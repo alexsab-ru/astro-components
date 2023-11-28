@@ -1,0 +1,177 @@
+name: telegram message
+
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  create: {}
+  delete: {}
+  issues: {}
+  workflow_call:
+    inputs:
+      additional-text:
+        description: 'Additional text passed from the caller workflow'
+        required: false
+        type: string
+    secrets:
+      TELEGRAM_TO:
+        description: 'Telegram ID passed from the caller workflow'
+        required: true
+      TELEGRAM_TOKEN:
+        description: 'Telegram token passed from the caller workflow'
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a job called "build" adn "log-github-event-goodies"
+  push:
+
+    if: ${{ github.event.commits != null }}
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: Get commits
+        id: get_commits
+        uses: actions/checkout@v3
+        with:
+          # checkout full tree
+          fetch-depth: 0
+
+      - name: Work with commits
+        id: with_commits
+        run: |
+          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+            git fetch origin master
+            git checkout master
+            mapfile -t COMMITS_ARRAY < <(git log --pretty=format:"'<code>%h</code>' - %an, %ar : %s" master..${{ github.sha }})
+            echo "before=${{ github.sha }}" >> $GITHUB_OUTPUT
+          else
+            mapfile -t COMMITS_ARRAY < <(git log --pretty=format:"'<code>%h</code>' - %an, %ar : %s" ${{ github.event.before }}..${{ github.sha }})
+            echo "before=${{ github.event.before }}..${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+          # Process each commit
+          echo "full_list<<EOF" >> $GITHUB_OUTPUT
+          for COMMIT in "${COMMITS_ARRAY[@]}"; do
+            echo "$COMMIT" >> $GITHUB_OUTPUT
+          done
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          LINES_COUNT=${#COMMITS_ARRAY[*]}
+          if [ "$LINES_COUNT" == "1" ]; then
+            echo "lines_count=$LINES_COUNT new commit" >> $GITHUB_OUTPUT
+          else
+            echo "lines_count=$LINES_COUNT new commits" >> $GITHUB_OUTPUT
+          fi
+
+
+      - name: Set outputs
+        id: set_outputs
+        # The part of this solution to focus on is that we’re substituting the %, \n, and \r characters
+        run: |
+          additional_text="${{ inputs.additional-text || '' }}"
+          if [ "$additional_text" != "" ]; then
+            echo "additional_text<<EOF" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo $additional_text >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send message to Telegram
+        if: ${{ steps.with_commits.outputs.full_list != '' }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          format: html
+          message: |
+            <b>[${{ github.event.repository.name }}:${{ github.ref_name }}]</b> <b><a href="https://github.com/${{ github.repository }}/compare/${{ steps.with_commits.outputs.before }}">${{ steps.with_commits.outputs.lines_count }}</a></b> by <b><a href="https://github.com/${{ github.actor }}">${{ github.actor }}</a></b>
+            ${{ steps.set_outputs.outputs.additional_text }}
+            ${{ steps.with_commits.outputs.full_list }}
+
+
+  create:
+
+    if: ${{ github.event.master_branch != null && github.event.commits == null }}
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: Send message to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          format: markdown
+          message: |
+            *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
+
+            added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})
+
+  pull_request:
+
+    if: ${{ github.event.pull_request != null }}
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: Send message to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          format: markdown
+          message: |
+            *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
+
+            pull request from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
+            ${{ github.event.pull_request.body }}
+
+  delete:
+
+    if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null }}
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: Send message to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          format: markdown
+          message: |
+            *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
+
+            branch '`${{ github.event.ref }}`' is deleted
+
+  # log-github-event-goodies:
+  #   name: "LOG Everything on GitHub Event"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Logging
+  #       run: |
+  #         echo "${{ toJSON( github.event ) }}"
