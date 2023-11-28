@@ -1,0 +1,147 @@
+---
+import { SITE_NAME } from '@/const.js';
+import { Icon } from 'astro-icon';
+import { phoneFormat, declOfNums } from '@/use/numbers.format';
+import salons from '@/data/salons.json';
+import Button from '@/components/Button.astro';
+
+const path = Astro.url.pathname;
+const links = [
+	{url: '#online-calc', name: 'Онлайн расчет'},
+	{url: '#advantages', name: 'Преимущества'},
+	{url: '#services', name: 'Услуги сервиса'},
+	{url: '#contacts', name: 'Контакты'},
+];
+
+const classBottom = path != '/' ? ' border-b' : '';
+---
+<div x-data="header">
+	<header 
+	class="fixed w-full top-0 left-0 bg-white lg:bg-white/80 z-30 transition-all duration-300 max-lg:shadow-3xl" 
+	:class="{'!bg-white': open, '!bg-white': scrolling}"
+>
+	<div class="container">
+		<div class="flex items-center justify-between max-[430px]:h-[60px] h-[80px]">
+			<div class="flex flex-nowrap items-center max-[430px]:gap-2 gap-3 divide-x divide-black/20">
+		{
+			path === '/' ? (
+				<div class="max-sm:flex-auto max-[430px]:text-base text-2xl uppercase w-min font-mono font-medium !leading-none select-none">{ SITE_NAME }</div>
+			) : (
+				<a href="/" class="max-sm:flex-auto max-[430px]:text-base text-2xl uppercase w-min font-mono font-medium !leading-none select-none">{ SITE_NAME }</a>
+			)
+		}
+				<div class="max-[430px]:px-2 px-3 grid grid-cols-2 items-center gap-y-1 max-[430px]:gap-x-1 gap-x-2">
+					<img src="/img/logos/exeed.svg" class="max-[430px]:h-1 h-2 w-auto" title="Exeed" alt="exeed">
+					<img src="/img/logos/geely.svg" class="max-[430px]:h-3 h-4 w-auto" title="Geely" alt="geely">
+					<img src="/img/logos/omoda.svg" class="max-[430px]:h-1 h-2 w-auto" title="Omoda" alt="omoda">
+					<img src="/img/logos/chery.svg" class="max-[430px]:h-3 h-4 w-auto" title="Chery" alt="chery">
+					<img src="/img/logos/jaecoo.svg" class="max-[430px]:h-1 h-2 w-auto invert" title="Jaecoo" alt="jaecoo">
+					<img src="/img/logos/gac.svg" class="max-[430px]:h-3 h-4 w-auto" title="Gac" alt="gac">
+				</div>
+			</div>
+			<div class="flex items-center max-[430px]:gap-3 gap-5 lg:gap-10">
+				<div class="hidden md:flex flex-col">
+				{
+					salons.map(salon => (
+					<a href={`tel:${phoneFormat(salon.phone)}`} class="font-extrabold text-black/80 text-base lg:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title="ул. Демократическая, 55"><Icon name="ic:outline-phone-android" class="w-6" /> {salon.phone}</a>
+					))
+				}
+				</div>
+				<div class="hidden lg:block">
+					<a 
+						href="#" 
+						class="underline" 
+						@click.prevent="open = !open"
+						@keydown.escape="open = false"
+					>Адреса салонов</a>
+					<small class="block text-xs">{salons.length}&nbsp;{declOfNums(salons.length, ['салон', 'салона', 'салонов'])}</small>
+				</div>
+
+				<Button 
+					classes="popup-link hidden lg:block" 
+					url="#common-modal" 
+					title="Заказать звонок"
+					dataTitle="Заказать звонок"
+					dataFormName="Заказ звонка. Шапка"
+				/>
+
+				<a 
+					href="#common-modal" 
+					class="lg:hidden popup-link shadow-md rounded flex items-center justify-center w-10 h-10 transition-shadow hover:shadow"
+					data-title="Заказать звонок"
+					data-form_name="Заказ звонка. Шапка"
+				>
+					<Icon name="ph:phone-incoming-thin" class="w-8" />
+				</a>
+				<button 
+					class="lg:hidden shadow-md rounded flex items-center justify-center w-10 h-10 transition-shadow hover:shadow"
+					@click.prevent="open = !open"
+				>
+					<Icon name="openmoji:hamburger-menu" class="w-8" />
+				</button>
+			</div>
+		</div>
+	</div>
+</header>
+
+
+
+<div 
+	id="site_nav" 
+	class={'fixed top-[80px] w-full bg-white/80 border-t z-30 transition-all duration-300 hidden lg:block'+classBottom}
+	:class="{'!bg-white': open, 'shadow-3xl !bg-white': scrolling}"
+>
+	<div class="container">
+		<div class="flex">
+		{
+			links.map(link => (
+			<a href={path === '/' ? link.url : '/'+link.url} class="scroll-link">{link.name}</a>
+			))
+		}
+		</div>
+	</div>
+</div>
+
+<div 
+	x-cloak
+	class="fixed inset-0 bg-black/40 z-[35] transition-opacity duration-500"
+	:class="open ? 'visible opacity-100' : 'invisible opacity-0'"
+	@click="open = false"
+></div>
+
+<div 
+	x-cloak
+	class="fixed top-0 bottom-0 right-0 z-40 bg-white py-8 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
+	:class="open ? 'translate-x-0' : 'translate-x-full'"
+>
+	<button class="w-10 h-10 absolute right-0 top-0 text-2xl font-mono transition-opacity opacity-60 hover:opacity-100" @click.prevent="open = false">&times;</button>
+	<div class="h-full">
+		<div class="h-full overflow-y-auto">
+			<div class="flex flex-col lg:hidden">
+			{
+				links.map(link => (
+				<a href={link.url} class="scroll-link">{link.name}</a>
+				))
+			}
+			</div>
+
+		{
+			salons.map(salon => (
+			<div class="flex flex-col gap-3 py-5 px-5 last:border-t">
+				<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap"><Icon name="clarity:map-marker-line" class="w-8" /> {salon.address}</a>
+				<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-black/80 flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500"><Icon name="ic:outline-phone-android" class="w-7" /> {salon.phone}</a>
+			</div>
+			))
+		}
+
+		</div>
+	</div>
+</div>
+</div>
+
+
+<style>
+	.scroll-link{
+		@apply inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-500/50;
+	}
+</style>
