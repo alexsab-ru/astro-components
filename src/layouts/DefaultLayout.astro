@@ -1,0 +1,40 @@
+---
+interface Props {
+	title?: string,
+	descr?: string
+}
+const { title, descr } = Astro.props;
+
+
+import { SITE_NAME, SITE_DESCR } from '@/const.js';
+
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Modals from '@/components/Modals.astro';
+import UpBtn from '@/components/UpBtn.astro';
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={ descr ?? SITE_DESCR } />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<meta name="generator" content={ Astro.generator } />
+		<title>{ title ?? SITE_NAME }</title>
+		<script src="../js/app.js"></script>
+	</head>
+	<body class="min-h-screen flex flex-col">
+		<Header />
+		<main class="flex-grow">
+			<slot />
+		</main>
+		<Footer />
+		<Modals />
+		<UpBtn />
+	</body>
+</html>
+<style is:global lang="scss">
+	@import "@/scss/app.scss";
+</style>
