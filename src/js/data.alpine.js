@@ -60,6 +60,15 @@ document.addEventListener('alpine:init', () => {
 			});
 		},
 	}));
+	Alpine.data('footer', (t) => ({
+		showDisclaimer: false,
+		onClick(e) {
+			this.showDisclaimer = !this.showDisclaimer;
+			this.$nextTick(() => {
+				window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+			});
+		}
+	}));
 });
 
 // window.Alpine = Alpine;
