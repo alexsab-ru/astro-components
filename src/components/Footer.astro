@@ -1,4 +1,5 @@
 ---
+import { SITE_NAME, LEGAL_ENTITY } from '@/const.js';
 import { Icon } from 'astro-icon'
 import { phoneFormat } from '@/js/use/numbers.format';
 import salons from '@/data/salons.json';
@@ -16,7 +17,7 @@ const path = Astro.url.pathname;
         <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-10 md:gap-5">
 
             <div class="">
-                <a href="/" class="uppercase font-extrabold text-2xl inline-block mb-5 transition-opacity hover:opacity-70">Кузов эксперт</a>
+                <a href="/" class="uppercase font-extrabold text-2xl inline-block mb-5 transition-opacity hover:opacity-70">{ SITE_NAME }</a>
                 <div class="flex flex-wrap items-center gap-5">
                     <img src="/img/logos/exeed.svg" class="h-3 md:h-4 w-auto filter brightness-0 invert opacity-70" title="Exeed" alt="exeed">
                     <img src="/img/logos/geely.svg" class="h-7 w-auto filter brightness-0 invert opacity-70" title="Geely" alt="geely">
@@ -66,7 +67,7 @@ const path = Astro.url.pathname;
 
         <div class="flex items-center justify-between gap-5 flex-wrap">
 			<div class="flex items-center flex-grow gap-5 flex-wrap">
-				<p class="text-sm m-0">© 2023 "Кузов Эксперт в&nbsp;Самаре"</p>
+				<p class="text-sm m-0">© 2023 { LEGAL_ENTITY }</p>
 				<a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a>
 			</div>
 			<!-- <p class="made-by text-sm m-0">Разработка <a href="https://alexsab.ru?utm_source=china" class="hover:!text-white" target="_blank">alexsab.ru</a></p> -->
