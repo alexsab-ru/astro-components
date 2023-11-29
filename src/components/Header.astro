@@ -9,21 +9,22 @@ const path = Astro.url.pathname;
 
 const classBottom = path != '/' ? ' border-b' : '';
 ---
-<div x-data="header" class="sticky top-0">
-	<header 
-		class="sticky w-full top-0 left-0 bg-white lg:bg-white/80 z-30 transition-all duration-300 max-lg:shadow-3xl" 
-		:class="{'!bg-white': open, '!bg-white': scrolling}"
-	>
+<div
+	x-data="header" 
+	class="bg-white sticky top-0 transition-all duration-300 z-30"
+	:class="{'shadow-3xl': scrolling}"
+>
+	<header >
 		<div class="container">
-			<div class="flex items-center justify-between max-[430px]:h-[60px] h-[80px]">
+			<div class="flex items-center justify-between max-md:h-[60px] h-[80px]">
 				<div class="flex flex-nowrap items-center max-[430px]:gap-2 gap-3 divide-x divide-black/20">
 
-					<img src="/img/logo.png" class="h-6 sm:h-10" alt="ALT">
+					<img src="/img/logo.png" class="h-4 sm:h-5 xl:h-10" alt="ALT">
 			{
 				path === '/' ? (
-					<div class="max-[430px]:pl-2 pl-3 max-sm:flex-auto max-[430px]:text-base text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</div>
+					<div class="max-[430px]:pl-2 pl-3 max-sm:flex-auto max-[430px]:text-base xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</div>
 				) : (
-					<a href="/" class="max-[430px]:pl-2 pl-3 max-sm:flex-auto max-[430px]:text-base text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</a>
+					<a href="/" class="max-[430px]:pl-2 pl-3 max-sm:flex-auto max-[430px]:text-base xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</a>
 				)
 			}
 				</div>
@@ -85,8 +86,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 	links.length ? (
 	<div 
 		id="site_nav" 
-		class={'sticky top-[80px] w-full bg-white/80 border-t z-30 transition-all duration-300 hidden lg:block'+classBottom}
-		:class="{'!bg-white': open, 'shadow-3xl !bg-white': scrolling}"
+		class={'hidden lg:block border-t'+classBottom}
 	>
 		<div class="container">
 			<div class="flex">

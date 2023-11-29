@@ -1,55 +1,40 @@
-let prevScrollpos = window.scrollY;
-let $header = document.querySelector("header");
 let $nav = document.getElementById('site_nav');
-let hideHeaderPos = $header.offsetHeight;
-let hideNavPos = $nav ? $nav.offsetHeight : 0;
-let ww = window.innerWidth;
 
-$nav.style.top = hideHeaderPos + "px";
+const hashURL = window.location.hash.substring(1);
+window.location.hash = '';
 
-window.addEventListener("resize", () => {
-	hideHeaderPos = $header.clientHeight;
-	ww = window.innerWidth;
-});
+if (hashURL) {
+	window.scrollTo(0, 0);
+	setTimeout(() => {
+		window.scrollTo(0, 0);
+	}, 1);
+	setTimeout(() => {
+		scroll(hashURL);
+	}, 300);
+	window.location.hash = hashURL;
+}
 
 document.querySelectorAll('a[href^="#"]:not(.popup-link)').forEach((link) => {
-	link.addEventListener("click", function (e) {
+	link.addEventListener('click', function (e) {
 		e.preventDefault();
-
-		let href = this.getAttribute("href").substring(1);
-
-		const scrollTarget = document.getElementById(href);
-
-		if(scrollTarget){
-			const topOffset = $nav ? $nav.offsetHeight : $header.offsetHeight;
-			// const topOffset = 0; // если не нужен отступ сверху
-			const elementPosition = scrollTarget.getBoundingClientRect().top;
-			const offsetPosition = elementPosition - topOffset;
-
-			window.scrollBy({
-				top: offsetPosition,
-				behavior: "smooth",
-			});
-		}
+		let hash = this.getAttribute('href').substring(1);
+		scroll(hash);
 	});
 });
 
-window.addEventListener("scroll", () => {
-	var currentScrollPos = window.scrollY;
-	if (currentScrollPos > hideHeaderPos) {
-		if (prevScrollpos > currentScrollPos) {
-			$header.style.top = 0;
-			$nav.style.top = hideHeaderPos + "px";
-		} else {
-			$header.style.top = -hideHeaderPos + "px";
-            $nav.style.top = 0;
-		}
-		prevScrollpos = currentScrollPos;
-	} else {
-		$header.style.top = 0;
-        $nav.style.top = hideHeaderPos + "px";
+function scroll(hash) {
+	const scrollTarget = document.getElementById(hash);
+	if (scrollTarget) {
+		const topOffset = $nav ? $nav.offsetHeight : 0;
+		// const topOffset = 0; // если не нужен отступ сверху
+		const elementPosition = scrollTarget.getBoundingClientRect().top;
+		const offsetPosition = elementPosition - topOffset;
+		window.scrollBy({
+			top: offsetPosition,
+			behavior: 'smooth',
+		});
 	}
-});
+}
 
 window.addEventListener('scroll', () => {
 	let scrollDistance = window.scrollY;
@@ -63,10 +48,10 @@ window.addEventListener('scroll', () => {
 
 			document.querySelectorAll('.scroll-link')[i].classList.add('bg-accent-500/50');
 		}
-		if(scrollDistance < 700){
+		if (scrollDistance < 700) {
 			document.querySelectorAll('.scroll-link').forEach((elem) => {
 				elem.classList.remove('bg-accent-500/50');
 			});
 		}
 	});
-})
+});
