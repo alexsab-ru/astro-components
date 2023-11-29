@@ -1,0 +1,38 @@
+---
+interface Props {
+    view?: string,
+    classes?: string,
+    url?: string,
+    title?: string,
+    dataTitle?: string,
+    dataFormName?: string,
+}
+const { 
+    view = 'link',
+    classes,
+    url,
+    title = 'BUTTON',
+    dataTitle,
+    dataFormName,
+} = Astro.props;
+---
+
+{
+    view === 'link' ? (
+    <a
+        class={`btn ${classes}`}
+        href={url ? url : '#'}
+        data-title={dataTitle}
+        data-form_name={dataFormName}
+    >
+        {title}
+    </a>
+    ) : 
+    view === 'form-button' ? (
+    <input 
+        type="submit" 
+        class={`btn ${classes}`} 
+        value={title}
+    >
+    ) : ('')
+}

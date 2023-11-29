@@ -1,0 +1,34 @@
+---
+interface Props {
+    type?: any,
+    name?: string,
+    classes?: string,
+    placeholder?: string,
+    required?: boolean,
+    errorText?: string,
+    errorClasses?: string,
+}
+const {
+    type = 'text',
+    name,
+    classes = '',
+    placeholder = 'Введите значение',
+    required = false,
+    errorText = '',
+    errorClasses = '' 
+} = Astro.props
+---
+
+<div class="w-full">
+    <input
+        type={type}
+        name={name}
+        class={`border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-none w-full text-black ${classes}`} 
+        placeholder={placeholder}
+    >
+{
+    required ? (
+    <div class={`error-message text-xs hidden ${name} ${errorClasses}`}>{errorText}</div>
+    ) : ('')
+}
+</div>
