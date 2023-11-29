@@ -1,0 +1,15 @@
+[
+    {
+        "id": 1,
+        "type": "",
+        "videoUrl": "",
+        "imageUrl": "/img/banners/1.jpg",
+        "title": "Кузов Эксперт",
+        "descr": "Первый официальный кузовной по&nbsp;автомобилям из&nbsp;Китая",
+        "btn": "Онлайн запись",
+        "btnUrl": "#common-modal",
+        "dataTitle": "Онлайн запись на сервис",
+        "dataFormName": "Онлайн запись на сервис. Баннер",
+        "autoplay": 7000
+    }
+]
