@@ -1,0 +1,54 @@
+.swiper-pagination-bullet {
+	@apply w-2.5 h-2.5 opacity-100 bg-white relative mx-1.5 transition-colors duration-300 before:content-[''] before:absolute before:w-5 before:h-5 before:-left-[5px] before:-top-[5px] before:border before:border-transparent before:rounded-full before:transition-colors before:duration-300 #{!important};
+	&.swiper-pagination-bullet-active {
+		@apply bg-accent-500 before:border-accent-500 #{!important};
+	}
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+	@apply bg-white text-black h-32 w-12 top-1/2 -translate-y-1/2 opacity-20 transition-opacity duration-500 ease-out hover:opacity-60;
+	&::after {
+		font-size: 20px;
+		font-weight: bold;
+	}
+}
+.swiper-button-next {
+	right: 0;
+}
+
+.swiper-button-prev {
+	left: 0;
+}
+
+.swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled{
+    display: none !important;
+}
+
+.autoplay-progress {
+	position: absolute;
+	right: 16px;
+	bottom: 16px;
+	z-index: 20;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	@apply text-xs sm:text-base w-10 h-10 sm:w-12 sm:h-12;
+}
+
+.autoplay-progress svg {
+	--progress: 1;
+	position: absolute;
+	left: 0;
+	top: 0px;
+	z-index: 10;
+	width: 100%;
+	height: 100%;
+	stroke-width: 2px;
+	stroke: #fff;
+	fill: none;
+	stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
+	stroke-dasharray: 125.6;
+	transform: rotate(-90deg);
+}
