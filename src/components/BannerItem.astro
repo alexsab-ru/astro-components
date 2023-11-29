@@ -1,0 +1,64 @@
+---
+interface Props {
+	banner: any
+}
+const {banner = {}} = Astro.props;
+import Button from '@/components/Button.astro';
+---
+
+<div class="swiper-slide banner-slide" data-swiper-autoplay={banner.autoplay}>
+	<div class="absolute inset-0 bg-black/50 z-[1]"></div>
+	<div class="container h-full relative z-[2] pt-10 md:pt-20">
+		<div class="h-full flex flex-col max-w-4xl">
+			{
+				banner.title ? (
+			<div
+				class="text-3xl md:text-4xl lg:text-6xl uppercase font-bold"
+				data-swiper-parallax="-20%"
+			>
+				<Fragment set:html={banner.title} />
+			</div>
+				) : ('')
+			}
+
+			{
+				banner.descr ? (
+			<p
+				data-swiper-parallax="-40%"
+				class="text-sm sm:text-xl md:text-3xl mt-3 sm:mt-5 mb-4 sm:mb-10"
+			>
+				<Fragment set:html={banner.descr} />
+			</p>
+				) : ('')
+			}
+
+			{
+				banner.btn ? (
+			<div data-swiper-parallax="-55%">
+				<Button
+					classes="popup-link white inline-block !py-2 sm:py-3 text-sm sm:text-base"
+					url={banner.btnUrl}
+					title={banner.btn}
+					dataTitle={banner.dataTitle}
+					dataFormName={banner.dataFormName}
+				/>
+			</div>
+				) : ('') 
+			}
+
+		</div>
+	</div>
+{
+	banner.type === 'video' ? (
+	<video muted autoplay loop poster={banner.imageUrl} class="absolute inset-0 h-full w-full object-cover">
+		<source src={banner.videoUrl} type="video/mp4">
+	</video>	
+	) : (
+	<img
+		src={banner.imageUrl}
+		class="absolute inset-0 h-full w-full object-cover object-center"
+		alt={banner.title}
+	/>
+	)
+}
+</div>

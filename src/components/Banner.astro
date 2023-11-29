@@ -1,0 +1,42 @@
+---
+interface Props {
+	fetchURL: string,
+}
+const { fetchURL = '' } = Astro.props;
+
+import BannerItem from '@/components/BannerItem.astro';
+const banners = await fetch(fetchURL).then((response) =>
+  response.json()
+);
+
+// import banners from '@/data/banners.json'
+---
+{
+	banners.length ? (
+<div class="banner relative min-h-[600px] h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] lg:h-[calc(100vh-129px)]">
+	<div class="absolute inset-0">
+		<div class="swiper banner-slider h-full text-white">
+			<div class="swiper-wrapper">
+				{
+					banners.map(banner => (
+					<BannerItem banner={banner}/>
+					))
+				}
+			</div>
+
+			<div class="swiper-pagination banner-pagination"></div>
+
+			<div class="autoplay-progress">
+				<svg viewBox="0 0 48 48">
+					<circle cx="24" cy="24" r="20"></circle>
+				</svg>
+				<span></span>
+			</div>
+
+			<div class="swiper-button-prev banner-button-prev !hidden md:!flex"></div>
+			<div class="swiper-button-next banner-button-next !hidden md:!flex"></div>
+		</div>
+	</div>
+</div>
+	) : ('')
+}
