@@ -1,8 +1,8 @@
 [
     {
         "id": 1,
-        "type": "",
-        "videoUrl": "",
+        "type": "video",
+        "videoUrl": "https://alexsab.ru/video/jetour-dashing-compress.mp4",
         "imageUrl": "/img/banners/1.jpg",
         "title": "Заголовок баннера",
         "descr": "Подзаголовок баннера может быть длиннее или короче",
@@ -10,6 +10,19 @@
         "btnUrl": "#common-modal",
         "dataTitle": "Онлайн запись",
         "dataFormName": "Онлайн запись. Баннер",
-        "autoplay": 7000
+        "autoplay": 6000
+    },
+    {
+        "id": 2,
+        "type": "",
+        "videoUrl": "",
+        "imageUrl": "/img/banners/1.jpg",
+        "title": "Заголовок баннера 2",
+        "descr": "Подзаголовок баннера",
+        "btn": "Онлайн запись",
+        "btnUrl": "#common-modal",
+        "dataTitle": "Онлайн запись",
+        "dataFormName": "Онлайн запись. Баннер",
+        "autoplay": 5000
     }
 ]
