@@ -17,11 +17,11 @@ const banners = await fetch(fetchURL).then((response) =>
 	<div class="absolute inset-0">
 		<div class="swiper banner-slider h-full text-white">
 			<div class="swiper-wrapper">
-				{
-					banners.map(banner => (
-					<BannerItem banner={banner}/>
-					))
-				}
+			{
+				banners.map((banner: any) => (
+				<BannerItem banner={ banner }/>
+				))
+			}
 			</div>
 
 			<div class="swiper-pagination banner-pagination"></div>
