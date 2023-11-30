@@ -61,7 +61,7 @@ document.addEventListener('alpine:init', () => {
 		},
 	}));
 	Alpine.data('footer', (t) => ({
-		showDisclaimer: false,
+		showDisclaimer: true,
 		onClick(e) {
 			this.showDisclaimer = !this.showDisclaimer;
 			this.$nextTick(() => {
