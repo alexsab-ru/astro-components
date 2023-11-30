@@ -1,0 +1,33 @@
+<section class="text-white py-20 sm:py-24 bg-[url(https://baic-krasnodar.ru/img/x35/konkurenty.jpg)] bg-cover bg-bottom relative z-[1] before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-[-1]">
+    <div class="container">
+        <div class="w-wull xl:w-1/2 text-base sm:text-xl !leading-normal">
+            <h2 class="text-left text-xl sm:text-4xl font-medium mb-4 before:hidden mx-0">
+                Улучшим предложение конкурентов!
+            </h2>
+            <p>У Вас уже есть предложение от другого дилера?</p>
+            <p>Сделаем лучше!</p>
+            <p>Оставьте Ваши контакты и в ближайшее время мы перезвоним!</p>
+            <form class="mt-14 sm:max-w-md text-base">
+                <input type="hidden" name="form" value="Улучшим предложение конкурентов">
+
+                <div class="w-full mb-4">
+                    <input type="tel" name="phone" class="border border-black border-opacity-20 transition-all focus:border-opacity-90 px-4 py-2.5 mb-1.5 outline-none w-full font-normal text-gray-900" placeholder="+7 999 999-99-99 *">
+                    <div class="error-message text-xs text-red hidden phone">
+                        Веден некорректный номер телефона
+                    </div>
+                </div>
+                <input type="submit" class="btn w-full mb-4" value="Отправить">
+                <input type="checkbox" name="subscribe" class="absolute w-0 h-0 opacity-0 invisible">
+                <label class="cursor-pointer flex items-center flex-wrap">
+                    <input type="checkbox" name="agree" class="absolute w-0 h-0 opacity-0 invisible">
+                    <div class="flex gap-x-2 text-white">
+                        <span class="fake-checkbox-white mt-0.5 w-4 h-4 border border-white inline-block flex-shrink-0 transition-all relative"></span>
+                        <noindex><span>Я согласен на</span>
+                        <a href="/privacy-policy.pdf" class="text-white underline transition-all hover:no-underline" target="_blank">обработку персональных данных</a></noindex>
+                    </div>
+                    <div class="error-message text-xs text-red mt-1 w-full hidden agree">Чтобы продолжить, установите флажок</div>
+                </label>
+            </form>
+        </div>
+    </div>
+</section>
