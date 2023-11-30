@@ -1,0 +1,57 @@
+---
+interface Props {
+	fetchURL?: string,
+}
+const { fetchURL = '' } = Astro.props;
+const models = await fetch(fetchURL).then((response) =>
+  response.json()
+);
+---
+{
+    models.length > 1 ? (
+<section class="models py-10 sm:py-20">
+	<div class="container">
+		<h2 class="text-center font-medium text-3xl sm:text-4xl mb-8 sm:mb-14">
+			Модельный ряд
+		</h2>
+
+		<div class="grid grid-cols-2 lg:grid-cols-3 gap-5 text-xs 2xl:text-base">
+			<a
+				href="#dashing"
+				class="flex flex-col border p-3 sm:pt-10 sm:pb-4 sm:px-5 overflow-hidden shadow-xl transition-all duration-500 in-expo group hover:border-gray-400 hover:shadow-md">
+				<div>
+					<span
+						class="text-xl sm:text-5xl uppercase font-bold transition-colors duration-500 group-hover:text-accent"
+						>Dashing</span
+					>
+				</div>
+				<div class="flex-grow flex items-center justify-center">
+					<img
+						src="/img/models/dashing/color-change/c4b.png"
+						class="scale-100 transition-transform duration-500 in-expo group-hover:scale-105"
+						alt="x3pro"
+					/>
+				</div>
+				<div class="flex max-sm:flex-col sm:mt-10 sm:divide-x">
+					<div
+						class="flex-1 py-1.5 sm:py-0 sm:p-4 flex sm:flex-col items-center gap-0.5 sm:gap-2">
+						<img src="/img/icons/icon-seats.png" class="w-5 sm:w-auto" />
+						<span>5 мест</span>
+					</div>
+					<div
+						class="flex-1 py-1.5 sm:py-0 sm:p-4 flex sm:flex-col items-center gap-0.5 sm:gap-2">
+						<img src="/img/icons/icon-petrol.png" class="w-5 sm:w-auto" />
+						<span>Бензин</span>
+					</div>
+					<div
+						class="flex-1 py-1.5 sm:py-0 sm:p-4 flex sm:flex-col items-center gap-0.5 sm:gap-2">
+						<img src="/img/icons/icon-auto.png" class="w-5 sm:w-auto" />
+						<span>6MT/6-7DCT</span>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+</section>
+    ) : ('')
+}
