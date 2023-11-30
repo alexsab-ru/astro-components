@@ -3,10 +3,12 @@ import Layout from "@/layouts/Layout.astro";
 import Banner from "@/components/Banner.astro";
 import ModelList from "@/components/ModelList.astro";
 import Callback from "@/components/Callback.astro";
+import Services from "@/components/Services.astro";
 ---
 
 <Layout title="TITLE" descr="DESCRIPTION">
 	<Banner fetchURL={`${Astro.url.href}src/data/banners.json`}/>
 	<ModelList fetchURL={`${Astro.url.href}src/data/models.json`}/>
 	<Callback />
+	<Services fetchURL={`${Astro.url.href}src/data/services.json`}/>
 </Layout>
