@@ -1,12 +1,16 @@
 [
     {
-        "id": "u5-plus",
-        "homeImg": "https://baic-krasnodar.ru/img/u5-plus/bg.jpgg",
+        "id": "u5plus",
+        "homeImg": "https://baic-krasnodar.ru/img/u5-plus/bg.jpg",
         "slogan": "Практичность и комфорт",
         "name": "U5 Plus",
         "price": "",
         "thumb": "https://baic-krasnodar.ru/img/u5-plus/black.png",
         "colors": [
+            {
+                "id": "red",
+                "name": "Красный металлик"
+            },
             {
                 "id": "gray",
                 "name": "Серый металлик"
@@ -16,14 +20,11 @@
                 "name": "Белый металлик"
             },
             {
-                "id": "red",
-                "name": "Красный металлик"
-            },
-            {
                 "id": "black",
                 "name": "Черный металлик"
             }
         ],
+        "photos": true,
         "chars": {
             "seats": "5 мест",
             "fuel": "Бензин",
@@ -93,6 +94,7 @@
                 "name": "Бронзовый металлик"
             }
         ],
+        "photos": "",
         "chars": {
             "seats": "5 мест",
             "fuel": "Бензин",
