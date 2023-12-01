@@ -1,0 +1,40 @@
+.color-link {
+	@apply relative block w-6 sm:w-8 lg:w-10 h-6 sm:h-8 lg:h-10 rounded-full shadow-sm shadow-[#eee];
+	&[data-color="gray"] {
+		@apply bg-gray-400;
+	}
+	&[data-color="white"] {
+		@apply bg-gray-200;
+	}
+	&[data-color="black"] {
+		@apply bg-black;
+	}
+	&[data-color="red"] {
+		@apply bg-[#E51036];
+	}
+	&[data-color="blue"] {
+		@apply bg-[#1C61D0];
+	}
+	&[data-color="light-blue"] {
+		@apply bg-[#1C61D0]/60;
+	}
+	&[data-color="purple"] {
+		@apply bg-[#391C35];
+	}
+	&[data-color="bronze"] {
+		@apply bg-[#480808];
+	}
+	&[data-color="green"] {
+		@apply bg-green-700;
+	}
+	&.active::after {
+		border: 2px solid #aaa;
+		border-radius: 50%;
+		bottom: -6px;
+		content: "";
+		left: -6px;
+		position: absolute;
+		right: -6px;
+		top: -6px;
+	}
+}
