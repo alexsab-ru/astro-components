@@ -1,8 +1,12 @@
 ---
+interface Props {
+	fetchURL?: string
+}
+const {fetchURL = ''} = Astro.props;
+const salons = await fetch(fetchURL).then((response) => response.json());
 import { SITE_NAME, LINKS_MENU as links } from '@/const.js';
 import { Icon } from 'astro-icon';
 import { phoneFormat, declOfNums } from '@/js/use/numbers.format';
-import salons from '@/data/salons.json';
 import Button from '@/components/Button.astro';
 
 const path = Astro.url.pathname;
@@ -31,12 +35,12 @@ const classBottom = path != '/' ? ' border-b' : '';
 				<div class="flex items-center xs:gap-3 gap-5 lg:gap-10">
 					<div class="hidden md:flex flex-col">
 					{
-						salons.map(salon => (
+						salons.length && salons.map((salon: any) => (
 						<a href={`tel:${phoneFormat(salon.phone)}`} class="font-extrabold text-black/80 text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title="ул. Демократическая, 55"><Icon name="ic:outline-phone-android" class="w-6" /> {salon.phone}</a>
 						))
 					}
 					</div>
-					{
+					{salons.length &&
 						salons.length > 1 ? (
 							<div class="hidden lg:block">
 								<a 
@@ -82,8 +86,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 	</header>
 
 
-{
-	links.length ? (
+{links.length && (
 	<div id="site_nav" class={'hidden lg:block border-t'+classBottom}>
 		<div class="container">
 			<div class="flex">
@@ -95,8 +98,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 			</div>
 		</div>
 	</div>
-	) : ('')
-}
+)}
 
 	<div 
 		x-cloak
@@ -113,23 +115,20 @@ const classBottom = path != '/' ? ' border-b' : '';
 		<button class="w-10 h-10 absolute right-0 top-0 text-2xl font-mono transition-opacity opacity-60 hover:opacity-100" @click.prevent="open = false">&times;</button>
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
+				{links.length &&
 				<div class="flex flex-col border-b lg:hidden">
-				{
-					links.length ? links.map(link => (
+					{links.map(link => (
 					<a href={link.url} class="scroll-link">{link.name}</a>
-					)) : ('')
-					
+					))}
+				</div>					
 				}
-				</div>
 				<div>
-				{
-					salons.map(salon => (
+				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
 						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap"><Icon name="clarity:map-marker-line" class="w-8" /> {salon.address}</a>
 						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-black/80 flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500"><Icon name="ic:outline-phone-android" class="w-7" /> {salon.phone}</a>
 					</div>
-					))
-				}
+				))}
 				</div>
 
 			</div>
