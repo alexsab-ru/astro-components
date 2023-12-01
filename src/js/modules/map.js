@@ -8,6 +8,8 @@ const balloonContentBody = (hours, phone, link) => {
 	<a href="${link}"  target="_blank" class="text-sm">📍 Как добраться</a><br>
 	`
 }
+const center = salons.length === 1 ? [salons[0].map.coords[0], salons[0].map.coords[1]] : [53.195878, 50.100202];
+const zoom = salons.length === 1 && salons[0].map.zoom ? salons[0].map.zoom : 10;
 const parent = document.querySelector(".map");
 
 let start_load_script = false, // Переменная для определения была ли хоть раз загружена Яндекс.Карта (чтобы избежать повторной загрузки при наведении)
@@ -19,8 +21,8 @@ let myMapTemp = null;
 function init() {
 	if (!myMapTemp) {
 		myMapTemp = new ymaps.Map("map", {
-			center: [53.195878, 50.100202],
-			zoom: 10,
+			center,
+			zoom,
 			controls: ["zoomControl"],
 		});
 	}
