@@ -1,0 +1,198 @@
+---
+interface Props {
+	model: any;
+}
+const {model} = Astro.props;
+import Icon from 'astro-icon';
+import style from './Model.module.scss';
+import {BRAND} from '@/const';
+const photoSlides = !model.photos ? [] : [].concat(
+	...Object.values(
+		await fetch(`https://baic-krasnodar.ru/data/u5plus.json`).then((response) =>
+			response.json()
+		)
+	)
+);
+---
+
+<section class={style.model} id={model?.id} data-dir={model?.id}>
+	<div
+		class={style.model__info}
+		style={`background-image: url(${model?.homeImg})`}>
+		<div class="container h-full pt-8 sm:pt-[2.5%]">
+			<div class="flex justify-between items-start flex-col lg:flex-row">
+				<div>
+					<div
+						class="text-2xl sm:text-5xl text-accent-500 tracking-wider font-medium uppercase">
+						{BRAND}
+						<b
+							class="font-bold tracking-tighter text-5xl sm:text-8xl uppercase text-white"
+							>{model?.name}</b
+						>
+					</div>
+					<p class="uppercase text-lg sm:text-2xl opacity-80">
+						{model?.slogan}
+					</p>
+				</div>
+				<a
+					href="#common-modal"
+					class="popup-link text-white mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
+					data-title="Подобрать комплектацию"
+					data-form_name={`Подобрать комплектацию. ${BRAND} ${model?.name}`}>
+					Подобрать комплектацию
+					<Icon
+						name="mdi:chevron-right-circle"
+						class="w-6 text-yellow-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+					/>
+				</a>
+			</div>
+
+			<div class="flex flex-col gap-4 mt-10 lg:mt-14">
+				<a
+					class="popup-link w-fit inline-flex items-center flex-nowrap gap-1.5 text-white font-medium text-base sm:text-xl group"
+					href="#common-modal"
+					data-title="Выгодный трейд-ин"
+					data-form_name={`Выгодный трейд-ин. ${BRAND} ${model?.name}`}>
+					<span
+						class="w-10 h-10 rounded-full bg-yellow-500 text-white flex items-center justify-center">
+						<Icon name="mdi:credit-card-check-outline" class="w-6" />
+					</span>
+					<span
+						class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+						Выгодный трейд-ин
+					</span>
+				</a>
+				<a
+					class="popup-link w-fit inline-flex items-center flex-nowrap gap-1.5 text-white font-medium text-base sm:text-xl group"
+					href="#common-modal"
+					data-title="Выгодный кредит"
+					data-form_name={`Выгодный кредит. ${BRAND} ${model?.name}`}>
+					<span
+						class="w-10 h-10 rounded-full bg-yellow-500 text-white flex items-center justify-center">
+						<Icon name="mdi:gift-outline" class="w-6" />
+					</span>
+					<span
+						class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+						Выгодный кредит
+					</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="flex justify-end relative z-10 lg:pt-[8vw] xl:pt-0">
+		<div
+			class="w-full lg:w-3/4 2xl:w-3/5 flex flex-col justify-center lg:justify-center">
+			<img
+				src="https://baic-alpha.ru/img/x35/red.png"
+				class="w-full color-img-preview"
+				alt={`${BRAND} ${model?.name}`}
+			/>
+			<div class="flex flex-wrap justify-center gap-4 sm:gap-5 color-links">
+                {
+                    model.colors && model.colors.map((c: any, idx: number) => (
+                    <a
+                        href="#"
+                        class={`color-link ${idx === 0 ? 'active' : ''}`}
+                        title={c.name}
+                        data-color={c.id}></a>
+                    ))
+                }
+				<p class="w-full text-center text-xs color-name text-black">
+					{model.colors[0]?.name}
+				</p>
+			</div>
+		</div>
+	</div>
+
+    <div class="container px-0 sm:px-5">
+        {
+			photoSlides.length && (
+				<div class="swiper photo-slider h-[120px] md:h-[200px] mt-14">
+					<div class="swiper-wrapper">
+						{photoSlides.map((photo) => (
+							<a
+								href={photo}
+								class="swiper-slide glightbox image-slide"
+								data-gallery={`gallery-${model.id}`}>
+								<img src={photo} loading="lazy" />
+								<div class="swiper-lazy-preloader" />
+							</a>
+						))}
+					</div>
+				</div>
+			)
+		}
+    </div>
+
+	<div class="container">
+		{
+			model.globalChars && (
+				<div class="flex justify-center flex-wrap gap-4 mt-14 text-black">
+					{model.globalChars.map((char: any) => (
+						<div class="flex flex-col justify-between gap-4 sm:gap-8 xs:p-3 p-4 shadow rounded w-[calc((100%/2)-16px)] sm:w-[calc((100%/3)-16px)] xl:w-[calc((100%/6)-16px)]">
+							<div class="text-xs sm:text-base">{char.title}:</div>
+							<div>
+								<b class="xs:text-xl text-2xl sm:text-3xl 2xl:text-4xl font-bold">
+									{char.value}
+								</b>{' '}
+								{char?.measure}
+							</div>
+						</div>
+					))}
+				</div>
+			)
+		}
+	</div>
+</section>
+
+<style lang="scss">
+	.image-slide {
+		@apply relative h-full cursor-zoom-in inline-flex w-auto;
+		&.swiper-slide-active {
+			img {
+				@apply brightness-100;
+			}
+		}
+		img {
+			@apply relative h-full w-full object-cover object-center inset-0 brightness-50 transition-[filter] duration-500 ease-in-out hover:brightness-110;
+		}
+	}
+</style>
+
+<script>
+	import GLightbox from 'glightbox';
+	import 'glightbox/dist/css/glightbox.min.css';
+	import Swiper from 'swiper';
+	import {Autoplay} from 'swiper/modules';
+	const photo = new Swiper('.photo-slider', {
+		modules: [Autoplay],
+		loop: true,
+		centeredSlides: true,
+		slidesPerView: 'auto',
+		speed: 100,
+		autoplay: {
+			// enabled: true,
+			disableOnInteraction: false,
+			waitForTransition: false,
+			delay: 5000,
+		},
+		breakpoints: {
+			320: {
+				spaceBetween: 5,
+			},
+			640: {
+				spaceBetween: 10,
+			},
+			1280: {
+				spaceBetween: 10,
+			},
+		},
+	});
+
+	if (photo) {
+		GLightbox({
+			loop: true,
+		});
+	}
+</script>

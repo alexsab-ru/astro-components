@@ -2,14 +2,17 @@
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner.astro';
 import ModelList from '@/components/ModelList.astro';
+import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
+const models = await fetch(`${Astro.url.href}src/data/models.json`).then((response) => response.json());
 ---
 
 <Layout title="TITLE" descr="DESCRIPTION">
 	<Banner fetchURL={`${Astro.url.href}src/data/banners.json`} />
 	<ModelList fetchURL={`${Astro.url.href}src/data/models.json`} />
+	{models && models.map((model: any) => <Model model={model}/>)}
 	<Callback />
 	<Services fetchURL={`${Astro.url.href}src/data/services.json`} />
 	<Contacts
