@@ -9,7 +9,7 @@ import {Icon} from 'astro-icon';
 ---
 
 {
-	models.length > 1 ? (
+	models.length > 1 && (
 		<section class="models py-10 sm:py-20">
 			<div class="container">
 				<h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14">
@@ -58,7 +58,5 @@ import {Icon} from 'astro-icon';
 				</div>
 			</div>
 		</section>
-	) : (
-		''
 	)
 }
