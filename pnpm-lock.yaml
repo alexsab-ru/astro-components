@@ -26,6 +26,9 @@ dependencies:
   astro-icon:
     specifier: ^0.8.1
     version: 0.8.1
+  glightbox:
+    specifier: ^3.2.0
+    version: 3.2.0
   swiper:
     specifier: ^11.0.5
     version: 11.0.5
@@ -1804,6 +1807,10 @@ packages:
 
   /github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
+    dev: false
+
+  /glightbox@3.2.0:
+    resolution: {integrity: sha512-iit1xYixqL4YVL+I2YJLfMeyJwvLi6FE6kY3qNKeZHEJgRIz80QU8Rm7YCyw1wOTgXvmNDnXGVhHOHRCwnDltQ==}
     dev: false
 
   /glob-parent@5.1.2:
