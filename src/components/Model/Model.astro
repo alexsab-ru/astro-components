@@ -84,7 +84,7 @@ const photoSlides = !model.photos ? [] : [].concat(
 		<div
 			class="w-full lg:w-3/4 2xl:w-3/5 flex flex-col justify-center lg:justify-center">
 			<img
-				src="https://baic-alpha.ru/img/x35/red.png"
+				src={`https://baic-alpha.ru/img/${model.id}/${model.colors[0].id}.png`}
 				class="w-full color-img-preview"
 				alt={`${BRAND} ${model?.name}`}
 			/>
