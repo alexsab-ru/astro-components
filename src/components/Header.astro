@@ -16,23 +16,23 @@ const classBottom = path != '/' ? ' border-b' : '';
 >
 	<header>
 		<div class="container">
-			<div class="flex items-center justify-between max-md:h-[60px] h-[80px]">
-				<div class="flex flex-nowrap items-center max-[430px]:gap-2 gap-3 divide-x divide-black/20">
+			<div class="flex items-center justify-between h-[60px] md:h-[80px]">
+				<div class="flex flex-nowrap items-center xs:gap-2 gap-3 divide-x divide-black/20">
 
 					<img src="/img/logo.svg" class="h-4 sm:h-5 xl:h-10" alt="ALT">
 			{
 				path === '/' ? (
-					<div class="max-[430px]:pl-2 pl-3 max-sm:flex-auto max-[430px]:text-base xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</div>
+					<div class="xs:pl-2 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</div>
 				) : (
-					<a href="/" class="max-[430px]:pl-2 pl-3 max-sm:flex-auto max-[430px]:text-base xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</a>
+					<a href="/" class="xs:pl-2 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</a>
 				)
 			}
 				</div>
-				<div class="flex items-center max-[430px]:gap-3 gap-5 lg:gap-10">
+				<div class="flex items-center xs:gap-3 gap-5 lg:gap-10">
 					<div class="hidden md:flex flex-col">
 					{
 						salons.map(salon => (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="font-extrabold text-black/80 text-base lg:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title="ул. Демократическая, 55"><Icon name="ic:outline-phone-android" class="w-6" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="font-extrabold text-black/80 text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title="ул. Демократическая, 55"><Icon name="ic:outline-phone-android" class="w-6" /> {salon.phone}</a>
 						))
 					}
 					</div>
@@ -47,7 +47,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 								>Адреса салонов</a>
 								<small class="block text-xs">{salons.length}&nbsp;{declOfNums(salons.length, ['салон', 'салона', 'салонов'])}</small>
 							</div>) : (
-							<div class="hidden lg:flex items-center gap-1 font-medium">
+							<div class="hidden lg:flex items-center gap-1 font-medium text-sm xl:text-base">
 								<Icon name="clarity:map-marker-line" class="w-6" />
 								{salons[0].address}
 							</div>
@@ -55,7 +55,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 					}
 
 					<Button 
-						classes="popup-link hidden lg:block" 
+						classes="popup-link hidden lg:block !px-4 xl:!px-8 !py-2 xl:!py-3" 
 						url="#common-modal" 
 						title="Заказать звонок"
 						dataTitle="Заказать звонок"
