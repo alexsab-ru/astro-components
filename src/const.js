@@ -3,6 +3,8 @@ export const LEGAL_ENTITY = 'ООО «Юридическое название»'
 export const LEGAL_INN = '1234567890'; // ИНН
 export const SITE_DESCR = 'Официальный дилерский центр'; // Описание сайта по умолчанию
 
+export const BRAND = 'Baic';
+
 export const LINKS_MENU = [
 	{url: '#services', name: 'Услуги сервиса'},
 	{url: '#contacts', name: 'Контакты'},
