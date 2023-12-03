@@ -1,0 +1,15 @@
+span[class^='fake-checkbox'],
+span[class^='fake-radio'] {
+	@apply w-4 h-4 inline-block flex-shrink-0 border relative before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-2.5 before:h-2.5 before:transition-opacity before:opacity-0;
+}
+.fake-checkbox-white {
+	@apply border-white before:bg-white;
+}
+.fake-checkbox-black,
+.fake-radio-black {
+	@apply border-black before:bg-black;
+}
+input[type='checkbox']:checked ~ div > span[class^='fake-checkbox'],
+input[type='radio']:checked ~ div > span[class^='fake-radio'] {
+	@apply before:opacity-100;
+}
