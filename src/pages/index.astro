@@ -13,7 +13,7 @@ const models = await fetch(`${Astro.url.href}src/data/models.json`).then((respon
 	<Banner fetchURL={`${Astro.url.href}src/data/banners.json`} />
 	<ModelList fetchURL={`${Astro.url.href}src/data/models.json`} />
 	{models && models.map((model: any) => <Model model={model}/>)}
-	<Callback />
+	<Callback bgUrl="https://baic-krasnodar.ru/img/x35/konkurenty.jpg" />
 	<Services fetchURL={`${Astro.url.href}src/data/services.json`} />
 	<Contacts
 		fetchURL={`${Astro.url.href}src/data/salons.json`}
