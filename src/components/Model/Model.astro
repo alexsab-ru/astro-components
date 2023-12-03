@@ -3,16 +3,20 @@ interface Props {
 	model: any;
 }
 const {model} = Astro.props;
+
 import Icon from 'astro-icon';
 import style from './Model.module.scss';
 import {BRAND} from '@/const';
-const photoSlides = !model.photos ? [] : [].concat(
-	...Object.values(
-		await fetch(`https://baic-krasnodar.ru/data/u5plus.json`).then((response) =>
-			response.json()
-		)
-	)
-);
+const photoSlides = !model.photos
+	? []
+	: [].concat(
+			...Object.values(
+				await fetch(`https://baic-krasnodar.ru/data/u5plus.json`).then((response) =>
+					response.json()
+				)
+			)
+	  );
+import Button from '@/components/Button.astro';
 ---
 
 <section class={style.model} id={model?.id} data-dir={model?.id}>
@@ -89,15 +93,17 @@ const photoSlides = !model.photos ? [] : [].concat(
 				alt={`${BRAND} ${model?.name}`}
 			/>
 			<div class="flex flex-wrap justify-center gap-4 sm:gap-5 color-links">
-                {
-                    model.colors && model.colors.map((c: any, idx: number) => (
-                    <a
-                        href="#"
-                        class={`color-link ${idx === 0 ? 'active' : ''}`}
-                        title={c.name}
-                        data-color={c.id}></a>
-                    ))
-                }
+				{
+					model.colors &&
+						model.colors.map((c: any, idx: number) => (
+							<a
+								href="#"
+								class={`color-link ${idx === 0 ? 'active' : ''}`}
+								title={c.name}
+								data-color={c.id}
+							/>
+						))
+				}
 				<p class="w-full text-center text-xs color-name text-black">
 					{model.colors[0]?.name}
 				</p>
@@ -105,8 +111,8 @@ const photoSlides = !model.photos ? [] : [].concat(
 		</div>
 	</div>
 
-    <div class="container px-0 sm:px-5">
-        {
+	<div class="container px-0 sm:px-5">
+		{
 			photoSlides.length && (
 				<div class="swiper photo-slider h-[120px] md:h-[200px] mt-14">
 					<div class="swiper-wrapper">
@@ -123,14 +129,14 @@ const photoSlides = !model.photos ? [] : [].concat(
 				</div>
 			)
 		}
-    </div>
+	</div>
 
 	<div class="container">
 		{
 			model.globalChars && (
 				<div class="flex justify-center flex-wrap gap-4 mt-14 text-black">
 					{model.globalChars.map((char: any) => (
-						<div class="flex flex-col justify-between gap-4 sm:gap-8 xs:p-3 p-4 shadow rounded w-[calc((100%/2)-16px)] sm:w-[calc((100%/3)-16px)] xl:w-[calc((100%/6)-16px)]">
+						<div class="flex flex-col justify-between gap-4 sm:gap-8 xs:p-3 p-4 shadow rounded w-[calc((100%/2)-8px)] sm:w-[calc((100%/3)-11px)] xl:w-[calc((100%/6)-14px)]">
 							<div class="text-xs sm:text-base">{char.title}:</div>
 							<div>
 								<b class="xs:text-xl text-2xl sm:text-3xl 2xl:text-4xl font-bold">
@@ -143,6 +149,37 @@ const photoSlides = !model.photos ? [] : [].concat(
 				</div>
 			)
 		}
+
+		<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-14">
+			<Button 
+				classes="popup-link btn black btn-o !px-4" 
+				url="#common-modal" 
+				title="Узнать цену"
+				dataTitle="Узнать цену"
+				dataFormName={`Узнать цену. ${BRAND} ${model.name}`}
+			/>
+			<Button 
+				classes="popup-link btn !px-4" 
+				url="#common-modal" 
+				title="Рассчитать кредит"
+				dataTitle="Рассчитать кредит"
+				dataFormName={`Рассчитать кредит. ${BRAND} ${model.name}`}
+			/>
+			<Button 
+				classes="popup-link btn black !px-4" 
+				url="#common-modal" 
+				title="Записаться на тест-драйв"
+				dataTitle="Записаться на тест-драйв"
+				dataFormName={`Записаться на тест-драйв. ${BRAND} ${model.name}`}
+			/>
+			<Button 
+				classes="popup-link btn gray !px-4" 
+				url="#common-modal" 
+				title="Узнать цену по акции"
+				dataTitle="Узнать цену по акции"
+				dataFormName={`Узнать цену по акции. ${BRAND} ${model.name}`}
+			/>
+		</div>
 	</div>
 </section>
 
