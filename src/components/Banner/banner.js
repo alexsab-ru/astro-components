@@ -18,6 +18,8 @@ if (progressCircle) {
 	progressCircle.closest(".autoplay-progress").style.display = "none";
 }
 
+const slides = document.querySelectorAll(".banner-slide");
+
 const initSlider = () => {
 	bannerSlider = new Swiper(".banner-slider", {
 		modules: [Navigation, Pagination, Autoplay, Parallax],
@@ -37,7 +39,7 @@ const initSlider = () => {
 		},
 		on: {
 			init(s) {
-				if (this.slides[0].querySelector("video")) {
+				if (this.slides[0].querySelector("video") && slides.length > 1) {
 					progressCircle.closest(".autoplay-progress").style.display = "flex";
 					videoPrev.play();
 				}
@@ -70,8 +72,6 @@ const initSlider = () => {
 		},
 	});
 };
-
-const slides = document.querySelectorAll(".banner-slide");
 
 if (slides.length > 1) {
 	loop = true;
