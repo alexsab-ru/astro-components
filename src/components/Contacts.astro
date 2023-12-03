@@ -5,75 +5,33 @@ interface Props {
 	title?: string;
 }
 
-const {fetchURL = '', mapImg = '', title = ''} = Astro.props;
+const {fetchURL, mapImg, title} = Astro.props;
+
 const salons = await fetch(fetchURL).then((response) => response.json());
-import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN } from '@/const.js';
-import { Icon } from 'astro-icon'
-import { phoneFormat } from '@/js/use/numbers.format';
-import Map from '@/components/Map/Map.astro'
+
+import Map from './Map/Map.astro';
+
+import MapInfo from './Map/MapInfo.astro';
 ---
 
 <section
 	class={`section bg-gray-50 ${title ? 'pt-8 sm:pt-16 pb-0' : 'p-0'}`}
 	id="contacts">
 	<div class="container relative">
-		{title && (<h2 class="text-xl sm:text-4xl font-medium mb-14 before:hidden text-left mx-0">{title}</h2>)}
+		{
+			title && (
+				<h2 class="text-xl sm:text-4xl font-medium mb-14 before:hidden text-left mx-0">
+					{title}
+				</h2>
+			)
+		}
 
-		{salons.length < 2 && salons.length != 0 && (
-		<div class="relative lg:absolute lg:max-w-md lg:top-[135px] s1024_1074:left-[45px] s1280_1330:left-[45px] s1536_1586:left-[45px] py-8 px-4 sm:px-8 z-10 bg-white map-info shadow-2xl w-fit mx-auto mb-10 lg:mb-0">
-			<div class="flex items-center flex-nowrap flex-col sm:flex-row gap-1 sm:gap-3 mb-6">
-				<div class="sm:pr-3 sm:border-r w-full max-w-[140px] flex-grow flex-shrink">
-					<img src="./img/logo.svg" class="w-full" alt={SITE_NAME} />
-				</div>
-				<div class="text-xl sm:text-2xl leading-none uppercase tracking-wider sm:tracking-normal">
-					{SITE_NAME}
-				</div>
-			</div>
-			{salons[0].address && (
-			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
-				<Icon name="mdi:map-marker-outline" class="h-8 flex-shrink-0" />
-				<div>
-					<div class="font-medium mb-2 sm:text-lg">
-						{salons[0].address}
-					</div>
-					{LEGAL_ENTITY && <div>{LEGAL_ENTITY}</div>}
-					{LEGAL_INN && <div>ИНН: {LEGAL_INN}</div>}
-				</div>
-			</div>
-			)}
-			{salons[0].work_hours && (
-			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
-				<Icon name="mdi:clock-time-three-outline" class="h-8 flex-shrink-0" />
-				<div class="font-medium mb-2 sm:text-lg">
-					{salons[0].work_hours}
-				</div>
-			</div>
-			)}
-			{salons[0].phone && (
-			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
-				<Icon name="ic:outline-phone-android" class="h-8 flex-shrink-0" />
-				<a 
-					href={`tel:${phoneFormat(salons[0].phone)}`}
-					class="font-medium mb-2 sm:text-xl goal-click-lead-tel">
-					{salons[0].phone}
-				</a>
-			</div>
-			)}
-			
-			<div class="font-bold sm:text-xl mb-4">
-				Остались вопросы? Мы&nbsp;перезвоним!
-			</div>
-			<a
-				class="popup-link btn black max-w-[400px] w-full block"
-				href="#common-modal"
-				data-title="Заказать звонок"
-				data-form_name="Заказ звонка. Секция Контакты">
-				Заказать звонок
-			</a>
-		</div>
-	)}
+		{
+		(salons.length < 2 && salons.length != 0) && (
+			<MapInfo fetchURL={`${Astro.url.href}src/data/salons.json`}' />
+		)}
 	</div>
 
-	<Map mapImg={mapImg}/>
-	
+	<Map mapImg={mapImg} />
+
 </section>
