@@ -1,0 +1,9 @@
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.mobile-title-size {
+		font-size: calc((1vw + 1vh) * 2.2);
+	}
+}
