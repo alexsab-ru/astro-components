@@ -3,7 +3,7 @@ interface Props {
 	banner: any
 }
 const {banner = {}} = Astro.props;
-import Button from '@/components/Button.astro';
+import Button from '@/components/Button/Button.astro';
 ---
 
 <div class="swiper-slide banner-slide" data-swiper-autoplay={banner.autoplay}>
