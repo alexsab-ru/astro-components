@@ -6,7 +6,7 @@ const {fetchURL = ''} = Astro.props;
 const salons = await fetch(fetchURL).then((response) => response.json());
 import { SITE_NAME, LINKS_MENU as links } from '@/const.js';
 import { Icon } from 'astro-icon';
-import { phoneFormat, declOfNums } from '@/js/use/numbers.format';
+import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 import Button from '@/components/Button/Button.astro';
 
 const path = Astro.url.pathname;

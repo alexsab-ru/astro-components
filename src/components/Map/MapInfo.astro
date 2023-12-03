@@ -8,7 +8,7 @@ const salons = await fetch(fetchURL).then((response) => response.json());
 
 import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN } from '@/const'
 
-import { phoneFormat } from '@/js/use/numbers.format';
+import { phoneFormat } from '@/js/utils/numbers.format';
 
 import Icon from 'astro-icon';
 ---
@@ -69,3 +69,4 @@ import Icon from 'astro-icon';
 		Заказать звонок
 	</a>
 </div>
+@/js/utils/numbers.format

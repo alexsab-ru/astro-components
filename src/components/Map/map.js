@@ -1,5 +1,5 @@
 import salons from '@/data/salons.json';
-import  { phoneFormat } from '@/js/use/numbers.format';
+import  { phoneFormat } from '@/js/utils/numbers.format';
 const balloonContentHeader = name => {return `<h6 class="text-sm"><b>${name}</b></h6>`};
 const balloonContentBody = (hours, phone, link) => {
 	return `
