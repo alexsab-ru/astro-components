@@ -3,11 +3,17 @@ interface Props {
 	fetchURL?: string
 }
 const {fetchURL = ''} = Astro.props;
+
 const salons = await fetch(fetchURL).then((response) => response.json());
-import { SITE_NAME, LINKS_MENU as links } from '@/const.js';
+
+import { LINKS_MENU as links } from '@/const.js';
+
 import { Icon } from 'astro-icon';
+
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
+
 import Button from '@/components/Button/Button.astro';
+import Logo from '@/components/Logo/Logo.astro';
 
 const path = Astro.url.pathname;
 
@@ -21,17 +27,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 	<header>
 		<div class="container">
 			<div class="flex items-center justify-between h-[60px] md:h-[80px]">
-				<div class="flex flex-nowrap items-center xs:gap-2 gap-3 divide-x divide-black/20">
-
-					<img src="/img/logo.svg" class="h-4 sm:h-5 xl:h-10" alt="ALT">
-			{
-				path === '/' ? (
-					<div class="xs:pl-2 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</div>
-				) : (
-					<a href="/" class="xs:pl-2 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{ SITE_NAME }</a>
-				)
-			}
-				</div>
+				<Logo />
 				<div class="flex items-center xs:gap-3 gap-5 lg:gap-10">
 					<div class="hidden md:flex flex-col">
 					{
