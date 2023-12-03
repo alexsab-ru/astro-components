@@ -2,7 +2,7 @@
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
-const label = '<span>Я согласен на</span><a href="/privacy-policy" class="underline transition-all hover:no-underline" target="_blank">обработку персональных данных</a>';
+import {AGREE_LABEL} from '@/const'
 ---
 
 <!-- MODALS -->
@@ -51,7 +51,7 @@ const label = '<span>Я согласен на</span><a href="/privacy-policy" cl
 
 			<Checkbox
 				name="agree"
-				label={label}
+				label={AGREE_LABEL}
 				color="black"
 				required
 				errorClasses="text-red-500 w-full"

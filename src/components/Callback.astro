@@ -3,7 +3,7 @@ const {bgUrl} = Astro.props;
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
-const label = '<span>Я согласен на</span><a href="/privacy-policy" class="underline transition-all hover:no-underline" target="_blank">обработку персональных данных</a>';
+import {AGREE_LABEL} from '@/const'
 ---
 
 <section class="text-white py-20 sm:py-24 bg-cover bg-bottom relative z-[1] before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-[-1]" style={`background-image: url(${bgUrl});`}>
@@ -44,7 +44,7 @@ const label = '<span>Я согласен на</span><a href="/privacy-policy" cl
 
                 <Checkbox
                     name="agree"
-                    label={label}
+                    label={AGREE_LABEL}
                     color="white"
                     required
                     errorClasses="text-red-500 w-full"
