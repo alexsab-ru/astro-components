@@ -1,12 +1,2 @@
-@mixin font($fname, $fstyle, $fweight, $furl) {
-	@font-face {
-		src: url($furl) format("woff2");
-		font-family: $fname;
-		font-style: $fstyle;
-		font-weight: $fweight;
-		font-display: "swap";
-	}
-}
-
 // @include font("Gilroy", normal, 300, "/fonts/gilroy-light.woff2");
 // @include font("Gilroy", normal, 800, "/fonts/gilroy-extrabold.woff2");
