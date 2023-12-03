@@ -5,7 +5,7 @@ interface Props {
 const {model} = Astro.props;
 
 import Icon from 'astro-icon';
-import style from './Model.module.scss';
+import './model.scss';
 import {BRAND} from '@/const';
 const photoSlides = !model.photos
 	? []
@@ -20,9 +20,9 @@ import Button from '@/components/Button/Button.astro';
 import ColorLink from '@/components/ColorLink/ColorLink.astro'
 ---
 
-<section class={style.model} id={model?.id} data-dir={model?.id}>
+<section class="model" id={model?.id} data-dir={model?.id}>
 	<div
-		class={style.model__info}
+		class="model__info"
 		style={`background-image: url(${model?.homeImg})`}>
 		<div class="container h-full pt-8 sm:pt-[2.5%]">
 			<div class="flex justify-between items-start flex-col lg:flex-row">
