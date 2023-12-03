@@ -17,6 +17,7 @@ const photoSlides = !model.photos
 			)
 	  );
 import Button from '@/components/Button/Button.astro';
+import ColorLink from '@/components/ColorLink/ColorLink.astro'
 ---
 
 <section class={style.model} id={model?.id} data-dir={model?.id}>
@@ -96,12 +97,7 @@ import Button from '@/components/Button/Button.astro';
 				{
 					model.colors &&
 						model.colors.map((c: any, idx: number) => (
-							<a
-								href="#"
-								class={`color-link ${idx === 0 ? 'active' : ''}`}
-								title={c.name}
-								data-color={c.id}
-							/>
+							<ColorLink title={c.name} id={c.id} idx={idx}/>
 						))
 				}
 				<p class="w-full text-center text-xs color-name text-black">

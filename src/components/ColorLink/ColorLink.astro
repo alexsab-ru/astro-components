@@ -1,0 +1,15 @@
+---
+interface Props {
+	title?: string;
+	id?: string;
+	idx?: number;
+}
+const {title, id, idx} = Astro.props;
+import './color-links.scss';
+---
+
+<a href="#" class={`color-link ${idx === 0 ? 'active' : ''}`} title={title} data-color={id}></a>
+
+<script>
+	import './color.links'
+</script>
