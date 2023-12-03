@@ -11,6 +11,8 @@ import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN } from '@/const'
 import { phoneFormat } from '@/js/utils/numbers.format';
 
 import Icon from 'astro-icon';
+
+import logo from '@/components/Logo/logo.svg';
 ---
 
 <div
@@ -18,7 +20,7 @@ import Icon from 'astro-icon';
 	<div
 		class="flex items-center flex-nowrap flex-col sm:flex-row gap-1 sm:gap-3 mb-6">
 		<div class="sm:pr-3 sm:border-r w-full max-w-[140px] flex-grow flex-shrink">
-			<img src="./img/logo.svg" class="w-full" alt={SITE_NAME} />
+			<img src={logo.src} class="w-full" alt={SITE_NAME} />
 		</div>
 		<div
 			class="text-xl sm:text-2xl leading-none uppercase tracking-wider sm:tracking-normal">
@@ -69,4 +71,3 @@ import Icon from 'astro-icon';
 		Заказать звонок
 	</a>
 </div>
-@/js/utils/numbers.format
