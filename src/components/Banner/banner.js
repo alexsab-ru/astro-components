@@ -1,5 +1,5 @@
 import Swiper from "swiper";
-import { Navigation, Pagination, Autoplay, Parallax, EffectFade } from "swiper/modules";
+import { Navigation, Pagination, Autoplay, Parallax } from "swiper/modules";
 
 import "swiper/css/bundle";
 
