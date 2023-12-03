@@ -1,41 +1,5 @@
-[x-cloak] {
-	display: none;
-}
-// @tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer components {
-	.mobile-title-size {
-		font-size: calc((1vw + 1vh) * 2.2);
-	}
-}
+@import "mixins";
 
 @import 'fonts';
-
-body {
-	@apply selection:bg-accent-500 selection:text-white;
-}
-
-section {
-	@apply relative py-8 sm:py-16 bg-cover bg-center;
-	h2 {
-		@apply relative pb-3 text-3xl sm:text-5xl w-fit mx-auto font-extrabold before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:h-1 before:w-32 before:bg-accent-500;
-	}
-}
-
-.dz-remove {
-	@apply text-red-500;
-}
-
-.content {
-	p, b, ul, ol, a {
-		@apply sm:text-lg mb-4;
-	}
-	a {
-		@apply font-extrabold text-accent-500 underline hover:no-underline;
-	}
-	li {
-		@apply mb-1;
-	}
-}
+@import 'tailwind';
+@import 'global';
