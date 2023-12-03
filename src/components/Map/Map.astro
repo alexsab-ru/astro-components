@@ -1,0 +1,16 @@
+---
+interface Props{
+    mapImg: string
+}
+const {mapImg} = Astro.props
+import './map.sass';
+---
+
+<div class="map h-[400px] lg:h-[500px]" style={`background-image: url(${mapImg})`}>
+    <div class="loader loader-default"></div>
+    <div id="map"></div>
+</div>
+
+<script>
+    import './map'
+</script>
