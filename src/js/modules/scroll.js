@@ -35,23 +35,27 @@ function scroll(hash) {
 		});
 	}
 }
-
-window.addEventListener('scroll', () => {
-	let scrollDistance = window.scrollY;
-	document.querySelectorAll('.section').forEach((el, i) => {
-		if (el.offsetTop - $nav.offsetHeight * 2.5 <= scrollDistance) {
-			document.querySelectorAll('.scroll-link').forEach((elem) => {
-				if (elem.classList.contains('bg-accent-500/50')) {
+const navOffset = $nav ? $nav.offsetHeight * 2.5 : 0;
+const sections = document.querySelectorAll('.section');
+const scrollLinks = document.querySelectorAll('.scroll-link');
+if(sections.length && scrollLinks.length){
+	window.addEventListener('scroll', () => {
+		let scrollDistance = window.scrollY;
+		sections.forEach((el, i) => {
+			if (el.offsetTop - navOffset <= scrollDistance) {
+				scrollLinks.forEach((elem) => {
+					if (elem.classList.contains('bg-accent-500/50')) {
+						elem.classList.remove('bg-accent-500/50');
+					}
+				});
+	
+				scrollLinks[i].classList.add('bg-accent-500/50');
+			}
+			if (scrollDistance < sections[0].offsetTop - navOffset) {
+				scrollLinks.forEach((elem) => {
 					elem.classList.remove('bg-accent-500/50');
-				}
-			});
-
-			document.querySelectorAll('.scroll-link')[i].classList.add('bg-accent-500/50');
-		}
-		if (scrollDistance < 700) {
-			document.querySelectorAll('.scroll-link').forEach((elem) => {
-				elem.classList.remove('bg-accent-500/50');
-			});
-		}
+				});
+			}
+		});
 	});
-});
+}
