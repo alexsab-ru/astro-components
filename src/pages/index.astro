@@ -6,17 +6,17 @@ import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
-const models = await fetch(`${Astro.url.href}src/data/models.json`).then((response) => response.json());
+const models = await fetch(`${Astro.url.origin}/src/data/models.json`).then((response) => response.json());
 ---
 
 <Layout title="TITLE" descr="DESCRIPTION">
-	<Banner fetchURL={`${Astro.url.href}src/data/banners.json`} />
-	<ModelList fetchURL={`${Astro.url.href}src/data/models.json`} />
+	<Banner fetchURL={`${Astro.url.origin}/src/data/banners.json`} />
+	<ModelList fetchURL={`${Astro.url.origin}/src/data/models.json`} />
 	{models && models.map((model: any) => <Model model={model}/>)}
 	<Callback bgUrl="https://baic-krasnodar.ru/img/x35/konkurenty.jpg" />
-	<Services fetchURL={`${Astro.url.href}src/data/services.json`} />
+	<Services fetchURL={`${Astro.url.origin}/src/data/services.json`} />
 	<Contacts
-		fetchURL={`${Astro.url.href}src/data/salons.json`}
+		fetchURL={`${Astro.url.origin}/src/data/salons.json`}
 		mapImg="https://baic-alpha.ru/img/map_bg.jpg"
 		title="Наши контакты"
 	/>

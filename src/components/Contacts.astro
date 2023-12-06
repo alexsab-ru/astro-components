@@ -28,7 +28,7 @@ import MapInfo from './Map/MapInfo.astro';
 
 		{
 		(salons.length < 2 && salons.length != 0) && (
-			<MapInfo fetchURL={`${Astro.url.href}src/data/salons.json`}' />
+			<MapInfo fetchURL={`${Astro.url.origin}/src/data/salons.json`}' />
 		)}
 	</div>
 
