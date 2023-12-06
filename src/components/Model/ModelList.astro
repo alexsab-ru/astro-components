@@ -4,7 +4,8 @@ interface Props {
 	title?: string;
 }
 const {fetchURL = '', title = 'Модельный ряд'} = Astro.props;
-const models = await fetch(fetchURL).then((response) => response.json());
+// const models = await fetch(fetchURL).then((response) => response.json());
+import models from '@/data/models.json'
 import {Icon} from 'astro-icon';
 ---
 
