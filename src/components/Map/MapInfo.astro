@@ -32,7 +32,7 @@ import logo from '@/components/Logo/logo.svg';
 			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
 				<Icon name="mdi:map-marker-outline" class="h-8 flex-shrink-0" />
 				<div>
-					<div class="font-medium mb-2 sm:text-lg">{salons[0].address}</div>
+					<div class="font-medium mb-2 sm:text-lg"><Fragment set:html={salons[0].address} /></div>
 					{LEGAL_ENTITY && <div>{LEGAL_ENTITY}</div>}
 					{LEGAL_INN && <div>ИНН: {LEGAL_INN}</div>}
 				</div>
@@ -43,7 +43,7 @@ import logo from '@/components/Logo/logo.svg';
 		salons[0].work_hours && (
 			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
 				<Icon name="mdi:clock-time-three-outline" class="h-8 flex-shrink-0" />
-				<div class="font-medium mb-2 sm:text-lg">{salons[0].work_hours}</div>
+				<div class="font-medium mb-2 sm:text-lg"><Fragment set:html={salons[0].work_hours} /></div>
 			</div>
 		)
 	}

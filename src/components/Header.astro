@@ -49,7 +49,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 							</div>) : (
 							<div class="hidden lg:flex items-center gap-1 font-medium text-sm xl:text-base">
 								<Icon name="clarity:map-marker-line" class="w-6" />
-								{salons[0].address}
+								<Fragment set:html={salons[0].address} />
 							</div>
 						)
 					}
