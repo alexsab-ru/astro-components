@@ -39,9 +39,11 @@ const initSlider = () => {
 		},
 		on: {
 			init(s) {
-				if (this.slides[0].querySelector("video") && slides.length > 1) {
-					progressCircle.closest(".autoplay-progress").style.display = "flex";
-					videoPrev.play();
+				if (slides.length > 1) {
+					progressCircle.closest('.autoplay-progress').style.display = 'flex';
+					if (this.slides[0].querySelector('video')) {
+						videoPrev.play();
+					}
 				}
 			},
 			autoplayTimeLeft(s, time, progress) {
