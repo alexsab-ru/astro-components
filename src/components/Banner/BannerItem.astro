@@ -25,7 +25,7 @@ import Badge from './Badge.astro';
 					banner.descr && (
 						<p
 							data-swiper-parallax="-40%"
-							class="text-sm sm:text-xl md:text-3xl mt-3 sm:mt-5 mb-4 sm:mb-10">
+							class="text-sm sm:text-xl md:text-3xl mt-3 sm:mt-5">
 							<Fragment set:html={banner.descr} />
 						</p>
 					)
@@ -35,7 +35,7 @@ import Badge from './Badge.astro';
 					banner.btn && (
 						<div data-swiper-parallax="-55%">
 							<Button
-								classes="popup-link white inline-block !py-2 sm:py-3 text-sm sm:text-base"
+								classes="popup-link white inline-block !py-2 sm:py-3 text-sm sm:text-base mt-8 sm:mt-10"
 								url={banner.btnUrl}
 								title={banner.btn}
 								dataTitle={banner.dataTitle}
