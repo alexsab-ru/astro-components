@@ -6,7 +6,8 @@ import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
-const models = await fetch(`${Astro.url.origin}/src/data/models.json`).then((response) => response.json());
+// const models = await fetch(`${Astro.url.origin}/src/data/models.json`).then((response) => response.json());
+import models from '@/data/models.json'
 ---
 
 <Layout title="TITLE" descr="DESCRIPTION">
