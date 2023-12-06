@@ -11,7 +11,7 @@ const photoSlides = !model.photos
 	? []
 	: [].concat(
 			...Object.values(
-				await fetch(`https://baic-krasnodar.ru/data/u5plus.json`).then((response) =>
+				await fetch(model.photos).then((response) =>
 					response.json()
 				)
 			)

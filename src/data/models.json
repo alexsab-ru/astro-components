@@ -24,7 +24,7 @@
                 "name": "Черный металлик"
             }
         ],
-        "photos": true,
+        "photos": "https://baic-krasnodar.ru/data/u5plus.json",
         "chars": {
             "seats": "5 мест",
             "fuel": "Бензин",
