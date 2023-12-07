@@ -50,9 +50,9 @@ jobs:
         id: with_commits
         run: |
           if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
-            git fetch origin master
-            git checkout master
-            mapfile -t COMMITS_ARRAY < <(git log --pretty=format:"'<code>%h</code>' - %an, %ar : %s" master..${{ github.sha }})
+            git fetch origin HEAD
+            git checkout HEAD
+            mapfile -t COMMITS_ARRAY < <(git log --pretty=format:"'<code>%h</code>' - %an, %ar : %s" HEAD..${{ github.sha }})
             echo "before=${{ github.sha }}" >> $GITHUB_OUTPUT
           else
             mapfile -t COMMITS_ARRAY < <(git log --pretty=format:"'<code>%h</code>' - %an, %ar : %s" ${{ github.event.before }}..${{ github.sha }})
@@ -148,7 +148,7 @@ jobs:
 
   delete:
 
-    if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null }}
+    if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null }}
 
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -167,6 +167,53 @@ jobs:
             *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
 
             branch '`${{ github.event.ref }}`' is deleted
+
+  get_last_commit:
+    if: ${{ inputs.additional-text != null }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update repository
+        run: git pull
+
+      - name: Get last commit information
+        id: get_commits
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
+          COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
+          COMMIT_HASH=$(git rev-parse HEAD)
+          echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          echo "author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
+          echo "hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+
+      - name: Set outputs
+        id: set_outputs
+        # The part of this solution to focus on is that we’re substituting the %, \n, and \r characters
+        run: |
+          additional_text="${{ inputs.additional-text || '' }}"
+          if [ "$additional_text" != "" ]; then
+            echo "additional_text<<EOF" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo $additional_text >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send message to Telegram
+        if: ${{ steps.get_commits.outputs.hash != '' }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          format: html
+          message: |
+            <b>[${{ github.event.repository.name }}:${{ github.ref_name }}]</b> <b><a href="https://github.com/${{ github.repository }}/commit/${{ steps.get_commits.outputs.hash }}">Last commit</a></b> by <b>${{ steps.get_commits.outputs.author }}</b>
+            ${{ steps.set_outputs.outputs.additional_text }}
+            ${{ steps.get_commits.outputs.message }}
+
 
   # log-github-event-goodies:
   #   name: "LOG Everything on GitHub Event"
