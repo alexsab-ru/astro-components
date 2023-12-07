@@ -116,7 +116,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 				{links.length &&
 				<div class="flex flex-col border-b lg:hidden">
 					{links.map(link => (
-					<a href={link.url} class="scroll-link">{link.name}</a>
+					<a href={path === '/' ? link.url : '/'+link.url} class="scroll-link">{link.name}</a>
 					))}
 				</div>					
 				}
