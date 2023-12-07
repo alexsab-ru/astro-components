@@ -6,6 +6,7 @@
         "work_hours": "пн — вс: 8:00 — 20:00",
         "map": {
             "zoom": 17,
+            "balloon": "img/empty-locator.png",
             "coords": [53.183971, 50.151672],
             "ya_link": "https://yandex.ru/maps/51/samara/?from=api-maps&ll=50.228953%2C53.274141&mode=routes&origin=jsapi_2_1_79&pt=50.227754%2C53.275197~50.178598%2C53.138397&rtext=~53.274703%2C50.227773&rtt=auto&ruri=~ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NzM5MDc3OBJJ0KDQvtGB0YHQuNGPLCDQodCw0LzQsNGA0LAsINCU0LXQvNC-0LrRgNCw0YLQuNGH0LXRgdC60LDRjyDRg9C70LjRhtCwLCA1NSIKDTnpSEIVzhlVQg%2C%2C&z=16.89"
         }

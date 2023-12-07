@@ -11,6 +11,8 @@ const balloonContentBody = (hours, phone, link) => {
 const center = salons.length === 1 ? [salons[0].map.coords[0], salons[0].map.coords[1]] : [53.195878, 50.100202];
 const zoom = salons.length === 1 && salons[0].map.zoom ? salons[0].map.zoom : 10;
 const parent = document.querySelector(".map");
+const _ball_Offset = [-21, -58];
+const _ball_Size = [43, 62];
 
 let start_load_script = false, // Переменная для определения была ли хоть раз загружена Яндекс.Карта (чтобы избежать повторной загрузки при наведении)
 	end_load_script = false; // Переменная для определения был ли загружен скрипт Яндекс.Карт полностью (чтобы не возникли какие-нибудь ошибки, если мы загружаем несколько карт одновременно)
@@ -28,6 +30,7 @@ function init() {
 	}
 	myMapTemp.behaviors.disable("scrollZoom");
 	salons.map((salon) => {
+		const _ball_bg = salon.map.balloon ? salon.map.balloon : '/img/map.balloon.png';
 		myMapTemp.geoObjects.add(
 			new ymaps.Placemark(
 				[salon.map.coords[0], salon.map.coords[1]],
@@ -38,8 +41,14 @@ function init() {
 					hintContent: salon.address,
 				},
 				{
-					preset: "islands#blueAutoIcon",
-					iconColor: "#06B6D4",
+					iconLayout: "default#image",
+					// Своё изображение иконки метки.
+					iconImageHref: _ball_bg,
+					// Размеры метки.
+					iconImageSize: _ball_Size,
+					// Смещение левого верхнего угла иконки относительно
+					// её "ножки" (точки привязки).
+					iconImageOffset: _ball_Offset,
 				}
 			)
 		);
