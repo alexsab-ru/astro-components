@@ -1,0 +1,23 @@
+---
+import Layout from '@/layouts/Layout.astro';
+const title = 'Ошибка 404';
+const pageTitle = '404. Такая страница не найдена' 
+---
+
+<Layout title={title} descr={pageTitle}>
+    <section class="relative pb-10 px-5">
+        <div class="flex flex-col items-center justify-center gap-5 sm:gap-10 px-2">
+            <div class="text-lg sm:text-3xl md:text-4xl lg:text-6xl text-center">
+                <h1 class="uppercase font-bold">{pageTitle}</h1>
+            </div>
+            <a href="/" class="btn inline-block mt-5 mb-10">Назад</a>
+        </div>
+        <img src="/img/404.jpg" class="not-found-image w-full mx-auto mt-10" alt="not found">
+    </section>
+</Layout>
+
+<style>
+    .not-found-image{
+        max-width: 512px;
+    }
+</style>
