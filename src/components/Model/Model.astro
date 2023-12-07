@@ -18,6 +18,7 @@ const photoSlides = !model.photos
 	  );
 import Button from '@/components/Button/Button.astro';
 import ColorLink from '@/components/ColorLink/ColorLink.astro'
+const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.colors[0].id}.png`;
 ---
 
 <section class="model" id={model?.id} data-dir={model?.id}>
@@ -89,15 +90,16 @@ import ColorLink from '@/components/ColorLink/ColorLink.astro'
 		<div
 			class="w-full lg:w-3/4 2xl:w-3/5 flex flex-col justify-center lg:justify-center">
 			<img
-				src={`https://baic-alpha.ru/img/${model.id}/${model.colors[0].id}.png`}
+				src={carImagePath}
 				class="w-full color-img-preview"
 				alt={`${BRAND} ${model?.name}`}
+				loading="lazy"
 			/>
 			<div class="flex flex-wrap justify-center gap-4 sm:gap-5 color-links">
 				{
 					model.colors &&
 						model.colors.map((c: any, idx: number) => (
-							<ColorLink title={c.name} id={c.id} idx={idx}/>
+							<ColorLink title={c.name} id={c.id} idx={idx} carImage={c.carImage} style={c.style} />
 						))
 				}
 				<p class="w-full text-center text-xs color-name text-black">
