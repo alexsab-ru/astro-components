@@ -4,7 +4,7 @@ import { Icon } from 'astro-icon'
 <div
 	x-data="scrollTop"
     x-cloak
-	class="fixed bottom-20 sm:bottom-10 right-10 rounded bg-accent flex items-center justify-center cursor-pointer bg-accent-500 w-10 h-10 transition-all duration-300 shadow-2xl opacity-50 hover:opacity-100 z-50 text-white"
+	class="fixed bottom-20 sm:bottom-10 right-10 rounded flex items-center justify-center cursor-pointer bg-accent-500 w-10 h-10 transition-all duration-300 shadow-2xl opacity-50 hover:opacity-100 z-50 text-white"
     :class="scrolled ? 'translate-x-0' : 'translate-x-24'"
 	x-on:click="onClick"
 >
