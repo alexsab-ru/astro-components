@@ -36,9 +36,13 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 							>{model?.name}</b
 						>
 					</div>
-					<p class="uppercase text-lg sm:text-2xl opacity-80">
-						{model?.slogan}
-					</p>
+					{
+						model.slogan && (
+						<p class="uppercase text-lg sm:text-2xl opacity-80">
+							{model.slogan}
+						</p>
+						)
+					}
 				</div>
 				<a
 					href="#common-modal"
