@@ -10,7 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@alexsab-ru/scripts": "^0.1.0",
+    "@alexsab-ru/scripts": "^0.3.1",
     "@astrojs/alpinejs": "^0.3.1",
     "@astrojs/tailwind": "^5.0.2",
     "@types/alpinejs": "^3.13.5",
