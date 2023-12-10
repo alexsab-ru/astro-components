@@ -9,7 +9,7 @@ import robots from "astro-robots";
 export default defineConfig({
 	site: 'https://site.com',
 	integrations: [
-		tailwind(), 
+		tailwind(),
 		sitemap(),
 		robots(),
 		alpinejs()
