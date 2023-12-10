@@ -29,6 +29,9 @@ dependencies:
   astro-icon:
     specifier: ^0.8.2
     version: 0.8.2
+  astro-robots:
+    specifier: ^2.0.0
+    version: 2.0.0
   glightbox:
     specifier: ^3.2.0
     version: 3.2.0
@@ -1015,6 +1018,10 @@ packages:
     dependencies:
       resolve-pkg: 2.0.0
       svgo: 2.8.0
+    dev: false
+
+  /astro-robots@2.0.0:
+    resolution: {integrity: sha512-12BN6vJUEJ5iFbb4Wa4k0Bvagr07Rut8V58KjD8hGzraRHfX7JiIvbsOnQP6UeBSZlZY/AqwVRz2q+6NowsWJw==}
     dev: false
 
   /astro@3.6.4(sass@1.69.5):
