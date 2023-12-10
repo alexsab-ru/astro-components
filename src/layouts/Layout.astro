@@ -1,9 +1,9 @@
 ---
 interface Props {
 	title?: string;
-	descr?: string;
+	description?: string;
 }
-const {title, descr} = Astro.props;
+const {title, description} = Astro.props;
 
 import {SITE_NAME, SITE_DESCR} from '@/const.js';
 
@@ -21,7 +21,7 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 <html lang="ru">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content={descr ?? SITE_DESCR} />
+		<meta name="description" content={description ?? SITE_DESCR} />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
