@@ -1,10 +1,10 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN} from '@/const'
+import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const'
 ---
 
 <PageLayout title="Политика конфиденциальности">
-    <p>Настоящим даю согласие на обработку моих вышеуказанных персональных данных {LEGAL_ENTITY ? LEGAL_ENTITY : SITE_NAME}, {LEGAL_INN && (`ИНН: ${LEGAL_INN}`)} (г. Самара) (далее – Оператор)</p>
+    <p>Настоящим даю согласие на обработку моих вышеуказанных персональных данных {LEGAL_ENTITY ? LEGAL_ENTITY : SITE_NAME}, {LEGAL_INN && (`ИНН: ${LEGAL_INN}`)} {LEGAL_CITY && (`(${LEGAL_CITY})`)} (далее – Оператор)</p>
         <p><strong>с целями:</strong></p>
         <ul>
             <li>◦ регистрации в качестве пользователя Сайта;</li>
