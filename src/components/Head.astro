@@ -1,5 +1,24 @@
 ---
 
+const yandexSiteVerification = import.meta.env.PUBLIC_YANDEX_SITE_VERIFICATION;
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 ---
+
+{
+	// If PUBLIC_YANDEX_SITE_VERIFICATION is set in the environment variable,
+	// include yandex-verification tag in the heading
+	// Learn more: https://yandex.ru/support/webmaster/service/rights.html#rights
+	yandexSiteVerification && (
+		<meta name="yandex-verification" content={yandexSiteVerification} />
+	)
+}
+{
+	// If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,
+	// include google-site-verification tag in the heading
+	// Learn more: https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag
+	googleSiteVerification && (
+		<meta name="google-site-verification" content={googleSiteVerification} />
+	)
+}
 
