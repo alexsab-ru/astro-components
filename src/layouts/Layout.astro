@@ -7,6 +7,7 @@ const {title, description} = Astro.props;
 
 import {SITE_NAME, SITE_DESCR} from '@/const.js';
 
+import Head from '@/components/Head.astro';
 import ScriptHead from '@/components/Scripts/Head.astro';
 import ScriptBodyBegin from '@/components/Scripts/BodyBegin.astro';
 import ScriptBodyEnd from '@/components/Scripts/BodyEnd.astro';
@@ -27,6 +28,7 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 		<meta name="generator" content={Astro.generator} />
 		<title>{title ?? SITE_NAME}</title>
 		<script src="../js/app.js"></script>
+		<Head />
 		<ScriptHead />
 	</head>
 	<body class="min-h-screen flex flex-col">
