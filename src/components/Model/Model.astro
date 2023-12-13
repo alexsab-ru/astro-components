@@ -90,7 +90,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 		</div>
 	</div>
 
-	<div class="w-full lg:w-3/4 2xl:w-3/5 ml-auto relative z-10 lg:translate-y-20">
+	<div class="w-full lg:w-3/4 2xl:w-3/5 ml-auto relative z-10 lg:pt-[150px] xl:pt-20">
 		<div class="flex flex-col justify-center">
 			<img
 				src={carImagePath}
@@ -112,9 +112,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 		</div>
 	</div>
 
-	<div class="container px-0 sm:px-5">
-		{
-			photoSlides.length && (
+	{
+		photoSlides.length > 0 && (
+			<div class="container px-0 sm:px-5">
 				<div class="swiper photo-slider h-[120px] md:h-[200px] mt-14">
 					<div class="swiper-wrapper">
 						{photoSlides.map((photo) => (
@@ -128,9 +128,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						))}
 					</div>
 				</div>
-			)
-		}
-	</div>
+			</div>
+		)
+	}
 
 	<div class="container">
 		{
