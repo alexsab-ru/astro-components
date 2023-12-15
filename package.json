@@ -16,7 +16,7 @@
     "@astrojs/tailwind": "^5.0.3",
     "@types/alpinejs": "^3.13.5",
     "alpinejs": "^3.13.3",
-    "astro": "^3.6.4",
+    "astro": "^4.0.5",
     "astro-icon": "^0.8.2",
     "astro-robots": "^2.0.0",
     "glightbox": "^3.2.0",
