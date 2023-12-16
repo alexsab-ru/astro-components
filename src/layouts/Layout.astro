@@ -1,9 +1,11 @@
 ---
 interface Props {
 	title?: string;
+	h1?: string;
 	description?: string;
+	image?: string;
 }
-const {title, description} = Astro.props;
+const {title, h1, description, image} = Astro.props;
 
 import {SITE_NAME, SITE_DESCR} from '@/const.js';
 
@@ -21,7 +23,7 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 <!doctype html>
 <html lang="ru">
 	<head>
-		<Head title={title ?? SITE_NAME} description={description ?? SITE_DESCR} />
+		<Head title={title || h1 || SITE_NAME} description={description ?? SITE_DESCR} image={image} />
 		<ScriptHead />
 	</head>
 	<body class="min-h-screen flex flex-col">

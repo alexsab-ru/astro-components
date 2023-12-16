@@ -12,3 +12,9 @@ export function declOfNums(value, words = ['автомобиль', 'автомо
     if(num == 1) return words[0]; 
     return words[2];
 }
+
+export function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+  }

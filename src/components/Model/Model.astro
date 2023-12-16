@@ -32,7 +32,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						class="text-2xl sm:text-5xl text-accent-500 tracking-wider font-medium uppercase">
 						{BRAND}
 						<b
-							class="font-bold tracking-tighter text-5xl sm:text-8xl uppercase text-white"
+							class="font-bold tracking-tighter xs:text-4xl text-5xl sm:text-8xl uppercase text-white"
 							>{model?.name}</b
 						>
 					</div>
@@ -46,7 +46,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 				</div>
 				<a
 					href="#common-modal"
-					class="popup-link text-white mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
+					class="popup-link text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
 					data-title="Подобрать комплектацию"
 					data-form_name={`Подобрать комплектацию. ${BRAND} ${model?.name}`}>
 					Подобрать комплектацию
@@ -90,7 +90,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 		</div>
 	</div>
 
-	<div class="w-full lg:w-3/4 2xl:w-3/5 ml-auto relative z-10 lg:pt-[150px] xl:pt-20">
+	<div class="w-full lg:w-3/4 2xl:w-3/5 ml-auto relative z-10 top-0 lg:top-[150px] xl:top-[120px] lg:pb-[120px] xl:pb-[120px]">
 		<div class="flex flex-col justify-center">
 			<img
 				src={carImagePath}
@@ -135,7 +135,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 	<div class="container">
 		{
 			model.globalChars && (
-				<div class="flex justify-center flex-wrap gap-4 mt-14 text-black">
+				<div class="flex justify-center flex-wrap gap-4 mt-10 lg:mt-14 text-black">
 					{model.globalChars.map((char: any) => (
 						<div class="flex flex-col justify-between gap-4 sm:gap-8 xs:p-3 p-4 shadow rounded w-[calc((100%/2)-8px)] sm:w-[calc((100%/3)-11px)] xl:w-[calc((100%/6)-14px)]">
 							<div class="text-xs sm:text-base">{char.title}:</div>
@@ -143,7 +143,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 								<b class="xs:text-xl text-2xl sm:text-3xl 2xl:text-4xl font-bold">
 									{char.value}
 								</b>{' '}
-								{char?.measure}
+								<span class="xs:text-[11px]">
+									{char?.measure}
+								</span>
 							</div>
 						</div>
 					))}

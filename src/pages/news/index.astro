@@ -1,0 +1,39 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+import FormattedDate from '@/components/FormattedDate.astro';
+import salons from '@/data/salons.json'
+
+const posts = (await getCollection('news')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+import { getRandomInt } from '@/js/utils/numbers.format'
+
+const image = posts[getRandomInt(0, posts.length)].data.image;
+---
+
+<PageLayout h1="Новости" title={`Новости | ${salons[0].name}`} image={image ? image : ''}>
+	{
+		posts ? (
+			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+				{
+					posts.map(post => (
+					<a 
+						href={'/news/'+post.slug}
+						class="!no-underline"
+					>
+						<div class="bg-gray-50 group rounded-2xl relative aspect-video overflow-hidden">
+							<img src={post.data.image} class="absolute w-full h-full object-cover objec-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} loading="lazy">
+						</div>
+						<div class="text-black mt-2 sm:mt-4 leading-none">{post.data.title}</div>
+						<FormattedDate date={post.data.pubDate} />
+					</a>
+				))
+				}
+			</div>
+		) : (
+			<p>Скоро здесь появятся новости {salons[0].name}.</p>
+		)
+	}
+</PageLayout>

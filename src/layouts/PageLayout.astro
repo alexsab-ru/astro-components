@@ -1,16 +1,18 @@
 ---
 interface Props {
 	title?: string;
+	h1?: string;
 	description?: string;
+	image?: string;
 }
-const {title, description} = Astro.props;
+const {title, h1, description, image} = Astro.props;
 import Layout from '@/layouts/Layout.astro';
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title || h1} description={description} image={image}>
 	<section class="content">
 		<div class="container">
-			{title && <h1 class="text-2xl sm:text-4xl font-extrabold mb-7">{title}</h1>}
+			{h1 && <h1>{h1}</h1> }
 			<slot />
 		</div>
 	</section>

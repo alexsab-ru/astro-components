@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import alpinejs from '@astrojs/alpinejs';
+import tailwind from "@astrojs/tailwind";
+import alpinejs from "@astrojs/alpinejs";
 import sitemap from "@astrojs/sitemap";
 import robots from "astro-robots";
 import mdx from "@astrojs/mdx";
@@ -16,6 +16,6 @@ export default defineConfig({
 		alpinejs(),
 		mdx()
 	],
-	site: 'https://site.com',
-	base: "/"
+	// site: 'https://alexsab-ru.github.io',
+	// base: 'astro-website'
 });

@@ -44,16 +44,16 @@ if(sections.length && scrollLinks.length){
 		sections.forEach((el, i) => {
 			if (el.offsetTop - navOffset <= scrollDistance) {
 				scrollLinks.forEach((elem) => {
-					if (elem.classList.contains('bg-accent-500/50')) {
-						elem.classList.remove('bg-accent-500/50');
+					if (elem.classList.contains('active')) {
+						elem.classList.remove('active');
 					}
 				});
 	
-				scrollLinks[i].classList.add('bg-accent-500/50');
+				scrollLinks[i].classList.add('active');
 			}
 			if (scrollDistance < sections[0].offsetTop - navOffset) {
 				scrollLinks.forEach((elem) => {
-					elem.classList.remove('bg-accent-500/50');
+					elem.classList.remove('active');
 				});
 			}
 		});

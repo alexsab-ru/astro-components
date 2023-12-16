@@ -18,13 +18,28 @@ section {
 }
 
 .content {
+	h1{
+		@apply text-2xl sm:text-4xl font-extrabold mb-7;
+	}
 	p, b, ul, ol, a {
-		@apply sm:text-lg mb-4;
+		@apply text-sm sm:text-lg mb-4;
 	}
 	a {
 		@apply text-accent-500 underline hover:no-underline;
 	}
 	li {
 		@apply mb-1;
+	}
+	img{
+		@apply block max-w-full mx-auto;
+	}
+	blockquote{
+		@apply text-xs;
+		p{
+			@apply text-xs text-gray-500;
+		}
+		a{
+			@apply text-xs;
+		}
 	}
 }
