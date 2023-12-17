@@ -9,7 +9,7 @@ const rawPosts = await getCollection('news');
 let posts, image;
 // Проверяем, что массив rawPosts не пустой перед сортировкой
 if (rawPosts && rawPosts.length > 0) {
-	const posts = rawPosts.sort(
+	posts = rawPosts.sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 	);
 

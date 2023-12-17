@@ -6,7 +6,6 @@ import { SITE_NAME } from '@/const';
 
 const rawPosts = await getCollection('special-offers');
 
-console.log(rawPosts.length);
 let posts, image;
 // Проверяем, что массив rawPosts не пустой перед сортировкой
 if (rawPosts && rawPosts.length > 0) {
