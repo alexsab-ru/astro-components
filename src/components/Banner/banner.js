@@ -24,7 +24,7 @@ const initSlider = () => {
 	bannerSlider = new Swiper(".banner-slider", {
 		modules: [Navigation, Pagination, Autoplay, Parallax],
 		loop,
-		speed: 2400,
+		speed: 1000,
 		parallax: {
 			enabled: true,
 		},
