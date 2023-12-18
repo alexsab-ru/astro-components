@@ -35,5 +35,15 @@ import './buttons.scss'
         class={`btn ${classes}`} 
         value={title}
     >
+    ) : 
+    view === 'popup-link' ? (
+        <a 
+            class={`btn popup-link ${classes}`}
+            href={url ? url : '#'}
+            data-title={dataTitle}
+            data-form_name={dataFormName}
+        >
+            {title}
+        </a>
     ) : ('')
 }
