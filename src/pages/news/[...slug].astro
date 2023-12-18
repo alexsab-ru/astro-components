@@ -2,13 +2,19 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
 
-
 export async function getStaticPaths() {
 	const posts = await getCollection('news');
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}));
+
+	// Проверяем, что массив posts не пустой перед обработкой
+	if (posts && posts.length > 0) {
+		return posts.map((post) => ({
+			params: { slug: post.slug },
+			props: post,
+		}));
+	} else {
+		// Если массив пустой, возвращаем пустой массив путей
+		return [];
+	}
 }
 type Props = CollectionEntry<'news'>;
 
