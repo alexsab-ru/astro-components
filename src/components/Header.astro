@@ -33,9 +33,11 @@ const classBottom = path != '/' ? ' border-b' : '';
 				<div class="flex items-center xs:gap-3 gap-5 lg:gap-10">
 					<div class="hidden md:flex flex-col">
 					{
-						salons.length && salons.map((salon: any) => (
+						salons.length && salons.map((salon: any, index) => {
+							return index < 2 && (
 						<a href={`tel:${phoneFormat(salon.phone)}`} class="font-extrabold text-black/80 text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title="ул. Демократическая, 55"><Icon name="ic:outline-phone-android" class="w-6" /> {salon.phone}</a>
-						))
+							)
+						})
 					}
 					</div>
 					{salons.length &&
