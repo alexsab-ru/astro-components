@@ -1,5 +1,6 @@
 ---
-import {FOOTER_INFO} from '@/const'
+import { FOOTER_INFO, LEGAL_ENTITY, BRAND, SITE_NAME } from '@/const'
+const url = `https://alexsab.ru?utm_source=${BRAND}&utm_compaing=${SITE_NAME}`
 ---
 
 <footer class="bg-black text-white py-8" x-data="footer">
@@ -8,19 +9,23 @@ import {FOOTER_INFO} from '@/const'
 			<a
 				href="#"
 				class="disclamer_switch switch text-white underline transition hover:no-underline"
-                @click.prevent="onClick"
+				@click.prevent="onClick"
 				>Подробные условия акций</a
 			>
 		</div>
-		<div 
-            class="disclaimer text-xs" 
-            x-show="showDisclaimer"
-        >
+		<div
+			class="disclaimer text-xs"
+			x-show="showDisclaimer"
+		>
 			<noindex>
 				<p class="my-10">
-                    <Fragment set:html={FOOTER_INFO} />   
+					<Fragment set:html={FOOTER_INFO} />
 				</p>
 			</noindex>
+		</div>
+		<div class="relative flex flex-col sm:flex-row justify-between pt-10">
+		<p class="mb-4">© 2023 {LEGAL_ENTITY}</p>
+		<p class="relative bottom-0 right-0 text-sm opacity-70">Разработка <a href={url} target="_blank">alexsab.ru</a></p>
 		</div>
 	</div>
 </footer>
