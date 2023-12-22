@@ -1,0 +1,76 @@
+---
+interface Props {
+	car: any
+}
+const {car = {}} = Astro.props;
+const data = car?.data || {};
+import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
+import Layout from '@/layouts/Layout.astro';
+import CarImageSlider from '@/components/Cars/ImageSlider.astro';
+import CarPageHeading from '@/components/Cars/PageHeading.astro';
+import CarCharItem from '@/components/Cars/CharItem.astro';
+---
+
+<Layout title={data?.h1} description={data?.description} image={data?.image}>
+	<section class="py-10 sm:py-14">
+		<div class="container">
+	
+			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14">
+	
+				<div class="col-span-12 lg:col-span-6">
+					<div class="block lg:hidden mb-5">
+						<CarPageHeading data={data} />
+					</div>
+
+				{ data.images.length > 0 ? (
+					<CarImageSlider data={data} />
+					) : (
+					<img src={data.image} class="w-full" alt={data.folder_id}>
+					)
+				}
+
+				</div>
+	
+				<div class="col-span-12 lg:col-span-6 2xl:col-span-5 text-sm sm:text-base">
+					<div class="hidden lg:block">
+						<CarPageHeading data={data} />
+					</div>
+					<div class="lg:mt-5 *:border-b">
+						{data.modification_id && (
+							<CarCharItem label="Двигатель" value={data.modification_id} />
+						)}
+						{data.run && (
+							<CarCharItem label="Пробег" value={`${data.run.toLocaleString('ru-RU')}&nbsp;км`} />
+						)}
+						{data.body_type && (
+							<CarCharItem label="Кузов" value={data.body_type} />
+						)}
+						{data.color && (
+							<CarCharItem label="Цвет" value={data.color} />
+						)}
+						{data.wheel && (
+							<CarCharItem label="Руль" value={data.wheel} />
+						)}
+						{data.vin_hidden && (
+							<CarCharItem label="VIN" value={data.vin_hidden} />
+						)}
+					</div>
+					<div class="my-8">
+						<div class="text-gray-400 font-light">Стоимость</div>
+						<div class="font-bold text-3xl">{currencyFormat(data.price)}</div>
+					</div>
+					<div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
+						<a href="#common-modal" class="popup-link btn flex-grow !p-2" data-title="Получить предложение" data-form_name={`Получить предложение. ${data?.color} ${data?.folder_id} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Получить предложение</a>
+						<a href="#common-modal" class="popup-link btn gray flex-grow !p-2" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.folder_id} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Рассчитать кредит</a>
+					</div>
+				</div>
+	
+			</div>
+	
+			<div class="mt-14">
+				<slot />
+			</div>
+	
+		</div>
+	</section>
+</Layout>

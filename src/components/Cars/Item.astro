@@ -1,0 +1,23 @@
+---
+interface Props {
+	car: any
+}
+const {car = {}} = Astro.props;
+import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
+import PreviewSlider from './PreviewSlider.astro';
+---
+
+<div class="car-item flex flex-col justify-between shadow-2xl pb-3 xl:pb-4" data-price={ car.data.price } data-model={ car.data.folder_id }>
+	<PreviewSlider car={car} />
+	<div class="flex-grow mb-3 md:mb-5 px-3 xl:px-4">
+		<div class="sm:text-lg md:text-xl xl:text-2xl font-medium mt-3">{currencyFormat(car.data.price)}</div>
+		<h3 class="xs:!text-xs sm:!text-base md:!text-lg xl:!text-xl font-normal mt-1 transition-colors hover:text-accent">
+			<a href={ car.slug } class="!no-underline !text-black !mb-0"><b class="font-bold">{ car.data.folder_id }</b> { car.data.modification_id }</a>
+		</h3>
+		<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">{ car.data.year }&nbsp;/&nbsp;{car.data.run}&nbsp;км</div>
+		<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>
+	</div>
+	<div class="px-3 xl:px-4">
+		<a href={ car.slug } class="btn block !px-3 !py-2 md:!text-base sm:!text-sm !text-xs !text-white !no-underline !mb-0">Подробнее</a>        
+	</div>
+</div>

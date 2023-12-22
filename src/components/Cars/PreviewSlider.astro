@@ -1,0 +1,43 @@
+---
+interface Props {
+	car: any;
+}
+const { car= {} } = Astro.props
+import './cars.sass'
+---
+<div class="preview-slider">
+    <div class="preview-list aspect-[4/3]">
+		{
+			car.data.images.length > 0 ? (
+				car.data.images.map((img:string, idx:number) => (
+					<a
+						href={img}
+						class={`glightbox preview-link ${idx > 4 ? '!hidden' : ''}`}
+						data-gallery={car.data.vin_hidden}
+						data-glightbox="description: .btn-desc"
+					>
+					{
+						idx < 5 && (
+							<div class="preview-img">
+								<img src={img} alt={car.mark_id +' '+car.folder_id}>
+								{
+									idx === 4 && car.data.images.length > 5 && (
+									<div class="preview-total"> Еще <br> { car.data.images.length - 5} фото</div>
+									)
+								}
+							</div>
+						) 
+					}
+					</a>
+					<div class="glightbox-desc btn-desc">
+						<a href={car.slug} title="Подробнее" class="btn block !px-3 !py-2 md:text-base sm:text-sm text-xs">Подробнее</a>
+					</div>
+				))
+			) : (
+				<a href={car.slug} class="absolute inset-0 w-full h-auto !mb-0" title="Подробнее">
+					<img src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt="No Photo">
+				</a>
+			)
+		}        
+    </div>
+</div>

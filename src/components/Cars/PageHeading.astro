@@ -1,0 +1,27 @@
+---
+const { data = {} } = Astro.props;
+import { declOfNums } from '@/js/utils/numbers.format';
+---
+
+{
+	data.h1 && (
+		<h1 class="xs:text-xl text-2xl sm:text-4xl font-medium uppercase">
+			{data.h1}
+		</h1>
+	)
+}
+
+{
+	data.complectation_name && data.complectation_name !== "" && (
+		<p class="text-gray-400 text-lg font-light">
+			{data.complectation_name !== "" ? (
+				<Fragment
+					set:html={data.complectation_name + ",&nbsp;" + data.year}
+				/>
+			) : (
+				data.year
+			)}
+		</p>
+	)
+}
+<p class="mt-2">{data.total}&nbsp;{declOfNums(data.total)} в наличии</p>

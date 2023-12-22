@@ -1,0 +1,40 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import { getCollection } from "astro:content";
+import { SITE_NAME } from "@/const";
+import CarItem from "@/components/Cars/Item.astro";
+import SortSelect from "@/components/Cars/SortSelect.astro";
+const rawCars = await getCollection("cars");
+let cars: any, image: string, total:number = 0;
+if (rawCars && rawCars.length > 0) {
+	cars = rawCars;
+	import { getRandomInt, declOfNums } from "@/js/utils/numbers.format";
+	image = cars[getRandomInt(0, cars.length)].data.image;
+	cars.map((car) => {
+		total = total+car.data.total	
+	})
+} else {
+	image = "";
+}
+---
+
+<PageLayout
+	h1="Автомобили Jetour в наличии в Оренбурге"
+	title={`Автомобили в наличии | ${SITE_NAME}`}
+	image={image ? image : ""}
+>
+	{
+		cars ? (
+			<p class="mb-6">{total} {declOfNums(total)} в наличии</p>
+			<hr>
+			<SortSelect />
+			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+				{cars.map((car) => (
+					<CarItem car={car} />
+				))}
+			</div>
+		) : (
+			<p>Скоро здесь появится список новых автомобилей.</p>
+		)
+	}
+</PageLayout>

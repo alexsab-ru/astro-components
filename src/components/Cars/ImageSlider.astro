@@ -1,0 +1,54 @@
+---
+const { data = {} } = Astro.props;
+import '@/components/Banner/banner.scss';
+---
+
+<div class="swiper car-image-slider aspect-[1/0.7] sm:mb-2.5">
+	<div class="swiper-wrapper">
+		{
+			data.images.map(img => (
+				<div class="swiper-slide bg-gray-100">
+					<img src={img} class="w-full h-full object-cover" alt={data.folder_id} loading="lazy" />
+					<div class="swiper-lazy-preloader"></div>
+				</div>
+			))
+		}
+	</div>
+	<div class="swiper-button-prev car-image-slider-prev !hidden sm:!flex"></div>
+	<div class="swiper-button-next car-image-slider-next !hidden sm:!flex"></div>
+</div>
+<div class="!hidden sm:!block swiper car-thumb-slider">
+	<div class="swiper-wrapper">
+		{
+			data.images.map(img => (
+				<div class="swiper-slide aspect-[1/0.7] relative">
+					<img src={img} class="absolute w-full h-full" alt={data.folder_id} loading="lazy" />
+					<div class="swiper-lazy-preloader"></div>
+				</div>
+			))
+		}
+	</div>
+</div>
+
+<script>
+	import '@/components/Cars/slider';
+</script>
+
+<style lang="scss">
+.swiper.car-thumb-slider{
+	.swiper-slide{
+		position: relative;
+		&::after{
+			content: '';
+			position: absolute;
+			inset: 0;
+			background-color: #000;
+			opacity: 0.6;
+			transition: opacity .3s;
+		}
+		&.swiper-slide-thumb-active::after{
+			opacity: 0;
+		}
+	}
+}
+</style>
