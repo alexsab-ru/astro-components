@@ -7,6 +7,12 @@ cookiecook();
 connectForms('https://alexsab.ru/lead/test/', function() {
 });
 
+import GLightbox from 'glightbox';
+import 'glightbox/dist/css/glightbox.min.css';
+const lightbox = GLightbox({
+    moreLength: 0,
+});
+
 grecaptcha.ready(function() {
 	grecaptcha.execute('6Lepfy4pAAAAAAGHFP655qNe6Bb_BcskklcxajC6', {action: 'open'}).then(function(token) {
 		let formData = new FormData();
