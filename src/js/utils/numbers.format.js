@@ -1,7 +1,14 @@
 export function phoneFormat(phone) {
-	const pattern = /^(\+7|8)?(\d*)/g;
-	phone = phone.replace(/\D*/g, "");
-	return phone.replace(pattern, "+7$2");
+	var cleanNumber = phone.replace(/\D/g, '');
+
+	// Удаляем первую цифру, если это 7 или 8
+	if(cleanNumber.length > 10) {
+		if (cleanNumber.startsWith('7') || cleanNumber.startsWith('8')) {
+			cleanNumber = cleanNumber.substring(1);
+		}
+	}
+
+	return "+7"+cleanNumber;
 }
 
 export function declOfNums(value, words = ['автомобиль', 'автомобиля', 'автомобилей']) {
