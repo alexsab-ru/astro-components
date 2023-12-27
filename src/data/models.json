@@ -1,6 +1,7 @@
 [
     {
         "id": "u5-plus",
+        "show": true,
         "homeImg": "https://baic-krasnodar.ru/img/u5-plus/bg.jpg",
         "slogan": "Практичность и комфорт",
         "name": "U5 Plus",
