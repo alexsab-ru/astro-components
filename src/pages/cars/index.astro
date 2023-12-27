@@ -1,7 +1,7 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import { getCollection } from "astro:content";
-import { SITE_NAME, BRAND } from "@/const";
+import { SITE_NAME, BRAND, LEGAL_CITY } from "@/const";
 import CarItem from "@/components/Cars/Item.astro";
 import SortSelect from "@/components/Cars/SortSelect.astro";
 const rawCars = await getCollection("cars");
@@ -19,7 +19,7 @@ if (rawCars && rawCars.length > 0) {
 ---
 
 <PageLayout
-	h1={`Автомобили ${BRAND} в наличии в Оренбурге`}
+	h1={`Автомобили ${BRAND} в наличии в ${LEGAL_CITY}`}
 	title={`Автомобили в наличии | ${SITE_NAME}`}
 	image={image ? image : ""}
 >
