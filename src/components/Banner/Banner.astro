@@ -17,7 +17,7 @@ import './banner.scss';
 				<div class="swiper banner-slider h-full text-white">
 					<div class="swiper-wrapper">
 						{banners.map((banner: any) => (
-							<BannerItem banner={banner} />
+							banner.show && <BannerItem banner={banner} />
 						))}
 					</div>
 
