@@ -1,6 +1,7 @@
 [
     {
         "id": 1,
+        "show": true,
         "type": "video",
         "videoUrl": "https://alexsab.ru/video/jetour-dashing-compress.mp4",
         "imageUrl": "https://gac-smr.ru/img/banners/1.jpg",
@@ -21,6 +22,7 @@
     },
     {
         "id": 2,
+        "show": true,
         "type": "",
         "videoUrl": "",
         "imageUrl": "https://gac-smr.ru/img/banners/1.jpg",
