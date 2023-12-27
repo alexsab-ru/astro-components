@@ -7,6 +7,7 @@ const {model} = Astro.props;
 import Icon from 'astro-icon';
 import './model.scss';
 import {BRAND} from '@/const';
+import { currencyFormat } from '@/js/utils/numbers.format';
 const photoSlides = !model.photos
 	? []
 	: [].concat(
@@ -69,7 +70,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 					</span>
 					<span
 						class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
-						Выгодный трейд-ин
+						{
+							model?.profit ? `Выгода до ${currencyFormat(model.profit/2)} за трейд-ин` : 'Выгодный трейд-ин'
+						}
 					</span>
 				</a>
 				<a
@@ -83,7 +86,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 					</span>
 					<span
 						class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
-						Выгодный кредит
+						{
+							model?.profit ? `Выгода до ${currencyFormat(model.profit/2)} за кредит` : 'Выгодный кредит'
+						}
 					</span>
 				</a>
 			</div>
