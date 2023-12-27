@@ -8,6 +8,7 @@ const {fetchURL = '', title = 'Модельный ряд'} = Astro.props;
 import models from '@/data/models.json';
 const filteredModels = models.filter(model => model.show)
 import {Icon} from 'astro-icon';
+import { currencyFormat } from '@/js/utils/numbers.format'
 ---
 
 {
@@ -27,11 +28,17 @@ import {Icon} from 'astro-icon';
 								<span class="text-xl sm:text-5xl uppercase font-bold transition-colors duration-500 group-hover:text-accent-500">
 									{model.name}
 								</span>
+							{
+								model?.profit && (
+									<span class="block text-xs sm:text-lg text-black/80">Выгода до {currencyFormat(model.profit)}</span>
+								)
+							}
+								<span class=""></span>
 							</div>
-							<div class="flex-grow flex items-center justify-center">
+							<div class="flex-grow flex items-end justify-center">
 								<img
 									src={model.thumb}
-									class="scale-100 transition-transform duration-500 in-expo group-hover:scale-105"
+									class="scale-100 transition-transform duration-500 in-expo group-hover:scale-105 max-h-full"
 									alt={model.name}
 									loading="lazy"
 								/>
