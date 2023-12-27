@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@alexsab-ru/scripts':
-    specifier: ^0.4.0
-    version: 0.4.0
+    specifier: ^0.4.1
+    version: 0.4.1
   '@astrojs/alpinejs':
     specifier: ^0.3.1
     version: 0.3.1(@types/alpinejs@3.13.5)(alpinejs@3.13.3)
@@ -52,8 +52,8 @@ devDependencies:
 
 packages:
 
-  /@alexsab-ru/scripts@0.4.0:
-    resolution: {integrity: sha512-cVyvYe3wDEAIcF9+uTrkZ+0lH4qOQJF0j6O8PC7sF4KWgFF5EXN2OZBGncsDJJiKGVxq0bDBVQ+XblraIXMnzA==}
+  /@alexsab-ru/scripts@0.4.1:
+    resolution: {integrity: sha512-25RarDm8+BwLGiTayi/bV55j6GgppJ8ITmK0rF8n+033hONbdxegB25a2Wq+e6m2OA3QrcQ3HrICPHarzcimrA==}
     dev: false
 
   /@alloc/quick-lru@5.2.0:
