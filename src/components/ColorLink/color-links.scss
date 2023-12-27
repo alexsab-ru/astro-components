@@ -3,8 +3,14 @@
 	&[data-color="gray"] {
 		@apply bg-gray-400;
 	}
-	&[data-color="white"] {
+	&[data-color="light-gray"] {
 		@apply bg-gray-200;
+	}
+	&[data-color="dark-gray"] {
+		@apply bg-gray-500;
+	}
+	&[data-color="white"] {
+		@apply bg-gray-100;
 	}
 	&[data-color="black"] {
 		@apply bg-black;
