@@ -13,7 +13,7 @@ import models from '@/data/models.json'
 <Layout title="TITLE" description="DESCRIPTION">
 	<Banner fetchURL={`${Astro.url.origin}/src/data/banners.json`} />
 	<ModelList fetchURL={`${Astro.url.origin}/src/data/models.json`} />
-	{models && models.map((model: any) => <Model model={model}/>)}
+	{models && models.map((model: any) => model.show && <Model model={model}/>)}
 	<Callback bgUrl="https://baic-krasnodar.ru/img/x35/konkurenty.jpg" />
 	<Services fetchURL={`${Astro.url.origin}/src/data/services.json`} />
 	<Contacts
