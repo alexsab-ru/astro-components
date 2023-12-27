@@ -10,6 +10,7 @@
         "btnUrl": "#common-modal",
         "dataTitle": "Онлайн запись",
         "dataFormName": "Онлайн запись. Баннер",
+        "view": "popup-link", 
         "badge": {
             "autoname": "Jetour Dashing",
             "title": "Ежегодная национальная премия",
@@ -29,6 +30,7 @@
         "btnUrl": "#common-modal",
         "dataTitle": "Онлайн запись",
         "dataFormName": "Онлайн запись. Баннер",
+        "view": "popup-link", 
         "badge": "",
         "autoplay": 5000
     }
