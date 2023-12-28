@@ -59,38 +59,34 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 			</div>
 
 			<div class="flex flex-col gap-4 mt-10 lg:mt-14">
-				<a
-					class="popup-link w-fit inline-flex items-center flex-nowrap gap-1.5 text-white font-medium text-base sm:text-xl group"
-					href="#common-modal"
-					data-title="Выгодный трейд-ин"
-					data-form_name={`Выгодный трейд-ин. ${BRAND} ${model?.name}`}>
-					<span
-						class="w-10 h-10 rounded-full bg-yellow-500 text-white flex items-center justify-center">
-						<Icon name="mdi:credit-card-check-outline" class="w-6" />
-					</span>
-					<span
-						class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+				{
+					model?.benefits && model.benefits.map(benefit => (
+					<a
+						class={`w-fit inline-flex items-center flex-nowrap gap-1.5 text-white font-medium text-base sm:text-xl group ${benefit.view === 'popup-link' ? 'popup-link' : ''}`}
+						href={benefit?.url ? benefit.url : '#'}
+						data-title={benefit?.data_title}
+						data-form_name={benefit?.data_form_name}
+						title={benefit?.label}
+					>
+						<span
+							class="w-10 h-10 rounded-full bg-yellow-500 text-white flex items-center justify-center">
+							{
+								benefit.icon_name && (
+									<Icon name={benefit.icon_name} class="w-6" />
+								)
+							}
+						</span>
 						{
-							model?.benefit ? `Выгода до ${currencyFormat(model.benefit/2)} за трейд-ин` : 'Выгодный трейд-ин'
+							benefit.label && (
+							<span
+								class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+								<Fragment set:html={benefit.label} />
+							</span>
+							)
 						}
-					</span>
-				</a>
-				<a
-					class="popup-link w-fit inline-flex items-center flex-nowrap gap-1.5 text-white font-medium text-base sm:text-xl group"
-					href="#common-modal"
-					data-title="Выгодный кредит"
-					data-form_name={`Выгодный кредит. ${BRAND} ${model?.name}`}>
-					<span
-						class="w-10 h-10 rounded-full bg-yellow-500 text-white flex items-center justify-center">
-						<Icon name="mdi:gift-outline" class="w-6" />
-					</span>
-					<span
-						class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
-						{
-							model?.benefit ? `Выгода до ${currencyFormat(model.benefit/2)} за кредит` : 'Выгодный кредит'
-						}
-					</span>
-				</a>
+					</a>
+					))
+				}
 			</div>
 		</div>
 	</div>
