@@ -12,7 +12,7 @@ document.querySelectorAll(".popup-link").forEach(
 
 			const captionEl = targetModal.querySelector(".caption");
 			if (captionEl) {
-				captionEl.innerText = link.dataset.title;
+				captionEl.innerHTML = link.dataset.title;
 			}
 			const formName = link.dataset.form_name;
 			const formInput = targetModal.querySelector('input[name="form"]');
