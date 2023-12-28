@@ -4,42 +4,48 @@ document.addEventListener('alpine:init', () => {
 	Alpine.data('header', () => ({
 		open: false,
 		scrolling: false,
+		showTopLine: localStorage.getItem('show-top-line') || 1,
+		hideTopLine() {
+			localStorage.setItem('show-top-line', 0);
+			this.showTopLine = 0;
+		},
 		init() {
-			const $siteHeader = this.$root;
-			let hideHeaderPos = $siteHeader.querySelector('header').offsetHeight;
-			let prevScrollpos = window.scrollY;
+			this.$nextTick(() => {
+				const $siteHeader = this.$root;
+				let hideHeaderPos = $siteHeader.querySelector('header').offsetHeight;
+				let prevScrollpos = window.scrollY;
 
-			if (document.body.getBoundingClientRect().top != 0) {
-				this.scrolling = true;
-				$siteHeader.style.top = -hideHeaderPos + 'px';
-			}
-
-			window.addEventListener('resize', () => {
-				this.open = false;
-				hideHeaderPos = $siteHeader.querySelector('header').clientHeight;
-			});
-
-			document.addEventListener('scroll', (e) => {
 				if (document.body.getBoundingClientRect().top != 0) {
 					this.scrolling = true;
-				} else {
-					this.scrolling = false;
+					$siteHeader.style.top = -hideHeaderPos + 'px';
 				}
-				this.open = false;
 
-				// Показ/скрытие шапки при скролинге
-				let currentScrollPos = window.scrollY;
-				if (currentScrollPos > hideHeaderPos) {
-					if (prevScrollpos > currentScrollPos) {
-						$siteHeader.style.top = 0;
+				window.addEventListener('resize', () => {
+					this.open = false;
+					hideHeaderPos = $siteHeader.querySelector('header').clientHeight;
+				});
+
+				document.addEventListener('scroll', (e) => {
+					if (document.body.getBoundingClientRect().top != 0) {
+						this.scrolling = true;
 					} else {
-						$siteHeader.style.top = -hideHeaderPos + 'px';
+						this.scrolling = false;
 					}
-					prevScrollpos = currentScrollPos;
-				} else {
-					$siteHeader.style.top = 0;
-				}
-				// // //
+					this.open = false;
+
+					// Показ/скрытие шапки при скролинге
+					let currentScrollPos = window.scrollY;
+					if (currentScrollPos > hideHeaderPos) {
+						if (prevScrollpos > currentScrollPos) {
+							$siteHeader.style.top = 0;
+						} else {
+							$siteHeader.style.top = -hideHeaderPos + 'px';
+						}
+						prevScrollpos = currentScrollPos;
+					} else {
+						$siteHeader.style.top = 0;
+					}
+				});
 			});
 		},
 	}));

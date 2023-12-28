@@ -8,7 +8,7 @@ const {fetchURL = ''} = Astro.props;
 
 import salons from '@/data/salons.json'
 
-import { LINKS_MENU as links } from '@/const.js';
+import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
 
 import { Icon } from 'astro-icon';
 
@@ -16,6 +16,7 @@ import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
 import Button from '@/components/Button/Button.astro';
 import Logo from '@/components/Logo/Logo.astro';
+import HeaderTopLine from '@/components/HeaderTopLine.astro';
 
 const path = Astro.url.pathname;
 
@@ -27,6 +28,9 @@ const classBottom = path != '/' ? ' border-b' : '';
 	:class="{'shadow-3xl': scrolling}"
 >
 	<header>
+		{
+			HEADER_TOP_LINE && <HeaderTopLine content={HEADER_TOP_LINE} />	
+		}
 		<div class="container">
 			<div class="flex items-center justify-between h-[60px] md:h-[80px]">
 				<Logo />

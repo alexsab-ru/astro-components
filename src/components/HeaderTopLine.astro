@@ -1,0 +1,17 @@
+---
+interface Props{
+	content: string;
+}
+const {content} = Astro.props
+---
+<template x-if="showTopLine === 1">
+	<div 
+		class="bg-[#05141f] px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative"
+	>
+		<Fragment set:html={content}>
+		<button 
+			class="text-base absolute h-8 sm:h-full w-8 sm:w-10 right-0 top-0 z-10"
+			@click="hideTopLine"
+		>&times;</button>
+	</div>
+</template>
