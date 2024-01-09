@@ -14,7 +14,7 @@ export const LINKS_MENU = [
 	{url: '#contacts', name: 'Контакты'},
 ];
 
-export const HEADER_TOP_LINE = 'ООО "Киа Центр Самара" расширяет горизонты: теперь и дилер JAC Motors (Джак Моторс)';
+export const HEADER_TOP_LINE = '';
 
 import {getPages} from '@/js/pages';
 export const PAGES = await getPages();
