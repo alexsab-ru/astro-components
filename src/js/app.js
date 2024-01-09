@@ -4,8 +4,7 @@ import './modules/modals';
 
 import { connectForms, cookiecook } from '@alexsab-ru/scripts';
 cookiecook();
-connectForms('https://alexsab.ru/lead/test/', function() {
-});
+connectForms('https://alexsab.ru/lead/test/');
 
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.min.css';
