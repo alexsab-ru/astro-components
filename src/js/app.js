@@ -9,7 +9,7 @@ connectForms('https://alexsab.ru/lead/test/');
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.min.css';
 const lightbox = GLightbox({
-    moreLength: 0,
+	moreLength: 0,
 });
 
 grecaptcha.ready(function() {
