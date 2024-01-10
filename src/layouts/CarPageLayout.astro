@@ -14,9 +14,9 @@ import CarCharItem from '@/components/Cars/CharItem.astro';
 <Layout title={data?.h1} description={data?.description} image={data?.image}>
 	<section class="py-10 sm:py-14">
 		<div class="container">
-	
+
 			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14">
-	
+
 				<div class="col-span-12 lg:col-span-6">
 					<div class="block lg:hidden mb-5">
 						<CarPageHeading data={data} />
@@ -25,12 +25,12 @@ import CarCharItem from '@/components/Cars/CharItem.astro';
 				{ data.images.length > 0 ? (
 					<CarImageSlider data={data} />
 					) : (
-					<img src={data.image} class="w-full" alt={data.folder_id}>
+					<img src={data.image} class="w-full" alt={data.folder_id} />
 					)
 				}
 
 				</div>
-	
+
 				<div class="col-span-12 lg:col-span-6 2xl:col-span-5 text-sm sm:text-base">
 					<div class="hidden lg:block">
 						<CarPageHeading data={data} />
@@ -64,13 +64,13 @@ import CarCharItem from '@/components/Cars/CharItem.astro';
 						<a href="#common-modal" class="popup-link btn gray flex-grow !p-2" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.folder_id} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Рассчитать кредит</a>
 					</div>
 				</div>
-	
+
 			</div>
-	
+
 			<div class="mt-14">
 				<slot />
 			</div>
-	
+
 		</div>
 	</section>
 </Layout>
