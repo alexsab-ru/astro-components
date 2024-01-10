@@ -1,8 +1,9 @@
 ---
-import { SITE_NAME, LEGAL_ENTITY } from '@/const.js';
+import { BASE_URL, SITE_URL, SITE_NAME, LEGAL_ENTITY } from '@/const.js';
 import { Icon } from 'astro-icon'
 import { phoneFormat } from '@/js/utils/numbers.format';
-import salons from '@/data/salons.json';
+const salons = await fetch(fetchURL).then((response) => response.json());
+// import salons from '@/data/salons.json';
 const links = [
 	{url: '/', name: 'Главная'},
 	{url: '#online-calc', name: 'Онлайн расчет'},

@@ -1,4 +1,6 @@
-import salons from '@/data/salons.json';
+import {BASE_URL, SITE_URL} from '@/const'
+const salons = await fetch(`${BASE_URL}${SITE_URL}/data/salons.json`).then((response) => response.json());
+// import salons from '@/data/salons.json';
 import  { phoneFormat } from '@/js/utils/numbers.format';
 const balloonContentHeader = name => {return `<h6 class="text-sm"><b>${name}</b></h6>`};
 const balloonContentBody = (hours, phone, link) => {
