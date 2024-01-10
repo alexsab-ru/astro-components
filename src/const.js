@@ -1,3 +1,4 @@
+export const BASE_URL = 'https://alexsab-ru.github.io/astro-json/'; // Название сайта по умолчанию
 export const SITE_URL = 'localhost'; // Название сайта по умолчанию
 export const SITE_NAME = 'Название сайта'; // Название сайта по умолчанию
 export const LEGAL_ENTITY = 'ООО «Юридическое название»'; // Юр лицо

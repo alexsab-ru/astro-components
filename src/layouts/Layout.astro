@@ -7,7 +7,7 @@ interface Props {
 }
 const {title, h1, description, image} = Astro.props;
 
-import {SITE_URL, SITE_NAME, SITE_DESCR} from '@/const.js';
+import {BASE_URL, SITE_URL, SITE_NAME, SITE_DESCR} from '@/const.js';
 
 import Head from '@/components/Head.astro';
 import ScriptHead from '@/components/Scripts/Head.astro';
@@ -28,7 +28,7 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 	</head>
 	<body class="min-h-screen flex flex-col">
 		<ScriptBodyBegin />
-		<Header fetchURL={`https://alexsab-ru.github.io/astro-json/${SITE_URL}/data/salons.json`} />
+		<Header fetchURL={`${BASE_URL}${SITE_URL}/data/salons.json`} />
 		<main class="flex-grow">
 			<slot />
 		</main>
