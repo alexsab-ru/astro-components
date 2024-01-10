@@ -2,6 +2,7 @@ export const SITE_NAME = 'Название сайта'; // Название са
 export const LEGAL_ENTITY = 'ООО «Юридическое название»'; // Юр лицо
 export const LEGAL_INN = '1234567890'; // ИНН
 export const LEGAL_CITY = 'г. Город'; // Город
+export const LEGAL_CITY_WHERE = 'Городе'; // где? в Городе
 export const SITE_DESCR = 'Официальный дилерский центр'; // Описание сайта по умолчанию
 
 export const BRAND = 'Baic';
