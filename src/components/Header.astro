@@ -4,9 +4,8 @@ interface Props {
 }
 const {fetchURL = ''} = Astro.props;
 
-// const salons = await fetch(fetchURL).then((response) => response.json());
-
-import salons from '@/data/salons.json'
+const salons = await fetch(fetchURL).then((response) => response.json());
+// import salons from '@/data/salons.json'
 
 import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
 

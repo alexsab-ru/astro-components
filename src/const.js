@@ -1,3 +1,4 @@
+export const SITE_URL = 'localhost'; // Название сайта по умолчанию
 export const SITE_NAME = 'Название сайта'; // Название сайта по умолчанию
 export const LEGAL_ENTITY = 'ООО «Юридическое название»'; // Юр лицо
 export const LEGAL_INN = '1234567890'; // ИНН
