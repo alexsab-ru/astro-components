@@ -8,8 +8,7 @@ const balloonContentBody = (hours, phone, link) => {
 	<a href="${link}"  target="_blank" class="text-sm">📍 Как добраться</a><br>
 	`
 }
-const center = salons.length === 1 ? [salons[0].map.coords[0], salons[0].map.coords[1]] : [53.195878, 50.100202];
-const zoom = salons.length === 1 && salons[0].map.zoom ? salons[0].map.zoom : 10;
+const zoom = salons.length === 1 && salons[0].map.zoom ? salons[0].map.zoom : 6;
 const parent = document.querySelector(".map");
 const _ball_Offset = [-21, -58];
 const _ball_Size = [43, 62];
@@ -21,6 +20,10 @@ let myMapTemp = null;
 
 //Функция создания карты сайта и затем вставки ее в блок с идентификатором "map-yandex"
 function init() {
+	const add = (a1, a2) => a1.map((e, i) => e + a2[i]);
+	const avr = (array, length) => array.map((e, i) => e/length);
+	var center = [0,0];
+
 	if (!myMapTemp) {
 		myMapTemp = new ymaps.Map("map", {
 			center,
@@ -29,7 +32,11 @@ function init() {
 		});
 	}
 	myMapTemp.behaviors.disable("scrollZoom");
+	salons.sort(function(a, b) {
+		return b.map.coords[1] - a.map.coords[1];
+	});
 	salons.map((salon) => {
+		center = add(center,salon.map.coords);
 		const _ball_bg = salon.map.balloon ? salon.map.balloon : '/img/map.balloon.png';
 		myMapTemp.geoObjects.add(
 			new ymaps.Placemark(
@@ -53,8 +60,13 @@ function init() {
 			)
 		);
 	});
+	myMapTemp.setCenter(avr(center,salons.length));
+	myMapTemp.setBounds(myMapTemp.geoObjects.getBounds(), {
+		checkZoomRange: true,
+		zoomMargin: 35
+	});
 
-	// myMapTemp.balloon.open(this.position,
+	// myMapTemp.balloon.open(this.coords,
 	//     this.balloonContentHeader + this.balloonContentFooter + this.balloonContentBody, {});
 	// Получаем первый экземпляр коллекции слоев, потом первый слой коллекции
 	var layer = myMapTemp.layers.get(0).get(0);
