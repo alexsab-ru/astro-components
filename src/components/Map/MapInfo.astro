@@ -28,20 +28,20 @@ import logo from '@/components/Logo/logo.svg';
 			{SITE_NAME}
 		</div>
 	</div>
-	{
-		salons[0].address && (
 			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
 				<Icon name="mdi:map-marker-outline" class="h-8 flex-shrink-0" />
 				<div>
+					{
+						salons.length < 2 && salons.length != 0 && salons[0].address && (
 					<div class="font-medium mb-2 sm:text-lg"><Fragment set:html={salons[0].address} /></div>
+						)
+					}
 					{LEGAL_ENTITY && <div>{LEGAL_ENTITY}</div>}
 					{LEGAL_INN && <div>ИНН: {LEGAL_INN}</div>}
 				</div>
 			</div>
-		)
-	}
 	{
-		salons[0].work_hours && (
+		salons.length < 2 && salons.length != 0 && salons[0].work_hours && (
 			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
 				<Icon name="mdi:clock-time-three-outline" class="h-8 flex-shrink-0" />
 				<div class="font-medium mb-2 sm:text-lg"><Fragment set:html={salons[0].work_hours} /></div>
@@ -49,7 +49,8 @@ import logo from '@/components/Logo/logo.svg';
 		)
 	}
 	{
-		salons[0].phone && (
+		salons.length && salons.map((salon: any, index) => {
+							return index < 2 && (
 			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
 				<Icon name="ic:outline-phone-android" class="h-8 flex-shrink-0" />
 				<a
@@ -58,7 +59,7 @@ import logo from '@/components/Logo/logo.svg';
 					{salons[0].phone}
 				</a>
 			</div>
-		)
+		)})
 	}
 
 	<div class="font-bold sm:text-xl mb-4">
