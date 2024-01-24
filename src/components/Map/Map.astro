@@ -84,10 +84,12 @@ function init() {
 		);
 	});
 	myMapTemp.setCenter(avr(center,salons.length));
+	if(salons.length > 1) {
 	myMapTemp.setBounds(myMapTemp.geoObjects.getBounds(), {
 		checkZoomRange: true,
 		zoomMargin: 35
 	});
+	}
 
 	// myMapTemp.balloon.open(this.coords,
 	//     this.balloonContentHeader + this.balloonContentFooter + this.balloonContentBody, {});
