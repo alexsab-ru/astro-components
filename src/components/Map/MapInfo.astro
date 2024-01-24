@@ -1,10 +1,10 @@
 ---
 interface Props {
-	fetchURL?: string;
+	salons?: array;
 }
-const {fetchURL = ''} = Astro.props;
+const {salons = []} = Astro.props;
 
-const salons = await fetch(fetchURL).then((response) => response.json());
+// const salons = await fetch(fetchURL).then((response) => response.json());
 // import salons from '@/data/salons.json'
 
 import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN } from '@/const'

@@ -1,16 +1,190 @@
 ---
 interface Props{
-    mapImg: string
+	mapImg: string;
+	salons?: array;
 }
-const {mapImg} = Astro.props
+const {salons = [], mapImg} = Astro.props
+
 import './map.sass';
+
 ---
 
 <div class="map h-[400px] lg:h-[540px]" style={`background-image: url(${mapImg})`}>
-    <div class="loader loader-default"></div>
-    <div id="map"></div>
+	<div class="loader loader-default"></div>
+	<div id="map"></div>
 </div>
 
+
+<script id="salons" type="application/ld+json" set:html={JSON.stringify(salons)}/>
 <script>
-    import './map'
+import { phoneFormat } from '@/js/utils/numbers.format';
+
+const balloonContentHeader = name => {return `<h6 class="text-sm"><b>${name}</b></h6>`};
+const balloonContentBody = (hours, phone, link) => {
+	return `
+	<p>${hours}</p>
+	<a href="tel:${phoneFormat(phone)}" class="inline-block text-lg text-accent-500 my-1">${phone}</a><br>
+	<a href="${link}" target="_blank" class="text-sm">📍 Как добраться</a><br>
+	`
+}
+const e = document.querySelector("#salons");
+if (!e || !e.textContent) throw new Error("Salons not found!");
+const salons = JSON.parse(e.textContent)
+
+const zoom = salons.length === 1 && salons[0].map.zoom ? salons[0].map.zoom : 6;
+const parent = document.querySelector(".map");
+const _ball_Offset = [-21, -58];
+const _ball_Size = [43, 62];
+
+let start_load_script = false, // Переменная для определения была ли хоть раз загружена Яндекс.Карта (чтобы избежать повторной загрузки при наведении)
+	end_load_script = false; // Переменная для определения был ли загружен скрипт Яндекс.Карт полностью (чтобы не возникли какие-нибудь ошибки, если мы загружаем несколько карт одновременно)
+
+let myMapTemp = null;
+
+//Функция создания карты сайта и затем вставки ее в блок с идентификатором "map-yandex"
+function init() {
+	const add = (a1, a2) => a1.map((e, i) => e + a2[i]);
+	const avr = (array, length) => array.map((e, i) => e/length);
+	var center = [0,0];
+
+	if (!myMapTemp) {
+		myMapTemp = new ymaps.Map("map", {
+			center,
+			zoom,
+			controls: ["zoomControl"],
+		});
+	}
+	myMapTemp.behaviors.disable("scrollZoom");
+	salons.sort(function(a, b) {
+		return b.map.coords[1] - a.map.coords[1];
+	});
+	salons.map((salon) => {
+		center = add(center,salon.map.coords);
+		const _ball_bg = salon.map.balloon ? salon.map.balloon : '/img/map.balloon.png';
+		myMapTemp.geoObjects.add(
+			new ymaps.Placemark(
+				[salon.map.coords[0], salon.map.coords[1]],
+				{
+					balloonContentHeader: balloonContentHeader(salon.name),
+					balloonContentBody: balloonContentBody(salon.work_hours, salon.phone, salon.map.ya_link),
+					balloonContentFooter: '',
+					hintContent: salon.address,
+				},
+				{
+					iconLayout: "default#image",
+					// Своё изображение иконки метки.
+					iconImageHref: _ball_bg,
+					// Размеры метки.
+					iconImageSize: _ball_Size,
+					// Смещение левого верхнего угла иконки относительно
+					// её "ножки" (точки привязки).
+					iconImageOffset: _ball_Offset,
+				}
+			)
+		);
+	});
+	myMapTemp.setCenter(avr(center,salons.length));
+	myMapTemp.setBounds(myMapTemp.geoObjects.getBounds(), {
+		checkZoomRange: true,
+		zoomMargin: 35
+	});
+
+	// myMapTemp.balloon.open(this.coords,
+	//     this.balloonContentHeader + this.balloonContentFooter + this.balloonContentBody, {});
+	// Получаем первый экземпляр коллекции слоев, потом первый слой коллекции
+	var layer = myMapTemp.layers.get(0).get(0);
+
+	// Решение по callback-у для определния полной загрузки карты
+	waitForTilesLoad(layer).then(function (value) {
+		// Скрываем индикатор загрузки после полной загрузки карты
+		parent.querySelector(".loader").classList.remove("is-active");
+	});
+}
+
+// Функция для определения полной загрузки карты (на самом деле проверяется загрузка тайлов)
+function waitForTilesLoad(layer) {
+	return new ymaps.vow.Promise(function (resolve, reject) {
+		var tc = getTileContainer(layer),
+			readyAll = true;
+		tc.tiles.each(function (tile, number) {
+			if (!tile.isReady()) {
+				readyAll = false;
+			}
+		});
+		if (readyAll) {
+			resolve();
+		} else {
+			tc.events.once("ready", function () {
+				resolve();
+			});
+		}
+	});
+}
+
+function getTileContainer(layer) {
+	for (var k in layer) {
+		if (layer.hasOwnProperty(k)) {
+			if (
+				layer[k] instanceof ymaps.layer.tileContainer.CanvasContainer ||
+				layer[k] instanceof ymaps.layer.tileContainer.DomContainer
+			) {
+				return layer[k];
+			}
+		}
+	}
+	return null;
+}
+
+// Функция загрузки API Яндекс.Карт по требованию (в нашем случае при наведении)
+function loadScript(url, callback) {
+	var script = document.createElement("script");
+
+	if (script.readyState) {
+		// IE
+		script.onreadystatechange = function () {
+			if (script.readyState == "loaded" || script.readyState == "complete") {
+				script.onreadystatechange = null;
+				callback();
+			}
+		};
+	} else {
+		// Другие браузеры
+		script.onload = function () {
+			callback();
+		};
+	}
+
+	script.src = url;
+	document.getElementsByTagName("head")[0].appendChild(script);
+}
+
+// Основная функция, которая проверяет когда мы навели на блок с классом "ymap-container"
+function ymap() {
+	if (!start_load_script) {
+		// проверяем первый ли раз загружается Яндекс.Карта, если да, то загружаем
+
+		// Показываем индикатор загрузки до тех пор, пока карта не загрузится
+		parent.querySelector(".loader").classList.add("is-active");
+
+		// Чтобы не было повторной загрузки карты, мы изменяем значение переменной
+		start_load_script = true;
+
+		// Загружаем API Яндекс.Карт
+		loadScript(
+			"https://api-maps.yandex.ru/2.1/?lang=ru_RU&loadByRequire=1",
+			function () {
+				end_load_script = !end_load_script;
+				// Как только API Яндекс.Карт загрузились, сразу формируем карту и помещаем в блок с идентификатором "map-yandex"
+				ymaps.ready(init);
+			}
+		);
+	}
+}
+
+if (parent) {
+	parent.onmouseenter = function () {
+		ymap();
+	}
+}
+
 </script>
