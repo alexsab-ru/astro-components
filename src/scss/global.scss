@@ -47,12 +47,12 @@ section {
 		thead {
 			@apply bg-slate-50;
 			th {
-				@apply min-w-[160px] border border-slate-300 font-semibold p-4 text-left;
+				@apply border border-slate-300 font-semibold p-4;
 			}
 		}
 		tbody {
 			td {
-				@apply min-w-[160px] border border-slate-300 p-4;
+				@apply border border-slate-300 p-4;
 			}
 		}
 	}
