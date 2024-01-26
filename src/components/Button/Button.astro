@@ -7,7 +7,7 @@ interface Props {
     dataTitle?: string,
     dataFormName?: string,
 }
-const { 
+const {
     view = 'link',
     classes,
     url,
@@ -28,16 +28,16 @@ import './buttons.scss'
     >
         {title}
     </a>
-    ) : 
+    ) :
     view === 'form-button' ? (
-    <input 
-        type="submit" 
-        class={`btn ${classes}`} 
+    <input
+        type="submit"
+        class={`btn ${classes}`}
         value={title}
     >
-    ) : 
+    ) :
     view === 'popup-link' ? (
-        <a 
+        <a
             class={`btn popup-link ${classes}`}
             href={url ? url : '#'}
             data-title={dataTitle}
