@@ -45,5 +45,13 @@ import './buttons.scss'
         >
             {title}
         </a>
+    ) :
+    view === 'scroll-link' ? (
+        <a 
+            class={`btn scroll-link ${classes}`}
+            href={url ? url : '#'}
+        >
+            {title}
+        </a>
     ) : ('')
 }
