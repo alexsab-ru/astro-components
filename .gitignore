@@ -20,6 +20,4 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 .vscode
-src/content/**/*.md
-src/content/**/*.mdx
 src/data/*.json
