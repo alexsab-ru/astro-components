@@ -1,0 +1,79 @@
+name: Generate Jekyll Files from XML
+
+on:
+  schedule:
+    # - cron: '0 */4 * * *'  # Запускается каждые 4 часа
+  push:
+    paths:
+      # - '.github/workflows/update_cars.yml'
+      # - '.github/scripts/update_cars.py'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Указываете окружение и его переменные
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Download XML
+      run: |
+        curl ${{ vars.ENV_XML_URL }} -o cars.xml
+
+    - name: Set XML_URL as environment variable
+      run: echo "XML_URL=${{ vars.ENV_XML_URL }}" >> $GITHUB_ENV
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.9
+        architecture: "x64"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+        pip install pyyaml
+
+    - name: Generate files
+      run: |
+        python .github/scripts/update_cars.py
+        ls -al src/content/cars
+
+    - name: Check for changes
+      id: check_changes
+      run: |
+        if git diff --exit-code; then
+          echo 'check_changes true — git diff'
+          echo "changes=true" >> $GITHUB_ENV
+          echo "changes=true" >> $GITHUB_OUTPUT
+        elif git status -s; then
+          echo 'check_changes true — git status'
+          echo "changes=true" >> $GITHUB_ENV
+          echo "changes=true" >> $GITHUB_OUTPUT
+        else
+          echo 'check_changes else'
+          echo "false — changes=false" >> $GITHUB_ENV
+          echo "changes=false" >> $GITHUB_OUTPUT
+        fi
+      continue-on-error: true
+
+    - name: Commit files
+      if: env.changes == 'true'
+      run: |
+        git config --local user.email "support+actions@github.com"
+        git config --local user.name "github-actions-bot"
+        git add public/_cars/*.html
+        git commit -m "Update cars from XML" -a || echo "No changes to commit"
+        git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        git push origin $GITHUB_REF_NAME
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    outputs:
+      changes: ${{ steps.check_changes.outputs.changes }}
