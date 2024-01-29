@@ -19,6 +19,10 @@ import './map.sass';
 <script>
 import { phoneFormat } from '@/js/utils/numbers.format';
 
+const e = document.querySelector("#salons");
+
+if (e && e.textContent) {
+
 const balloonContentHeader = name => {return `<h6 class="text-sm"><b>${name}</b></h6>`};
 const balloonContentBody = (hours, phone, link) => {
 	return `
@@ -27,8 +31,7 @@ const balloonContentBody = (hours, phone, link) => {
 	<a href="${link}" target="_blank" class="text-sm">📍 Как добраться</a><br>
 	`
 }
-const e = document.querySelector("#salons");
-if (!e || !e.textContent) throw new Error("Salons not found!");
+
 const salons = JSON.parse(e.textContent)
 
 const zoom = salons.length === 1 && salons[0].map.zoom ? salons[0].map.zoom : 6;
@@ -187,6 +190,8 @@ if (parent) {
 	parent.onmouseenter = function () {
 		ymap();
 	}
+}
+
 }
 
 </script>
