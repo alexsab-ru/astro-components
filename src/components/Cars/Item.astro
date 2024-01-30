@@ -28,7 +28,7 @@ const price = car.data.max_discount ? car.data.price - car.data.max_discount : c
 
 <style lang="scss">
 	.discount{
-		@apply relative bg-accent-500 text-white rounded-xl w-fit text-xs py-1 px-2.5 z-[1];
+		@apply relative bg-accent-500 text-white rounded-xl w-fit text-[10px] sm:text-xs py-1 px-2.5 z-[1];
 		&::before {
 			@apply content-[''] w-2.5 h-2.5 bg-accent-500 border-r-0 border-b-0 absolute -bottom-[5px] left-4 rotate-[-135deg] z-[-1];
 		}
