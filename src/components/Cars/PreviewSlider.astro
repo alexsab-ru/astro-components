@@ -5,7 +5,7 @@ interface Props {
 const { car= {} } = Astro.props
 import './cars.sass'
 ---
-<div class="preview-slider">
+<div class="preview-slider mb-2.5">
     <div class="preview-list aspect-[4/3]">
 		{
 			car.data.images.length > 0 ? (
@@ -14,7 +14,7 @@ import './cars.sass'
 						href={img}
 						class={`glightbox preview-link ${idx > 4 ? '!hidden' : ''}`}
 						data-gallery={car.data.vin_hidden}
-						data-glightbox="description: .btn-desc"
+						data-glightbox={`description: .btn-desc-${car.data.vin_hidden}`}
 					>
 					{
 						idx < 5 && (
@@ -29,7 +29,7 @@ import './cars.sass'
 						) 
 					}
 					</a>
-					<div class="glightbox-desc btn-desc">
+					<div class={`glightbox-desc btn-desc-${car.data.vin_hidden}`}>
 						<a href={car.slug} title="Подробнее" class="btn block !px-3 !py-2 md:text-base sm:text-sm text-xs">Подробнее</a>
 					</div>
 				))
