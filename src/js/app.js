@@ -12,6 +12,7 @@ const lightbox = GLightbox({
 	moreLength: 0,
 });
 
+function executeRecaptcha() {
 grecaptcha.ready(function() {
 	grecaptcha.execute('6Lepfy4pAAAAAAGHFP655qNe6Bb_BcskklcxajC6', {action: 'open'}).then(function(token) {
 		let formData = new FormData();
@@ -37,3 +38,20 @@ grecaptcha.ready(function() {
 			});
 	});
 });
+}
+
+// Проверяем, определена ли grecaptcha
+if (typeof grecaptcha === "undefined") {
+	// Если grecaptcha не определена, устанавливаем интервал для проверки
+	var checkRecaptchaAvailability = setInterval(function() {
+		if (typeof grecaptcha !== "undefined") {
+			// Как только grecaptcha становится доступной, очищаем интервал
+			clearInterval(checkRecaptchaAvailability);
+			// Выполняем код с grecaptcha
+			executeRecaptcha();
+		}
+	}, 1000); // Проверяем каждую секунду
+} else {
+	// Если grecaptcha уже доступна, просто выполняем код
+	executeRecaptcha();
+}
