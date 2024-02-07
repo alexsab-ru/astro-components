@@ -1,44 +1,28 @@
 ---
 interface Props {
-	banner: any;
 }
-const {banner = {}} = Astro.props;
 import Button from '../Button/Button.astro';
 import Badge from './Badge.astro';
+import BannerTitle from './Title.astro';
+import BannerDescription from './Description.astro';
+import BannerVideo from './Video.astro';
+import BannerImage from './Image.astro';
 ---
 
-<div class="swiper-slide banner-slide" data-swiper-autoplay={banner.autoplay}>
+<div class="swiper-slide banner-slide" data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
 	<div class="container h-full relative z-[2] py-10 lg:py-20">
 		<div class="h-full flex flex-col justify-between">
 			<div class="mb-10">
+				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
+				{ banner?.descr && ( <BannerDescription description={banner.descr} /> ) }
 				{
-					banner.title && (
-						<div
-							class="text-3xl md:text-4xl lg:text-5xl uppercase font-bold"
-							data-swiper-parallax="-20%">
-							<Fragment set:html={banner.title} />
-						</div>
-					)
-				}
-
-				{
-					banner.descr && (
-						<p
-							data-swiper-parallax="-40%"
-							class="text-sm sm:text-xl md:text-3xl mt-3 sm:mt-5">
-							<Fragment set:html={banner.descr} />
-						</p>
-					)
-				}
-
-				{
-					banner.btn && (
+					banner?.btn && (
 						<div data-swiper-parallax="-55%">
 							<Button
 								classes="white inline-block !py-2 sm:py-3 text-sm sm:text-base mt-8 sm:mt-10"
 								view={banner?.view}
-								url={banner.btnUrl}
-								title={banner.btn}
+								url={banner?.btnUrl}
+								title={banner?.btn}
 								dataTitle={banner?.dataTitle}
 								dataFormName={banner?.dataFormName}
 							/>
@@ -46,34 +30,31 @@ import Badge from './Badge.astro';
 					)
 				}
 			</div>
-
 			{
-				banner.badge && (
+				banner?.badge && (
 					<Badge
-						autoName={banner.badge.autoname}
-						title={banner.badge.title}
-						descr={banner.badge.descr}
-						image={banner.badge.image}
+						autoName={banner.badge?.autoname}
+						title={banner.badge?.title}
+						descr={banner.badge?.descr}
+						image={banner.badge?.image}
 					/>
 				)
 			}
 		</div>
 	</div>
 	{
-		banner.type === 'video' ? (
-			<video
-				muted
-				loop
-				poster={banner.imageUrl}
-				class="absolute inset-0 h-full w-full object-cover">
-				<source src={banner.videoUrl} type="video/mp4" />
-			</video>
+		banner?.type === 'video' && banner?.bannerUrl ? (
+			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
+				<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
+			</a>			
+		) : banner?.type === 'video' && !banner?.bannerUrl ? (
+			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
+		) : !banner?.type && banner?.bannerUrl ? (
+			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
+				<BannerImage url={banner.imageUrl} title={banner?.title} />
+			</a>
 		) : (
-			<img
-				src={banner.imageUrl}
-				class="absolute inset-0 h-full w-full object-cover object-center"
-				alt={banner.title}
-			/>
+			<BannerImage url={banner.imageUrl} title={banner?.title} />
 		)
 	}
 </div>
