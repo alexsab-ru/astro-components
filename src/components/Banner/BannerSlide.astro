@@ -1,6 +1,32 @@
 ---
-interface Props {
+type TBadge = {
+	autoname: string
+	title: string
+	descr: string
+	image: string
 }
+type TBanner = {
+	id?: number
+	show?: boolean
+	type?: string
+	view?: string
+	videoUrl?: string
+	imageUrl: string
+	bannerUrl?: string
+	target?: string
+	title?: string
+	descr?: string
+	btn?: string
+	btnUrl?: string
+	dataTitle?: string
+	dataFormName?: string
+	badge?: TBadge
+	autoplay?: number
+}
+interface Props {
+	banner: TBanner;
+}
+const {banner} = Astro.props;
 import Button from '../Button/Button.astro';
 import Badge from './Badge.astro';
 import BannerTitle from './Title.astro';
