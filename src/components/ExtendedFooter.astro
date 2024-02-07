@@ -1,6 +1,6 @@
 ---
 import { BASE_URL, SITE_URL, SITE_NAME, LEGAL_ENTITY } from '@/const.js';
-import { Icon } from 'astro-icon'
+import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
 const salons = await fetch(fetchURL).then((response) => response.json());
 // import salons from '@/data/salons.json';
@@ -45,11 +45,11 @@ const path = Astro.url.pathname;
                     salons.map(salon => (
                     <div class="flex flex-col gap-3">
                         <span class="flex items-center gap-1 flex-nowrap">
-                            <Icon name="clarity:map-marker-line" class="w-6" /> 
+                            <Icon name="mdi:map-marker-outline" class="text-2xl" /> 
                             {salon.address}
                         </span>
                         <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
-                            <Icon name="ic:outline-phone-android" class="w-5" /> 
+                            <Icon name="mdi:cellphone" class="text-xl" /> 
                             {salon.phone}
                         </a>
                     </div>
