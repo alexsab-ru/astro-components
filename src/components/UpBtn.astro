@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon'
+import { Icon } from 'astro-icon/components'
 ---
 <div
 	x-data="scrollTop"
@@ -8,5 +8,5 @@ import { Icon } from 'astro-icon'
 	:class="scrolled ? 'translate-x-0' : 'translate-x-20'"
 	x-on:click="onClick"
 >
-	<Icon name="carbon:chevron-up" class="w-5" />
+	<Icon name="mdi:chevron-up" class="text-3xl" />
 </div>
