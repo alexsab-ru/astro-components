@@ -1,0 +1,12 @@
+---
+interface Props{
+	title?: string;
+	url: string
+}
+const {title, url} = Astro.props
+---
+<img
+	src={url}
+	class="absolute inset-0 h-full w-full object-cover object-center"
+	{...title ? {alt: title} : {} }
+/>
