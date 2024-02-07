@@ -1,5 +1,5 @@
 ---
-import Icon from 'astro-icon';
+import Icon from 'astro-icon/components';
 ---
 <div class="flex items-center xs:gap-2 gap-4 mt-5 text-xs sm:text-base" x-data="sorting">
 	<span class="flex-shrink-0">Сортировать по:</span>
@@ -15,7 +15,7 @@ import Icon from 'astro-icon';
 			<span x-text="value"></span>
 			<Icon 
 				name="mdi:chevron-down" 
-				class="size-5 transition-transform duration-300 origin-center"
+				class="text-xl transition-transform duration-300 origin-center"
 				:class="{'-rotate-180': open}" 
 			/>
 		</span>
