@@ -1,0 +1,12 @@
+---
+interface Props{
+	title: string
+}
+const {title} = Astro.props
+---
+
+<div
+	class="text-3xl md:text-4xl lg:text-5xl uppercase font-bold"
+	data-swiper-parallax="-20%">
+	<Fragment set:html={title} />
+</div>
