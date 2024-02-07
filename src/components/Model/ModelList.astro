@@ -7,7 +7,7 @@ const {fetchURL = '', title = 'Модельный ряд'} = Astro.props;
 const models = await fetch(fetchURL).then((response) => response.json());
 // import models from '@/data/models.json';
 const filteredModels = models.filter(model => model.show)
-import {Icon} from 'astro-icon';
+import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format'
 ---
 
@@ -54,7 +54,7 @@ import { currencyFormat } from '@/js/utils/numbers.format'
 													? 'mdi:fuel-pump'
 													: 'mdi:car-manual-transmission'
 											}
-											class="text-gray-700 h-5 sm:h-8"
+											class="text-gray-700 text-2xl sm:text-3xl"
 										/>
 										<span>{model.chars[key]}</span>
 									</div>
