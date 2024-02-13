@@ -41,7 +41,7 @@ jobs:
 
       - name: Get commits
         id: get_commits
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # checkout full tree
           fetch-depth: 0
@@ -173,7 +173,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Update repository
         run: git pull
