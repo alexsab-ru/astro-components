@@ -56,12 +56,18 @@ jobs:
             echo "Something found." && echo "changes=true" >> $GITHUB_ENV && echo "changes=true" >> $GITHUB_OUTPUT
           fi
 
+      - name: Check if manually triggered
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Run manually." && echo "changes=true" >> $GITHUB_ENV && echo "changes=true" >> $GITHUB_OUTPUT
+
       - name: Setup Pages
         id: pages
         if: env.changes == 'true'
         uses: actions/configure-pages@v4
 
       - name: Create env file
+        if: env.changes == 'true'
         run: |
           touch .env
           echo PUBLIC_YANDEX_SITE_VERIFICATION=${{ vars.PUBLIC_YANDEX_SITE_VERIFICATION }} >> .env
