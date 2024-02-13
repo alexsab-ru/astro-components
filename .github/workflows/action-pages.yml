@@ -44,30 +44,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check for new commits
+      - name: Determine changes
         id: check_changes
         run: |
-          # Получите количество коммитов за последние 10 минут
-          COUNT=$(git log --since="10 minutes ago" --pretty=oneline | wc -l)
-          if [ "$COUNT" -eq "0" ]; then
-            echo "No new commits. Exiting workflow." && echo "changes=false" >> $GITHUB_ENV && echo "changes=false" >> $GITHUB_OUTPUT
-            exit 0
+          # Проверка запущен ли экшн вручную или есть ли коммиты за последние 10 минут
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Run manually. Assuming changes." && echo "changes=true" >> $GITHUB_OUTPUT
           else
-            echo "Something found." && echo "changes=true" >> $GITHUB_ENV && echo "changes=true" >> $GITHUB_OUTPUT
+            COUNT=$(git rev-list --count HEAD --since="10 minutes ago")
+            if [ "$COUNT" -eq "0" ]; then
+              echo "No new commits. Exiting workflow." && echo "changes=false" >> $GITHUB_OUTPUT
+              exit 0
+            else
+              echo "New commits found." && echo "changes=true" >> $GITHUB_OUTPUT
+            fi
           fi
-
-      - name: Check if manually triggered
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          echo "Run manually." && echo "changes=true" >> $GITHUB_ENV && echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Setup Pages
         id: pages
-        if: env.changes == 'true'
+        if: steps.check_changes.outputs.changes == 'true'
         uses: actions/configure-pages@v4
 
       - name: Create env file
-        if: env.changes == 'true'
+        if: steps.check_changes.outputs.changes == 'true'
         run: |
           touch .env
           echo PUBLIC_YANDEX_SITE_VERIFICATION=${{ vars.PUBLIC_YANDEX_SITE_VERIFICATION }} >> .env
@@ -75,14 +74,14 @@ jobs:
           cat .env
 
       - name: Build Astro
-        if: env.changes == 'true'
+        if: steps.check_changes.outputs.changes == 'true'
         run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
           pnpm build --outDir ./_site
 
       - name: Upload artifact
-        if: env.changes == 'true'
+        if: steps.check_changes.outputs.changes == 'true'
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3
 
