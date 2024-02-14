@@ -1,11 +1,5 @@
 import Alpine from 'alpinejs';
 import { BASE_URL, SITE_URL } from '../const';
-async function getModels() {
-    let response = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`) 
-    return await response.json();
-}
-// const models = await getModels();
-// console.log(models);
 
 document.addEventListener('alpine:init', () => {
 	Alpine.data('header', () => ({
