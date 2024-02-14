@@ -1,0 +1,56 @@
+---
+interface Props {
+	name: string;
+	placeholder?: string;
+	options?: any
+}
+const {name, placeholder = 'Выберите значение', options = []} = Astro.props
+import { Icon } from 'astro-icon/components';
+---
+<div x-data={ `{
+		open: false, 
+		options: ${JSON.stringify(options)},
+		placeholder: '${placeholder}',
+		value: null,
+		currentOption: {},
+		select(id){
+			this.currentOption = this.options.find(o => o.id === id);
+			this.value = this.currentOption.name || null;
+			this.open = false;
+		}
+	}` }
+	x-cloak>
+	<input type="hidden" name={name} :value="value"/>
+	<div 
+		class="relative min-w-[160px] xs:w-full sm:min-w-[250px] w-auto" 
+		@click.outside="open = false"
+	>
+		<span 
+			class="border-2 border-gray-100 py-2.5 px-4 cursor-pointer flex items-center justify-between gap-5 flex-nowrap outline-none" 
+			tabindex="-1" 
+			@click="open = !open" 
+			@keydown.escape="open = false">
+			<span x-text="value || placeholder" :class="{'text-gray-400': !value}"></span>
+			<Icon 
+				name="mdi:chevron-down" 
+				class="text-xl transition-transform duration-300 origin-center"
+				:class="{'-rotate-180': open}" 
+			/>
+		</span>
+		<div 
+			class="absolute top-full left-0 w-full bg-white border-2 border-gray-100 border-t-0 shadow-xl z-10 max-h-[165px] overflow-y-auto transition-translate duration-200 custom-scroll"
+			:class="open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-2'"
+			x-cloak
+		>
+			<template x-for="option in options" :key="option.id">
+				<a 
+					href="#" 
+					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 !no-underline !text-black !mb-0"
+					:class="{'bg-gray-200': option.id === currentOption.id}"
+					@click.prevent="select(option.id)"
+					x-text="option.name"
+				></a>
+			</template>
+		</div>
+	</div>
+</div>
