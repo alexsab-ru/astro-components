@@ -5,7 +5,7 @@ import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 const salons = await fetch(`${BASE_URL}${SITE_URL}/data/salons.json`).then((response) => response.json());
-const salonsPhone = salons.map((salon: any, index) => { return salons[0].phone })
+const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ')
 ---
 
 <Layout title={`Тест-драйв автомобиля ${BRAND} – Онлайн запись в салон официального дилера ${BRAND} в ${LEGAL_CITY_WHERE}`} description={`Записаться на тест-драйв автомобиля ${BRAND} в ${LEGAL_CITY_WHERE} вы можете на официальном сайте дилера ${BRAND} в ${LEGAL_CITY_WHERE}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
