@@ -1,5 +1,5 @@
 import Swiper from "swiper";
-import { Navigation, Pagination, Autoplay, Parallax } from "swiper/modules";
+import { Navigation, Pagination, Autoplay, Parallax, Keyboard } from "swiper/modules";
 
 import "swiper/css/bundle";
 
@@ -22,9 +22,13 @@ const slides = document.querySelectorAll(".banner-slide");
 
 const initSlider = () => {
 	bannerSlider = new Swiper(".banner-slider", {
-		modules: [Navigation, Pagination, Autoplay, Parallax],
+		modules: [Navigation, Pagination, Autoplay, Parallax, Keyboard],
 		loop,
 		speed: 1000,
+		keyboard: {
+			enabled: true,
+			onlyInViewport: true,
+		},
 		parallax: {
 			enabled: true,
 		},
