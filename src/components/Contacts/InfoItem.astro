@@ -1,0 +1,27 @@
+---
+interface Props{
+	iconName?: string;
+	label?: string;
+	value?: string;
+	class?: string;
+	type?: string
+}
+const { label, value, iconName, class: className, type = '', ...rest  } = Astro.props
+import { Icon } from 'astro-icon/components';
+import { phoneFormat } from '@/js/utils/numbers.format';
+---
+<div class={className} {...rest}>
+	{iconName && ( <Icon name={iconName} class="text-3xl sm:text-4xl flex-shrink-0 text-gray-500" /> )}
+	<div>
+		{label && ( <small class="text-xs sm:text-sm text-gray-500 block">{label}</small> )}
+		{type === 'phone' ? (
+			<a
+				href={`tel:${phoneFormat(value)}`}
+				class="text-sm sm:text-lg font-medium transition-colors hover:text-accent-500 goal-click-lead-tel">
+				{value}
+			</a>
+		) : (
+			<div class="text-sm sm:text-lg font-medium"><Fragment set:html={value} /></div>
+		)}
+	</div>
+</div>
