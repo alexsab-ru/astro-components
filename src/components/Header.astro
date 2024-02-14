@@ -92,7 +92,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 {links && (
 	<div id="site_nav" class={'hidden lg:block border-t'+classBottom}>
 		<div class="container">
-			<div class="flex">
+			<div class="flex overflow-x-auto">
 			{
 				links.map(link => (
 				<a
@@ -137,7 +137,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 							{
 								'scroll-link': link.url.includes('#'),
 								'header-link': !link.url.includes('#'),
-								'active': path.replace(/\//g, '') === link.url.replace(/\//g, '')
+								'active': path.replace(/\//g, '') === link.url.replace(/\//g, ''),
 							}
 						]}
 					>{link.name}</a>
@@ -161,7 +161,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 
 <style lang="scss">
 	.scroll-link, .header-link{
-		@apply inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-400 hover:text-white;
+		@apply inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-400 hover:text-white whitespace-nowrap;
 		&.active{
 			@apply bg-accent-400 text-white;
 		}
