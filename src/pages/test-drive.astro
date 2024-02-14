@@ -1,0 +1,79 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { BRAND, LEGAL_CITY_WHERE, AGREE_LABEL } from '@/const';
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+---
+
+<Layout title={`Запись на тест-драйв автомобилей ${BRAND}`} description={`Запись на тест-драйв автомобилей ${BRAND}-удобный и комфортный для вас сервис тест-драйва в ${LEGAL_CITY_WHERE}`}>
+	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data="modelsData">
+
+		<div class="p-5 sm:p-10 bg-cover bg-center w-full lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-[1]" :style="`background-image: url(${current?.homeImg})`" x-cloak>
+			<h2 class="text-2xl font-bold text-white" x-text="current?.name"></h2>
+			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-cover sm:w-2/3 absolute -right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.name">
+			<div class="flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white">
+				<template x-for="char in current?.globalChars">
+					<div class="flex xl:flex-col items-center xl:items-start justify-between gap-4 sm:gap-8 xl:p-3 xl:shadow shadow-white rounded sm:w-1/2 xl:w-auto">
+						<div class="text-xs" x-text="char.title+':'"></div>
+						<div>
+							<b class="text-base xl:text-lg font-bold" x-text="char.value"></b>{' '}
+							<span class="xs:text-[11px]" x-text="char?.measure"></span>
+						</div>
+					</div>
+				</template>
+			</div>
+		</div>
+
+		<div class="p-5 sm:p-10 space-y-10 w-full lg:w-2/5 2xl:w-1/2" x-cloak>
+			<h1 class="text-3xl font-bold text-center">Записаться на тест-драйв</h1>
+			<div class="flex justify-center gap-4 flex-wrap">
+				<template x-for="model in models">
+					<button 
+						class="text-sm sm:text-base py-2 px-2 sm:px-4 rounded" 
+						:class="model?.id === current?.id ? 'bg-accent-500 text-white' : 'bg-gray-200'"
+						x-text="model?.name" 
+						@click="currentModel(model.id)"
+					></button>
+				</template>
+			</div>
+			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
+				<input type="hidden" name="form" :value="`Запись на тест-драйв. ${current?.name}`" />
+				<input
+					type="email"
+					tabindex="-1"
+					name="email"
+					class="h-0 opacity-0 absolute -z-[100]"
+					placeholder="mail@example.com"
+				/>
+				<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+				<Input
+					type="tel"
+					name="phone"
+					classes="border-gray-100"
+					placeholder="+7 (999) 999-99-99*"
+					required
+					errorClasses="text-red-500"
+				/>
+	
+				<Checkbox
+					name="agree"
+					label={AGREE_LABEL}
+					color="black"
+					required
+					errorClasses="text-red-500 w-full"
+					errorText="Чтобы продолжить, установите флажок"
+				/>
+	
+				<input
+					type="checkbox"
+					name="subscribe"
+					class="absolute w-0 h-0 opacity-0 invisible"
+				/>
+	
+				<Button view="form-button" classes="w-full" title="Отправить" />
+			</form>
+		</div>
+
+	</div>
+</Layout>

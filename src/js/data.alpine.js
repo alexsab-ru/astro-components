@@ -1,4 +1,11 @@
 import Alpine from 'alpinejs';
+import { BASE_URL, SITE_URL } from '../const';
+async function getModels() {
+    let response = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`) 
+    return await response.json();
+}
+// const models = await getModels();
+// console.log(models);
 
 document.addEventListener('alpine:init', () => {
 	Alpine.data('header', () => ({
@@ -131,6 +138,20 @@ document.addEventListener('alpine:init', () => {
 			this.setTitle();
             // this.sortBy(this.current)
 		},
+	}));
+	Alpine.data("modelsData", () => ({
+		models: null,
+		current: null,
+		async getModels() {
+			this.models = await (await fetch(`${BASE_URL}${SITE_URL}/data/models.json`)).json()
+		},
+		async currentModel(id){
+			this.current =  await this.models.find(m => m.id === id)
+		},
+		async init(){
+			await this.getModels()
+			await this.currentModel(this.models[0].id)
+		}
 	}));
 });
 
