@@ -1,0 +1,55 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { LEGAL_CITY_WHERE, AGREE_LABEL, BASE_URL, SITE_URL } from '@/const';
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import FormSelect from '@/components/FormSelect.astro';
+const models = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`).then((response) => response.json());
+const options = models.map(m => ({id: m.id, name: m.name}))
+console.log(options);
+
+---
+
+<Layout title="Запись на сервис" description={`Запись на сервис автомобилей в ${LEGAL_CITY_WHERE}`}>
+	<div class="container py-10 space-y-10" x-data="modelsData">
+		<h1 class="text-3xl font-bold text-center">Записаться на сервис</h1>
+		<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
+			<input type="hidden" name="form" value="Запись на сервис" />
+			<input
+				type="email"
+				tabindex="-1"
+				name="email"
+				class="h-0 opacity-0 absolute -z-[100]"
+				placeholder="mail@example.com"
+			/>
+			<FormSelect name="model" placeholder="Выберите модель" options={options} />
+			<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+			<Input
+				type="tel"
+				name="phone"
+				classes="border-gray-100"
+				placeholder="+7 (999) 999-99-99*"
+				required
+				errorClasses="text-red-500"
+			/>
+
+			<Checkbox
+				name="agree"
+				label={AGREE_LABEL}
+				color="black"
+				required
+				errorClasses="text-red-500 w-full"
+				errorText="Чтобы продолжить, установите флажок"
+			/>
+
+			<input
+				type="checkbox"
+				name="subscribe"
+				class="absolute w-0 h-0 opacity-0 invisible"
+			/>
+
+			<Button view="form-button" classes="w-full" title="Отправить" />
+		</form>
+	</div>
+</Layout>
