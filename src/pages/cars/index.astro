@@ -34,19 +34,17 @@ if (rawCars && rawCars.length > 0) {
 				<hr class="my-5">
 				{models.length && (
 					<div class="flex flex-wrap gap-2 sm:gap-4">
-						<a 
-							href="all" 
+						<button 
 							class="filter-model-link"
 							:class="currentModel === 'all' ? 'bg-accent-500 text-white' : 'bg-gray-200'"
 							@click.prevent="filteredCars('all')"
-						>Все</a>
+						>Все</button>
 						{models.map(model => (
-							<a 
-								href={model.toLowerCase()} 
+							<button
 								class="filter-model-link"
 								:class={`currentModel === '${model.toLowerCase()}' ? 'bg-accent-500 text-white' : 'bg-gray-200'`}
 								@click.prevent={`filteredCars('${model.toLowerCase()}')`}
-							>{model}</a>
+							>{model}</button>
 						))}
 					</div>
 				)}
