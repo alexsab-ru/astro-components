@@ -68,6 +68,7 @@ jobs:
       run: |
         git config --local user.email "support+actions@github.com"
         git config --local user.name "github-actions-bot"
+        git add public/img/thumbs/*.webp
         git add src/content/cars/*.mdx
         git commit -m "Update cars from XML" -a || echo "No changes to commit"
         git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
