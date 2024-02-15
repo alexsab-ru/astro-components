@@ -8,10 +8,10 @@ import './cars.sass'
 <div class="preview-slider mb-2.5">
     <div class="preview-list aspect-[4/3]">
 		{
-			car.data.images.length > 0 ? (
-				car.data.images.map((img:string, idx:number) => (
+			car.data.thumbs.length > 0 ? (
+				car.data.thumbs.map((img:string, idx:number) => (
 					<a
-						href={img}
+						href={car.data.images[idx]}
 						class={`glightbox preview-link ${idx > 4 ? '!hidden' : ''}`}
 						data-gallery={car.data.vin_hidden}
 						data-glightbox={`description: .btn-desc-${car.data.vin_hidden}`}
