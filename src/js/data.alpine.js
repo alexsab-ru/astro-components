@@ -129,6 +129,7 @@ document.addEventListener('alpine:init', () => {
 			this.cars.forEach(function (element) {
 				document.querySelector(".car-list").appendChild(element);
 			});
+			this.addQueryParam('sort_by', id);
 		},
 		addQueryParam(key, value) {
 			const url = new URL(window.location.href);
@@ -157,10 +158,14 @@ document.addEventListener('alpine:init', () => {
 			const vm = this;
 			this.cars = Array.from(this.carItems);
 			this.setTitle();
-			this.sortBy(this.current)
 			const params = new URLSearchParams(document.location.search);
 			const modelParams = params.get('model');
-			console.log(modelParams);
+			const sort_by = params.get('sort_by');
+			if(sort_by){
+				this.sortBy(sort_by)
+			}else{
+				this.sortBy(this.current)
+			}
 			if(modelParams){
 				this.filteredCars(modelParams);
 			}else{
