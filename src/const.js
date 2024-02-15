@@ -13,10 +13,10 @@ export const LINKS_MENU = [
 	{url: 'cars/', name: 'Авто в наличии'},
 	{url: 'special-offers/', name: 'Спецпредложения'},
 	{url: 'news/', name: 'Новости'},
-	{url: 'test-drive', name: 'Запись на тест-драйв'},
-	{url: 'service-request', name: 'Запись на сервис'},
+	{url: 'test-drive/', name: 'Запись на тест-драйв'},
+	{url: 'service-request/', name: 'Запись на сервис'},
 	{url: '#services', name: 'Услуги'},
-	{url: 'contacts', name: 'Контакты'},
+	{url: 'contacts/', name: 'Контакты'},
 ];
 
 export const HEADER_TOP_LINE = '';
