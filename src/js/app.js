@@ -12,6 +12,32 @@ const lightbox = GLightbox({
 	moreLength: 0,
 });
 
+const imageObserver = new IntersectionObserver((entries, observer) => {
+	entries.forEach((entry) => {
+		if (entry.isIntersecting) {
+			entry.target.src = entry.target.dataset.src;
+			observer.unobserve(entry.target);
+		}
+	});
+	},
+	{
+		threshold: 0.5
+	}
+);
+
+const lazys = document.querySelectorAll('.lazy');
+
+if(lazys.length){
+	lazys.forEach(lazy => {
+		if(lazy.querySelector('img')){
+			imageObserver.observe(lazy.querySelector('img'))
+		}
+		lazy.classList.remove('lazy')
+	})
+}
+
+
+
 function executeRecaptcha() {
 grecaptcha.ready(function() {
 	grecaptcha.execute('6Lepfy4pAAAAAAGHFP655qNe6Bb_BcskklcxajC6', {action: 'open'}).then(function(token) {
