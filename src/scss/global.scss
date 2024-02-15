@@ -24,7 +24,7 @@ section {
 	p, b, ul, ol, a {
 		@apply text-sm sm:text-lg mb-4;
 	}
-	a {
+	a:not(.filter-model-link) {
 		@apply text-accent-500 underline hover:no-underline;
 	}
 	li {
