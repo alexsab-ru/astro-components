@@ -51,11 +51,11 @@ import logo from '@/components/Logo/logo.svg';
 	{
 		salons.length && salons.map((salon: any, index) => {
 							return index < 2 && (
-			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
+			<div class="flex items-center flex-nowrap gap-2 sm:gap-3 mb-4">
 				<Icon name="mdi:cellphone" class="text-2xl flex-shrink-0" />
 				<a
 					href={`tel:${phoneFormat(salons[0].phone)}`}
-					class="font-medium mb-2 sm:text-xl goal-click-lead-tel">
+					class="font-medium sm:text-xl goal-click-lead-tel">
 					{salons[0].phone}
 				</a>
 			</div>

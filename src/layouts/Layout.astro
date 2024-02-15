@@ -29,7 +29,7 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 	<body class="min-h-screen flex flex-col">
 		<ScriptBodyBegin />
 		<Header fetchURL={`${BASE_URL}${SITE_URL}/data/salons.json`} />
-		<main class="flex-grow">
+		<main class="flex-grow relative">
 			<slot />
 		</main>
 		<Footer />
