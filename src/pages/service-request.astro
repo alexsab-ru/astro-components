@@ -6,7 +6,11 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
 const models = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`).then((response) => response.json());
-const options = models.map(m => ({id: m.id, name: m.name}))
+const options = models.filter(m => {
+	if(m.show){
+		return {id: m.id, name: m.name}
+	}
+});
 console.log(options);
 
 ---
