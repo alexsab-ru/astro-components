@@ -18,8 +18,8 @@ import './cars.sass'
 					>
 					{
 						idx < 5 && (
-							<div class="preview-img">
-								<img src={img} alt={car.mark_id +' '+car.folder_id}>
+							<div class="preview-img lazy">
+								<img src="/img/loading-simple.gif" data-src={img} alt={car.mark_id +' '+car.folder_id}>
 								{
 									idx === 4 && car.data.images.length > 5 && (
 									<div class="preview-total"> Еще <br> { car.data.images.length - 5} фото</div>
@@ -34,8 +34,8 @@ import './cars.sass'
 					</div>
 				))
 			) : (
-				<a href={car.slug} class="absolute inset-0 w-full h-auto !mb-0" title="Подробнее">
-					<img src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt="No Photo">
+				<a href={car.slug} class="absolute inset-0 w-full h-auto !mb-0 lazy" title="Подробнее">
+					<img src="/img/loading-simple.gif" data-src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt="No Photo">
 				</a>
 			)
 		}        

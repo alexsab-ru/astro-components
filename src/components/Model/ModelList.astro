@@ -35,9 +35,10 @@ import { currencyFormat } from '@/js/utils/numbers.format'
 							}
 								<span class=""></span>
 							</div>
-							<div class="flex-grow flex items-end justify-center">
+							<div class="flex-grow flex items-end justify-center lazy">
 								<img
-									src={model.thumb}
+									src="/img/loading-simple.gif"
+									data-src={model.thumb}
 									class="scale-100 transition-transform duration-500 in-expo group-hover:scale-105 max-h-full"
 									alt={model.name}
 									loading="lazy"
