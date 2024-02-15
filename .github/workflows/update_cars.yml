@@ -70,8 +70,8 @@ jobs:
       run: |
         git config --local user.email "support+actions@github.com"
         git config --local user.name "github-actions-bot"
-        git add public/img/thumbs/*.webp
-        git add src/content/cars/*.mdx
+        if [[ -d public/img/thumbs && $(find public/img/thumbs -type f -name "*.webp") ]]; then git add public/img/thumbs/*.webp; fi
+        if [[ -d src/content/cars && $(find src/content/cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
         git commit -m "Update cars from XML" -a || echo "No changes to commit"
         git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         git push origin $GITHUB_REF_NAME
