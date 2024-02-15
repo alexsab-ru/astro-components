@@ -16,8 +16,7 @@ export const LINKS_MENU = [
 	{url: 'test-drive', name: 'Запись на тест-драйв'},
 	{url: 'service-request', name: 'Запись на сервис'},
 	{url: 'contacts', name: 'Контакты'},
-	{url: '#services', name: 'Услуги'},
-	{url: '#contacts', name: 'Контакты'},
+	// {url: '#services', name: 'Услуги'},
 ];
 
 export const HEADER_TOP_LINE = '';
