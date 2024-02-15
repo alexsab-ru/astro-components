@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { LEGAL_CITY_WHERE, AGREE_LABEL, BASE_URL, SITE_URL } from '@/const';
+import { LEGAL_CITY_WHERE, AGREE_LABEL, BASE_URL, SITE_URL, BRAND } from '@/const';
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
@@ -11,11 +11,11 @@ console.log(options);
 
 ---
 
-<Layout title="Запись на сервис" description={`Запись на сервис автомобилей в ${LEGAL_CITY_WHERE}`}>
+<Layout title={`Запись на сервис ${BRAND}`} description={`Запись на сервис автомобилей ${BRAND} в ${LEGAL_CITY_WHERE}`}>
 	<div class="container py-10 space-y-10" x-data="modelsData">
 		<div>
-			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на сервис</h1>
-			<p class="text-center mt-1 text-gray-500">Подзаголовок</p>
+			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на сервис {BRAND}</h1>
+			<p class="text-center mt-1 text-gray-500">Профессиональное обслуживание с сохранением гарантии</p>
 		</div>
 		<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
 			<input type="hidden" name="form" value="Запись на сервис" />
