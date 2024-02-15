@@ -3,6 +3,9 @@ import re
 import yaml
 import shutil
 import requests
+import urllib.parse
+from PIL import Image, ImageOps
+from io import BytesIO
 
 # Parsing XML
 import xml.etree.ElementTree as ET
@@ -69,7 +72,9 @@ def create_file(car, filename, unique_id):
             continue
         if child.tag == 'images':
             images = [img.text for img in child.findall('image')]
+            thumbs_files = createThumbs(images)
             content += f"{child.tag}: {images}\n"
+            content += f"thumbs: {thumbs_files}\n"
         elif child.tag == 'color':
             content += f"{child.tag}: {color}\n"
             content += f"image: {thumb}\n"
@@ -139,6 +144,51 @@ def update_yaml(car, filename):
         f.write(updated_content)
 
     return filename
+
+def createThumbs(image_urls):
+    # Путь к папке для сохранения уменьшенных изображений
+    output_dir = "/img/thumbs/"
+
+    # Проверка наличия папки, если нет - создаем
+    if not os.path.exists(f"public{output_dir}"):
+        os.makedirs(f"public{output_dir}")
+
+    # Список для хранения путей к новым файлам
+    new_files = []
+
+    # Обработка первых 5 изображений
+    for img_url in image_urls[:5]:
+        try:
+            # Загрузка изображения из интернета
+            response = requests.get(img_url)
+            image = Image.open(BytesIO(response.content))
+
+            # Получение оригинального имени файла из URL и удаление расширения
+            original_filename = os.path.basename(urllib.parse.urlparse(img_url).path)
+            filename_without_extension, _ = os.path.splitext(original_filename)
+
+            # Расчет новых размеров, сохраняя пропорции
+            aspect_ratio = image.width / image.height
+            new_width = 360
+            new_height = int(new_width / aspect_ratio)
+
+            # Изменение размера изображения
+            resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
+
+            # Сохранение изображения в формате WEBP
+            output_filename = f"thumb_{filename_without_extension}.webp"
+            output_path = os.path.join(f"public{output_dir}", output_filename)
+            resized_image.save(output_path, "WEBP")
+
+            # Добавление пути к файлу в список новых файлов
+            new_files.append(f"{output_dir}{output_filename}")
+
+            print(f"Изображение {img_url} успешно обработано и сохранено как {output_path}")
+        except Exception as e:
+            print(f"Ошибка при обработке изображения {img_url}: {e}")
+
+    # Возвращение списка новых файлов
+    return new_files
 
 
 filename = 'cars.xml'
