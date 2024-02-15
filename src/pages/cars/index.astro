@@ -5,13 +5,15 @@ import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
 import CarItem from "@/components/Cars/Item.astro";
 import SortSelect from "@/components/Cars/SortSelect.astro";
 const rawCars = await getCollection("cars");
-let cars: any, image: string, total:number = 0;
+let cars: any, image: string, models = [];
+import { getRandomInt, declOfNums } from "@/js/utils/numbers.format";
 if (rawCars && rawCars.length > 0) {
 	cars = rawCars;
-	import { getRandomInt, declOfNums } from "@/js/utils/numbers.format";
 	image = cars[getRandomInt(0, cars.length)].data.image;
 	cars.map((car) => {
-		total = total+car.data.total	
+		if(!models.includes(car.data.folder_id)){
+			models.push(car.data.folder_id)
+		}
 	})
 } else {
 	image = "";
@@ -25,16 +27,43 @@ if (rawCars && rawCars.length > 0) {
 >
 	{
 		cars ? (
-			<p class="mb-6">{total} {declOfNums(total)} в наличии</p>
-			<hr>
-			<SortSelect />
-			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
-				{cars.map((car) => (
-					<CarItem car={car} />
-				))}
+			<div x-data="sorting" x-cloak>
+				<p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
+				<hr class="my-5">
+				<SortSelect />
+				<hr class="my-5">
+				{models.length && (
+					<div class="flex flex-wrap gap-2 sm:gap-4">
+						<a 
+							href="all" 
+							class="filter-model-link"
+							:class="currentModel === 'all' ? 'bg-accent-500 text-white' : 'bg-gray-200'"
+							@click.prevent="filteredCars('all')"
+						>Все</a>
+						{models.map(model => (
+							<a 
+								href={model.toLowerCase()} 
+								class="filter-model-link"
+								:class={`currentModel === '${model.toLowerCase()}' ? 'bg-accent-500 text-white' : 'bg-gray-200'`}
+								@click.prevent={`filteredCars('${model.toLowerCase()}')`}
+							>{model}</a>
+						))}
+					</div>
+				)}
+				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+					{cars.map((car) => (
+						<CarItem car={car} />
+					))}
+				</div>
 			</div>
 		) : (
 			<p>Скоро здесь появится список новых автомобилей.</p>
 		)
 	}
 </PageLayout>
+
+<style>
+	.filter-model-link{
+		@apply text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0;
+	}
+</style>
