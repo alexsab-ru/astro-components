@@ -11,7 +11,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@alexsab-ru/scripts": "^0.5.1",
+    "@alexsab-ru/scripts": "^0.5.2",
     "@astrojs/alpinejs": "^0.4.0",
     "@astrojs/mdx": "^2.1.1",
     "@astrojs/sitemap": "^3.0.5",
@@ -19,7 +19,7 @@
     "@iconify-json/mdi": "^1.1.64",
     "@types/alpinejs": "^3.13.6",
     "alpinejs": "^3.13.5",
-    "astro": "^4.3.3",
+    "astro": "^4.4.0",
     "astro-icon": "^1.1.0",
     "astro-robots": "^2.0.0",
     "glightbox": "^3.2.0",
