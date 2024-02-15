@@ -146,50 +146,64 @@ def update_yaml(car, filename):
     return filename
 
 def createThumbs(image_urls):
-    # Путь к папке для сохранения уменьшенных изображений
-    output_dir = "/img/thumbs/"
+    global current_thumbs
+    global output_dir
+
+    # Определение относительного пути для возврата
+    relative_output_dir = "/img/thumbs/"
 
     # Проверка наличия папки, если нет - создаем
-    if not os.path.exists(f"public{output_dir}"):
-        os.makedirs(f"public{output_dir}")
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
-    # Список для хранения путей к новым файлам
-    new_files = []
+    # Список для хранения путей к новым или существующим файлам
+    new_or_existing_files = []
 
     # Обработка первых 5 изображений
     for img_url in image_urls[:5]:
         try:
-            # Загрузка изображения из интернета
-            response = requests.get(img_url)
-            image = Image.open(BytesIO(response.content))
-
-            # Получение оригинального имени файла из URL и удаление расширения
             original_filename = os.path.basename(urllib.parse.urlparse(img_url).path)
             filename_without_extension, _ = os.path.splitext(original_filename)
-
-            # Расчет новых размеров, сохраняя пропорции
-            aspect_ratio = image.width / image.height
-            new_width = 360
-            new_height = int(new_width / aspect_ratio)
-
-            # Изменение размера изображения
-            resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
-
-            # Сохранение изображения в формате WEBP
             output_filename = f"thumb_{filename_without_extension}.webp"
-            output_path = os.path.join(f"public{output_dir}", output_filename)
-            resized_image.save(output_path, "WEBP")
+            output_path = os.path.join(output_dir, output_filename)
+            relative_output_path = os.path.join(relative_output_dir, output_filename)
 
-            # Добавление пути к файлу в список новых файлов
-            new_files.append(f"{output_dir}{output_filename}")
+            # Проверка существования файла
+            if not os.path.exists(output_path):
+                # Загрузка и обработка изображения, если файла нет
+                response = requests.get(img_url)
+                image = Image.open(BytesIO(response.content))
+                aspect_ratio = image.width / image.height
+                new_width = 360
+                new_height = int(new_width / aspect_ratio)
+                resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                resized_image.save(output_path, "WEBP")
+                print(f"Создано превью: {relative_output_path}")
+            else:
+                print(f"Файл уже существует: {relative_output_path}")
 
-            print(f"Изображение {img_url} успешно обработано и сохранено как {output_path}")
+            # Добавление относительного пути файла в списки
+            new_or_existing_files.append(relative_output_path)
+            current_thumbs.append(output_path)  # Здесь сохраняем полный путь для дальнейшего использования
         except Exception as e:
             print(f"Ошибка при обработке изображения {img_url}: {e}")
 
-    # Возвращение списка новых файлов
-    return new_files
+    return new_or_existing_files
 
+def cleanup_unused_thumbs():
+    global current_thumbs
+    all_thumbs = [os.path.join(output_dir, f) for f in os.listdir(output_dir)]
+    unused_thumbs = [thumb for thumb in all_thumbs if thumb not in current_thumbs]
+
+    for thumb in unused_thumbs:
+        os.remove(thumb)
+        print(f"Удалено неиспользуемое превью: {thumb}")
+
+# Путь к папке для сохранения уменьшенных изображений
+output_dir = "public/img/thumbs/"
+
+# Глобальный список для хранения путей к текущим превьюшкам
+current_thumbs = []
 
 filename = 'cars.xml'
 
@@ -431,6 +445,9 @@ for car in root.find('cars'):
         update_yaml(car, file_path)
     else:
         create_file(car, file_path, unique_id)
+
+# Удаление неиспользуемых превьюшек
+cleanup_unused_thumbs()
 
 
 for existing_file in os.listdir(directory):
