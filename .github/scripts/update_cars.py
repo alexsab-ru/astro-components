@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 
 def process_unique_id(unique_id, replace = "-"):
     # Удаление специальных символов
-    processed_id = re.sub(r'[.,()"\']', '', unique_id)
+    processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', unique_id)
 
     # Удаление пробелов и приведение к нижнему регистру
     processed_id = processed_id.replace(" ", replace).lower()
@@ -49,8 +49,18 @@ def create_file(car, filename, unique_id):
     color = car.find('color').text.strip().capitalize()
     model = car.find('folder_id').text.strip()
 
-    thumb = f"/img/models/{model_mapping.get(model, '../404.jpg?').get('folder')}/colors/{model_mapping.get(model, '../404.jpg?').get('color').get(color, '../../../404.jpg?')}.webp"
+    model_obj = model_mapping.get(model, '../404.jpg?')
 
+    # Проверяем, существует ли 'model' в 'model_mapping' и есть ли соответствующий 'color'
+    if model in model_mapping and color in model_mapping[model].get('color', {}):
+        folder = model_mapping[model]['folder']
+        color_image = model_mapping[model]['color'][color]
+        thumb = f"/img/models/{folder}/colors/{color_image}.webp"
+    else:
+        # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
+        thumb = "/img/404.jpg"
+        global error_404_found
+        error_404_found = True
 
     # Forming the YAML frontmatter
     content = "---\n"
@@ -206,6 +216,9 @@ output_dir = "public/img/thumbs/"
 # Глобальный список для хранения путей к текущим превьюшкам
 current_thumbs = []
 
+# Переменная для отслеживания наличия 404 ошибки
+error_404_found = False
+
 filename = 'cars.xml'
 
 if os.path.exists(filename):
@@ -237,6 +250,7 @@ os.makedirs(directory)
 existing_files = set()  # для сохранения имен созданных или обновленных файлов
 
 
+
 for car in root.find('cars'):
     unique_id = f"{car.find('mark_id').text} {car.find('folder_id').text} {car.find('modification_id').text} {car.find('complectation_name').text} {car.find('color').text} {car.find('price').text} {car.find('year').text}"
     unique_id = f"{process_unique_id(unique_id)}"
@@ -256,3 +270,14 @@ for existing_file in os.listdir(directory):
     filepath = os.path.join(directory, existing_file)
     if filepath not in existing_files:
         os.remove(filepath)
+
+if error_404_found:
+    with open('output.txt', 'w') as file:
+        file.write("error 404 found")
+else:
+    with open('output.txt', 'w') as file:
+        file.write("no error")
+
+if error_404_found:
+    print("error 404 found")
+
