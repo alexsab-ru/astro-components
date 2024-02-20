@@ -40,7 +40,7 @@ import CarCharItem from '@/components/Cars/CharItem.astro';
 						{data.modification_id && (
 							<CarCharItem label="Двигатель" value={data.modification_id} />
 						)}
-						{data.run && (
+						{(data.run !== undefined && data.run !== null) && (
 							<CarCharItem label="Пробег" value={`${data.run.toLocaleString('ru-RU')}&nbsp;км`} />
 						)}
 						{data.body_type && (
