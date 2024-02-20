@@ -45,6 +45,18 @@ jobs:
     - name: Generate files
       run: |
         python .github/scripts/update_cars.py
+
+    - name: Set output
+      id: set_output
+      run: |
+        if [ -f output.txt ]; then
+          echo "script_output=$(<output.txt)"
+          echo "script_output=$(<output.txt)" >> $GITHUB_ENV
+          echo "script_output=$(<output.txt)" >> $GITHUB_OUTPUT
+        fi
+
+    - name: ls files
+      run: |
         ls -al src/content/cars
 
     - name: Check for changes
@@ -80,3 +92,15 @@ jobs:
 
     outputs:
       changes: ${{ steps.check_changes.outputs.changes }}
+      script_output: ${{ steps.set_output.outputs.script_output }}
+
+
+  notify_telegram:
+    needs: build
+    if: needs.build.outputs.script_output == 'error 404 found'
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      additional-text: 'No model or color found. Check please'
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
