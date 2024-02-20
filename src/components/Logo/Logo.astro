@@ -5,12 +5,12 @@ const path = Astro.url.pathname;
 ---
 {path === '/' ? (
 <div class="flex flex-nowrap items-center xs:gap-2 gap-3 divide-x divide-black/20">
-    <img src={logo.src} class="h-4 sm:h-5 xl:h-10" alt={SITE_NAME} />
-    <span class="xs:pl-2 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{SITE_NAME}</span>
+    <img src={logo.src} class="h-3 sm:h-4 xl:h-8" alt={SITE_NAME} />
+    <span class="xs:pl-2 pl-3 xl:text-3xl uppercase font-medium !leading-none select-none">{SITE_NAME}</span>
 </div>
 ) : (
 <a href="/" class="flex flex-nowrap items-center xs:gap-2 gap-3 divide-x divide-black/20">
-    <img src={logo.src} class="h-4 sm:h-5 xl:h-10" alt={SITE_NAME} />
-    <span class="xs:pl-2 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{SITE_NAME}</span>
+    <img src={logo.src} class="h-3 sm:h-4 xl:h-8" alt={SITE_NAME} />
+    <span class="xs:pl-2 pl-3 xl:text-3xl uppercase font-medium !leading-none select-none">{SITE_NAME}</span>
 </a>
 )}

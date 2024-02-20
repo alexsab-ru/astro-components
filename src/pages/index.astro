@@ -11,11 +11,11 @@ const models = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`).then((resp
 // import models from '@/data/models.json'
 ---
 
-<Layout title="TITLE" description="DESCRIPTION">
+<Layout title="Купить Джетур у официального дилера JETOUR Альфа в Самаре" description="Jetour Альфа – официальный дилер автомобилей Джетур в Самаре. Предлагаем широкий выбор новых автомобилей Джетур в разнообразных цветах и комплектациях. Обеспечиваем качественное сервисное и гарантийное обслуживание вашего автомобиля. ☎️ 8 (846) 9 777-779">
 	<Banner fetchURL={`${BASE_URL}${SITE_URL}/data/banners.json`} />
 	<ModelList fetchURL={`${BASE_URL}${SITE_URL}/data/models.json`} />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
-	<Callback bgUrl="https://baic-krasnodar.ru/img/x35/konkurenty.jpg" />
+	<Callback bgUrl="/img/konkurenty.webp" />
 	<Services fetchURL={`${BASE_URL}${SITE_URL}/data/services.json`} />
 	<Contacts
 		fetchURL={`${BASE_URL}${SITE_URL}/data/salons.json`}
