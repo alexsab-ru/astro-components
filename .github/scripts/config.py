@@ -1,104 +1,63 @@
 dealer = {
-    "city": "Оренбург",
-    "where": "Оренбурге",
+    "city": "Самара",
+    "where": "Самаре",
 }
 # Словарь соответствия цветов
 model_mapping = {
-    "Atlas Pro": {
-        "folder": "Atlas Pro",
+    "X90 PLUS": {
+        "folder": "X90 PLUS",
         "color": {
-            "Черный": "black-metallic",
-            "Черный/черный": "black-metallic",
-            "Серый": "gray-metallic",
-            "Красный": "red-metallic",
-            "Серебристый": "silver-metallic",
-        }},
-    "Atlas, I": {
-        "folder": "Atlas Pro",
+            "White": "c1b.png",
+            "Black": "c2b.png",
+            "Blue": "c3b.png",
+            "Violet": "c4b.png",
+            "Grey": "c5b.png",
+        }
+    },
+    "Dashing": {
+        "folder": "Dashing",
         "color": {
-
-        }},
-    "Atlas, II": {
-        "folder": "Atlas-2024",
+            "White": "c1b.png",
+            "Black": "c2b.png",
+            "Red": "c3b.png",
+            "Azure": "c4b.png",
+            "Grey": "c5b.png",
+            "Green": "c6b.png",
+            "Lightgray": "c7b.png",
+        }
+    },
+    "X70 PLUS": {
+        "folder": "X70 PLUS",
         "color": {
-            "Черный": "black-metallic",
-            "Черный/черный": "black-metallic",
-            "Серебристый": "silver-metallic",
-            "Серый": "starry-blue-metallic",
-            "Белый": "white",
-        }},
-    "Coolray, I Рестайлинг": {
-        "folder": "New Coolray",
+            "White": "c1b.png",
+            "Grey": "c2b.png",
+            "Red": "c3b.png",
+            "Gray": "c4b.png",
+            "Blue": "c5b.png",
+            "Darkblue": "c6b.png",
+            "Black": "c7b.png",
+        }
+    },
+    "X70": {
+        "folder": "X70",
         "color": {
-            "Красный": "bright-vermilion",
-            "Белый": "crystal-white",
-            "Синий": "cyber-blue",
-            "Серый": "magnetic-grey",
-            "Серебристый": "unicorn-grey",
-        }},
-    "Coolray, I": {
-        "folder": "Coolray",
+            "White": "c1b.png",
+            "Grey": "c2b.png",
+            "Red": "c3b.png",
+            "Gray": "c4b.png",
+            "Blue": "c5b.png",
+            "Darkblue": "c6b.png",
+            "Black": "c7b.png",
+        }
+    },
+    "T2": {
+        "folder": "X70",
         "color": {
-            "Синий": "blue-metallic",
-            "Серый": "grey",
-            "Красный": "red",
-            "Серебристый": "silver-metallic",
-            "Белый": "white",
-        }},
-    "Emgrand L": {
-        "folder": "Emgrand",
-        "color": {
-            "Черный": "black-metallic",
-            "Синий": "blue-metallic",
-            "Золотой": "gold-metallic",
-            "Серый": "gray-metallic",
-            "Белый": "white-metallic",
-        }},
-    "Emgrand, II": {
-        "folder": "Emgrand",
-        "color": {
-            "Черный": "black-metallic",
-            "Синий": "blue-metallic",
-            "Золотой": "gold-metallic",
-            "Оранжевый": "gold-metallic",
-            "Серый": "gray-metallic",
-            "Белый": "white-metallic",
-        }},
-    "Monjaro": {
-        "folder": "Monjaro",
-        "color": {
-            "Черный": "black-metallic",
-            "Черный/черный": "black-metallic",
-            "Зеленый": "emerald-metallic",
-            "Синий": "emerald-metallic",
-            "Серый": "gray-metallic",
-            "Серебристый": "silver-metallic",
-            "Белый": "white-metallic",
-        }},
-    "Okavango": {
-        "folder": "Okavango",
-        "color": {
-
-        }},
-    "Tugella, I Рестайлинг": {
-        "folder": "Tugella",
-        "color": {
-            "Черный": "black-metallic",
-            "Черный/черный": "black-metallic",
-            "Серо-голубой": "gray-blue-metallic",
-            "Серый": "gray-metallic",
-            "Белый": "white-metallic",
-        }},
-    "X50": {
-        "folder": "Belgee X50",
-        "color": {
-            "Черный": "black",
-            "Черный/черный": "black",
-            "Серый": "gray",
-            "Красный": "red",
-            "Синий": "blue",
-            "Серебристый": "silver",
-            "Белый": "white",
-        }},
+            "Black": "c1b.png",
+            "Lightgray": "c2b.png",
+            "Gold": "c3b.png",
+            "Gray": "c4b.png",
+        }
+    }
     # ... добавьте другие модели по мере необходимости
 }
