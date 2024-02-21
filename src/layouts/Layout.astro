@@ -14,7 +14,7 @@ import ScriptHead from '@/components/Scripts/Head.astro';
 import ScriptBodyBegin from '@/components/Scripts/BodyBegin.astro';
 import ScriptBodyEnd from '@/components/Scripts/BodyEnd.astro';
 import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
+import Footer from '@/components/ExtendedFooter.astro';
 import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
@@ -32,7 +32,7 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 		<main class="flex-grow relative">
 			<slot />
 		</main>
-		<Footer />
+		<Footer fetchURL={`${BASE_URL}${SITE_URL}/data/salons.json`} />
 		<Modals />
 		<UpBtn />
 		<Cookie />
