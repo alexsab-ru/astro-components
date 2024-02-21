@@ -6,6 +6,7 @@ on:
   # push:
     # paths:
       # - '.github/workflows/update_cars.yml'
+      # - '.github/scripts/update_cars_maxposter.py'
       # - '.github/scripts/update_cars.py'
       # - '.github/scripts/config.py'
   workflow_dispatch:
