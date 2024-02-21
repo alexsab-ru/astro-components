@@ -26,7 +26,13 @@ import CarCharItem from '@/components/Cars/CharItem.astro';
 				{ data.images.length > 0 ? (
 					<CarImageSlider data={data} />
 					) : (
-					<img src={data.image} class="w-full" alt={data.folder_id} />
+					<a 
+						href={data.image} 
+						class="block cursor-zoom-in w-full glightbox"
+						data-gallery={data.vin_hidden}
+					>
+						<img src={data.image} class="w-full h-auto" alt={data.folder_id} />
+					</a>
 					)
 				}
 
