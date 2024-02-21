@@ -8,8 +8,14 @@ import '@/components/Banner/banner.scss';
 		{
 			data.images.map(img => (
 				<div class="swiper-slide bg-gray-100">
-					<img src={img} class="w-full h-full object-cover" alt={data.folder_id} loading="lazy" />
-					<div class="swiper-lazy-preloader"></div>
+					<a 
+						href={img} 
+						class="block cursor-zoom-in h-full w-full glightbox"
+						data-gallery={data.vin_hidden}
+					>
+						<img src={img} class="w-full h-full object-cover object-center" alt={data.folder_id} loading="lazy" />
+						<div class="swiper-lazy-preloader"></div>
+					</a>
 				</div>
 			))
 		}
