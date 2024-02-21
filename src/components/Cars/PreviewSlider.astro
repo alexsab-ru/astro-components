@@ -10,28 +10,16 @@ import './cars.sass'
 		{
 			car.data.thumbs.length > 0 ? (
 				car.data.thumbs.map((img:string, idx:number) => (
-					<a
-						href={car.data.images[idx]}
-						class={`glightbox preview-link ${idx > 4 ? '!hidden' : ''}`}
-						data-gallery={car.data.vin_hidden}
-						data-glightbox={`description: .btn-desc-${car.data.vin_hidden}`}
-					>
-					{
-						idx < 5 && (
+					idx < 5 && (
+						<a
+							href={car.slug}
+							class="preview-link"
+						>
 							<div class="preview-img lazy">
 								<img src="/img/loading-simple.gif" data-src={img} alt={car.mark_id +' '+car.folder_id}>
-								{
-									idx === 4 && car.data.images.length > 5 && (
-									<div class="preview-total"> Еще <br> { car.data.images.length - 5} фото</div>
-									)
-								}
 							</div>
-						) 
-					}
-					</a>
-					<div class={`glightbox-desc btn-desc-${car.data.vin_hidden}`}>
-						<a href={car.slug} title="Подробнее" class="btn block !px-3 !py-2 md:text-base sm:text-sm text-xs">Подробнее</a>
-					</div>
+						</a>
+					)
 				))
 			) : (
 				<a href={car.slug} class="absolute inset-0 w-full h-auto !mb-0 lazy" title="Подробнее">
