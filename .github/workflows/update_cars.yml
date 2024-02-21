@@ -1,14 +1,14 @@
 name: Generate Astro Files from XML
 
 on:
-  # schedule:
-    # - cron: '0 */4 * * *'  # Запускается каждые 4 часа
-  # push:
-    # paths:
-      # - '.github/workflows/update_cars.yml'
-      # - '.github/scripts/update_cars_maxposter.py'
-      # - '.github/scripts/update_cars.py'
-      # - '.github/scripts/config.py'
+  schedule:
+    - cron: '0 */4 * * *'  # Запускается каждые 4 часа
+  push:
+    paths:
+      - '.github/workflows/update_cars.yml'
+      - '.github/scripts/update_cars_maxposter.py'
+      - '.github/scripts/update_cars.py'
+      - '.github/scripts/config.py'
   workflow_dispatch:
 
 jobs:
