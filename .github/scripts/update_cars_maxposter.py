@@ -300,6 +300,7 @@ translations = {
     "red": "Красный",
     "grey": "Серый",
     "azure": "Лазурный",
+    "beige": "Бежевый",
 
     # steeringWheel
     "left": "Левый",
