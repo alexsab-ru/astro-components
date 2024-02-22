@@ -354,7 +354,7 @@ elements_to_localize = ['engineType', 'drive_type', 'gearboxType', 'ptsType', 'c
 for car in root.find("offers"):
     rename_child_element(car, 'make', 'mark_id')
     rename_child_element(car, 'model', 'folder_id')
-    rename_child_element(car, 'modification-id', 'modification_id')
+    rename_child_element(car, 'version', 'modification_id')
     rename_child_element(car, 'complectation', 'complectation_name')
     # rename_child_element(car, 'bodyColor', 'color')
     # rename_child_element(car, 'mileage', 'run')
