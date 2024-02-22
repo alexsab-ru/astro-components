@@ -17,6 +17,11 @@ import './cars.sass'
 						>
 							<div class="preview-img lazy">
 								<img src="/img/loading-simple.gif" data-src={img} alt={car.mark_id +' '+car.folder_id}>
+								{
+									idx === 4 && car.data.images.length > 5 && (
+									<div class="preview-total"> Еще <br> { car.data.images.length - 5} фото</div>
+									)
+								}
 							</div>
 						</a>
 					)
