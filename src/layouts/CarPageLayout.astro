@@ -12,7 +12,7 @@ import CarPageHeading from '@/components/Cars/PageHeading.astro';
 import CarCharItem from '@/components/Cars/CharItem.astro';
 ---
 
-<Layout title={data?.h1} description={data?.description} image={data?.image}>
+<Layout title={data?.title || data?.h1} description={data?.description} image={data?.image}>
 	<section class="py-10 sm:py-14">
 		<div class="container">
 
