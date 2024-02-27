@@ -4,6 +4,40 @@ import { BASE_URL, SITE_URL } from '../const';
 import { declOfNums } from "@/js/utils/numbers.format";
 
 document.addEventListener('alpine:init', () => {
+	Alpine.data("usedPreviewGallery", t=>({
+		activeIndex: 0,
+		total: 0,
+		init() {
+			if(this.$refs.wrapper){
+				this.total = this.$refs.wrapper.children.length;
+			}
+
+		},
+		get activeSlide() {
+			return Array.from(this.$refs.wrapper.children).find(e=>e.dataset.slide == this.activeIndex)
+		},
+		get windowWidth() {
+			return window.innerWidth || document.documentElement.clientWidth
+		},
+		onPrevClick() {
+			this.showSlideAt(this.activeIndex === 0 ? this.total - 1 : this.activeIndex - 1)
+		},
+		onNextClick() {
+			const e = this.activeIndex + 1;
+			this.showSlideAt(e === this.total ? 0 : e)
+		},
+		showSlideAt(e) {
+			if (e == this.activeIndex)
+				return;
+			const i = this.activeSlide.getBoundingClientRect();
+			this.activeIndex = e;
+			const r = this.activeSlide.getBoundingClientRect();
+			this.$refs.wrapper.scrollTo({
+				left: r.x - i.x + this.$refs.wrapper.scrollLeft,
+				behavior: "instant"
+			})
+		}
+	}));
 	Alpine.data('header', () => ({
 		open: false,
 		scrolling: false,
