@@ -18,6 +18,7 @@ document.querySelectorAll(".popup-link").forEach(
 				const flexColClass = imgPosition === 'right' ? 'flex-col-reverse' : 'flex-col';
 				modalGridContent.classList.add(flexColClass);
 				if(modalImgBlock){
+					modalImgBlock.innerHTML = '';
 					const myImage = new Image();
 					myImage.classList.add('modal-img');
 					myImage.src = img;
