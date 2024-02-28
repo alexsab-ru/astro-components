@@ -6,6 +6,8 @@ interface Props {
     title?: string,
     dataTitle?: string,
     dataFormName?: string,
+    dataImg?: string,
+    dataImgPosition?: string,
 }
 const {
     view = 'link',
@@ -14,6 +16,8 @@ const {
     title = 'BUTTON',
     dataTitle,
     dataFormName,
+    dataImg,
+    dataImgPosition,
 } = Astro.props;
 import './buttons.scss'
 ---
@@ -25,6 +29,8 @@ import './buttons.scss'
         href={url ? url : '#'}
         data-title={dataTitle}
         data-form_name={dataFormName}
+        data-img={dataImg}
+        data-img_position={dataImgPosition}
     >
         {title}
     </a>
