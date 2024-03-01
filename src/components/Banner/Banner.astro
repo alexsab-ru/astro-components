@@ -7,7 +7,6 @@ const {fetchURL = ''} = Astro.props;
 import BannerSlide from './BannerSlide.astro';
 const banners = await fetch(fetchURL).then((response) => response.json());
 // import banners from '@/data/banners.json'
-import './banner.scss';
 ---
 
 {
@@ -40,4 +39,5 @@ import './banner.scss';
 
 <script>
 	import './banner'
+	import './banner.scss';
 </script>

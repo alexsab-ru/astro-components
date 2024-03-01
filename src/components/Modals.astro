@@ -2,30 +2,20 @@
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import CloseModalBtn from '@/components/CloseModalBtn.astro';
 import {AGREE_LABEL} from '@/const'
 ---
 
 <!-- MODALS -->
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black bg-opacity-90 overflow-x-hidden overflow-y-auto hidden modal-overlay z-50"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-50"
 	id="common-modal"
 	data-close>
 	<div
-		class="modal-content relative top-20 mb-10 left-1/2 translate-x-[-50%] -translate-y-10 transition-all duration-1000 max-w-xl w-full bg-white font-medium text-dark py-8 px-4 sm:p-8">
-		<div
-			class="w-10 h-10 flex items-center justify-center absolute right-0 top-0 opacity-50 transition-opacity hover:opacity-100 cursor-pointer rotate-45"
-			data-close>
-			<svg
-				width="20"
-				height="20"
-				viewBox="0 0 20 20"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				data-close>
-				<line y1="9.5" x2="20" y2="9.5" stroke="black" data-close></line>
-				<line x1="9.5" y1="20" x2="9.5" stroke="black" data-close></line>
-			</svg>
-		</div>
+		class="modal-content relative top-10 sm:top-20 mb-10 left-1/2 translate-x-[-50%] max-w-xl w-full bg-white py-8 px-4 sm:p-8">
+
+		<CloseModalBtn />
+
 		<p class="caption text-center text-3xl mb-2 text-gray-800">Обратная связь</p>
 		<p class="text-center mb-10 font-normal text-gray-600">
 			Оставьте свои данные и мы свяжемся с Вами в ближайшее время!
@@ -70,25 +60,74 @@ import {AGREE_LABEL} from '@/const'
 </div>
 
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black bg-opacity-90 z-50 overflow-x-hidden overflow-y-auto hidden modal-overlay"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-50"
+	id="common-modal-with-img"
+	data-close>
+	<div
+		class="modal-content relative top-0 sm:top-20 mb-10 left-1/2 translate-x-[-50%] max-w-[705px] w-full bg-white">
+
+		<CloseModalBtn color="accent-500" />
+
+		<div class="flex sm:grid grid-cols-5 modal-grid-content">
+
+			<div class="col-span-2 relative left bg-gray-100 hidden"></div>
+
+			<div class="col-span-3 p-5 sm:p-8">
+				<p class="caption text-xl sm:text-3xl mb-8 text-gray-800">Здравствуйте, оставьте телефон, я перезвоню и расскажу о преимуществах работы</p>
+				<form class="flex flex-col gap-4" id="rating-form">
+					<input type="hidden" name="form" value="" />
+					<input
+						type="email"
+						tabindex="-1"
+						name="email"
+						class="h-0 opacity-0 absolute -z-[100]"
+						placeholder="mail@example.com"
+					/>
+					<Input
+					type="tel"
+					name="phone"
+					classes="border-gray-100"
+					placeholder="+7 (999) 999-99-99*"
+					required
+					errorClasses="text-red-500"
+					/>
+					<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+
+					<Checkbox
+						name="agree"
+						label={AGREE_LABEL}
+						color="black"
+						required
+						errorClasses="text-red-500 w-full"
+						errorText="Чтобы продолжить, установите флажок"
+					/>
+
+					<input
+						type="checkbox"
+						name="subscribe"
+						class="absolute w-0 h-0 opacity-0 invisible"
+					/>
+
+					<Button view="form-button" classes="w-full" title="Отправить" />
+				</form>
+			</div>
+
+			<div class="col-span-2 relative right bg-gray-100 hidden"></div>
+
+		</div>
+
+	</div>
+</div>
+
+<div
+	class="fixed w-screen h-screen left-0 top-0 bg-black/70 z-50 overflow-x-hidden overflow-y-auto hidden modal-overlay"
 	id="message-modal"
 	data-close>
 	<div
-		class="modal-content relative top-20 mb-10 left-1/2 translate-x-[-50%] -translate-y-10 transition-all duration-1000 max-w-xl w-full bg-white text-gray-800 py-8 px-4 sm:p-8">
-		<div
-			class="w-10 h-10 flex items-center justify-center absolute right-0 top-0 opacity-50 transition-opacity hover:opacity-100 cursor-pointer rotate-45"
-			data-close>
-			<svg
-				width="20"
-				height="20"
-				viewBox="0 0 20 20"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				data-close>
-				<line y1="9.5" x2="20" y2="9.5" stroke="black" data-close></line>
-				<line x1="9.5" y1="20" x2="9.5" stroke="black" data-close></line>
-			</svg>
-		</div>
+		class="modal-content relative top-10 sm:top-20 mb-10 left-1/2 translate-x-[-50%] max-w-xl w-full bg-white text-gray-800 py-8 px-4 sm:p-8">
+
+		<CloseModalBtn color="accent-500" />
+
 		<div class="w-20 h-20 mx-auto mb-10" id="icon"></div>
 		<p class="text-center text-lg mb-10"></p>
 	</div>
@@ -99,21 +138,10 @@ import {AGREE_LABEL} from '@/const'
 	id="confirm-modal"
 	data-close>
 	<div
-		class="modal-content relative top-20 mb-10 left-1/2 translate-x-[-50%] -translate-y-10 transition-all duration-1000 max-w-xl w-full bg-white text-gray-800 py-8 px-4 sm:p-8">
-		<div
-			class="w-10 h-10 flex items-center justify-center absolute right-0 top-0 opacity-50 transition-opacity hover:opacity-100 cursor-pointer rotate-45"
-			data-close>
-			<svg
-				width="20"
-				height="20"
-				viewBox="0 0 20 20"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				data-close>
-				<line y1="9.5" x2="20" y2="9.5" stroke="black" data-close></line>
-				<line x1="9.5" y1="20" x2="9.5" stroke="black" data-close></line>
-			</svg>
-		</div>
+		class="modal-content relative top-10 sm:top-20 mb-10 left-1/2 translate-x-[-50%] max-w-xl w-full bg-white text-gray-800 py-8 px-4 sm:p-8">
+
+		<CloseModalBtn color="accent-500" />
+
 		<p class="text-center text-lg mb-10 message"></p>
 		<div class="flex justify-center flex-wrap gap-5">
 			<button id="accept-confirm" class="btn danger">Да</button>

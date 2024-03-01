@@ -8,7 +8,25 @@ document.querySelectorAll(".popup-link").forEach(
 			if (id === "#" || !id) return;
 			const targetModal = document.getElementById(id.replace("#", ""));
 			if (!targetModal) return;
-			targetModal.classList.remove("hidden");
+
+			const img = link.dataset.img;
+			const imgPosition = link.dataset.img_position || 'right';
+
+			if(imgPosition && img){
+				const modalGridContent = targetModal.querySelector('.modal-grid-content');
+				const modalImgBlock = modalGridContent.querySelector('.'+imgPosition);
+				const flexColClass = imgPosition === 'right' ? 'flex-col-reverse' : 'flex-col';
+				modalGridContent.classList.add(flexColClass);
+				if(modalImgBlock){
+					modalImgBlock.innerHTML = '';
+					const myImage = new Image();
+					myImage.classList.add('modal-img');
+					myImage.src = img;
+					myImage.alt = imgPosition;
+					modalImgBlock.classList.remove('hidden');
+					modalImgBlock.append(myImage);
+				}
+			}
 
 			const captionEl = targetModal.querySelector(".caption");
 			if (captionEl) {
@@ -20,6 +38,7 @@ document.querySelectorAll(".popup-link").forEach(
 				formInput.value = formName;
 			}
 			reachGoal("form_open");
+			targetModal.classList.remove("hidden");
 			document.body.classList.add("overflow-hidden");
 		})
 );

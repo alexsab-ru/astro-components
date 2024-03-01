@@ -1,0 +1,29 @@
+---
+const { color = 'black' } = Astro.props;
+---
+<div class="w-10 h-10 flex items-center justify-center absolute right-0 top-0 opacity-60 transition-opacity hover:opacity-100 cursor-pointer rotate-45 z-10" data-close>
+	<svg
+		width="20"
+		height="20"
+		viewBox="0 0 20 20"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		data-close
+		class={`custom-stroke-${color}`}
+		>
+		<line y1="9.5" x2="20" y2="9.5" stroke="" data-close></line>
+		<line x1="9.5" y1="20" x2="9.5" stroke="" data-close></line>
+	</svg>
+</div>
+
+<style>
+	.custom-stroke-black{
+		@apply stroke-black;
+	}
+	.custom-stroke-white{
+		@apply stroke-white;
+	}
+	.custom-stroke-accent-500{
+		@apply stroke-accent-500;
+	}
+</style>

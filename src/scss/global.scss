@@ -57,3 +57,6 @@ section {
 		}
 	}
 }
+.modal-img{
+	@apply h-[calc(calc(1vw+1vh)*40)] sm:absolute inset-0 w-full sm:h-full object-cover object-center;
+}
