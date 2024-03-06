@@ -43,7 +43,6 @@ def process_description(desc_text):
 
 def create_file(car, filename, unique_id):
     vin = car.find('vin').text
-    permalink = unique_id
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
     color = car.find('color').text.strip().capitalize()
@@ -57,6 +56,9 @@ def create_file(car, filename, unique_id):
         color_image = model_mapping[model]['color'][color]
         thumb = f"/img/models/{folder}/colors/{color_image}.webp"
     else:
+        print(f"{model} {color}")
+        with open('output.txt', 'a') as file:
+            file.write(f"{model} {color}\n")
         # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
         thumb = "/img/404.jpg"
         global error_404_found
@@ -66,7 +68,7 @@ def create_file(car, filename, unique_id):
     content = "---\n"
     # content += "layout: car-page\n"
     content += "total: 1\n"
-    # content += f"permalink: {permalink}\n"
+    # content += f"permalink: {unique_id}\n"
     content += f"vin_hidden: {vin_hidden}\n"
 
     h1 = f"{car.find('folder_id').text} {car.find('modification_id').text}"
@@ -77,14 +79,20 @@ def create_file(car, filename, unique_id):
 
     description = ""
 
+    for elem_name in elements_to_localize:
+        elem = car.find(elem_name)
+        localize_element_text(elem, translations)
+
+    color = car.find('color').text.strip().capitalize()
+
     for child in car:
         # Skip nodes with child nodes (except images) and attributes
         if list(child) and child.tag != 'images':
             continue
         if child.tag == 'images':
             images = [img.text for img in child.findall('image')]
-            thumbs_files = createThumbs(images)
-            content += f"{child.tag}: {images}\n"
+            thumbs_files = createThumbs(images, unique_id)
+            content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
         elif child.tag == 'color':
             content += f"{child.tag}: {color}\n"
@@ -98,7 +106,7 @@ def create_file(car, filename, unique_id):
         elif child.tag == 'description' and child.text:
             description = child.text
             flat_description = description.replace('\n', '<br>\n')
-            content += f"{child.tag}: |\n"
+            content += f"description: |\n"
             content += f"  Купить автомобиль {car.find('mark_id').text} {car.find('folder_id').text} {car.find('year').text} года выпуска, комплектация {car.find('complectation_name').text}, цвет - {car.find('color').text}, двигатель - {car.find('modification_id').text} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {car.find('mark_id').text} {car.find('folder_id').text} – {car.find('price').text}\n"
             # for line in flat_description.split("\n"):
                 # content += f"  {line}\n"
@@ -139,10 +147,11 @@ def update_yaml(car, filename):
     else:
         raise KeyError("'total' key not found in the YAML block.")
 
-    if 'run' in data:
+    if 'run' in data and 'run' in car:
         data['run'] = min(data['run'], int(car.find('run').text))
     else:
-        raise KeyError("'run' key not found in the YAML block.")
+        data['run'] = 0
+        # raise KeyError("'run' key not found in the YAML block.")
 
     # Convert the data back to a YAML string
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
@@ -156,7 +165,7 @@ def update_yaml(car, filename):
 
     return filename
 
-def createThumbs(image_urls):
+def createThumbs(image_urls, unique_id):
     global current_thumbs
     global output_dir
 
@@ -171,11 +180,9 @@ def createThumbs(image_urls):
     new_or_existing_files = []
 
     # Обработка первых 5 изображений
-    for img_url in image_urls[:5]:
+    for index, img_url in enumerate(image_urls[:5]):
         try:
-            original_filename = os.path.basename(urllib.parse.urlparse(img_url).path)
-            filename_without_extension, _ = os.path.splitext(original_filename)
-            output_filename = f"thumb_{filename_without_extension}.webp"
+            output_filename = f"thumb_{unique_id}_{index}.webp"
             output_path = os.path.join(output_dir, output_filename)
             relative_output_path = os.path.join(relative_output_dir, output_filename)
 
@@ -190,8 +197,8 @@ def createThumbs(image_urls):
                 resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
                 resized_image.save(output_path, "WEBP")
                 print(f"Создано превью: {relative_output_path}")
-            else:
-                print(f"Файл уже существует: {relative_output_path}")
+            # else:
+                # print(f"Файл уже существует: {relative_output_path}")
 
             # Добавление относительного пути файла в списки
             new_or_existing_files.append(relative_output_path)
@@ -210,6 +217,10 @@ def cleanup_unused_thumbs():
         os.remove(thumb)
         print(f"Удалено неиспользуемое превью: {thumb}")
 
+def localize_element_text(element, translations):
+    if element is not None and element.text in translations:
+        element.text = translations[element.text]
+
 # Путь к папке для сохранения уменьшенных изображений
 output_dir = "public/img/thumbs/"
 
@@ -220,6 +231,60 @@ current_thumbs = []
 error_404_found = False
 
 filename = 'cars.xml'
+
+translations = {
+     # engineType
+    "hybrid": "Гибрид",
+    "petrol": "Бензин",
+    "diesel": "Дизель",
+    "petrol_and_gas": "Бензин и газ",
+    "electric": "Электро",
+
+     # driveType
+    "full_4wd": "Постоянный полный",
+    "optional_4wd": "Подключаемый полный",
+    "front": "Передний",
+    "rear": "Задний",
+
+     # gearboxType
+    "robotized": "Робот",
+    "variator": "Вариатор",
+    "manual": "Механика",
+    "automatic": "Автомат",
+
+     # transmission
+    "RT": "Робот",
+    "CVT": "Вариатор",
+    "MT": "Механика",
+    "AT": "Автомат",
+
+    # ptsType
+    "duplicate": "Дубликат",
+    "original": "Оригинал",
+    "electronic": "Электронный",
+
+    # bodyColor
+    "black": "Черный",
+    "white": "Белый",
+    "blue": "Синий",
+    "gray": "Серый",
+    "silver": "Серебристый",
+    "brown": "Коричневый",
+    "red": "Красный",
+    "grey": "Серый",
+    "azure": "Лазурный",
+    "beige": "Бежевый",
+
+    # steeringWheel
+    "left": "Левый",
+    "right": "Правый",
+    "L": "Левый",
+    "R": "Правый",
+
+    # bodyType
+    "suv": "SUV",
+
+}
 
 if os.path.exists(filename):
     tree = ET.parse(filename)
@@ -249,10 +314,14 @@ os.makedirs(directory)
 
 existing_files = set()  # для сохранения имен созданных или обновленных файлов
 
+with open('output.txt', 'w') as file:
+    file.write("")
 
+# Предполагаем, что у вас есть элементы с именами
+elements_to_localize = []
 
 for car in root.find('cars'):
-    unique_id = f"{car.find('mark_id').text} {car.find('folder_id').text} {car.find('modification_id').text} {car.find('complectation_name').text} {car.find('color').text} {car.find('price').text} {car.find('year').text}"
+    unique_id = f"{car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} {car.find('modification_id').text.strip()} {car.find('complectation_name').text.strip()} {car.find('color').text.strip()} {car.find('price').text.strip()} {car.find('year').text.strip()}"
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"
     file_path = os.path.join(directory, file_name)
@@ -272,10 +341,10 @@ for existing_file in os.listdir(directory):
         os.remove(filepath)
 
 if error_404_found:
-    with open('output.txt', 'w') as file:
+    with open('output.txt', 'a') as file:
         file.write("error 404 found")
 else:
-    with open('output.txt', 'w') as file:
+    with open('output.txt', 'a') as file:
         file.write("no error")
 
 if error_404_found:
