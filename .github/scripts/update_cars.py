@@ -123,7 +123,7 @@ def create_file(car, filename, unique_id):
     print(filename);
     existing_files.add(filename)
 
-def update_yaml(car, filename):
+def update_yaml(car, filename, unique_id):
     """Increment the 'total' value in the YAML block of an HTML file."""
 
     with open(filename, "r", encoding="utf-8") as f:
@@ -152,6 +152,14 @@ def update_yaml(car, filename):
     else:
         data['run'] = 0
         # raise KeyError("'run' key not found in the YAML block.")
+
+    if 'images' in data:
+        images = [img.text for img in car.find('images').findall('image')]
+        if len(images) > 0:
+            data['images'] += images
+            if len(data['thumbs']) < 5:
+                thumbs_files = createThumbs(images, unique_id)
+                data['thumbs'] += thumbs_files
 
     # Convert the data back to a YAML string
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
@@ -327,7 +335,7 @@ for car in root.find('cars'):
     file_path = os.path.join(directory, file_name)
 
     if os.path.exists(file_path):
-        update_yaml(car, file_path)
+        update_yaml(car, file_path, unique_id)
     else:
         create_file(car, file_path, unique_id)
 
