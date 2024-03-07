@@ -8,12 +8,12 @@ const rawPosts = await getCollection('news');
 
 let posts, image;
 // Проверяем, что массив rawPosts не пустой перед сортировкой
+import { getRandomInt } from '@/js/utils/numbers.format';
 if (rawPosts && rawPosts.length > 0) {
 	posts = rawPosts.sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 	);
 
-	import { getRandomInt } from '@/js/utils/numbers.format';
 	image = posts[getRandomInt(0, posts.length)].data.image;
 } else {
 	// Если массив пустой, можно присвоить image значение по умолчанию или обработать этот случай
