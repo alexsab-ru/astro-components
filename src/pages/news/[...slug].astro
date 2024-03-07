@@ -20,8 +20,9 @@ type Props = CollectionEntry<'news'>;
 
 const post = Astro.props;
 const { Content } = await post.render();
+import { breadcrumb } from './index.astro';
 ---
 
-<PageLayout {...post.data} breadcrumbName={post.data.breadcrumb}>
+<PageLayout {...post.data} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]}>
 	<Content />
 </PageLayout>

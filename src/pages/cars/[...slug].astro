@@ -20,8 +20,9 @@ type Props = CollectionEntry<'cars'>;
 
 const car = Astro.props;
 const { Content } = await car.render();
+import { breadcrumb } from './index.astro';
 ---
 
-<CarPageLayout car={car}>
+<CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]}>
 	<Content />
 </CarPageLayout>

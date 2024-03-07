@@ -4,9 +4,9 @@ interface Props {
 	h1?: string;
 	description?: string;
 	image?: string;
-  	breadcrumbName?: boolean|string;
+	breadcrumb?: string[];
 }
-const {title, h1, description, image, breadcrumbName} = Astro.props;
+const {title, h1, description, image, breadcrumb} = Astro.props;
 import Layout from '@/layouts/Layout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 ---
@@ -14,8 +14,8 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 <Layout title={title || h1} description={description} image={image}>
 	<section class="content">
 		<div class="container">
-			{breadcrumbName && <Breadcrumbs breadcrumbName={breadcrumbName} />}
-			{h1 && <h1 class="mt-5 sm:mt-10"><Fragment set:html={h1} /></h1> }
+			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
+			{h1 && <h1><Fragment set:html={h1} /></h1> }
 			<slot />
 		</div>
 	</section>

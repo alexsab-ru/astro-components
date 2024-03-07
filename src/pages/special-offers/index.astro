@@ -19,10 +19,15 @@ if (rawPosts && rawPosts.length > 0) {
 	// Если массив пустой, можно присвоить image значение по умолчанию или обработать этот случай
 	image = ''; // или какая-то другая логика
 }
-
+export const breadcrumb = { name: "Спецпредложения", href: "/special-offers/" };
 ---
 
-<PageLayout h1="Спецпредложения" title={`Спецпредложения | ${SITE_NAME}`} image={image ? image : ''} breadcrumbName={true} >
+<PageLayout
+	h1="Спецпредложения"
+	title={`Спецпредложения | ${SITE_NAME}`}
+	breadcrumb={[breadcrumb]}
+	image={image ? image : ''}
+>
 	{
 		posts ? (
 			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">

@@ -1,8 +1,9 @@
 ---
 interface Props {
 	car: any;
+	breadcrumb?: string[];
 }
-const {car = {}} = Astro.props;
+const {car = {}, breadcrumb} = Astro.props;
 const data = car?.data || {};
 const price = data.max_discount ? data.price - data.max_discount : car.data.price;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
@@ -14,12 +15,12 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 ---
 
 <Layout title={data?.title || data?.h1} description={data?.description} image={data?.image}>
-	<section class="py-10 sm:py-14">
+	<section>
 		<div class="container">
 
-			{data.breadcrumb && <Breadcrumbs breadcrumbName={data.breadcrumb} />}
+			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
 
-			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14 mt-5 sm:mt-10">
+			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14">
 
 				<div class="col-span-12 lg:col-span-6">
 					<div class="block lg:hidden mb-5">
