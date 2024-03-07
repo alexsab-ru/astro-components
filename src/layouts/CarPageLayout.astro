@@ -1,6 +1,6 @@
 ---
 interface Props {
-	car: any
+	car: any;
 }
 const {car = {}} = Astro.props;
 const data = car?.data || {};
@@ -10,13 +10,16 @@ import Layout from '@/layouts/Layout.astro';
 import CarImageSlider from '@/components/Cars/ImageSlider.astro';
 import CarPageHeading from '@/components/Cars/PageHeading.astro';
 import CarCharItem from '@/components/Cars/CharItem.astro';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 ---
 
 <Layout title={data?.title || data?.h1} description={data?.description} image={data?.image}>
 	<section class="py-10 sm:py-14">
 		<div class="container">
 
-			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14">
+			{data.breadcrumb && <Breadcrumbs breadcrumbName={data.breadcrumb} />}
+
+			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14 mt-10">
 
 				<div class="col-span-12 lg:col-span-6">
 					<div class="block lg:hidden mb-5">

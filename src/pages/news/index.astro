@@ -22,7 +22,7 @@ if (rawPosts && rawPosts.length > 0) {
 
 ---
 
-<PageLayout h1="Новости" title={`Новости | ${SITE_NAME}`} image={image ? image : ''}>
+<PageLayout h1="Новости" title={`Новости | ${SITE_NAME}`} image={image ? image : ''} breadcrumbName={true}>
 	{
 		posts ? (
 			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">

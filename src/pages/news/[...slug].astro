@@ -22,6 +22,6 @@ const post = Astro.props;
 const { Content } = await post.render();
 ---
 
-<PageLayout {...post.data}>
+<PageLayout {...post.data} breadcrumbName={post.data.breadcrumb}>
 	<Content />
 </PageLayout>
