@@ -18,11 +18,13 @@ if (rawCars && rawCars.length > 0) {
 } else {
 	image = "";
 }
+export const breadcrumb = { name: "Авто в наличии", href: "/cars/" };
 ---
 
 <PageLayout
 	h1={`Автомобили ${BRAND} в наличии в ${LEGAL_CITY_WHERE}`}
 	title={`Автомобили в наличии | ${SITE_NAME}`}
+	breadcrumb={[breadcrumb]}
 	image={image ? image : ""}
 >
 	{

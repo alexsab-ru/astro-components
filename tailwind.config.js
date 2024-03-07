@@ -13,6 +13,7 @@ export const theme = {
     },
     boxShadow: {
       '3xl': '0 35px 60px rgba(0, 0, 0, 0.3)',
+      '4xl': '0 0 60px rgba(0, 0, 0, 0.5)',
     },
     colors: {
       accent: colors.cyan, // в основном используется 400 и 500

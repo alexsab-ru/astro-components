@@ -60,66 +60,6 @@ import {AGREE_LABEL} from '@/const'
 </div>
 
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-50"
-	id="common-modal-with-img"
-	data-close>
-	<div
-		class="modal-content relative top-0 sm:top-20 mb-10 left-1/2 translate-x-[-50%] max-w-[705px] w-full bg-white">
-
-		<CloseModalBtn color="accent-500" />
-
-		<div class="flex sm:grid grid-cols-5 modal-grid-content">
-
-			<div class="col-span-2 relative left bg-gray-100 hidden"></div>
-
-			<div class="col-span-3 p-5 sm:p-8">
-				<p class="caption text-xl sm:text-3xl mb-8 text-gray-800">Здравствуйте, оставьте телефон, я перезвоню и расскажу о преимуществах работы</p>
-				<form class="flex flex-col gap-4" id="rating-form">
-					<input type="hidden" name="form" value="" />
-					<input
-						type="email"
-						tabindex="-1"
-						name="email"
-						class="h-0 opacity-0 absolute -z-[100]"
-						placeholder="mail@example.com"
-					/>
-					<Input
-					type="tel"
-					name="phone"
-					classes="border-gray-100"
-					placeholder="+7 (999) 999-99-99*"
-					required
-					errorClasses="text-red-500"
-					/>
-					<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
-
-					<Checkbox
-						name="agree"
-						label={AGREE_LABEL}
-						color="black"
-						required
-						errorClasses="text-red-500 w-full"
-						errorText="Чтобы продолжить, установите флажок"
-					/>
-
-					<input
-						type="checkbox"
-						name="subscribe"
-						class="absolute w-0 h-0 opacity-0 invisible"
-					/>
-
-					<Button view="form-button" classes="w-full" title="Отправить" />
-				</form>
-			</div>
-
-			<div class="col-span-2 relative right bg-gray-100 hidden"></div>
-
-		</div>
-
-	</div>
-</div>
-
-<div
 	class="fixed w-screen h-screen left-0 top-0 bg-black/70 z-50 overflow-x-hidden overflow-y-auto hidden modal-overlay"
 	id="message-modal"
 	data-close>

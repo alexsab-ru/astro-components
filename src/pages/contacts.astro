@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Map from '@/components/Map/Map.astro';
+import AutoShowModal from '@/components/AutoShowModal.astro';
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 import {BASE_URL, SITE_URL, SITE_NAME, LEGAL_ENTITY, LEGAL_INN} from '@/const';
 const salons = await fetch(`${BASE_URL}${SITE_URL}/data/salons.json`).then((response) => response.json());
@@ -33,3 +34,19 @@ const salon = salons[0]; //временно, наверное
 		</div>
 	</div>
 </Layout>
+
+<!--
+	modalShow - Количество милесекунд до показа окна (по умолчанию 20000)
+	title - Заголовок
+	modalPosition - позиция окна left-top|right-top|right-bottom|left-bottom|center (по умолчанию center)
+	img - фото человека (по умолчанию /img/people/user.webp)
+	imgPosition - позиция фото right|left (по умолчанию right)
+-->
+
+<AutoShowModal 
+	modalShow = 20000
+	title="Здравствуйте, оставьте телефон, я&nbsp;перезвоню и&nbsp;расскажу о&nbsp;преимуществах работы"
+	modalPosition="right-bottom"
+	img = '/img/people/user.webp'
+	imgPosition = 'right'
+/>

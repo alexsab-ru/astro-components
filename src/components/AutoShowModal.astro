@@ -1,0 +1,116 @@
+---
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import CloseModalBtn from '@/components/CloseModalBtn.astro';
+import {AGREE_LABEL} from '@/const';
+
+const { 
+	modalShow = 20000,
+	title = '',
+	modalPosition = 'center',
+	img = '/img/people/user.webp',
+	imgPosition = 'right',
+} = Astro.props;
+---
+
+<div class={`modal fixed max-w-[700px] w-full max-h-full overflow-y-auto overflow-x-hidden bg-white z-[10000] hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
+
+	<CloseModalBtn color="black" />
+
+	<div class={`flex sm:grid grid-cols-5 ${imgPosition === 'right' ? 'flex-col-reverse' : 'flex-col'}`}>
+
+		{imgPosition === 'left' && img ? (
+			<div class="col-span-2 relative left bg-gray-100">
+				<img src={img} alt="ALT">
+			</div>
+		) : ('')}
+
+		<div class="col-span-3 p-5 sm:p-8">
+			{title && (<p class="caption text-xl sm:text-3xl mb-8 text-gray-800"><Fragment set:html={title} /></p>)}
+			<form class="flex flex-col gap-4" id="rating-form">
+				<input type="hidden" name="form" value="" />
+				<input
+					type="email"
+					tabindex="-1"
+					name="email"
+					class="h-0 opacity-0 absolute -z-[100]"
+					placeholder="mail@example.com"
+				/>
+				<Input
+				type="tel"
+				name="phone"
+				classes="border-gray-100"
+				placeholder="+7 (999) 999-99-99*"
+				required
+				errorClasses="text-red-500"
+				/>
+				<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+
+				<Checkbox
+					name="agree"
+					label={AGREE_LABEL}
+					color="black"
+					required
+					errorClasses="text-red-500 w-full"
+					errorText="Чтобы продолжить, установите флажок"
+				/>
+
+				<input
+					type="checkbox"
+					name="subscribe"
+					class="absolute w-0 h-0 opacity-0 invisible"
+				/>
+
+				<Button view="form-button" classes="w-full" title="Отправить" />
+			</form>
+		</div>
+
+		{imgPosition === 'right' && img ? (
+			<div class="col-span-2 relative left bg-gray-100">
+				<img src={img} alt="ALT">
+			</div>
+		) : ('')}
+
+	</div>
+
+</div>
+
+<div class="fixed inset-0 overflow-x-hidden overflow-y-auto bg-black/70 z-[9999] hidden" id="modal-overlay" data-close></div>
+
+<style>
+	[data-position="left-top"]{
+		@apply top-0 md:top-5 left-0 md:left-5;
+	}
+	[data-position="right-top"]{
+		@apply top-0 md:top-5 right-0 md:right-5;
+	}
+	[data-position="right-bottom"]{
+		@apply bottom-0 md:bottom-5 right-0 md:right-5;
+	}
+	[data-position="left-bottom"]{
+		@apply bottom-0 md:bottom-5 left-0 md:left-5;
+	}
+	[data-position="center"]{
+		@apply top-0 md:top-20 left-1/2 -translate-x-1/2;
+	}
+</style>
+
+<script define:vars={{seconds: modalShow, position: modalPosition}} is:inline>
+	setTimeout(() => {
+		document.getElementById('common-modal-with-img').classList.remove('hidden');
+		if(position === 'center'){
+			document.getElementById('modal-overlay').classList.remove('hidden');
+		}
+	}, seconds);
+	// document.getElementById('modal-overlay').addEventListener('click', function(e){
+	// 	this.classList.add('hidden');
+	// 	document.querySelectorAll('.modal').forEach(modal => modal.classList.add('hidden'))
+	// });
+	document.querySelectorAll('[data-close]').forEach(close => {
+		close.addEventListener('click', () => {
+			document.querySelectorAll('.modal').forEach(modal => modal.classList.add('hidden'))
+			document.getElementById('modal-overlay').classList.add('hidden')
+		})
+	})
+</script>

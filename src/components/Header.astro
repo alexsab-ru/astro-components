@@ -122,7 +122,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 	<div
 		x-cloak
 		class="fixed top-0 bottom-0 right-0 z-40 bg-white py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
-		:class="open ? 'translate-x-0' : 'translate-x-full'"
+		:class="open ? 'translate-x-0' : 'translate-x-[110%]'"
 	>
 		<button class="w-10 h-10 absolute right-0 top-0 text-2xl font-mono transition-opacity opacity-60 hover:opacity-100" @click.prevent="open = false">&times;</button>
 
