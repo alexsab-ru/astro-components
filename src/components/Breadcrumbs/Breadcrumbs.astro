@@ -26,9 +26,9 @@ const breadcrumbs = generateBreadcrumbs(pathName, titlesMapping);
 	  {breadcrumbs.map((crumb, index) => (
 		<li class={`!m-0 flex items-center flex-nowrap gap-1 ${(breadcrumbs.length - 1) === index ? 'truncate' : ''}`}>
 		{crumb.href ? (
-			<a href={crumb.href} class="!text-sm !m-0 !leading-none !text-black !no-underline font-medium hover:!text-gray-600">{crumb.name}</a> <span class="text-xs !leading-none">></span>
+			<a href={crumb.href} class="!text-xs sm:!text-sm !m-0 !leading-none !text-black !no-underline font-semibold hover:!text-gray-600">{crumb.name}</a> <span class="text-xs !leading-none">></span>
 		) : (
-			<span class="text-sm !leading-none text-gray-600 truncate">{crumb.name}</span>
+			<span class="text-xs sm:text-sm !leading-none text-gray-600 truncate">{crumb.name}</span>
 		)}
 		</li>
 	  ))}
