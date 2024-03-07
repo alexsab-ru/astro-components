@@ -1,0 +1,36 @@
+---
+import { generateBreadcrumbs } from './generateBreadcrumbs.js';
+
+interface Props {
+	breadcrumbName: boolean|string;
+}
+
+const { breadcrumbName } = Astro.props;
+const pathName = Astro.url.pathname
+const pathNames = pathName.split("/").filter(Boolean)
+const lastPathName = '/'+pathNames[pathNames.length - 1];
+let titlesMapping = {};
+titlesMapping[lastPathName] = breadcrumbName;
+titlesMapping = {
+  ...titlesMapping,
+  '/special-offers': 'Спецпредложения',
+  '/news': 'Новости',
+  '/cars': 'Автомобили в наличии',
+  '/privacy-policy': 'Политика конфиденциальности',
+};
+const breadcrumbs = generateBreadcrumbs(pathName, titlesMapping);
+---
+
+<nav aria-label="Breadcrumb">
+	<ol class="flex items-center flex-nowrap whitespace-nowrap gap-1">
+	  {breadcrumbs.map((crumb, index) => (
+		<li class={`!m-0 flex items-center flex-nowrap gap-1 ${(breadcrumbs.length - 1) === index ? 'truncate' : ''}`}>
+		{crumb.href ? (
+			<a href={crumb.href} class="!text-sm !m-0 !leading-none !text-black !no-underline font-medium hover:!text-gray-600">{crumb.name}</a> <span class="text-xs !leading-none">></span>
+		) : (
+			<span class="text-sm !leading-none text-gray-600 truncate">{crumb.name}</span>
+		)}
+		</li>
+	  ))}
+	</ol>
+</nav>
