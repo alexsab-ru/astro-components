@@ -15,7 +15,7 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 	<section class="content">
 		<div class="container">
 			{breadcrumbName && <Breadcrumbs breadcrumbName={breadcrumbName} />}
-			{h1 && <h1><Fragment set:html={h1} /></h1> }
+			{h1 && <h1 class="mt-5 sm:mt-10"><Fragment set:html={h1} /></h1> }
 			<slot />
 		</div>
 	</section>
