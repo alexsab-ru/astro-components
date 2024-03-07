@@ -74,6 +74,8 @@ def create_file(car, filename, unique_id):
     h1 = f"{car.find('folder_id').text} {car.find('modification_id').text}"
     content += f"h1: {h1}\n"
 
+    content += f"breadcrumb: {car.find('mark_id').text} {car.find('folder_id').text} {car.find('complectation_name').text}\n"
+
     title = f"{car.find('mark_id').text} {car.find('folder_id').text} {car.find('modification_id').text} купить у официального дилера в {dealer.get('where')}"
     content += f"title: {title}\n"
 
