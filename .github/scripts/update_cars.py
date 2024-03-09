@@ -343,7 +343,7 @@ with open('output.txt', 'w') as file:
 elements_to_localize = []
 
 for car in root.find('cars'):
-    unique_id = f"{car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} {car.find('modification_id').text.strip()} {car.find('complectation_name').text.strip()} {car.find('color').text.strip()} {car.find('price').text.strip()} {car.find('year').text.strip()}"
+    unique_id = f"{car.find('mark_id').text.strip() ? car.find('mark_id') : ''} {car.find('folder_id').text.strip() ? car.find('folder_id') : ''} {car.find('modification_id').text.strip() ? car.find('modification_id') : ''} {car.find('complectation_name').text.strip() ? car.find('complectation_name') : ''} {car.find('color').text.strip() ? car.find('color') : ''} {car.find('price').text.strip() ? car.find('price') : ''} {car.find('year').text.strip() ? car.find('year') : ''}"
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"
     file_path = os.path.join(directory, file_name)
