@@ -264,6 +264,12 @@ def localize_element_text(element, translations):
     if element is not None and element.text in translations:
         element.text = translations[element.text]
 
+def stripElement(car, element):
+    if car.find(element) is not None and car.find(element).text != None:
+        return f"{car.find(element).text.strip()}"
+    return ""
+
+
 # Путь к папке для сохранения уменьшенных изображений
 output_dir = "public/img/thumbs/"
 
@@ -377,7 +383,8 @@ for car in root:
     if(car.find('creditDiscount').text > car.find('tradeinDiscount').text):
         max_discount_tag = "creditDiscount"
     rename_child_element(car, max_discount_tag, 'max_discount')
-    unique_id = f"{car.find('mark_id').text.strip() if car.find('mark_id') else ''} {car.find('folder_id').text.strip() if car.find('folder_id') else ''} {car.find('modification_id').text.strip() if car.find('modification_id') else ''} {car.find('complectation_name').text.strip() if car.find('complectation_name') else ''} {car.find('color').text.strip() if car.find('color') else ''} {car.find('price').text.strip() if car.find('price') else ''} {car.find('year').text.strip() if car.find('year') else ''}"
+
+    unique_id = f"{stripElement(car,'mark_id')} {stripElement(car,'folder_id')} {stripElement(car,'modification_id')} {stripElement(car,'complectation_name')} {stripElement(car,'color')} {stripElement(car,'price')} {stripElement(car,'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"
     file_path = os.path.join(directory, file_name)
