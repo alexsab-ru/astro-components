@@ -71,12 +71,12 @@ def create_file(car, filename, unique_id):
     # content += f"permalink: {unique_id}\n"
     content += f"vin_hidden: {vin_hidden}\n"
 
-    h1 = f"{car.find('folder_id').text} {car.find('modification_id').text}"
+    h1 = f"{car.find('folder_id').text.strip()} {car.find('modification_id').text}"
     content += f"h1: {h1}\n"
 
-    content += f"breadcrumb: {car.find('mark_id').text} {car.find('folder_id').text} {car.find('complectation_name').text}\n"
+    content += f"breadcrumb: {car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} {car.find('complectation_name').text}\n"
 
-    title = f"{car.find('mark_id').text} {car.find('folder_id').text} {car.find('modification_id').text} купить у официального дилера в {dealer.get('where')}"
+    title = f"{car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} {car.find('modification_id').text} купить у официального дилера в {dealer.get('where')}"
     content += f"title: {title}\n"
 
     description = ""
@@ -109,14 +109,14 @@ def create_file(car, filename, unique_id):
             description = child.text
             flat_description = description.replace('\n', '<br>\n')
             content += f"description: |\n"
-            content += f"  Купить автомобиль {car.find('mark_id').text} {car.find('folder_id').text} {car.find('year').text} года выпуска, комплектация {car.find('complectation_name').text}, цвет - {car.find('color').text}, двигатель - {car.find('modification_id').text} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {car.find('mark_id').text} {car.find('folder_id').text} – {car.find('price').text}\n"
+            content += f"  Купить автомобиль {car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} {car.find('year').text} года выпуска, комплектация {car.find('complectation_name').text}, цвет - {car.find('color').text}, двигатель - {car.find('modification_id').text} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} – {car.find('price').text}\n"
             # for line in flat_description.split("\n"):
                 # content += f"  {line}\n"
         elif child.tag == 'equipment' and child.text:
             description = child.text
             flat_description = description.replace('\n', '<br>\n')
             content += f"{child.tag}: |\n"
-            # content += f"  Купить автомобиль {car.find('mark_id').text} {car.find('folder_id').text} {car.find('year').text} года выпуска, комплектация {car.find('complectation_name').text}, цвет - {car.find('color').text}, двигатель - {car.find('modification_id').text} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {car.find('mark_id').text} {car.find('folder_id').text} – {car.find('price').text}\n"
+            # content += f"  Купить автомобиль {car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} {car.find('year').text} года выпуска, комплектация {car.find('complectation_name').text}, цвет - {car.find('color').text}, двигатель - {car.find('modification_id').text} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {car.find('mark_id').text.strip()} {car.find('folder_id').text.strip()} – {car.find('price').text}\n"
             for line in flat_description.split("\n"):
                 content += f"  {line}\n"
         else:
