@@ -382,7 +382,7 @@ for car in root.find("offers"):
     rename_child_element(car, 'drive-type', 'drive_type')
     rename_child_element(car, 'steering-wheel', 'wheel')
     rename_child_element(car, "max-discount", 'max_discount')
-    unique_id = f"{car.find('mark_id').text.strip() ? car.find('mark_id') : ''} {car.find('folder_id').text.strip() ? car.find('folder_id') : ''} {car.find('modification_id').text.strip() ? car.find('modification_id') : ''} {car.find('complectation_name').text.strip() ? car.find('complectation_name') : ''} {car.find('color').text.strip() ? car.find('color') : ''} {car.find('price').text.strip() ? car.find('price') : ''} {car.find('year').text.strip() ? car.find('year') : ''}"
+    unique_id = f"{car.find('mark_id').text.strip() if car.find('mark_id') else ''} {car.find('folder_id').text.strip() if car.find('folder_id') else ''} {car.find('modification_id').text.strip() if car.find('modification_id') else ''} {car.find('complectation_name').text.strip() if car.find('complectation_name') else ''} {car.find('color').text.strip() if car.find('color') else ''} {car.find('price').text.strip() if car.find('price') else ''} {car.find('year').text.strip() if car.find('year') else ''}"
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"
     file_path = os.path.join(directory, file_name)
