@@ -27,7 +27,7 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 						<CarPageHeading data={data} />
 					</div>
 
-				{ data.images.length > 0 ? (
+				{ data.images && data.images.length > 0 ? (
 					<CarImageSlider data={data} />
 					) : (
 					<a 

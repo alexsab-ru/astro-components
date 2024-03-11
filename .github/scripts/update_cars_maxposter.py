@@ -54,7 +54,7 @@ def create_file(car, filename, unique_id):
     if model in model_mapping and color in model_mapping[model].get('color', {}):
         folder = model_mapping[model]['folder']
         color_image = model_mapping[model]['color'][color]
-        thumb = f"/img/models/{folder}/colors/{color_image}.webp"
+        thumb = f"/img/models/{folder}/colors/{color_image}"
     else:
         print(f"{model} {color}")
         with open('output.txt', 'a') as file:

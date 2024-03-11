@@ -9,7 +9,7 @@ import './cars.sass'
 	<div class="flex-full lg:flex-none relative flex group" x-data="usedPreviewGallery">
 
 		{
-			car.data.thumbs.length > 0 ? (
+			car.data.thumbs && car.data.thumbs.length > 0 ? (
 			<div class="overflow-x-auto flex gap-[5px] lg:gap-0 snap-x snap-mandatory w-full scroll-smooth no-scrollbar" x-ref="wrapper">
 			{
 				car.data.thumbs.map((img:string, idx:number) => (
