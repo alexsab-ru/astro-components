@@ -3,17 +3,17 @@ const { data = {} } = Astro.props;
 import '@/components/Banner/banner.scss';
 ---
 
-<div class="swiper car-image-slider aspect-[1/0.7] sm:mb-2.5">
+<div class="swiper car-image-slider aspect-video w-full sm:mb-2.5 bg-gray-50">
 	<div class="swiper-wrapper">
 		{
 			data.images.map(img => (
-				<div class="swiper-slide bg-gray-100">
+				<div class="swiper-slide !w-fit sm:!w-full">
 					<a 
 						href={img} 
 						class="block cursor-zoom-in h-full w-full select-none glightbox"
 						data-gallery={data.vin_hidden}
 					>
-						<img src={img} class="w-full h-full object-cover object-center select-none" alt={data.folder_id} loading="lazy" />
+						<img src={img} class="w-auto mx-auto h-full object-cover select-none" alt={data.folder_id} loading="lazy" />
 						<div class="swiper-lazy-preloader"></div>
 					</a>
 				</div>
@@ -23,12 +23,12 @@ import '@/components/Banner/banner.scss';
 	<div class="swiper-button-prev car-image-slider-prev !hidden sm:!flex"></div>
 	<div class="swiper-button-next car-image-slider-next !hidden sm:!flex"></div>
 </div>
-<div class="!hidden sm:!block swiper car-thumb-slider">
+<div class="!hidden sm:!block swiper car-thumb-slider h-[130px]">
 	<div class="swiper-wrapper">
 		{
 			data.images.map(img => (
-				<div class="swiper-slide aspect-[1/0.7] relative">
-					<img src={img} class="absolute w-full h-full" alt={data.folder_id} loading="lazy" />
+				<div class="swiper-slide select-none !inline-flex !w-fit">
+					<img src={img} class="select-none" alt={data.folder_id} loading="lazy" />
 					<div class="swiper-lazy-preloader"></div>
 				</div>
 			))

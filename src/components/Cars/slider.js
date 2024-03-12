@@ -1,40 +1,33 @@
 import Swiper from "swiper";
-import { Navigation, Thumbs, Keyboard } from "swiper/modules";
+import { Navigation, Thumbs, Keyboard, FreeMode } from "swiper/modules";
 
 const carThumbSlider = new Swiper('.car-thumb-slider', {
-	spaceBetween: 10,
-	slidesPerView: 4.5,
+	modules: [FreeMode],
+	spaceBetween: 10, 
+	slidesPerView: 'auto',
 	slideToClickedSlide: true,
 	watchSlidesProgress: true,
-	centeredSlides: true,
-	loop: true
 });
 
 const carImageSlider = new Swiper('.car-image-slider', {
-	modules: [Navigation, Thumbs, Keyboard],
-	spaceBetween: 20,
-	loop: true,
+	modules: [Navigation, Keyboard, Thumbs],
+	spaceBetween: 10,
 	keyboard: {
 		enabled: true,
 		onlyInViewport: true,
 	},
-	centeredSlides: true,
-	loopAdditionalSlides: 5,
 	navigation: {
 		nextEl: ".car-image-slider-next",
 		prevEl: ".car-image-slider-prev",
 	},
 	breakpoints: {
 		320: {
-		  slidesPerView: 1.08,
-		  spaceBetween: 5,
-		  centeredSlides: false,
-		  navigation: false
+			slidesPerView: 'auto',
+			spaceBetween: 5,
 		},
 		640: {
-		  slidesPerView: 1,
-		  spaceBetween: 20,
-		  centeredSlides: true,
+			slidesPerView: 1,
+			spaceBetween: 10,
 		}
 	},
 	thumbs: {
