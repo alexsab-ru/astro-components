@@ -2,8 +2,9 @@
 interface Props {
 	car: any;
 	breadcrumb?: string[];
+	backLink? : boolean;
 }
-const {car = {}, breadcrumb} = Astro.props;
+const {car = {}, breadcrumb, backLink = false} = Astro.props;
 const data = car?.data || {};
 const price = data.max_discount ? data.price - data.max_discount : car.data.price;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
@@ -12,6 +13,7 @@ import CarImageSlider from '@/components/Cars/ImageSlider.astro';
 import CarPageHeading from '@/components/Cars/PageHeading.astro';
 import CarCharItem from '@/components/Cars/CharItem.astro';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
+import BackLink from '@/components/BackLink.astro';
 ---
 
 <Layout title={data?.title || data?.h1} description={data?.description} image={data?.image}>
@@ -84,6 +86,12 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 			<div class="mt-14">
 				<slot />
 			</div>
+
+			{backLink && (
+				<div class="mt-10">
+					<BackLink />
+				</div>
+			)}
 
 		</div>
 	</section>

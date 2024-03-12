@@ -23,6 +23,6 @@ const { Content } = await car.render();
 import { breadcrumb } from './index.astro';
 ---
 
-<CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]}>
+<CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]} backLink={true}>
 	<Content />
 </CarPageLayout>
