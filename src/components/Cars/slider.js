@@ -1,5 +1,5 @@
 import Swiper from "swiper";
-import { Navigation, Thumbs } from "swiper/modules";
+import { Navigation, Thumbs, Keyboard } from "swiper/modules";
 
 const carThumbSlider = new Swiper('.car-thumb-slider', {
 	spaceBetween: 10,
@@ -11,9 +11,13 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 });
 
 const carImageSlider = new Swiper('.car-image-slider', {
-	modules: [Navigation, Thumbs],
+	modules: [Navigation, Thumbs, Keyboard],
 	spaceBetween: 20,
 	loop: true,
+	keyboard: {
+		enabled: true,
+		onlyInViewport: true,
+	},
 	centeredSlides: true,
 	loopAdditionalSlides: 5,
 	navigation: {
