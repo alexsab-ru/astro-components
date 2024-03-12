@@ -1,0 +1,29 @@
+---
+interface Props {
+  href?: string;
+  title?: string;
+}
+const { href, title = "вернуться обратно" } = Astro.props;
+import { Icon } from "astro-icon/components";
+---
+
+{
+  href ? (
+	<a
+		href={href}
+		class="flex items-center gap-1 flex-nowrap !no-underline !text-black opacity-60 transition-opacity hover:opacity-100 cursor-pointer"
+	>
+		<Icon name="mdi:arrow-left" class="text-2xl" />
+		<span>{title}</span>
+	</a>
+	) : (
+	<a
+		href="#"
+		onclick="history.back();return false;"
+		class="flex items-center gap-1 flex-nowrap !no-underline !text-black opacity-60 transition-opacity hover:opacity-100 cursor-pointer"
+	>
+		<Icon name="mdi:arrow-left" class="text-2xl" />
+		<span>{title}</span>
+	</a>
+	)
+}
