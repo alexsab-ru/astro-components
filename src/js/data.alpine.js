@@ -128,6 +128,7 @@ document.addEventListener('alpine:init', () => {
 		value: "",
 		total: 0,
 		declOfNums,
+		firstLoadPage: true,
 		setTitle() {
 			this.options.find((c) => {
 				if (c.id === this.current) {
@@ -164,7 +165,9 @@ document.addEventListener('alpine:init', () => {
 			this.cars.forEach(function (element) {
 				document.querySelector(".car-list").appendChild(element);
 			});
-			this.addQueryParam('sort_by', id);
+			if(!this.firstLoadPage){
+				this.addQueryParam('sort_by', id);				
+			}
 		},
 		addQueryParam(key, value) {
 			const url = new URL(window.location.href);
@@ -208,6 +211,7 @@ document.addEventListener('alpine:init', () => {
 					return vm.total = acc+Number(val.dataset.total);
 				}, 0)
 			}
+			this.firstLoadPage = false
 		},
 	}));
 	Alpine.data("modelsData", () => ({
