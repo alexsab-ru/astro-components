@@ -1,8 +1,10 @@
 import Swiper from "swiper";
 import { Navigation, Thumbs, Keyboard, FreeMode } from "swiper/modules";
+import "swiper/css/bundle";
 
 const carThumbSlider = new Swiper('.car-thumb-slider', {
 	modules: [FreeMode],
+	freeMode: true,
 	spaceBetween: 10, 
 	slidesPerView: 'auto',
 	slideToClickedSlide: true,
