@@ -3,6 +3,7 @@ import { Navigation, Thumbs, Keyboard, FreeMode } from "swiper/modules";
 import "swiper/css/bundle";
 
 const carThumbSlider = new Swiper('.car-thumb-slider', {
+	rewind: true,
 	modules: [FreeMode],
 	freeMode: true,
 	spaceBetween: 10, 
@@ -12,6 +13,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 });
 
 const carImageSlider = new Swiper('.car-image-slider', {
+	rewind: true,
 	modules: [Navigation, Keyboard, Thumbs],
 	spaceBetween: 10,
 	keyboard: {
