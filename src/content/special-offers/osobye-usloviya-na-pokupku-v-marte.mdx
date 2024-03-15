@@ -9,7 +9,7 @@ description: "Привлекательные условия кредитован
 export const DateTo = "31.03.2024"
 
 import Button from '@/components/Button/Button.astro';
-// import url from Astro;
+import { LEGAL_CITY_WHERE } from '@/const'
 
 <picture>
     <source media="(min-width: 1025px)" srcset="/img/specials/osobye-usloviya-na-pokupku-v-marte/jetour-vigoda.webp" />
@@ -22,12 +22,16 @@ import Button from '@/components/Button/Button.astro';
 <h3 class="font-bold text-xl">Получите выгоду на&nbsp;покупку автомобиля jetour 100&nbsp;000 рублей. При сдаче вашего автомобиля в Трейд-ин!</h3>
 <br />
 
-Выгоду можно получить в салонах официальных дилеров Jetour c 1 марта по 31 декабря 2024 года. Акция действует на модели: Dashing, X70 Plus, X90 Plus 2023 и 2024 годов выпуска. Подробности уточняйте в официальных дилерских центрах.
+Выгоду можно получить в **Дилерском центре &laquo;Jetour Альфа&raquo;** в {LEGAL_CITY_WHERE} c 1 по 31 марта 2024 года. 
+
+Акция действует на модели: Dashing, X70 Plus, X90 Plus 2023 и 2024 годов выпуска.
 <br />
 
 ![Большая выгода на Jetour Dashing](/img/specials/osobye-usloviya-na-pokupku-v-marte/jetour-dashing-vigoda.webp)
+<br />
+Вы можете приобрести автомобиль Jetour Dashing в любой комплектации с выгодой 300 тысяч рублей в **Дилерском центре &laquo;Jetour Альфа&raquo;** в {LEGAL_CITY_WHERE}. 
 
-Вы можете приобрести автомобиль Jetour Dashing в любой комплектации с выгодой 300 тысяч рублей у официальных дилеров Jetour. Предложение суммируется со всеми кредитными программами банков-партнеров. Акция действует с 1 по 31 марта 2024 года. Подробности необходимо уточнять в отделе продаж выбранного дилерского центра.<sup>1</sup>
+Предложение суммируется со всеми кредитными программами банков-партнеров. Акция действует с 1 по 31 марта 2024 года.<sup>1</sup>
 
 <div class="flex justify-center mt-10 mb-5">
     <Button 
