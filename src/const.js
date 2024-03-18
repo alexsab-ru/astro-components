@@ -8,6 +8,7 @@ export const LEGAL_INN = '1234567890'; // ИНН
 export const LEGAL_CITY = 'г. Город'; // Город
 export const LEGAL_CITY_WHERE = 'Городе'; // где? в Городе
 export const SITE_DESCR = 'Официальный дилерский центр'; // Описание сайта по умолчанию
+export const TELEGRAM = ''; // Имя пользователя в Телегам
 export const PHONE = '+7 (999) 000-00-00'; // Телефон по умолчанию
 
 export const BRAND = 'Baic';
