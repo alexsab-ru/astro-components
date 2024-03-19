@@ -7,7 +7,7 @@ const {fetchURL = ''} = Astro.props;
 const salons = await fetch(fetchURL).then((response) => response.json());
 // import salons from '@/data/salons.json'
 
-import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
+import { LINKS_MENU as links, HEADER_TOP_LINE, TELEGRAM } from '@/const.js';
 
 import { Icon } from 'astro-icon/components';
 
@@ -33,12 +33,12 @@ const classBottom = path != '/' ? ' border-b' : '';
 		<div class="container">
 			<div class="flex items-center justify-between h-[60px] md:h-[80px]">
 				<Logo />
-				<div class="flex items-center xs:gap-3 gap-5 lg:gap-10">
+				<div class="flex items-center xs:gap-3 gap-5 lg:gap-4 xl:gap-10">
 					<div class="hidden md:flex flex-col">
 					{
 						salons.length && salons.map((salon: any, index) => {
 							return index < 2 && (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="font-extrabold text-black/80 text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-black/80 text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
 							)
 						})
 					}
@@ -62,12 +62,28 @@ const classBottom = path != '/' ? ' border-b' : '';
 					}
 
 					<Button
-						classes="popup-link hidden lg:block !px-4 xl:!px-8 !py-2 xl:!py-3"
+						classes="popup-link hidden lg:block !px-4 xl:!px-4 !py-2 xl:!py-3"
 						url="#common-modal"
 						title="Заказать звонок"
 						dataTitle="Заказать звонок"
 						dataFormName="Заказ звонка. Шапка"
 					/>
+					{ TELEGRAM && <Button
+						classes="black hidden lg:block !px-4 xl:!px-4 !py-2 xl:!py-3"
+						url={`tg://resolve?domain=${TELEGRAM}`}
+						title="Телеграм"
+						dataTitle="Телеграм"
+						dataFormName="Телеграм"
+					/>
+					<a
+						href={`tg://resolve?domain=${TELEGRAM}`}
+						class="lg:hidden shadow-md rounded flex items-center justify-center w-10 h-10 transition-shadow hover:shadow"
+						data-title="Телеграм"
+						data-form_name="Телеграм"
+					>
+						<Icon name="mdi:telegram" class="text-3xl" />
+					</a>
+					}
 
 					<a
 						href="#common-modal"
