@@ -25,7 +25,7 @@ export const BRAND = 'Jetour';
 export const LINKS_MENU = [
 	{url: 'cars/', name: 'Авто в наличии'},
 	{url: 'special-offers/', name: 'Спецпредложения'},
-	// {url: 'news/', name: 'Новости'},
+	{url: 'news/', name: 'Новости'},
 	{url: 'test-drive/', name: 'Запись на тест-драйв'},
 	{url: 'service-request/', name: 'Запись на сервис'},
 	{url: '#services', name: 'Услуги'},
