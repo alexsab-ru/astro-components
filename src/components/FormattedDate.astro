@@ -5,8 +5,8 @@ interface Props {
 
 const { date } = Astro.props;
 ---
-
-<time datetime={date.toISOString()} class="text-sm text-gray-500">
+<div class="text-xs text-gray-500">от 
+<time datetime={date.toISOString()}>
 	{
 		date.toLocaleDateString('ru-RU', {
 			year: 'numeric',
@@ -15,3 +15,4 @@ const { date } = Astro.props;
 		})
 	}
 </time>
+</div>
