@@ -8,6 +8,8 @@ const {poster, url} = Astro.props
 <video
 	muted
 	loop
+	autoplay
+	playsinline
 	poster={poster}
 	class="absolute inset-0 h-full w-full object-cover">
 	<source src={url} type="video/mp4" />
