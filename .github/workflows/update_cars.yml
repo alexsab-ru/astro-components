@@ -52,9 +52,9 @@ jobs:
       id: set_output
       run: |
         if [ -f output.txt ]; then
-          echo "$(<output.txt)"
-          echo "script_output='error 404 found'" >> $GITHUB_ENV
-          echo "script_output='error 404 found'" >> $GITHUB_OUTPUT
+          echo "script_output=$(<output.txt)"
+          echo "script_output=$(<output.txt)" >> $GITHUB_ENV
+          echo "script_output=$(<output.txt)" >> $GITHUB_OUTPUT
         fi
 
     - name: ls files
