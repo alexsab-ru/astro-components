@@ -1,0 +1,66 @@
+---
+const {
+	title,
+	data: socials,
+	border = false,
+	class: className,
+	...rest
+} = Astro.props;
+import './social.scss';
+import { Icon } from 'astro-icon/components';
+---
+
+{
+	socials && (
+		<div
+			class={className}
+			{...rest}
+		>
+		{title && <h2 class="text-xl sm:text-2xl font-medium mb-6 sm:mb-10"><Fragment set:html={title}/></h2>}
+			<svg class="absolute w-0 h-0 opacity-0">
+				<linearGradient
+					id="SVGID_1_"
+					gradientUnits="userSpaceOnUse"
+					x1="-46.0041"
+					y1="634.1208"
+					x2="-32.9334"
+					y2="647.1917"
+					gradientTransform="matrix(32 0 0 -32 1519 20757)"
+				>
+					<stop
+						offset="0"
+						style="stop-color:#FFC107"
+					/>
+					<stop
+						offset="0.507"
+						style="stop-color:#F44336"
+					/>
+					<stop
+						offset="0.99"
+						style="stop-color:#9C27B0"
+					/>
+				</linearGradient>
+			</svg>
+
+			<div class="flex flex-wrap gap-2 sm:gap-4">
+				{Object.keys(socials).map((key) => (
+					<a
+						href={socials[key]?.url || '#!'}
+						title={socials[key]?.title}
+						class={
+							border
+								? `icon-link social-link ${key}`
+								: `icon-link messanger-link`
+						}
+						target="_blank"
+					>
+						<Icon
+							name={key}
+							class={key === 'telegram' ? '-translate-x-0.5' : ''}
+						/>
+					</a>
+				))}
+			</div>
+		</div>
+	)
+}
