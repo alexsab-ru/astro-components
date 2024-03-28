@@ -7,9 +7,9 @@ const salons = await fetch(`${BASE_URL}${SITE_URL}/data/salons.json`).then((resp
 // import salons from '@/data/salons.json';
 const path = Astro.url.pathname;
 import logo from '@/components/Logo/logo.svg';
+// SOCIALS
 import SocialList from '@/components/Social/List.astro';
-// DATA
-import socials from '@/data/social.json';
+const socials = await fetch(`${BASE_URL}${SITE_URL}/data/socials.json`).then((response) => response.json());
 ---
 
 <footer class="bg-black/90 text-white py-14 relative">
