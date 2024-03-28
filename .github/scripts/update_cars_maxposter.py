@@ -56,9 +56,11 @@ def create_file(car, filename, unique_id):
         color_image = model_mapping[model]['color'][color]
         thumb = f"/img/models/{folder}/colors/{color_image}"
     else:
-        print(f"{model} {color}")
-        with open('output.txt', 'a') as file:
-            file.write(f"{model} {color}\n")
+        print("")
+        print(f"VIN: {vin}. Не хватает модели: {model} или цвета: {color}")
+        print("")
+        # with open('output.txt', 'a') as file:
+        #     file.write(f"{model} {color}\n")
         # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
         thumb = "/img/404.jpg"
         global error_404_found

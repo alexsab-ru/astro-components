@@ -1,0 +1,65 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.framework.id": "astro",
+  "frontMatter.preview.host": "http://localhost:4321",
+  "frontMatter.content.publicFolder": "public",
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "special-offers",
+      "path": "[[workspace]]/src/content/special-offers"
+    }
+  ],
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "default",
+      "pageBundle": false,
+      "previewPath": "'special-offers'",
+      "fileType": "mdx",
+      "fields": [
+        {
+          "title": "Image",
+          "name": "image",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "title": "H1",
+          "name": "h1",
+          "type": "string"
+        },
+        {
+          "title": "Caption",
+          "name": "caption",
+          "type": "string"
+        },
+        {
+          "title": "Breadcrumb",
+          "name": "breadcrumb",
+          "type": "string"
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "Publish Date",
+          "name": "pubDate",
+          "type": "datetime"
+        },
+        {
+          "title": "Draft",
+          "name": "draft",
+          "type": "boolean",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "frontMatter.framework.startCommand": "pnpm dev"
+}

@@ -10,6 +10,12 @@ export const theme = {
   extend: {
     fontFamily: {
       // 'sans': ['Gilroy', ...defaultTheme.fontFamily.sans],
+      vk: '#4B76A8',
+      ok: '#F7931D',
+      fb: '#3C5A99',
+      youtube: '#FF0018',
+      tiktok: '#000000',
+      telegram: '#2FACE1',
     },
     boxShadow: {
       '3xl': '0 35px 60px rgba(0, 0, 0, 0.3)',

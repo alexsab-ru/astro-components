@@ -7,7 +7,7 @@ const {fetchURL = ''} = Astro.props;
 const salons = await fetch(fetchURL).then((response) => response.json());
 // import salons from '@/data/salons.json'
 
-import { LINKS_MENU as links, HEADER_TOP_LINE, TELEGRAM } from '@/const.js';
+import { LINKS_MENU as links, HEADER_TOP_LINE, BASE_URL, SITE_URL } from '@/const.js';
 
 import { Icon } from 'astro-icon/components';
 
@@ -20,6 +20,10 @@ import HeaderTopLine from '@/components/HeaderTopLine.astro';
 const path = Astro.url.pathname;
 
 const classBottom = path != '/' ? ' border-b' : '';
+
+// SOCIALS
+import SocialList from '@/components/Social/List.astro';
+const socials = await fetch(`${BASE_URL}${SITE_URL}/data/socials.json`).then((response) => response.json());
 ---
 <div
 	x-data="header"
@@ -31,9 +35,9 @@ const classBottom = path != '/' ? ' border-b' : '';
 			HEADER_TOP_LINE && <HeaderTopLine content={HEADER_TOP_LINE} />
 		}
 		<div class="container">
-			<div class="flex items-center justify-between h-[60px] md:h-[80px]">
+			<div class="flex items-center justify-between xs:py-2 xs:h-auto h-[60px] md:h-[80px]">
 				<Logo />
-				<div class="flex items-center xs:gap-3 gap-5 lg:gap-4 xl:gap-10">
+				<div class="flex items-center xs:gap-3 gap-4 xl:gap-10">
 					<div class="hidden md:flex flex-col">
 					{
 						salons.length && salons.map((salon: any, index) => {
@@ -60,44 +64,31 @@ const classBottom = path != '/' ? ' border-b' : '';
 							</div>
 						)
 					}
-
-					<Button
-						classes="popup-link hidden lg:block !px-4 xl:!px-4 !py-2 xl:!py-3"
-						url="#common-modal"
-						title="Заказать звонок"
-						dataTitle="Заказать звонок"
-						dataFormName="Заказ звонка. Шапка"
-					/>
-					{ TELEGRAM && <Button
-						classes="black hidden lg:block !px-4 xl:!px-4 !py-2 xl:!py-3"
-						url={`tg://resolve?domain=${TELEGRAM}`}
-						title="Телеграм"
-						dataTitle="Телеграм"
-						dataFormName="Телеграм"
-					/>
-					<a
-						href={`tg://resolve?domain=${TELEGRAM}`}
-						class="lg:hidden shadow-md rounded flex items-center justify-center w-10 h-10 transition-shadow hover:shadow"
-						data-title="Телеграм"
-						data-form_name="Телеграм"
-					>
-						<Icon name="mdi:telegram" class="text-3xl" />
-					</a>
-					}
-
-					<a
-						href="#common-modal"
-						class="lg:hidden popup-link shadow-md rounded flex items-center justify-center w-10 h-10 transition-shadow hover:shadow"
-						data-title="Заказать звонок"
-						data-form_name="Заказ звонка. Шапка"
-					>
-						<Icon name="mdi:phone-incoming" class="text-3xl" />
-					</a>
+					<div class="flex items-center gap-4">
+						<Button
+							classes="popup-link hidden lg:block !px-4 xl:!px-4 !py-2 xl:!py-3"
+							url="#common-modal"
+							title="Заказать звонок"
+							dataTitle="Заказать звонок"
+							dataFormName="Заказ звонка. Шапка"
+						/>
+						<a
+							href="#common-modal"
+							class="lg:hidden popup-link shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow"
+							data-title="Заказать звонок"
+							data-form_name="Заказ звонка. Шапка"
+						>
+							<Icon name="mdi:phone-incoming" class="text-3xl" />
+						</a>
+						{Object.keys(socials.footer).length ? (
+							<SocialList data={socials.footer} />
+					  	) : ('')}
+					</div>
 					<button
-						class="lg:hidden shadow-md rounded flex items-center justify-center w-10 h-10 transition-shadow hover:shadow"
+						class="lg:hidden shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow"
 						@click.prevent="open = !open"
 					>
-						<Icon name="mdi:hamburger-menu" class="text-3xl" />
+						<Icon name="mdi:hamburger-menu" class="text-2xl" />
 					</button>
 				</div>
 			</div>
