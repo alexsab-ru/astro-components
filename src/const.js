@@ -15,8 +15,6 @@ export const LEGAL_CITY = 'г. Город';
 export const LEGAL_CITY_WHERE = 'Городе';
 // Описание сайта по умолчанию
 export const SITE_DESCR = 'Официальный дилерский центр';
-// Имя пользователя в Телегам
-export const TELEGRAM = '';
 // Телефон по умолчанию
 export const PHONE = '+7 (999) 000-00-00';
 // Бренд
