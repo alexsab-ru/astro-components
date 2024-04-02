@@ -410,8 +410,8 @@ for car in root:
     rename_child_element(car, 'mileage', 'run')
     rename_child_element(car, 'bodyType', 'body_type')
     rename_child_element(car, 'steeringWheel', 'wheel')
-    credit_discount = int(car.find('creditDiscount').text)
-    tradein_discount = int(car.find('tradeinDiscount').text)
+    credit_discount = int(car.find('creditDiscount').text or 0)
+    tradein_discount = int(car.find('tradeinDiscount').text or 0)
     create_child_element(car, 'max_discount', credit_discount + tradein_discount)
 
     unique_id = build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'price', 'year')
