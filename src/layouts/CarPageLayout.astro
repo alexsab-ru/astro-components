@@ -7,7 +7,7 @@ interface Props {
 const {car = {}, breadcrumb, backLink = false} = Astro.props;
 const data = car?.data || {};
 const thumb = data.thumbs && data.thumbs.length ? data.thumbs[0] : data.image;
-const price = data.max_discount ? data.price - data.max_discount : car.data.price;
+const price = data.priceWithDiscount ? data.priceWithDiscount : (data.max_discount ? data.price - data.max_discount : data.price);
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import Layout from '@/layouts/Layout.astro';
 import CarImageSlider from '@/components/Cars/ImageSlider.astro';
@@ -33,8 +33,8 @@ import BackLink from '@/components/BackLink.astro';
 				{ data.images && data.images.length > 0 ? (
 					<CarImageSlider data={data} />
 					) : (
-					<a 
-						href={data.image} 
+					<a
+						href={data.image}
 						class="block cursor-zoom-in w-full glightbox"
 						data-gallery={data.vin_hidden}
 					>
