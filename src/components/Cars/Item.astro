@@ -5,7 +5,7 @@ interface Props {
 const {car = {}} = Astro.props;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
-const price = car.data.max_discount ? car.data.price - car.data.max_discount : car.data.price;
+const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.data.max_discount ? car.data.price - car.data.max_discount : car.data.price);
 ---
 
 <div class="car-item flex flex-col justify-between shadow-2xl pb-3 xl:pb-4 relative" data-price={ price } data-model={ car.data.folder_id } data-total={ car.data.total }>
@@ -22,7 +22,7 @@ const price = car.data.max_discount ? car.data.price - car.data.max_discount : c
 		<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>
 	</div>
 	<div class="px-3 xl:px-4">
-		<a href={ car.slug } class="btn block !px-3 !py-2 md:!text-base sm:!text-sm !text-xs !text-white !no-underline !mb-0">Подробнее</a>        
+		<a href={ car.slug } class="btn block !px-3 !py-2 md:!text-base sm:!text-sm !text-xs !text-white !no-underline !mb-0">Подробнее</a>
 	</div>
 </div>
 
