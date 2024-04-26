@@ -37,11 +37,11 @@ import socials from '@/data/socials.json';
                     salons.map(salon => (
                     <div class="flex flex-col gap-3">
                         <span class="flex items-center gap-1 flex-nowrap">
-                            <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" /> 
+                            <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" />
                             <Fragment set:html={salon.address} />
                         </span>
                         <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
-                            <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" /> 
+                            <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" />
                             {salon.phone}
                         </a>
                     </div>

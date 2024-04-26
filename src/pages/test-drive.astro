@@ -64,10 +64,10 @@ const optionsJSON = JSON.stringify(options);
 			<div class="flex justify-center gap-4 flex-wrap">
 				<template x-for="model in models">
 					<template x-if="model.show">
-						<button 
-							class="text-sm sm:text-base py-2 px-2 sm:px-4 rounded" 
+						<button
+							class="text-sm sm:text-base py-2 px-2 sm:px-4 rounded"
 							:class="model?.id === current?.id ? 'bg-accent-500 text-white' : 'bg-gray-200'"
-							x-text="model?.name" 
+							x-text="model?.name"
 							@click="currentModel(model.id)"
 						></button>
 					</template>
@@ -91,7 +91,7 @@ const optionsJSON = JSON.stringify(options);
 					required
 					errorClasses="text-red-500"
 				/>
-	
+
 				<Checkbox
 					name="agree"
 					label={AGREE_LABEL}
@@ -100,13 +100,13 @@ const optionsJSON = JSON.stringify(options);
 					errorClasses="text-red-500 w-full"
 					errorText="Чтобы продолжить, установите флажок"
 				/>
-	
+
 				<input
 					type="checkbox"
 					name="subscribe"
 					class="absolute w-0 h-0 opacity-0 invisible"
 				/>
-	
+
 				<Button view="form-button" classes="w-full" title="Отправить" />
 			</form>
 		</div>
