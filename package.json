@@ -8,6 +8,8 @@
     "build_local": "astro build --config astro.local.config.mjs",
     "build": "astro build",
     "preview": "astro preview --open --host",
+    "download_json": "JSON_PATH=$(cat .env | grep JSON_PATH= | cut -d '=' -f 2) && folder_name=$(node -e \"console.log(require('path').basename(process.cwd()))\") && echo \"Using JSON_PATH: $JSON_PATH\" && echo \"Using folder_name: $folder_name\" && mkdir -p src/data && for file in banners models salons services socials; do curl $JSON_PATH/$folder_name/data/$file.json -o src/data/$file.json; done",
+    "download_json_win": "cross-env JSON_PATH=$(cat .env | grep JSON_PATH= | cut -d '=' -f 2) && folder_name=$(node -e \"console.log(require('path').basename(process.cwd()))\") && echo \"Using JSON_PATH: $JSON_PATH\" && echo \"Using folder_name: $folder_name\" && mkdir -p src/data && for file in banners models salons services socials; do curl $JSON_PATH/$folder_name/data/$file.json -o src/data/$file.json; done",
     "astro": "astro"
   },
   "dependencies": {
@@ -22,6 +24,7 @@
     "astro": "^4.4.5",
     "astro-icon": "^1.1.0",
     "astro-robots": "^2.0.0",
+    "cross-env": "^7.0.3",
     "glightbox": "^3.2.0",
     "swiper": "^11.0.7",
     "tailwindcss": "^3.4.1"
