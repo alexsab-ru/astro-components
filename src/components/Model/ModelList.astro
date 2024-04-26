@@ -1,11 +1,9 @@
 ---
 interface Props {
-	fetchURL?: string;
 	title?: string;
 }
-const {fetchURL = '', title = 'Модельный ряд'} = Astro.props;
-const models = await fetch(fetchURL).then((response) => response.json());
-// import models from '@/data/models.json';
+const {title = 'Модельный ряд'} = Astro.props;
+import models from '@/data/models.json';
 const filteredModels = models.filter(model => model.show)
 import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format'

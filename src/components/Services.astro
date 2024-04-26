@@ -1,11 +1,9 @@
 ---
 interface Props {
-	fetchURL?: string;
 	title?: string;
 }
-const {fetchURL = '', title = 'Услуги дилерского центра'} = Astro.props;
-const services = await fetch(fetchURL).then((response) => response.json());
-// import services from '@/data/services.json'
+const {title = 'Услуги дилерского центра'} = Astro.props;
+import services from '@/data/services.json'
 import {Icon} from 'astro-icon/components';
 ---
 

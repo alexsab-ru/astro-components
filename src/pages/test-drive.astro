@@ -1,23 +1,54 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { BRAND, LEGAL_CITY_WHERE, AGREE_LABEL, BASE_URL, SITE_URL } from '@/const';
+import { BRAND, LEGAL_CITY_WHERE, AGREE_LABEL } from '@/const';
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
-const salons = await fetch(`${BASE_URL}${SITE_URL}/data/salons.json`).then((response) => response.json());
-const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ')
+import salons from '@/data/salons.json'
+const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
+import modelsJSON from '@/data/models.json';
+function filterAndExtractKeys(items) {
+    return items.reduce((acc, item) => {
+        if (item.show) {
+            acc.push({
+                id: item.id,
+                name: item.name,
+                show: item.show,
+                thumb: item.thumb,
+                globalChars: item.globalChars
+            });
+        }
+        return acc;
+    }, []);
+}
+const options = filterAndExtractKeys(modelsJSON);
+const optionsJSON = JSON.stringify(options);
+
 ---
 
 <Layout title={`Тест-драйв автомобиля ${BRAND} – Онлайн запись в салон официального дилера ${BRAND} в ${LEGAL_CITY_WHERE}`} description={`Записаться на тест-драйв автомобиля ${BRAND} в ${LEGAL_CITY_WHERE} вы можете на официальном сайте дилера ${BRAND} в ${LEGAL_CITY_WHERE}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
-	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data="modelsData">
+	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data=`{
+		models: null,
+		current: null,
+		getModels: function() {
+			this.models = ${optionsJSON};
+		},
+		currentModel: function(id) {
+			this.current = this.models.find(m => m.id === id);
+		},
+		init: function() {
+			this.getModels();
+			this.currentModel([...this.models][0].id);
+		}
+	}`>
 
 		<div class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-[1]" style="background-image: url('/img/model-bg.webp')" x-cloak>
 			<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
 			<h2 class="p-5 sm:p-10 text-2xl font-bold text-white" x-text="current?.name"></h2>
 			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.name">
-			<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white">
+			<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white xl:text-black">
 				<template x-for="char in current?.globalChars">
-					<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow xl:shadow-white rounded sm:w-1/2 xl:w-auto">
+					<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
 						<div class="text-xs" x-text="char.title+':'"></div>
 						<div>
 							<b class="text-base xl:text-lg font-bold" x-text="char.value"></b>{' '}
@@ -33,10 +64,10 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 			<div class="flex justify-center gap-4 flex-wrap">
 				<template x-for="model in models">
 					<template x-if="model.show">
-						<button 
-							class="text-sm sm:text-base py-2 px-2 sm:px-4 rounded" 
+						<button
+							class="text-sm sm:text-base py-2 px-2 sm:px-4 rounded"
 							:class="model?.id === current?.id ? 'bg-accent-500 text-white' : 'bg-gray-200'"
-							x-text="model?.name" 
+							x-text="model?.name"
 							@click="currentModel(model.id)"
 						></button>
 					</template>
@@ -60,7 +91,7 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 					required
 					errorClasses="text-red-500"
 				/>
-	
+
 				<Checkbox
 					name="agree"
 					label={AGREE_LABEL}
@@ -69,13 +100,13 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 					errorClasses="text-red-500 w-full"
 					errorText="Чтобы продолжить, установите флажок"
 				/>
-	
+
 				<input
 					type="checkbox"
 					name="subscribe"
 					class="absolute w-0 h-0 opacity-0 invisible"
 				/>
-	
+
 				<Button view="form-button" classes="w-full" title="Отправить" />
 			</form>
 		</div>
