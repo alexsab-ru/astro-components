@@ -1,4 +1,5 @@
 ---
+import {SITE_NAME, BRAND, LEGAL_CITY_WHERE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
 import ModelList from '@/components/Model/ModelList.astro';
@@ -11,7 +12,7 @@ import salons from '@/data/salons.json'
 const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
 ---
 
-<Layout title="TITLE" description="DESCRIPTION">
+<Layout title=`Купить ${BRAND} у официального дилера ${SITE_NAME}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${BRAND} в ${LEGAL_CITY_WHERE}! ☎️ ${salonsPhone}`>
 	<Banner />
 	<ModelList />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
