@@ -51,20 +51,20 @@ const { title, subtitle, endtime = '2024-12-31 23:59:59' } = Astro.props;
 		const minutesBlock = clock.querySelector('#minutes');
 		const secondsBlock = clock.querySelector('#seconds');
 		function getTimeRemaining(endtime){  
-			const t = Date.parse(endtime) - Date.parse(new Date()); 
-			const seconds = Math.floor( (t/1000) % 60 );  
-			const minutes = Math.floor( (t/1000/60) % 60 );  
-			const hours = Math.floor( (t/(1000*60*60)) % 24 );  
-			const days = Math.floor( t/(1000*60*60*24) );  
-			return {  
-				'total': t,  
-				'days': days,  
-				'hours': hours,  
-				'minutes': minutes,  
-				'seconds': seconds  
-			};  
+			const t = Date.parse(endtime) - Date.parse(new Date());
+			const seconds = Math.floor( (t/1000) % 60 );
+			const minutes = Math.floor( (t/1000/60) % 60 );
+			const hours = Math.floor( (t/(1000*60*60)) % 24 );
+			const days = Math.floor( t/(1000*60*60*24) );
+			return {
+				'total': t,
+				'days': days,
+				'hours': hours,
+				'minutes': minutes,
+				'seconds': seconds
+			};
 		}
-		function initializeClock(endtime){ 
+		function initializeClock(endtime){
 			function updateClock(){
 				const t = getTimeRemaining(endtime);
 				if(t.total<=0){  
