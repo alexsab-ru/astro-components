@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
+import Timer from '@/components/Timer/Timer.astro';
 import ModelList from '@/components/Model/ModelList.astro';
 import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
@@ -13,6 +14,7 @@ const models = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`).then((resp
 
 <Layout title="TITLE" description="DESCRIPTION">
 	<Banner fetchURL={`${BASE_URL}${SITE_URL}/data/banners.json`} />
+	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList fetchURL={`${BASE_URL}${SITE_URL}/data/models.json`} />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
 	<Callback bgUrl="https://baic-krasnodar.ru/img/x35/konkurenty.jpg" />
