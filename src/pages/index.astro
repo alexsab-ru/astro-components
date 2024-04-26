@@ -6,19 +6,18 @@ import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
-import {BASE_URL, SITE_URL} from '@/const'
-const models = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`).then((response) => response.json());
-// import models from '@/data/models.json'
+import models from '@/data/models.json'
+import salons from '@/data/salons.json'
+const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
 ---
 
 <Layout title="TITLE" description="DESCRIPTION">
-	<Banner fetchURL={`${BASE_URL}${SITE_URL}/data/banners.json`} />
-	<ModelList fetchURL={`${BASE_URL}${SITE_URL}/data/models.json`} />
+	<Banner />
+	<ModelList />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
-	<Callback bgUrl="https://baic-krasnodar.ru/img/x35/konkurenty.jpg" />
-	<Services fetchURL={`${BASE_URL}${SITE_URL}/data/services.json`} />
+	<Callback bgUrl="/img/konkurenty.jpg" />
+	<Services />
 	<Contacts
-		fetchURL={`${BASE_URL}${SITE_URL}/data/salons.json`}
 		mapImg="/img/map-bg.webp"
 		title="Наши контакты"
 	/>

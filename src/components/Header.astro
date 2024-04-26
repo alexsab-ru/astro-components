@@ -1,13 +1,7 @@
 ---
-interface Props {
-	fetchURL?: string
-}
-const {fetchURL = ''} = Astro.props;
+import salons from '@/data/salons.json'
 
-const salons = await fetch(fetchURL).then((response) => response.json());
-// import salons from '@/data/salons.json'
-
-import { LINKS_MENU as links, HEADER_TOP_LINE, BASE_URL, SITE_URL } from '@/const.js';
+import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
 
 import { Icon } from 'astro-icon/components';
 
@@ -23,7 +17,7 @@ const classBottom = path != '/' ? ' border-b' : '';
 
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
-const socials = await fetch(`${BASE_URL}${SITE_URL}/data/socials.json`).then((response) => response.json());
+import socials from '@/data/socials.json';
 ---
 <div
 	x-data="header"

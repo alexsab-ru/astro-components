@@ -1,14 +1,11 @@
 ---
 interface Props {
-	fetchURL?: string;
 	mapImg?: string;
 	title?: string;
 }
 
-const {fetchURL, mapImg, title} = Astro.props;
-import {BASE_URL, SITE_URL} from '@/const'
-const salons = await fetch(fetchURL).then((response) => response.json());
-// import salons from '@/data/salons.json'
+const {mapImg, title} = Astro.props;
+import salons from '@/data/salons.json'
 
 import Map from './Map/Map.astro';
 
