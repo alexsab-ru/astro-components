@@ -6,10 +6,41 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import salons from '@/data/salons.json'
 const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
+import modelsJSON from '@/data/models.json';
+function filterAndExtractKeys(items) {
+    return items.reduce((acc, item) => {
+        if (item.show) {
+            acc.push({
+                id: item.id,
+                name: item.name,
+                show: item.show,
+                thumb: item.thumb,
+                globalChars: item.globalChars
+            });
+        }
+        return acc;
+    }, []);
+}
+const options = filterAndExtractKeys(modelsJSON);
+const optionsJSON = JSON.stringify(options);
+
 ---
 
 <Layout title={`Тест-драйв автомобиля ${BRAND} – Онлайн запись в салон официального дилера ${BRAND} в ${LEGAL_CITY_WHERE}`} description={`Записаться на тест-драйв автомобиля ${BRAND} в ${LEGAL_CITY_WHERE} вы можете на официальном сайте дилера ${BRAND} в ${LEGAL_CITY_WHERE}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
-	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data="modelsData">
+	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data=`{
+		models: null,
+		current: null,
+		getModels: function() {
+			this.models = ${optionsJSON};
+		},
+		currentModel: function(id) {
+			this.current = this.models.find(m => m.id === id);
+		},
+		init: function() {
+			this.getModels();
+			this.currentModel([...this.models][0].id);
+		}
+	}`>
 
 		<div class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-[1]" style="background-image: url('/img/model-bg.webp')" x-cloak>
 			<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
