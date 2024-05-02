@@ -1,15 +1,14 @@
 ---
-import { BASE_URL, SITE_URL, SITE_NAME, LEGAL_ENTITY, LEGAL_INN, BRAND, FOOTER_INFO, LINKS_MENU as links } from '@/const';
+import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN, BRAND, FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
 const url = `https://alexsab.ru?utm_source=${BRAND}&utm_compaing=${SITE_NAME}`
-const salons = await fetch(`${BASE_URL}${SITE_URL}/data/salons.json`).then((response) => response.json());
-// import salons from '@/data/salons.json';
+import salons from '@/data/salons.json';
 const path = Astro.url.pathname;
 import logo from '@/components/Logo/logo.svg';
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
-const socials = await fetch(`${BASE_URL}${SITE_URL}/data/socials.json`).then((response) => response.json());
+import socials from '@/data/socials.json';
 ---
 
 <footer class="bg-black/90 text-white py-14 relative">
@@ -38,11 +37,11 @@ const socials = await fetch(`${BASE_URL}${SITE_URL}/data/socials.json`).then((re
                     salons.map(salon => (
                     <div class="flex flex-col gap-3">
                         <span class="flex items-center gap-1 flex-nowrap">
-                            <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" /> 
+                            <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" />
                             <Fragment set:html={salon.address} />
                         </span>
                         <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
-                            <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" /> 
+                            <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" />
                             {salon.phone}
                         </a>
                     </div>

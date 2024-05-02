@@ -1,8 +1,4 @@
 import { phoneFormat } from '@/js/utils/numbers.format';
-// Адрес для JSON
-export const BASE_URL = 'https://alexsab-ru.github.io/astro-json/';
-// URL сайта по умолчанию
-export const SITE_URL = 'jetour-alpha.ru';
 // Название сайта по умолчанию
 export const SITE_NAME = 'Альфа';
 // Юр лицо

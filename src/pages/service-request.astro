@@ -1,11 +1,11 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { LEGAL_CITY_WHERE, AGREE_LABEL, BASE_URL, SITE_URL, BRAND } from '@/const';
+import { LEGAL_CITY_WHERE, AGREE_LABEL, BRAND } from '@/const';
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
-const models = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`).then((response) => response.json());
+import models from '@/data/models.json';
 const options = models.filter(m => {
 	if(m.show){
 		return {id: m.id, name: m.name}
@@ -14,7 +14,7 @@ const options = models.filter(m => {
 ---
 
 <Layout title={`Запись на сервис ${BRAND}`} description={`Запись на сервис автомобилей ${BRAND} в ${LEGAL_CITY_WHERE}`}>
-	<div class="container py-10 space-y-10" x-data="modelsData">
+	<div class="container py-10 space-y-10">
 		<div>
 			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на сервис {BRAND}</h1>
 			<p class="text-center mt-1 text-gray-500">Профессиональное обслуживание с сохранением гарантии</p>

@@ -111,7 +111,7 @@ def create_file(car, filename, unique_id):
             description = child.text
             flat_description = description.replace('\n', '<br>\n')
             content += f"description: |\n"
-            content += f"""  Купить автомобиль {build_unique_id(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {build_unique_id(car, 'mark_id', 'folder_id')} – {car.find('price').text}\n"""
+            content += f"""  Купить автомобиль {build_unique_id(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {build_unique_id(car, 'mark_id', 'folder_id')} – {car.find('priceWithDiscount').text}\n"""
 
             # for line in flat_description.split("\n"):
                 # content += f"  {line}\n"
@@ -414,7 +414,7 @@ for car in root:
     tradein_discount = int(car.find('tradeinDiscount').text or 0)
     create_child_element(car, 'max_discount', credit_discount + tradein_discount)
 
-    unique_id = build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'price', 'year')
+    unique_id = build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'priceWithDiscount', 'year')
     print(f"Уникальный идентификатор: {unique_id}")
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"

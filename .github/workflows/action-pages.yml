@@ -73,6 +73,16 @@ jobs:
           echo PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }} >> .env
           cat .env
 
+      - name: Download JSONs
+        run: |
+          mkdir src/data
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/banners.json -o src/data/banners.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/models.json -o src/data/models.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/salons.json -o src/data/salons.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/services.json -o src/data/services.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/socials.json -o src/data/socials.json
+          ls -al src/data
+
       - name: Build Astro
         if: steps.check_changes.outputs.changes == 'true'
         run: |

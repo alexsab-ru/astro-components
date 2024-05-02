@@ -1,4 +1,5 @@
 ---
+import {SITE_NAME, BRAND, LEGAL_CITY_WHERE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
 import ModelList from '@/components/Model/ModelList.astro';
@@ -6,19 +7,18 @@ import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
-import {BASE_URL, SITE_URL} from '@/const'
-const models = await fetch(`${BASE_URL}${SITE_URL}/data/models.json`).then((response) => response.json());
-// import models from '@/data/models.json'
+import models from '@/data/models.json'
+import salons from '@/data/salons.json'
+const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
 ---
 
 <Layout title="Купить Джетур у официального дилера JETOUR Альфа в Самаре" description="Jetour Альфа – официальный дилер автомобилей Джетур в Самаре. Предлагаем широкий выбор новых автомобилей Джетур в разнообразных цветах и комплектациях. Обеспечиваем качественное сервисное и гарантийное обслуживание вашего автомобиля. ☎️ 8 (846) 9 777-779">
-	<Banner fetchURL={`${BASE_URL}${SITE_URL}/data/banners.json`} />
-	<ModelList fetchURL={`${BASE_URL}${SITE_URL}/data/models.json`} />
+	<Banner />
+	<ModelList />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
-	<Callback bgUrl="/img/konkurenty.webp" />
-	<Services fetchURL={`${BASE_URL}${SITE_URL}/data/services.json`} />
+	<Callback bgUrl="/img/konkurenty.jpg" />
+	<Services />
 	<Contacts
-		fetchURL={`${BASE_URL}${SITE_URL}/data/salons.json`}
 		mapImg="/img/map-bg.webp"
 		title="Наши контакты"
 	/>
