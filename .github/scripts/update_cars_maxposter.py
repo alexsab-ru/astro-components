@@ -1,3 +1,4 @@
+# python3 .github/scripts/update_cars_maxposter.py
 import os
 import re
 import yaml
