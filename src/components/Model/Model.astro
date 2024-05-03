@@ -29,14 +29,14 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 		<div class="container h-full pt-8 sm:pt-[2.5%]">
 			<div class="flex justify-between items-start flex-col lg:flex-row">
 				<div>
-					<div
-						class="text-2xl sm:text-5xl text-accent-500 tracking-wider font-medium uppercase">
+					<h2
+						class="text-2xl sm:text-5xl text-accent-500 tracking-wider font-medium uppercase before:hidden">
 						{BRAND}
 						<b
 							class="font-bold tracking-tighter xs:text-4xl text-5xl sm:text-8xl uppercase text-white"
 							>{model?.name}</b
 						>
-					</div>
+					</h2>
 					{
 						model.slogan && (
 						<p class="uppercase text-lg sm:text-2xl opacity-80">
@@ -152,34 +152,41 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 			)
 		}
 
-		<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-14">
+		<div class="flex justify-center flex-wrap xs:flex-col gap-4 mt-14">
 			<Button 
-				classes="popup-link btn black btn-o !px-4" 
+				classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap" 
 				url="#common-modal" 
 				title="Узнать цену"
 				dataTitle="Узнать цену"
 				dataFormName={`Узнать цену. ${BRAND} ${model.name}`}
 			/>
 			<Button 
-				classes="popup-link btn !px-4" 
+				classes="popup-link btn !px-4 flex-1 whitespace-nowrap" 
 				url="#common-modal" 
 				title="Рассчитать кредит"
 				dataTitle="Рассчитать кредит"
 				dataFormName={`Рассчитать кредит. ${BRAND} ${model.name}`}
 			/>
 			<Button 
-				classes="popup-link btn black !px-4" 
+				classes="popup-link btn black !px-4 flex-1 whitespace-nowrap" 
 				url="#common-modal" 
 				title="Записаться на тест-драйв"
 				dataTitle="Записаться на тест-драйв"
 				dataFormName={`Записаться на тест-драйв. ${BRAND} ${model.name}`}
 			/>
 			<Button 
-				classes="popup-link btn gray !px-4" 
+				classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap" 
 				url="#common-modal" 
 				title="Узнать цену по акции"
 				dataTitle="Узнать цену по акции"
 				dataFormName={`Узнать цену по акции. ${BRAND} ${model.name}`}
+			/>
+			<Button 
+				classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap" 
+				url="#common-modal" 
+				title="Купить"
+				dataTitle={`Купить ${BRAND}`}
+				dataFormName={`Купить. ${BRAND} ${model.name}`}
 			/>
 		</div>
 	</div>
