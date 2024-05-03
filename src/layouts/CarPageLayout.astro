@@ -3,8 +3,9 @@ interface Props {
 	car: any;
 	breadcrumb?: string[];
 	backLink? : boolean;
+	keywords?: string;
 }
-const {car = {}, breadcrumb, backLink = false} = Astro.props;
+const {car = {}, breadcrumb, backLink = false, keywords} = Astro.props;
 const data = car?.data || {};
 const thumb = data.thumbs && data.thumbs.length ? data.thumbs[0] : data.image;
 const price = data.priceWithDiscount ? data.priceWithDiscount : (data.max_discount ? data.price - data.max_discount : data.price);
@@ -17,7 +18,7 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import BackLink from '@/components/BackLink.astro';
 ---
 
-<Layout title={data?.title || data?.h1} description={data?.description} image={thumb}>
+<Layout title={data?.title || data?.h1} description={data?.description} image={thumb} keywords={keywords}>
 	<section>
 		<div class="container">
 
