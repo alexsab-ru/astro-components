@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Map from '@/components/Map/Map.astro';
+import MapWidget from '@/components/Map/Widget.astro';
 import AutoShowModal from '@/components/AutoShowModal.astro';
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN} from '@/const';
@@ -27,7 +28,8 @@ const salon = salons[0]; //временно, наверное
 				</div>
 
 				<div class="h-[400px] md:h-auto w-full md:w-1/2 absolute md:top-0 right-0 bottom-0">
-					<Map mapImg="/img/map-bg.webp" salons={salons} class="h-full" />
+					<!-- <Map mapImg="/img/map-bg.webp" salons={salons} class="h-full" /> -->
+					<MapWidget />
 				</div>
 
 			</div>
