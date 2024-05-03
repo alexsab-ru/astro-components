@@ -1,0 +1,89 @@
+---
+interface Props {
+	title?: string;
+	subtitle?: string;
+	endtime?: string;
+}
+const { title, subtitle, endtime = '2024-12-31 23:59:59' } = Astro.props;
+---
+
+<section class="py-10 bg-gray-100" id="timer" data-endtime={endtime}>
+	<div class="container">
+		{title && (<div class="text-center font-medium mobile-title-size"><Fragment set:html={ title } /></div>)}
+		{subtitle && (<p class="text-center text-xl"><Fragment set:html={ subtitle } /></p>)}
+		<div id="clockdiv" class="flex items-center justify-center gap-2 md:gap-5 mt-6 md:mt-10 font-bold text-[40px] md:text-8xl lg:text-9xl !leading-none">
+			<div class="flex flex-col items-center justify-center">
+				<span id="daysCount" class="">00</span>
+				<span class="font-normal text-[10px] md:text-base !leading-none text-gray-400" id="days">дней</span>
+			</div>
+			<span class="-mt-5 md:-mt-10">:</span>
+			<div class="flex flex-col items-center justify-center">
+				<span id="hoursCount" class="">00</span>
+				<span class="font-normal text-[10px] md:text-base !leading-none text-gray-400" id="hours">часов</span>
+			</div>
+			<span class="-mt-5 md:-mt-10">:</span>
+			<div class="flex flex-col items-center justify-center">
+				<span id="minutesCount" class="">00</span>
+				<span class="font-normal text-[10px] md:text-base !leading-none text-gray-400" id="minutes">минут</span>
+			</div>
+			<span class="-mt-5 md:-mt-10">:</span>
+			<div class="flex flex-col items-center justify-center">
+				<span id="secondsCount" class="">00</span>
+				<span class="font-normal text-[10px] md:text-base !leading-none text-gray-400" id="seconds">секунд</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { declOfNums } from '@/js/utils/numbers.format';
+	const timerBlock = document.getElementById('timer');
+	if(timerBlock){
+		let timeinterval;
+		const endtime = timerBlock.dataset.endtime;
+		const clock = document.getElementById('clockdiv');
+		const daysCountBlock = clock.querySelector('#daysCount');
+		const hoursCountBlock = clock.querySelector('#hoursCount');
+		const minutesCountBlock = clock.querySelector('#minutesCount');
+		const secondsCountBlock = clock.querySelector('#secondsCount');
+		const daysBlock = clock.querySelector('#days');
+		const hoursBlock = clock.querySelector('#hours');
+		const minutesBlock = clock.querySelector('#minutes');
+		const secondsBlock = clock.querySelector('#seconds');
+		function getTimeRemaining(endtime){  
+			const t = Date.parse(endtime) - Date.parse(new Date());
+			const seconds = Math.floor( (t/1000) % 60 );
+			const minutes = Math.floor( (t/1000/60) % 60 );
+			const hours = Math.floor( (t/(1000*60*60)) % 24 );
+			const days = Math.floor( t/(1000*60*60*24) );
+			return {
+				'total': t,
+				'days': days,
+				'hours': hours,
+				'minutes': minutes,
+				'seconds': seconds
+			};
+		}
+		function initializeClock(endtime){
+			function updateClock(){
+				const t = getTimeRemaining(endtime);
+				if(t.total<=0){  
+					clearInterval(timeinterval);
+					timerBlock.remove();
+				}else{
+					daysCountBlock.textContent = (t.days < 10 ? '0' : '')+t.days;
+					daysBlock.textContent = declOfNums(t.days, ['день', 'дня', 'дней']);
+					hoursCountBlock.textContent = ('0' + t.hours).slice(-2);
+					hoursBlock.textContent = declOfNums(t.hours, ['час', 'часа', 'часов']);
+					minutesCountBlock.textContent = ('0' + t.minutes).slice(-2);
+					minutesBlock.textContent = declOfNums(t.minutes, ['минута', 'минуты', 'минут']);
+					secondsCountBlock.textContent = ('0' + t.seconds).slice(-2);
+					secondsBlock.textContent = declOfNums(t.seconds, ['секунда', 'секунды', 'секунд']);
+				}
+			}
+			updateClock();
+			timeinterval = setInterval(updateClock, 1000);
+		}
+		initializeClock(endtime);
+	}	
+</script>

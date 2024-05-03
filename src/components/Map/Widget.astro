@@ -1,0 +1,45 @@
+---
+interface Props{
+	mapImg?: string;
+	class?: string;
+}
+const {mapImg = '/img/map-bg.webp', class: className = '', ...rest} = Astro.props
+import './map.sass';
+---
+<div style={`background-image: url(${mapImg})`} class={`relative overflow-hidden w-full flex items-center justify-center bg-gray-100 bg-cover bg-center z-10 cursor-pointer ${className}`} {...rest} id="map-widget-wrapper">
+	<div class="loader loader-default"></div>
+	<div id="map-widget" class="h-full w-full flex items-center justify-center"></div>
+</div>
+
+<script>
+	import { LINK_WIDGET, LINK_WIDGET_ORGNIZATION } from '@/const';
+	const widgetWrapper = document.getElementById('map-widget-wrapper');
+	const widget = document.getElementById('map-widget');
+	let onHover = false;
+	widgetWrapper.addEventListener('mouseenter', e => {
+		if(!onHover){
+			widgetWrapper.classList.add('is-active');
+			const iframe = document.createElement("iframe");
+			iframe.classList.add('absolute', 'w-full', 'h-full', 'z-20');
+			iframe.onload = function(e) {
+				if(!iframe.contentWindow.length){
+					widgetWrapper.setAttribute('style', '');
+					showError(widgetWrapper);
+				}
+				// console.log("iframe загрузился");
+				widgetWrapper.classList.remove('is-active');
+			};
+			iframe.onerror = function() {
+				// console.log("Что-то пошло не так, давай, ищи ошибку!");
+				showError(widget);
+				widgetWrapper.classList.remove('is-active');
+			};
+			iframe.src = LINK_WIDGET+LINK_WIDGET_ORGNIZATION;
+			widget.appendChild(iframe);
+			onHover = true;
+		}
+	});
+	function showError(el: HTMLElement){
+		el.innerHTML = '<p class="text-center font-medium text-lg">Упс! Что-то пошло не так :( <br /> Перезагрузите страницу и попробуйте снова... </p>'
+	}
+</script>

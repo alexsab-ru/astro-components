@@ -1,7 +1,8 @@
 ---
-import {SITE_NAME, BRAND, LEGAL_CITY_WHERE} from '@/const.js';
+import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER_ENDTIME} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
+import Timer from '@/components/Timer/Timer.astro';
 import ModelList from '@/components/Model/ModelList.astro';
 import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
@@ -14,6 +15,7 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 
 <Layout title="Купить Джетур у официального дилера JETOUR Альфа в Самаре" description="Jetour Альфа – официальный дилер автомобилей Джетур в Самаре. Предлагаем широкий выбор новых автомобилей Джетур в разнообразных цветах и комплектациях. Обеспечиваем качественное сервисное и гарантийное обслуживание вашего автомобиля. ☎️ 8 (846) 9 777-779">
 	<Banner />
+	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
 	<Callback bgUrl="/img/konkurenty.jpg" />
