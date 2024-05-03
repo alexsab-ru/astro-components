@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --open --host --config astro.local.config.mjs",
-    "start": "astro dev --open --host",
+    "start": "cp .env.example .env",
     "build_local": "astro build --config astro.local.config.mjs",
     "build": "astro build",
     "preview": "astro preview --open --host",
