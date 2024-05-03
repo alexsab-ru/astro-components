@@ -29,14 +29,14 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 		<div class="container h-full pt-8 sm:pt-[2.5%]">
 			<div class="flex justify-between items-start flex-col lg:flex-row">
 				<div>
-					<div
-						class="text-2xl sm:text-5xl text-accent-500 tracking-wider font-medium uppercase">
+					<h2
+						class="text-2xl sm:text-5xl text-accent-500 tracking-wider font-medium uppercase before:hidden">
 						{BRAND}
 						<b
 							class="font-bold tracking-tighter xs:text-4xl text-5xl sm:text-8xl uppercase text-white"
 							>{model?.name}</b
 						>
-					</div>
+					</h2>
 					{
 						model.slogan && (
 						<p class="uppercase text-lg sm:text-2xl opacity-80">
