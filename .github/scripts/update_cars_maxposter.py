@@ -415,7 +415,7 @@ for car in root:
     tradein_discount = int(car.find('tradeinDiscount').text or 0)
     create_child_element(car, 'max_discount', credit_discount + tradein_discount)
 
-    unique_id = build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'priceWithDiscount', 'year')
+    unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')} {car.find('vin').text[-4:]}"
     print(f"Уникальный идентификатор: {unique_id}")
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"

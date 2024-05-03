@@ -423,7 +423,7 @@ for car in root.find("offers"):
     max_discount = int(car.find('max_discount').text or 0)
     create_child_element(car, 'priceWithDiscount', price + max_discount)
 
-    unique_id = build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'priceWithDiscount', 'year')
+    unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')} {car.find('vin').text[-4:]}"
     print(f"Уникальный идентификатор: {unique_id}")
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"
