@@ -6,7 +6,7 @@ interface Props{
 const {mapImg = '/img/map-bg.webp', class: className = '', ...rest} = Astro.props
 import './map.sass';
 ---
-<div style={`background-image: url(${mapImg})`} class={`h-full relative overflow-hidden w-full flex items-center justify-center bg-gray-100 bg-cover bg-center z-10 cursor-pointer ${className}`} {...rest} id="map-widget-wrapper">
+<div style={`background-image: url(${mapImg})`} class={`relative overflow-hidden w-full flex items-center justify-center bg-gray-100 bg-cover bg-center z-10 cursor-pointer ${className}`} {...rest} id="map-widget-wrapper">
 	<div class="loader loader-default"></div>
 	<div id="map-widget" class="h-full w-full flex items-center justify-center"></div>
 </div>
