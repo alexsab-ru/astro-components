@@ -20,6 +20,10 @@ export const BRAND = 'Baic';
 // Конечное время для таймера
 //string 2024-04-26 or 2024-04-26 23:59:59 or December 31 2015 or December 31 2015 23:59:59 GMT+02:00
 export const TIMER_ENDTIME = '';
+// Ссылка яндекс-виджета
+export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
+// Ссылка организации для виджета
+export const LINK_WIDGET_ORGNIZATION = '';
 // Ссылки под хедером
 export const LINKS_MENU = [
 	{url: 'cars/', name: 'Авто в наличии'},
