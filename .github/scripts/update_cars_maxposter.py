@@ -169,6 +169,22 @@ def update_yaml(car, filename, unique_id):
         # можно установить значение по умолчанию для 'run' в data или обработать этот случай иначе
         data.setdefault('run', 0)
 
+    priceWithDiscount_element = car.find('priceWithDiscount')
+    if 'priceWithDiscount' in data and priceWithDiscount_element is not None:
+        try:
+            car_priceWithDiscount_value = int(priceWithDiscount_element.text)
+            data_priceWithDiscount_value = int(data['priceWithDiscount'])
+            data['priceWithDiscount'] = min(data_priceWithDiscount_value, car_priceWithDiscount_value)
+        except ValueError:
+            # В случае, если не удается преобразовать значения в int,
+            # можно оставить текущее значение data['priceWithDiscount'] или установить его в 0,
+            # либо выполнить другое действие по вашему выбору
+            pass
+    # else:
+        # Если элемент 'priceWithDiscount' отсутствует в одном из источников,
+        # можно установить значение по умолчанию для 'priceWithDiscount' в data или обработать этот случай иначе
+        # data.setdefault('priceWithDiscount', 0)
+
     images_container = car.find('photos')
     if images_container is not None:
         images = [img.text for img in images_container.findall('photo')]
@@ -415,7 +431,7 @@ for car in root:
     tradein_discount = int(car.find('tradeinDiscount').text or 0)
     create_child_element(car, 'max_discount', credit_discount + tradein_discount)
 
-    unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')} {car.find('vin').text[-4:]}"
+    unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     print(f"Уникальный идентификатор: {unique_id}")
     unique_id = f"{process_unique_id(unique_id)}"
     file_name = f"{unique_id}.mdx"
