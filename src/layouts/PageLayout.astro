@@ -1,10 +1,11 @@
 ---
+import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
 interface Props {
 	title?: string;
 	h1?: string;
 	description?: string;
 	image?: string;
-	breadcrumb?: string[];
+	breadcrumb?: TBreadcrumb[];
 	backLink? : boolean;
 	keywords?: string;
 }
