@@ -17,6 +17,9 @@ def process_unique_id(unique_id, replace = "-"):
     # Удаление специальных символов
     processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', unique_id)
 
+    # Замена '+' на '-plus'
+    processed_id = processed_id.replace("+", "-plus")
+
     # Удаление пробелов и приведение к нижнему регистру
     processed_id = processed_id.replace(" ", replace).lower()
 
