@@ -17,6 +17,9 @@ def process_unique_id(unique_id, replace = "-"):
     # Удаление специальных символов
     processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', unique_id)
 
+    # Замена '+' на '-plus'
+    processed_id = processed_id.replace("+", "-plus")
+
     # Удаление пробелов и приведение к нижнему регистру
     processed_id = processed_id.replace(" ", replace).lower()
 
@@ -440,8 +443,8 @@ for car in root.find("offers"):
     create_child_element(car, 'priceWithDiscount', price - max_discount)
 
     unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
-    print(f"Уникальный идентификатор: {unique_id}")
     unique_id = f"{process_unique_id(unique_id)}"
+    print(f"Уникальный идентификатор: {unique_id}")
     file_name = f"{unique_id}.mdx"
     file_path = os.path.join(directory, file_name)
 
