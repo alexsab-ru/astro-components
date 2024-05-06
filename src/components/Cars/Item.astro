@@ -29,21 +29,21 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 			url="#common-modal" 
 			title="Купить"
 			dataTitle={`Купить ${BRAND}`}
-			dataFormName={`Купить. ${BRAND} ${car.data.folder_id}`}
+			dataFormName={`Купить. ${BRAND}, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 		/>
 		<Button 
 			classes="popup-link gray block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !text-white !no-underline !mb-0 w-full md:w-[48%]" 
 			url="#common-modal" 
 			title="Кредит"
 			dataTitle="Рассчитать кредит"
-			dataFormName={`Рассчитать кредит. ${BRAND} ${car.data.folder_id}`}
+			dataFormName={`Рассчитать кредит. ${BRAND}, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 		/>
 		<Button 
 			classes="popup-link black btn-o block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !no-underline !mb-0 w-full md:w-[48%]" 
 			url="#common-modal" 
 			title="Рассрочка"
 			dataTitle={`Рассрочка на ${BRAND} ${car.data.folder_id}`}
-			dataFormName={`Рассрочка. ${BRAND} ${car.data.folder_id}`}
+			dataFormName={`Рассрочка. ${BRAND}, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 		/>
 		<Button 
 			classes="block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !no-underline !mb-0 !text-white w-full md:w-[48%]" 
