@@ -41,12 +41,12 @@ import Button from '@/components/Button/Button.astro';
 					classes="popup-link btn !px-4 whitespace-nowrap" 
 					url="#common-modal" 
 					title={btnName}
-					dataTitle="Получить предложение"
-					dataFormName="Акция с таймера"
+					dataTitle={btnName}
+					dataFormName={`Акция с таймера. ${btnName}`}
 				/>
 			</div>
 		)}
-
+		
 	</div>
 </section>
 
