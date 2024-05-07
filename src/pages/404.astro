@@ -16,6 +16,12 @@ const pageTitle = '404. Такая страница не найдена';
     </section>
 </Layout>
 
+<script>
+	if(window.location.pathname.includes('/cars/')){
+        window.location.href = `${window.location.origin}/cars/`;
+    }
+</script>
+
 <style>
     .not-found-image{
         max-width: 512px;
