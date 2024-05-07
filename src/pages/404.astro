@@ -2,9 +2,6 @@
 import Layout from '@/layouts/Layout.astro';
 const title = 'Ошибка 404';
 const pageTitle = '404. Такая страница не найдена';
-if(Astro.url.pathname.includes("/cars/")){
-	return Astro.redirect('/cars')
-}
 ---
 
 <Layout title={title} description={pageTitle}>
@@ -18,6 +15,12 @@ if(Astro.url.pathname.includes("/cars/")){
         <img src="/img/404.jpg" class="not-found-image w-full mx-auto mt-10" alt="not found">
     </section>
 </Layout>
+
+<script>
+	if(window.location.pathname.includes('/cars/')){
+        window.location.href = `${window.location.origin}/cars/`;
+    }
+</script>
 
 <style>
     .not-found-image{
