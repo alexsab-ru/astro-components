@@ -11,6 +11,7 @@ import 'glightbox/dist/css/glightbox.min.css';
 const lightbox = GLightbox({
 	moreLength: 0,
 	loop: true,
+	slideEffect: 'fade',
 });
 
 const imageObserver = new IntersectionObserver((entries, observer) => {
