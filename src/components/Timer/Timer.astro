@@ -3,11 +3,13 @@ interface Props {
 	title?: string;
 	subtitle?: string;
 	endtime?: string;
+	btnName?: string;
 }
-const { title, subtitle, endtime = '2024-12-31 23:59:59' } = Astro.props;
+const { title, subtitle, endtime = '2024-12-31 23:59:59', btnName } = Astro.props;
+import Button from '@/components/Button/Button.astro';
 ---
 
-<section class="py-10 bg-gray-100" id="timer" data-endtime={endtime}>
+<section class="pt-10 pb-16 bg-gray-100" id="timer" data-endtime={endtime}>
 	<div class="container">
 		{title && (<div class="text-center font-medium mobile-title-size"><Fragment set:html={ title } /></div>)}
 		{subtitle && (<p class="text-center text-xl"><Fragment set:html={ subtitle } /></p>)}
@@ -32,6 +34,19 @@ const { title, subtitle, endtime = '2024-12-31 23:59:59' } = Astro.props;
 				<span class="font-normal text-[10px] md:text-base !leading-none text-gray-400" id="seconds">секунд</span>
 			</div>
 		</div>
+
+		{btnName && (
+			<div class="flex justify-center mt-10 md:mt-14">
+				<Button 
+					classes="popup-link btn !px-4 whitespace-nowrap" 
+					url="#common-modal" 
+					title={btnName}
+					dataTitle="Получить предложение"
+					dataFormName="Акция с таймера"
+				/>
+			</div>
+		)}
+
 	</div>
 </section>
 
