@@ -92,6 +92,7 @@ def create_file(car, filename, unique_id):
         localize_element_text(elem, translations)
 
     color = car.find('color').text.strip().capitalize()
+    encountered_tags = set()  # Создаем множество для отслеживания встреченных тегов
 
     for child in car:
         # Skip nodes with child nodes (except photos) and attributes
@@ -126,6 +127,9 @@ def create_file(car, filename, unique_id):
             for line in flat_description.split("\n"):
                 content += f"  {line}\n"
         else:
+            if child.tag in encountered_tags:  # Проверяем, встречался ли уже такой тег
+                continue  # Если встречался, переходим к следующей итерации цикла
+            encountered_tags.add(child.tag)  # Добавляем встреченный тег в множество
             if child.text:  # Only add if there's content
                 content += f"{child.tag}: {child.text}\n"
 
