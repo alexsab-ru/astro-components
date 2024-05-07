@@ -1,7 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 const title = 'Ошибка 404';
-const pageTitle = '404. Такая страница не найдена' 
+const pageTitle = '404. Такая страница не найдена';
+if(Astro.url.pathname.includes("/cars/")){
+	return Astro.redirect('/cars')
+}
 ---
 
 <Layout title={title} description={pageTitle}>
