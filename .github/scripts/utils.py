@@ -2,6 +2,7 @@
 
 import os
 import re
+import requests
 import xml.etree.ElementTree as ET
 from PIL import Image, ImageOps
 from io import BytesIO
@@ -156,31 +157,27 @@ def build_unique_id(car, *elements):
     return " ".join(unique_id_parts)
 
 
-def read_XML():
-    filename = 'cars.xml'
+filename = 'cars.xml'
 
-    if os.path.exists(filename):
-        tree = ET.parse(filename)
-        root = tree.getroot()
-    else:
-        XML_URL = os.environ['XML_URL']
+if os.path.exists(filename):
+    tree = ET.parse(filename)
+    root = tree.getroot()
+else:
+    XML_URL = os.environ['XML_URL']
 
-        response = requests.get(XML_URL)
-        response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
-        content = response.content
+    response = requests.get(XML_URL)
+    response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
+    content = response.content
 
-        # Убрать BOM, если он присутствует
-        if content.startswith(b'\xef\xbb\xbf'):
-            content = content[3:]
+    # Убрать BOM, если он присутствует
+    if content.startswith(b'\xef\xbb\xbf'):
+        content = content[3:]
 
-        # Декодируем содержимое из байтов в строку
-        xml_content = content.decode('utf-8')
+    # Декодируем содержимое из байтов в строку
+    xml_content = content.decode('utf-8')
 
-        # Parsing the provided XML data
-        root = ET.fromstring(xml_content)
-
-    return root
-
+    # Parsing the provided XML data
+    root = ET.fromstring(xml_content)
 
 # Путь к папке для сохранения уменьшенных изображений
 output_dir = "public/img/thumbs/"

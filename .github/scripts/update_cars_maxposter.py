@@ -2,7 +2,6 @@
 import os
 import yaml
 import shutil
-import requests
 from PIL import Image, ImageOps
 from io import BytesIO
 from config import dealer, model_mapping
@@ -183,8 +182,6 @@ def update_yaml(car, filename, unique_id):
 
 # Переменная для отслеживания наличия 404 ошибки
 error_404_found = False
-
-root = read_XML()
 
 # Создание директории для автомобилей
 directory = "src/content/cars"
