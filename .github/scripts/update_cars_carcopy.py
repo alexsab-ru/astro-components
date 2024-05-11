@@ -224,6 +224,7 @@ for car in root.find("offers"):
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
     create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
+    update_element_text(car, 'url_link', f"https://{repo_name}/cars/{unique_id}/")
     file_name = f"{unique_id}.mdx"
     file_path = os.path.join(directory, file_name)
 
