@@ -211,7 +211,7 @@ for car in root:
     credit_discount = int(car.find('creditDiscount').text or 0)
     tradein_discount = int(car.find('tradeinDiscount').text or 0)
     create_child_element(car, 'max_discount', credit_discount + tradein_discount)
-    create_child_element(car, 'sale_price', price - max_discount)
+    create_child_element(car, 'sale_price', priceWithDiscount)
     unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
