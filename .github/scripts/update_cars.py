@@ -203,6 +203,7 @@ for car in root.find('cars'):
     price = int(car.find('price').text or 0)
     max_discount = int(car.find('max_discount').text or 0)
     create_child_element(car, 'priceWithDiscount', price - max_discount)
+    create_child_element(car, 'sale_price', price - max_discount)
     unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
