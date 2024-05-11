@@ -158,6 +158,9 @@ def build_unique_id(car, *elements):
 
 
 filename = 'cars.xml'
+# repo_name = os.environ('REPO_NAME')
+repo_name = os.getenv('REPO_NAME', 'localhost')
+
 
 if os.path.exists(filename):
     tree = ET.parse(filename)

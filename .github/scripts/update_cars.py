@@ -207,6 +207,7 @@ for car in root.find('cars'):
     unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
+    create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
     file_name = f"{unique_id}.mdx"
     file_path = os.path.join(directory, file_name)
 
@@ -214,6 +215,9 @@ for car in root.find('cars'):
         update_yaml(car, file_path, unique_id)
     else:
         create_file(car, file_path, unique_id)
+
+output_path = './public/cars.xml'
+tree.write(output_path, encoding='utf-8', xml_declaration=True)
 
 # Удаление неиспользуемых превьюшек
 cleanup_unused_thumbs()
