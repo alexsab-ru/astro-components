@@ -3,6 +3,7 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import { getCollection } from 'astro:content';
 import FormattedDate from '@/components/FormattedDate.astro';
 import { SITE_NAME } from '@/const';
+import PostItem from '@/components/Post/Item.astro'
 
 const rawPosts = await getCollection('special-offers');
 
@@ -32,20 +33,7 @@ export const breadcrumb = { name: "Спецпредложения", href: "/spec
 	{
 		posts ? (
 			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-				{
-					posts.map(post => (
-					<a 
-						href={'/special-offers/'+post.slug+'/'}
-						class="!no-underline"
-					>
-						<div class="bg-gray-50 group rounded-2xl relative aspect-video overflow-hidden">
-							<img src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} loading="lazy">
-						</div>
-						<div class="text-black mt-2 sm:mt-4 leading-none">{post.data.caption || post.data.title}</div>
-						<FormattedDate date={post.data.pubDate} />
-					</a>
-				))
-				}
+				{ posts.map(post => ( <PostItem post={post} /> )) }
 			</div>
 		) : (
 			<p>Скоро здесь появятся спецпредложения {SITE_NAME}.</p>
