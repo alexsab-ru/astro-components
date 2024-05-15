@@ -3,8 +3,9 @@ import FaqItem from './Item.astro';
 import { type TFaqItem } from './types';
 interface Props {
 	items: TFaqItem[];
+	title?: string;
 }
-const { items } = Astro.props;
+const { items, title } = Astro.props;
 ---
 
 {
@@ -14,9 +15,7 @@ const { items } = Astro.props;
 			x-data="{activities:[]}"
 		>
 			<div class="container">
-				<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">
-					Часто задаваемые вопросы
-				</h2>
+				{title && (<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{title}</h2>)}
 
 				{items.map((item) => (
 					<FaqItem item={item} />
