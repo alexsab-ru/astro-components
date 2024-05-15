@@ -60,3 +60,15 @@ section {
 .modal-img{
 	@apply h-[calc(calc(1vw+1vh)*40)] sm:absolute inset-0 w-full sm:h-full object-cover object-center;
 }
+
+.custom-scrollbar{
+	&::-webkit-scrollbar {
+		@apply w-1 appearance-none rounded-lg;
+	}
+	&::-webkit-scrollbar-track {
+		@apply bg-gray-100 rounded-lg;
+	}
+	&::-webkit-scrollbar-thumb {
+		@apply bg-accent-500/60 rounded-lg;
+	}
+}
