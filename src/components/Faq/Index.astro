@@ -5,11 +5,11 @@ interface Props {
 	items: TFaqItem[];
 	title?: string;
 }
-const { items, title } = Astro.props;
+const { items = [], title } = Astro.props;
 ---
 
 {
-	items.length && (
+	items.length > 0 && (
 		<section
 			class="faq"
 			x-data="{activities:[]}"
