@@ -87,6 +87,9 @@ jobs:
           if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/faq.json; then
             curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/faq.json -o src/data/faq.json 
           fi
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json -o src/data/reviews.json 
+          fi
           ls -al src/data
 
       - name: Build Astro
