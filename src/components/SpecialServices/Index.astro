@@ -1,0 +1,17 @@
+---
+import SpecialServiceItem from './Item.astro'
+import { type TSpecialService  } from './types'
+interface Props {
+	items: TSpecialService[]
+}
+const { items } = Astro.props;
+---
+{items.length && (
+<section class="" id="specials">
+	<div class="container">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4 sm:gap-y-5">
+			{items.map(item => <SpecialServiceItem item={item} />)}
+		</div>
+	</div>
+</section>
+)}
