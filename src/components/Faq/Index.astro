@@ -1,0 +1,27 @@
+---
+import FaqItem from './Item.astro';
+import { type TFaqItem } from './types';
+interface Props {
+	items: TFaqItem[];
+}
+const { items } = Astro.props;
+---
+
+{
+	items.length && (
+		<section
+			class="faq"
+			x-data="{activities:[]}"
+		>
+			<div class="container">
+				<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">
+					Часто задаваемые вопросы
+				</h2>
+
+				{items.map((item) => (
+					<FaqItem item={item} />
+				))}
+			</div>
+		</section>
+	)
+}
