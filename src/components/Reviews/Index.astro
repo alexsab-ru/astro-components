@@ -1,5 +1,7 @@
 ---
 import ReviewItem from './Item.astro';
+import SliderNavigation from '@/components/SliderNav/Navigation.astro'
+import SliderPagination from '@/components/SliderNav/Pagination.astro'
 import { type TReviewItem } from './types';
 interface Props {
 	items: TReviewItem[];
@@ -15,10 +17,14 @@ const slides = items.length ? items.filter(item => item.show) : [];
 		<section class={`reviews ${classNames}`} id="reviews">
 			<div class="container">
 				{title && ( <h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{title}</h2> )}
-				<div class="swiper reviews-slider">
-					<div class="swiper-wrapper">
-						{slides.map((item) => ( <ReviewItem item={item} /> ))}
+				<div class="relative">
+					<SliderNavigation id="reviews" class="mb-4 sm:mb-6" />
+					<div class="swiper reviews-slider">
+						<div class="swiper-wrapper">
+							{slides.map((item) => ( <ReviewItem item={item} /> ))}
+						</div>
 					</div>
+					<SliderPagination id="reviews" class="mt-10 hidden sm:flex" />
 				</div>
 			</div>
 		</section>
@@ -27,9 +33,18 @@ const slides = items.length ? items.filter(item => item.show) : [];
 
 <script>
 	import Swiper from "swiper";
-	import { Navigation, Pagination, Autoplay, Parallax, Keyboard } from "swiper/modules";
-	const reviewsSlider = new Swiper('.reviews-slider', {
+	import { Navigation, Pagination } from "swiper/modules";
+	new Swiper('.reviews-slider', {
+		modules: [Navigation, Pagination],
 		loop: true,
+		navigation: {
+			nextEl: '.reviews-navigation-next',
+			prevEl: '.reviews-navigation-prev',
+		},
+		pagination: {
+			el: '.reviews-pagination',
+			clickable: true,
+		},
 		breakpoints: {
 			320: {
 				slidesPerView: 1,
