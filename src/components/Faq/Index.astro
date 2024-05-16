@@ -4,14 +4,16 @@ import { type TFaqItem } from './types';
 interface Props {
 	items: TFaqItem[];
 	title?: string;
+	class?: string;
 }
-const { items = [], title } = Astro.props;
+const { items = [], title, class: classNames = '' } = Astro.props;
 ---
 
 {
 	items.length > 0 && (
 		<section
-			class="faq"
+			class={`faq ${classNames}`}
+			id="faq"
 			x-data="{activities:[]}"
 		>
 			<div class="container">
