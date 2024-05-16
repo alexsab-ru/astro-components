@@ -29,7 +29,7 @@ if(postSliders.length){
 					spaceBetween: 20,
 				},
 				1024: {
-					slidesPerView: 2,
+					slidesPerView: 3,
 					spaceBetween: 30,
 				},
 			},
