@@ -1,6 +1,7 @@
 import './data.alpine';
 import './modules/scroll';
 import './modules/modals';
+import './modules/latest.posts';
 
 import { connectForms, cookiecook } from '@alexsab-ru/scripts';
 cookiecook();
