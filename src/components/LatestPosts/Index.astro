@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import SliderNavigation from '@/components/SliderNav/Navigation.astro';
 import SliderPagination from '@/components/SliderNav/Pagination.astro';
 import PostItem from '@/components/Post/Item.astro';
+import Button from '@/components/Button/Button.astro';
 interface Props {
 	collectionName: string;
 	id?: string;
@@ -42,7 +43,7 @@ if (rawPosts && rawPosts.length) {
 {
 	posts.length > 0 && (
 		<section
-			class={`${classNames}`}
+			class={`select-none ${classNames}`}
 			id={id}
 			data-loop={loop ? 1 : 0}
 			data-navigation={navigation ? 1 : 0}
@@ -76,6 +77,13 @@ if (rawPosts && rawPosts.length) {
 							class="mt-10 hidden sm:flex"
 						/>
 					)}
+				</div>
+				<div class="flex justify-center mt-10">
+					<Button 
+						classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
+						url={`/${collectionName}/`}
+						title="Смотреть все"
+					/>
 				</div>
 			</div>
 		</section>
