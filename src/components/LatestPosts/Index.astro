@@ -78,13 +78,15 @@ if (rawPosts && rawPosts.length) {
 						/>
 					)}
 				</div>
-				<div class="flex justify-center mt-10">
-					<Button 
-						classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
-						url={`/${collectionName}/`}
-						title="Смотреть все"
-					/>
-				</div>
+				{posts.length > limit && (
+					<div class="flex justify-center mt-10">
+						<Button 
+							classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
+							url={`/${collectionName}/`}
+							title="Смотреть все"
+						/>
+					</div>
+				)}
 			</div>
 		</section>
 	)
