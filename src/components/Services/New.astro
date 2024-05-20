@@ -5,10 +5,12 @@ interface Props {
 	items: TNewService[];
 	title?: string;
 	class?: string;
+	id?: string
+	show?: boolean
 }
-const { items = [], title, class: classNames = '', ...rest } = Astro.props;
+const { items = [], title, class: classNames = '', id, show = true, ...rest } = Astro.props;
 ---
-{items.length > 0 && (
+{show && items.length > 0 && (
 <section class={`${classNames}`} {...rest}>
 	<div class="container">
 		{title && (<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{title}</h2>)}
