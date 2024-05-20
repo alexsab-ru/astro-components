@@ -1,0 +1,41 @@
+---
+import { Icon } from 'astro-icon/components';
+import { type TNewService } from './types';
+interface Props {
+	item: TNewService;
+}
+const { item } = Astro.props;
+---
+
+<a
+	{...item.url ? { href: item.url } : {}}
+	class={`w-1/2 lg:w-1/3 px-2 sm:px-5 text-black text-center inline-block relative group ${item.url.includes('#') ? 'popup-link' : ''}`}
+	{...item.url.includes('#')
+		? {
+				'data-title': item.title,
+				'data-form_name': `Запись на сервис. ${item.title}`,
+			}
+		: {}}
+>
+	<span
+		class="rounded-full size-20 flex items-center justify-center mb-3 mx-auto border-2 border-black transition-color duration-300 group-hover:bg-black"
+	>
+		{
+			item.icon ? (
+				<Icon
+					name={item?.icon || 'mdi:1123'}
+					class="text-4xl transition-color duration-300 group-hover:text-white"
+				/>
+			) : item.img ? (
+				<img
+					src={item.img}
+					alt={item.title}
+					class="w-auto h-10 transition-all group-hover:invert"
+				/>
+			) : (
+				''
+			)
+		}
+	</span>
+	<h3 class="text-xs sm:text-xl">{item.title}</h3>
+</a>

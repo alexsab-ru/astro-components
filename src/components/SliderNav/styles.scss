@@ -1,0 +1,23 @@
+.slider-navigation-prev,
+.slider-navigation-next{
+	@apply flex items-center justify-center size-10 shadow rounded-full cursor-pointer text-2xl bg-white opacity-60 transition-opacity duration-300 hover:opacity-100;
+	&.swiper-button-disabled{
+		@apply cursor-not-allowed opacity-20 hover:opacity-20;
+	}
+}
+
+.slider-pagination{
+	&.swiper-pagination-clickable{
+		.swiper-pagination-bullet{
+			background-color: #000 !important;
+			opacity: 0.4 !important;
+			&.swiper-pagination-bullet-active{
+				opacity: 1 !important;
+			}
+		}
+	}
+}
+
+.swiper-button-lock {
+	display: none;
+ }

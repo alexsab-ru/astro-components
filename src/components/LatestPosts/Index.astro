@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import SliderNavigation from '@/components/SliderNav/Navigation.astro';
+import SliderPagination from '@/components/SliderNav/Pagination.astro';
+import PostItem from '@/components/Post/Item.astro';
+import Button from '@/components/Button/Button.astro';
+interface Props {
+	collectionName: string;
+	id?: string;
+	class?: string;
+	title?: string;
+	loop?: boolean;
+	navigation?: boolean;
+	pagination?: boolean;
+	offset?: number;
+	limit?: number;
+}
+const {
+	collectionName,
+	id = '',
+	class: classNames = '',
+	title = '',
+	loop = false,
+	navigation = true,
+	pagination = false,
+	offset = 0,
+	limit = 10,
+} = Astro.props;
+let posts = [];
+let rawPosts = await getCollection(collectionName);
+let diffLimit: number;
+if (rawPosts && rawPosts.length) {
+	rawPosts = rawPosts
+		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+		.filter((post) => !post.data.draft);
+	diffLimit = rawPosts.length < limit ? rawPosts.length : limit;
+	for (let i = offset; i < diffLimit; i++) {
+		posts[i] = rawPosts[i];
+	}
+}
+---
+
+{
+	posts.length > 0 && (
+		<section
+			class={`select-none ${classNames}`}
+			id={id}
+			data-loop={loop ? 1 : 0}
+			data-navigation={navigation ? 1 : 0}
+			data-pagination={pagination ? 1 : 0}
+		>
+			<div class="container">
+				{title && (
+					<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">
+						{title}
+					</h2>
+				)}
+				<div class="relative">
+					{navigation && (
+						<SliderNavigation
+							id={id}
+							class="mb-4 sm:mb-6"
+						/>
+					)}
+					<div class="swiper latest-posts-slider">
+						<div class="swiper-wrapper">
+							{posts.map((post) => (
+								<div class="swiper-slide">
+									<PostItem post={post} />
+								</div>
+							))}
+						</div>
+					</div>
+					{pagination && (
+						<SliderPagination
+							id={id}
+							class="mt-10 hidden sm:flex"
+						/>
+					)}
+				</div>
+				{posts.length > limit && (
+					<div class="flex justify-center mt-10">
+						<Button 
+							classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
+							url={`/${collectionName}/`}
+							title="Смотреть все"
+						/>
+					</div>
+				)}
+			</div>
+		</section>
+	)
+}

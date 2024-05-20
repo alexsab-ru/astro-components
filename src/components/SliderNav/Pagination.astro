@@ -1,0 +1,10 @@
+---
+interface Props {
+	id?: string;
+	class?: string;
+}
+const { id = '', class: classNames = '' } = Astro.props
+import './styles.scss'
+---
+
+<div class={`slider-pagination ${id}-pagination flex justify-center ${classNames}`}></div>

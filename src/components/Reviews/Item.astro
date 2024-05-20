@@ -1,0 +1,25 @@
+---
+import { type TReviewItem } from './types';
+import { Icon } from 'astro-icon/components'
+interface Props {
+	item: TReviewItem;
+}
+const { item } = Astro.props;
+---
+
+<div class="swiper-slide">
+	<div class="reviews__item">
+		<div class="reviews__item--text px-5 py-8 bg-white shadow-lg rounded-lg">
+			<blockquote class="max-h-[200px] overflow-y-auto custom-scrollbar">
+				<p class="pr-2">{item.text}</p>
+			</blockquote>
+		</div>
+		<div class="reviews__item--bottom flex items-center flex-nowrap mt-5 gap-4">
+			<Icon name="mdi:message-processing-outline" class="text-4xl flex-shrink-0" />
+			<div class="reviews__item-autor">
+				<div>{item.name}</div>
+				<small>{item.date}</small>
+			</div>
+		</div>
+	</div>
+</div>

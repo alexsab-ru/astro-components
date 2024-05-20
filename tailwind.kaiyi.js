@@ -10,8 +10,9 @@ module.exports = {
 			colors: {
 				...baseConfig.theme.extend.colors,
 				accent: {
-					400: '#FF9966',
-					500: '#ff874a',
+					400: "#f82b1e",
+					500: "#d2251a",
+					600: "#9f1c13",
 				},
 			},
 			fontFamily: {

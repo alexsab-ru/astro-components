@@ -1,0 +1,14 @@
+---
+import { Icon } from 'astro-icon/components'
+interface Props {
+	id?: string;
+	class?: string;
+}
+const { id = '', class: classNames = '' } = Astro.props
+import './styles.scss'
+---
+<div class={`slider-navigation ${id}-navigation flex flex-nowrap items-center justify-end gap-2 ${classNames}`}>
+	<div class={`slider-navigation-prev ${id}-navigation-prev`}><Icon name="mdi:keyboard-arrow-left" /></div>
+	<div class={`slider-navigation-next ${id}-navigation-next`}><Icon name="mdi:keyboard-arrow-right" /></div>
+</div>
+
