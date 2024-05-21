@@ -1,7 +1,21 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import PostItem from '@/components/Post/Item.astro';
+import CarItem from "@/components/Cars/Item.astro";
 const title = 'Ошибка 404';
 const pageTitle = '404. Такая страница не найдена';
+import { getCollection } from 'astro:content';
+let posts = [];
+const pathname = Astro.url.pathname;
+const items = ['special-offers', 'cars'];
+
+for (const item of items) {
+  if (pathname.includes(`/${item}/`)) {
+    posts = await getCollection(item) || [];
+  }
+}
+
+// if(pathname.includes('/cars/')) posts = await getCollection('cars') || [];
 ---
 
 <Layout title={title} description={pageTitle}>
@@ -14,13 +28,23 @@ const pageTitle = '404. Такая страница не найдена';
         </div>
         <img src="/img/404.jpg" class="not-found-image w-full mx-auto mt-10" alt="not found">
     </section>
+    {posts.length > 0 && (
+        <section class="relative pb-10">
+            <div class="container">
+                <h2 class="mb-10">Смотрите также:</h2>
+                {!pathname.includes('/cars/') ? (
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+                        { posts.map(post => ( <PostItem post={post} /> )) }
+                    </div>
+                ) : (
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+                        { posts.map(post => ( <CarItem car={post} /> )) }
+                    </div>
+                )}
+            </div>
+        </section>
+    )}
 </Layout>
-
-<script>
-	if(window.location.pathname.includes('/cars/')){
-        window.location.href = `${window.location.origin}/cars/`;
-    }
-</script>
 
 <style>
     .not-found-image{
