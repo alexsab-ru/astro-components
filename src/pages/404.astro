@@ -1,51 +1,52 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import PostItem from '@/components/Post/Item.astro';
-import CarItem from "@/components/Cars/Item.astro";
+import CarItem from '@/components/Cars/Item.astro';
 const title = 'Ошибка 404';
 const pageTitle = '404. Такая страница не найдена';
 import { getCollection } from 'astro:content';
-let posts = [];
-const pathname = Astro.url.pathname;
-const items = ['special-offers', 'cars'];
-
-for (const item of items) {
-  if (pathname.includes(`/${item}/`)) {
-    posts = await getCollection(item) || [];
-  }
-}
+const cars = await getCollection('cars');
+const special = await getCollection('special-offers');
 ---
 
 <Layout title={title} description={pageTitle}>
-    <section class="relative pb-10 px-5">
-        <div class="flex flex-col items-center justify-center gap-5 sm:gap-10 px-2">
-            <div class="text-lg sm:text-3xl md:text-4xl lg:text-6xl text-center">
-                <h1 class="uppercase font-bold">{pageTitle}</h1>
-            </div>
-            <a href="/" class="btn inline-block mt-5 mb-10">Назад</a>
-        </div>
-        <img src="/img/404.jpg" class="not-found-image w-full mx-auto mt-10" alt="not found">
-    </section>
-    {posts.length > 0 && (
-        <section class="relative pb-10">
-            <div class="container">
-                <h2 class="mb-10">Смотрите также:</h2>
-                {!pathname.includes('/cars/') ? (
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-                        { posts.map(post => ( <PostItem post={post} /> )) }
-                    </div>
-                ) : (
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
-                        { posts.map(post => ( <CarItem car={post} /> )) }
-                    </div>
-                )}
-            </div>
-        </section>
-    )}
+	<section class="relative pb-10 px-5">
+		<div class="flex flex-col items-center justify-center gap-5 sm:gap-10 px-2">
+			<div class="text-lg sm:text-3xl md:text-4xl lg:text-6xl text-center">
+				<h1 class="uppercase font-bold">{pageTitle}</h1>
+			</div>
+			<a href="/" class="btn inline-block mt-5 mb-10">Назад</a>
+		</div>
+		<img src="/img/404.jpg" class="max-w-xl w-full mx-auto mt-10" alt="not found"/>
+	</section>
+	<section class="relative pb-10 hidden" id="more">
+		<div class="container">
+			<h2 class="mb-10">Смотрите также:</h2>
+			{(cars && cars.length > 0) && (
+				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list hidden" id="cars_more">
+					{cars.map((car) => <CarItem car={car} />)}
+				</div>
+			)}
+			{(special && special.length > 0) && (
+				<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 hidden" id="special-offers_more">
+					{special.map((post) => <PostItem post={post} />)}
+				</div>
+			)}
+		</div>
+	</section>
 </Layout>
 
-<style>
-    .not-found-image{
-        max-width: 512px;
-    }
-</style>
+<script>
+	const items = ['cars', 'special-offers']
+	const parent = document.getElementById('more');
+	items.map(item => {
+		const match = `/${item}/`;
+		if (window.location.pathname.includes(match)){
+			const elem = document.getElementById(item+'_more');
+			if(elem){
+				elem.classList.remove('hidden');
+				parent.classList.remove('hidden');
+			}
+		}
+	})	
+</script>
