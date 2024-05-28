@@ -1,7 +1,7 @@
 .model {
 	@apply min-h-[350px] sm:min-h-[420px] h-auto py-0 mb-10 lg:mb-20 text-white;
 	&__info {
-		@apply relative lg:absolute h-[350px] sm:h-[420px] w-full top-0 left-0 bg-cover bg-center z-[1];
+		@apply relative lg:absolute w-full top-0 left-0 bg-cover bg-center z-[1];
 		&::before {
 			content: '';
 			position: absolute;
