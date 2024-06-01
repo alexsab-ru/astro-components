@@ -2,7 +2,7 @@
 import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN, BRAND, FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
-const url = `https://alexsab.ru?utm_source=${BRAND}&utm_compaing=${SITE_NAME}`
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${BRAND}&utm_compaing=${SITE_NAME}`
 import salons from '@/data/salons.json';
 const path = Astro.url.pathname;
 import logo from '@/components/Logo/logo.svg';
