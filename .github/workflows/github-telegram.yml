@@ -31,7 +31,7 @@ jobs:
   # This workflow contains a job called "build" adn "log-github-event-goodies"
   push:
 
-    if: ${{ github.event.commits != null }}
+    if: ${{ github.event.commits != null && inputs.additional-text == null }}
 
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -192,11 +192,20 @@ jobs:
         id: set_outputs
         # The part of this solution to focus on is that we’re substituting the %, \n, and \r characters
         run: |
-          additional_text="${{ inputs.additional-text || '' }}"
+          additional_text=$(echo "${{ inputs.additional-text || '' }}" | base64 -d)
           if [ "$additional_text" != "" ]; then
+            # Форматируем текст с переносами строк
+            additional_text=$(echo -e "$additional_text")
+            
+            # Debug: print the formatted text
+            echo "Formatted additional_text:"
+            echo "$additional_text"
+            
             echo "additional_text<<EOF" >> $GITHUB_OUTPUT
             echo "" >> $GITHUB_OUTPUT
-            echo $additional_text >> $GITHUB_OUTPUT
+            echo "<pre>" >> $GITHUB_OUTPUT
+            echo "$additional_text" >> $GITHUB_OUTPUT
+            echo "</pre>" >> $GITHUB_OUTPUT
             echo "" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           fi
