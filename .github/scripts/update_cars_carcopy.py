@@ -25,10 +25,11 @@ def create_file(car, filename, unique_id):
         thumb = f"/img/models/{folder}/colors/{color_image}"
     else:
         print("")
-        print(f"VIN: {vin}. Не хватает модели: {model} или цвета: {color}")
+        errorText = f"VIN: {vin}. Не хватает модели: {model} или цвета: {color}"
+        print(errorText)
         print("")
-        # with open('output.txt', 'a') as file:
-        #     file.write(f"{model} {color}\n")
+        with open('output.txt', 'a') as file:
+            file.write(f"{errorText}\n")
         # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
         thumb = "/img/404.jpg"
         global error_404_found
@@ -244,13 +245,6 @@ for existing_file in os.listdir(directory):
     filepath = os.path.join(directory, existing_file)
     if filepath not in existing_files:
         os.remove(filepath)
-
-if error_404_found:
-    with open('output.txt', 'a') as file:
-        file.write("error 404 found")
-else:
-    with open('output.txt', 'a') as file:
-        file.write("no error")
 
 if error_404_found:
     print("error 404 found")
