@@ -18,6 +18,7 @@ const {
     dataFormName,
     dataImg,
     dataImgPosition,
+    ...rest
 } = Astro.props;
 import './buttons.scss'
 ---
@@ -31,6 +32,7 @@ import './buttons.scss'
         data-form_name={dataFormName}
         data-img={dataImg}
         data-img_position={dataImgPosition}
+        {...rest}
     >
         {title}
     </a>
