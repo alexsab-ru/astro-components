@@ -1,4 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme'
+import colors from 'tailwindcss/colors'
 const baseConfig = require('./tailwind.config');
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
 			...baseConfig.theme.extend,
 			colors: {
 				...baseConfig.theme.extend.colors,
-				dark: '#252c2c',
+				black: '#252c2c',
 				accent: { // в основном в верстке используется 400 и 500
 					400: '#ff9549',
 					500: '#ff9549',
