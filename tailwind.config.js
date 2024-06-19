@@ -32,6 +32,9 @@ module.exports = {
 				's1280_1330': {'min': '1280px', 'max': '1330px'},
 				's1536_1586': {'min': '1536px', 'max': '1586px'},
 			},
+			borderRadius: {
+				btn: '0px'
+			}
 		},
 	},
 	plugins: [
