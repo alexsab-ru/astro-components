@@ -1,5 +1,4 @@
 import defaultTheme from 'tailwindcss/defaultTheme'
-import colors from 'tailwindcss/colors'
 const baseConfig = require('./tailwind.config');
 
 module.exports = {
@@ -19,6 +18,9 @@ module.exports = {
 			fontFamily: {
 				'sans': ['TT_TANK', ...defaultTheme.fontFamily.sans],
 			},
+			borderRadius:  {
+				btn: '8px'
+			}
 		},
 	},
 }
