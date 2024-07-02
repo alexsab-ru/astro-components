@@ -27,12 +27,12 @@ jobs:
     - name: Download CSV
       if: ${{ vars.ENV_CSV_URL }}
       run: |
-        curl ${{ vars.ENV_CSV_URL }} -o data.csv
+        curl '${{ vars.ENV_CSV_URL }}' -o data.csv
 
     - name: Download XML
       if: ${{ vars.ENV_XML_URL }}
       run: |
-        curl ${{ vars.ENV_XML_URL }} -o cars.xml
+        curl '${{ vars.ENV_XML_URL }}' -o cars.xml
 
     - name: Set up Python
       uses: actions/setup-python@v5
