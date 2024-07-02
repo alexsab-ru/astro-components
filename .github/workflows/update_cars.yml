@@ -25,12 +25,12 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Download CSV
-      if: ${{ env.ENV_CSV_URL }}
+      if: ${{ vars.ENV_CSV_URL }}
       run: |
         curl ${{ vars.ENV_CSV_URL }} -o data.csv
 
     - name: Download XML
-      if: ${{ env.ENV_XML_URL }}
+      if: ${{ vars.ENV_XML_URL }}
       run: |
         curl ${{ vars.ENV_XML_URL }} -o cars.xml
 
@@ -48,7 +48,7 @@ jobs:
         pip install Pillow
 
     - name: Generate cars.xml from csv
-      if: ${{ env.ENV_CSV_URL }}
+      if: ${{ vars.ENV_CSV_URL }}
       run: |
         python .github/scripts/CarFeedProcessorCSV.py
       env:
