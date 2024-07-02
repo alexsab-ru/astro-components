@@ -62,6 +62,7 @@ class CarFeedProcessorCSV:
             # ET.SubElement(car, 'registry_year').text =          row.get('Год регистрации', '2023')
             ET.SubElement(car, 'vin').text =                    row.get('VIN', '')
             ET.SubElement(car, 'description').text =            row.get('Описание', '')
+            ET.SubElement(car, 'total').text =                  row.get('Количество', '1')
             # images = ET.SubElement(car, 'images')
             # ET.SubElement(images, 'image').text =             row.get('Ссылка на изображение', '')
 
