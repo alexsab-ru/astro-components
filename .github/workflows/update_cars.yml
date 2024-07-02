@@ -24,6 +24,11 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v4
 
+    - name: Download CSV
+      if: ${{ env.ENV_CSV_URL }}
+      run: |
+        curl ${{ vars.ENV_CSV_URL }} -o data.csv
+
     - name: Download XML
       if: ${{ env.ENV_XML_URL }}
       run: |
