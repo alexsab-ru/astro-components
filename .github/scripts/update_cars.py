@@ -67,7 +67,7 @@ def create_file(car, filename, unique_id):
         # Skip nodes with child nodes (except images) and attributes
         if list(child) and child.tag != 'images':
             continue
-        if child.tag != 'total':
+        if child.tag == 'total':
             continue
         if child.tag == 'images':
             images = [img.text for img in child.findall('image')]
