@@ -55,6 +55,7 @@ model_mapping = {
             "Синий": "c5b.png",
             "Темно-синий": "c6b.png",
             "Черный": "c7b.png",
+            "Зеленый": "green.png",
         }
     },
     "X70": {
@@ -81,6 +82,7 @@ model_mapping = {
         "color": {
             "Black": "c1b.png",
             "Lightgray": "c2b.png",
+            "Серебряный": "c2b.png",
             "Gold": "c3b.png",
             "Gray": "c4b.png",
             "Черный": "c1b.png",
