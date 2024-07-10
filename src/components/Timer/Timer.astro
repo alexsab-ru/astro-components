@@ -4,15 +4,23 @@ interface Props {
 	subtitle?: string;
 	endtime?: string;
 	btnName?: string;
+	class?: string;
 }
-const { title, subtitle, endtime = '2024-12-31 23:59:59', btnName } = Astro.props;
+const { 
+	title, 
+	subtitle, 
+	endtime = '2024-12-31 23:59:59', 
+	btnName, 
+	class: className,
+	...rest 
+} = Astro.props;
 import Button from '@/components/Button/Button.astro';
 ---
 
-<section class="pt-10 pb-16 bg-gray-100" id="timer" data-endtime={endtime}>
+<section class={`pt-10 pb-16 ${className}`} {...rest} id="timer" data-endtime={endtime}>
 	<div class="container">
 		{title && (<div class="text-center font-medium mobile-title-size"><Fragment set:html={ title } /></div>)}
-		{subtitle && (<p class="text-center text-xl"><Fragment set:html={ subtitle } /></p>)}
+		{subtitle && (<p class="text-center text-xl xl:text-2xl"><Fragment set:html={ subtitle } /></p>)}
 		<div id="clockdiv" class="flex items-center justify-center gap-2 md:gap-5 mt-6 md:mt-10 font-bold text-[40px] md:text-8xl lg:text-9xl !leading-none">
 			<div class="flex flex-col items-center justify-center">
 				<span id="daysCount" class="">00</span>
@@ -38,7 +46,7 @@ import Button from '@/components/Button/Button.astro';
 		{btnName && (
 			<div class="flex justify-center mt-10 md:mt-14">
 				<Button 
-					classes="popup-link btn !px-4 whitespace-nowrap" 
+					classes="popup-link btn !px-5 sm:!px-10 !py-4 text-xs sm:text-lg whitespace-nowrap" 
 					url="#common-modal" 
 					title={btnName}
 					dataTitle={btnName}
