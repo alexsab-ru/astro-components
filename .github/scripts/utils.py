@@ -49,10 +49,6 @@ def createThumbs(image_urls, unique_id):
     # Определение относительного пути для возврата
     relative_output_dir = "/img/thumbs/"
 
-    # Проверка наличия папки, если нет - создаем
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
     # Список для хранения путей к новым или существующим файлам
     new_or_existing_files = []
 
@@ -88,6 +84,8 @@ def createThumbs(image_urls, unique_id):
 
 def cleanup_unused_thumbs():
     global current_thumbs
+    global output_dir
+
     all_thumbs = [os.path.join(output_dir, f) for f in os.listdir(output_dir)]
     unused_thumbs = [thumb for thumb in all_thumbs if thumb not in current_thumbs]
 
@@ -184,6 +182,10 @@ else:
 
 # Путь к папке для сохранения уменьшенных изображений
 output_dir = "public/img/thumbs/"
+
+# Проверка наличия папки, если нет - создаем
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 # Глобальный список для хранения путей к текущим превьюшкам
 current_thumbs = []

@@ -38,7 +38,11 @@ def create_file(car, filename, unique_id):
     # Forming the YAML frontmatter
     content = "---\n"
     # content += "layout: car-page\n"
-    content += "total: 1\n"
+    total_element = car.find('total')
+    if total_element is not None:
+        content += f"total: {int(total_element.text)}\n"
+    else:
+        content += "total: 1\n"
     # content += f"permalink: {unique_id}\n"
     content += f"vin_hidden: {vin_hidden}\n"
 
@@ -62,6 +66,8 @@ def create_file(car, filename, unique_id):
     for child in car:
         # Skip nodes with child nodes (except images) and attributes
         if list(child) and child.tag != 'images':
+            continue
+        if child.tag == 'total':
             continue
         if child.tag == 'images':
             images = [img.text for img in child.findall('image')]
@@ -103,7 +109,6 @@ def create_file(car, filename, unique_id):
 
 
 def update_yaml(car, filename, unique_id):
-    """Increment the 'total' value in the YAML block of an HTML file."""
 
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
@@ -120,11 +125,21 @@ def update_yaml(car, filename, unique_id):
     yaml_block = parts[1].strip()
     data = yaml.safe_load(yaml_block)
 
-    # Increment the 'total' value
-    if 'total' in data:
-        data['total'] += 1
+    total_element = car.find('total')
+    if 'total' in data and total_element is not None:
+        try:
+            car_total_value = int(total_element.text)
+            data_total_value = int(data['total'])
+            data['total'] = data_total_value + car_total_value
+        except ValueError:
+            # В случае, если не удается преобразовать значения в int,
+            # можно оставить текущее значение data['total'] или установить его в 0,
+            # либо выполнить другое действие по вашему выбору
+            pass
     else:
-        raise KeyError("'total' key not found in the YAML block.")
+        # Если элемент 'total' отсутствует в одном из источников,
+        # можно установить значение по умолчанию для 'total' в data или обработать этот случай иначе
+        data['total'] += 1
 
     run_element = car.find('run')
     if 'run' in data and run_element is not None:

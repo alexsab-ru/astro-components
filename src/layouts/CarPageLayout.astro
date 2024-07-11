@@ -70,7 +70,7 @@ import BackLink from '@/components/BackLink.astro';
 						{data.vin_hidden && (
 							<CarCharItem label="VIN" value={data.vin_hidden} />
 						)}
-						{data.max_discount && (
+						{data.max_discount != null && data.max_discount != 0 && (
 							<CarCharItem label="Выгода" value={`до&nbsp;${currencyFormat(data.max_discount)}`} />
 						)}
 					</div>

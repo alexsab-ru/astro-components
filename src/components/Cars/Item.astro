@@ -20,7 +20,10 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 		<h3 class="xs:!text-xs sm:!text-base md:!text-lg xl:!text-xl font-normal mt-1 transition-colors hover:text-accent flex-grow">
 			<a href={ car.slug } class="!no-underline !text-black !mb-0"><b class="font-bold">{BRAND} { car.data.folder_id }</b> { car.data.modification_id }</a>
 		</h3>
-		<noindex><div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">{ car.data.year }&nbsp;/&nbsp;{car.data.run}&nbsp;км</div></noindex>
+		<noindex><div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">
+			{car.data.year}
+			{car.data.run ? `&nbsp;/&nbsp;${car.data.run}&nbsp;км` : ''}
+		</div></noindex>
 		<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>
 	</div>
 	<div class="px-3 xl:px-4 flex flex-wrap justify-between gap-y-2 sm:gap-y-3">
