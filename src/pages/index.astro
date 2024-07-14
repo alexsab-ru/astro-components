@@ -22,6 +22,11 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
+	<section class="" id="complectation">
+		<div class="container">
+			<h2>Подобрать комплектацию</h2>
+		</div>
+	</section>
 	<Callback bgUrl="/img/konkurenty.webp" />
 	<Services />
 	<Contacts
