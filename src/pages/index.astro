@@ -1,5 +1,5 @@
 ---
-import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER_ENDTIME} from '@/const.js';
+import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER_ENDTIME, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
 import PageTitle from '@/components/PageTitle/Index.astro';
@@ -9,6 +9,7 @@ import Model from '@/components/Model/Model.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
+import Morquee from '@/components/Marquee/Index.astro';
 import models from '@/data/models.json'
 import salons from '@/data/salons.json'
 const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
@@ -16,6 +17,7 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 
 <Layout title=`Купить ${BRAND} у официального дилера ${SITE_NAME}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${BRAND} в ${LEGAL_CITY_WHERE}! ☎️ ${salonsPhone}`>
 	<Banner />
+	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
 	<PageTitle />
 	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList />
