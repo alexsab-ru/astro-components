@@ -56,7 +56,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 					href="#complectation"
 					class="scroll-link text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
 					data-title="Подобрать комплектацию"
-					data-form_name={`Подобрать комплектацию. ${BRAND} ${model?.name}`}>
+					data-form_name={`Подобрать комплектацию. ${BRAND} ${model?.name}`}
+					@click={`currentModel = '${JSON.stringify(model)}'`}
+				>
 					Подобрать комплектацию
 					<Icon
 						name="mdi:chevron-right-circle"
