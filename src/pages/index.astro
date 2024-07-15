@@ -22,9 +22,30 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
-	<section class="" id="complectation">
+	<section class="" id="complectation" x-init={`currentModel = '${JSON.stringify(models[0])}'`}>
 		<div class="container">
-			<h2>Подобрать комплектацию</h2>
+			<h2 class="text-center">Подобрать комплектацию</h2>
+			<div class="flex gap-4 flex-wrap justify-center my-10">
+				{models.map(model => model.show && (
+					<span 
+						class="border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer w-[100px] sm:w-auto flex-shrink-0 sm:flex-auto text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500"
+						:class={`{'border-accent-500 text-accent-500': JSON.parse(currentModel).id === '${model.id}' }`}
+						@click={`currentModel = '${JSON.stringify(model)}'`}
+					>{model.name}</span>
+				))}
+			</div>
+			<img :src="JSON.parse(currentModel).colors[0].carImage" class="w-1/2" :alt="JSON.parse(currentModel).name">
+			<template x-if="JSON.parse(currentModel).complectations && JSON.parse(currentModel).complectations.length">
+				<div class="flex border-b">
+					<template x-for="(c, idx) in JSON.parse(currentModel).complectations" :key="idx">
+						<span 
+							class="pb-5 text-xl font-bold uppercase"
+							:class="{'text-accent-500': idx === 0}"
+							x-text="c.name" 
+						></span>
+					</template>
+				</div>
+			</template>
 		</div>
 	</section>
 	<Callback bgUrl="/img/konkurenty.webp" />
