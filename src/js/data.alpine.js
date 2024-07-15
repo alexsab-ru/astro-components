@@ -213,6 +213,9 @@ document.addEventListener('alpine:init', () => {
 			this.firstLoadPage = false
 		},
 	}));
+	Alpine.data('complectation', (t) => ({
+		currentModel: '{}',
+	}));
 });
 
 // window.Alpine = Alpine;
