@@ -2,6 +2,8 @@ import Alpine from 'alpinejs';
 
 import { declOfNums } from "@/js/utils/numbers.format";
 
+import models from "@/data/models.json";
+
 document.addEventListener('alpine:init', () => {
 	Alpine.data("usedPreviewGallery", t=>({
 		activeIndex: 0,
@@ -214,8 +216,17 @@ document.addEventListener('alpine:init', () => {
 		},
 	}));
 	Alpine.data('complectation', (t) => ({
-		currentModel: '{}',
-		getParse: (json) => JSON.parse(json),
+		currentModel: {},
+		currentModelComplectation: {},
+		selectedModel(id){
+			this.currentModel = models.filter(model => model.id === id)[0];
+			this.currentModelComplectation = this.currentModel.complectations[0];
+			console.log(this.currentModel);
+			console.log(this.currentModelComplectation);
+		},
+		init() {
+			this.selectedModel(models[0].id)
+		},
 	}));
 });
 
