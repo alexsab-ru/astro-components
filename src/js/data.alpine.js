@@ -224,6 +224,10 @@ document.addEventListener('alpine:init', () => {
 			console.log(this.currentModel);
 			console.log(this.currentModelComplectation);
 		},
+		selectedModelComplectation(name){
+			this.currentModelComplectation = this.currentModel.complectations.filter(c => c.name === name )[0];
+			console.log(this.currentModelComplectation);
+		},
 		init() {
 			this.selectedModel(models[0].id)
 		},

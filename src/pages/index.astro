@@ -39,13 +39,15 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 				<div class="flex border-b">
 					<template x-for="(c, idx) in currentModel.complectations" :key="idx">
 						<span 
-							class="pb-5 text-xl font-bold uppercase"
-							:class="{'text-accent-500': idx === 0}"
-							x-text="c.name" 
+							class="pb-5 text-xl font-bold uppercase cursor-pointer"
+							:class="{'text-accent-500': c.name === currentModelComplectation.name}"
+							x-text="c.name"
+							@click="selectedModelComplectation(c.name)"
 						></span>
 					</template>
 				</div>
 			</template>
+			<pre x-text="JSON.stringify(currentModelComplectation)"></pre>
 		</div>
 	</section>
 	<Callback bgUrl="/img/konkurenty.webp" />
