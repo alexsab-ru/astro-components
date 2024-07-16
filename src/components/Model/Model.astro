@@ -60,6 +60,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						title="Подобрать комплектацию"
 						icon="mdi:chevron-right-circle"
 						iconClasses="text-xl text-accent-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+						@click={`selectedModel('${model.id}')`}
 					/>
 				) : (
 					<Button
