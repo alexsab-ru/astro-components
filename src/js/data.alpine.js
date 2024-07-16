@@ -215,6 +215,7 @@ document.addEventListener('alpine:init', () => {
 	}));
 	Alpine.data('complectation', (t) => ({
 		currentModel: '{}',
+		getParse: (json) => JSON.parse(json),
 	}));
 });
 
