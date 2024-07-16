@@ -8,6 +8,8 @@ interface Props {
     dataFormName?: string,
     dataImg?: string,
     dataImgPosition?: string,
+    icon?: string,
+    iconClasses?: string,
 }
 const {
     view = 'link',
@@ -18,9 +20,12 @@ const {
     dataFormName,
     dataImg,
     dataImgPosition,
+    icon,
+    iconClasses,
     ...rest
 } = Astro.props;
 import './buttons.scss'
+import {Icon} from 'astro-icon/components';
 ---
 
 {
@@ -35,6 +40,7 @@ import './buttons.scss'
         {...rest}
     >
         {title}
+        {icon && <Icon name={icon} class={iconClasses} />}
     </a>
     ) :
     view === 'form-button' ? (
@@ -52,6 +58,7 @@ import './buttons.scss'
             data-form_name={dataFormName}
         >
             {title}
+            {icon && <Icon name={icon} class={iconClasses} />}
         </a>
     ) :
     view === 'scroll-link' ? (
@@ -60,6 +67,7 @@ import './buttons.scss'
             href={url ? url : '#'}
         >
             {title}
+            {icon && <Icon name={icon} class={iconClasses} />}
         </a>
     ) : ('')
 }
