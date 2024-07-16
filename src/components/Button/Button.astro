@@ -52,7 +52,7 @@ import {Icon} from 'astro-icon/components';
     ) :
     view === 'popup-link' ? (
         <a
-            class={`btn popup-link ${classes}`}
+            class={`popup-link ${classes}`}
             href={url ? url : '#'}
             data-title={dataTitle}
             data-form_name={dataFormName}
@@ -63,7 +63,7 @@ import {Icon} from 'astro-icon/components';
     ) :
     view === 'scroll-link' ? (
         <a 
-            class={`btn scroll-link ${classes}`}
+            class={`scroll-link ${classes}`}
             href={url ? url : '#'}
         >
             {title}
