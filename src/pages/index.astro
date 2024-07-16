@@ -22,22 +22,22 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
-	<section class="" id="complectation" x-init={`currentModel = '${JSON.stringify(models[0])}'`}>
+	<section class="bg-gray-50" id="complectation">
 		<div class="container">
 			<h2 class="text-center">Подобрать комплектацию</h2>
 			<div class="flex gap-4 flex-wrap justify-center my-10">
-				{models.map(model => model.show && (
+				{models.map(model => ((model.show && model.complectations) && (model.show && model.complectations.length)) && (
 					<span 
-						class="border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer w-[100px] sm:w-auto flex-shrink-0 sm:flex-auto text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500"
-						:class={`{'border-accent-500 text-accent-500': getParse(currentModel).id === '${model.id}' }`}
-						@click={`currentModel = '${JSON.stringify(model)}'`}
+						class="inline border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer min-w-[100px] w-auto sm:flex-initial text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500"
+						:class={`{'border-accent-500 text-accent-500': currentModel.id === '${model.id}' }`}
+						@click={`selectedModel('${model.id}')`}
 					>{model.name}</span>
 				))}
 			</div>
-			<img :src="getParse(currentModel).colors[0].carImage" class="w-1/2" :alt="getParse(currentModel).name">
-			<template x-if="getParse(currentModel).complectations && getParse(currentModel).complectations.length">
+			<img :src="currentModel.colors[0].carImage" class="w-1/2" :alt="currentModel.name">
+			<template x-if="currentModel.complectations && currentModel.complectations.length">
 				<div class="flex border-b">
-					<template x-for="(c, idx) in getParse(currentModel).complectations" :key="idx">
+					<template x-for="(c, idx) in currentModel.complectations" :key="idx">
 						<span 
 							class="pb-5 text-xl font-bold uppercase"
 							:class="{'text-accent-500': idx === 0}"
