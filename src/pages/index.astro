@@ -6,12 +6,14 @@ import PageTitle from '@/components/PageTitle/Index.astro';
 import Timer from '@/components/Timer/Timer.astro';
 import ModelList from '@/components/Model/ModelList.astro';
 import Model from '@/components/Model/Model.astro';
+import ModelComplectations from '@/components/Model/Complectations.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
 import Morquee from '@/components/Marquee/Index.astro';
 import models from '@/data/models.json'
 import salons from '@/data/salons.json'
+const modelsWithComplectations = models.filter(m => (m.complectations !== undefined && m.complectations.length))
 const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
 ---
 
@@ -21,35 +23,8 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 	<PageTitle />
 	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList />
-	{models && models.map((model: any) => model.show && <Model model={model}/>)}
-	<section class="bg-gray-50" id="complectation">
-		<div class="container">
-			<h2 class="text-center">Подобрать комплектацию</h2>
-			<div class="flex gap-4 flex-wrap justify-center my-10">
-				{models.map(model => ((model.show && model.complectations) && (model.show && model.complectations.length)) && (
-					<span 
-						class="inline border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer min-w-[100px] w-auto sm:flex-initial text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500"
-						:class={`{'border-accent-500 text-accent-500': currentModel.id === '${model.id}' }`}
-						@click={`selectedModel('${model.id}')`}
-					>{model.name}</span>
-				))}
-			</div>
-			<img :src="currentModel.colors[0].carImage" class="w-1/2" :alt="currentModel.name">
-			<template x-if="currentModel.complectations && currentModel.complectations.length">
-				<div class="flex border-b">
-					<template x-for="(c, idx) in currentModel.complectations" :key="idx">
-						<span 
-							class="pb-5 text-xl font-bold uppercase cursor-pointer"
-							:class="{'text-accent-500': c.name === currentModelComplectation.name}"
-							x-text="c.name"
-							@click="selectedModelComplectation(c.name)"
-						></span>
-					</template>
-				</div>
-			</template>
-			<pre x-text="JSON.stringify(currentModelComplectation)"></pre>
-		</div>
-	</section>
+	{models.length > 0 && models.map((model: any) => model.show && <Model model={model}/>)}
+	{modelsWithComplectations.length > 0 && <ModelComplectations models={modelsWithComplectations} />}
 	<Callback bgUrl="/img/konkurenty.webp" />
 	<Services />
 	<Contacts
