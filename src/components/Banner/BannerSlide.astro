@@ -18,6 +18,7 @@ type TBanner = {
 	descr?: string
 	btn?: string
 	btnUrl?: string
+	btnColor?: string
 	dataTitle?: string
 	dataFormName?: string
 	badge?: TBadge
@@ -33,6 +34,7 @@ import BannerTitle from './Title.astro';
 import BannerDescription from './Description.astro';
 import BannerVideo from './Video.astro';
 import BannerImage from './Image.astro';
+const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 ---
 
 <div class="swiper-slide banner-slide" data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
@@ -45,7 +47,7 @@ import BannerImage from './Image.astro';
 					banner?.btn && (
 						<div data-swiper-parallax="-55%">
 							<Button
-								classes="btn white inline-block !py-2 sm:py-3 text-sm sm:text-base mt-8 sm:mt-10"
+								classes={`btn inline-block !py-2 sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
 								view={banner?.view}
 								url={banner?.btnUrl}
 								title={banner?.btn}
