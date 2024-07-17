@@ -11,6 +11,7 @@ const {
 	modalPosition = 'center',
 	img = '/img/people/user.webp',
 	imgPosition = 'right',
+	formName = ''
 } = Astro.props;
 ---
 
@@ -29,7 +30,7 @@ const {
 		<div class="col-span-3 p-5 sm:p-8">
 			{title && (<p class="caption text-xl sm:text-3xl mb-8 text-gray-800"><Fragment set:html={title} /></p>)}
 			<form class="flex flex-col gap-4" id="rating-form">
-				<input type="hidden" name="form" value="" />
+				<input type="hidden" name="form" value={formName} />
 				<input
 					type="email"
 					tabindex="-1"
