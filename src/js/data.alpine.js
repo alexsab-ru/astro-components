@@ -3,6 +3,7 @@ import Alpine from 'alpinejs';
 import { declOfNums } from "@/js/utils/numbers.format";
 
 import models from "@/data/models.json";
+import { useTranslit } from '@/js/utils/translit'
 
 document.addEventListener('alpine:init', () => {
 	Alpine.data("usedPreviewGallery", t=>({
@@ -219,12 +220,15 @@ document.addEventListener('alpine:init', () => {
 		currentModel: {},
 		currentModelComplectation: {},
 		selectedModel(id){
+			if(this.currentModel.id === id) return;
 			this.currentModel = models.find(model => model.id === id);
 			this.currentModelComplectation = this.currentModel.complectations[0];
 		},
 		selectedModelComplectation(name){
+			if(this.currentModelComplectation.name === name) return;
 			this.currentModelComplectation = this.currentModel.complectations.find(c => c.name === name );
 		},
+		translit: useTranslit
 	}));
 });
 
