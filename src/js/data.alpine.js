@@ -219,17 +219,11 @@ document.addEventListener('alpine:init', () => {
 		currentModel: {},
 		currentModelComplectation: {},
 		selectedModel(id){
-			this.currentModel = models.filter(model => model.id === id)[0];
+			this.currentModel = models.find(model => model.id === id);
 			this.currentModelComplectation = this.currentModel.complectations[0];
-			console.log(this.currentModel);
-			console.log(this.currentModelComplectation);
 		},
 		selectedModelComplectation(name){
-			this.currentModelComplectation = this.currentModel.complectations.filter(c => c.name === name )[0];
-			console.log(this.currentModelComplectation);
-		},
-		init() {
-			this.selectedModel(models[0].id)
+			this.currentModelComplectation = this.currentModel.complectations.find(c => c.name === name );
 		},
 	}));
 });
