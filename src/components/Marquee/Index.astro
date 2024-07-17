@@ -1,0 +1,51 @@
+---
+type TMarquee = {
+	title: string
+	dateTo?: string
+	count?: number[]
+	show: boolean
+}
+interface Props {
+	marquee: TMarquee
+}
+const { marquee } = Astro.props
+---
+<div class="absolute w-full left-0 z-10 top-[50vh] md:top-[70vh] flex items-center overflow-x-hidden bg-accent-500">
+	<div class="marquee_run_string whitespace-nowrap py-2 sm:py-3 sm:text-xl md:text-3xl text-white">
+		{marquee.count.length ? marquee.count.map(i => (
+			<span class="uppercase pr-8 sm:pr-[54px] mr-[28px] sm:mr-[44px]">{marquee.title} {marquee?.dateTo && (<b>{marquee.dateTo}</b>)}</span>
+		)) : (
+			<span class="uppercase pr-8 sm:pr-[54px] mr-[28px] sm:mr-[44px]">{marquee.title} {marquee?.dateTo && (<b>{marquee.dateTo}</b>)}</span>
+		)}
+	</div>
+</div>
+
+<style>
+	.marquee_run_string {
+		animation: runstring 30s infinite linear;
+	}
+	.marquee_run_string span {
+		display: inline-block;
+		position: relative;
+		font-weight: 500;
+	}
+	.marquee_run_string span:after {
+		content: '';
+		display: block;
+		width: 10px;
+		height: 10px;
+		background: #ffffff;
+		border-radius: 50%;
+		position: absolute;
+		right: -5px;
+		top: calc(50% - 5px);
+	}
+	@keyframes runstring {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
+	}
+</style>

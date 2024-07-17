@@ -1,25 +1,30 @@
 ---
-import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER_ENDTIME} from '@/const.js';
+import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER_ENDTIME, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
 import PageTitle from '@/components/PageTitle/Index.astro';
 import Timer from '@/components/Timer/Timer.astro';
 import ModelList from '@/components/Model/ModelList.astro';
 import Model from '@/components/Model/Model.astro';
+import ModelComplectations from '@/components/Model/Complectations.astro';
 import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
+import Morquee from '@/components/Marquee/Index.astro';
 import models from '@/data/models.json'
 import salons from '@/data/salons.json'
+const modelsWithComplectations = models.filter(m => (m.complectations !== undefined && m.complectations.length))
 const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
 ---
 
 <Layout title="Купить автомобили JETOUR от 2 089 900 р. в Самаре. Цены и комплектации на новые авто в автосалоне официального дилера Альфа" description="Автомобили Джетур купить в Самаре. Кредит от 0,01%, авторассрочка, скидки на все автомобили от розничной цены. Гарантия 3 года или 100 000 км. Звонить по тел.: ☎️ 8 (846) 2 125-591" keywords="купить jetour в Самаре, цены на jetour в Самаре, jetour в кредит в Самаре, jetour в рассрочку в Самаре, тест драйв jetour в Самаре, цены и комплектации jetour в Самаре, официальный дилер jetour в Самаре" image="/img/specials/vesennee-obnovlenie-s-jetour/vesennee-obnovlenie-s-jetour-1920x1080.webp">
 	<Banner />
+	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
 	<PageTitle />
 	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList title="Модельный ряд JETOUR" />
 	{models && models.map((model: any) => model.show && <Model model={model}/>)}
+	{modelsWithComplectations.length > 0 && <ModelComplectations models={modelsWithComplectations} brand={BRAND} />}
 	<Callback bgUrl="/img/konkurenty.webp" />
 	<Services />
 	<Contacts

@@ -27,7 +27,7 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 		<Head title={title || h1 || SITE_NAME} description={description ?? SITE_DESCR} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
-	<body class="min-h-screen flex flex-col">
+	<body class="min-h-screen flex flex-col" x-data="complectation">
 		<ScriptBodyBegin />
 		<Header />
 		<main class="flex-grow relative">
