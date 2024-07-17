@@ -3,7 +3,7 @@ import Alpine from 'alpinejs';
 import { declOfNums } from "@/js/utils/numbers.format";
 
 import models from "@/data/models.json";
-import { useTranslit } from '@/js/utils/translit'
+import { useTranslit } from '@/js/utils/translit';
 
 document.addEventListener('alpine:init', () => {
 	Alpine.data("usedPreviewGallery", t=>({
