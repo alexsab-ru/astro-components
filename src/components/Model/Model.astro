@@ -52,17 +52,28 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						)
 					}
 				</div>
-				<a
-					href="#common-modal"
-					class="popup-link text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
-					data-title="Подобрать комплектацию"
-					data-form_name={`Подобрать комплектацию. ${BRAND} ${model?.name}`}>
-					Подобрать комплектацию
-					<Icon
-						name="mdi:chevron-right-circle"
-						class="text-xl text-accent-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+				{model.complectations && model.complectations.length ? (
+					<Button
+						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
+						view="scroll-link"
+						url="#complectation"
+						title="Подобрать комплектацию"
+						icon="mdi:chevron-right-circle"
+						iconClasses="text-xl text-accent-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+						@click={`selectedModel('${model.id}')`}
 					/>
-				</a>
+				) : (
+					<Button
+						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
+						view="popup-link"
+						url="#common-modal"
+						title="Подобрать комплектацию"
+						dataTitle="Подобрать комплектацию"
+						dataFormName={`Подобрать комплектацию. ${BRAND} ${model?.name}`}
+						icon="mdi:chevron-right-circle"
+						iconClasses="text-xl text-accent-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+					/>
+				)}
 			</div>
 
 			<div class="flex flex-col gap-4 mt-10 lg:mt-14">
