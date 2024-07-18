@@ -27,7 +27,7 @@
   <previousPrice>3789900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3139900</priceWithDiscount>
+  <priceWithDiscount />
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
@@ -202,11 +202,11 @@
   <brandColorCode />
   <brandInteriorCode />
   <certificationProgram />
-  <avitoId>3201017733</avitoId>
+  <avitoId />
   <autoruId />
   <dromId />
   <siteUrl>https://jetour-alpha.ru/</siteUrl>
-  <avitoUrl>https://www.avito.ru/items/3201017733</avitoUrl>
+  <avitoUrl />
   <autoruUrl />
   <dromUrl />
   <siteUrls>
@@ -224,7 +224,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>700000</max_discount><sale_price>3139900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-blue-2023/</url></vehicle>
+<max_discount>700000</max_discount><sale_price>0</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-blue-2023/</url></vehicle>
 <vehicle>
   <id>4582091</id>
   <vin>HJRPBGJB5PF079315</vin>
@@ -252,7 +252,7 @@
   <previousPrice>3789900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3139900</priceWithDiscount>
+  <priceWithDiscount />
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
@@ -432,7 +432,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>700000</max_discount><sale_price>3139900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-black-2023/</url></vehicle>
+<max_discount>700000</max_discount><sale_price>0</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-black-2023/</url></vehicle>
 <vehicle>
   <id>4622210</id>
   <vin>HJRPBGJB5PF079752</vin>
@@ -460,7 +460,7 @@
   <previousPrice>3789900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3139900</priceWithDiscount>
+  <priceWithDiscount />
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
@@ -641,7 +641,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>700000</max_discount><sale_price>3139900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-blue-2023/</url></vehicle>
+<max_discount>700000</max_discount><sale_price>0</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-blue-2023/</url></vehicle>
 <vehicle>
   <id>4622324</id>
   <vin>HJRPBGJB1PF074824</vin>
@@ -669,7 +669,7 @@
   <previousPrice>3669900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3019900</priceWithDiscount>
+  <priceWithDiscount />
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
@@ -828,11 +828,11 @@
   <brandColorCode />
   <brandInteriorCode />
   <certificationProgram />
-  <avitoId>3233550843</avitoId>
+  <avitoId />
   <autoruId />
   <dromId />
   <siteUrl>https://jetour-alpha.ru/</siteUrl>
-  <avitoUrl>https://www.avito.ru/items/3233550843</avitoUrl>
+  <avitoUrl />
   <autoruUrl />
   <dromUrl />
   <siteUrls>
@@ -850,7 +850,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>700000</max_discount><sale_price>3019900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-elite-white-2023/</url></vehicle>
+<max_discount>700000</max_discount><sale_price>0</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-elite-white-2023/</url></vehicle>
 <vehicle>
   <id>4771991</id>
   <vin>HJRPBGJB0PF090674</vin>
