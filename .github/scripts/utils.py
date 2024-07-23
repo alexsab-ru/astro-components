@@ -154,6 +154,12 @@ def build_unique_id(car, *elements):
 
     return " ".join(unique_id_parts)
 
+def convert_to_string(element):
+    if element.text is not None:
+        element.text = str(element.text)
+    for child in element:
+        convert_to_string(child)
+
 
 filename = 'cars.xml'
 # repo_name = os.environ('REPO_NAME')

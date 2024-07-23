@@ -230,6 +230,7 @@ for car in root:
         create_file(car, file_path, unique_id)
 
 output_path = './public/cars.xml'
+convert_to_string(root)
 tree.write(output_path, encoding='utf-8', xml_declaration=True)
 
 # Удаление неиспользуемых превьюшек
