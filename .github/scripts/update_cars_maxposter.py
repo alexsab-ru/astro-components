@@ -211,8 +211,12 @@ for car in root:
     rename_child_element(car, 'steeringWheel', 'wheel')
     credit_discount = int(car.find('creditDiscount').text or 0)
     tradein_discount = int(car.find('tradeinDiscount').text or 0)
-    create_child_element(car, 'max_discount', credit_discount + tradein_discount)
-    create_child_element(car, 'sale_price', car.find('priceWithDiscount').text or 0)
+    max_discount = credit_discount + tradein_discount
+    create_child_element(car, 'max_discount', max_discount)
+    price = int(car.find('price').text or 0)
+    if(car.find('priceWithDiscount').text is None):
+        update_element_text(car, 'priceWithDiscount', price - max_discount)
+    create_child_element(car, 'sale_price', car.find('priceWithDiscount').text or price - max_discount)
     unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
@@ -226,6 +230,7 @@ for car in root:
         create_file(car, file_path, unique_id)
 
 output_path = './public/cars.xml'
+convert_to_string(root)
 tree.write(output_path, encoding='utf-8', xml_declaration=True)
 
 # Удаление неиспользуемых превьюшек
