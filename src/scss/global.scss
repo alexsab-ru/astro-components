@@ -43,7 +43,7 @@ section {
 		}
 	}
 	table {
-		@apply border-collapse w-full bg-white;
+		@apply border-collapse w-full bg-white text-center text-xs sm:text-sm md:text-base;
 		thead {
 			@apply bg-slate-50;
 			th {
