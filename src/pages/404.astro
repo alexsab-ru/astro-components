@@ -43,7 +43,6 @@ const special = await getCollection('special-offers');
 	const regex = /\/cars\/.+/;
 	if(regex.test(path)){
 		window.location.href = window.location.origin;
-		return;
 	}
 	items.map(item => {
 		const match = `/${item}/`;
