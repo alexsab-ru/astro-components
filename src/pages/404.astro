@@ -39,14 +39,19 @@ const special = await getCollection('special-offers');
 <script>
 	const items = ['cars', 'special-offers']
 	const parent = document.getElementById('more');
+	const path = window.location.pathname;
+	const regex = /\/cars\/.+/;
 	items.map(item => {
 		const match = `/${item}/`;
-		if (window.location.pathname.includes(match)){
+		if (path.includes(match)){
 			const elem = document.getElementById(item+'_more');
 			if(elem){
 				elem.classList.remove('hidden');
 				parent.classList.remove('hidden');
 			}
 		}
-	})	
+	})
+	if(regex.test(path)){
+		window.location.href = window.location.origin;
+	}
 </script>
