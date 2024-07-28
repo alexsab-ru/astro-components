@@ -41,6 +41,10 @@ const special = await getCollection('special-offers');
 	const parent = document.getElementById('more');
 	const path = window.location.pathname;
 	const regex = /\/cars\/.+/;
+	if(regex.test(path)){
+		window.location.href = window.location.origin;
+		return;
+	}
 	items.map(item => {
 		const match = `/${item}/`;
 		if (path.includes(match)){
@@ -51,7 +55,4 @@ const special = await getCollection('special-offers');
 			}
 		}
 	})
-	if(regex.test(path)){
-		window.location.href = window.location.origin;
-	}
 </script>
