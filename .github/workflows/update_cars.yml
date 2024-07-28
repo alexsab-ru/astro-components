@@ -89,7 +89,7 @@ jobs:
           echo "changes=true" >> $GITHUB_OUTPUT
         else
           echo 'check_changes else'
-          echo "false — changes=false" >> $GITHUB_ENV
+          echo "changes=false" >> $GITHUB_ENV
           echo "changes=false" >> $GITHUB_OUTPUT
         fi
       continue-on-error: true
