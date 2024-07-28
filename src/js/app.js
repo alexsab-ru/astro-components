@@ -86,3 +86,10 @@ if (typeof grecaptcha === "undefined") {
 	// Если grecaptcha уже доступна, просто выполняем код
 	executeRecaptcha();
 }
+
+// Редирект, если в конце URL больше одного слеша
+const path = window.location.pathname;
+const regex = /\/{2,}$/;
+if(regex.test(path)){
+	window.location.href = path.replace(regex, '/');
+}
