@@ -85,6 +85,7 @@ model_mapping = {
             "Серебряный": "c2b.png",
             "Gold": "c3b.png",
             "Gray": "c4b.png",
+            "Grey": "c4b.png",
             "Черный": "c1b.png",
             "Светло-серый": "c2b.png",
             "Золотой": "c3b.png",
