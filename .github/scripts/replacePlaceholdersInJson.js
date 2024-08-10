@@ -7,14 +7,34 @@ const dataDirectory = path.join(process.cwd(), 'src', 'data');
 
 // Текущая дата для подстановки
 const today = new Date();
-const placeholders = {
-  '{{lastDay}}': new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate(),
-  '{{month}}': String(today.getMonth() + 1).padStart(2, '0'),
-  '{{year}}': today.getFullYear()
+const month = today.getMonth() + 1;
+
+const months = {
+  1: { nominative: 'Январь', genitive: 'Января', prepositional: 'Январе' },
+  2: { nominative: 'Февраль', genitive: 'Февраля', prepositional: 'Феврале' },
+  3: { nominative: 'Март', genitive: 'Марта', prepositional: 'Марте' },
+  4: { nominative: 'Апрель', genitive: 'Апреля', prepositional: 'Апреле' },
+  5: { nominative: 'Май', genitive: 'Мая', prepositional: 'Мае' },
+  6: { nominative: 'Июнь', genitive: 'Июня', prepositional: 'Июне' },
+  7: { nominative: 'Июль', genitive: 'Июля', prepositional: 'Июле' },
+  8: { nominative: 'Август', genitive: 'Августа', prepositional: 'Августе' },
+  9: { nominative: 'Сентябрь', genitive: 'Сентября', prepositional: 'Сентябре' },
+  10: { nominative: 'Октябрь', genitive: 'Октября', prepositional: 'Октябре' },
+  11: { nominative: 'Ноябрь', genitive: 'Ноября', prepositional: 'Ноябре' },
+  12: { nominative: 'Декабрь', genitive: 'Декабря', prepositional: 'Декабре' }
 };
 
 // Функция для замены плейсхолдеров в содержимом файла
 function replacePlaceholders(content) {
+  const placeholders = {
+    '{{lastDay}}': new Date(today.getFullYear(), month, 0).getDate(),
+    '{{month}}': String(today.getMonth() + 1).padStart(2, '0'),
+    '{{monthNominative}}': months[month].nominative,           // Например: Август
+    '{{monthGenitive}}': months[month].genitive,     // Например: Августа
+    '{{monthPrepositional}}': months[month].prepositional, // Например: в Августе
+    '{{year}}': today.getFullYear()
+  };
+
   for (let placeholder in placeholders) {
     content = content.replace(new RegExp(placeholder, 'g'), placeholders[placeholder]);
   }
