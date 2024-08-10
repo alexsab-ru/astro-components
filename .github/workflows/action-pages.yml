@@ -92,6 +92,11 @@ jobs:
           fi
           ls -al src/data
 
+      - name: Replace Placeholders in JSON
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          node .github/scripts/replacePlaceholdersInJson.js
+
       - name: Build Astro
         if: steps.check_changes.outputs.changes == 'true'
         run: |
