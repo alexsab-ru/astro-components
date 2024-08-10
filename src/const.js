@@ -1,4 +1,5 @@
 import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 // Название сайта по умолчанию
 export const SITE_NAME = 'Название сайта';
 // Юр лицо
@@ -21,7 +22,7 @@ export const BRAND = 'Baic';
 //string 2024-04-26 or 2024-04-26 23:59:59 or December 31 2015 or December 31 2015 23:59:59 GMT+02:00
 export const TIMER_ENDTIME = '';
 // Объект для бегущей строки
-export const MARQUEE = {title: 'Тотальная распродажа до', dateTo: '31.07', count: [1,2,3,4,5,6,7,8], show: false };
+export const MARQUEE = {title: 'Тотальная распродажа до', dateTo: `${LAST_DAY}.${MONTH}.${YEAR}`, count: [1,2,3,4,5,6,7,8], show: false };
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылка организации для виджета
