@@ -73,13 +73,35 @@ jobs:
           echo PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }} >> .env
           cat .env
 
+      - name: Download JSONs
+        run: |
+          mkdir src/data
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/banners.json -o src/data/banners.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/models.json -o src/data/models.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/salons.json -o src/data/salons.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/services.json -o src/data/services.json
+          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/socials.json -o src/data/socials.json
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/special-services.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/special-services.json -o src/data/special-services.json 
+          fi
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/faq.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/faq.json -o src/data/faq.json 
+          fi
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json -o src/data/reviews.json 
+          fi
+          ls -al src/data
+
+      - name: Replace Placeholders in JSON
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          node .github/scripts/replacePlaceholdersInJson.js
+
       - name: Build Astro
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
-          pnpm download_json
-          ls -al src/data
           pnpm build --outDir ./_site
 
       - name: Upload artifact
