@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --open --host --config astro.local.config.mjs",
+    "dd": "concurrently \"pnpm run download_json\" \"pnpm run dev\"",
+    "ddw": "concurrently \"pnpm run download_json_win\" \"pnpm run dev\"",
     "start": "cp .env.example .env",
     "build_local": "astro build --config astro.local.config.mjs",
     "build": "astro build",
@@ -29,6 +31,7 @@
     "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "sass": "^1.71.1"
   }
 }
