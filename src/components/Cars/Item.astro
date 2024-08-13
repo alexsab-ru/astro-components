@@ -22,7 +22,7 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 		</h3>
 		<noindex><div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">
 			{car.data.year}
-			{car.data.run ? `&nbsp;/&nbsp;${car.data.run}&nbsp;км` : ''}
+			{car.data.run ? <Fragment set:html={`&nbsp;/&nbsp;${car.data.run}&nbsp;км`} /> : ''}
 		</div></noindex>
 		<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>
 	</div>
