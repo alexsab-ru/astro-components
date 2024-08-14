@@ -8,6 +8,7 @@ on:
       # - '.github/workflows/update_cars.yml'
       # - '.github/scripts/update_cars_carcopy.py'
       # - '.github/scripts/update_cars_maxposter.py'
+      # - '.github/scripts/update_cars_vehicles.py'
       # - '.github/scripts/update_cars.py'
       # - '.github/scripts/config.py'
   workflow_dispatch:
