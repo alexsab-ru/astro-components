@@ -26,9 +26,26 @@ export function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min) + min);
 }
 
-export function currencyFormat(number, locale = 'ru-RU'){
-	if (!number || number === 0 || typeof number != 'number' ){
+export function currencyFormat(number, locale = 'ru-RU') {
+	// Проверка на null, undefined, или пустую строку
+	if (number === null || number === undefined || number === '' || isNaN(number)) {
 		return;
 	}
-	return number.toLocaleString(locale, { style: "currency", currency: "RUB", minimumFractionDigits: 0, });
+
+	// Если number является строкой, пытаемся преобразовать её в число
+	if (typeof number === 'string') {
+		number = parseFloat(number);
+	}
+
+	// Если после преобразования значение не является числом (например, если оно было невалидной строкой)
+	if (isNaN(number)) {
+		return;
+	}
+
+	return number.toLocaleString(locale, { 
+		style: "currency", 
+		currency: "RUB", 
+		minimumFractionDigits: 0,
+	});
 }
+

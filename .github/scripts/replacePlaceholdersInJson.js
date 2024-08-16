@@ -24,15 +24,68 @@ const months = {
   12: { nominative: 'Декабрь', genitive: 'Декабря', prepositional: 'Декабре' }
 };
 
+// Проверяем наличие файла cars.json
+const carsFilePath = path.join(dataDirectory, 'cars.json');
+let carsData = [];
+
+if (fs.existsSync(carsFilePath)) {
+  const carsFileContent = fs.readFileSync(carsFilePath, 'utf-8');
+  try {
+    carsData = JSON.parse(carsFileContent);
+    if (!Array.isArray(carsData)) {
+      carsData = []; // Если данные не являются массивом, обнуляем их
+    }
+  } catch (error) {
+    console.error("Ошибка парсинга файла cars.json:", error);
+  }
+}
+
+// Создаем объект для хранения цен по моделям
+const prices = {};
+const pricesb = {};
+if (carsData.length > 0) {
+  carsData.forEach(car => {
+    if (car.id && car.price) {
+      prices[`{{price-${car.id}}}`] = car.price;
+      pricesb[`{{priceb-${car.id}}}`] = currencyFormat(car.price);
+    }
+  });
+}
+
+function currencyFormat(number, locale = 'ru-RU') {
+  // Проверка на null, undefined, или пустую строку
+  if (number === null || number === undefined || number === '' || isNaN(number)) {
+    return;
+  }
+
+  // Если number является строкой, пытаемся преобразовать её в число
+  if (typeof number === 'string') {
+    number = parseFloat(number);
+  }
+
+  // Если после преобразования значение не является числом (например, если оно было невалидной строкой)
+  if (isNaN(number)) {
+    return;
+  }
+
+  return number.toLocaleString(locale, { 
+    style: "currency", 
+    currency: "RUB", 
+    minimumFractionDigits: 0,
+  });
+}
+
 // Функция для замены плейсхолдеров в содержимом файла
 function replacePlaceholders(content) {
   const placeholders = {
     '{{lastDay}}': new Date(today.getFullYear(), month, 0).getDate(),
     '{{month}}': String(today.getMonth() + 1).padStart(2, '0'),
-    '{{monthNominative}}': months[month].nominative,           // Например: Август
-    '{{monthGenitive}}': months[month].genitive,     // Например: Августа
-    '{{monthPrepositional}}': months[month].prepositional, // Например: в Августе
-    '{{year}}': today.getFullYear()
+    '{{monthNominative}}': months[month].nominative,
+    '{{monthGenitive}}': months[month].genitive,
+    '{{monthPrepositional}}': months[month].prepositional,
+    '{{year}}': today.getFullYear(),
+    ...prices, // Добавляем цены к плейсхолдерам, если они есть
+    ...pricesb // Добавляем красивые цены к плейсхолдерам, если они есть
   };
 
   for (let placeholder in placeholders) {
@@ -50,6 +103,11 @@ fs.readdir(dataDirectory, (err, files) => {
 
   files.forEach(file => {
     const filePath = path.join(dataDirectory, file);
+
+    // Пропускаем cars.json, так как он уже обработан
+    if (filePath.includes('cars.json')) {
+      return;
+    }
 
     // Проверяем, является ли файл JSON
     if (path.extname(filePath) === '.json') {
