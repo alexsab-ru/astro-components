@@ -24,15 +24,26 @@ const months = {
   12: { nominative: 'Декабрь', genitive: 'Декабря', prepositional: 'Декабре' }
 };
 
+// Читаем данные из cars.json
+const carsFilePath = path.join(dataDirectory, 'cars.json');
+const carsData = JSON.parse(fs.readFileSync(carsFilePath, 'utf-8'));
+
+// Создаем объект для хранения цен по моделям
+const prices = {};
+carsData.forEach(car => {
+  prices[`{{price-${car.id}}}`] = car.price;
+});
+
 // Функция для замены плейсхолдеров в содержимом файла
 function replacePlaceholders(content) {
   const placeholders = {
     '{{lastDay}}': new Date(today.getFullYear(), month, 0).getDate(),
     '{{month}}': String(today.getMonth() + 1).padStart(2, '0'),
-    '{{monthNominative}}': months[month].nominative,           // Например: Август
-    '{{monthGenitive}}': months[month].genitive,     // Например: Августа
-    '{{monthPrepositional}}': months[month].prepositional, // Например: в Августе
-    '{{year}}': today.getFullYear()
+    '{{monthNominative}}': months[month].nominative,
+    '{{monthGenitive}}': months[month].genitive,
+    '{{monthPrepositional}}': months[month].prepositional,
+    '{{year}}': today.getFullYear(),
+    ...prices // Добавляем цены к плейсхолдерам
   };
 
   for (let placeholder in placeholders) {
@@ -50,6 +61,11 @@ fs.readdir(dataDirectory, (err, files) => {
 
   files.forEach(file => {
     const filePath = path.join(dataDirectory, file);
+
+    // Пропускаем cars.json, так как он уже обработан
+    if (filePath.includes('cars.json')) {
+      return;
+    }
 
     // Проверяем, является ли файл JSON
     if (path.extname(filePath) === '.json') {
