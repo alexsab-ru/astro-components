@@ -81,6 +81,9 @@ jobs:
           curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/salons.json -o src/data/salons.json
           curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/services.json -o src/data/services.json
           curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/socials.json -o src/data/socials.json
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/cars.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/cars.json -o src/data/cars.json 
+          fi
           if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/special-services.json; then
             curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/special-services.json -o src/data/special-services.json 
           fi
