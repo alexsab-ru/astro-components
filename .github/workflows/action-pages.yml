@@ -7,6 +7,8 @@
 name: Deploy website to Pages
 
 on:
+  schedule:
+    - cron: '0 2 * * *'  # Запускается в 2 по гринвичу принулительно
   workflow_run:
     workflows: ["Generate Astro Files from XML"]  # Замените на имя вашего рабочего процесса обновления АВН
     types:
