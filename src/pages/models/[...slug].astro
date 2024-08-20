@@ -26,6 +26,7 @@ const sections = currentModel?.sections || [];
   description={model.slogan} 
   breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} 
   backLink={true}
+  image={model.image ?? model.thumb}
 >
 	<Model model={model} />
   {
