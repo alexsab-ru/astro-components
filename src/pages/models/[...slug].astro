@@ -1,0 +1,19 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Model from '@/components/Model/Model.astro';
+import models from '@/data/models.json';
+export async function getStaticPaths() {
+  return models.filter(m => m.show).map((model) => {
+    return {
+      params: { slug: model.id },
+      props: { model },
+    };
+  });
+}
+
+const { model } = Astro.props;
+import { breadcrumb } from './index.astro';
+---
+<Layout title={model.name} description={model.slogan} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} backLink={true}>
+	<Model model={model} />
+</Layout>

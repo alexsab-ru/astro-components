@@ -1,0 +1,13 @@
+---
+import { BRAND } from '@/const'
+import PageLayout from '@/layouts/PageLayout.astro';
+import ModelList from '@/components/Model/ModelList.astro';
+export const breadcrumb = { name: `Модели`, href: "/models/" };
+---
+<PageLayout
+	h1={`Модели ${BRAND}`}
+	title={`Модели ${BRAND}`}
+	breadcrumb={[breadcrumb]}
+>
+	<ModelList title="" classes="!pb-0" />
+</PageLayout>
