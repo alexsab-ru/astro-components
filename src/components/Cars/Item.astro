@@ -50,7 +50,7 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 		/>
 		<Button 
 			classes="block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !no-underline !mb-0 !text-white w-full md:w-[48%]" 
-			url={ car.slug }
+			url={ `/cars/${car.slug}` }
 			view="link"
 			title="Подробнее"
 		/>
