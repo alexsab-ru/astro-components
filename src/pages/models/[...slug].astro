@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Model from '@/components/Model/Model.astro';
+import CarItem from "@/components/Cars/Item.astro";
 import models from '@/data/models.json';
 export async function getStaticPaths() {
   return models.filter(m => m.show).map((model) => {
@@ -20,6 +21,9 @@ import modelsSections from '@/data/models-sections.yml';
 const currentModel = modelsSections.find(m => m?.id === model.id) || {};
 const sections = currentModel?.sections || [];
 
+import { getCollection } from "astro:content";
+const rawCars = await getCollection("cars");
+const cars = rawCars.length ? rawCars.filter(car => car.data.folder_id.toLowerCase() === model.id.toLowerCase()) : [];
 ---
 <Layout 
   title={`${BRAND} ${model.name} – фото, цены, комплектации и характеристики ${BRAND} ${model.name} в ${LEGAL_CITY_WHERE}`} 
@@ -36,4 +40,15 @@ const sections = currentModel?.sections || [];
       </section>
     )) : ('')
   }
+  {cars.length > 0 && (
+    <section class="bg-gray-50">
+      <div class="container">
+        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${BRAND}&nbsp;${model.name} в наличии в ${LEGAL_CITY_WHERE}`} /></h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+          {cars.map((car) => ( <CarItem car={car} /> ))}
+        </div>
+      </div>
+    </section>
+  )}
+    
 </Layout>
