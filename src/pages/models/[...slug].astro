@@ -23,12 +23,10 @@ const sections = currentModel?.sections || [];
 ---
 <Layout 
   title={`${BRAND} ${model.name} – фото, цены, комплектации и характеристики ${BRAND} ${model.name} в ${LEGAL_CITY_WHERE}`} 
-  description={model.slogan} 
-  breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} 
-  backLink={true}
+  description={model.slogan}
   image={model.image ?? model.thumb}
 >
-	<Model model={model} />
+	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     sections.length ? sections.map(s => (
       <section class="">

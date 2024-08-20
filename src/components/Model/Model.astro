@@ -1,10 +1,13 @@
 ---
+import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
 interface Props {
 	model: any;
+	breadcrumb?: TBreadcrumb[];
 }
-const {model} = Astro.props;
+const {model, breadcrumb} = Astro.props;
 
 import {Icon} from 'astro-icon/components';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import './model.scss';
 import {BRAND} from '@/const';
 import { currencyFormat } from '@/js/utils/numbers.format';
@@ -27,6 +30,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 		class="model__info"
 		style={`background-image: url(${model?.homeImg})`}>
 		<div class="container h-full pt-8 sm:pt-[2.5%] xl:pb-10">
+			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} color="white" />}
 			<div class="flex justify-between items-start flex-col lg:flex-row">
 				<div>
 					<h2
@@ -54,7 +58,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 				</div>
 				{model.complectations && model.complectations.length ? (
 					<Button
-						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
+						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-50"
 						view="scroll-link"
 						url="#complectation"
 						title="Подобрать комплектацию"
@@ -64,7 +68,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 					/>
 				) : (
 					<Button
-						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-10"
+						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-50"
 						view="popup-link"
 						url="#common-modal"
 						title="Подобрать комплектацию"
