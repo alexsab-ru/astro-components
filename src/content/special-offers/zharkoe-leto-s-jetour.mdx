@@ -10,8 +10,10 @@ description: "Жаркое лето с Jetour - это выгода на пок�
 
 
 import Button from '@/components/Button/Button.astro';
-import { LEGAL_CITY_WHERE, LEGAL_ENTITY } from '@/const';
+import { BRAND, LEGAL_CITY_WHERE, LEGAL_ENTITY } from '@/const';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import models from '@/data/models.json';
+import { currencyFormat } from '@/js/utils/numbers.format';
 
 export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
@@ -22,6 +24,14 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 </picture>
 
 Жаркое лето с Jetour - это выгода на покупку, специальное предложение по trade-in, а также привлекательные условия кредитования на автомобили X90 Plus, X70 Plus, Dashing от 4 банков: Альфа-Банк, СОВКОМБАНК, РОСБАНК АВТО, ВТБ.
+
+        <div class="space-y-5 mt-12">
+    {
+        models.filter(model => model.show).map(m => (
+            <div class="sm:text-lg"><strong>{BRAND} { m.name }.</strong> Минимальная цена на кроссовер с учетом всех выгод – <strong>{ currencyFormat(m.price) }</strong></div>
+        ))
+    }
+        </div>
 
 <div class="flex flex-col lg:flex-row lg:items-center my-10 lg:my-20">
     <div class="mb-4 lg:mb-0 flex-shrink-0">
