@@ -95,6 +95,9 @@ jobs:
           if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json; then
             curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json -o src/data/reviews.json 
           fi
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/models-sections.yml; then
+            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/models-sections.yml -o src/data/models-sections.yml 
+          fi
           ls -al src/data
 
       - name: Replace Placeholders in JSON
