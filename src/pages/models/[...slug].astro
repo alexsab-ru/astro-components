@@ -23,7 +23,7 @@ const sections = currentModel?.sections || [];
 
 import { getCollection } from "astro:content";
 const rawCars = await getCollection("cars");
-const cars = rawCars && rawCars.length ? rawCars.filter(car => car.data.folder_id.toLowerCase() === model.id.toLowerCase()) : [];
+const cars = rawCars && rawCars.length ? rawCars.filter(car => car.data.folder_id.replace(/ /gm, '').replace(/-/gm, '').toLowerCase() === model.id.replace(/ /gm, '').replace(/-/gm, '').toLowerCase()) : [];
 ---
 <Layout 
   title={`${BRAND} ${model.name} – фото, цены, комплектации и характеристики ${BRAND} ${model.name} в ${LEGAL_CITY_WHERE}`} 
