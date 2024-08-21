@@ -6,7 +6,7 @@ body {
 	@apply selection:bg-accent-500 selection:text-white;
 }
 
-section {
+section:not(.model-section) {
 	@apply relative py-8 sm:py-16 bg-cover bg-center;
 	h2 {
 		@apply relative pb-3 text-3xl sm:text-5xl w-fit mx-auto font-extrabold before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:h-1 before:w-32 before:bg-accent-500;
