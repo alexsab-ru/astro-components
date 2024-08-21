@@ -2,6 +2,11 @@
 import Layout from '@/layouts/Layout.astro';
 import Model from '@/components/Model/Model.astro';
 import CarItem from "@/components/Cars/Item.astro";
+import DesignSection from '@/components/Model/sections/design.astro';
+import ExteriorSection from '@/components/Model/sections/exterior.astro';
+import WarantySection from '@/components/Model/sections/waranty.astro';
+
+
 import models from '@/data/models.json';
 export async function getStaticPaths() {
   return models.filter(m => m.show).map((model) => {
@@ -32,13 +37,12 @@ const cars = rawCars && rawCars.length ? rawCars.filter(car => car.data.folder_i
 >
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
-    sections.length ? sections.map(s => (
-      <section class="">
-        <div class="container">
-          <h2>{s.name}</h2>
-        </div>
-      </section>
-    )) : ('')
+    sections.length > 0 && sections.map(s => (
+      s.id === 'design' ? <DesignSection section={s} /> :
+      s.id === 'exterior' ? <ExteriorSection section={s} /> :
+      s.id === 'waranty' ? <WarantySection section={s} /> :
+      ''
+    ))
   }
   {cars.length > 0 && (
     <section class="bg-gray-50">
