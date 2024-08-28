@@ -1,35 +1,44 @@
 # python3 .github/scripts/getOneXML.py --xpath "//data/cars/car" --output merged_cars.xml
 import os
 import requests
+import argparse
 from lxml import etree
 
-# Получаем значение переменной окружения
-env_xml_url = os.getenv('ENV_XML_URL', '')
-
-# Разделяем URL-ы
-urls = env_xml_url.strip().split('\n')
-
-# Функция для скачивания XML
 def download_xml(url):
     response = requests.get(url)
     return response.content
 
-# Скачиваем все XML файлы
-xml_contents = [download_xml(url) for url in urls]
+def merge_xml_files(xml_contents, xpath):
+    merged_root = etree.Element("merged_data")
+    
+    for content in xml_contents:
+        root = etree.fromstring(content)
+        elements = root.xpath(xpath)
+        for element in elements:
+            merged_root.append(element)
+    
+    return merged_root
 
-# Создаем корневой элемент для объединенного XML
-merged_root = etree.Element("data")
+def main():
+    parser = argparse.ArgumentParser(description='Download and merge XML files.')
+    parser.add_argument('--xpath', default='//car', help='XPath to the elements to be merged')
+    parser.add_argument('--output', default='merged_output.xml', help='Output file name')
+    args = parser.parse_args()
 
-# Объединяем все XML файлы
-for content in xml_contents:
-    root = etree.fromstring(content)
-    for element in root:
-        merged_root.append(element)
+    env_xml_url = os.getenv('ENV_XML_URL', '')
+    urls = env_xml_url.strip().split('\n')
 
-# Создаем новый XML документ
-merged_tree = etree.ElementTree(merged_root)
+    if not urls:
+        print("No URLs found in ENV_XML_URL. Please set the environment variable.")
+        return
 
-# Сохраняем объединенный XML
-merged_tree.write("merged_feeds.xml", encoding="UTF-8", xml_declaration=True, pretty_print=True)
+    xml_contents = [download_xml(url) for url in urls]
+    merged_root = merge_xml_files(xml_contents, args.xpath)
 
-print("XML файлы успешно скачаны и объединены в merged_feeds.xml")
+    merged_tree = etree.ElementTree(merged_root)
+    merged_tree.write(args.output, encoding="UTF-8", xml_declaration=True, pretty_print=True)
+
+    print(f"XML files successfully downloaded and merged into {args.output}")
+
+if __name__ == "__main__":
+    main()
