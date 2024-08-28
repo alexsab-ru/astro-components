@@ -30,11 +30,6 @@ jobs:
       run: |
         curl '${{ vars.ENV_CSV_URL }}' -o data.csv
 
-    - name: Download XML
-      if: ${{ vars.ENV_XML_URL }}
-      run: |
-        curl '${{ vars.ENV_XML_URL }}' -o cars.xml
-
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -44,9 +39,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests
-        pip install pyyaml
-        pip install Pillow
+        pip install requests lxml pyyaml Pillow
 
     - name: Generate cars.xml from csv
       if: ${{ vars.ENV_CSV_URL }}
@@ -55,6 +48,13 @@ jobs:
       env:
         REPO_NAME: ${{ github.event.repository.name }}
         CSV_URL: ${{ vars.ENV_CSV_URL }}
+
+    - name: Get one XML
+      if: ${{ vars.ENV_XML_URL }}
+      run: |
+        python3 .github/scripts/getOneXML.py --xpath "//data/cars/car" --output cars.xml
+      env:
+        ENV_XML_URL: ${{ vars.ENV_XML_URL }}
 
     - name: Generate files
       run: |
