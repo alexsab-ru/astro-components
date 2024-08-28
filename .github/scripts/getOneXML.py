@@ -6,6 +6,7 @@ from lxml import etree
 
 def download_xml(url):
     response = requests.get(url)
+    response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
     return response.content
 
 def merge_xml_files(xml_contents, xpath):
@@ -21,6 +22,12 @@ def merge_xml_files(xml_contents, xpath):
         merged_root = etree.Element("merged_data")
 
     for content in xml_contents:
+        # Убрать BOM, если он присутствует
+        if content.startswith(b'\xef\xbb\xbf'):
+            content = content[3:]
+
+        # Декодируем содержимое из байтов в строку
+        content = content.decode('utf-8')
         root = etree.fromstring(content)
         
         # Находим элементы для объединения на основе полного XPATH
@@ -51,7 +58,8 @@ def main():
     parser.add_argument('--output', default='merged_output.xml', help='Output file name')
     args = parser.parse_args()
 
-    env_xml_url = os.getenv('ENV_XML_URL', '')
+    # env_xml_url = os.getenv('ENV_XML_URL', '')
+    env_xml_url = os.environ['ENV_XML_URL']
     urls = env_xml_url.strip().split('\n')
 
     if not urls:
