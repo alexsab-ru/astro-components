@@ -8,41 +8,42 @@ def download_xml(url):
     response = requests.get(url)
     return response.content
 
-def find_or_create_parent(root, path):
-    current = root
-    for tag in path.split('/'):
-        if not tag:  # пропускаем пустые строки (например, при начальном '/')
-            continue
-        child = current.find(tag)
-        if child is None:
-            child = etree.SubElement(current, tag)
-        current = child
-    return current
-
 def merge_xml_files(xml_contents, xpath):
-    # Разбиваем XPath на путь к родительскому элементу и имя конечного элемента
-    parts = xpath.split('/')
-    parent_path = '/'.join(parts[:-1])
-    child_name = parts[-1]
-    
-    # Используем первый XML в качестве основы для объединенного документа
-    merged_root = etree.fromstring(xml_contents[0])
-    
-    # Находим или создаем родительский элемент в объединенном документе
-    parent_element = find_or_create_parent(merged_root, parent_path)
-    
-    # Удаляем все существующие дочерние элементы с именем child_name из родительского элемента
-    for child in parent_element.findall(child_name):
-        parent_element.remove(child)
-    
-    # Объединяем элементы из всех XML файлов
+    # Определяем путь до родительского элемента для объединения
+    path = xpath.strip('/').split('/')[:-1]
+    root_path = path[0]
+    parent_path = '/'.join(path[1:])
+
+    # Создаем корневой элемент на основе родительского пути
+    if parent_path:
+        merged_root = etree.Element(root_path)
+    else:
+        merged_root = etree.Element("merged_data")
+
     for content in xml_contents:
         root = etree.fromstring(content)
+        
+        # Находим элементы для объединения на основе полного XPATH
         elements = root.xpath(xpath)
+        
+        # Находим или создаем нужную структуру родителя
+        parent_elements = merged_root.xpath(parent_path) if parent_path else [merged_root]
+        
+        # Если родитель не найден, создаем его
+        if not parent_elements:
+            parent_element = merged_root
+            for tag in parent_path.split('/'):
+                new_element = etree.Element(tag)
+                parent_element.append(new_element)
+                parent_element = new_element
+            parent_elements = [parent_element]
+        
         for element in elements:
-            parent_element.append(element)
+            # Добавляем элементы в соответствующую родительскую структуру
+            parent_elements[0].append(element)
     
     return merged_root
+
 
 def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
