@@ -27,7 +27,7 @@ def merge_xml_files(xml_contents, xpath):
             content = content[3:]
 
         # Декодируем содержимое из байтов в строку
-        content = content.decode('utf-8')
+        # content = content.decode('utf-8')
         root = etree.fromstring(content)
         
         # Находим элементы для объединения на основе полного XPATH
