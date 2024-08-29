@@ -9,7 +9,6 @@ const {model, breadcrumb} = Astro.props;
 import {Icon} from 'astro-icon/components';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import './model.scss';
-import {BRAND} from '@/const';
 import { currencyFormat } from '@/js/utils/numbers.format';
 const photoSlides = !model.photos
 	? []
@@ -35,7 +34,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 				<div>
 					<h2
 						class="text-2xl sm:text-5xl text-accent-500 tracking-wider font-medium uppercase before:hidden mx-0">
-						{BRAND}
+						{model.mark_id}
 						<b
 							class="font-bold tracking-tighter xs:text-3xl text-5xl sm:text-8xl uppercase text-white"
 							>{model?.name}</b
@@ -73,7 +72,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						url="#common-modal"
 						title="Подобрать комплектацию"
 						dataTitle="Подобрать комплектацию"
-						dataFormName={`Подобрать комплектацию. ${BRAND} ${model?.name}`}
+						dataFormName={`Подобрать комплектацию. ${model.mark_id} ${model?.name}`}
 						icon="mdi:chevron-right-circle"
 						iconClasses="text-xl text-accent-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
 					/>
@@ -117,7 +116,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 			<img
 				src={carImagePath}
 				class="w-full color-img-preview"
-				alt={`${BRAND} ${model?.name}`}
+				alt={`${model.mark_id} ${model?.name}`}
 			/>
 			<div class="flex flex-wrap justify-center gap-4 sm:gap-5 color-links">
 				{
@@ -180,35 +179,35 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 				url="#common-modal"
 				title="Узнать цену"
 				dataTitle="Узнать цену"
-				dataFormName={`Узнать цену. ${BRAND} ${model.name}`}
+				dataFormName={`Узнать цену. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
 				classes="popup-link btn !px-4 flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Рассчитать кредит"
 				dataTitle="Рассчитать кредит"
-				dataFormName={`Рассчитать кредит. ${BRAND} ${model.name}`}
+				dataFormName={`Рассчитать кредит. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
 				classes="popup-link btn black !px-4 flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Записаться на тест-драйв"
 				dataTitle="Записаться на тест-драйв"
-				dataFormName={`Записаться на тест-драйв. ${BRAND} ${model.name}`}
+				dataFormName={`Записаться на тест-драйв. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
 				classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Узнать цену по акции"
 				dataTitle="Узнать цену по акции"
-				dataFormName={`Узнать цену по акции. ${BRAND} ${model.name}`}
+				dataFormName={`Узнать цену по акции. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
 				classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Купить"
-				dataTitle={`Купить ${BRAND}`}
-				dataFormName={`Купить. ${BRAND} ${model.name}`}
+				dataTitle={`Купить ${model.mark_id}`}
+				dataFormName={`Купить. ${model.mark_id} ${model.name}`}
 			/>
 		</div>
 	</div>

@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 }
 
 
-import { BRAND, LEGAL_CITY_WHERE } from '@/const';
+import { LEGAL_CITY_WHERE } from '@/const';
 import { breadcrumb } from './index.astro';
 const { model } = Astro.props;
 
@@ -31,7 +31,7 @@ const rawCars = await getCollection("cars");
 const cars = rawCars && rawCars.length ? rawCars.filter(car => car.data.folder_id.replace(/ /gm, '').replace(/-/gm, '').toLowerCase() === model.id.replace(/ /gm, '').replace(/-/gm, '').toLowerCase()) : [];
 ---
 <Layout 
-  title={`${BRAND} ${model.name} – фото, цены, комплектации и характеристики ${BRAND} ${model.name} в ${LEGAL_CITY_WHERE}`} 
+  title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${LEGAL_CITY_WHERE}`} 
   description={model.slogan}
   image={model.image ?? model.thumb}
 >
@@ -47,7 +47,7 @@ const cars = rawCars && rawCars.length ? rawCars.filter(car => car.data.folder_i
   {cars.length > 0 && (
     <section class="bg-gray-50">
       <div class="container">
-        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${BRAND}&nbsp;${model.name} в наличии в ${LEGAL_CITY_WHERE}`} /></h2>
+        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${LEGAL_CITY_WHERE}`} /></h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
           {cars.map((car) => ( <CarItem car={car} /> ))}
         </div>
