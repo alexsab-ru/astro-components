@@ -124,4 +124,36 @@
 			@apply scale-110;
 		}
 	}
+	&.instagram {
+		border: none;
+		color: #b900b4;
+		position: relative;
+		z-index: 1;
+		&::before {
+			content: '';
+			display: block;
+			position: absolute;
+			top: 2px;
+			right: 2px;
+			bottom: 2px;
+			left: 2px;
+			background-color: #fff;
+			z-index: -1;
+			border-radius: inherit;
+			opacity: 1;
+			transition: all 0.5s;
+		}
+		svg, svg path, svg circle {
+			fill: url(#SVGID_1_);
+			transition: all 0.5s;
+		}
+		&:hover {
+			&::before {
+				opacity: 0;
+			}
+			svg {
+				@apply text-white;
+			}
+		}
+	}
 }
