@@ -2,9 +2,11 @@
 import type {TBreadcrumb} from './types'
 interface Props {
 	breadcrumb: TBreadcrumb[];
+	color?: string;
 }
 
-const { breadcrumb } = Astro.props;
+const { breadcrumb, color = 'black' } = Astro.props;
+const linkClass = `!text-${color}`;
 
 breadcrumb.unshift({name:"Главная", href:"/"});
 ---
@@ -14,9 +16,9 @@ breadcrumb.unshift({name:"Главная", href:"/"});
 		{breadcrumb.map((crumb, index) => (
 		<li class={`!m-0 flex items-center flex-nowrap gap-1 ${(breadcrumb.length - 1) === index ? 'truncate' : ''}`}>
 		{(breadcrumb.length - 1) !== index ? (
-			<a href={crumb.href} class="!text-xs sm:!text-sm !m-0 !leading-none !text-black !no-underline font-semibold hover:!text-gray-600">{crumb.name}</a> <span class="text-xs !leading-none">></span>
+			<a href={crumb.href} class={`!text-xs sm:!text-sm !m-0 !leading-none !no-underline font-semibold hover:opacity-80 ${linkClass}`}>{crumb.name}</a> <span class="text-xs !leading-none">&#62;</span>
 		) : (
-			<span class="text-xs sm:text-sm !leading-none text-gray-600 truncate">{crumb.name}</span>
+			<span class="text-xs sm:text-sm !leading-none opacity-80 truncate">{crumb.name}</span>
 		)}
 		</li>
 		))}

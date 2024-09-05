@@ -10,8 +10,8 @@
     "build_local": "astro build --config astro.local.config.mjs",
     "build": "astro build",
     "preview": "astro preview --open --host",
-    "download_json": "JSON_PATH=$(cat .env | grep JSON_PATH= | cut -d '=' -f 2) && folder_name=$(node -e \"console.log(require('path').basename(process.cwd()))\") && echo \"Using JSON_PATH: $JSON_PATH\" && echo \"Using folder_name: $folder_name\" && mkdir -p src/data && for file in banners cars models salons services socials special-services faq reviews; do if curl --output /dev/null --silent --fail -r 0-0 $JSON_PATH/$folder_name/data/$file.json; then curl $JSON_PATH/$folder_name/data/$file.json -o src/data/$file.json; fi; done && node .github/scripts/replacePlaceholdersInJson.js",
-    "download_json_win": "powershell -Command \"$jsonPath = (Get-Content .env | Select-String 'JSON_PATH=').ToString().Split('=')[1]; $folderName = node -e \\\"console.log(require('path').basename(process.cwd()))\\\"; Write-Host \\\"Using JSON_PATH: $jsonPath\\\"; Write-Host \\\"Using folder_name: $folderName\\\"; $dir = 'src/data'; if (-Not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir }; $files = @('banners', 'cars', 'models', 'salons', 'services', 'socials', 'special-services', 'faq', 'reviews'); foreach ($file in $files) { $url = \\\"$jsonPath/$folderName/data/$file.json\\\"; $output = \\\"src/data/$file.json\\\"; $response = Invoke-WebRequest -Uri $url -Method Head -ErrorAction SilentlyContinue; if ($response.StatusCode -eq 200) { Write-Host \\\"Downloading $url\\\"; Invoke-WebRequest -Uri $url -OutFile $output } else { Write-Host \\\"File $url does not exist on server. Skipping download.\\\" } }\"; node .github/scripts/replacePlaceholdersInJson.js",
+    "download_json": "JSON_PATH=$(cat .env | grep JSON_PATH= | cut -d '=' -f 2) && folder_name=$(node -e \"console.log(require('path').basename(process.cwd()))\") && echo \"Using JSON_PATH: $JSON_PATH\" && echo \"Using folder_name: $folder_name\" && mkdir -p src/data && for file in banners.json cars.json models.json salons.json services.json socials.json special-services.json faq.json reviews.json models-sections.yml; do if curl --output /dev/null --silent --fail -r 0-0 $JSON_PATH/$folder_name/data/$file; then curl $JSON_PATH/$folder_name/data/$file -o src/data/$file; fi; done && node .github/scripts/replacePlaceholdersInJson.js",
+    "download_json_win": "powershell -Command \"$jsonPath = (Get-Content .env | Select-String 'JSON_PATH=').ToString().Split('=')[1]; $folderName = node -e \\\"console.log(require('path').basename(process.cwd()))\\\"; Write-Host \\\"Using JSON_PATH: $jsonPath\\\"; Write-Host \\\"Using folder_name: $folderName\\\"; $dir = 'src/data'; if (-Not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir }; $files = @('banners.json', 'cars.json', 'models.json', 'salons.json', 'services.json', 'socials.json', 'special-services.json', 'faq.json', 'reviews.json', 'models-sections.yml'); foreach ($file in $files) { $url = \\\"$jsonPath/$folderName/data/$file\\\"; $output = \\\"src/data/$file\\\"; $response = Invoke-WebRequest -Uri $url -Method Head -ErrorAction SilentlyContinue; if ($response.StatusCode -eq 200) { Write-Host \\\"Downloading $url\\\"; Invoke-WebRequest -Uri $url -OutFile $output } else { Write-Host \\\"File $url does not exist on server. Skipping download.\\\" } }\"; node .github/scripts/replacePlaceholdersInJson.js",
     "astro": "astro"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
+    "@rollup/plugin-yaml": "^4.1.2",
     "sass": "^1.71.1"
   }
 }

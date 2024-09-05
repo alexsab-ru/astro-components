@@ -1,0 +1,63 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Model from '@/components/Model/Model.astro';
+import CarItem from "@/components/Cars/Item.astro";
+import DesignSection from '@/components/Model/sections/design.astro';
+import ExteriorSection from '@/components/Model/sections/exterior.astro';
+import WarantySection from '@/components/Model/sections/waranty.astro';
+
+
+import models from '@/data/models.json';
+export async function getStaticPaths() {
+  return models.filter(m => m.show).map((model) => {
+    return {
+      params: { slug: model.id },
+      props: { model },
+    };
+  });
+}
+
+
+import { LEGAL_CITY_WHERE } from '@/const';
+import { breadcrumb } from './index.astro';
+const { model } = Astro.props;
+
+import modelsSections from '@/data/models-sections.yml';
+const currentModel = modelsSections.find(m => m?.id === model.id) || {};
+const sections = currentModel?.sections || [];
+
+import { getCollection } from "astro:content";
+const rawCars = await getCollection("cars");
+const cars = rawCars && rawCars.length ? rawCars.filter(
+  car => (
+    car.data.folder_id.replace(/\W/gm, '').toLowerCase() === model.id.replace(/\W/gm, '').toLowerCase()
+    && car.data.mark_id.toLowerCase() === model.mark_id.toLowerCase()
+  )
+) : [];
+---
+<Layout 
+  title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${LEGAL_CITY_WHERE}`} 
+  description={model.slogan}
+  image={model.image ?? model.thumb}
+>
+	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
+  {
+    sections.length > 0 && sections.map(s => (
+      s.id === 'design' ? <DesignSection section={s} /> :
+      s.id === 'exterior' ? <ExteriorSection section={s} /> :
+      s.id === 'waranty' ? <WarantySection section={s} /> :
+      ''
+    ))
+  }
+  {cars.length > 0 && (
+    <section class="bg-gray-50">
+      <div class="container">
+        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${LEGAL_CITY_WHERE}`} /></h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+          {cars.map((car) => ( <CarItem car={car} /> ))}
+        </div>
+      </div>
+    </section>
+  )}
+    
+</Layout>

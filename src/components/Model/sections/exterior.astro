@@ -1,0 +1,41 @@
+---
+interface Props {
+	section: {
+		id?: string;
+		name?: string;
+		title?: string;
+		descr?: string;
+		items?: [
+			{ 
+				title?: string;
+				descr?: string;
+				img?: string;
+			}
+		];
+		img?: string;
+	};
+}
+const { section } = Astro.props;
+---
+<section class="py-20 font-light bg-[#26282A] text-white model-section" id="{ section.id }">
+	<div class="container">
+		{section?.name && (<p class="text-accent-400 text-sm"><Fragment set:html={section?.name} /></p>)}
+		{section?.title && (<h2 class="text-3xl sm:text-5xl font-normal lg:w-1/2"><Fragment set:html={section?.title} /></h2>)}
+		{section?.descr && (<p class="sm:text-lg mt-2 sm:mt-5 lg:w-1/2"><Fragment set:html={section?.descr} /></p>)}
+		{section.items && (
+			<div class="mt-10 lg:mt-20 space-y-10">
+				{section.items.map(item => (
+					<div class="flex gap-5 lg:gap-10 flex-col lg:flex-row lg:even:flex-row-reverse">
+						 <div class="lg:w-1/3">
+							{item?.title && (<h3 class="text-xl font-normal"><Fragment set:html={item?.title} /></h3>)}
+							{item?.descr && (<p class="mt-2"><Fragment set:html={item?.descr} /></p>)}
+						 </div>
+						 <div class="lg:w-2/3">
+							{item?.img && (<img src={ item.img } class="w-full h-auto" alt={ item?.name || 'ALT' } />)}
+						 </div>
+					</div>
+				))}
+			</div>
+		)}
+	</div>
+</section>

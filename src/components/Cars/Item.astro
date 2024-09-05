@@ -4,7 +4,6 @@ interface Props {
 }
 const {car = {}} = Astro.props;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
-import { BRAND } from '@/const'
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';
 const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.data.max_discount ? car.data.price - car.data.max_discount : car.data.price);
@@ -18,7 +17,7 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 		): ('')}
 		<div class="sm:text-lg md:text-xl xl:text-3xl font-medium mt-3"><span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(price)}</div>
 		<h3 class="xs:!text-xs sm:!text-base md:!text-lg xl:!text-xl font-normal mt-1 transition-colors hover:text-accent flex-grow">
-			<a href={ car.slug } class="!no-underline !text-black !mb-0"><b class="font-bold">{BRAND} { car.data.folder_id }</b> { car.data.modification_id }</a>
+			<a href={ car.slug } class="!no-underline !text-black !mb-0"><b class="font-bold">{ car.data.mark_id } { car.data.folder_id }</b> { car.data.modification_id }</a>
 		</h3>
 		<noindex><div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">
 			{car.data.year}
@@ -31,26 +30,26 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 			classes="popup-link black block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !text-white !no-underline !mb-0 w-full md:w-[48%]" 
 			url="#common-modal" 
 			title="Купить"
-			dataTitle={`Купить ${BRAND}`}
-			dataFormName={`Купить. ${BRAND}, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			dataTitle={`Купить ${ car.data.mark_id }`}
+			dataFormName={`Купить. ${ car.data.mark_id }, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 		/>
 		<Button 
 			classes="popup-link gray block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !text-white !no-underline !mb-0 w-full md:w-[48%]" 
 			url="#common-modal" 
 			title="Кредит"
 			dataTitle="Рассчитать кредит"
-			dataFormName={`Рассчитать кредит. ${BRAND}, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			dataFormName={`Рассчитать кредит. ${ car.data.mark_id }, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 		/>
 		<Button 
 			classes="popup-link black btn-o block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !no-underline !mb-0 w-full md:w-[48%]" 
 			url="#common-modal" 
 			title="Рассрочка"
-			dataTitle={`Рассрочка на ${BRAND} ${car.data.folder_id}`}
-			dataFormName={`Рассрочка. ${BRAND}, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			dataTitle={`Рассрочка на ${ car.data.mark_id } ${car.data.folder_id}`}
+			dataFormName={`Рассрочка. ${ car.data.mark_id }, ${car.data?.color} ${car.data?.folder_id} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 		/>
 		<Button 
 			classes="block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !no-underline !mb-0 !text-white w-full md:w-[48%]" 
-			url={ car.slug }
+			url={ `/cars/${car.slug}` }
 			view="link"
 			title="Подробнее"
 		/>

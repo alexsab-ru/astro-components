@@ -1,0 +1,19 @@
+---
+import { BRAND, LEGAL_CITY_WHERE } from '@/const'
+import Layout from '@/layouts/Layout.astro';
+import ModelList from '@/components/Model/ModelList.astro';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
+export const breadcrumb = { name: `Модели`, href: "/models/" };
+---
+<Layout 
+	title={`Модельный ряд ${BRAND} – Официальный дилер ${BRAND} в ${LEGAL_CITY_WHERE}`} 
+	description={`Информация о моделях ${BRAND} 2023-2024 на сайте официального дилера в ${LEGAL_CITY_WHERE}: обзор, цены, комплектации, технические характеристики.`}
+>
+	<section class="content">
+		<div class="container">
+			<Breadcrumbs breadcrumb={[breadcrumb]} />
+			<h1><Fragment set:html={`Модели ${BRAND}`} /></h1>
+		</div>
+	</section>
+	<ModelList title="" classes="!pt-0 pb-10" />
+</Layout>

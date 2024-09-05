@@ -21,3 +21,5 @@ pnpm-debug.log*
 .DS_Store
 .vscode
 src/data/*.json
+src/data/*.yml
+src/data/*.yaml

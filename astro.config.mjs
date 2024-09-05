@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import robots from "astro-robots";
 import mdx from "@astrojs/mdx";
 import icon from "astro-icon";
+import yaml from '@rollup/plugin-yaml';
 
 // https://astro.build/config
 export default defineConfig({
@@ -26,6 +27,9 @@ export default defineConfig({
 		mdx(),
 		icon(),
 	],
+	vite: {
+		plugins: [yaml()]
+	},
 	site: 'https://jetour-alpha.ru',
-	base: '/'
+	base: "/"
 });
