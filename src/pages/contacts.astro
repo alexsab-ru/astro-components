@@ -4,6 +4,7 @@ import Map from '@/components/Map/Map.astro';
 import MapWidget from '@/components/Map/Widget.astro';
 import AutoShowModal from '@/components/AutoShowModal.astro';
 import InfoItem from '@/components/Contacts/InfoItem.astro';
+import WorkerItem from '@/components/Contacts/WorkerItem.astro';
 import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LINK_WIDGET_ORGNIZATION} from '@/const';
 import salons from '@/data/salons.json';
 const salon = salons[0]; //временно, наверное
@@ -11,7 +12,7 @@ const salon = salons[0]; //временно, наверное
 ---
 
 <Layout title={`Контакты автосалона ${SITE_NAME}`}>
-	<div class="h-full">
+	<div class="h-full relative">
 		<div class="container">
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
 
@@ -38,6 +39,18 @@ const salon = salons[0]; //временно, наверное
 			</div>
 		</div>
 	</div>
+	{salon?.workers && salon?.workers.length ? (
+		<section class="bg-gray-100">
+			<div class="container">
+				<h2 class="mb-10">Ваши менеджеры</h2>
+				<div class="flex gap-[1%] flex-wrap justify-center">
+				{salon.workers.map(worker => (
+					<WorkerItem worker={worker} />
+				))}
+				</div>
+			</div>
+		</section>
+	) : ('')}
 </Layout>
 
 <!--
