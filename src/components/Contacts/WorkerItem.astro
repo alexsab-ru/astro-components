@@ -1,0 +1,39 @@
+---
+interface Props {
+	worker: {
+		name: string;
+		position?: string;
+		photo?: string;
+		email?: string;
+		phone?: string;
+	}
+}
+const {worker} = Astro.props;
+const workerPhoto = worker?.photo || '/img/people/user.webp';
+
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { Icon } from 'astro-icon/components';
+---
+<div class="w-[24%] p-4 bg-white flex flex-col">
+	{workerPhoto && (<img src={workerPhoto} alt={worker?.name} class="w-full max-h-[490px] object-cover object-left-top h-auto mb-5">)}
+	<div class="flex-grow flex flex-col gap-4 justify-between">
+		<div>
+			<div class="text-lg font-bold !leading-none">{worker.name}</div>
+			{worker?.position && (<small class="text-xs text-gray-400 block mt-1">{worker.position}</small>)}
+		</div>
+		<div class="space-y-3">
+			{worker?.phone && (
+				<div class="flex items-center gap-1.5">
+					<Icon name="mdi:cellphone" class="text-xl flex-shrink-0 text-gray-600" />
+					<a href={`tel:${phoneFormat(worker.phone)}`} class="font-bold transition-colors hover:text-accent-500 inline-block !m-0">{worker.phone}</a>
+				</div>
+			)}
+			{worker?.email && (
+				<div class="flex items-center gap-1.5">
+					<Icon name="mdi:email-outline" class="text-xl flex-shrink-0 text-gray-600" />
+					<a href={`mailto:${worker.email}`} class="font-bold transition-colors hover:text-accent-500 inline-block">{worker.email}</a>
+				</div>
+			)}
+		</div>
+	</div>
+</div>
