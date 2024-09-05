@@ -30,8 +30,9 @@ import { getCollection } from "astro:content";
 const rawCars = await getCollection("cars");
 const cars = rawCars && rawCars.length ? rawCars.filter(
   car => (
-    car.data.folder_id.replace(/\W/gm, '').toLowerCase() === model.id.replace(/\W/gm, '').toLowerCase()
-    && car.data.mark_id.toLowerCase() === model.mark_id.toLowerCase()
+    car.data.mark_id.toLowerCase() === model.mark_id.toLowerCase()
+    && (car.data.folder_id.replace(/\W/gm, '').toLowerCase() === model.id.replace(/\W/gm, '').toLowerCase()
+    || (model?.feed_names ? model?.feed_names.includes(car.data.folder_id) : false) )
   )
 ) : [];
 ---
