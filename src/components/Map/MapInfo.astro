@@ -46,9 +46,9 @@ import logo from '@/components/Logo/logo.svg';
 			<div class="flex items-center flex-nowrap gap-2 sm:gap-3 mb-4">
 				<Icon name="mdi:cellphone" class="text-2xl flex-shrink-0" />
 				<a
-					href={`tel:${phoneFormat(salons[0].phone)}`}
+					href={`tel:${phoneFormat(salons[index].phone)}`}
 					class="font-medium sm:text-xl goal-click-lead-tel">
-					{salons[0].phone}
+					{salons[index].phone}
 				</a>
 			</div>
 		)})
