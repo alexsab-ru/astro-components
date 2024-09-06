@@ -9,6 +9,9 @@ description: "Приобретайте автомобиль Jetour Dashing в л
 export const DateTo = "30.04.2024"
 
 import Button from '@/components/Button/Button.astro';
+import { SITE_NAME, PHONE } from '@/const';
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 import { LEGAL_CITY_WHERE } from '@/const'
 
 <picture>
@@ -26,7 +29,7 @@ import { LEGAL_CITY_WHERE } from '@/const'
 
 Акция действует с 1 по 30 июня 2024 года.
 
-Подробности уточняйте по телефону [+7 (846) 9-777-779](tel:+78469777779)
+Подробности уточняйте по телефону <a href={`tel:${phoneFormat(PHONE)}`}>{PHONE}</a>
 
 <div class="flex justify-center mt-10 mb-5">
     <Button

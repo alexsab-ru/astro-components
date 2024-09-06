@@ -10,7 +10,8 @@ description: "Жаркое лето с Jetour - это выгода на пок�
 
 
 import Button from '@/components/Button/Button.astro';
-import { BRAND, LEGAL_CITY_WHERE, LEGAL_ENTITY } from '@/const';
+import { SITE_NAME, PHONE } from '@/const';
+import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 import models from '@/data/models.json';
 import { currencyFormat } from '@/js/utils/numbers.format';
