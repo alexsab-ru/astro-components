@@ -148,6 +148,7 @@ import socials from '@/data/socials.json';
 				<div>
 				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
+						<h3 class="font-bold text-lg">{salon.name}</h3>
 						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap"><Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" /><Fragment set:html={salon.address} /></a>
 						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-black/80 flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
 					</div>
