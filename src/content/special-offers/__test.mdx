@@ -7,6 +7,7 @@ image: https://jetour-ru.com/cn/upload/images/202312/17014189954493.jpg
 description: "Выгодные условия кредитования на автомобили Jetour X90 Plus, Jetour X70 Plus, Jetour Dashing от 4 банков: Альфа-Банк, СОВКОМБАНК, РОСБАНК АВТО, БАНК ОТКРЫТИЕ"
 ---
 import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import { SITE_NAME, PHONE } from '@/const';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
@@ -59,16 +60,6 @@ export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
 	</table>
 </div>
 
-Подробности в нашем дилерском центре по тел.: <a href={`tel:${phoneFormat(PHONE)}`}>{PHONE}</a>
-
-<div class="flex justify-center mt-10 mb-5">
-	<Button 
-		classes="popup-link block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
-		url="#common-modal" 
-		title="Записаться на тест-драйв"
-		dataTitle="Записаться на тест-драйв"
-		dataFormName={`Запись на тест-драйв`}
-	/>
-</div>
+<SpecialSalonsInfo />
 
 > <sup>1</sup> Предложение действительно с {from} до {to} года, распространяется на комплектации Comfort Plus, Comfort, Elite, Luxury. Выгода предоставляется путем прямого снижения РРЦ на автомобиль выбранной комплектации.
