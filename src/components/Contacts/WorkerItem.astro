@@ -6,6 +6,7 @@ interface Props {
 		photo?: string;
 		email?: string;
 		phone?: string;
+		salonName?: string;
 	}
 }
 const {worker} = Astro.props;
@@ -19,7 +20,7 @@ import { Icon } from 'astro-icon/components';
 	<div class="flex-grow flex flex-col gap-4 justify-between">
 		<div>
 			<div class="text-lg font-bold !leading-none">{worker.name}</div>
-			{worker?.position && (<small class="text-xs text-gray-400 block mt-1">{worker.position}</small>)}
+			<small class="text-xs text-gray-400 block mt-1">{worker?.position && worker.position+' - '} {worker?.salonName && worker.salonName}</small>
 		</div>
 		<div class="space-y-3">
 			{worker?.phone && (
