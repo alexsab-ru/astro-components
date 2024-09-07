@@ -8,7 +8,8 @@ import WorkerItem from '@/components/Contacts/WorkerItem.astro';
 import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LINK_WIDGET_ORGNIZATION} from '@/const';
 import salons from '@/data/salons.json';
 const salon = salons[0]; //временно, наверное
-
+let workers = [];
+salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map(worker => workers.push({...worker, salonName: salon.name})));
 ---
 
 <Layout title={`Контакты автосалона ${SITE_NAME}`}>
@@ -18,14 +19,29 @@ const salon = salons[0]; //временно, наверное
 
 				<div class="md:w-2/5 py-10">
 					<h1 class="text-3xl sm:text-4xl font-bold">Контакты</h1>
-					<div class="flex flex-wrap gap-y-5 sm:gap-y-8 mt-10">
-
-						{LEGAL_ENTITY && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={LEGAL_ENTITY} iconName="mdi:bank" />)}
-						{LEGAL_INN && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={LEGAL_INN} iconName="mdi:list-box-outline" />)}
-						{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
-						{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
-						{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
-					</div>
+					{LEGAL_ENTITY ? (
+						<div class="flex flex-wrap gap-y-5 sm:gap-y-8 mt-10">
+							{LEGAL_ENTITY && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={LEGAL_ENTITY} iconName="mdi:bank" />)}
+							{LEGAL_INN && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={LEGAL_INN} iconName="mdi:list-box-outline" />)}
+							{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
+							{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
+							{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
+						</div>
+					) : (
+						<div class="divide-y">
+							{
+								salons.map(salon => (
+								<div class="flex flex-wrap gap-y-3 py-8">
+									{salon?.legal_entity && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={salon?.legal_entity} iconName="mdi:bank" />)}
+									{salon?.legal_inn && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={salon?.legal_inn} iconName="mdi:list-box-outline" />)}
+									{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
+									{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
+									{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
+								</div>
+								))
+							}
+						</div>
+					)}
 				</div>
 
 				<div class="h-[400px] md:h-auto w-full md:w-1/2 absolute md:top-0 right-0 bottom-0">
@@ -39,18 +55,18 @@ const salon = salons[0]; //временно, наверное
 			</div>
 		</div>
 	</div>
-	{salon?.workers && salon?.workers.length ? (
+	{workers.length > 0 && (
 		<section class="bg-gray-100">
 			<div class="container">
 				<h2 class="mb-10">Ваши менеджеры</h2>
 				<div class="flex gap-5 sm:gap-[1%] flex-wrap justify-center">
-				{salon.workers.map(worker => (
-					<WorkerItem worker={worker} />
-				))}
+					{workers.map(worker => (
+						<WorkerItem worker={worker} />
+					))}
 				</div>
 			</div>
 		</section>
-	) : ('')}
+	)}
 </Layout>
 
 <!--
