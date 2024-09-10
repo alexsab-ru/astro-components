@@ -1,0 +1,21 @@
+---
+import Button from '@/components/Button/Button.astro';
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LEGAL_ENTITY, PHONE } from '@/const';
+import salons from '@/data/salons.json';
+const LEGAL_SALONS_INFO = LEGAL_ENTITY ? 
+[`<p class="text-sm">${LEGAL_ENTITY}&nbsp;- <a class="whitespace-nowrap" href="tel:${phoneFormat(PHONE)}">${PHONE}</a></p>`] : 
+salons.map(s => `<p class="text-sm">${s.name}&nbsp;- <a class="whitespace-nowrap" href="tel:${phoneFormat(s.phone)}">${s.phone}</a></p>`);
+---
+<p class="font-bold">Подробности по телефону:</p>
+<Fragment set:html={LEGAL_SALONS_INFO.join('')} />
+
+<div class="flex justify-center mt-10 mb-5">
+	<Button 
+		classes="popup-link block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
+		url="#common-modal" 
+		title="Узнать подробнее"
+		dataTitle="Узнать подробнее"
+		dataFormName={`Узнать подробнее`}
+	/>
+</div>

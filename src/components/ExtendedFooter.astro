@@ -1,5 +1,6 @@
 ---
 import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN, BRAND, FOOTER_INFO, LINKS_MENU as links } from '@/const';
+import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${BRAND}&utm_compaing=${SITE_NAME}`
@@ -9,6 +10,11 @@ import logo from '@/components/Logo/logo.svg';
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
+const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
+[`<p class="text-sm">${LEGAL_ENTITY}&nbsp;- ИНН:&nbsp;${LEGAL_INN}</p>`] : 
+salons
+    .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
+    .map(s => `<p class="text-sm">${s?.legal_entity}&nbsp;- ИНН:&nbsp;${s?.legal_inn}</p>`);
 ---
 
 <footer class="bg-black/90 text-white py-14 relative">
@@ -33,6 +39,7 @@ import socials from '@/data/socials.json';
             </div>
             <div class="">
                 <h3 class="text-xl mb-3 md:mb-5">Контакты</h3>
+                <div class="space-y-6">
                 {
                     salons.map(salon => (
                     <div class="flex flex-col gap-3">
@@ -47,6 +54,7 @@ import socials from '@/data/socials.json';
                     </div>
                     ))
                 }
+                </div>
             </div>
 
             <div class="">
@@ -64,13 +72,15 @@ import socials from '@/data/socials.json';
 
         <hr class="mt-5 mb-8 opacity-20">
 
-        <div class="flex items-center justify-between gap-5 flex-wrap">
-            <div class="flex items-center flex-grow gap-5 flex-wrap">
-                <p class="text-sm m-0">© 2024 { LEGAL_ENTITY }</p>
-                {LEGAL_INN && (<p class="text-sm text-white/80">ИНН: <Fragment set:html={LEGAL_INN} /></p>)}
+        <div class="flex justify-between items-start gap-5 flex-wrap">
+            <div class="flex flex-grow gap-5 flex-wrap items-start">
+                <div class="text-sm">
+                    <p class="text-sm mb-2">&copy; {YEAR}</p>
+                    {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
+                </div>
                 <a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a>
             </div>
-            <p class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:!text-white" target="_blank">alexsab.ru</a></p>
+            <p class="made-by text-sm m-0 text-white/80 leading-none">Разработка <a href={url} class="hover:!text-white leading-none" target="_blank">alexsab.ru</a></p>
         </div>
 
     </div>

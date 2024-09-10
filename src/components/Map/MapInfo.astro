@@ -8,12 +8,13 @@ import { phoneFormat } from '@/js/utils/numbers.format';
 import {Icon} from 'astro-icon/components';
 
 import logo from '@/components/Logo/logo.svg';
+
+import InfoItem from '@/components/Contacts/InfoItem.astro';
+const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
 ---
 
-<div
-	class="map-info relative lg:absolute lg:max-w-md lg:top-[135px] s1024_1074:left-[45px] s1280_1330:left-[45px] s1536_1586:left-[45px] py-8 px-4 sm:px-8 z-10 bg-white/70 shadow-2xl w-fit mx-auto mb-10 lg:mb-0">
-	<div
-		class="flex items-center flex-nowrap flex-col sm:flex-row gap-1 sm:gap-3 mb-6">
+<div class="map-info relative lg:absolute lg:max-w-md lg:top-[135px] s1024_1074:left-[45px] s1280_1330:left-[45px] s1536_1586:left-[45px] py-8 px-4 sm:px-8 z-10 bg-white/70 shadow-2xl w-fit mx-auto mb-10 lg:mb-0">
+	<div class="flex items-center flex-nowrap flex-col sm:flex-row gap-1 sm:gap-3 mb-3">
 		<div class="sm:pr-3 sm:border-r w-full max-w-[140px] flex-grow flex-shrink">
 			<img src={logo.src} class="w-full" alt={SITE_NAME} />
 		</div>
@@ -22,37 +23,19 @@ import logo from '@/components/Logo/logo.svg';
 			{SITE_NAME}
 		</div>
 	</div>
-			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
-				<Icon name="mdi:map-marker-outline" class="text-3xl flex-shrink-0" />
-				<div>
-					{
-						salons.length < 2 && salons.length != 0 && salons[0].address && (
-					<div class="font-medium mb-2 sm:text-lg"><Fragment set:html={salons[0].address} /></div>
-						)
-					}
+
+	{salons.length > 0 && (
+		<div class="divide-y">
+			{salons.map(salon => (
+				<div class={`py-4 ${space}`}>
+					{salons.length > 1 && salon?.name && (<InfoItem class="w-full flex items-center gap-2" value={salon.name} iconName="mdi:bank" iconClass="text-2xl text-gray-500" />)}					
+					{salon?.address && (<InfoItem class="w-full flex items-center gap-2" value={salon.address} iconName="mdi:map-marker-outline" iconClass="text-2xl text-gray-500" />)}
+					{salon?.phone && (<InfoItem class="w-full flex items-center gap-2" value={salon.phone} iconName="mdi:cellphone" type="phone" iconClass="text-2xl text-gray-500" />)}
+					{salons.length === 1 && salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2" value={salon.work_hours} iconName="mdi:clock-time-three-outline" iconClass="text-2xl text-gray-500" />)}
 				</div>
-			</div>
-	{
-		salons.length < 2 && salons.length != 0 && salons[0].work_hours && (
-			<div class="flex flex-nowrap gap-2 sm:gap-3 mb-4">
-				<Icon name="mdi:clock-time-three-outline" class="text-2xl flex-shrink-0" />
-				<div class="font-medium mb-2 sm:text-lg"><Fragment set:html={salons[0].work_hours} /></div>
-			</div>
-		)
-	}
-	{
-		salons.length && salons.map((salon: any, index) => {
-							return index < 2 && (
-			<div class="flex items-center flex-nowrap gap-2 sm:gap-3 mb-4">
-				<Icon name="mdi:cellphone" class="text-2xl flex-shrink-0" />
-				<a
-					href={`tel:${phoneFormat(salons[0].phone)}`}
-					class="font-medium sm:text-xl goal-click-lead-tel">
-					{salons[0].phone}
-				</a>
-			</div>
-		)})
-	}
+			))}
+		</div>
+	)}
 
 	<div class="font-bold sm:text-xl mb-4">
 		Остались вопросы? Мы&nbsp;перезвоним!
