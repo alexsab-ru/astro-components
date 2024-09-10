@@ -16,10 +16,7 @@ def merge_xml_files(xml_contents, xpath):
     parent_path = '/'.join(path[1:])
 
     # Создаем корневой элемент на основе родительского пути
-    if parent_path:
-        merged_root = etree.Element(root_path)
-    else:
-        merged_root = etree.Element("merged_data")
+    merged_root = etree.Element(root_path)
 
     for content in xml_contents:
         # Убрать BOM, если он присутствует
