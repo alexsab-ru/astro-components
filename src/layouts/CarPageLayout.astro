@@ -79,8 +79,8 @@ import BackLink from '@/components/BackLink.astro';
 						<div class="font-bold text-4xl"><span class="text-sm text-gray-400 font-normal">от</span>&nbsp;{currencyFormat(price)}</div>
 					</div>
 					<div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
-						<a href="#common-modal" class="popup-link btn flex-grow !p-2" data-title="Получить предложение" data-form_name={`Получить предложение. ${data?.color} ${data?.folder_id} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Получить предложение</a>
-						<a href="#common-modal" class="popup-link btn gray flex-grow !p-2" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.folder_id} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Рассчитать кредит</a>
+						<a href="#common-modal" class="popup-link btn flex-grow !p-2" data-title="Получить предложение" data-form_name={`Получить предложение. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Получить предложение</a>
+						<a href="#common-modal" class="popup-link btn gray flex-grow !p-2" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Рассчитать кредит</a>
 					</div>
 				</div>
 
