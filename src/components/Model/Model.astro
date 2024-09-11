@@ -24,7 +24,7 @@ import ColorLink from '@/components/ColorLink/ColorLink.astro'
 const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.colors[0].id}.png`;
 ---
 
-<section class="model" id={model?.id} data-dir={model?.id}>
+<section class="model model-section" id={model?.id} data-dir={model?.id}>
 	<div
 		class="model__info"
 		style={`background-image: url(${model?.homeImg})`}>
