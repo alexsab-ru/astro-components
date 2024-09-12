@@ -24,8 +24,8 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 	<PageTitle />
 	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<ModelList title="Модельный ряд JETOUR" />
-	{models && models.map((model: any) => model.show && <Model model={model}/>)}
-	{modelsWithComplectations.length > 0 && <ModelComplectations models={modelsWithComplectations} brand={BRAND} />}
+	{models && false && models.map((model: any) => model.show && <Model model={model}/>)}
+	{modelsWithComplectations.length > 0 && false && <ModelComplectations models={modelsWithComplectations} brand={BRAND} />}
 	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" />
 	<Callback bgUrl="/img/konkurenty.webp" />
 	<Services />
