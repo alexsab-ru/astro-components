@@ -9,7 +9,7 @@ from config import dealer, model_mapping
 from utils import *
 import xml.etree.ElementTree as ET
 
-def duplicate_car(car, n):
+def duplicate_car(car, n, status = "в пути"):
     """Функция для дублирования элемента 'car' N раз с изменением vin."""
     duplicates = []
     for i in range(n):
@@ -27,6 +27,7 @@ def duplicate_car(car, n):
         
         # new_vin = f"VIN_{i+1:05d}"    # Генерация уникального значения VIN (заглушка)
         new_car.find('vin').text = new_vin  # Меняем текст VIN
+        new_car.find('availability').text = status  # Меняем статус Наличие автомобиля
         duplicates.append(new_car)
     
     return duplicates
