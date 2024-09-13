@@ -38,15 +38,6 @@ output_path = './public/avito.xml'
 convert_to_string(root)
 tree.write(output_path, encoding='utf-8', xml_declaration=True)
 
-# Удаление неиспользуемых превьюшек
-cleanup_unused_thumbs()
-
-
-for existing_file in os.listdir(directory):
-    filepath = os.path.join(directory, existing_file)
-    if filepath not in existing_files:
-        os.remove(filepath)
-
 if error_404_found:
     print("error 404 found")
 
