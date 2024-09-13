@@ -72,6 +72,7 @@ jobs:
         ENV_XML_URL: ${{ vars.AVITO_XML_URL }}
 
     - name: Generate avito xml
+      if: ${{ vars.AVITO_XML_URL }}
       run: |
         python .github/scripts/update_cars_avito.py
       env:
