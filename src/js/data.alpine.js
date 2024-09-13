@@ -184,10 +184,10 @@ document.addEventListener('alpine:init', () => {
 				element.style.display = 'none';
 				if(model){
 					if(element.dataset.model.toLowerCase() == model){
-						element.style.display = 'block';
+						element.style.display = 'flex';
 						vm.total = vm.total+Number(element.dataset.total)
 					}else if(!model || model == 'all'){
-						element.style.display = 'block';
+						element.style.display = 'flex';
 						vm.total = vm.total+Number(element.dataset.total)
 					}
 				}
