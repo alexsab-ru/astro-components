@@ -12,15 +12,6 @@ import xml.etree.ElementTree as ET
 # Переменная для отслеживания наличия 404 ошибки
 error_404_found = False
 
-# Создание директории для автомобилей
-directory = "src/content/cars"
-if os.path.exists(directory):
-    shutil.rmtree(directory)
-os.makedirs(directory)
-
-# для сохранения имен созданных или обновленных файлов
-existing_files = set()
-
 with open('output.txt', 'w') as file:
     file.write("")
 
