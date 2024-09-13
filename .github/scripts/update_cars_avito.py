@@ -9,7 +9,7 @@ from config import dealer, model_mapping
 from utils import *
 import xml.etree.ElementTree as ET
 
-def duplicate_car(car, n, status = "в пути"):
+def duplicate_car(car, n, status = "в пути", num=9):
     """Функция для дублирования элемента 'car' N раз с изменением vin."""
     duplicates = []
     for i in range(n):
@@ -19,7 +19,7 @@ def duplicate_car(car, n, status = "в пути"):
         # Извлекаем последние 5 символов
         vin_suffix = vin[-5:]
         # Меняем пятую цифру с конца на 9
-        vin_suffix = '9' + vin_suffix[1:]
+        vin_suffix = num + vin_suffix[1:]
         # Преобразуем последние 5 символов в число и уменьшаем на i
         new_suffix = str(int(vin_suffix) - i).zfill(5)  # zfill добавляет ведущие нули, если нужно
         # Собираем новый VIN
