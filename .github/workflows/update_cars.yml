@@ -64,6 +64,20 @@ jobs:
         REPO_NAME: ${{ github.event.repository.name }}
         XML_URL: ${{ vars.ENV_XML_URL }}
 
+    - name: Get XML for avito
+      if: ${{ vars.AVITO_XML_URL }}
+      run: |
+        python3 .github/scripts/getOneXML.py --xpath "//data/cars/car" --output cars.xml
+      env:
+        ENV_XML_URL: ${{ vars.AVITO_XML_URL }}
+
+    - name: Generate avito xml
+      run: |
+        python .github/scripts/update_cars_avito.py
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.AVITO_XML_URL }}
+
     - name: Set output
       id: set_output
       run: |
@@ -104,6 +118,7 @@ jobs:
         if [[ -d public/img/thumbs && $(find public/img/thumbs -type f -name "*.webp") ]]; then git add public/img/thumbs/*.webp; fi
         if [[ -d src/content/cars && $(find src/content/cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
         if [[ -f public/cars.xml ]]; then git add public/cars.xml; fi
+        if [[ -f public/avito.xml ]]; then git add public/avito.xml; fi
         git commit -m "Update cars from XML" -a || echo "No changes to commit"
         git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         git push origin $GITHUB_REF_NAME
