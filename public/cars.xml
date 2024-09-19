@@ -3894,4 +3894,201 @@
     <reserved />
   </status>
 <max_discount>500000</max_discount><sale_price>2339900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-amt-147-лс-elite-grey-2024/</url></vehicle>
+<vehicle>
+  <id>6275018</id>
+  <vin>HJRPBGJB9RB358972</vin>
+  <uin />
+  <dealer id="6372">Автоцентр Альфа Jetour</dealer>
+  <category id="1">Легковые</category>
+  <subcategory />
+  <type>new</type>
+  <year>2024</year>
+  <mark_id>Jetour</mark_id><folder_id>T2</folder_id><generation />
+  <bodyConfiguration id="13640">Внедорожник 5 дв.</bodyConfiguration>
+  <modification_id>2.0 AMT (245 л.с.) 4WD</modification_id><complectation_name>Voyage</complectation_name><brandComplectationCode />
+  <engineType>Бензин</engineType>
+  <engineVolume>1998</engineVolume>
+  <enginePower>245</enginePower>
+  <bodyNumber />
+  <body_type>SUV</body_type><bodyDoorCount>5</bodyDoorCount>
+  <seatCount>5</seatCount>
+  <color>Черный</color><bodyColorMetallic>0</bodyColorMetallic>
+  <driveType>Постоянный полный</driveType>
+  <gearboxType>Робот</gearboxType>
+  <gearboxGearCount />
+  <wheel>Левый</wheel><run>0</run><mileageUnit>km</mileageUnit>
+  <price>3759900</price>
+  <previousPrice />
+  <specialOffer>0</specialOffer>
+  <specialOfferPreviousPrice />
+  <priceWithDiscount>3659900</priceWithDiscount>
+  <tradeinDiscount>100000</tradeinDiscount>
+  <creditDiscount />
+  <insuranceDiscount />
+  <availability>available</availability>
+  <ptsType />
+  <country />
+  <operatingTime />
+  <ecoClass />
+  <driveWheel />
+  <axisCount />
+  <brakeType />
+  <cabinType />
+  <maximumPermittedMass />
+  <saddleHeight />
+  <cabinSuspension />
+  <chassisSuspension />
+  <length />
+  <width />
+  <bodyVolume />
+  <bucketVolume />
+  <tractionClass />
+  <refrigeratorClass />
+  <craneArrowRadius />
+  <craneArrowLength />
+  <craneArrowPayload />
+  <loadHeight />
+  <photoCount>1</photoCount>
+  <description>СКИДКИ ПО ПРОГРАММЕ ТРЕЙД-ИН
+НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
+ 
+ Почему стоит покупать JETOUR в АЛЬФА: 
+- Автомобили в наличии и с ПТС   
+- Персональный менеджер во время всех этапов сделки 
+- Расположение рядом с центром города, удобная парковка 
+- Бесплатный тест-драйв 
+- Оформление автомобиля в день обращения 
+- Индивидуальный подход  к каждому клиенту
+ 
+ Не выбирай между качеством и выгодой. У нас вы сможете получить всё и сразу.</description>
+  <address>Самара, Новоурицкая 22</address>
+  <ownersCount>0</ownersCount>
+  <vehicleCondition>excellent</vehicleCondition>
+  <equipment>
+    <group id="1" name="Активная безопасность">
+      <element id="1">Антиблокировочная система</element>
+      <element id="2">Антипробуксовочная система</element>
+      <element id="3">Система курсовой устойчивости</element>
+      <element id="5">Система помощи при экстренном торможении</element>
+      <element id="8">Датчик давления в шинах</element>
+      <element id="223">ЭРА-ГЛОНАСС</element>
+    </group>
+    <group id="2" name="Пассивная безопасность">
+      <element id="10">Подушки безопасности водителя</element>
+      <element id="12">Подушки безопасности пассажира</element>
+      <element id="14">Боковые передние подушки безопасности</element>
+      <element id="16">Оконные шторки безопасности</element>
+      <element id="18">Блокировка замков задних дверей</element>
+      <element id="19">Система крепления детских автокресел</element>
+    </group>
+    <group id="3" name="Противоугонная система">
+      <element id="22">Дистанционный запуск двигателя</element>
+      <element id="24">Иммобилайзер</element>
+      <element id="25">Центральный замок</element>
+    </group>
+    <group id="4" name="Помощь при вождении">
+      <element id="26">Бортовой компьютер</element>
+      <element id="27">Круиз-контроль</element>
+      <element id="30">Парктроник задний</element>
+      <element id="34">Камера 360°</element>
+      <element id="36">Система помощи при старте в гору</element>
+      <element id="225">Система помощи при спуске с горы</element>
+      <element id="41">Датчик света</element>
+      <element id="42">Датчик дождя</element>
+    </group>
+    <group id="5" name="Комфорт">
+      <element id="43">Усилитель руля</element>
+      <element id="49">Запуск двигателя с кнопки</element>
+      <element id="51">Система доступа без ключа</element>
+      <element id="52">Регулировка руля</element>
+      <element id="59">Электрорегулировка сиденья водителя с памятью положения</element>
+      <element id="67">Электростеклоподъемники передние и задние</element>
+      <element id="68">Электропривод зеркал</element>
+      <element id="69">Электропривод крышки багажника</element>
+      <element id="237">Декоративное освещение салона</element>
+    </group>
+    <group id="6" name="Управление климатом и обогрев">
+      <element id="76">Климат-контроль 2-зонный</element>
+      <element id="87">Подогрев сидений водителя, пассажира и задних пассажиров</element>
+      <element id="88">Подогрев руля</element>
+      <element id="89">Обогрев зеркал</element>
+      <element id="91">Обогрев лобового стекла</element>
+      <element id="94">Обогрев форсунок стеклоомывателей</element>
+    </group>
+    <group id="7" name="Мультимедиа и навигация">
+      <element id="101">USB</element>
+      <element id="105">TV</element>
+      <element id="106">Функция Apple CarPlay</element>
+      <element id="107">Функция Android Auto</element>
+      <element id="108">Голосовое управление</element>
+      <element id="109">Bluetooth</element>
+      <element id="264">Электронная приборная панель</element>
+      <element id="121">Мультифункциональное рулевое колесо</element>
+      <element id="122">Беспроводная зарядка для телефона</element>
+      <element id="123">Розетка 12V</element>
+    </group>
+    <group id="8" name="Салон и интерьер">
+      <element id="126">Кожаная обивка салона</element>
+      <element id="128">Комбинированная обивка салона</element>
+      <element id="133">Кожаный руль</element>
+      <element id="143">Передний центральный подлокотник</element>
+      <element id="145">Подрулевые лепестки переключения передач</element>
+      <element id="148">Накладки на пороги</element>
+    </group>
+    <group id="9" name="Экстерьер">
+      <element id="161">Размер дисков 19″</element>
+      <element id="174">Рейлинги на крыше</element>
+    </group>
+    <group id="10" name="Освещение">
+      <element id="182">Светодиодные фары</element>
+      <element id="185">Огни дневного хода</element>
+      <element id="186">Корректор фар</element>
+    </group>
+    <group id="12" name="Комплектность">
+      <element id="215">Докатка</element>
+    </group>
+  </equipment>
+  <photos>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/7c34ad4838aa6d2c059ae81c12301779.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/1329a6df247ef1095ec81d7d705b3789.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/1466a4b85a45bb8367aa7631cda06549.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/61aadd916b5bcca5ea5f907ada9d904a.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/a61f356fe3c67a2be5b89ff0e598d587.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/407ae0297ccdbc8bf96a651cd477eda3.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/2fd91c81919b7f20ec67952b377c93cc.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/61105374ce3340e5f9480de717f950d5.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/2262cb6c028e34d3dd1709fcd5e56570.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/92143f27c6c9bf3d71181bc73a27a560.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/b7d292819d8d7f4333460495bf5dfe8f.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6275018/orig/b34482e7ecd1d57520bf993c506855b6.jpg?sid=42</photo>
+  </photos>
+  <phones>
+    <phone number="78469777779" callFrom="8" callTo="20">+7(846)977-77-79</phone>
+  </phones>
+  <brandColorCode />
+  <brandInteriorCode />
+  <certificationProgram />
+  <avitoId />
+  <autoruId />
+  <dromId />
+  <siteUrl>https://jetour-alpha.ru/</siteUrl>
+  <avitoUrl />
+  <autoruUrl />
+  <dromUrl />
+  <siteUrls>
+    <url sourceId="0" source="Ссылка по шаблону">https://jetour-alpha.ru/</url>
+  </siteUrls>
+  <acquisitionSource />
+  <acquisitionDate>2024-09-03</acquisitionDate>
+  <manufactureDate />
+  <status>
+    <inPresalePreparation />
+    <inRepair />
+    <inLogistics />
+    <inLegal />
+    <inProblems />
+    <inContent />
+    <reserved />
+  </status>
+<max_discount>100000</max_discount><sale_price>3659900</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-voyage-black-2024/</url></vehicle>
 </vehicles>
