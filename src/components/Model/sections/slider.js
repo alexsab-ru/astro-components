@@ -7,16 +7,16 @@ if(sliders.length){
 	Array.from(sliders).map(slider => {
 		new Swiper(slider, {
 			modules: [Navigation, Pagination, Keyboard],
-			loop: true,
+			loop: false,
 			speed: 1000,
 			keyboard: {
 				enabled: true,
 				onlyInViewport: true,
 			},
-			pagination: {
-				el: ".banner-pagination",
-				clickable: true,
-			},
+			// pagination: {
+			// 	el: ".banner-pagination",
+			// 	clickable: true,
+			// },
 			navigation: {
 				nextEl: ".banner-button-next",
 				prevEl: ".banner-button-prev",
