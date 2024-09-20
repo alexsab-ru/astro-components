@@ -36,7 +36,7 @@ import {Icon} from 'astro-icon/components';
 		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8"><Fragment set:html={section?.title} /></h2>)}
 		{section?.text && section?.id !== 'more' ? (
 			<Fragment set:html={section?.text} />
-		) : (
+		) : section?.text && section?.id === 'more' ? (
 			<div x-data="{showMore: false}" x-cloak>
 				<div 
 					class="space-y-4 overflow-hidden mb-5" 
@@ -50,7 +50,7 @@ import {Icon} from 'astro-icon/components';
 					x-text="showMore ? 'Свернуть' : 'Подробнее'"
 				></span>
 			</div>
-		)}
+		) : ('')}
 		{section?.images && section?.images.length > 1 ? (
 			<div class="swiper simple-slider mt-8">
 				<div class="swiper-wrapper">
