@@ -881,7 +881,7 @@
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
   <priceWithDiscount>2689900</priceWithDiscount>
-  <tradeinDiscount>300000</tradeinDiscount>
+  <tradeinDiscount>200000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
@@ -916,7 +916,7 @@
 - Расположение рядом с центром города, удобная парковка 
 - Бесплатный тест-драйв 
 - Оформление автомобиля в день обращения 
-- Скидка по программе ТРЕЙД-ИН + АВТОКРЕДИТ до 500 000 руб.
+- Скидка по программе ТРЕЙД-ИН + АВТОКРЕДИТ 
 - Индивидуальный подход  к каждому клиенту
  
  Не выбирай между качеством и выгодой. У нас вы сможете получить всё и сразу.</description>
@@ -1061,7 +1061,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>500000</max_discount><sale_price>2689900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
+<max_discount>400000</max_discount><sale_price>2689900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
 <vehicle>
   <id>4913262</id>
   <vin>HJRPBGGB5PF098678</vin>
@@ -2725,8 +2725,8 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2689900</priceWithDiscount>
-  <tradeinDiscount>300000</tradeinDiscount>
+  <priceWithDiscount>2789900</priceWithDiscount>
+  <tradeinDiscount>200000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
@@ -2761,7 +2761,7 @@
 - Расположение рядом с центром города, удобная парковка 
 - Бесплатный тест-драйв 
 - Оформление автомобиля в день обращения 
-- Скидка по программе ТРЕЙД-ИН + АВТОКРЕДИТ до 500 000 руб.
+- Скидка по программе ТРЕЙД-ИН + АВТОКРЕДИТ
 - Индивидуальный подход  к каждому клиенту
  
  Не выбирай между качеством и выгодой. У нас вы сможете получить всё и сразу.</description>
@@ -2901,7 +2901,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>500000</max_discount><sale_price>2689900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
+<max_discount>400000</max_discount><sale_price>2789900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
 <vehicle>
   <id>6231528</id>
   <vin>HJRPBGFB7PB377235</vin>
