@@ -8,12 +8,18 @@ interface Props {
 				text: string
 			}
 		];
+		suptitle?: string;
 		title?: string;
 		sectionClass?: string;
 		text?: string;
 		images?: [
-			{url: string}
+			{
+				url: string
+				title?: string
+				description?: string
+			}
 		];
+		button?: string;
 	};
 	class?: string
 }
@@ -33,6 +39,7 @@ import {Icon} from 'astro-icon/components';
 				))}
 			</div>
 		)}
+		{section?.suptitle && (<span class="text-sm font-bold text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
 		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8"><Fragment set:html={section?.title} /></h2>)}
 		{section?.text && section?.id !== 'more' ? (
 			<Fragment set:html={section?.text} />
@@ -40,7 +47,7 @@ import {Icon} from 'astro-icon/components';
 			<div x-data="{showMore: false}" x-cloak>
 				<div 
 					class="space-y-4 overflow-hidden mb-5" 
-					:class="{'h-[150px]': !showMore}"
+					:class="{'h-[90px]': !showMore}"
 				>
 					<Fragment set:html={section?.text} />
 				</div>
@@ -55,19 +62,25 @@ import {Icon} from 'astro-icon/components';
 			<div class="swiper simple-slider mt-8">
 				<div class="swiper-wrapper">
 					{section?.images.map(img => (
-						<div class="swiper-slide">
+						<div class="swiper-slide text-center">
 							<img src={img.url} class="max-w-full mx-auto" />
+							{img?.title && (<h3 class="font-bold mt-4">{img?.title}</h3>)}
+							{img?.description && (<p class="mt-1 max-w-[700px] mx-auto">{img?.description}</p>)}
 						</div>
 					))}
 				</div>
-				<div class="swiper-pagination banner-pagination"></div>
+				{/* <div class="swiper-pagination banner-pagination"></div> */}
 				<div class="swiper-button-prev banner-button-prev !hidden md:!flex" />
 				<div class="swiper-button-next banner-button-next !hidden md:!flex" />
 			</div>
 		) : section?.images && section?.images.length === 1 ? (
-			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-8" />
+			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-8 max-w-full mx-auto" />
 		) : ('')}
 		
+		{section?.button && (
+			<div class="flex justify-center"><Fragment set:html={section.button} /></div>
+		)}
+
 	</div>
 </section>
 
