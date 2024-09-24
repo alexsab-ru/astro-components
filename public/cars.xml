@@ -1346,11 +1346,11 @@
   <brandColorCode />
   <brandInteriorCode />
   <certificationProgram />
-  <avitoId>4065269619</avitoId>
+  <avitoId />
   <autoruId />
   <dromId />
   <siteUrl>https://jetour-alpha.ru/</siteUrl>
-  <avitoUrl>https://www.avito.ru/items/4065269619</avitoUrl>
+  <avitoUrl />
   <autoruUrl />
   <dromUrl />
   <siteUrls>
@@ -1704,8 +1704,8 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2879900</priceWithDiscount>
-  <tradeinDiscount>200000</tradeinDiscount>
+  <priceWithDiscount>2829900</priceWithDiscount>
+  <tradeinDiscount>250000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
@@ -1732,7 +1732,7 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>CКИДКА ПО ПРОГРАММЕ TRADE-IN и АВТОКРЕДИТОВАНИЮ 420 000 руб. 
+  <description>CКИДКА ПО ПРОГРАММЕ TRADE-IN и АВТОКРЕДИТОВАНИЮ 
 Абсолютно новый бренд JETOUR X70 PLUS на ваших дорогах
 
   Почему стоит покупать JETOUR в АЛЬФА: 
@@ -1881,7 +1881,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>420000</max_discount><sale_price>2879900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-white-2024/</url></vehicle>
+<max_discount>470000</max_discount><sale_price>2829900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-white-2024/</url></vehicle>
 <vehicle>
   <id>6058441</id>
   <vin>HJRPBGGB0RF034776</vin>
@@ -1909,8 +1909,8 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2879900</priceWithDiscount>
-  <tradeinDiscount>200000</tradeinDiscount>
+  <priceWithDiscount>2829900</priceWithDiscount>
+  <tradeinDiscount>250000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
@@ -1937,7 +1937,7 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>СКИДКИ ПО ПРОГРАММЕ ТРЕЙД-ИН + Кредит  ДО  420 000 руб.!!! 
+  <description>СКИДКИ ПО ПРОГРАММЕ ТРЕЙД-ИН + Кредит 
 НОВЫЙ  КРОССОВЕР JETOUR X70 PLUS 2024 года выпуска!
  
  Почему стоит покупать JETOUR в АЛЬФА: 
@@ -2082,7 +2082,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>420000</max_discount><sale_price>2879900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-grey-2024/</url></vehicle>
+<max_discount>470000</max_discount><sale_price>2829900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-grey-2024/</url></vehicle>
 <vehicle>
   <id>6058720</id>
   <vin>HJRPBGJB3RB351564</vin>
@@ -4347,7 +4347,7 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>СКИДКИ ПО ПРОГРАММЕ ТРЕЙД-ИН + Кредит  ДО  470 000 руб.!!! 
+  <description>СКИДКИ ПО ПРОГРАММЕ ТРЕЙД-ИН + Кредит 
 НОВЫЙ  КРОССОВЕР JETOUR X70 PLUS 2024 года выпуска!
  
  Почему стоит покупать JETOUR в АЛЬФА: 
@@ -4512,8 +4512,8 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2879900</priceWithDiscount>
-  <tradeinDiscount>200000</tradeinDiscount>
+  <priceWithDiscount>2829900</priceWithDiscount>
+  <tradeinDiscount>250000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
@@ -4677,7 +4677,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>420000</max_discount><sale_price>2879900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-red-2024/</url></vehicle>
+<max_discount>470000</max_discount><sale_price>2829900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-red-2024/</url></vehicle>
 <vehicle>
   <id>6277055</id>
   <vin>HJRPBGGBXRF025356</vin>
