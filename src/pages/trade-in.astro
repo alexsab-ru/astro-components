@@ -1,0 +1,19 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
+import salons from '@/data/salons.json';
+const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
+[`${LEGAL_ENTITY}`] : 
+salons
+    .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
+    .map(s => `${s?.legal_entity}`);
+import TradeInCalc from '@/components/React/TradeInCalc';
+---
+
+<PageLayout
+    h1="Онлайн-оценка вашего автомобиля"
+    title={`Онлайн-оценка вашего автомобиля в ${LEGAL_SALONS_INFO.join(' и ')}`}
+    breadcrumb={[{name:"Онлайн-оценка вашего автомобиля",href:""}]}
+>
+    <TradeInCalc client:visible />
+</PageLayout>

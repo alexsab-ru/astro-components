@@ -1,0 +1,90 @@
+---
+interface Props {
+	section: {
+		id?: string;
+		items?: [
+			{
+				icon: string
+				text: string
+			}
+		];
+		suptitle?: string;
+		title?: string;
+		sectionClass?: string;
+		text?: string;
+		images?: [
+			{
+				url: string
+				title?: string
+				description?: string
+			}
+		];
+		button?: string;
+	};
+	class?: string
+}
+const { section, class: className, ...rest } = Astro.props;
+import {Icon} from 'astro-icon/components';
+---
+
+<section class={`sm:py-20 py-10 font-light model-section ${section?.sectionClass} ${className}`} id={section?.id} {...rest}>
+	<div class="container">
+		{section?.items && section?.items.length && (
+			<div class="flex justify-center gap-4 flex-wrap">
+				{section?.items.map(item => (
+					<div class="flex-1 flex flex-col items-center justify-start gap-4 px-4">
+						<Icon name={item.icon} class="text-accent-500 stroke-accent-500 fill-accent-500 text-5xl sm:text-7xl" />
+						<p class="font-medium text-center text-xs sm:text-sm md:text-base">{item.text}</p>
+					</div>
+				))}
+			</div>
+		)}
+		{section?.suptitle && (<span class="text-sm font-bold text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
+		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8"><Fragment set:html={section?.title} /></h2>)}
+		{section?.text && section?.id !== 'more' ? (
+			<Fragment set:html={section?.text} />
+		) : section?.text && section?.id === 'more' ? (
+			<div x-data="{showMore: false}" x-cloak>
+				<div 
+					class="space-y-4 overflow-hidden mb-5" 
+					:class="{'h-[90px]': !showMore}"
+				>
+					<Fragment set:html={section?.text} />
+				</div>
+				<span 
+					class="underline cursor-pointer" 
+					@click="showMore = !showMore" 
+					x-text="showMore ? 'Свернуть' : 'Подробнее'"
+				></span>
+			</div>
+		) : ('')}
+		{section?.images && section?.images.length > 1 ? (
+			<div class="swiper simple-slider mt-8">
+				<div class="swiper-wrapper">
+					{section?.images.map(img => (
+						<div class="swiper-slide text-center">
+							<img src={img.url} class="max-w-full mx-auto" />
+							{img?.title && (<h3 class="font-bold mt-4">{img?.title}</h3>)}
+							{img?.description && (<p class="mt-1 max-w-[700px] mx-auto">{img?.description}</p>)}
+						</div>
+					))}
+				</div>
+				{/* <div class="swiper-pagination banner-pagination"></div> */}
+				<div class="swiper-button-prev banner-button-prev !hidden md:!flex" />
+				<div class="swiper-button-next banner-button-next !hidden md:!flex" />
+			</div>
+		) : section?.images && section?.images.length === 1 ? (
+			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-8 max-w-full mx-auto" />
+		) : ('')}
+		
+		{section?.button && (
+			<div class="flex justify-center"><Fragment set:html={section.button} /></div>
+		)}
+
+	</div>
+</section>
+
+<script>
+	import './slider';
+	import '@/components/Banner/banner.scss'
+</script>
