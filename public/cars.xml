@@ -880,7 +880,7 @@
   <previousPrice>3089900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2689900</priceWithDiscount>
+  <priceWithDiscount>2789900</priceWithDiscount>
   <tradeinDiscount>200000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
@@ -1061,7 +1061,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>400000</max_discount><sale_price>2689900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
+<max_discount>400000</max_discount><sale_price>2789900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
 <vehicle>
   <id>4913262</id>
   <vin>HJRPBGGB5PF098678</vin>
@@ -5049,11 +5049,11 @@
   <brandColorCode />
   <brandInteriorCode />
   <certificationProgram />
-  <avitoId />
+  <avitoId>4288580592</avitoId>
   <autoruId />
   <dromId />
   <siteUrl>https://jetour-alpha.ru/</siteUrl>
-  <avitoUrl />
+  <avitoUrl>https://www.avito.ru/items/4288580592</avitoUrl>
   <autoruUrl />
   <dromUrl />
   <siteUrls>
@@ -5258,11 +5258,11 @@
   <brandColorCode />
   <brandInteriorCode />
   <certificationProgram />
-  <avitoId />
+  <avitoId>4288908321</avitoId>
   <autoruId />
   <dromId />
   <siteUrl>https://jetour-alpha.ru/</siteUrl>
-  <avitoUrl />
+  <avitoUrl>https://www.avito.ru/items/4288908321</avitoUrl>
   <autoruUrl />
   <dromUrl />
   <siteUrls>
