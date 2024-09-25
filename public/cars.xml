@@ -1089,9 +1089,9 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2719900</priceWithDiscount>
-  <tradeinDiscount>550000</tradeinDiscount>
-  <creditDiscount>250000</creditDiscount>
+  <priceWithDiscount>2799900</priceWithDiscount>
+  <tradeinDiscount>500000</tradeinDiscount>
+  <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -1258,7 +1258,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>800000</max_discount><sale_price>2719900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-black-2023/</url></vehicle>
+<max_discount>720000</max_discount><sale_price>2799900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-black-2023/</url></vehicle>
 <vehicle>
   <id>5188229</id>
   <vin>LDNHC8FC1N0007947</vin>
@@ -1396,8 +1396,8 @@
   <previousPrice>2495000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2195000</priceWithDiscount>
-  <tradeinDiscount>300000</tradeinDiscount>
+  <priceWithDiscount>2139000</priceWithDiscount>
+  <tradeinDiscount>348000</tradeinDiscount>
   <creditDiscount>100000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
@@ -1477,7 +1477,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>400000</max_discount><sale_price>2195000</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-15-amt-156-лс-transcendence-pro-white-2022/</url></vehicle>
+<max_discount>448000</max_discount><sale_price>2139000</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-15-amt-156-лс-transcendence-pro-white-2022/</url></vehicle>
 <vehicle>
   <id>5710789</id>
   <vin>HJRPBGFB3PB393254</vin>
