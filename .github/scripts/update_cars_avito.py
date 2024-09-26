@@ -35,7 +35,7 @@ def increment_str(str, increment):
     new_str_value = str_value + increment  # Увеличиваем на заданное значение
     return base36_to_str(new_str_value, len(str))  # Преобразуем обратно в строку
 
-def duplicate_car(car, n, status = "в пути", num=9):
+def duplicate_car(car, n, status = "в пути"):
     """Функция для дублирования элемента 'car' N раз с изменением vin."""
     duplicates = []
     for i in range(n):
