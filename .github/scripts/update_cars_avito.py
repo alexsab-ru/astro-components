@@ -99,13 +99,13 @@ for car in cars_element:
     create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
     
     # Создаем дубликаты, но не добавляем их сразу в cars_element
-    duplicates = duplicate_car(car, 0, "в наличии", len(all_duplicates))
+    duplicates = duplicate_car(car, 0, "в наличии", 0)
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
     
-    duplicates = duplicate_car(car, 0, "в пути", len(all_duplicates))
+    duplicates = duplicate_car(car, 0, "в пути", 1)
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
     
-    duplicates = duplicate_car(car, 0, "на заказ", len(all_duplicates))
+    duplicates = duplicate_car(car, 0, "на заказ", 8)
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
     
     # Добавляем дубликаты в отдельный список
