@@ -12,43 +12,45 @@ import xml.etree.ElementTree as ET
 
 # Создаем последовательность a-z + 0-9
 chars = string.ascii_lowercase + string.digits
+base = len(chars)  # Основание для системы исчисления (36)
 
-def increment_char(c):
-    """Увеличивает символ по правилу a-z0-9. Если достигнута 'z', идет к '0', и так далее."""
-    index = chars.index(c)
-    return chars[(index + 1) % len(chars)]  # Циклически перемещаемся по последовательности
+def str_to_base36(str):
+    """Конвертирует строку STR в число на основе системы с основанием 36."""
+    value = 0
+    for char in str:
+        value = value * base + chars.index(char)  # Преобразуем каждый символ в число
+    return value
 
-def modify_unique_id(unique_id, i):
-    """Изменяет последний символ unique_id с учетом правила a-z0-9."""
-    last_char = unique_id[-1]
-    print(last_char, i, range(i))
-    for k in range(i):
-        last_char = increment_char(last_char)  # Увеличиваем последний символ i раз
-        print(last_char)
-    return unique_id[:-1] + last_char  # Собираем новый unique_id
+def base36_to_str(value, length):
+    """Конвертирует число обратно в строку STR на основе системы с основанием 36."""
+    str = []
+    while value > 0:
+        str.append(chars[value % base])
+        value //= base
+    return ''.join(reversed(str)).zfill(length)  # Добавляем нули в начало, если нужно
+
+def increment_str(str, increment):
+    """Изменяет STR путем увеличения всей строки на значение increment."""
+    str_value = str_to_base36(str)  # Конвертируем STRING в число
+    new_str_value = str_value + increment  # Увеличиваем на заданное значение
+    return base36_to_str(new_str_value, len(str))  # Преобразуем обратно в строку
 
 def duplicate_car(car, n, status = "в пути", num=9):
     """Функция для дублирования элемента 'car' N раз с изменением vin."""
     duplicates = []
     for i in range(n):
         new_car = copy.deepcopy(car)  # Клонируем текущий элемент car
-        vin = new_car.find('vin').text
 
-        # Извлекаем последние 5 символов
-        vin_suffix = vin[-5:]
-        # Меняем пятую цифру с конца на 9
-        vin_suffix = int(num) + int(vin_suffix[1:])
-        # Преобразуем последние 5 символов в число и уменьшаем на i
-        new_suffix = str(int(vin_suffix) - i).zfill(5)  # zfill добавляет ведущие нули, если нужно
-        # Собираем новый VIN
-        new_vin = vin[:-5] + new_suffix
-        # new_vin = f"VIN_{i+1:05d}"    # Генерация уникального значения VIN (заглушка)
-        new_car.find('vin').text = new_vin  # Меняем текст VIN
+        # Обрабатываем VIN
+        vin = new_car.find('vin').text
+        new_vin = increment_str(vin.lower(), i+1)
+        new_car.find('vin').text = new_vin.upper()  # Меняем текст VIN
 
         # Обрабатываем unique_id
         unique_id = new_car.find('unique_id').text
-        new_unique_id = modify_unique_id(unique_id, i+1)  # Изменяем последний символ на i
+        new_unique_id = increment_str(unique_id, i+1)  # Изменяем последний символ на i
         new_car.find('unique_id').text = new_unique_id  # Меняем текст unique_id
+
         print(unique_id, new_unique_id)
         
         # Обновляем статус
