@@ -14,6 +14,24 @@ import xml.etree.ElementTree as ET
 chars = string.ascii_lowercase + string.digits
 base = len(chars)  # Основание для системы исчисления (36)
 
+def vin_to_number(vin):
+    """Конвертирует последние цифры VIN в число."""
+    if not vin[-5:].isdigit():
+        raise ValueError("Последние 5 символов VIN должны быть цифрами.")
+    
+    return int(vin[-5:])  # Преобразуем последние 5 символов VIN в число
+
+def number_to_vin(vin, number):
+    """Преобразует число обратно в VIN."""
+    new_suffix = str(number).zfill(5)  # Преобразуем число обратно в строку с ведущими нулями
+    return vin[:-5] + new_suffix  # Собираем новый VIN
+
+def modify_vin(vin, increment):
+    """Изменяет VIN путем увеличения последних цифр."""
+    vin_number = vin_to_number(vin)  # Получаем числовое значение последних 5 цифр VIN
+    new_vin_number = vin_number + increment  # Увеличиваем на заданное значение
+    return number_to_vin(vin, new_vin_number)  # Преобразуем обратно в VIN
+
 def str_to_base36(str):
     """Конвертирует строку STR в число на основе системы с основанием 36."""
     value = 0
@@ -43,7 +61,7 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
 
         # Обрабатываем VIN
         vin = new_car.find('vin').text
-        new_vin = increment_str(vin.lower(), offset+i+1)
+        new_vin = modify_vin(vin.lower(), offset+i+1)
         new_car.find('vin').text = new_vin.upper()  # Меняем текст VIN
 
         # Обрабатываем unique_id
@@ -51,7 +69,7 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
         new_unique_id = increment_str(unique_id, offset+i+1)  # Изменяем последний символ на i
         new_car.find('unique_id').text = new_unique_id  # Меняем текст unique_id
 
-        print(unique_id, new_unique_id)
+        print(vin, new_vin, unique_id, new_unique_id)
         
         # Обновляем статус
         new_car.find('availability').text = status  # Меняем статус Наличие автомобиля
