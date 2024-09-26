@@ -35,7 +35,7 @@ def increment_str(str, increment):
     new_str_value = str_value + increment  # Увеличиваем на заданное значение
     return base36_to_str(new_str_value, len(str))  # Преобразуем обратно в строку
 
-def duplicate_car(car, n, status = "в пути"):
+def duplicate_car(car, n, status = "в пути", offset = 0):
     """Функция для дублирования элемента 'car' N раз с изменением vin."""
     duplicates = []
     for i in range(n):
@@ -43,12 +43,12 @@ def duplicate_car(car, n, status = "в пути"):
 
         # Обрабатываем VIN
         vin = new_car.find('vin').text
-        new_vin = increment_str(vin.lower(), i+1)
+        new_vin = increment_str(vin.lower(), offset+i+1)
         new_car.find('vin').text = new_vin.upper()  # Меняем текст VIN
 
         # Обрабатываем unique_id
         unique_id = new_car.find('unique_id').text
-        new_unique_id = increment_str(unique_id, i+1)  # Изменяем последний символ на i
+        new_unique_id = increment_str(unique_id, offset+i+1)  # Изменяем последний символ на i
         new_car.find('unique_id').text = new_unique_id  # Меняем текст unique_id
 
         print(unique_id, new_unique_id)
@@ -79,9 +79,18 @@ for car in cars_element:
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
     create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
+    
     # Создаем дубликаты, но не добавляем их сразу в cars_element
-    duplicates = duplicate_car(car, 1)
+    duplicates = duplicate_car(car, 0, "в наличии", len(all_duplicates))
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
+    
+    duplicates = duplicate_car(car, 0, "в пути", len(all_duplicates))
+    all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
+    
+    duplicates = duplicate_car(car, 0, "на заказ", len(all_duplicates))
+    all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
+    
+    # Добавляем дубликаты в отдельный список
 
 # После окончания основного цикла добавляем все дубликаты в cars_element
 for new_car in all_duplicates:
