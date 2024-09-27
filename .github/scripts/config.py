@@ -38,6 +38,7 @@ model_mapping = {
             "Brown": "c3b.png",
             "Gray": "c4b.png",
             "Grey": "c4b.png",
+            "Blue": "blue.png",
             "Серый": "c4b.png",
         }
     },
