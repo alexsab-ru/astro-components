@@ -16,7 +16,7 @@ const vinSchema = yup.object().shape({
 });
 
 const VinForm = () => {
-	const {incrementStep, setVIN, setMessage, setAvtoInfo, setBodyNumber, vinState, bodyNumber} = useCarInfo()
+	const {incrementStep, setVIN, setMessage, setAvtoInfo, setBodyNumber, vinState, bodyNumber, showLoader, hideLoader} = useCarInfo()
 	const vin = vinState || '';
 	const {
 		register,
@@ -37,6 +37,7 @@ const VinForm = () => {
 			incrementStep();
 		} else {
 			// await axios.post("https://api.maxposter.ru/partners-api/vin/info", {
+			showLoader()
 			await axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/vin/info`, {
 				vin,
 			},
@@ -69,6 +70,7 @@ const VinForm = () => {
 				}
 			)
 			incrementStep();
+			hideLoader();
 		}
 	};
   
