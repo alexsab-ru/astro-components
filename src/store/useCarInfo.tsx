@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 export type TCarState = {
+	loading: boolean;
 	vinState: string;
 	bodyNumber: string;
 	step: number;
@@ -23,9 +24,12 @@ export type TCarInfoActions = {
 	setBodyNumber: (vin2: string) => void;
 	setAvtoInfo: (data: any) => void;
 	setBrands: (data: any) => void;
+	showLoader: () => void;
+	hideLoader: () => void;
 }
 
 export const useCarInfo = create<TCarState & TCarInfoActions>()(devtools((set) => ({
+	loading: true,
 	vinState: "",
 	bodyNumber: "",
 	step: 0,
@@ -43,4 +47,6 @@ export const useCarInfo = create<TCarState & TCarInfoActions>()(devtools((set) =
 	setBodyNumber: (vin) => set({ bodyNumber: vin }),
 	setAvtoInfo: (data) => set({ avtoInfo: data }),
 	setBrands: (data) => set({ brands: data }),
+	showLoader: () => set({ loading: true }),
+	hideLoader: () => set({ loading: false }),
 })))
