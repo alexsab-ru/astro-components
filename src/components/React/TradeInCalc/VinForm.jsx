@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import ShowErrors from '../ShowErrors';
+import { useCarInfo } from '@/store/useCarInfo';
 // Определение схемы валидации с помощью Yup
 const vinSchema = yup.object().shape({
 	vin: yup
@@ -15,8 +16,8 @@ const vinSchema = yup.object().shape({
 });
 
 const VinForm = () => {
-	const [vin, setVin] = useState('');
-
+	const {incrementStep, setVIN, setMessage, setAvtoInfo, setBodyNumber, vinState, bodyNumber} = useCarInfo()
+	const vin = vinState || '';
 	const {
 		register,
 		handleSubmit,
@@ -25,36 +26,50 @@ const VinForm = () => {
 	} = useForm({
 		resolver: yupResolver(vinSchema),
 		defaultValues: {
-			vin: '',
+			vin: vinState || '',
 		},
 	});
 	// Обработчик отправки формы
 	const onSubmit = async (data) => {
 		const isFormCorrect = await trigger();
 		if (!isFormCorrect) return;
-		// await axios.post("https://api.maxposter.ru/partners-api/vin/info", {
-		await axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/vin/info`, {
-			vin: vin,
-		},
-		{
-			headers: {
-				"Authorization": `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`,
-				"Accept": "application/json",
-            "Content-Type": "application/json",
-			}
-	  })
-	  .then(res => {
-			console.log(res)
-		},
-		(error) => {
-			console.log("vin-info-error", error);
+		if (bodyNumber.length) {
+			incrementStep();
+		} else {
+			// await axios.post("https://api.maxposter.ru/partners-api/vin/info", {
+			await axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/vin/info`, {
+				vin,
+			},
+			{
+				// headers: {
+				// 	"Authorization": `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`,
+				// 	"Accept": "application/json",
+				// 	"Content-Type": "application/json",
+				// }
+			})
+				.then(res => {
+					const data = res.data;
+					const status = data.status;
+					if (window.location.hostname == "localhost")
+						console.log("vin-info-response", res);
+					if (status == "error") {
+						if (data.message == "VIN не найден.") {
+							setMessage(data.message);
+						} else {
+							setMessage("Что-то пошло не так :(( <br> Вернитесь назад и попробуйте снова <br> или выберите авто вручную.");
+						}
+						setAvtoInfo({});
+					} else if (status == "success") {
+						setAvtoInfo(data.data);
+						setBodyNumber(data.data.bodyNumber);
+					}
+				},
+				(error) => {
+					console.log("vin-info-error", error);
+				}
+			)
+			incrementStep();
 		}
-		)
-		// if (store.getters.getBodyNumber.length) {
-		// 	store.commit('incrementStep');
-		// } else {
-		// 	await store.dispatch('fetchVinInfo', vin);
-		// }
 	};
   
 	 // Функция для транслитерации
@@ -70,9 +85,8 @@ const VinForm = () => {
 	 // Следим за изменениями поля vin и обновляем состояние
 	useEffect(() => {
 		const newVin = translit(vin.toUpperCase());
-		setVin(newVin);
-		// store.commit('setVIN', newVin);
-		// store.commit('setBodyNumber', '');
+		setVIN(newVin);
+		setBodyNumber('');
 	}, [vin]);
 	return (
 		<form className="mb-10 vue-form" onSubmit={handleSubmit(onSubmit)}>
@@ -84,10 +98,10 @@ const VinForm = () => {
 					placeholder="Введите VIN-номер"
 					value={vin}
 					{...register('vin')}
-					onChange={(e) => setVin(e.target.value)}
+					onChange={(e) => setVIN(e.target.value)}
 				/>
 				<button
-					className="bg-black text-white w-[48px] h-[48px] m-0 flex justify-center items-center transition-opacity hover:bg-accent-400"
+					className="bg-black text-white w-[48px] h-[48px] m-0 flex justify-center items-center transition-opacity hover:bg-accent-400 disabled:opacity-90 disabled:cursor-not-allowed"
 					disabled={isSubmitting}
 				>
 					<svg
