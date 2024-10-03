@@ -5199,9 +5199,9 @@
   <previousPrice>3999000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>4049000</priceWithDiscount>
-  <tradeinDiscount>100000</tradeinDiscount>
-  <creditDiscount>100000</creditDiscount>
+  <priceWithDiscount>4249000</priceWithDiscount>
+  <tradeinDiscount />
+  <creditDiscount />
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -5227,7 +5227,9 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
+  <description>Ограниченная партия автомобилей по старым* ценам!
+Специальные условия на несколько  автомобилей в наличии!
+НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
  
  Почему стоит покупать JETOUR в АЛЬФА: 
 - Автомобили в наличии и с ПТС   
@@ -5381,5 +5383,5 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>200000</max_discount><sale_price>4049000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
+<max_discount>0</max_discount><sale_price>4249000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
 </vehicles>
