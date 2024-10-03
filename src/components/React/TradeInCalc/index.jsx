@@ -2,39 +2,48 @@ import React, { useState, useEffect, StrictMode } from 'react';
 import VinForm from './VinForm';
 import StepPanel from './StepPanel';
 import { useCarInfo } from '@/store/useCarInfo';
-import {localBrands} from '@/store/local.brands'
+import { localBrands } from '@/store/local.brands'
 import axios from 'axios';
 import Loader from '../Loader/Loader';
+import BrandsList from './brands/List';
 axios.defaults.headers.common['Authorization'] = `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`;
 
 export default function TradeInCalc() {
-	const {step, avtoInfo, brands, setBrands, loading, hideLoader} = useCarInfo();	
+	const {step, error, setError, brands, setBrands, loading, hideLoader} = useCarInfo();
 	useEffect(() => {
+		const fetchBrands = async () => {
+			try {
+				const response = await axios.get(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-brands`);
+				const filteredBrands = response.data.data.vehicleBrands.filter(brand => {
+					const b = localBrands.find(b => b.name === brand.name);
+					if (!b) return false; // Убедитесь, что возвращаете true/false для корректной фильтрации
+					brand.popular = b.popular;
+					return true;
+				});	 
+				setBrands(filteredBrands);
+		  	} catch (error) {
+				setError();
+				console.error("fetch-brands-error", error);
+		  	} finally {
+				hideLoader();
+		  	}
+		};
+	 
 		if (!brands.length) {
-		  axios.get('http://127.0.0.1:8321/api/trade-in/dynamic-directories/vehicle-brands')
-				.then((res) => {
-					setBrands(res.data.data.vehicleBrands.filter( brand => {
-						const b = localBrands.find(b => b.name == brand.name)
-						if(!b){
-							return;
-						}
-						brand.popular = b.popular;
-						return brand;
-					}));
-				},
-				(error) => {
-					console.log("brands-error", error);
-				}
-			)
-			hideLoader();
+		  fetchBrands(); // Вызываем асинхронную функцию
 		}
-	 }, [brands]);
+	}, [brands]); // Следим за изменением brands
 	return ( 
 		<>
 			<StrictMode>
-				{loading && <Loader />}
-				<StepPanel />
-				{step === 0 && <VinForm /> }
+				{loading ? <Loader /> : error && <div className="py-10 text-center sm:text-lg">{error}</div>}
+				{brands.length > 0 && (
+					<>
+						<StepPanel />
+						{step === 0 && <VinForm />}
+						<BrandsList />
+					</>
+				)}
 			</StrictMode>
 		</> 
 	);
