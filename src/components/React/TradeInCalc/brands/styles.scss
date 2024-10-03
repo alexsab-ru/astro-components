@@ -1,0 +1,6 @@
+.trade-in-nav-tab{
+	@apply cursor-pointer py-2 relative before:content-[''] before:absolute before:w-full before:h-[3px] before:top-0 before:bg-black before:transition-transform hover:before:scale-x-100 before:scale-x-0;
+}
+.trade-in-nav-tab.active{
+	@apply before:scale-x-100;
+}
