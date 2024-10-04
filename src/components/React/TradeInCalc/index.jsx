@@ -6,6 +6,7 @@ import { localBrands } from '@/store/local.brands'
 import axios from 'axios';
 import Loader from '../Loader/Loader';
 import BrandsList from './brands/List';
+import AvtoInfo from './avto/Info';
 axios.defaults.headers.common['Authorization'] = `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`;
 
 export default function TradeInCalc() {
@@ -40,8 +41,17 @@ export default function TradeInCalc() {
 				{brands.length > 0 && (
 					<>
 						<StepPanel />
-						{step === 0 && <VinForm />}
-						<BrandsList />
+						{step === 0 && 
+							<>
+								<VinForm />
+								<BrandsList />
+							</>
+						}
+						{step === 1 && 
+							<>
+								<AvtoInfo />
+							</>
+						}
 					</>
 				)}
 			</StrictMode>
