@@ -1,0 +1,45 @@
+.k-select{
+	@apply min-w-[220px] inline-block relative;
+	a{
+		text-decoration: none !important;
+		margin: 0 !important;
+	}
+	&.selected{
+		.k-select-head{
+			@apply bg-white text-black border-black;
+		}
+	}
+	&.active{
+		.k-select-head{
+			@apply bg-white text-black border-black;
+			.k-select-arrow{
+				@apply -rotate-180;
+			}
+		}
+	}
+}
+.k-select-head{
+	@apply h-11 w-full inline-flex items-center justify-between text-center py-0 px-2.5 bg-transparent transition-all duration-300 ease-in border border-gray-500 text-gray-700 text-sm sm:text-base;
+}
+.k-select-arrow{
+	@apply rotate-0 origin-center transition-transform duration-300 ease-in;
+}
+.k-select-dropdown{
+	@apply absolute top-full left-0 max-h-[200px] overflow-y-auto min-w-full z-[100] border border-t-0 border-black bg-white shadow;
+	&::-webkit-scrollbar{
+		@apply w-1 bg-white;
+	}
+	&::-webkit-scrollbar-thumb{
+		@apply bg-gray-300;
+	}
+	a{
+		@apply block bg-transparent transition-colors duration-300 ease-in-out hover:bg-gray-200 text-sm sm:text-base text-left py-1.5 px-2.5;
+		&.selected{
+			@apply bg-gray-200;
+		}
+	}
+}
+
+.k-select-search{
+	@apply block py-1.5 px-2.5 text-base my-2.5 mx-auto border border-black w-[99%];
+}
