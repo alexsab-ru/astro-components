@@ -35,11 +35,6 @@ export type TCarInfoActions = {
 	recalculate: () => void;
 	setBodyNumber: (vin: string) => void;
 	setAvtoInfo: (data: any) => void;
-	setBrands: (data: any) => void;
-	setModels: (data: any) => void;
-	setYears: (data: any) => void;
-	setGenerations: (data: any) => void;
-	setBodyConfigurations: (data: any) => void;
 	showLoader: () => void;
 	hideLoader: () => void;
 	fetchCarsInfo: (data: any) => void;
@@ -67,11 +62,6 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	decrimentStep: () => set((state) => ({ step: state.step - 1 })),
 	setBodyNumber: (vin) => set({ bodyNumber: vin }),
 	setAvtoInfo: (data) => set({ avtoInfo: data }),
-	setBrands: (data) => set({ brands: data }),
-	setModels: (data) => set({ models: data }),
-	setYears: (data) => set({ years: data }),
-	setGenerations: (data) => set({ generations: data }),
-	setBodyConfigurations: (data) => set({ bodyConfigurations: data }),
 	showLoader: () => set({ loading: true }),
 	hideLoader: () => set({ loading: false }),
 	fetchCarsInfo: async (data) => {
