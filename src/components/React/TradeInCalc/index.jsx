@@ -10,50 +10,39 @@ import AvtoInfo from './avto/Info';
 axios.defaults.headers.common['Authorization'] = `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`;
 
 export default function TradeInCalc() {
-	const {step, error, setError, brands, setBrands, loading, hideLoader} = useCarInfo();
+	const {step, error, brands, loading, fetchCarsInfo} = useCarInfo();
 	useEffect(() => {
-		const fetchBrands = async () => {
-			try {
-				const response = await axios.get(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-brands`);
-				const filteredBrands = response.data.data.vehicleBrands.filter(brand => {
-					const b = localBrands.find(b => b.name === brand.name);
-					if (!b) return false; // Убедитесь, что возвращаете true/false для корректной фильтрации
-					brand.popular = b.popular;
-					return true;
-				});	 
-				setBrands(filteredBrands);
-		  	} catch (error) {
-				setError();
-				console.error("fetch-brands-error", error);
-		  	} finally {
-				hideLoader();
-		  	}
-		};
-	 
+		const data = {
+			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-brands`,
+			name: 'brands',
+			params: {}
+		}	 
 		if (!brands.length) {
-		  fetchBrands(); // Вызываем асинхронную функцию
+			fetchCarsInfo(data);
 		}
 	}, [brands]); // Следим за изменением brands
 	return ( 
 		<>
 			<StrictMode>
-				{loading ? <Loader /> : error && <div className="py-10 text-center sm:text-lg">{error}</div>}
-				{brands.length > 0 && (
-					<>
-						<StepPanel />
-						{step === 0 && 
-							<>
-								<VinForm />
-								<BrandsList />
-							</>
-						}
-						{step === 1 && 
-							<>
-								<AvtoInfo />
-							</>
-						}
-					</>
-				)}
+				{loading && <Loader />}
+				{error ? <div className="py-10 text-center sm:text-lg">{error}</div> : 
+					brands.length > 0 && (
+						<>
+							<StepPanel />
+							{step === 0 && 
+								<>
+									<VinForm />
+									<BrandsList />
+								</>
+							}
+							{step === 1 && 
+								<>
+									<AvtoInfo />
+								</>
+							}
+						</>
+					)
+				}
 			</StrictMode>
 		</> 
 	);
