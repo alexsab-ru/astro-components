@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import ShowErrors from '../ShowErrors';
 import { useCarInfo } from '@/store/useCarInfo';
+import { vinTranslit } from '@/js/utils/translit';
 // Определение схемы валидации с помощью Yup
 const vinSchema = yup.object().shape({
 	vin: yup
@@ -74,19 +75,9 @@ const VinForm = () => {
 		}
 	};
   
-	 // Функция для транслитерации
-	const translit = (value) => {
-		const translitMap = {
-			а: 'a',
-			т: 't',
-			х: 'x',
-		};
-		return value.replace(/[а-я]/gi, (matched) => translitMap[matched.toLowerCase()] || matched);
-	};
-  
 	 // Следим за изменениями поля vin и обновляем состояние
 	useEffect(() => {
-		const newVin = translit(vin.toUpperCase());
+		const newVin = vinTranslit(vin.toUpperCase());
 		setVIN(newVin);
 		setBodyNumber('');
 	}, [vin]);
