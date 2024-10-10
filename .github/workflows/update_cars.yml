@@ -93,7 +93,7 @@ jobs:
 
     - name: ls files
       run: |
-        ls -al src/content/cars
+        if [[ -d src/content/cars ]]; then ls -al src/content/cars; fi
 
     - name: Check for changes
       id: check_changes
