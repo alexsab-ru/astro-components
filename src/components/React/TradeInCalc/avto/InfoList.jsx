@@ -13,7 +13,7 @@ function AvtoInfoList() {
 			) : (
 				<ul className="flex flex-col">
 					
-					{Object.keys(avtoInfo).map(key => rusKey(key) && useTranslit(typeof avtoInfo[key] === 'object' ? avtoInfo[key].name : avtoInfo[key]) && (
+					{Object.keys(avtoInfo).map(key => rusKey(key) && useTranslit(typeof avtoInfo[key] === 'object' ? avtoInfo[key]?.name : avtoInfo[key]) && (
 						<li
 							className={`flex justify-between ${rusKey(key).orderId == 3 ? '!mb-8' : '!mb-3'}`}
 							style={{ order: rusKey(key).orderId }}
@@ -22,9 +22,9 @@ function AvtoInfoList() {
 							<span>{ rusKey(key).label }</span>
 							<span className="flex-grow border-b border-dotted mx-2 mb-2"></span>
 							{key === 'engineVolume' ? (
-								<span className="font-bold">{ useTranslit(typeof avtoInfo[key] === 'object' ? round(avtoInfo[key].name) : round(avtoInfo[key])) }</span>
+								<span className="font-bold">{ useTranslit(typeof avtoInfo[key] === 'object' ? round(avtoInfo[key]?.name) : round(avtoInfo[key])) }</span>
 							) : (
-								<span className="font-bold">{ useTranslit(typeof avtoInfo[key] === 'object' ? avtoInfo[key].name : avtoInfo[key]) }</span>
+								<span className="font-bold">{ useTranslit(typeof avtoInfo[key] === 'object' ? avtoInfo[key]?.name : avtoInfo[key]) }</span>
 							)}
 						</li>
 					) )}
