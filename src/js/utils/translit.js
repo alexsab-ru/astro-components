@@ -74,3 +74,12 @@ export const rusKey = (key) => {
 
    return { ...engToRus[key] };
 };
+
+export const vinTranslit = (value) => {
+   const translitMap = {
+      а: 'a',
+      т: 't',
+      х: 'x',
+   };
+   return value.replace(/[а-я]/gi, (matched) => translitMap[matched.toLowerCase()] || matched);
+};
