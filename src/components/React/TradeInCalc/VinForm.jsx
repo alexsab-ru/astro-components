@@ -17,7 +17,7 @@ const vinSchema = yup.object().shape({
 });
 
 const VinForm = () => {
-	const {incrementStep, setVIN, setMessage, setAvtoInfo, setBodyNumber, vinState, bodyNumber, showLoader, hideLoader} = useCarInfo()
+	const {incrementStep, recalculate, setVIN, setMessage, setAvtoInfo, setBodyNumber, vinState, bodyNumber, showLoader, hideLoader} = useCarInfo()
 	const vin = vinState || '';
 	const {
 		register,
@@ -38,6 +38,7 @@ const VinForm = () => {
 			incrementStep();
 		} else {
 			// await axios.post("https://api.maxposter.ru/partners-api/vin/info", {
+			recalculate();
 			showLoader()
 			await axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/vin/info`, {
 				vin,
@@ -60,10 +61,14 @@ const VinForm = () => {
 						} else {
 							setMessage("Что-то пошло не так :(( <br> Вернитесь назад и попробуйте снова <br> или выберите авто вручную.");
 						}
-						setAvtoInfo({});
+						// setAvtoInfo({});
 					} else if (status == "success") {
-						setAvtoInfo(data.data);
-						setBodyNumber(data.data.bodyNumber);
+						const avtoInfoData = data.data;
+						if(avtoInfoData.generation && avtoInfoData.generation.name === ''){
+							avtoInfoData.generation.name = 'Без поколения';
+						}
+						setAvtoInfo(avtoInfoData);
+						setBodyNumber(avtoInfoData.bodyNumber);
 					}
 				},
 				(error) => {

@@ -2,7 +2,7 @@ import { useCarInfo } from '@/store/useCarInfo';
 import { useTranslit, rusKey } from '@/js/utils/translit';
 
 function AvtoInfoList() {
-	const {avtoInfo, noResultFetchMessage} = useCarInfo();
+	const {avtoInfo, noResultFetchMessage, mileageState} = useCarInfo();
 	
 	const round = (num) => Math.round(num / 100) / 10;
 	return (
@@ -28,12 +28,14 @@ function AvtoInfoList() {
 							)}
 						</li>
 					) )}
-
-					<li className="flex justify-between order-last mt-5">
-						<span>Пробег</span>
-						<span className="flex-grow border-b border-dotted mx-2 mb-2"></span>
-						<span className="font-bold"></span>
-					</li>
+					
+					{Number(mileageState) !== 0 && (
+						<li className="flex justify-between order-last mt-5">
+							<span>Пробег</span>
+							<span className="flex-grow border-b border-dotted mx-2 mb-2"></span>
+							<span className="font-bold">{Number(mileageState).toLocaleString('ru-RU')} км</span>
+						</li>
+					)}
 
 				</ul>
 			)}

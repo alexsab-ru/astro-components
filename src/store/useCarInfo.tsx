@@ -13,6 +13,7 @@ type TBrand = {
 export type TCarState = {
 	loading: boolean;
 	vinState: string;
+	mileageState: string;
 	bodyNumber: string;
 	step: number;
 	error: string;
@@ -23,12 +24,14 @@ export type TCarState = {
 	years: any;
 	generations: any;
 	bodyConfigurations: any;
+	modifications: any;
 }
 
 export type TCarInfoActions = {
 	incrementStep: () => void;
 	decrimentStep: () => void;
 	setVIN: (vin: string) => void;
+	setMileage: (mileage: string) => void;
 	setError: () => void;
 	clearError: () => void;
 	setMessage: (mes: string) => void;
@@ -43,6 +46,7 @@ export type TCarInfoActions = {
 export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	loading: true,
 	vinState: "",
+	mileageState: "",
 	bodyNumber: "",
 	step: 0,
 	error: "",
@@ -52,12 +56,23 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	models: [],
 	years: [],
 	generations: [],
-	bodyConfigurations: [],
+	bodyConfigurations: [], 
+	modifications: [], 
 	setVIN: (vin) => set({ vinState: vin }),
+	setMileage: (mileage) => set({ mileageState: mileage.replace(/[^0-9\.]/g, '') }),
 	setError: () => set({ error: 'Извините, сервис временно недоступен. Мы уже работает над этим, повторите попыку позже.' }),
 	clearError: () => set({ error: '' }),
 	setMessage: (mes) => set({ noResultFetchMessage: mes }),
-	recalculate: () => set({ step: 0, bodyNumber: '', avtoInfo: {} }),
+	recalculate: () => set({ 
+		// step: 0, 
+		bodyNumber: '', 
+		avtoInfo: {},
+		models: [],
+		years: [],
+		generations: [],
+		bodyConfigurations: [], 
+		modifications: [],
+	}),
 	incrementStep: () => set((state) => ({ step: state.step + 1 })),
 	decrimentStep: () => set((state) => ({ step: state.step - 1 })),
 	setBodyNumber: (vin) => set({ bodyNumber: vin }),
@@ -86,9 +101,7 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 						set({ brands: filteredBrands });
 						break;
 					case 'models':
-						set({ years: [] });
-						set({ generations: [] });
-						set({ bodyConfigurations: [] });
+						get().recalculate();
 						const currentBrand = get().brands.find(b => b.id === Number(data.params.brandId));
 						if(!currentBrand){ get().setError() }			
 						get().setAvtoInfo({ brand: currentBrand });
@@ -97,6 +110,7 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 					case 'years':
 						set({ generations: [] });
 						set({ bodyConfigurations: [] });
+						set({ modifications: [] });
 						const currentModel = get().models.find(m => m.id === Number(data.params.modelId));
 						if(!currentModel){ get().setError() }
 						delete currentModel.category;			
@@ -105,8 +119,9 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 						break;
 					case 'generations':
 						set({ bodyConfigurations: [] });
+						set({ modifications: [] });
 						if(!data.params.year){ get().setError() }
-						get().setAvtoInfo({ ...get().avtoInfo, year: data.params.year });
+						get().setAvtoInfo({ ...get().avtoInfo, year: Number(data.params.year) });
 						let generations = fetchData.data.vehicleGenerations;
 						if(generations.length == 1){
 							generations[0].name = "Без поколения";
@@ -114,13 +129,17 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 						set({ generations: generations });
 						break;
 					case 'bodyConf':
+						set({ modifications: [] });
 						const currentGeneration = get().generations.find(g => g.id === Number(data.params.generationId));
 						if(!currentGeneration){ get().setError() }		
 						get().setAvtoInfo({ ...get().avtoInfo, generation: currentGeneration });
 						set({ bodyConfigurations: fetchData.data.vehicleBodyConfigurations });
 						break;
 					case 'modifications':
-						// commit("setModifications", response.data.vehicleModifications);
+						const currentBodyConfiguration = get().bodyConfigurations.find(b => b.id === Number(data.params.bodyConfigurationId));
+						if(!currentBodyConfiguration){ get().setError() }		
+						get().setAvtoInfo({ ...get().avtoInfo, bodyConfiguration: currentBodyConfiguration });
+						set({ modifications: fetchData.data.vehicleModifications });
 						break;
 					default:
 						break;
