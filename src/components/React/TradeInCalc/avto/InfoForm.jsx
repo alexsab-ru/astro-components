@@ -3,8 +3,45 @@ import { useCarInfo } from '@/store/useCarInfo';
 import { useTranslit } from '@/js/utils/translit';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import React, { useEffect, useState } from 'react';
+import ShowErrors from '../../ShowErrors';
+
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
+
+const schema = yup.object().shape({
+	brand: yup
+		.string()
+		.required('Поле обязательно для заполнения'),
+	model: yup
+		.string()
+		.required('Поле обязательно для заполнения'),
+});
 
 function AvtoInfoForm() {
+
+	const { vinState, mileageState, recalculate, decrimentStep, setMileage, avtoInfo, setAvtoInfo, brands, models, years, generations, bodyConfigurations, modifications, fetchCarsInfo } = useCarInfo();
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting },
+		trigger,
+	} = useForm({
+		resolver: yupResolver(schema),
+		defaultValues: {
+			brand: avtoInfo?.brand?.name || '',
+			model: avtoInfo?.model?.name || '',
+		},
+	});
+
+	const onSubmit = async (data) => {
+		const isFormCorrect = await trigger();
+		console.log('Errors', errors);
+		if (!isFormCorrect) return;
+		console.log(data);
+	}
 
 	const ptsTypes = [
 		{value: 'duplicate', name: 'Дубликат' },
@@ -19,7 +56,6 @@ function AvtoInfoForm() {
 	const [ptsType, setPtsType] = useState('');
 	const [phone, setPhone] = useState('');
 
-	const { vinState, mileageState, setMileage, avtoInfo, setAvtoInfo, brands, models, years, generations, bodyConfigurations, modifications, fetchCarsInfo } = useCarInfo();
 	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
 	const selectModel = (modelId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-years`, name: 'years', params: { brandId: avtoInfo?.brand?.id, modelId } });
 	const selectYear = (year) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-generations`, name: 'generations', params: { modelId: avtoInfo?.model?.id, year } });
@@ -54,17 +90,17 @@ function AvtoInfoForm() {
 		}
 	}, [models, years, generations, bodyConfigurations, modifications, engineType, driveType, gearboxType])
 
-	return ( 
+	return (
 		<div className="w-full lg:w-2/3 lg:pl-10 py-8 lg:py-16">
 			<h3 className="text-xl font-bold mb-2">Характеристики вашего авто</h3>
 			<p className="mb-4">Параметры, необходимые для оценки автомобиля</p>
 
-			<form className="vue-form grid grid-cols-6 gap-5">
+			<form className="vue-form grid grid-cols-6 gap-5" onSubmit={handleSubmit(onSubmit)}>
 				<input type="hidden" name="form" value="Онлайн-оценка автомобиля" />
 				<input type="hidden" name="email" tabIndex="-1" placeholder="mail@example.com" />
 				<input type="hidden" name="VIN" value={vinState} />
-				<input type="hidden" name="brand" value={avtoInfo?.brand?.name || ''} />
-				<input type="hidden" name="model" value={avtoInfo?.model?.name || ''} />
+				<input type="hidden" {...register('brand')} value={avtoInfo?.brand?.name || ''} />
+				<input type="hidden" {...register('model')} value={avtoInfo?.model?.name || ''} />
 				<input type="hidden" name="year-of-issue" value={avtoInfo?.year || ''} />
 				<input type="hidden" name="generation" value={avtoInfo?.generation?.name || ''} />
 				<input type="hidden" name="bodyConfiguration" value={avtoInfo?.bodyConfiguration?.name || ''} />
@@ -90,8 +126,9 @@ function AvtoInfoForm() {
 								className="w-full"
 								select={avtoInfo?.brand?.id || ''}
 							/>
+							{errors.brand && <ShowErrors errors={errors.brand.message} /> }
 						</div>
-						<div className="col-span-6 lg:col-span-3">					
+						<div className="col-span-6 lg:col-span-3 relative">					
 							<Select
 								placeholder="Модель *"
 								options={models}
@@ -101,6 +138,7 @@ function AvtoInfoForm() {
 								data-block={!models.length || models.length == 1}
 								className="w-full"
 							/>
+							{errors.model && <span className="absolute top-full left-0 text-xs text-red-500">{errors.model.message}</span> }
 						</div>
 						<div className="col-span-6 lg:col-span-3">					
 							<Select
@@ -249,7 +287,23 @@ function AvtoInfoForm() {
 					</label>
 				</div>
 
+				<div className="col-span-6 sticky bottom-0 left-0 right-0 z-10 bg-white border-t border-b border-t-gray-100 border-b-gray-100">
+					<div className="flex justify-between flex-wrap sm:justify-end">
+						<div
+							className="btn white border-0 flex flex-grow sm:flex-grow-0 items-center justify-center px-5 sm:px-20"
+							onClick={ () => {decrimentStep(); recalculate();} }
+						>
+							<span className="flex justify-center items-center gap-1 h-5">
+								<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" className=""><path data-v-6e69ebae="" d="M12 5l-5 5 5 5" stroke="currentColor" strokeWidth="2"></path></svg>
+								Шаг назад
+							</span>
+						</div>
+						<button type="submit" className="btn px-5 sm:px-20 flex-grow sm:flex-grow-0" disabled={isSubmitting}><span>Получить&nbsp;оценку</span></button>
+					</div>
+				</div>
+
 			</form>
+
 		</div>
 	);
 }
