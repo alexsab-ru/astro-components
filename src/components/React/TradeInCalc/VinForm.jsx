@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import ShowErrors from '../ShowErrors';
 import { useCarInfo } from '@/store/useCarInfo';
+import { vinTranslit } from '@/js/utils/translit';
 // Определение схемы валидации с помощью Yup
 const vinSchema = yup.object().shape({
 	vin: yup
@@ -16,7 +17,7 @@ const vinSchema = yup.object().shape({
 });
 
 const VinForm = () => {
-	const {incrementStep, setVIN, setMessage, setAvtoInfo, setBodyNumber, vinState, bodyNumber, showLoader, hideLoader} = useCarInfo()
+	const {incrementStep, recalculate, setVIN, setMessage, setAvtoInfo, setBodyNumber, vinState, bodyNumber, showLoader, hideLoader} = useCarInfo()
 	const vin = vinState || '';
 	const {
 		register,
@@ -37,6 +38,7 @@ const VinForm = () => {
 			incrementStep();
 		} else {
 			// await axios.post("https://api.maxposter.ru/partners-api/vin/info", {
+			recalculate();
 			showLoader()
 			await axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/vin/info`, {
 				vin,
@@ -59,10 +61,14 @@ const VinForm = () => {
 						} else {
 							setMessage("Что-то пошло не так :(( <br> Вернитесь назад и попробуйте снова <br> или выберите авто вручную.");
 						}
-						setAvtoInfo({});
+						// setAvtoInfo({});
 					} else if (status == "success") {
-						setAvtoInfo(data.data);
-						setBodyNumber(data.data.bodyNumber);
+						const avtoInfoData = data.data;
+						if(avtoInfoData.generation && avtoInfoData.generation.name === ''){
+							avtoInfoData.generation.name = 'Без поколения';
+						}
+						setAvtoInfo(avtoInfoData);
+						setBodyNumber(avtoInfoData.bodyNumber);
 					}
 				},
 				(error) => {
@@ -74,19 +80,9 @@ const VinForm = () => {
 		}
 	};
   
-	 // Функция для транслитерации
-	const translit = (value) => {
-		const translitMap = {
-			а: 'a',
-			т: 't',
-			х: 'x',
-		};
-		return value.replace(/[а-я]/gi, (matched) => translitMap[matched.toLowerCase()] || matched);
-	};
-  
 	 // Следим за изменениями поля vin и обновляем состояние
 	useEffect(() => {
-		const newVin = translit(vin.toUpperCase());
+		const newVin = vinTranslit(vin.toUpperCase());
 		setVIN(newVin);
 		setBodyNumber('');
 	}, [vin]);

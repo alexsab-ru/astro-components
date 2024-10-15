@@ -78,13 +78,6 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
     return duplicates
 
 
-
-# Переменная для отслеживания наличия 404 ошибки
-error_404_found = False
-
-with open('output.txt', 'w') as file:
-    file.write("")
-
 # Предполагаем, что у вас есть элементы с именами
 elements_to_localize = []
 # Предполагаем, что cars_element уже определён
@@ -118,7 +111,4 @@ for new_car in all_duplicates:
 output_path = './public/avito.xml'
 convert_to_string(root)
 tree.write(output_path, encoding='utf-8', xml_declaration=True)
-
-if error_404_found:
-    print("error 404 found")
 

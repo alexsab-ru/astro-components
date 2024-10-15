@@ -25,7 +25,7 @@ export default function Select({
 	id = false,
 	//   obj = false,
 	search = false,
-	select = '',
+	select = null,
 	onChanged,
 	className = '',
 	...rest
@@ -81,20 +81,23 @@ export default function Select({
 	// Фильтруем опции на основе поискового запроса
 	useEffect(() => {
 		const filtered = options.filter((option) =>
-			typeof option === 'object'
+			typeof option === 'object' 
 				? option.name.toLowerCase().includes(searchQuery.toLowerCase())
-				: option.toLowerCase().includes(searchQuery.toLowerCase())
+				: option.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())
 		);
 		setFilteredOptions(filtered);
 	}, [searchQuery, options]);
 
-	useEffect(() => {
+	useEffect(() => {		
 		if (select != null) {
 			const opt = options.find((item) => item.id === select);
 			if (opt && labelRef.current) {
 				labelRef.current.innerText = opt.name;
 				setIsSelected(true);
 			}
+		}else{
+			labelRef.current.innerText = placeholder;
+			setIsSelected(false);
 		}
 	}, [select, options]);
 
@@ -153,7 +156,9 @@ export default function Select({
 						/>
 					)}
 					{filteredOptions.length > 0 ? (
-						filteredOptions.map((option, idx) => (
+						filteredOptions.map((option, idx) => {
+							const isSelected = id ? option.id === select : idx === select;
+							return (
 							<a
 								href="#"
 								key={id ? option.id : idx}
@@ -163,13 +168,7 @@ export default function Select({
 										? option.name
 										: option
 								}
-								className={`${
-									id
-										? option.id === select
-										: idx === select
-										? 'selected'
-										: ''
-								}`}
+								className={`${isSelected ? 'selected' : '' }`}
 								onClick={(e) =>
 									e.preventDefault() || clickOption(e)
 								}
@@ -178,7 +177,8 @@ export default function Select({
 									? option.name
 									: option}
 							</a>
-						))
+						)}
+					)
 					) : (
 						<p className="px-2.5 !text-base !mb-2.5">
 							Нет доступных опций

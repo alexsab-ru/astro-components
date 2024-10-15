@@ -69,6 +69,8 @@ def create_file(car, filename, unique_id):
             continue
         if child.tag == 'total':
             continue
+        if child.tag == 'folder_id':
+            content += f"{child.tag}: '{child.text}'\n"
         if child.tag == 'images':
             images = [img.text for img in child.findall('image')]
             thumbs_files = createThumbs(images, unique_id)

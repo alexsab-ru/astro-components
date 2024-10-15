@@ -6,7 +6,7 @@ import './styles.scss';
 function BrandsList() {
 	const tabs = ['Популярные', 'Все марки'];
 	const [activeTab, setActiveTab] = useState(0);
-	const {brands, incrementStep} = useCarInfo();
+	const {brands, incrementStep, setAvtoInfo, fetchCarsInfo} = useCarInfo();
 	const allBrands = brands.reduce((acc, obj) => {
 		let key = 'a';
 		if( key != obj.name[0].toLowerCase() ){
@@ -17,7 +17,17 @@ function BrandsList() {
 		}
 		acc[key].push(obj);
 		return acc;
-	}, {});	
+	}, {});
+	const handleBrand = (brand) => {
+		setAvtoInfo({ brand });
+		const data = {
+			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`,
+			name: 'models',
+			params: {brandId: brand.id}
+		};
+		fetchCarsInfo(data);
+		incrementStep(); 
+	}
 	return ( 
 		<>
 			<div className="flex items-end mb-8">
@@ -32,8 +42,8 @@ function BrandsList() {
 			{activeTab === 0 ? (
 				<ul className="columns-2 sm:columns-4 md:columns-5 lg:columns-6 space-y-2.5 font-medium mb-16">
 					{ brands.filter(b => b.popular).map(brand => (
-						<li className="relative cursor-pointer" key={brand.id} onClick={() => incrementStep()}>
-							{brand.name == BRAND ? (
+						<li className="relative cursor-pointer" key={brand.id} onClick={() => handleBrand(brand)}>
+							{brand.name.toLowerCase() == BRAND.toLowerCase() ? (
 								<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" className="text-greenBrand absolute top-1.5 -left-4 w-2.5"><path d="M5 0l1.123 3.455h3.632L6.816 5.59 7.94 9.045 5 6.91 2.061 9.045 3.184 5.59.244 3.455h3.633L5 0z" fill="currentColor"></path></svg>
 							) : ('')}
 							{ brand.name }
@@ -54,7 +64,7 @@ function BrandsList() {
 							<span className="inline-block text-4xl text-gray-300 mb-3">{ key.toUpperCase() }</span>
 							<ul className="space-y-2.5">
 								{allBrands[key].map(brand => (
-									<li className="cursor-pointer" key={brand.id} onClick={() => incrementStep()}>
+									<li className="cursor-pointer" key={brand.id} onClick={() => handleBrand(brand)}>
 										{brand.name}
 									</li>
 								))}

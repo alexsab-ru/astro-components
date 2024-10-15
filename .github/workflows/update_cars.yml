@@ -59,6 +59,7 @@ jobs:
         ENV_XML_URL: ${{ vars.ENV_XML_URL }}
 
     - name: Generate files
+      if: ${{ vars.ENV_XML_URL }}
       run: |
         python .github/scripts/update_cars_maxposter.py
       env:
@@ -92,7 +93,7 @@ jobs:
 
     - name: ls files
       run: |
-        ls -al src/content/cars
+        if [[ -d src/content/cars ]]; then ls -al src/content/cars; fi
 
     - name: Check for changes
       id: check_changes

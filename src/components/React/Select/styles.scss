@@ -19,7 +19,7 @@
 	}
 }
 .k-select-head{
-	@apply h-11 w-full inline-flex items-center justify-between text-center py-0 px-2.5 bg-transparent transition-all duration-300 ease-in border border-gray-500 text-gray-700 text-sm sm:text-base;
+	@apply h-11 w-full inline-flex items-center justify-between text-center py-0 px-2.5 bg-transparent transition-all duration-300 ease-in border border-gray-400 text-gray-700 text-sm sm:text-base;
 }
 .k-select-arrow{
 	@apply rotate-0 origin-center transition-transform duration-300 ease-in;
