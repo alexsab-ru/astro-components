@@ -63,6 +63,8 @@ def create_file(car, filename, unique_id):
         # Skip nodes with child nodes (except photos) and attributes
         if list(child) and child.tag != 'photos':
             continue
+        if child.tag == 'folder_id':
+            content += f"{child.tag}: '{child.text}'\n"
         if child.tag == 'photos':
             images = [img.text for img in child.findall('photo')]
             thumbs_files = createThumbs(images, unique_id)
