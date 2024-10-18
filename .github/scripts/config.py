@@ -74,6 +74,7 @@ model_mapping = {
             "Black": "c7b.png",
             "Черный": "c7b.png",
             "Зеленый": "green.png",
+            "Green": "green.png",
         }
     },
     "X70": {
