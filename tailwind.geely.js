@@ -37,6 +37,9 @@ module.exports = {
 			fontFamily: {
 				'sans': ['Open Sans', ...defaultTheme.fontFamily.sans],
 			},
+			borderRadius: {
+				btn: '4px'
+			}
 		},
 	},
 }

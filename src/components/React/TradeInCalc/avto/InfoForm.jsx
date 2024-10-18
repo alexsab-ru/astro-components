@@ -1,7 +1,6 @@
 import Select from '@/components/React/Select';
 import { useCarInfo } from '@/store/useCarInfo';
 import { useTranslit } from '@/js/utils/translit';
-import { phoneFormat } from '@/js/utils/numbers.format';
 import React, { useEffect, useState } from 'react';
 import ShowErrors from '../../ShowErrors';
 
@@ -13,35 +12,47 @@ import axios from 'axios';
 const schema = yup.object().shape({
 	brand: yup
 		.string()
-		.required('Поле обязательно для заполнения'),
+		.required('Чтобы продолжить, выберите марку авто'),
 	model: yup
 		.string()
+		.required('Чтобы продолжить, выберите модель'),
+	'year-of-issue': yup
+		.string()
+		.required('Чтобы продолжить, выберите год выпуска'),
+	mileage: yup
+		.string()
 		.required('Поле обязательно для заполнения'),
+	phone: yup
+		.string()
+		.required('Укажите номер телефона в формате +7 999 999-99-99')
+		.matches(/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, 'Введен некорректный номер телефона'),
+	agree: yup
+		.boolean()
+		.oneOf([true], 'Вы должны согласиться с условиями использования')
+		.required('Чтобы продолжить, установите этот флажок'),
 });
 
 function AvtoInfoForm() {
 
-	const { vinState, mileageState, recalculate, decrimentStep, setMileage, avtoInfo, setAvtoInfo, brands, models, years, generations, bodyConfigurations, modifications, fetchCarsInfo } = useCarInfo();
+	const { vinState, mileageState, recalculate, decrimentStep, setMileage, avtoInfo, setAvtoInfo, brands, models, years, generations, bodyConfigurations, modifications, fetchCarsInfo, showLoader, hideLoader, setError } = useCarInfo();
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting },
 		trigger,
+		setValue
 	} = useForm({
 		resolver: yupResolver(schema),
 		defaultValues: {
 			brand: avtoInfo?.brand?.name || '',
 			model: avtoInfo?.model?.name || '',
+			'year-of-issue': avtoInfo?.year || '',
+			mileage: mileageState || '',
+			phone: '',
+			agree: false,
 		},
 	});
-
-	const onSubmit = async (data) => {
-		const isFormCorrect = await trigger();
-		console.log('Errors', errors);
-		if (!isFormCorrect) return;
-		console.log(data);
-	}
 
 	const ptsTypes = [
 		{value: 'duplicate', name: 'Дубликат' },
@@ -49,16 +60,41 @@ function AvtoInfoForm() {
 		{value: 'electronic', name: 'Электронный' },
 	]; 
 
+	const maskPhone = (e) => {
+		let num = e.target.value.replace(/^(\+7|8|7)/g, "").replace(/\D/g, "").split(/(?=.)/),
+			i = num.length;
+	
+		if(e.target.value != "" && e.target.value != "+") {
+			if (0 <= i) num.unshift("+7");
+			if (1 <= i) num.splice(1, 0, " ");
+			if (4 <= i) num.splice(5, 0, " ");
+			if (7 <= i) num.splice(9, 0, "-");
+			if (9 <= i) num.splice(12, 0, "-");
+			e.target.value = num.join("");
+		}
+	}
+
 	const [engineType, setEngineType] = useState('');
 	const [driveType, setDriveType] = useState('');
 	const [gearboxType, setGearboxType] = useState('');
 	const [ownerCount, setOwnerCount] = useState('');
 	const [ptsType, setPtsType] = useState('');
 	const [phone, setPhone] = useState('');
+	const [selfSale, setSelfSale] = useState('');
+	const [dealerPrice, setDealerPrice] = useState('');
 
 	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
-	const selectModel = (modelId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-years`, name: 'years', params: { brandId: avtoInfo?.brand?.id, modelId } });
-	const selectYear = (year) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-generations`, name: 'generations', params: { modelId: avtoInfo?.model?.id, year } });
+	const selectModel = async (modelId) => {
+		await fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-years`, name: 'years', params: { brandId: avtoInfo?.brand?.id, modelId } });
+		const currentModelName = models.find(m => m.id === Number(modelId))?.name;		
+		setValue('model', currentModelName);
+		trigger('model');
+	};
+	const selectYear = async (year) => {
+		await fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-generations`, name: 'generations', params: { modelId: avtoInfo?.model?.id, year } });
+		setValue('year-of-issue', year);
+		trigger('year-of-issue');
+	};
 	const selectGeneration = (generationId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-body-configurations`, name: 'bodyConf', params: { modelId: avtoInfo?.model?.id, year: avtoInfo?.year, generationId } });
 	const selectBodyConfiguration = (bodyConfigurationId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-modifications`, name: 'modifications', params: { modelId: avtoInfo?.model?.id, year: avtoInfo?.year, generationId: avtoInfo?.generation?.id, bodyConfigurationId } });
 	const selectModification = (modificationId) => {
@@ -68,14 +104,6 @@ function AvtoInfoForm() {
 		setGearboxType(useTranslit(currentModification.gearboxType));
 		const engineVolume = currentModification.engineVolume;
 		const enginePower = currentModification.enginePower;
-		// delete currentModification.bodyDoorCount
-		// delete currentModification.bodyType
-		// delete currentModification.driveType
-		// delete currentModification.enginePower
-		// delete currentModification.engineType
-		// delete currentModification.engineVolume
-		// delete currentModification.gearboxGearCount
-		// delete currentModification.gearboxType
 		setAvtoInfo({...avtoInfo, modification: currentModification, engineVolume, enginePower });
 	};
 	
@@ -88,20 +116,89 @@ function AvtoInfoForm() {
 		if(vinState === ''){
 			setAvtoInfo({...avtoInfo, engineType, driveType, gearboxType });
 		}
-	}, [models, years, generations, bodyConfigurations, modifications, engineType, driveType, gearboxType])
+	}, [models, years, generations, bodyConfigurations, modifications, engineType, driveType, gearboxType]);
+
+	const calcMinPrice = (price) => {
+		var minimum = 0;
+		var percent = 25;
+		if(price > 1500000){
+			percent = 4;
+		} else if(price > 1000000){
+			percent = 6;
+		} else if(price > 500000){
+			percent = 8;
+		} else if(price > 300000){
+			percent = 15;
+		} else {
+			minimum = 50000;
+		}
+		return Math.max(0,price-Math.max(price*percent/100,minimum))
+	}
+
+	const onSubmit = async (data, e) => {
+		const isFormCorrect = await trigger();
+		if (!isFormCorrect) return;
+		showLoader();
+		const info = JSON.parse(JSON.stringify(avtoInfo));
+		delete info.brand.popular;
+		delete info.bodyConfiguration.bodyDoorCount;
+		delete info.bodyConfiguration.bodyType;
+		if(info.modification !== null){
+			delete info.modification.bodyDoorCount;
+			delete info.modification.bodyType;
+			delete info.modification.driveType;
+			delete info.modification.enginePower;
+			delete info.modification.engineType;
+			delete info.modification.engineVolume;
+			delete info.modification.gearboxGearCount;
+			delete info.modification.gearboxType;
+		}
+		const { brand, model, bodyConfiguration, modification, year } = info;
+		const params = {
+			"filter": {brand, model},
+			"marketFilter": {brand, model, bodyConfiguration, modification},
+			"vehicle": {
+				year,
+				"mileage": Number(mileageState),
+				"ptsType": ptsType,
+				"ownerCount": Number(ownerCount)
+			}
+		}
+
+		axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/express`, params)
+		.then(async (res) => {
+			if(res.data.status == 'success'){
+				if (window.location.hostname == "localhost")
+					console.log(res);
+				res.data.data.analyticsByActualSales.minPrice !== 0 ? setSelfSale(res.data.data.analyticsByActualSales.minPrice) : setSelfSale(res.data.data.analyticsByCompletedSales.minPrice);
+				setDealerPrice(calcMinPrice(selfSale));
+				//await e.target.submit(); // submit form
+				hideLoader();
+			}else{
+				if (window.location.hostname == "localhost")
+					console.log('Error fetch express', res);
+				setError();
+				hideLoader();
+			}
+		}, (error) => {
+			if (window.location.hostname == "localhost")
+				console.log('Error fetch express', error);
+			setError();
+			hideLoader();
+		});
+	}
 
 	return (
 		<div className="w-full lg:w-2/3 lg:pl-10 py-8 lg:py-16">
 			<h3 className="text-xl font-bold mb-2">Характеристики вашего авто</h3>
 			<p className="mb-4">Параметры, необходимые для оценки автомобиля</p>
-
-			<form className="vue-form grid grid-cols-6 gap-5" onSubmit={handleSubmit(onSubmit)}>
+			<form className="vue-form grid grid-cols-6 gap-x-5 gap-y-6" onSubmit={handleSubmit(onSubmit)}>
 				<input type="hidden" name="form" value="Онлайн-оценка автомобиля" />
 				<input type="hidden" name="email" tabIndex="-1" placeholder="mail@example.com" />
 				<input type="hidden" name="VIN" value={vinState} />
 				<input type="hidden" {...register('brand')} value={avtoInfo?.brand?.name || ''} />
-				<input type="hidden" {...register('model')} value={avtoInfo?.model?.name || ''} />
-				<input type="hidden" name="year-of-issue" value={avtoInfo?.year || ''} />
+				<input type="hidden" {...register('model')} />
+				<input type="hidden" {...register('year-of-issue')} />
 				<input type="hidden" name="generation" value={avtoInfo?.generation?.name || ''} />
 				<input type="hidden" name="bodyConfiguration" value={avtoInfo?.bodyConfiguration?.name || ''} />
 				<input type="hidden" name="modification" value={avtoInfo?.modification?.name || ''} />
@@ -110,9 +207,9 @@ function AvtoInfoForm() {
 				<input type="hidden" name="gearboxType" value={useTranslit(avtoInfo?.gearboxType) || ''} />
 				<input type="hidden" name="engineVolume" value={Math.round(avtoInfo?.engineVolume / 100) / 10 || ''} />
 				<input type="hidden" name="enginePower" value={avtoInfo?.enginePower || ''} />
-				<input type="hidden" name="complectation" value={avtoInfo?.complectation || ''} />
-				<input type="hidden" name="dealerPrice" value={''} />
-				<input type="hidden" name="selfSale" value={''} />
+				<input type="hidden" name="complectation" value={avtoInfo?.complectation?.name || ''} />
+				<input type="hidden" name="dealerPrice" value={dealerPrice} />
+				<input type="hidden" name="selfSale" value={selfSale} />
 
 				{!Object.keys(avtoInfo).length || vinState === '' && 
 					<>
@@ -126,7 +223,7 @@ function AvtoInfoForm() {
 								className="w-full"
 								select={avtoInfo?.brand?.id || ''}
 							/>
-							{errors.brand && <ShowErrors errors={errors.brand.message} /> }
+							{errors.brand && <span className="absolute top-full left-0 text-xs text-red-500">{errors.brand.message}</span> }
 						</div>
 						<div className="col-span-6 lg:col-span-3 relative">					
 							<Select
@@ -140,7 +237,7 @@ function AvtoInfoForm() {
 							/>
 							{errors.model && <span className="absolute top-full left-0 text-xs text-red-500">{errors.model.message}</span> }
 						</div>
-						<div className="col-span-6 lg:col-span-3">					
+						<div className="col-span-6 lg:col-span-3 relative">					
 							<Select
 								placeholder="Год выпуска *"
 								options={years}
@@ -149,6 +246,7 @@ function AvtoInfoForm() {
 								className="w-full"
 								select={years.length == 1 ? years[0] : null}
 							/>
+							{errors['year-of-issue'] && <span className="absolute top-full left-0 text-xs text-red-500">{errors['year-of-issue'].message}</span> }
 						</div>
 						<div className="col-span-6 lg:col-span-3">					
 							<Select
@@ -213,16 +311,20 @@ function AvtoInfoForm() {
 					</>
 				}
 
-				<div className="col-span-6 lg:col-span-3 mb-10">
+				<div className="col-span-6 lg:col-span-3 mb-10 relative">
 					<input
 						type="tel"
-						name="mileage"
 						placeholder="Пробег *"
 						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${mileageState !== '' ? 'border-black' : 'border-gray-400'}`}
-						value={mileageState !== 0 || mileageState !== '' ? mileageState : ''}
-						onChange={e => setMileage(e.target.value)}
+						{...register('mileage')}
+						onChange={e => {
+							setMileage(e.target.value);
+							setValue('mileage', e.target.value);
+							trigger('mileage');
+						}}
 						disabled={!avtoInfo?.brand}
 					/>
+					{errors.mileage && <span className="absolute top-full left-0 text-xs text-red-500">{errors.mileage.message}</span> }
 				</div>
 
 				<div className="col-span-6 border-b-2 border-b-black pb-2 mb-4">
@@ -264,26 +366,32 @@ function AvtoInfoForm() {
 								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black border-gray-400 active:border-accent-500 focus-within:border-accent-500`}
 							/>
 						</div>
-						<div className="col-span-6 lg:col-span-3">
+						<div className="col-span-6 lg:col-span-3 relative">
 							<input
 								type="tel"
-								name="phone"
+								{...register('phone')}
 								placeholder="+7 999 999-99-99 *"
 								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
 								value={phone}
-								onChange={e => setPhone(phoneFormat(e.target.value))}
+								onChange={e => {
+									setPhone(maskPhone(e));
+									setValue('phone', e.target.value);
+									trigger('phone');
+								}}
 							/>
+							{errors.phone && <span className="absolute top-full left-0 text-xs text-red-500">{errors.phone.message}</span> }
 						</div>
 					</div>
 				</div>
 
-				<div className="col-span-6">
+				<div className="col-span-6 relative">
 					<label className="cursor-pointer flex items-center flex-wrap"> 
-						<input type="checkbox" name="agree" className="absolute w-0 h-0 opacity-0 invisible" /> 
+						<input type="checkbox" {...register('agree')} className="absolute w-0 h-0 opacity-0 invisible" /> 
 						<div className="flex flex-nowrap gap-x-2 text-black/80"> 
 							<span className="fake-checkbox-black"></span> 
 							<span>Проставляя отметку, Вы даете согласие на обработку Ваших персональных данных в соответствии с ФЗ № 152 «О персональных данных» на условиях, <a href="/privacy-policy" target="_blank">указанных здесь</a>. Настоящим Вы выражаете свое согласие на получение информационных и рекламных материалов путем осуществления прямых контактов с помощью различных средств связи, включая, но, не ограничиваясь: почтовую рассылку, sms – рассылку, электронную почту, телефон, Интернет.</span>
-						</div> 
+						</div>
+						{errors.agree && <span className="absolute top-full left-0 text-xs text-red-500 pl-6">{errors.agree.message}</span> }
 					</label>
 				</div>
 

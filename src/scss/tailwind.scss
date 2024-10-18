@@ -6,4 +6,13 @@
 	.mobile-title-size {
 		font-size: calc((1vw + 1vh) * 2.2);
 	}
+
+	.banner-title{
+		@apply text-3xl md:text-4xl lg:text-5xl uppercase font-bold mb-3 sm:mb-5;
+	}
+
+	.banner-description{
+		@apply text-sm sm:text-xl md:text-3xl;
+	}
+
 }
