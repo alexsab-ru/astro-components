@@ -34,7 +34,30 @@ const schema = yup.object().shape({
 
 function AvtoInfoForm() {
 
-	const { vinState, mileageState, recalculate, decrimentStep, setMileage, avtoInfo, setAvtoInfo, brands, models, years, generations, bodyConfigurations, modifications, fetchCarsInfo, showLoader, hideLoader, setError } = useCarInfo();
+	const { 
+		vinState, 
+		mileageState, 
+		recalculate, 
+		decrimentStep, 
+		setMileage, 
+		avtoInfo, 
+		setAvtoInfo, 
+		brands, 
+		models, 
+		years, 
+		generations, 
+		bodyConfigurations, 
+		modifications, 
+		fetchCarsInfo, 
+		showLoader, 
+		hideLoader, 
+		setError, 
+		selfSale, 
+		dealerPrice, 
+		setSelfSale, 
+		setDealerPrice, 
+		setStep 
+	} = useCarInfo();
 
 	const {
 		register,
@@ -60,7 +83,7 @@ function AvtoInfoForm() {
 		{value: 'electronic', name: 'Электронный' },
 	]; 
 
-	const maskPhone = (e) => {
+	const maskphone = (e) => {
 		let num = e.target.value.replace(/^(\+7|8|7)/g, "").replace(/\D/g, "").split(/(?=.)/),
 			i = num.length;
 	
@@ -80,8 +103,6 @@ function AvtoInfoForm() {
 	const [ownerCount, setOwnerCount] = useState('');
 	const [ptsType, setPtsType] = useState('');
 	const [phone, setPhone] = useState('');
-	const [selfSale, setSelfSale] = useState('');
-	const [dealerPrice, setDealerPrice] = useState('');
 
 	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
 	const selectModel = async (modelId) => {
@@ -144,14 +165,14 @@ function AvtoInfoForm() {
 		delete info.bodyConfiguration.bodyDoorCount;
 		delete info.bodyConfiguration.bodyType;
 		if(info.modification !== null){
-			delete info.modification.bodyDoorCount;
-			delete info.modification.bodyType;
-			delete info.modification.driveType;
-			delete info.modification.enginePower;
-			delete info.modification.engineType;
-			delete info.modification.engineVolume;
-			delete info.modification.gearboxGearCount;
-			delete info.modification.gearboxType;
+			delete info.modification?.bodyDoorCount;
+			delete info.modification?.bodyType;
+			delete info.modification?.driveType;
+			delete info.modification?.enginePower;
+			delete info.modification?.engineType;
+			delete info.modification?.engineVolume;
+			delete info.modification?.gearboxGearCount;
+			delete info.modification?.gearboxType;
 		}
 		const { brand, model, bodyConfiguration, modification, year } = info;
 		const params = {
@@ -172,7 +193,7 @@ function AvtoInfoForm() {
 					console.log(res);
 				res.data.data.analyticsByActualSales.minPrice !== 0 ? setSelfSale(res.data.data.analyticsByActualSales.minPrice) : setSelfSale(res.data.data.analyticsByCompletedSales.minPrice);
 				setDealerPrice(calcMinPrice(selfSale));
-				//await e.target.submit(); // submit form
+				setStep(2); // submit form
 				hideLoader();
 			}else{
 				if (window.location.hostname == "localhost")
@@ -374,7 +395,7 @@ function AvtoInfoForm() {
 								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
 								value={phone}
 								onChange={e => {
-									setPhone(maskPhone(e));
+									setPhone(maskphone(e));
 									setValue('phone', e.target.value);
 									trigger('phone');
 								}}

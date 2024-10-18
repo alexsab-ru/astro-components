@@ -25,6 +25,8 @@ export type TCarState = {
 	generations: any;
 	bodyConfigurations: any;
 	modifications: any;
+	selfSale: number;
+	dealerPrice: number;
 }
 
 export type TCarInfoActions = {
@@ -37,10 +39,13 @@ export type TCarInfoActions = {
 	setMessage: (mes: string) => void;
 	recalculate: () => void;
 	setBodyNumber: (vin: string) => void;
+	setStep: (step: number) => void;
 	setAvtoInfo: (data: any) => void;
 	showLoader: () => void;
 	hideLoader: () => void;
 	fetchCarsInfo: (data: any) => void;
+	setSelfSale: (num: number) => void;
+	setDealerPrice: (num: number) => void;
 }
 
 export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
@@ -58,6 +63,8 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	generations: [],
 	bodyConfigurations: [], 
 	modifications: [], 
+	selfSale: 0,
+	dealerPrice: 0,
 	setVIN: (vin) => set({ vinState: vin }),
 	setMileage: (mileage) => set({ mileageState: mileage.replace(/[^0-9\.]/g, '') }),
 	setError: () => set({ error: 'Извините, сервис временно недоступен. Мы уже работает над этим, повторите попыку позже.' }),
@@ -76,9 +83,12 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	incrementStep: () => set((state) => ({ step: state.step + 1 })),
 	decrimentStep: () => set((state) => ({ step: state.step - 1 })),
 	setBodyNumber: (vin) => set({ bodyNumber: vin }),
+	setStep: (step) => set({ step }),
 	setAvtoInfo: (data) => set({ avtoInfo: data }),
 	showLoader: () => set({ loading: true }),
 	hideLoader: () => set({ loading: false }),
+	setSelfSale: (num) => set({ selfSale: num }),
+	setDealerPrice: (num) => set({ dealerPrice: num }),
 	fetchCarsInfo: async (data) => {
 		data.params.categoryId = 1; // 1 - легковые автомобили
 		get().setVIN('');
