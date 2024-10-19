@@ -73,12 +73,15 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	recalculate: () => set({ 
 		// step: 0, 
 		bodyNumber: '', 
+		// mileageState: '',
 		avtoInfo: {},
 		models: [],
 		years: [],
 		generations: [],
 		bodyConfigurations: [], 
 		modifications: [],
+		// selfSale: 0,
+		// dealerPrice: 0,
 	}),
 	incrementStep: () => set((state) => ({ step: state.step + 1 })),
 	decrimentStep: () => set((state) => ({ step: state.step - 1 })),
@@ -87,8 +90,8 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	setAvtoInfo: (data) => set({ avtoInfo: data }),
 	showLoader: () => set({ loading: true }),
 	hideLoader: () => set({ loading: false }),
-	setSelfSale: (num) => set({ selfSale: num }),
-	setDealerPrice: (num) => set({ dealerPrice: num }),
+	setSelfSale: async (num) => set({ selfSale: num }),
+	setDealerPrice: async (num) => set({ dealerPrice: num }),
 	fetchCarsInfo: async (data) => {
 		data.params.categoryId = 1; // 1 - легковые автомобили
 		get().setVIN('');
