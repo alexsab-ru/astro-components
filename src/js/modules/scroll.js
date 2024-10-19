@@ -22,7 +22,7 @@ document.querySelectorAll('a[href^="#"]:not(.popup-link)').forEach((link) => {
 	});
 });
 
-function scroll(hash) {
+export function scroll(hash) {
 	const scrollTarget = document.getElementById(hash);
 	if (scrollTarget) {
 		const topOffset = $nav ? $nav.offsetHeight : 0;
