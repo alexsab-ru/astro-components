@@ -5,11 +5,12 @@ const steps = ['Ваш автомобиль', 'Характеристики ва
 
 // Компонент для отображения шагов
 const StepPanel = () => {
-  const {step, decrimentStep} = useCarInfo();
+  const {step, setStep, recalculate} = useCarInfo();
 
   const handleStepClick = (idx) => {
     if (step < idx || step === 0 || step === idx) return;
-    decrimentStep();
+    if(idx === 0) { recalculate(); }
+    setStep(idx);
   };
 
   const translateStyle = useMemo(() => ({
@@ -22,8 +23,7 @@ const StepPanel = () => {
         {steps.map((s, idx) => (
           <div
             key={idx}
-            className={`relative md:flex-grow flex items-center gap-4 !pt-3 w-1/3 md:w-auto 
-              ${step === idx ? 'border-t-4 border-t-black' : step > idx ? 'border-t-4 border-t-greenBrand cursor-pointer' : 'border-t border-t-cd'}`}
+            className={`relative md:flex-grow flex items-center gap-4 !pt-3 w-1/3 md:w-auto ${step === idx ? 'border-t-4 border-t-black' : step > idx ? 'border-t-4 border-t-greenBrand cursor-pointer' : 'border-t border-t-cd'}`}
             onClick={() => handleStepClick(idx)}
           >
             <span className={`font-bold ${step > idx ? 'text-greenBrand' : 'text-black'}`}>
