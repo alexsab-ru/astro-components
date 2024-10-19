@@ -19,7 +19,7 @@ const StepPanel = () => {
 
   return (
     <div className="overflow-hidden pt-5">
-      <div className="mb-12 flex flex-nowrap font-medium text-cd w-[800px] md:w-auto md:!translate-x-0" style={translateStyle}>
+      <div className="mb-12 flex flex-nowrap font-medium text-gray-500 w-[800px] md:w-auto md:!translate-x-0" style={translateStyle}>
         {steps.map((s, idx) => (
           <div
             key={idx}
@@ -29,7 +29,7 @@ const StepPanel = () => {
             <span className={`font-bold ${step > idx ? 'text-greenBrand' : 'text-black'}`}>
               0{idx + 1}
             </span>
-            <span className={`${step < idx ? '!text-cd' : 'text-black'}`}>
+            <span className={`${step < idx ? '!text-gray-500' : 'text-black'}`}>
               {s}
             </span>
           </div>
