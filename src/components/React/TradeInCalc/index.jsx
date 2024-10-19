@@ -8,7 +8,7 @@ import Loader from '../Loader/Loader';
 import BrandsList from './brands/List';
 import AvtoInfo from './avto/Info';
 import AvtoInfoResult from './avto/InfoResult';
-axios.defaults.headers.common['Authorization'] = `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`;
+// axios.defaults.headers.common['Authorization'] = `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`;
 
 export default function TradeInCalc() {
 	const {step, error, brands, loading, fetchCarsInfo} = useCarInfo();
