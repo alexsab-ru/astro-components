@@ -27,7 +27,7 @@ const VinForm = () => {
 	} = useForm({
 		resolver: yupResolver(vinSchema),
 		defaultValues: {
-			vin: vinState || '',
+			vin,
 		},
 	});
 	// Обработчик отправки формы
@@ -98,9 +98,8 @@ const VinForm = () => {
 						type="text"
 						className={`w-[270px] border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-none text-black border-gray-100 ${vin ? '!border-black !text-black' : ''}`}
 						placeholder="Введите VIN-номер"
-						value={vin}
 						{...register('vin')}
-						onChange={(e) => setVIN(e.target.value)}
+						onInput={(e) => setVIN(e.target.value)}
 					/>
 					<button
 						className="bg-black text-white w-[48px] h-[48px] m-0 flex justify-center items-center transition-opacity hover:bg-accent-400 disabled:opacity-90 disabled:cursor-not-allowed"
