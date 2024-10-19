@@ -59,6 +59,13 @@ function AvtoInfoForm() {
 		setStep 
 	} = useCarInfo();
 
+	const [engineType, setEngineType] = useState('');
+	const [driveType, setDriveType] = useState('');
+	const [gearboxType, setGearboxType] = useState('');
+	const [ownerCount, setOwnerCount] = useState('');
+	const [ptsType, setPtsType] = useState('');
+	const [phone, setPhone] = useState('');
+
 	const {
 		register,
 		handleSubmit,
@@ -72,7 +79,7 @@ function AvtoInfoForm() {
 			model: avtoInfo?.model?.name || '',
 			'year-of-issue': avtoInfo?.year || '',
 			mileage: mileageState || '',
-			phone: '',
+			phone: phone || '',
 			agree: false,
 		},
 	});
@@ -96,13 +103,6 @@ function AvtoInfoForm() {
 			e.target.value = num.join("");
 		}
 	}
-
-	const [engineType, setEngineType] = useState('');
-	const [driveType, setDriveType] = useState('');
-	const [gearboxType, setGearboxType] = useState('');
-	const [ownerCount, setOwnerCount] = useState('');
-	const [ptsType, setPtsType] = useState('');
-	const [phone, setPhone] = useState('');
 
 	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
 	const selectModel = async (modelId) => {
@@ -156,6 +156,35 @@ function AvtoInfoForm() {
 		return Math.max(0,price-Math.max(price*percent/100,minimum))
 	}
 
+	const getCookie = (name) => {
+		var matches = document.cookie.match(new RegExp(
+		"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+		))
+		return matches ? decodeURIComponent(matches[1]) : undefined
+	}
+
+	const getPair = (openURL = '') => {
+		let result = {referer: window.location.origin};
+		if(typeof openURL === "object") {
+			openURL.search.substring(1).split('&').forEach(function(el){
+				var pair = el.split('=');
+				result[pair[0]] = pair[1];
+			});
+		}
+		let source = new URL(getCookie('__gtm_campaign_url') ? getCookie('__gtm_campaign_url') : window.location);
+		if(source.search !== window.location.search) {
+			source.search.substring(1).split('&').forEach(function(el){
+				var pair = el.split('=');
+				result[pair[0]] = pair[1];
+			});
+		}
+		window.location.search.substring(1).split('&').forEach(function(el){
+			var pair = el.split('=');
+			result[pair[0]] = pair[1];
+		});
+		return result;
+	}
+
 	const onSubmit = async (data, e) => {
 		const isFormCorrect = await trigger();
 		if (!isFormCorrect) return;
@@ -191,9 +220,42 @@ function AvtoInfoForm() {
 			if(res.data.status == 'success'){
 				if (window.location.hostname == "localhost")
 					console.log(res);
-				res.data.data.analyticsByActualSales.minPrice !== 0 ? setSelfSale(res.data.data.analyticsByActualSales.minPrice) : setSelfSale(res.data.data.analyticsByCompletedSales.minPrice);
-				setDealerPrice(calcMinPrice(selfSale));
-				setStep(2); // submit form
+				const sPrice = res.data.data.analyticsByActualSales.minPrice !== 0 ? res.data.data.analyticsByActualSales.minPrice : res.data.data.analyticsByCompletedSales.minPrice;
+				console.log('selfSale', sPrice);
+
+				const dPrice = calcMinPrice(sPrice);
+				console.log('dealerPrice',dPrice);
+
+				await setSelfSale(sPrice);				
+				await setDealerPrice(dPrice);
+				const formData = new FormData(e.target);
+				const pairs = getPair();
+				Object.entries(pairs).forEach(function(pair){
+					formData.append(pair[0], pair[1]);
+				});
+				formData.append("page_url", window.location.origin + window.location.pathname);
+				const options = {
+					method: "POST",
+					mode: "cors",
+					cache: "no-cache",
+					credentials: "same-origin",
+					headers: { "Content-Type": "application/x-www-form-urlencoded", },
+					data: formData,
+					url: import.meta.env.PUBLIC_SEND_EMAIL_URL,
+				 };
+				await axios(options)
+				.then(function (response) {
+					if (window.location.hostname == "localhost")
+						console.log('Отправка письма', response);
+					// recalculate();
+					e.target.reset();
+					setStep(2);
+				})
+				.catch(function (error) {
+					if (window.location.hostname == "localhost")
+						console.log('Ошибка отправки письма', error);
+					setError();
+				});
 				hideLoader();
 			}else{
 				if (window.location.hostname == "localhost")
