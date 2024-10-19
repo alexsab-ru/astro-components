@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { useCarInfo } from '@/store/useCarInfo';
+import { scroll } from '@/js/modules/scroll';
 import { BRAND } from '@/const';
 import './styles.scss';
 
@@ -18,15 +19,16 @@ function BrandsList() {
 		acc[key].push(obj);
 		return acc;
 	}, {});
-	const handleBrand = (brand) => {
+	const handleBrand = async (brand) => {
 		setAvtoInfo({ brand });
 		const data = {
 			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`,
 			name: 'models',
 			params: {brandId: brand.id}
 		};
-		fetchCarsInfo(data);
+		await fetchCarsInfo(data);
 		incrementStep(); 
+		scroll('trade-in-calc');
 	}
 	return ( 
 		<>

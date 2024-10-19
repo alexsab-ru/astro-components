@@ -1,8 +1,9 @@
 import Select from '@/components/React/Select';
 import { useCarInfo } from '@/store/useCarInfo';
 import { useTranslit } from '@/js/utils/translit';
+import { scroll } from '@/js/modules/scroll';
+import { maskphone, calcMinPrice, getPair } from '@/js/utils/helpers';
 import React, { useEffect, useState } from 'react';
-import ShowErrors from '../../ShowErrors';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -32,8 +33,7 @@ const schema = yup.object().shape({
 		.required('Чтобы продолжить, установите этот флажок'),
 });
 
-function AvtoInfoForm() {
-
+function AvtoInfoForm() {	
 	const { 
 		vinState, 
 		mileageState, 
@@ -88,21 +88,7 @@ function AvtoInfoForm() {
 		{value: 'duplicate', name: 'Дубликат' },
 		{value: 'original', name: 'Оригинал' },
 		{value: 'electronic', name: 'Электронный' },
-	]; 
-
-	const maskphone = (e) => {
-		let num = e.target.value.replace(/^(\+7|8|7)/g, "").replace(/\D/g, "").split(/(?=.)/),
-			i = num.length;
-	
-		if(e.target.value != "" && e.target.value != "+") {
-			if (0 <= i) num.unshift("+7");
-			if (1 <= i) num.splice(1, 0, " ");
-			if (4 <= i) num.splice(5, 0, " ");
-			if (7 <= i) num.splice(9, 0, "-");
-			if (9 <= i) num.splice(12, 0, "-");
-			e.target.value = num.join("");
-		}
-	}
+	];
 
 	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
 	const selectModel = async (modelId) => {
@@ -138,52 +124,6 @@ function AvtoInfoForm() {
 			setAvtoInfo({...avtoInfo, engineType, driveType, gearboxType });
 		}
 	}, [models, years, generations, bodyConfigurations, modifications, engineType, driveType, gearboxType]);
-
-	const calcMinPrice = (price) => {
-		var minimum = 0;
-		var percent = 25;
-		if(price > 1500000){
-			percent = 4;
-		} else if(price > 1000000){
-			percent = 6;
-		} else if(price > 500000){
-			percent = 8;
-		} else if(price > 300000){
-			percent = 15;
-		} else {
-			minimum = 50000;
-		}
-		return Math.max(0,price-Math.max(price*percent/100,minimum))
-	}
-
-	const getCookie = (name) => {
-		var matches = document.cookie.match(new RegExp(
-		"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-		))
-		return matches ? decodeURIComponent(matches[1]) : undefined
-	}
-
-	const getPair = (openURL = '') => {
-		let result = {referer: window.location.origin};
-		if(typeof openURL === "object") {
-			openURL.search.substring(1).split('&').forEach(function(el){
-				var pair = el.split('=');
-				result[pair[0]] = pair[1];
-			});
-		}
-		let source = new URL(getCookie('__gtm_campaign_url') ? getCookie('__gtm_campaign_url') : window.location);
-		if(source.search !== window.location.search) {
-			source.search.substring(1).split('&').forEach(function(el){
-				var pair = el.split('=');
-				result[pair[0]] = pair[1];
-			});
-		}
-		window.location.search.substring(1).split('&').forEach(function(el){
-			var pair = el.split('=');
-			result[pair[0]] = pair[1];
-		});
-		return result;
-	}
 
 	const onSubmit = async (data, e) => {
 		const isFormCorrect = await trigger();
@@ -250,11 +190,13 @@ function AvtoInfoForm() {
 					// recalculate();
 					e.target.reset();
 					setStep(2);
+					scroll('trade-in-calc');
 				})
 				.catch(function (error) {
 					if (window.location.hostname == "localhost")
 						console.log('Ошибка отправки письма', error);
 					setError();
+					scroll('trade-in-calc');
 				});
 				hideLoader();
 			}else{
@@ -262,12 +204,14 @@ function AvtoInfoForm() {
 					console.log('Error fetch express', res);
 				setError();
 				hideLoader();
+				scroll('trade-in-calc');
 			}
 		}, (error) => {
 			if (window.location.hostname == "localhost")
 				console.log('Error fetch express', error);
 			setError();
 			hideLoader();
+			scroll('trade-in-calc');
 		});
 	}
 
@@ -279,7 +223,7 @@ function AvtoInfoForm() {
 				<input type="hidden" name="form" value="Онлайн-оценка автомобиля" />
 				<input type="hidden" name="email" tabIndex="-1" placeholder="mail@example.com" />
 				<input type="hidden" name="VIN" value={vinState} />
-				<input type="hidden" {...register('brand')} value={avtoInfo?.brand?.name || ''} />
+				<input type="hidden" {...register('brand')} />
 				<input type="hidden" {...register('model')} />
 				<input type="hidden" {...register('year-of-issue')} />
 				<input type="hidden" name="generation" value={avtoInfo?.generation?.name || ''} />
@@ -455,7 +399,6 @@ function AvtoInfoForm() {
 								{...register('phone')}
 								placeholder="+7 999 999-99-99 *"
 								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
-								value={phone}
 								onChange={e => {
 									setPhone(maskphone(e));
 									setValue('phone', e.target.value);
