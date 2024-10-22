@@ -9,14 +9,17 @@ const { mdx } = Astro.props;
 
 // Попробуем получить запись из коллекции 'seo' по слагу
 const content = await getEntryBySlug('seo', mdx);
+let showseo = false;
+let Content = null;
 
-if (!content) {
-	throw new Error(`Контент для ${mdx} не найден.`);
+if (content) {
+  const result = await content.render();
+  Content = result.Content;
+  showseo = true;
 }
-
-const { Content } = await content.render();
 ---
 
+{ showseo ? ( 
 <section class="!pt-0">
 	<div class="container">
 		<div class="seo-content">
@@ -30,3 +33,4 @@ const { Content } = await content.render();
 		</div>
 	</div>
 </section>
+) : ('')}
