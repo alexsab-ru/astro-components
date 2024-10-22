@@ -1,0 +1,70 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import { getCollection } from "astro:content";
+import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
+import CarItem from "@/components/Cars/Item.astro";
+import SortSelect from "@/components/Cars/SortSelect.astro";
+const rawCars = await getCollection("used_cars");
+let cars: any, image: string, models = [];
+import { getRandomInt, declOfNums } from "@/js/utils/numbers.format";
+if (rawCars && rawCars.length > 0) {
+	cars = rawCars;
+	image = cars[getRandomInt(0, cars.length)].data.image;
+	cars.map((car) => {
+		if(!models.includes(car.data.folder_id)){
+			models.push(car.data.folder_id)
+		}
+	})
+} else {
+	image = "";
+}
+export const breadcrumb = { name: "Авто с пробегом", href: "/used_cars/" };
+---
+
+<PageLayout
+	h1={`Автомобили ${BRAND} с пробегом в ${LEGAL_CITY_WHERE}`}
+	title={`Автомобили с пробегом | ${SITE_NAME}`}
+	breadcrumb={[breadcrumb]}
+	image={image ? image : ""}
+	backLink={true}
+>
+	{
+		cars ? (
+			<div x-data="sorting" x-cloak>
+				<p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
+				<hr class="my-5">
+				<SortSelect />
+				<hr class="my-5">
+				{models.length && (
+					<div class="flex flex-wrap gap-2 sm:gap-4">
+						<button 
+							class="filter-model-link"
+							:class="currentModel === 'all' ? 'bg-accent-500 text-white' : 'bg-gray-200'"
+							@click.prevent="filteredCars('all')"
+						>Все</button>
+						{models.map(model => (
+							<button
+								class="filter-model-link"
+								:class={`currentModel === '${model.toLowerCase()}' ? 'bg-accent-500 text-white' : 'bg-gray-200'`}
+								@click.prevent={`filteredCars('${model.toLowerCase()}')`}
+							>{model}</button>
+						))}
+					</div>
+				)}
+				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+					{cars.map((car) => (
+						<CarItem car={car} />
+					))}
+				</div>
+			</div>
+		) : (
+			<p>Скоро здесь появится список автомобилей с пробегом.</p>
+		)
+	}
+</PageLayout>
+
+<style>
+	.filter-model-link{
+		@apply text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0;
+	}
+</style>

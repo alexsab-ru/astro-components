@@ -1,8 +1,9 @@
 import Select from '@/components/React/Select';
 import { useCarInfo } from '@/store/useCarInfo';
 import { useTranslit } from '@/js/utils/translit';
+import { scroll } from '@/js/modules/scroll';
+import { maskphone, calcMinPrice, getPair } from '@/js/utils/helpers';
 import React, { useEffect, useState } from 'react';
-import ShowErrors from '../../ShowErrors';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -32,9 +33,38 @@ const schema = yup.object().shape({
 		.required('Чтобы продолжить, установите этот флажок'),
 });
 
-function AvtoInfoForm() {
+function AvtoInfoForm() {	
+	const { 
+		vinState, 
+		mileageState, 
+		recalculate, 
+		decrimentStep, 
+		setMileage, 
+		avtoInfo, 
+		setAvtoInfo, 
+		brands, 
+		models, 
+		years, 
+		generations, 
+		bodyConfigurations, 
+		modifications, 
+		fetchCarsInfo, 
+		showLoader, 
+		hideLoader, 
+		setError, 
+		selfSale, 
+		dealerPrice, 
+		setSelfSale, 
+		setDealerPrice, 
+		setStep 
+	} = useCarInfo();
 
-	const { vinState, mileageState, recalculate, decrimentStep, setMileage, avtoInfo, setAvtoInfo, brands, models, years, generations, bodyConfigurations, modifications, fetchCarsInfo, showLoader, hideLoader, setError } = useCarInfo();
+	const [engineType, setEngineType] = useState('');
+	const [driveType, setDriveType] = useState('');
+	const [gearboxType, setGearboxType] = useState('');
+	const [ownerCount, setOwnerCount] = useState('');
+	const [ptsType, setPtsType] = useState('');
+	const [phone, setPhone] = useState('');
 
 	const {
 		register,
@@ -49,7 +79,7 @@ function AvtoInfoForm() {
 			model: avtoInfo?.model?.name || '',
 			'year-of-issue': avtoInfo?.year || '',
 			mileage: mileageState || '',
-			phone: '',
+			phone: phone || '',
 			agree: false,
 		},
 	});
@@ -58,30 +88,7 @@ function AvtoInfoForm() {
 		{value: 'duplicate', name: 'Дубликат' },
 		{value: 'original', name: 'Оригинал' },
 		{value: 'electronic', name: 'Электронный' },
-	]; 
-
-	const maskPhone = (e) => {
-		let num = e.target.value.replace(/^(\+7|8|7)/g, "").replace(/\D/g, "").split(/(?=.)/),
-			i = num.length;
-	
-		if(e.target.value != "" && e.target.value != "+") {
-			if (0 <= i) num.unshift("+7");
-			if (1 <= i) num.splice(1, 0, " ");
-			if (4 <= i) num.splice(5, 0, " ");
-			if (7 <= i) num.splice(9, 0, "-");
-			if (9 <= i) num.splice(12, 0, "-");
-			e.target.value = num.join("");
-		}
-	}
-
-	const [engineType, setEngineType] = useState('');
-	const [driveType, setDriveType] = useState('');
-	const [gearboxType, setGearboxType] = useState('');
-	const [ownerCount, setOwnerCount] = useState('');
-	const [ptsType, setPtsType] = useState('');
-	const [phone, setPhone] = useState('');
-	const [selfSale, setSelfSale] = useState('');
-	const [dealerPrice, setDealerPrice] = useState('');
+	];
 
 	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
 	const selectModel = async (modelId) => {
@@ -118,23 +125,6 @@ function AvtoInfoForm() {
 		}
 	}, [models, years, generations, bodyConfigurations, modifications, engineType, driveType, gearboxType]);
 
-	const calcMinPrice = (price) => {
-		var minimum = 0;
-		var percent = 25;
-		if(price > 1500000){
-			percent = 4;
-		} else if(price > 1000000){
-			percent = 6;
-		} else if(price > 500000){
-			percent = 8;
-		} else if(price > 300000){
-			percent = 15;
-		} else {
-			minimum = 50000;
-		}
-		return Math.max(0,price-Math.max(price*percent/100,minimum))
-	}
-
 	const onSubmit = async (data, e) => {
 		const isFormCorrect = await trigger();
 		if (!isFormCorrect) return;
@@ -144,14 +134,14 @@ function AvtoInfoForm() {
 		delete info.bodyConfiguration.bodyDoorCount;
 		delete info.bodyConfiguration.bodyType;
 		if(info.modification !== null){
-			delete info.modification.bodyDoorCount;
-			delete info.modification.bodyType;
-			delete info.modification.driveType;
-			delete info.modification.enginePower;
-			delete info.modification.engineType;
-			delete info.modification.engineVolume;
-			delete info.modification.gearboxGearCount;
-			delete info.modification.gearboxType;
+			delete info.modification?.bodyDoorCount;
+			delete info.modification?.bodyType;
+			delete info.modification?.driveType;
+			delete info.modification?.enginePower;
+			delete info.modification?.engineType;
+			delete info.modification?.engineVolume;
+			delete info.modification?.gearboxGearCount;
+			delete info.modification?.gearboxType;
 		}
 		const { brand, model, bodyConfiguration, modification, year } = info;
 		const params = {
@@ -170,21 +160,58 @@ function AvtoInfoForm() {
 			if(res.data.status == 'success'){
 				if (window.location.hostname == "localhost")
 					console.log(res);
-				res.data.data.analyticsByActualSales.minPrice !== 0 ? setSelfSale(res.data.data.analyticsByActualSales.minPrice) : setSelfSale(res.data.data.analyticsByCompletedSales.minPrice);
-				setDealerPrice(calcMinPrice(selfSale));
-				//await e.target.submit(); // submit form
+				const sPrice = res.data.data.analyticsByActualSales.minPrice !== 0 ? res.data.data.analyticsByActualSales.minPrice : res.data.data.analyticsByCompletedSales.minPrice;
+				console.log('selfSale', sPrice);
+
+				const dPrice = calcMinPrice(sPrice);
+				console.log('dealerPrice',dPrice);
+
+				await setSelfSale(sPrice);				
+				await setDealerPrice(dPrice);
+				const formData = new FormData(e.target);
+				const pairs = getPair();
+				Object.entries(pairs).forEach(function(pair){
+					formData.append(pair[0], pair[1]);
+				});
+				formData.append("page_url", window.location.origin + window.location.pathname);
+				const options = {
+					method: "POST",
+					mode: "cors",
+					cache: "no-cache",
+					credentials: "same-origin",
+					headers: { "Content-Type": "application/x-www-form-urlencoded", },
+					data: formData,
+					url: import.meta.env.PUBLIC_SEND_EMAIL_URL,
+				 };
+				await axios(options)
+				.then(function (response) {
+					if (window.location.hostname == "localhost")
+						console.log('Отправка письма', response);
+					// recalculate();
+					e.target.reset();
+					setStep(2);
+					scroll('trade-in-calc');
+				})
+				.catch(function (error) {
+					if (window.location.hostname == "localhost")
+						console.log('Ошибка отправки письма', error);
+					setError();
+					scroll('trade-in-calc');
+				});
 				hideLoader();
 			}else{
 				if (window.location.hostname == "localhost")
 					console.log('Error fetch express', res);
 				setError();
 				hideLoader();
+				scroll('trade-in-calc');
 			}
 		}, (error) => {
 			if (window.location.hostname == "localhost")
 				console.log('Error fetch express', error);
 			setError();
 			hideLoader();
+			scroll('trade-in-calc');
 		});
 	}
 
@@ -196,7 +223,7 @@ function AvtoInfoForm() {
 				<input type="hidden" name="form" value="Онлайн-оценка автомобиля" />
 				<input type="hidden" name="email" tabIndex="-1" placeholder="mail@example.com" />
 				<input type="hidden" name="VIN" value={vinState} />
-				<input type="hidden" {...register('brand')} value={avtoInfo?.brand?.name || ''} />
+				<input type="hidden" {...register('brand')} />
 				<input type="hidden" {...register('model')} />
 				<input type="hidden" {...register('year-of-issue')} />
 				<input type="hidden" name="generation" value={avtoInfo?.generation?.name || ''} />
@@ -372,9 +399,8 @@ function AvtoInfoForm() {
 								{...register('phone')}
 								placeholder="+7 999 999-99-99 *"
 								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
-								value={phone}
 								onChange={e => {
-									setPhone(maskPhone(e));
+									setPhone(maskphone(e));
 									setValue('phone', e.target.value);
 									trigger('phone');
 								}}

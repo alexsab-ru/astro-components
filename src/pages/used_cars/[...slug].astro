@@ -1,0 +1,28 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import CarPageLayout from '@/layouts/CarPageLayout.astro';
+
+export async function getStaticPaths() {
+const cars = await getCollection('used_cars');
+
+	// Проверяем, что массив cars не пустой перед обработкой
+	if (cars && cars.length > 0) {
+		return cars.map((car) => ({
+			params: { slug: car.slug },
+			props: car,
+		}));
+	} else {
+		// Если массив пустой, возвращаем пустой массив путей
+		return [];
+	}
+}
+type Props = CollectionEntry<'used_cars'>;
+
+const car = Astro.props;
+const { Content } = await car.render();
+import { breadcrumb } from './index.astro';
+---
+
+<CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]} backLink={true}>
+	<Content />
+</CarPageLayout>

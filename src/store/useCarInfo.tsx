@@ -1,47 +1,8 @@
 import axios from 'axios';
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { localBrands } from '@/store/local.brands';
 
-import { localBrands } from '@/store/local.brands'
-
-type TBrand = {
-	id: number; 
-	name: string; 
-	popular?: boolean;
-}
-
-export type TCarState = {
-	loading: boolean;
-	vinState: string;
-	mileageState: string;
-	bodyNumber: string;
-	step: number;
-	error: string;
-	noResultFetchMessage: string;
-	avtoInfo: any;
-	brands: TBrand[];
-	models: any;
-	years: any;
-	generations: any;
-	bodyConfigurations: any;
-	modifications: any;
-}
-
-export type TCarInfoActions = {
-	incrementStep: () => void;
-	decrimentStep: () => void;
-	setVIN: (vin: string) => void;
-	setMileage: (mileage: string) => void;
-	setError: () => void;
-	clearError: () => void;
-	setMessage: (mes: string) => void;
-	recalculate: () => void;
-	setBodyNumber: (vin: string) => void;
-	setAvtoInfo: (data: any) => void;
-	showLoader: () => void;
-	hideLoader: () => void;
-	fetchCarsInfo: (data: any) => void;
-}
+import type { TCarState, TCarInfoActions, TBrand } from './types';
 
 export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	loading: true,
@@ -58,6 +19,8 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	generations: [],
 	bodyConfigurations: [], 
 	modifications: [], 
+	selfSale: 0,
+	dealerPrice: 0,
 	setVIN: (vin) => set({ vinState: vin }),
 	setMileage: (mileage) => set({ mileageState: mileage.replace(/[^0-9\.]/g, '') }),
 	setError: () => set({ error: 'Извините, сервис временно недоступен. Мы уже работает над этим, повторите попыку позже.' }),
@@ -66,19 +29,25 @@ export const useCarInfo = create<TCarState & TCarInfoActions>((set, get) => ({
 	recalculate: () => set({ 
 		// step: 0, 
 		bodyNumber: '', 
+		// mileageState: '',
 		avtoInfo: {},
 		models: [],
 		years: [],
 		generations: [],
 		bodyConfigurations: [], 
 		modifications: [],
+		// selfSale: 0,
+		// dealerPrice: 0,
 	}),
 	incrementStep: () => set((state) => ({ step: state.step + 1 })),
 	decrimentStep: () => set((state) => ({ step: state.step - 1 })),
 	setBodyNumber: (vin) => set({ bodyNumber: vin }),
+	setStep: (step) => set({ step }),
 	setAvtoInfo: (data) => set({ avtoInfo: data }),
 	showLoader: () => set({ loading: true }),
 	hideLoader: () => set({ loading: false }),
+	setSelfSale: async (num) => set({ selfSale: num }),
+	setDealerPrice: async (num) => set({ dealerPrice: num }),
 	fetchCarsInfo: async (data) => {
 		data.params.categoryId = 1; // 1 - легковые автомобили
 		get().setVIN('');
