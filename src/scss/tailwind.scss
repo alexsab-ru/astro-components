@@ -40,7 +40,11 @@
 	}
 
 	.seo-content h2 {
-		@apply text-3xl font-bold mb-3 before:hidden;
+		@apply text-3xl font-bold mx-0 mb-3 text-left before:hidden #{!important};
+	}
+
+	.seo-content h2:not(:first-child) {
+		@apply mt-10;
 	}
 
 	.seo-content h3 {
