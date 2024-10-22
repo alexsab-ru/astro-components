@@ -28,7 +28,7 @@ import SeoText from '@/components/Seo/Index.astro';
 	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" />
 	<Callback bgUrl="/img/konkurenty.webp" />
 	<Services />
-	{false && <SeoText mdx="index" />}
+	<SeoText mdx="index" />
 	<Contacts
 		mapImg="/img/map-bg.webp"
 		title="Наши контакты"

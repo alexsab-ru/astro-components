@@ -16,6 +16,6 @@ import SeoText from '@/components/Seo/Index.astro';
 			<h1><Fragment set:html={`Модели ${BRAND}`} /></h1>
 		</div>
 	</section>
-	{false && <SeoText mdx="models" />}
+	<SeoText mdx="models" />
 	<ModelList title="" classes="!pt-0 pb-10" />
 </Layout>
