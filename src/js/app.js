@@ -93,3 +93,18 @@ const regex = /\/{2,}$/;
 if(regex.test(path)){
 	window.location.href = path.replace(regex, '/');
 }
+const seoShowMoreBtns = document.querySelectorAll('.seo-show-more');
+if(seoShowMoreBtns.length){
+	Array.from(seoShowMoreBtns).map(btn => {
+		btn.addEventListener('click', function(e){
+			e.preventDefault();
+			const contentBlock = btn.closest('section').querySelector('.seo-content');
+			btn.classList.toggle('active');
+			contentBlock.classList.toggle('open');
+			btn.querySelector('.seo-show-more-text').innerText = btn.classList.contains('active') ? 'скрыть' : 'читать полностью';
+			if(!btn.classList.contains('active')){
+				 contentBlock.scrollIntoView({ block: "start", behavior: "smooth" });
+			}
+		});
+	});
+}
