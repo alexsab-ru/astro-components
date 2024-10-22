@@ -16,6 +16,7 @@ import models from '@/data/models.json'
 import salons from '@/data/salons.json'
 const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length))
 const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
+import SeoText from '@/components/Seo/Index.astro';
 ---
 
 <Layout title=`Купить ${BRAND} у официального дилера ${SITE_NAME}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${BRAND} в ${LEGAL_CITY_WHERE}! ☎️ ${salonsPhone}`>
@@ -27,6 +28,7 @@ const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(
 	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" />
 	<Callback bgUrl="/img/konkurenty.webp" />
 	<Services />
+	{true && <SeoText mdx="index" />}
 	<Contacts
 		mapImg="/img/map-bg.webp"
 		title="Наши контакты"
