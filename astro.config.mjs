@@ -32,6 +32,6 @@ export default defineConfig({
 	vite: {
 		plugins: [yaml()]
 	},
-	site: 'https://belgee-partner-orenburg.ru',
-	base: "/"
+	site: 'https://alexsab-ru.github.io',
+	base: '/belgee-partner-orenburg.ru/'
 });
