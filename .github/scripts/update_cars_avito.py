@@ -82,10 +82,18 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
 elements_to_localize = []
 # Предполагаем, что cars_element уже определён
 all_duplicates = []  # Список для хранения всех дубликатов
+# Создаем список машин для удаления
+cars_to_remove = []
 
+result_cars = []
 cars_element = root.find('cars')
 
 for car in cars_element:
+    if car.find('mark_id').text != "BelGee":
+        # Добавляем машину в список на удаление
+        cars_to_remove.append(car)
+        continue  # Пропускаем остальные операции для этой машины
+
     unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
@@ -102,6 +110,10 @@ for car in cars_element:
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
     
     # Добавляем дубликаты в отдельный список
+
+# Удаляем все не-BelGee машины
+for car in cars_to_remove:
+    cars_element.remove(car)
 
 # После окончания основного цикла добавляем все дубликаты в cars_element
 for new_car in all_duplicates:
