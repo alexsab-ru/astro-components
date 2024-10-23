@@ -94,7 +94,7 @@ for car in cars_element:
         cars_to_remove.append(car)
         continue  # Пропускаем остальные операции для этой машины
 
-    if car.find('folder_id').text != "001":
+    if car.find('folder_id').text == "001":
         # Добавляем машину в список на удаление
         cars_to_remove.append(car)
         continue  # Пропускаем остальные операции для этой машины
