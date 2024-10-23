@@ -63,7 +63,9 @@ import {Icon} from 'astro-icon/components';
 				<div class="swiper-wrapper">
 					{section?.images.map(img => (
 						<div class="swiper-slide text-center">
-							<img src={img.url} class="max-w-full mx-auto" />
+							<div class="aspect-video relative">
+								<img src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" />
+							</div>
 							{img?.title && (<h3 class="font-bold mt-4">{img?.title}</h3>)}
 							{img?.description && (<p class="mt-1 max-w-[700px] mx-auto">{img?.description}</p>)}
 						</div>
