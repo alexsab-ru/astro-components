@@ -12,7 +12,7 @@ import react from '@astrojs/react';
 export default defineConfig({
 	integrations: [
 		tailwind({
-			configFile: './tailwind.config.js'
+			configFile: './tailwind.belgee.js'
 		}),
 		sitemap(),
 		robots(),

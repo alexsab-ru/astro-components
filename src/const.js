@@ -1,21 +1,21 @@
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 // Название сайта по умолчанию
-export const SITE_NAME = 'Название сайта';
+export const SITE_NAME = 'Белджи Партнер';
 // Юр лицо
-export const LEGAL_ENTITY = 'ООО «Юридическое название»';
+export const LEGAL_ENTITY = 'ООО "ПАРТНЕР"';
 // ИНН
-export const LEGAL_INN = '1234567890';
+export const LEGAL_INN = '5609202210';
 // Город
-export const LEGAL_CITY = 'г. Город';
+export const LEGAL_CITY = 'г. Оренбург';
 // где? в Городе
-export const LEGAL_CITY_WHERE = 'Городе';
+export const LEGAL_CITY_WHERE = 'Оренбурге';
 // Описание сайта по умолчанию
-export const SITE_DESCR = 'Официальный дилерский центр';
+export const SITE_DESCR = 'Официальный дилерский центр Belgee в Оренбурге';
 // Телефон по умолчанию
-export const PHONE = '+7 (999) 000-00-00';
+export const PHONE = '+7 (3532) 40-53-53';
 // Бренд
-export const BRAND = 'Baic';
+export const BRAND = 'BELGEE';
 // Конечное время для таймера
 //string 2024-04-26 or 2024-04-26 23:59:59 or December 31 2015 or December 31 2015 23:59:59 GMT+02:00
 export const TIMER_ENDTIME = '';
@@ -24,16 +24,16 @@ export const MARQUEE = {title: 'Тотальная распродажа до', d
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылка организации для виджета
-export const LINK_WIDGET_ORGNIZATION = '';
+export const LINK_WIDGET_ORGNIZATION = 'CDV3QI7y';
 // Ссылки под хедером
 export const LINKS_MENU = [
 	{url: 'cars/', name: 'Авто в наличии'},
 	{url: 'models/', name: 'Модели'},
 	{url: 'special-offers/', name: 'Спецпредложения'},
-	{url: 'news/', name: 'Новости'},
+	// {url: 'news/', name: 'Новости'},
 	{url: 'test-drive/', name: 'Запись на тест-драйв'},
 	{url: 'service-request/', name: 'Запись на сервис'},
-	{url: '#services', name: 'Услуги'},
+	// {url: '#services', name: 'Услуги'},
 	{url: 'contacts/', name: 'Контакты'},
 ];
 // Текстовая строка над хедером

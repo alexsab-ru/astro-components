@@ -1,0 +1,59 @@
+---
+h1: Программа Belgee Лизинг
+title: Программа Belgee Лизинг
+breadcrumb: Belgee Leasing
+pubDate: 2024-07-01
+image: /img/specials/leasing/thumb_600x338.webp
+description: "Лизинг Belgee — программа для корпоративных клиентов. Узнайте об условиях сотрудничества по программе Лизинг Belgee."
+---
+import Button from '@/components/Button/Button.astro';
+import { SITE_NAME, PHONE } from '@/const';
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+
+export const from = '01.07.2024';
+export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
+
+<picture>
+	<source media="(min-width: 942px)" srcset="/img/specials/leasing/banner_1920x1080.webp" />
+	<source media="(min-width: 320px)" srcset="/img/specials/leasing/banner_1080x720.webp" />
+	<img src="/img/specials/leasing/banner_1920x1080.webp" class="w-full mb-10" alt="Belgee Лизинг" />
+</picture>
+
+<div class="overflow-auto min-w-full my-14"> 
+	<table>
+		<thead>
+			<tr>
+				<th>Модель нового автомобиля</th>
+				<th>Комплектация нового автомобиля</th>
+				<th>Размер выгоды<sup>*</sup> на новый автомобиль от розничной цены, с учетом применимого НДС, руб.</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td>X50</td>
+			<td>Все комплектации</td>
+			<td>335 000</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+**Условия программы:** 
+
+- ☑ Покупателем нового автомобиля должна быть лизинговая компания 
+- ☑ Выгоды не распространяются на лизинг для физических лиц
+
+Подробности в нашем дилерском центре по тел.: <a href={`tel:${phoneFormat(PHONE)}`}>{PHONE}</a>
+
+<div class="flex justify-center mt-10 mb-5">
+	<Button 
+		classes="popup-link block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
+		url="#common-modal" 
+		title="Получить предложение"
+		dataTitle="Программа Belgee Лизинг"
+		dataFormName="Программа Belgee Лизинг"
+	/>
+</div>
+
+> <sup>*</sup> 335 000 рублей для автомобилей X50 (все комплектации).
