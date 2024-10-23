@@ -13,7 +13,7 @@ export const LEGAL_CITY_WHERE = 'Оренбурге';
 // Описание сайта по умолчанию
 export const SITE_DESCR = 'Официальный дилерский центр Belgee в Оренбурге';
 // Телефон по умолчанию
-export const PHONE = '+7 (3532) 40-53-53';
+export const PHONE = '+7 (3532) 99-01-01';
 // Бренд
 export const BRAND = 'BELGEE';
 // Конечное время для таймера
@@ -24,7 +24,7 @@ export const MARQUEE = {title: 'Тотальная распродажа до', d
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылка организации для виджета
-export const LINK_WIDGET_ORGNIZATION = 'CDV3QI7y';
+export const LINK_WIDGET_ORGNIZATION = 'CDdoJCk8';
 // Ссылки под хедером
 export const LINKS_MENU = [
 	{url: 'cars/', name: 'Авто в наличии'},
