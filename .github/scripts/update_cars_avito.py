@@ -94,6 +94,11 @@ for car in cars_element:
         cars_to_remove.append(car)
         continue  # Пропускаем остальные операции для этой машины
 
+    if car.find('folder_id').text != "001":
+        # Добавляем машину в список на удаление
+        cars_to_remove.append(car)
+        continue  # Пропускаем остальные операции для этой машины
+
     unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
