@@ -13,8 +13,17 @@ import scripts from '@/data/scripts.json';
             window.removeEventListener('scroll', loadAnalyticsScripts);
             document.removeEventListener('mousemove', loadAnalyticsScripts);
 
+            // Google Tag Managers
+            if (scripts.gtm && scripts.gtm.length > 0) {
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer',scripts.gtm);
+            }
+
             // Яндекс Метрика
-            if (scripts.metrika && scripts.metrika.length > 0) {
+            if (scripts.gtm =="" && scripts.metrika && scripts.metrika.length > 0) {
                 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
                 m[i].l=1*new Date();
                 for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -27,7 +36,7 @@ import scripts from '@/data/scripts.json';
             }
 
             // Google Analytics 4
-            if (scripts.ga4 && scripts.ga4.length > 0) {
+            if (scripts.gtm =="" && scripts.ga4 && scripts.ga4.length > 0) {
                 scripts.ga4.forEach(ga => {
                     var script = document.createElement('script');
                     script.src = `https://www.googletagmanager.com/gtag/js?id=${ga.id}`;
@@ -50,7 +59,7 @@ import scripts from '@/data/scripts.json';
             }
 
             // VK Retargeting
-            if (scripts['vk-rtrg'] && scripts['vk-rtrg'].length > 0) {
+            if (scripts.gtm =="" && scripts['vk-rtrg'] && scripts['vk-rtrg'].length > 0) {
                 scripts['vk-rtrg'].forEach(vk => {
                     if (vk.id && vk.id.trim() !== "") {
                         var script = document.createElement('script');
@@ -61,7 +70,7 @@ import scripts from '@/data/scripts.json';
             }
 
             // Top Mail.ru
-            if (scripts['top.mail.ru'] && scripts['top.mail.ru'].length > 0) {
+            if (scripts.gtm =="" && scripts['top.mail.ru'] && scripts['top.mail.ru'].length > 0) {
                 scripts['top.mail.ru'].forEach(mail => {
                     if (mail.id && mail.id.trim() !== "") {
                         var script = document.createElement('script');
@@ -72,7 +81,7 @@ import scripts from '@/data/scripts.json';
             }
 
             // Calltouch
-            if (scripts.calltouch && scripts.calltouch.client_id && scripts.calltouch.site_id) {
+            if (scripts.gtm =="" && scripts.calltouch && scripts.calltouch.client_id && scripts.calltouch.site_id) {
                 var script = document.createElement('script');
                 script.src = `https://mod.calltouch.ru/init.js?id=${scripts.calltouch.client_id}`;
                 script.async = true;
@@ -83,7 +92,7 @@ import scripts from '@/data/scripts.json';
             }
 
             // Konget
-            if (scripts.konget && scripts.konget.trim() !== "") {
+            if (scripts.gtm =="" && scripts.konget && scripts.konget.trim() !== "") {
                 var script = document.createElement('script');
                 script.src = scripts.konget;
                 script.async = true;
@@ -91,14 +100,14 @@ import scripts from '@/data/scripts.json';
             }
 
             // Streamwood
-            if (scripts.streamwood && scripts.streamwood.code) {
+            if (scripts.gtm =="" && scripts.streamwood && scripts.streamwood.code) {
                 var script = document.createElement('script');
                 script.innerHTML = scripts.streamwood.code;
                 document.head.appendChild(script);
             }
 
             // Widgets
-            if (scripts.widgets && scripts.widgets.length > 0) {
+            if (scripts.gtm =="" && scripts.widgets && scripts.widgets.length > 0) {
                 scripts.widgets.forEach(widget => {
                     if (widget && widget.trim() !== "") {
                         var script = document.createElement('script');
