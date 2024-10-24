@@ -410,34 +410,6 @@
 			</multiposting>
 		<priceWithDiscount>2190990</priceWithDiscount><sale_price>2190990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-белый-2024/</url></car>
 		<car>
-			<unique_id>c80e7845d65b209cd60db20f3b41a74a</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Черный</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>6</run>
-			<year>2024</year>
-			<price>3237990</price>
-			<credit_discount>0</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>0</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>0</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D3RB327572</vin>
-			<description />
-			<images />
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<priceWithDiscount>3237990</priceWithDiscount><sale_price>3237990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
-		<car>
 			<unique_id>9832de57395512c5463cf6a4d93d74c3</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X70</folder_id>
@@ -465,6 +437,34 @@
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<priceWithDiscount>3237990</priceWithDiscount><sale_price>3237990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<car>
+			<unique_id>c80e7845d65b209cd60db20f3b41a74a</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Черный</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>6</run>
+			<year>2024</year>
+			<price>3237990</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>0</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>0</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D3RB327572</vin>
+			<description />
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<priceWithDiscount>3237990</priceWithDiscount><sale_price>3237990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
 		<car>
 			<unique_id>2f905506f31bca5a862e11da995010ef</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -1948,7 +1948,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>2100000</priceWithDiscount><sale_price>2100000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-оранжевый-2023/</url></car>
 		<car>
-			<unique_id>c403b9e67b155ba14bbf2f824d003e35</unique_id>
+			<unique_id>d2cc6017b08e0b4e991fd604f30cf76e</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Emgrand, II</folder_id>
 			<modification_id>1.5 AT (122 л.с.)</modification_id>
@@ -1959,16 +1959,16 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>11</run>
+			<run>9</run>
 			<year>2023</year>
 			<price>2637990</price>
 			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>150000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>607990</max_discount>
+			<max_discount>602990</max_discount>
 			<currency>RUR</currency>
-			<vin>LB3F31034PG028425</vin>
+			<vin>LB3F31036PG028510</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely Emgrand, 2023 года, в комплектации Flagship.
@@ -1993,18 +1993,19 @@ Geely Coolray — это автомобиль, который подарит в�
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
 			<images>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/c94e4b43990c45c2f8bcdfba12f02dd3.jpg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/a87a8436220759efc2272a0c896b7151.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/707c30a03a0798380964f7d11698d0e0.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/0edcd23d8103848973f75c25e40b48dc.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/5ada2b7a30539bc3095151f8ab33a8ef.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/d371a4196ffc656fcebbc688e416f73b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/09f563dfff08915b2e7f787fe8891359.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/9fec671b8b3ddcfb254a0fe4648587c7.jpg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/fff3a144a593afdc96caf4f2fb157403.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/17171512106389ef6e09e2d8b6a74259.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/44f521f44637c8981bc8863086be2519.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e1c78bd78f51a3ce82de75661ef10bbc.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/cbf1bd746249aa13dd0ff295d74a1e17.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/2e1acbd3d2bd1851d61d9c3f236d138b.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e41295e1208b22b3b0455e55e5259b5c.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2030000</priceWithDiscount><sale_price>2030000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
+		<priceWithDiscount>2035000</priceWithDiscount><sale_price>2035000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
 		<car>
 			<unique_id>4c3d04cc7dcafccdd2b05cbff9236d42</unique_id>
 			<mark_id>Geely</mark_id>
@@ -2065,7 +2066,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>2040000</priceWithDiscount><sale_price>2040000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
 		<car>
-			<unique_id>d2cc6017b08e0b4e991fd604f30cf76e</unique_id>
+			<unique_id>c403b9e67b155ba14bbf2f824d003e35</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Emgrand, II</folder_id>
 			<modification_id>1.5 AT (122 л.с.)</modification_id>
@@ -2076,16 +2077,16 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>9</run>
+			<run>11</run>
 			<year>2023</year>
 			<price>2637990</price>
 			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>150000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>602990</max_discount>
+			<max_discount>607990</max_discount>
 			<currency>RUR</currency>
-			<vin>LB3F31036PG028510</vin>
+			<vin>LB3F31034PG028425</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely Emgrand, 2023 года, в комплектации Flagship.
@@ -2110,19 +2111,18 @@ Geely Coolray — это автомобиль, который подарит в�
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
 			<images>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/9fec671b8b3ddcfb254a0fe4648587c7.jpg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/fff3a144a593afdc96caf4f2fb157403.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/17171512106389ef6e09e2d8b6a74259.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/44f521f44637c8981bc8863086be2519.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e1c78bd78f51a3ce82de75661ef10bbc.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/cbf1bd746249aa13dd0ff295d74a1e17.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/2e1acbd3d2bd1851d61d9c3f236d138b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e41295e1208b22b3b0455e55e5259b5c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/c94e4b43990c45c2f8bcdfba12f02dd3.jpg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/a87a8436220759efc2272a0c896b7151.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/707c30a03a0798380964f7d11698d0e0.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/0edcd23d8103848973f75c25e40b48dc.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/5ada2b7a30539bc3095151f8ab33a8ef.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/d371a4196ffc656fcebbc688e416f73b.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/09f563dfff08915b2e7f787fe8891359.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2035000</priceWithDiscount><sale_price>2035000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
+		<priceWithDiscount>2030000</priceWithDiscount><sale_price>2030000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
 		<car>
 			<unique_id>804d43edb62ede8e2153765ce092e073</unique_id>
 			<mark_id>Geely</mark_id>
@@ -2238,102 +2238,6 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>4482990</priceWithDiscount><sale_price>4482990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-exclusive-синий-2024/</url></car>
 		<car>
-			<unique_id>744284ecbfe00d4197fecde636784bf4</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Monjaro</folder_id>
-			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
-			<complectation_name>Flagship</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>5</run>
-			<year>2024</year>
-			<price>4732990</price>
-			<credit_discount>250000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>200000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>862390</max_discount>
-			<currency>RUR</currency>
-			<vin>LB37852D2RS171456</vin>
-			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
-
-В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 4 732 990 рублей (без учета установленного дополнительного оборудования)
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<priceWithDiscount>3870600</priceWithDiscount><sale_price>3870600</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
-		<car>
-			<unique_id>1c4c87aa736b1565c701b137b75526eb</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Monjaro</folder_id>
-			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
-			<complectation_name>Flagship</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>5</run>
-			<year>2024</year>
-			<price>4732990</price>
-			<credit_discount>0</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>450000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>450000</max_discount>
-			<currency>RUR</currency>
-			<vin>LB37852D9RS171731</vin>
-			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
-
-В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 4 732 990 рублей (без учета установленного дополнительного оборудования)
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
-		<car>
 			<unique_id>5ecc3b64a4f1a1a84c6c247d65329354</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
@@ -2381,6 +2285,54 @@ Geely Coolray — это автомобиль, который подарит в�
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
+		<car>
+			<unique_id>98c5dd5027e29f2aab4e9a3e5b693416</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Monjaro</folder_id>
+			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Черный</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>5</run>
+			<year>2024</year>
+			<price>4732990</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>450000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>450000</max_discount>
+			<currency>RUR</currency>
+			<vin>LB37852D4RS168851</vin>
+			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
+
+В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 4 732 990 рублей (без учета установленного дополнительного оборудования)
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-черный-2024/</url></car>
 		<car>
 			<unique_id>346f82b18cf47d949e711c076f7ca072</unique_id>
 			<mark_id>Geely</mark_id>
@@ -2430,27 +2382,27 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-черный-2024/</url></car>
 		<car>
-			<unique_id>98c5dd5027e29f2aab4e9a3e5b693416</unique_id>
+			<unique_id>744284ecbfe00d4197fecde636784bf4</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
 			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
 			<complectation_name>Flagship</complectation_name>
 			<body_type>Внедорожник 5 дв.</body_type>
 			<wheel>левый</wheel>
-			<color>Черный</color>
-			<metallic>да</metallic>
+			<color>Белый</color>
+			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
 			<run>5</run>
 			<year>2024</year>
 			<price>4732990</price>
-			<credit_discount>0</credit_discount>
+			<credit_discount>250000</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>450000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>450000</max_discount>
+			<max_discount>862390</max_discount>
 			<currency>RUR</currency>
-			<vin>LB37852D4RS168851</vin>
+			<vin>LB37852D2RS171456</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
@@ -2476,7 +2428,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-черный-2024/</url></car>
+		<priceWithDiscount>3870600</priceWithDiscount><sale_price>3870600</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>e69125b30a58d681c30a1254308e01b4</unique_id>
 			<mark_id>Geely</mark_id>
