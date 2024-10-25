@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Model from '@/components/Model/Model.astro';
+import ModelComplectations from '@/components/Model/Complectations.astro';
 import CarItem from "@/components/Cars/Item.astro";
 import UniversalSection from '@/components/Model/sections/universal.astro';
 
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 
-import { LEGAL_CITY_WHERE } from '@/const';
+import { LEGAL_CITY_WHERE, BRAND } from '@/const';
 import { breadcrumb } from './index.astro';
 const { model } = Astro.props;
 
@@ -42,6 +43,9 @@ const cars = rawCars && rawCars.length ? rawCars.filter(
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     sections.length > 0 && sections.map(s => ( <UniversalSection section={s} /> ))
+  }
+  {
+    (model?.complectations !== undefined && model?.complectations.length) && <ModelComplectations model={model} brand={BRAND} />
   }
   {cars.length > 0 && (
     <section class="bg-gray-50">

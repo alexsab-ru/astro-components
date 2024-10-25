@@ -55,28 +55,6 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						)
 					}
 				</div>
-				{model.complectations && model.complectations.length ? (
-					<Button
-						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-50"
-						view="scroll-link"
-						url="#complectation"
-						title="Подобрать комплектацию"
-						icon="mdi:chevron-right-circle"
-						iconClasses="text-xl text-accent-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
-						@click={`selectedModel('${model.id}')`}
-					/>
-				) : (
-					<Button
-						classes="text-white mt-5 sm:mt-10 lg:mt-0 flex items-center gap-1.5 group relative z-50"
-						view="popup-link"
-						url="#common-modal"
-						title="Подобрать комплектацию"
-						dataTitle="Подобрать комплектацию"
-						dataFormName={`Подобрать комплектацию. ${model.mark_id} ${model?.name}`}
-						icon="mdi:chevron-right-circle"
-						iconClasses="text-xl text-accent-500 translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
-					/>
-				)}
 			</div>
 
 			<div class="flex flex-col gap-4 mt-10 lg:mt-14">
@@ -177,9 +155,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 			<Button
 				classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
 				url="#common-modal"
-				title="Узнать цену"
-				dataTitle="Узнать цену"
-				dataFormName={`Узнать цену. ${model.mark_id} ${model.name}`}
+				title="Купить"
+				dataTitle={`Купить ${model.mark_id}`}
+				dataFormName={`Купить. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
 				classes="popup-link btn !px-4 flex-1 whitespace-nowrap"
@@ -189,26 +167,36 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 				dataFormName={`Рассчитать кредит. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
-				classes="popup-link btn black !px-4 flex-1 whitespace-nowrap"
+				classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Записаться на тест-драйв"
 				dataTitle="Записаться на тест-драйв"
 				dataFormName={`Записаться на тест-драйв. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
-				classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap"
+				classes="popup-link btn black !px-4 flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Узнать цену по акции"
 				dataTitle="Узнать цену по акции"
 				dataFormName={`Узнать цену по акции. ${model.mark_id} ${model.name}`}
 			/>
-			<Button
-				classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
-				url="#common-modal"
-				title="Купить"
-				dataTitle={`Купить ${model.mark_id}`}
-				dataFormName={`Купить. ${model.mark_id} ${model.name}`}
-			/>
+			{ (model?.complectations !== undefined && model?.complectations.length) ? (
+				<Button
+					classes="btn black btn-o !px-4 flex-1 whitespace-nowrap"
+					view="scroll-link"
+					url="#complectation"
+					title="Подобрать комплектацию"
+				/>
+			) : (
+				<Button
+					classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
+					view="popup-link"
+					url="#common-modal"
+					title="Подобрать комплектацию"
+					dataTitle="Подобрать комплектацию"
+					dataFormName={`Подобрать комплектацию. ${model.mark_id} ${model?.name}`}
+				/>
+			)}
 		</div>
 	</div>
 </section>

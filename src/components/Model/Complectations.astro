@@ -1,16 +1,17 @@
 ---
 interface Props {
-	models: any
+	models?: any
+	model: any
 	brand: string
 }
-const { models, brand } = Astro.props
+const { models = [], model, brand } = Astro.props
 ---
 
-<section class="bg-gray-50" id="complectation" x-init={`selectedModel('${models[0].id}')`}>
+<section class="bg-gray-50" id="complectation" x-init={`selectedModel('${models.length ? models[0]?.id : model?.id}')`}>
 	<div class="container">
-		<h2 class="text-center">Подобрать комплектацию</h2>
+		<h2 class="text-center mb-10">Подобрать комплектацию</h2>
 		<div class="flex gap-4 flex-wrap justify-center my-10">
-			{models.map(model => ((model.show && model.complectations) && (model.show && model.complectations.length)) ? (
+			{models.length && models.map(model => ((model.show && model.complectations) && (model.show && model.complectations.length)) ? (
 				<span 
 					class="inline border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer min-w-[100px] w-auto sm:flex-initial text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500 select-none"
 					:class={`{'border-accent-500 text-accent-500': currentModel.id === '${model.id}' }`}
@@ -36,12 +37,13 @@ const { models, brand } = Astro.props
 				<div class="absolute -top-5 sm:top-0 left-0">
 					<div class="text-xl sm:text-3xl font-bold uppercase !leading-none" x-html={`'${brand}&nbsp;' + currentModel.name`}></div>
 					<div class="sm:text-xl" x-text="currentModelComplectation.name"></div>
+					<div class="sm:text-2xl" x-html="'от&nbsp;'+currencyFormat(currentModelComplectation.price)"></div>
 				</div>
 			</div>
 			<div class="grid sm:grid-cols-2 gap-10 lg:gap-5 xl:gap-10">
 				<div class="space-y-5 xl:text-lg">
 					<template x-for="[key, value] in Object.entries(currentModelComplectation)">
-						<template x-if="key !== 'name'">
+						<template x-if="key !== 'name' && key !== 'price'">
 							<div class="flex justify-between items-end leading-none">
 								<div class="" x-text="translit(key)"></div>
 								<div class="flex-grow border-b border-dotted mx-1"></div>
@@ -56,10 +58,10 @@ const { models, brand } = Astro.props
 					</template>
 				</div>
 				<div class="flex flex-col gap-4">
-					<a class="popup-link btn black btn-o !px-4 whitespace-nowrap" href="#common-modal" data-title="Узнать цену" :data-form_name={`'Узнать цену. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Узнать цену</a>
+					<a class="popup-link btn black btn-o !px-4 whitespace-nowrap" href="#common-modal" :data-title={`'Купить ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`} :data-form_name={`'Купить. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Купить</a>
 					<a class="popup-link btn !px-4 whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
-					<a class="popup-link btn black !px-4 whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
-					<a class="popup-link btn gray !px-4 whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
+					<a class="popup-link btn gray !px-4 whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
+					<a class="popup-link btn black !px-4 whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
 				</div>
 			</div>
 		</div>
