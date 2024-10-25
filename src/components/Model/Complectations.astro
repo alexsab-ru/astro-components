@@ -11,7 +11,7 @@ const { models = [], model, brand } = Astro.props
 	<div class="container">
 		<h2 class="text-center mb-10">Подобрать комплектацию</h2>
 		<div class="flex gap-4 flex-wrap justify-center my-10">
-			{models.length && models.map(model => ((model.show && model.complectations) && (model.show && model.complectations.length)) ? (
+			{models.length > 0 && models.map(model => ((model.show && model.complectations) && (model.show && model.complectations.length)) ? (
 				<span 
 					class="inline border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer min-w-[100px] w-auto sm:flex-initial text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500 select-none"
 					:class={`{'border-accent-500 text-accent-500': currentModel.id === '${model.id}' }`}

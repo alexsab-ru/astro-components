@@ -25,7 +25,7 @@
 
 .simple-slider-button-prev,
 .simple-slider-button-next{
-	@apply bg-white opacity-70 h-12 rounded-full top-24 sm:top-[20%] lg:top-[25%] #{!important};
+	@apply bg-gray-200 opacity-70 h-12 rounded-full top-24 sm:top-[20%] lg:top-[25%] #{!important};
 }
 .swiper-button-next {
 	right: 0 !important;
