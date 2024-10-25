@@ -62,7 +62,7 @@ import {Icon} from 'astro-icon/components';
 			<div class="swiper simple-slider mt-8 !pb-10">
 				<div class="swiper-wrapper">
 					{section?.images.map(img => (
-						<a href={img.url} class="swiper-slide text-center glightbox" data-title={img?.title} data-description={img?.description} data-effect="slide" title={img?.description}>
+						<a href={img.url} class="swiper-slide text-center glightbox" data-title={img?.title} data-description={img?.description} data-effect="slide" title={img?.description} data-gallery={`gallery-${section?.id}`}>
 							<div class="aspect-video relative mb-4">
 								<img src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" />
 							</div>
