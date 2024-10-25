@@ -39,7 +39,7 @@ import {Icon} from 'astro-icon/components';
 				))}
 			</div>
 		)}
-		{section?.suptitle && (<span class="text-sm font-bold text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
+		{section?.suptitle && (<span class="text-sm font-medium text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
 		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8"><Fragment set:html={section?.title} /></h2>)}
 		{section?.text && section?.id !== 'more' ? (
 			<Fragment set:html={section?.text} />
@@ -66,7 +66,7 @@ import {Icon} from 'astro-icon/components';
 							<div class="aspect-video relative mb-4">
 								<img src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" />
 							</div>
-							{img?.title && (<h3 class="font-bold text-lg">{img?.title}</h3>)}
+							{img?.title && (<h3 class="font-medium text-lg">{img?.title}</h3>)}
 							{img?.description && (<p class="mt-1 mx-auto">{img?.description}</p>)}
 						</a>
 					))}

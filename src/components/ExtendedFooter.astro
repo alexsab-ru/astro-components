@@ -32,7 +32,7 @@ salons
                 <ul class="space-y-2">
                 {
                     links.map(link => (
-                    <li><a href={path === '/' ? link.url : '/'+link.url} class={`transition hover:underline ${path === link.url ? 'font-extrabold' : ''}`}>{link.name}</a></li>
+                    <li><a href={path === '/' ? link.url : '/'+link.url} class={`transition hover:underline ${path === link.url ? 'font-medium' : ''}`}>{link.name}</a></li>
                     ))
                 }
                 </ul>

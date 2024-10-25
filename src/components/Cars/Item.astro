@@ -13,11 +13,11 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 	<PreviewSlider car={car} />
 	<div class="flex-grow mb-3 md:mb-5 px-3 xl:px-4 flex flex-col justify-end">
 		{ car.data.max_discount ? (
-			<noindex><div class="discount">с&nbsp;учетом выгоды до&nbsp;<span class="font-semibold">{ currencyFormat(car.data.max_discount) }</span></div></noindex>
+			<noindex><div class="discount">с&nbsp;учетом выгоды до&nbsp;<span class="font-medium">{ currencyFormat(car.data.max_discount) }</span></div></noindex>
 		): ('')}
 		<div class="sm:text-lg md:text-xl xl:text-3xl font-medium mt-3"><span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(price)}</div>
 		<h3 class="xs:!text-xs sm:!text-base md:!text-lg xl:!text-xl font-normal mt-1 transition-colors hover:text-accent flex-grow">
-			<a href={ car.slug } class="!no-underline !text-black !mb-0"><b class="font-bold">{ car.data.mark_id } { car.data.folder_id }</b> { car.data.complectation_name }</a>
+			<a href={ car.slug } class="!no-underline !text-black !mb-0"><b class="font-medium">{ car.data.mark_id } { car.data.folder_id }</b> { car.data.complectation_name }</a>
 		</h3>
 		<noindex><div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">
 			{ car.data.modification_id } · { car.data.year }

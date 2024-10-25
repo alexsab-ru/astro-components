@@ -18,7 +18,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
 
 				<div class="md:w-2/5 py-10">
-					<h1 class="text-3xl sm:text-4xl font-bold">Контакты</h1>
+					<h1 class="text-3xl sm:text-4xl font-medium">Контакты</h1>
 					{LEGAL_ENTITY ? (
 						<div class="flex flex-wrap gap-y-5 sm:gap-y-8 mt-10">
 							{LEGAL_ENTITY && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={LEGAL_ENTITY} iconName="mdi:bank" />)}

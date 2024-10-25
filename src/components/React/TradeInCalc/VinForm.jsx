@@ -92,7 +92,7 @@ const VinForm = () => {
 				<p>Заполните данные о&nbsp;вашем автомобиле и&nbsp;получите предварительную оценку. <br className="hidden md:block" />Вы&nbsp;можете сразу отправить ваш расчет официальному дилеру Kia и&nbsp;уточнить <br className="hidden md:block" />детали выкупа автомобиля.</p>
 			</div>
 			<form className="mb-10 vue-form" onSubmit={handleSubmit(onSubmit)}>
-				<h3 className="text-2xl font-bold mb-6">Введите VIN-номер</h3>
+				<h3 className="text-2xl font-medium mb-6">Введите VIN-номер</h3>
 				<div className="flex">
 					<input
 						type="text"

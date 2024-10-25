@@ -217,7 +217,7 @@ function AvtoInfoForm() {
 
 	return (
 		<div className="w-full lg:w-2/3 lg:pl-10 py-8 lg:py-16">
-			<h3 className="text-xl font-bold mb-2">Характеристики вашего авто</h3>
+			<h3 className="text-xl font-medium mb-2">Характеристики вашего авто</h3>
 			<p className="mb-4">Параметры, необходимые для оценки автомобиля</p>
 			<form className="vue-form grid grid-cols-6 gap-x-5 gap-y-6" onSubmit={handleSubmit(onSubmit)}>
 				<input type="hidden" name="form" value="Онлайн-оценка автомобиля" />
@@ -355,7 +355,7 @@ function AvtoInfoForm() {
 				</div>
 
 				<div className="col-span-6 border-b-2 border-b-black pb-2 mb-4">
-					<h3 className="text-xl font-bold mb-2">Дополнительная информация</h3>
+					<h3 className="text-xl font-medium mb-2">Дополнительная информация</h3>
 					<p className="m-0">Если вы заполните эти поля, то повысите точность расчета</p>
 				</div>
 
@@ -371,7 +371,7 @@ function AvtoInfoForm() {
 				</div>
 
 				<div className="col-span-6 !mb-5">
-					<h3 className="text-base font-bold mb-2">ПТС</h3>
+					<h3 className="text-base font-medium mb-2">ПТС</h3>
 					<div className="flex gap-5">
 						{ptsTypes.map(pts => (
 							<label className="flex items-center gap-1" key={pts.value}>
@@ -383,7 +383,7 @@ function AvtoInfoForm() {
 				</div>
 
 				<div className="col-span-6">
-					<h3 className="text-base font-bold !mb-2">Контактные данные</h3>
+					<h3 className="text-base font-medium !mb-2">Контактные данные</h3>
 					<div className="grid grid-cols-6 gap-5">
 						<div className="col-span-6 lg:col-span-3">
 							<input

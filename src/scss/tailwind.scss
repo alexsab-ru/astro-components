@@ -8,7 +8,7 @@
 	}
 
 	.banner-title {
-		@apply text-3xl md:text-4xl lg:text-5xl uppercase font-bold mb-3 sm:mb-5;
+		@apply text-3xl md:text-4xl lg:text-5xl uppercase font-medium mb-3 sm:mb-5;
 	}
 
 	.banner-description {
@@ -40,7 +40,7 @@
 	}
 
 	.seo-content h2 {
-		@apply text-3xl font-bold mx-0 mb-3 text-left before:hidden #{!important};
+		@apply text-3xl font-medium mx-0 mb-3 text-left before:hidden #{!important};
 	}
 
 	.seo-content h2:not(:first-child) {
@@ -48,11 +48,11 @@
 	}
 
 	.seo-content h3 {
-		@apply text-2xl font-bold mb-3;
+		@apply text-2xl font-medium mb-3;
 	}
 
 	.seo-content strong {
-		@apply font-bold;
+		@apply font-medium;
 	}
 
 	.seo-content p{

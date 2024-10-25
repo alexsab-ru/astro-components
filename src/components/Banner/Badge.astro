@@ -9,7 +9,7 @@ const {autoName, title, descr, image} = Astro.props
 ---
 
 <div class="px-5 mx-auto flex flex-col items-center justify-center lg:text-white">
-    <div class="text-xl md:text-2xl xl:text-3xl font-bold uppercase"><Fragment set:html={autoName}></div>
+    <div class="text-xl md:text-2xl xl:text-3xl font-medium uppercase"><Fragment set:html={autoName}></div>
     <img src={image} class="w-full max-w-sm xl:max-w-md" alt={title} />
     <p class="xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4"><Fragment set:html={title}></p>
     <p class="xs:text-xs sm:text-lg font-medium text-center uppercase"><Fragment set:html={descr}></p>

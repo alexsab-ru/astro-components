@@ -14,7 +14,7 @@ body {
 section:not(.model-section) {
 	@apply relative py-8 sm:py-16 bg-cover bg-center;
 	h2 {
-		@apply relative pb-3 text-3xl sm:text-5xl w-fit mx-auto font-extrabold before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:h-1 before:w-32 before:bg-accent-500;
+		@apply relative pb-3 text-3xl sm:text-5xl w-fit mx-auto font-medium before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:h-1 before:w-32 before:bg-accent-500;
 	}
 }
 
@@ -24,7 +24,7 @@ section:not(.model-section) {
 
 .content {
 	h1 {
-		@apply text-2xl sm:text-4xl font-extrabold mb-7;
+		@apply text-2xl sm:text-4xl font-medium mb-7;
 	}
 	p, b, ul, ol, a {
 		@apply text-sm sm:text-lg mb-4;
@@ -52,7 +52,7 @@ section:not(.model-section) {
 		thead {
 			@apply bg-slate-50;
 			th {
-				@apply border border-slate-300 font-semibold p-4;
+				@apply border border-slate-300 font-medium p-4;
 			}
 		}
 		tbody {

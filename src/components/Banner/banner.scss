@@ -19,7 +19,7 @@
 	@apply bg-gray-200 text-black h-32 w-12 top-1/2 -translate-y-1/2 m-0 opacity-30 transition-opacity duration-500 ease-out hover:opacity-60 #{!important};
 	&::after {
 		font-size: 20px !important;
-		font-weight: bold !important;
+		font-weight: medium !important;
 	}
 }
 

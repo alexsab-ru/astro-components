@@ -14,7 +14,7 @@ import salons from '@/data/salons.json';
 const LEGAL_SALONS_INFO = salons.length ? salons.map(s => `<p class="text-sm">${s.name}&nbsp;- <a class="whitespace-nowrap" href="tel:${phoneFormat(s.phone)}">${s.phone}</a></p>`) : [];
 ---
 {LEGAL_SALONS_INFO.length > 0 && (
-	<p class="font-bold">Подробности по телефону:</p>
+	<p class="font-medium">Подробности по телефону:</p>
 	<Fragment set:html={LEGAL_SALONS_INFO.join('')} />
 )}
 <div class="flex justify-center mt-10 mb-5">

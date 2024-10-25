@@ -16,7 +16,7 @@ const { item } = Astro.props;
 		class="flex items-center justify-between cursor-pointer"
 		@click={ `activities.includes(${item.id}) ? activities = activities.filter(id => id != ${item.id}) : activities.push(${item.id})` }
 	>
-		<div class="font-semibold text-sm md:text-lg">{item.question}</div>
+		<div class="font-medium text-sm md:text-lg">{item.question}</div>
 
 		<Icon 
 			name="mdi:keyboard-arrow-down" 

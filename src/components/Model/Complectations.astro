@@ -35,7 +35,7 @@ const { models = [], model, brand } = Astro.props
 			<div class="relative">
 				<img loading="lazy" :src="currentModel.colors[0].carImage" class="w-full col-span-1" :alt="currentModel.name">
 				<div class="absolute -top-5 sm:top-0 left-0">
-					<div class="text-xl sm:text-3xl font-bold uppercase !leading-none" x-html={`'${brand}&nbsp;' + currentModel.name`}></div>
+					<div class="text-xl sm:text-3xl font-medium uppercase !leading-none" x-html={`'${brand}&nbsp;' + currentModel.name`}></div>
 					<div class="sm:text-xl" x-text="currentModelComplectation.name"></div>
 					<div class="sm:text-2xl" x-html="'от&nbsp;'+currencyFormat(currentModelComplectation.price)"></div>
 				</div>
@@ -48,10 +48,10 @@ const { models = [], model, brand } = Astro.props
 								<div class="" x-text="translit(key)"></div>
 								<div class="flex-grow border-b border-dotted mx-1"></div>
 								<template x-if="key === 'engine_power'">
-									<div class="font-bold" x-text="value + ' л.с.'"></div>
+									<div class="font-medium" x-text="value + ' л.с.'"></div>
 								</template>
 								<template x-if="key !== 'engine_power'">
-									<div class="font-bold" x-text="value"></div>
+									<div class="font-medium" x-text="value"></div>
 								</template>
 							</div>
 						</template>
@@ -70,7 +70,7 @@ const { models = [], model, brand } = Astro.props
 
 <style lang="scss">
 	.compl_name{
-		@apply pb-5 text-xl font-bold uppercase cursor-pointer relative before:bg-accent-500 select-none;
+		@apply pb-5 text-xl font-medium uppercase cursor-pointer relative before:bg-accent-500 select-none;
 		&::before{
 			content: '';
 			width: 0;

@@ -28,7 +28,7 @@ const { item } = Astro.props;
 			</h3>
 			{
 				item.subtitle && (
-					<div class="absolute top-full pl-2 text-xs xs:text-sm md:text-base lg:text-lg xl:text-2xl font-semibold text-gray-900 mt-1 !leading-[1]">
+					<div class="absolute top-full pl-2 text-xs xs:text-sm md:text-base lg:text-lg xl:text-2xl font-medium text-gray-900 mt-1 !leading-[1]">
 						<Fragment set:html={item.subtitle} />{' '}
 					</div>
 				)

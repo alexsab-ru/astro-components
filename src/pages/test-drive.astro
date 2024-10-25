@@ -44,14 +44,14 @@ const optionsJSON = JSON.stringify(options);
 
 		<div class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-[1]" style="background-image: url('/img/model-bg.webp')" x-cloak>
 			<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
-			<h2 class="p-5 sm:p-10 text-2xl font-bold text-white" x-text="current?.name"></h2>
+			<h2 class="p-5 sm:p-10 text-2xl font-medium text-white" x-text="current?.name"></h2>
 			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.name">
 			<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white xl:text-black">
 				<template x-for="char in current?.globalChars">
 					<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
 						<div class="text-xs" x-text="char.title+':'"></div>
 						<div>
-							<b class="text-base xl:text-lg font-bold" x-text="char.value"></b>{' '}
+							<b class="text-base xl:text-lg font-medium" x-text="char.value"></b>{' '}
 							<span class="xs:text-[11px]" x-text="char?.measure"></span>
 						</div>
 					</div>
@@ -60,7 +60,7 @@ const optionsJSON = JSON.stringify(options);
 		</div>
 
 		<div class="p-5 sm:p-10 space-y-10 w-full lg:w-2/5 2xl:w-1/2" x-cloak>
-			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на тест-драйв</h1>
+			<h1 class="text-3xl sm:text-4xl font-medium text-center">Записаться на тест-драйв</h1>
 			<div class="flex justify-center gap-4 flex-wrap">
 				<template x-for="model in models">
 					<template x-if="model.show">

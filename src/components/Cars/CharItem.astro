@@ -3,5 +3,5 @@ const {label = '', value = ''} = Astro.props;
 ---
 <div class="flex justify-between py-3">
 	{label && <span class="font-light sm:w-1/2">{ label }</span>}
-	{value && <span class="font-bold"><Fragment set:html={value} /></span>}
+	{value && <span class="font-medium"><Fragment set:html={value} /></span>}
 </div>

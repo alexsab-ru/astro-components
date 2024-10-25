@@ -26,7 +26,7 @@ const StepPanel = () => {
             className={`relative md:flex-grow flex items-center gap-4 !pt-3 w-1/3 md:w-auto ${step === idx ? 'border-t-4 border-t-black' : step > idx ? 'border-t-4 border-t-greenBrand cursor-pointer' : 'border-t border-t-cd'}`}
             onClick={() => handleStepClick(idx)}
           >
-            <span className={`font-bold ${step > idx ? 'text-greenBrand' : 'text-black'}`}>
+            <span className={`font-medium ${step > idx ? 'text-greenBrand' : 'text-black'}`}>
               0{idx + 1}
             </span>
             <span className={`${step < idx ? '!text-gray-500' : 'text-black'}`}>

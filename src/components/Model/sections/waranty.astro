@@ -27,7 +27,7 @@ const { section } = Astro.props;
 					<div class="mt-10 lg:mt-20 flex flex-wrap gap-10">
 						{section.items.map(item => (
 							<div>
-								{item?.title && (<h3 class="text-4xl text-gray-800 font-bold"><Fragment set:html={item?.title} /></h3>)}
+								{item?.title && (<h3 class="text-4xl text-gray-800 font-medium"><Fragment set:html={item?.title} /></h3>)}
 								{item?.descr && (<p class="text-xs"><Fragment set:html={item?.descr} /></p>)}
 							</div>
 						))}
