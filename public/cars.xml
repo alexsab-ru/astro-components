@@ -1,6 +1,34 @@
 <?xml version='1.0' encoding='utf-8'?>
 <data>
   <cars><car>
+			<unique_id>e8b4510431dda24ae73bce6f641fd252</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>001</folder_id>
+			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship Sport</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>5</run>
+			<year>2024</year>
+			<price>4215990</price>
+			<credit_discount>150000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>400000</max_discount>
+			<currency>RUR</currency>
+			<vin>LHA022GDXRB003245</vin>
+			<description />
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<priceWithDiscount>3815990</priceWithDiscount><sale_price>3815990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-001-20-at-238-лс-4wd-flagship-sport-белый-2024/</url></car>
+		<car>
 			<unique_id>4c973a86d3d79e455ea68c22c7ed75b9</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>001</folder_id>
@@ -43,34 +71,6 @@
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<priceWithDiscount>3625990</priceWithDiscount><sale_price>3625990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-001-20-at-238-лс-4wd-flagship-sport-белый-2024/</url></car>
-		<car>
-			<unique_id>e8b4510431dda24ae73bce6f641fd252</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>001</folder_id>
-			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
-			<complectation_name>Flagship Sport</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>5</run>
-			<year>2024</year>
-			<price>4215990</price>
-			<credit_discount>150000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>400000</max_discount>
-			<currency>RUR</currency>
-			<vin>LHA022GDXRB003245</vin>
-			<description />
-			<images />
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<priceWithDiscount>3815990</priceWithDiscount><sale_price>3815990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-001-20-at-238-лс-4wd-flagship-sport-белый-2024/</url></car>
 		<car>
 			<unique_id>48e7868e205db759ae27288a5fbf93a2</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -150,7 +150,7 @@
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>7</run>
+			<run>8</run>
 			<year>2024</year>
 			<price>2610990</price>
 			<credit_discount>135000</credit_discount>
@@ -185,63 +185,22 @@
 Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/cbdf5009b90d963cb9bce44d294f37fc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/19de55f94379d73d94d59eee04b26ad9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/43058e56797d5785c89a78f9e4338efe.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/28032debf3b917a1cedb848e8c2edac2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/a4e1b34601710df9ae28229c388d2b5f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/eaa2624e040dde91c0a1a56079c0e2d3.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/b63a3a2a137333c6fb4a6a2215b24db8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/0fb36c7959ae2ba0a57d4b9a598a0728.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/da7dd4937f7cc01add006dacf59b5075.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z8RB939863/52b0e15196bfac5a11502d6936097bc1.jpeg</image>
+			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<priceWithDiscount>2240990</priceWithDiscount><sale_price>2240990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x50-15-amt-150-лс-prestige-белый-2024/</url></car>
-		<car>
-			<unique_id>f059531d95a1d93543d76a6130a9e248</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>7</run>
-			<year>2024</year>
-			<price>2610990</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z9RB938964</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 553 990 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<priceWithDiscount>2240990</priceWithDiscount><sale_price>2240990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x50-15-amt-150-лс-prestige-серый-2024/</url></car>
 		<car>
 			<unique_id>50b421985ae47ac42c0fbdb9751c28ce</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -352,7 +311,18 @@
 Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/5a53b05801a77b77dd0c610b6990e3a8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/114a3a205386d77580e0057c02ccb865.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/3e6b9a6ec24857f6f460925d4f9cfdf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/f47ee53d114d6582de265bf3541047d2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/d3c1c361cea054d0811935843e8f013a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/8005047a3ea6e6f03090e9c7769bb8a9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/728021b97b6bd662dd66182dc511e7d3.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/f864b1b404da0219bda54ff68b953d56.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/7d4f4ef61ffca80ef6632ff365d5fe14.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z7RB939076/05664667cb356f981fcffee65c9b81bb.jpeg</image>
+			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
@@ -404,7 +374,20 @@
 Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/51d6d606e048b45a18397d3c20bcb1e8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/0da3467565019ab50b144588113fceed.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/9a67635171af35cf19a814bb31ddbfb2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/73d6bb4dc72517b56f28c5c782db0d04.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/b39e6de483966e738e5541db44143f88.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/b5338dc3550bb839baccbc5faf3763c4.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/80120b3de54ffe6bae1dda03f4f253cb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/108b48f1cdbb166d21e4ec156e2b009e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/1f9eaa31daa7bd337c47b2c09b5a4f37.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/c31c572e17d7ba0b3eba87ef8f3bb2b3.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/4ebdb830557003ac5cdd4b05deadf92f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z5RB939075/c900685ff6656ce23e97d0a84225f273.jpeg</image>
+			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
@@ -537,7 +520,7 @@
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>5</run>
+			<run>6</run>
 			<year>2024</year>
 			<price>3237990</price>
 			<credit_discount>200000</credit_discount>
@@ -654,27 +637,27 @@
 			</multiposting>
 		<priceWithDiscount>2842990</priceWithDiscount><sale_price>2842990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-plus-черный-2024/</url></car>
 		<car>
-			<unique_id>9bc7cbd87dc91ee8988d296a7a795750</unique_id>
+			<unique_id>050bac70c84f3aa3ebbd5d92cf7c068e</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X70</folder_id>
 			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
 			<complectation_name>Prestige+</complectation_name>
 			<body_type>Внедорожник 5 дв.</body_type>
 			<wheel>левый</wheel>
-			<color>Белый</color>
+			<color>Серый</color>
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>7</run>
+			<run>11</run>
 			<year>2024</year>
-			<price>3037990</price>
+			<price>3342990</price>
 			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
-			<vin>Y4K8722D6RB326061</vin>
+			<vin>Y4K8722D5RB318954</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
 
 В наличии новый Belgee X70, 2024 года, в комплектации Prestige+.
@@ -701,24 +684,26 @@
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
 			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/05bb9533988a8f94392b49ae94ccefe2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/b29416a630667082270d963c4b88b673.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/bcc76d4ac8d14c49af96d1b389b978b3.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/2f4e95a52e19758c915c4e787ec1a538.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/3f01a83f95445a2e641c0a423bdea256.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/bcfa1b60899bd3734c60ff7e9eebf3f2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/10b5b5c51443a360609106ad14dd85ec.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/11ea4b558847979449e353c6fb6a2eec.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/efc3f57ba7bb28026ab9026bacdb6b73.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/a77216408f534c15f813b47fcc6da7bd.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/b730eabcd36a6b70200c61f210885473.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/92597ca1d989a560ed48234ec2f4e983.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/3e42bde2943a8795e219ca118a364b77.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/b3880fbfaaa91f66895f9139a527655a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/10fd9aa3b2e0887c812fd16af3ab137f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/c89463dcd0c9d680729003524bae8b05.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/2f6571d0717bcfdfd92bfb102a445a17.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/032287007f29a9c04692fa7f7303e54d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/bee7941af4b54e0a3e24ce20ca170cb1.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/826ab064aec565556ef16264e17a95a7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/46e4d7eee95f7257f73fe7ca5aecae47.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/d902ace07a5a0021ea9ba7553c58a3bf.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/2a102447a0d192bf53aa8b232085606f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/c248b8d4c110a6d91dd93e893c3466da.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/98fd17220f3e57b7759fc87b48851ee7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/dad8cdb10fdc1ae2872084b4460e0d6a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/f7002971c24724e11f055e135151dcf0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/47ee03fc8e712521ae5be1747a385206.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2537990</priceWithDiscount><sale_price>2537990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-plus-белый-2024/</url></car>
+		<priceWithDiscount>2842990</priceWithDiscount><sale_price>2842990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-plus-серый-2024/</url></car>
 		<car>
 			<unique_id>ee3ad8645a992c132e702e2b029a8caa</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -731,7 +716,7 @@
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>5</run>
+			<run>6</run>
 			<year>2024</year>
 			<price>2862990</price>
 			<credit_discount>200000</credit_discount>
@@ -766,7 +751,14 @@
 Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722Z1RB327209/6e810a2861945fbdd0b87c3a7baf1bc0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722Z1RB327209/d1865286f4d18c95fc0ef0d19d2fdcf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722Z1RB327209/f2140d058ac4f758e5d55e7fec2d44d9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722Z1RB327209/569ebf3895022a7418a815f83ed708ba.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722Z1RB327209/0a7f04d7423a89280dce943e48c811d2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722Z1RB327209/eaf32e70aa5e1349aba0ba66f4de81fe.jpeg</image>
+			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
@@ -884,33 +876,49 @@
 Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/87dd503982bc33397c479ca5108d378c.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/9a46c2215a75383c5df85c097a2d5e36.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/ce8c2315216f60797bb945e1ccb739e5.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/686f9cf86a3542cddcdc80dd1e1347a2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/b11c2514cd9b98e0814b9da2af320a0d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/694ac2252f702b8e605793550d6ebcf3.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/f254626d75f7d6d327a7f3d1116a44e6.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/2cdf4a5166981e346eb5651c1086a0ed.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/38c556f41aeb5cb4a334e5b225b5047a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/fe60ef55bc37b6b6733365620282ab18.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/6ae46f27bff849e42b42dc3f7fe9b1ff.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/0c85ffc36031f4734df8349e05df31a0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/3ae5f3a3e0acc0764ff934abefa239dd.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/0f2d7b647671044e349a33840565e5bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/737032112b37580c2addb82a41b724ff.jpeg</image>
+			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<priceWithDiscount>2537990</priceWithDiscount><sale_price>2537990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-черный-2024/</url></car>
 		<car>
-			<unique_id>050bac70c84f3aa3ebbd5d92cf7c068e</unique_id>
+			<unique_id>9bc7cbd87dc91ee8988d296a7a795750</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X70</folder_id>
 			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
 			<complectation_name>Style</complectation_name>
 			<body_type>Внедорожник 5 дв.</body_type>
 			<wheel>левый</wheel>
-			<color>Серый</color>
+			<color>Белый</color>
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>11</run>
+			<run>7</run>
 			<year>2024</year>
-			<price>3342990</price>
+			<price>3037990</price>
 			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
-			<vin>Y4K8722D5RB318954</vin>
+			<vin>Y4K8722D6RB326061</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
 
 В наличии новый Belgee X70, 2024 года, в комплектации Style.
@@ -937,26 +945,24 @@
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
 			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/b3880fbfaaa91f66895f9139a527655a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/10fd9aa3b2e0887c812fd16af3ab137f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/c89463dcd0c9d680729003524bae8b05.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/2f6571d0717bcfdfd92bfb102a445a17.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/032287007f29a9c04692fa7f7303e54d.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/bee7941af4b54e0a3e24ce20ca170cb1.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/826ab064aec565556ef16264e17a95a7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/46e4d7eee95f7257f73fe7ca5aecae47.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/d902ace07a5a0021ea9ba7553c58a3bf.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/2a102447a0d192bf53aa8b232085606f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/c248b8d4c110a6d91dd93e893c3466da.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/98fd17220f3e57b7759fc87b48851ee7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/dad8cdb10fdc1ae2872084b4460e0d6a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/f7002971c24724e11f055e135151dcf0.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D5RB318954/47ee03fc8e712521ae5be1747a385206.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/05bb9533988a8f94392b49ae94ccefe2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/b29416a630667082270d963c4b88b673.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/bcc76d4ac8d14c49af96d1b389b978b3.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/2f4e95a52e19758c915c4e787ec1a538.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/3f01a83f95445a2e641c0a423bdea256.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/bcfa1b60899bd3734c60ff7e9eebf3f2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/10b5b5c51443a360609106ad14dd85ec.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/11ea4b558847979449e353c6fb6a2eec.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/efc3f57ba7bb28026ab9026bacdb6b73.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/a77216408f534c15f813b47fcc6da7bd.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/b730eabcd36a6b70200c61f210885473.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/92597ca1d989a560ed48234ec2f4e983.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D6RB326061/3e42bde2943a8795e219ca118a364b77.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2842990</priceWithDiscount><sale_price>2842990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-серый-2024/</url></car>
+		<priceWithDiscount>2537990</priceWithDiscount><sale_price>2537990</sale_price><url>https://belgee-partner-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-белый-2024/</url></car>
 		<car>
 			<unique_id>c17c9c05bcd4131d8f970c0b72f731cd</unique_id>
 			<mark_id>Geely</mark_id>
@@ -1074,6 +1080,83 @@ Geely Atlas II — это идеальный выбор для тех, кто и
 			<max_discount>350000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3FX1S66RB109289</vin>
+			<description>ПAРTHEP - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
+
+B наличии HOBЫЙ ATLАS , 2024 года, в кoмплeктации Flаgshiр
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+✅ KPЕДИT БEЗ ПEРBОНAЧAЛЬHОГO BЗНOСА
+
+✅ PACCPОЧКA
+
+✅ ВЫГOДHЫЙ ОБМЕH BАШEГO АBТOМОБИЛЯ HА НOВЫЙ
+
+Cтoимость автомобиля 3 566 990 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+Если новый GЕЕLY , то в GЕЕLY ПАРТНЕР.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
+
+Geely Atlas II, 2024 год
+
+Geely Atlas II — это сочетание стиля, комфорта и передовых технологий. Этот автомобиль создан для тех, кто ценит качество и удобство в каждой поездке.
+
+Дизайн и комфорт
+
+Элегантный дизайн Geely Atlas II подчёркивает его статус и привлекает внимание на дороге. Просторный салон с отделкой из искусственной кожи обеспечивает комфорт как водителю, так и пассажирам.
+
+Технологии
+
+Geely Atlas II оснащён передовыми технологиями, которые делают вождение более приятным и безопасным. Двухзонный климат-контроль, адаптивный круиз-контроль, система старт-стоп и другие функции обеспечивают комфорт и безопасность на дороге.
+
+Комфорт и удобство
+
+Электрорегулировка сидений, обогрев всех сидений, подогрев рулевого колеса и другие опции делают каждую поездку максимально комфортной. А панорамная крыша и люк позволяют наслаждаться видами и свежим воздухом.
+
+Безопасность
+
+Система курсовой стабилизации, антиблокировочная система тормозов, подушки безопасности и другие функции обеспечивают высокий уровень безопасности как для водителя, так и для пассажиров.
+
+Дополнительные опции
+
+Центральный замок, иммобилайзер, сигнализация и другие дополнительные опции обеспечивают безопасность автомобиля.
+
+Geely Atlas II — это идеальный выбор для тех, кто ищет комфорт, безопасность и передовые технологии в одном автомобиле.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<priceWithDiscount>3216990</priceWithDiscount><sale_price>3216990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-atlas-ii-20-amt-200-лс-flagship-серо-голубой-2024/</url></car>
+		<car>
+			<unique_id>7a8bc3ef05b9df68d43192713c4416f3</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Atlas, II</folder_id>
+			<modification_id>2.0 AMT (200 л.с.)</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серо-голубой</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>5</run>
+			<year>2024</year>
+			<price>3566990</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>150000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>350000</max_discount>
+			<currency>RUR</currency>
+			<vin>LB3FX1S67RB134069</vin>
 			<description>ПAРTHEP - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
 
 B наличии HOBЫЙ ATLАS , 2024 года, в кoмплeктации Flаgshiр
@@ -2039,7 +2122,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>2100000</priceWithDiscount><sale_price>2100000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-оранжевый-2023/</url></car>
 		<car>
-			<unique_id>c403b9e67b155ba14bbf2f824d003e35</unique_id>
+			<unique_id>d2cc6017b08e0b4e991fd604f30cf76e</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Emgrand, II</folder_id>
 			<modification_id>1.5 AT (122 л.с.)</modification_id>
@@ -2050,16 +2133,16 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>11</run>
+			<run>9</run>
 			<year>2023</year>
 			<price>2637990</price>
 			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>150000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>607990</max_discount>
+			<max_discount>602990</max_discount>
 			<currency>RUR</currency>
-			<vin>LB3F31034PG028425</vin>
+			<vin>LB3F31036PG028510</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely Emgrand, 2023 года, в комплектации Flagship.
@@ -2084,18 +2167,19 @@ Geely Coolray — это автомобиль, который подарит в�
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
 			<images>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/c94e4b43990c45c2f8bcdfba12f02dd3.jpg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/a87a8436220759efc2272a0c896b7151.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/707c30a03a0798380964f7d11698d0e0.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/0edcd23d8103848973f75c25e40b48dc.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/5ada2b7a30539bc3095151f8ab33a8ef.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/d371a4196ffc656fcebbc688e416f73b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31034PG028425/09f563dfff08915b2e7f787fe8891359.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/9fec671b8b3ddcfb254a0fe4648587c7.jpg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/fff3a144a593afdc96caf4f2fb157403.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/17171512106389ef6e09e2d8b6a74259.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/44f521f44637c8981bc8863086be2519.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e1c78bd78f51a3ce82de75661ef10bbc.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/cbf1bd746249aa13dd0ff295d74a1e17.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/2e1acbd3d2bd1851d61d9c3f236d138b.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e41295e1208b22b3b0455e55e5259b5c.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2030000</priceWithDiscount><sale_price>2030000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
+		<priceWithDiscount>2035000</priceWithDiscount><sale_price>2035000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
 		<car>
 			<unique_id>4c3d04cc7dcafccdd2b05cbff9236d42</unique_id>
 			<mark_id>Geely</mark_id>
@@ -2156,7 +2240,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>2040000</priceWithDiscount><sale_price>2040000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
 		<car>
-			<unique_id>d2cc6017b08e0b4e991fd604f30cf76e</unique_id>
+			<unique_id>c403b9e67b155ba14bbf2f824d003e35</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Emgrand, II</folder_id>
 			<modification_id>1.5 AT (122 л.с.)</modification_id>
@@ -2167,16 +2251,16 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>9</run>
+			<run>11</run>
 			<year>2023</year>
 			<price>2637990</price>
 			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>150000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>602990</max_discount>
+			<max_discount>607990</max_discount>
 			<currency>RUR</currency>
-			<vin>LB3F31036PG028510</vin>
+			<vin>LB3F31034PG028425</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely Emgrand, 2023 года, в комплектации Flagship.
@@ -2201,19 +2285,18 @@ Geely Coolray — это автомобиль, который подарит в�
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
 			<images>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/9fec671b8b3ddcfb254a0fe4648587c7.jpg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/fff3a144a593afdc96caf4f2fb157403.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/17171512106389ef6e09e2d8b6a74259.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/44f521f44637c8981bc8863086be2519.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e1c78bd78f51a3ce82de75661ef10bbc.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/cbf1bd746249aa13dd0ff295d74a1e17.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/2e1acbd3d2bd1851d61d9c3f236d138b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3F31036PG028510/e41295e1208b22b3b0455e55e5259b5c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/c94e4b43990c45c2f8bcdfba12f02dd3.jpg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/a87a8436220759efc2272a0c896b7151.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/707c30a03a0798380964f7d11698d0e0.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/0edcd23d8103848973f75c25e40b48dc.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/5ada2b7a30539bc3095151f8ab33a8ef.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/d371a4196ffc656fcebbc688e416f73b.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31034PG028425/09f563dfff08915b2e7f787fe8891359.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2035000</priceWithDiscount><sale_price>2035000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
+		<priceWithDiscount>2030000</priceWithDiscount><sale_price>2030000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-белый-2023/</url></car>
 		<car>
 			<unique_id>804d43edb62ede8e2153765ce092e073</unique_id>
 			<mark_id>Geely</mark_id>
@@ -2269,78 +2352,18 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>2380000</priceWithDiscount><sale_price>2380000</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-бежевый-2024/</url></car>
 		<car>
-			<unique_id>83d7f7ff256015f504d6fae8209d36db</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Monjaro</folder_id>
-			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
-			<complectation_name>Exclusive</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Синий</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>4932990</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>450000</max_discount>
-			<currency>RUR</currency>
-			<vin>LB37852D5RS124504</vin>
-			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
-
-В наличии новый Geely MONJARO, 2024 года, в комплектации Exclusive.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 4 932 990 рублей (без учета установленного дополнительного оборудования)
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/810800250ef4d32db0ded1d452ee7fbf.jpg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/a2b052a0f988538715153e6c80873274.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/c25674d2b65cad93ea19f38209b7d45b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/270fc559baf5041b4415ccacf6da0c07.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/bf8088bb95ce0f5421e283d235c73507.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/975e053963217c1777aedaa82e0133ed.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/ce8e953c06b466b8eb8206991fb32f32.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/e46e899fddde3fca49d7213faf75c419.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/afe053d2e4fad7916f2003642f765b8c.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/0aa343776c0e7ce2092d149999a2e1b1.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D5RS124504/5938ef7616e2e96ce10622986c1f34e8.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<priceWithDiscount>4482990</priceWithDiscount><sale_price>4482990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-exclusive-синий-2024/</url></car>
-		<car>
-			<unique_id>5ecc3b64a4f1a1a84c6c247d65329354</unique_id>
+			<unique_id>4576cdb5f252e042c8e5dac0fa78f3d3</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
 			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
 			<complectation_name>Flagship</complectation_name>
 			<body_type>Внедорожник 5 дв.</body_type>
 			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
+			<color>Серебристый</color>
+			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>7</run>
+			<run>5</run>
 			<year>2024</year>
 			<price>4732990</price>
 			<credit_discount>0</credit_discount>
@@ -2349,7 +2372,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<optional_discount>0</optional_discount>
 			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
-			<vin>LB37852D2RS171733</vin>
+			<vin>LB37852D5RS173928</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
@@ -2375,9 +2398,105 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
+		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серебристый-2024/</url></car>
 		<car>
-			<unique_id>98c5dd5027e29f2aab4e9a3e5b693416</unique_id>
+			<unique_id>241ab29c6d6b9c8056917a6783de8d9b</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Monjaro</folder_id>
+			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серебристый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>5</run>
+			<year>2024</year>
+			<price>4732990</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>450000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>450000</max_discount>
+			<currency>RUR</currency>
+			<vin>LB37852D1RS173327</vin>
+			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
+
+В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 4 732 990 рублей (без учета установленного дополнительного оборудования)
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серебристый-2024/</url></car>
+		<car>
+			<unique_id>5072c0c4c9e6fca131413aea4e2f154e</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Monjaro</folder_id>
+			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>6</run>
+			<year>2024</year>
+			<price>4732990</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>450000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>450000</max_discount>
+			<currency>RUR</currency>
+			<vin>LB37852D9RS174189</vin>
+			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
+
+В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 4 732 990 рублей (без учета установленного дополнительного оборудования)
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
+		<car>
+			<unique_id>346f82b18cf47d949e711c076f7ca072</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
 			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
@@ -2397,7 +2516,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<optional_discount>0</optional_discount>
 			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
-			<vin>LB37852D4RS168851</vin>
+			<vin>LB37852D7RS170738</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
@@ -2425,7 +2544,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-черный-2024/</url></car>
 		<car>
-			<unique_id>346f82b18cf47d949e711c076f7ca072</unique_id>
+			<unique_id>98c5dd5027e29f2aab4e9a3e5b693416</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
 			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
@@ -2445,7 +2564,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<optional_discount>0</optional_discount>
 			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
-			<vin>LB37852D7RS170738</vin>
+			<vin>LB37852D4RS168851</vin>
 			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
@@ -2520,6 +2639,54 @@ Geely Coolray — это автомобиль, который подарит в�
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<priceWithDiscount>3870600</priceWithDiscount><sale_price>3870600</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
+		<car>
+			<unique_id>5ecc3b64a4f1a1a84c6c247d65329354</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Monjaro</folder_id>
+			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>7</run>
+			<year>2024</year>
+			<price>4732990</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>450000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>450000</max_discount>
+			<currency>RUR</currency>
+			<vin>LB37852D2RS171733</vin>
+			<description>ПАРТНЕР - новый официальный дилер GEELY в городе Оренбурге.
+
+В наличии новый Geely MONJARO, 2024 года, в комплектации Flaghip.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 4 732 990 рублей (без учета установленного дополнительного оборудования)
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<priceWithDiscount>4282990</priceWithDiscount><sale_price>4282990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>e69125b30a58d681c30a1254308e01b4</unique_id>
 			<mark_id>Geely</mark_id>
@@ -2684,67 +2851,6 @@ Geely Coolray — это автомобиль, который подарит в�
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<priceWithDiscount>3298990</priceWithDiscount><sale_price>3298990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-okavango-20-amt-218-лс-flagship-серый-2024/</url></car>
-		<car>
-			<unique_id>fc28c1afc8314e4713bc53c993697107</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Preface, I Рестайлинг 2</folder_id>
-			<modification_id>2.0 AMT (200 л.с.)</modification_id>
-			<complectation_name>Flagship</complectation_name>
-			<body_type>Седан</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>9</run>
-			<year>2024</year>
-			<price>3338990</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>150000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>350000</max_discount>
-			<currency>RUR</currency>
-			<vin>L6TFS1S83RD088188</vin>
-			<description>ПAРTHEP - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
-
-B наличии HOBЫЙ PREFACE , 2024 года, в кoмплeктации Flаgshiр.
-
-✅ ГAРАHTИЯ 5 ЛEТ
-
-✅ KPЕДИT БEЗ ПEРBОНAЧAЛЬHОГO BЗНOСА
-
-✅ PACCPОЧКA
-
-✅ ВЫГOДHЫЙ ОБМЕH BАШEГO АBТOМОБИЛЯ HА НOВЫЙ
-
-Cтoимость автомобиля 3 338 990 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-Если новый GЕЕLY , то в GЕЕLY ПАРТНЕР.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
-
-Geely Preface I Рестайлинг 2 — седан для тех, кто ценит комфорт и динамику
-
-Geely Preface I Рестайлинг 2 — это воплощение стиля и мощи. Серый цвет кузова придаёт автомобилю элегантный и современный вид.
-
-Под капотом у этого седана скрывается бензиновый двигатель объёмом 2 литра и мощностью 200 лошадиных сил. Благодаря этому Preface обеспечивает отличную динамику и позволяет наслаждаться каждым километром пути.
-
-Коробка передач — робот, который обеспечивает плавное и точное переключение передач. Это делает управление автомобилем ещё более приятным и комфортным.
-
-Geely Preface I Рестайлинг 2 — выбор тех, кто ищет сочетание стиля, комфорта и динамики.</description>
-			<images />
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<priceWithDiscount>2988990</priceWithDiscount><sale_price>2988990</sale_price><url>https://belgee-partner-orenburg.ru/cars/geely-preface-i-рестайлинг-2-20-amt-200-лс-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>ac23851f61d8d86c758f43fa4fe98dd6</unique_id>
 			<mark_id>Geely</mark_id>
