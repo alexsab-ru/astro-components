@@ -1601,10 +1601,10 @@
   <previousPrice>3759900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3759000</priceWithDiscount>
+  <priceWithDiscount>3859000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
   <creditDiscount />
-  <insuranceDiscount>100000</insuranceDiscount>
+  <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
   <country />
@@ -1629,7 +1629,10 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>СКИДКИ ПО ПРОГРАММЕ ТРЕЙД-ИН
+  <description>Выгода до 200 000  рублей при покупке автомобиля в кредит + трейд ин,
+Подробности уточняйте у менеджера автосалона. 
+
+СКИДКИ ПО ПРОГРАММЕ ТРЕЙД-ИН
 НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
  
  Почему стоит покупать JETOUR в АЛЬФА: 
@@ -1776,7 +1779,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>100000</max_discount><sale_price>3759000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-voyage-brown-2024/</url></vehicle>
+<max_discount>100000</max_discount><sale_price>3859000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-voyage-brown-2024/</url></vehicle>
 <vehicle>
   <id>6231331</id>
   <vin>HJRPBGGB9PB363173</vin>
@@ -3179,9 +3182,9 @@
   <previousPrice>3999000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>4049000</priceWithDiscount>
-  <tradeinDiscount>100000</tradeinDiscount>
-  <creditDiscount>100000</creditDiscount>
+  <priceWithDiscount>4249000</priceWithDiscount>
+  <tradeinDiscount />
+  <creditDiscount />
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -3207,7 +3210,9 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
+  <description>Выгода до 200 000  рублей при покупке автомобиля в кредит + трейд ин,
+Подробности уточняйте у менеджера автосалона. 
+НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
  
  Почему стоит покупать JETOUR в АЛЬФА: 
 - Автомобили в наличии и с ПТС   
@@ -3356,7 +3361,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>200000</max_discount><sale_price>4049000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-blue-2024/</url></vehicle>
+<max_discount>0</max_discount><sale_price>4249000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-blue-2024/</url></vehicle>
 <vehicle>
   <id>6299555</id>
   <vin>HJRPBGJB9RB385430</vin>
@@ -3384,9 +3389,9 @@
   <previousPrice>4290000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>4049000</priceWithDiscount>
-  <tradeinDiscount>100000</tradeinDiscount>
-  <creditDiscount>100000</creditDiscount>
+  <priceWithDiscount>4249000</priceWithDiscount>
+  <tradeinDiscount />
+  <creditDiscount />
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -3412,7 +3417,9 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
+  <description>Выгода до 200 000  рублей при покупке автомобиля в кредит + трейд ин,
+Подробности уточняйте у менеджера автосалона. 
+НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
  
  Почему стоит покупать JETOUR в АЛЬФА: 
 - Автомобили в наличии и с ПТС   
@@ -3565,7 +3572,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>200000</max_discount><sale_price>4049000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
+<max_discount>0</max_discount><sale_price>4249000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
 <vehicle>
   <id>6299590</id>
   <vin>HJRPBGJB6RB382677</vin>
@@ -3994,9 +4001,9 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>4049000</priceWithDiscount>
-  <tradeinDiscount>100000</tradeinDiscount>
-  <creditDiscount>100000</creditDiscount>
+  <priceWithDiscount>4249000</priceWithDiscount>
+  <tradeinDiscount />
+  <creditDiscount />
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -4022,7 +4029,9 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
+  <description>Выгода до 200 000  рублей при покупке автомобиля в кредит + трейд ин,
+Подробности уточняйте у менеджера автосалона. 
+НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
  
  Почему стоит покупать JETOUR в АЛЬФА: 
 - Автомобили в наличии и с ПТС   
@@ -4171,7 +4180,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>200000</max_discount><sale_price>4049000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-black-2024/</url></vehicle>
+<max_discount>0</max_discount><sale_price>4249000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-black-2024/</url></vehicle>
 <vehicle>
   <id>6390234</id>
   <vin>HJRPBGJB2RB384247</vin>
@@ -4199,9 +4208,9 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>4049000</priceWithDiscount>
-  <tradeinDiscount>100000</tradeinDiscount>
-  <creditDiscount>100000</creditDiscount>
+  <priceWithDiscount>4249000</priceWithDiscount>
+  <tradeinDiscount />
+  <creditDiscount />
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -4227,7 +4236,9 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
+  <description>Выгода до 200 000  рублей при покупке автомобиля в кредит + трейд ин,
+Подробности уточняйте у менеджера автосалона. 
+НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
  
  Почему стоит покупать JETOUR в АЛЬФА: 
 - Автомобили в наличии и с ПТС   
@@ -4378,7 +4389,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>200000</max_discount><sale_price>4049000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-black-2024/</url></vehicle>
+<max_discount>0</max_discount><sale_price>4249000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-black-2024/</url></vehicle>
 <vehicle>
   <id>6390242</id>
   <vin>HJRPBGJB8RB382468</vin>
@@ -4406,9 +4417,9 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>4049000</priceWithDiscount>
-  <tradeinDiscount>100000</tradeinDiscount>
-  <creditDiscount>100000</creditDiscount>
+  <priceWithDiscount>4249000</priceWithDiscount>
+  <tradeinDiscount />
+  <creditDiscount />
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -4434,7 +4445,9 @@
   <craneArrowPayload />
   <loadHeight />
   <photoCount>1</photoCount>
-  <description>НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
+  <description>Выгода до 200 000  рублей при покупке автомобиля в кредит + трейд ин,
+Подробности уточняйте у менеджера автосалона. 
+НОВЫЙ ПОЛНОПРИВОДНЫЙ Jetour T2
  
  Почему стоит покупать JETOUR в АЛЬФА: 
 - Автомобили в наличии и с ПТС   
@@ -4585,7 +4598,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>200000</max_discount><sale_price>4049000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
+<max_discount>0</max_discount><sale_price>4249000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
 <vehicle>
   <id>6393046</id>
   <vin>HJRPBGFB6PB369501</vin>
