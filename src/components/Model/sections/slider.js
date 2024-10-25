@@ -15,24 +15,30 @@ if(sliders.length){
 				onlyInViewport: true,
 			},
 			navigation: {
-				nextEl: ".banner-button-next",
-				prevEl: ".banner-button-prev",
+				nextEl: ".simple-slider-button-next",
+				prevEl: ".simple-slider-button-prev",
 			},
-			// pagination: {
-			// 	el: '.banner-pagination',
-			// 	type: 'bullets',
-			// 	clickable: true,
-			// },
+			pagination: {
+				el: '.simple-slider-pagination',
+				type: 'bullets',
+				clickable: true,
+			},
 			breakpoints: {
 				// when window width is >= 320px
 				320: {
-				  slidesPerView: 1,
+				  slidesPerView: 1.2,
+				  centeredSlides: true,
+				  spaceBetween: 15,
 				},
 				640: {
 				  slidesPerView: 2,
+				  centeredSlides: false,
+				  spaceBetween: 20,
 				},
 				1024: {
-				  slidesPerView: 3,				  
+				  slidesPerView: 3,
+				  centeredSlides: false,		  
+				  spaceBetween: 20,
 				}
 			 }
 		})

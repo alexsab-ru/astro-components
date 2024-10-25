@@ -33,7 +33,7 @@ import {Icon} from 'astro-icon/components';
 			<div class="flex justify-center gap-4 flex-wrap">
 				{section?.items.map(item => (
 					<div class="flex-1 flex flex-col items-center justify-start gap-4 px-4">
-						<Icon name={item.icon} class="text-accent-500 stroke-accent-500 fill-accent-500 text-5xl sm:text-7xl" />
+						<Icon name={item.icon} class="text-accent-500 text-5xl sm:text-7xl" />
 						<p class="font-medium text-center text-xs sm:text-sm md:text-base">{item.text}</p>
 					</div>
 				))}
@@ -59,21 +59,21 @@ import {Icon} from 'astro-icon/components';
 			</div>
 		) : ('')}
 		{section?.images && section?.images.length > 1 ? (
-			<div class="swiper simple-slider mt-8">
+			<div class="swiper simple-slider mt-8 !pb-10">
 				<div class="swiper-wrapper">
 					{section?.images.map(img => (
-						<div class="swiper-slide text-center">
-							<div class="aspect-video relative">
+						<a href={img.url} class="swiper-slide text-center glightbox" data-title={img?.title} data-description={img?.description} data-effect="slide" title={img?.description}>
+							<div class="aspect-video relative mb-4">
 								<img src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" />
 							</div>
-							{img?.title && (<h3 class="font-bold mt-4">{img?.title}</h3>)}
-							{img?.description && (<p class="mt-1 max-w-[700px] mx-auto">{img?.description}</p>)}
-						</div>
+							{img?.title && (<h3 class="font-bold text-lg">{img?.title}</h3>)}
+							{img?.description && (<p class="mt-1 mx-auto">{img?.description}</p>)}
+						</a>
 					))}
 				</div>
-				{/* <div class="swiper-pagination banner-pagination"></div> */}
-				<div class="swiper-button-prev banner-button-prev !hidden md:!flex" />
-				<div class="swiper-button-next banner-button-next !hidden md:!flex" />
+				<div class="swiper-pagination simple-slider-pagination !bottom-0"></div>
+				<div class="swiper-button-prev simple-slider-button-prev" />
+				<div class="swiper-button-next simple-slider-button-next" />
 			</div>
 		) : section?.images && section?.images.length === 1 ? (
 			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-8 max-w-full mx-auto" />

@@ -3,7 +3,12 @@
 }
 
 body {
-	@apply selection:bg-accent-500 selection:text-white;
+	min-width: 320px;
+	overflow-x: hidden;
+}
+
+::selection{
+	@apply bg-accent-500 text-white;
 }
 
 section:not(.model-section) {
