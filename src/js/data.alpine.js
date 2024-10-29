@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs';
 
-import { declOfNums } from "@/js/utils/numbers.format";
+import { declOfNums, currencyFormat } from "@/js/utils/numbers.format";
 
 import models from "@/data/models.json";
 import { useTranslit } from '@/js/utils/translit';
@@ -228,7 +228,8 @@ document.addEventListener('alpine:init', () => {
 			if(this.currentModelComplectation.name === name) return;
 			this.currentModelComplectation = this.currentModel.complectations.find(c => c.name === name );
 		},
-		translit: useTranslit
+		translit: useTranslit,
+		currencyFormat: currencyFormat
 	}));
 });
 

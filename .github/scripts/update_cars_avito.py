@@ -77,6 +77,9 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
     
     return duplicates
 
+cars_available = os.getenv('CARS_AVAILABLE', 0)
+cars_ontheway = os.getenv('CARS_ONTHEWAY', 0)
+cars_toorder = os.getenv('CARS_TOORDER', 0)
 
 # Предполагаем, что у вас есть элементы с именами
 elements_to_localize = []
@@ -92,13 +95,13 @@ for car in cars_element:
     create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
     
     # Создаем дубликаты, но не добавляем их сразу в cars_element
-    duplicates = duplicate_car(car, 0, "в наличии", 0)
+    duplicates = duplicate_car(car, cars_available, "в наличии", 0)
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
     
-    duplicates = duplicate_car(car, 0, "в пути", 1)
+    duplicates = duplicate_car(car, cars_ontheway, "в пути", cars_available)
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
     
-    duplicates = duplicate_car(car, 0, "на заказ", 8)
+    duplicates = duplicate_car(car, cars_toorder, "на заказ", cars_available+cars_ontheway)
     all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
     
     # Добавляем дубликаты в отдельный список
