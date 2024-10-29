@@ -20,7 +20,7 @@ const { models = [], model, brand } = Astro.props
 			) : (''))}
 		</div>
 		<template x-if="currentModel.complectations !== undefined && currentModel.complectations.length > 0">
-			<div class="flex gap-5 flex-nowrap border-b mb-10">
+			<div class="flex gap-x-5 gap-y-2 flex-wrap border-b mb-10">
 				<template x-for="(c, idx) in currentModel.complectations" :key="idx">
 					<span 
 						class="compl_name"
@@ -70,7 +70,7 @@ const { models = [], model, brand } = Astro.props
 
 <style lang="scss">
 	.compl_name{
-		@apply pb-5 text-sm sm:text-xl font-medium uppercase cursor-pointer relative before:bg-accent-500 select-none;
+		@apply pb-1 sm:pb-5 text-sm sm:text-xl font-medium uppercase cursor-pointer relative before:bg-accent-500 select-none;
 		&::before{
 			content: '';
 			width: 0;
