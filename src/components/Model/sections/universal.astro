@@ -39,7 +39,7 @@ import {Icon} from 'astro-icon/components';
 				))}
 			</div>
 		)}
-		{section?.suptitle && (<span class="text-sm font-bold text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
+		{section?.suptitle && (<span class="text-sm font-bold text-accent-500"><Fragment set:html={section?.suptitle} /></span>)}
 		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8"><Fragment set:html={section?.title} /></h2>)}
 		{section?.text && section?.id !== 'more' ? (
 			<Fragment set:html={section?.text} />
