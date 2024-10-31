@@ -59,7 +59,7 @@ jobs:
         id: check_changes
         run: |
           # Проверка запущен ли экшн вручную или есть ли коммиты за последние 10 минут
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] || [ "${{ github.event_name }}" == "schedule" ]; then
             echo "Run manually. Assuming changes." && echo "changes=true" >> $GITHUB_OUTPUT
           else
             COUNT=$(git rev-list --count HEAD --since="10 minutes ago")
