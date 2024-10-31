@@ -41,13 +41,16 @@ if (fs.existsSync(carsFilePath)) {
 }
 
 // Создаем объект для хранения цен по моделям
-const prices = {};
-const pricesb = {};
+const carsPlaceholder = {};
 if (carsData.length > 0) {
   carsData.forEach(car => {
     if (car.id && car.price) {
-      prices[`{{price-${car.id}}}`] = car.price;
-      pricesb[`{{priceb-${car.id}}}`] = currencyFormat(car.price);
+      carsPlaceholder[`{{price-${car.id}}}`] = car.price;
+      carsPlaceholder[`{{priceb-${car.id}}}`] = currencyFormat(car.price);
+    }
+    if (car.id && car.benefit) {
+      carsPlaceholder[`{{benefit-${car.id}}}`] = car.benefit;
+      carsPlaceholder[`{{benefitb-${car.id}}}`] = currencyFormat(car.benefit);
     }
   });
 }
@@ -84,8 +87,7 @@ function replacePlaceholders(content) {
     '{{monthGenitive}}': months[month].genitive,
     '{{monthPrepositional}}': months[month].prepositional,
     '{{year}}': today.getFullYear(),
-    ...prices, // Добавляем цены к плейсхолдерам, если они есть
-    ...pricesb // Добавляем красивые цены к плейсхолдерам, если они есть
+    ...carsPlaceholder, // Добавляем к остальным плейсхолдерам плейсхолдеры из json тачек, если они есть
   };
 
   for (let placeholder in placeholders) {
