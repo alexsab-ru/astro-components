@@ -77,9 +77,9 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
     
     return duplicates
 
-cars_available = os.getenv('CARS_AVAILABLE', 0)
-cars_ontheway = os.getenv('CARS_ONTHEWAY', 0)
-cars_toorder = os.getenv('CARS_TOORDER', 0)
+cars_available = int(os.getenv('CARS_AVAILABLE', 0))
+cars_ontheway = int(os.getenv('CARS_ONTHEWAY', 0))
+cars_toorder = int(os.getenv('CARS_TOORDER', 0))
 
 # Предполагаем, что у вас есть элементы с именами
 elements_to_localize = []

@@ -186,6 +186,8 @@ else:
     # Parsing the provided XML data
     root = ET.fromstring(xml_content)
 
+    tree = ET.ElementTree(root)
+
 # Путь к папке для сохранения уменьшенных изображений
 output_dir = "public/img/thumbs/"
 
