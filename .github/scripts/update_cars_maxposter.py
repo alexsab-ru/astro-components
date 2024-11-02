@@ -201,10 +201,36 @@ with open('output.txt', 'w') as file:
 # Предполагаем, что у вас есть элементы с именами 'brand', 'engineType', 'driveType' и т.д.
 elements_to_localize = ['engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel']
 # , 'bodyColor', 'bodyType', 'steeringWheel'
+# Создаем список машин для удаления
+cars_to_remove = []
+remove_mark_ids = [
+]
+remove_folder_ids = [
+]
+cars_element = root
 
-for car in root:
+for car in cars_element:
     rename_child_element(car, 'brand', 'mark_id')
     rename_child_element(car, 'model', 'folder_id')
+
+    should_remove = False
+    
+    # Проверяем mark_id только если список не пустой
+    if remove_mark_ids:
+        car_mark = car.find('mark_id').text
+        if car_mark in remove_mark_ids:
+            should_remove = True
+    
+    # Проверяем folder_id только если список не пустой
+    if remove_folder_ids:
+        car_folder = car.find('folder_id').text
+        if car_folder in remove_folder_ids:
+            should_remove = True
+    
+    if should_remove:
+        cars_to_remove.append(car)
+        continue  # Пропускаем остальные операции для этой машины
+
     rename_child_element(car, 'modification', 'modification_id')
     rename_child_element(car, 'complectation', 'complectation_name')
     rename_child_element(car, 'bodyColor', 'color')
@@ -230,6 +256,10 @@ for car in root:
         update_yaml(car, file_path, unique_id)
     else:
         create_file(car, file_path, unique_id)
+
+# Удаляем все не-BelGee машины
+for car in cars_to_remove:
+    cars_element.remove(car)
 
 output_path = './public/cars.xml'
 convert_to_string(root)
