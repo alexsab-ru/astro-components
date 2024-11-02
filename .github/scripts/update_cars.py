@@ -215,8 +215,32 @@ with open('output.txt', 'w') as file:
 
 # Предполагаем, что у вас есть элементы с именами
 elements_to_localize = []
+# Создаем список машин для удаления
+cars_to_remove = []
+remove_mark_ids = [
+]
+remove_folder_ids = [
+]
+cars_element = root.find('cars')
 
-for car in root.find('cars'):
+for car in cars_element:
+    should_remove = False
+    
+    # Проверяем mark_id только если список не пустой
+    if remove_mark_ids:
+        car_mark = car.find('mark_id').text
+        if car_mark in remove_mark_ids:
+            should_remove = True
+    
+    # Проверяем folder_id только если список не пустой
+    if remove_folder_ids:
+        car_folder = car.find('folder_id').text
+        if car_folder in remove_folder_ids:
+            should_remove = True
+    
+    if should_remove:
+        cars_to_remove.append(car)
+        continue  # Пропускаем остальные операции для этой машины
 
     price = int(car.find('price').text or 0)
     max_discount = int(car.find('max_discount').text or 0)
@@ -233,6 +257,10 @@ for car in root.find('cars'):
         update_yaml(car, file_path, unique_id)
     else:
         create_file(car, file_path, unique_id)
+
+# Удаляем все не-BelGee машины
+for car in cars_to_remove:
+    cars_element.remove(car)
 
 output_path = './public/cars.xml'
 convert_to_string(root)

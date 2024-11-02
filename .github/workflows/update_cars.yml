@@ -78,6 +78,9 @@ jobs:
       run: |
         python .github/scripts/update_cars_avito.py
       env:
+        CARS_AVAILABLE: 0
+        CARS_ONTHEWAY: 0
+        CARS_TOORDER: 0
         REPO_NAME: ${{ github.event.repository.name }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
 

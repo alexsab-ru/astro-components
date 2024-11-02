@@ -41,13 +41,16 @@ if (fs.existsSync(carsFilePath)) {
 }
 
 // Создаем объект для хранения цен по моделям
-const prices = {};
-const pricesb = {};
+const carsPlaceholder = {};
 if (carsData.length > 0) {
   carsData.forEach(car => {
-    if (car.id && car.price) {
-      prices[`{{price-${car.id}}}`] = car.price;
-      pricesb[`{{priceb-${car.id}}}`] = currencyFormat(car.price);
+    if (car.id !== undefined && car.price !== undefined) {
+      carsPlaceholder[`{{price-${car.id}}}`] = car.price;
+      carsPlaceholder[`{{priceb-${car.id}}}`] = currencyFormat(car.price);
+    }
+    if (car.id !== undefined && car.benefit !== undefined) {
+      carsPlaceholder[`{{benefit-${car.id}}}`] = car.benefit;
+      carsPlaceholder[`{{benefitb-${car.id}}}`] = currencyFormat(car.benefit);
     }
   });
 }
@@ -55,7 +58,7 @@ if (carsData.length > 0) {
 function currencyFormat(number, locale = 'ru-RU') {
   // Проверка на null, undefined, или пустую строку
   if (number === null || number === undefined || number === '' || isNaN(number)) {
-    return;
+    return "";
   }
 
   // Если number является строкой, пытаемся преобразовать её в число
@@ -65,7 +68,7 @@ function currencyFormat(number, locale = 'ru-RU') {
 
   // Если после преобразования значение не является числом (например, если оно было невалидной строкой)
   if (isNaN(number)) {
-    return;
+    return "";
   }
 
   return number.toLocaleString(locale, { 
@@ -84,8 +87,7 @@ function replacePlaceholders(content) {
     '{{monthGenitive}}': months[month].genitive,
     '{{monthPrepositional}}': months[month].prepositional,
     '{{year}}': today.getFullYear(),
-    ...prices, // Добавляем цены к плейсхолдерам, если они есть
-    ...pricesb // Добавляем красивые цены к плейсхолдерам, если они есть
+    ...carsPlaceholder, // Добавляем к остальным плейсхолдерам плейсхолдеры из json тачек, если они есть
   };
 
   for (let placeholder in placeholders) {

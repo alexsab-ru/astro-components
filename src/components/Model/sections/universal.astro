@@ -29,18 +29,8 @@ import {Icon} from 'astro-icon/components';
 
 <section class={`sm:py-20 py-10 font-light model-section ${section?.sectionClass} ${className}`} id={section?.id} {...rest}>
 	<div class="container">
-		{section?.items && section?.items.length && (
-			<div class="flex justify-center gap-4 flex-wrap">
-				{section?.items.map(item => (
-					<div class="flex-1 flex flex-col items-center justify-start gap-4 px-4">
-						<Icon name={item.icon} class="text-accent-500 text-5xl sm:text-7xl" />
-						<p class="font-medium text-center text-xs sm:text-sm md:text-base">{item.text}</p>
-					</div>
-				))}
-			</div>
-		)}
-		{section?.suptitle && (<span class="text-sm font-medium text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
-		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8"><Fragment set:html={section?.title} /></h2>)}
+		{section?.suptitle && (<span class="text-sm font-bold text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
+		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8 uppercase"><Fragment set:html={section?.title} /></h2>)}
 		{section?.text && section?.id !== 'more' ? (
 			<Fragment set:html={section?.text} />
 		) : section?.text && section?.id === 'more' ? (
@@ -58,16 +48,26 @@ import {Icon} from 'astro-icon/components';
 				></span>
 			</div>
 		) : ('')}
+		{section?.items && section?.items.length && (
+			<div class="xs:flex-col flex justify-center gap-4 flex-wrap pt-10 sm:pt-20">
+				{section?.items.map(item => (
+					<div class="flex-1 flex flex-col items-center justify-start gap-4 px-4">
+						<Icon name={item.icon} class="text-accent-500 text-5xl sm:text-7xl" />
+						<p class="font-medium text-center text-xs sm:text-sm md:text-base"><Fragment set:html={item.text} /></p>
+					</div>
+				))}
+			</div>
+		)}
 		{section?.images && section?.images.length > 1 ? (
 			<div class="swiper simple-slider mt-8 !pb-10">
 				<div class="swiper-wrapper">
 					{section?.images.map(img => (
-						<a href={img.url} class="swiper-slide text-center glightbox" data-title={img?.title} data-description={img?.description} data-effect="slide" title={img?.description} data-gallery={`gallery-${section?.id}`}>
+						<a href={img.url} class="swiper-slide text-center glightbox" data-title={img?.title} data-description={img?.description?.replace(/<[^>]*>/g, '').trim()} data-effect="slide" data-gallery={`gallery-${section?.id}`}>
 							<div class="aspect-video relative mb-4">
 								<img src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" />
 							</div>
-							{img?.title && (<h3 class="font-medium text-lg">{img?.title}</h3>)}
-							{img?.description && (<p class="mt-1 mx-auto">{img?.description}</p>)}
+							{img?.title && (<h3 class="font-bold text-lg">{img?.title}</h3>)}
+							{img?.description && (<div class="mt-1 mx-auto text-xs sm:text-sm"><Fragment set:html={img?.description} /></div>)}
 						</a>
 					))}
 				</div>
@@ -76,7 +76,11 @@ import {Icon} from 'astro-icon/components';
 				<div class="swiper-button-next simple-slider-button-next" />
 			</div>
 		) : section?.images && section?.images.length === 1 ? (
-			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-8 max-w-full mx-auto" />
+			<>
+			{section.images[0]?.title && <h3 class="font-bold text-lg">{section.images[0]?.title}</h3>}
+			{section.images[0]?.description && <div class="mt-1 mx-auto text-xs sm:text-sm"><Fragment set:html={section.images[0]?.description} /></div>}
+			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-10 sm:mt-20 max-w-full mx-auto" />
+			</>
 		) : ('')}
 		
 		{section?.button && (
