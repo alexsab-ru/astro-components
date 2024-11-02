@@ -218,8 +218,10 @@ elements_to_localize = []
 # Создаем список машин для удаления
 cars_to_remove = []
 remove_mark_ids = [
+    "Geely"
 ]
 remove_folder_ids = [
+    "001"
 ]
 cars_element = root.find('cars')
 
