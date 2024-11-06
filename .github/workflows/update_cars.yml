@@ -52,6 +52,15 @@ jobs:
         REPO_NAME: ${{ github.event.repository.name }}
         CSV_URL: ${{ vars.ENV_CSV_URL }}
 
+    - name: Get air storage
+      if: ${{ vars.AIR_STORAGE_CSV_URL }}
+      run: node .github/scripts/getAirStorage.js
+      env:
+        AIR_STORAGE_CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
+        QUERY_STRING: "SELECT A, B"
+        KEY_COLUMN: "VIN"
+        OUTPUT_PATHS: "air_storage.json"
+
     - name: Get one XML
       if: ${{ vars.ENV_XML_URL }}
       run: |
