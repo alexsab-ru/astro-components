@@ -3,6 +3,7 @@ import os
 import yaml
 import shutil
 import copy
+import json
 import string
 from PIL import Image, ImageOps
 from io import BytesIO
@@ -77,9 +78,17 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
     
     return duplicates
 
-cars_available = int(os.getenv('CARS_AVAILABLE', 0))
-cars_ontheway = int(os.getenv('CARS_ONTHEWAY', 0))
-cars_toorder = int(os.getenv('CARS_TOORDER', 0))
+
+# Загружаем данные из JSON файла
+air_storage_data = {}
+if os.path.exists('air_storage.json'):
+    try:
+        with open('air_storage.json', 'r', encoding='utf-8') as f:
+            air_storage_data = json.load(f)
+    except json.JSONDecodeError:
+        print("Ошибка при чтении air_storage.json")
+    except Exception as e:
+        print(f"Произошла ошибка при работе с файлом: {e}")
 
 # Предполагаем, что у вас есть элементы с именами
 elements_to_localize = []
@@ -91,7 +100,7 @@ remove_mark_ids = [
 ]
 remove_folder_ids = [
 ]
-cars_element = root.find('cars')
+cars_element = root
 
 for car in cars_element:
     should_remove = False
@@ -112,20 +121,18 @@ for car in cars_element:
         cars_to_remove.append(car)
         continue  # Пропускаем остальные операции для этой машины
 
-    unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
-    unique_id = f"{process_unique_id(unique_id)}"
-    print(f"Уникальный идентификатор: {unique_id}")
-    create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
+    # unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
+    # unique_id = f"{process_unique_id(unique_id)}"
+    # print(f"Уникальный идентификатор: {unique_id}")
+    # create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
     
-    # Создаем дубликаты, но не добавляем их сразу в cars_element
-    duplicates = duplicate_car(car, cars_available, "в наличии", 0)
-    all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
+    # Получаем VIN автомобиля
+    vin = car.find('VIN').text if car.find('VIN') is not None else None
     
-    duplicates = duplicate_car(car, cars_ontheway, "в пути", cars_available)
-    all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
-    
-    duplicates = duplicate_car(car, cars_toorder, "на заказ", cars_available+cars_ontheway)
-    all_duplicates.extend(duplicates)  # Добавляем дубликаты в отдельный список
+    if vin and vin in air_storage_data:
+        # Создаем указанное количество дубликатов для машин из JSON
+        duplicates = duplicate_car(car, air_storage_data[vin], "в наличии", 0)
+        all_duplicates.extend(duplicates)
     
     # Добавляем дубликаты в отдельный список
 
