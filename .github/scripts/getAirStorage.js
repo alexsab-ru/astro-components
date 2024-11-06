@@ -1,8 +1,8 @@
-const fs = require('fs');
-const fsPromises = require('fs').promises; // Добавляем промисы из fs
-const path = require('path');
-const https = require('https');
-const csv = require('csv-parse');
+import fs from 'fs';
+import fsPromises from 'fs/promises'; // Используем промисы из fs
+import path from 'path';
+import https from 'https';
+import csv from 'csv-parse';
 
 // Получение переменных среды
 let csvUrl = process.env.AIR_STORAGE_CSV_URL;

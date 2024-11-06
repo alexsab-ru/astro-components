@@ -1,5 +1,6 @@
 {
   "name": "astro-components",
+  "type": "module",
   "version": "0.0.1",
   "scripts": {
     "get_report": "git log --since='2024-04-01' --until='2024-10-31' --pretty=format:'%h\t%ad\t%an\t%s' --first-parent --date=format:'%Y-%m-%d %H:%M:%S' > commit_report.csv",
