@@ -1398,7 +1398,7 @@
   <specialOfferPreviousPrice />
   <priceWithDiscount>2779900</priceWithDiscount>
   <tradeinDiscount>250000</tradeinDiscount>
-  <creditDiscount>220000</creditDiscount>
+  <creditDiscount>270000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -1573,7 +1573,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>470000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-white-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-white-2024/</url></vehicle>
 <vehicle>
   <id>6190243</id>
   <vin>HJRPBGJB0RB361839</vin>
@@ -2609,7 +2609,7 @@
   <specialOfferPreviousPrice />
   <priceWithDiscount>2479900</priceWithDiscount>
   <tradeinDiscount>250000</tradeinDiscount>
-  <creditDiscount>220000</creditDiscount>
+  <creditDiscount>270000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -2772,7 +2772,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>470000</max_discount><sale_price>2479900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-white-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>2479900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-white-2024/</url></vehicle>
 <vehicle>
   <id>6277032</id>
   <vin>HJRPBGGB8RF035268</vin>
@@ -2802,7 +2802,7 @@
   <specialOfferPreviousPrice />
   <priceWithDiscount>2779900</priceWithDiscount>
   <tradeinDiscount>250000</tradeinDiscount>
-  <creditDiscount>220000</creditDiscount>
+  <creditDiscount>270000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -2965,7 +2965,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>470000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-red-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-red-2024/</url></vehicle>
 <vehicle>
   <id>6277055</id>
   <vin>HJRPBGGBXRF025356</vin>
@@ -2995,7 +2995,7 @@
   <specialOfferPreviousPrice />
   <priceWithDiscount>2479900</priceWithDiscount>
   <tradeinDiscount>250000</tradeinDiscount>
-  <creditDiscount>220000</creditDiscount>
+  <creditDiscount>270000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -3154,7 +3154,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>470000</max_discount><sale_price>2479900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-silver-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>2479900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-silver-2024/</url></vehicle>
 <vehicle>
   <id>6299359</id>
   <vin>HJRPBGJB6RB387426</vin>
@@ -4816,7 +4816,7 @@
   <specialOfferPreviousPrice />
   <priceWithDiscount>2779900</priceWithDiscount>
   <tradeinDiscount>250000</tradeinDiscount>
-  <creditDiscount>220000</creditDiscount>
+  <creditDiscount>270000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -4985,7 +4985,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>470000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-green-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-green-2024/</url></vehicle>
 <vehicle>
   <id>6395986</id>
   <vin>HJRPBGFB7RB174025</vin>
@@ -5405,7 +5405,7 @@
   <specialOfferPreviousPrice />
   <priceWithDiscount>2779900</priceWithDiscount>
   <tradeinDiscount>250000</tradeinDiscount>
-  <creditDiscount>220000</creditDiscount>
+  <creditDiscount>270000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -5575,5 +5575,5 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>470000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-black-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>2779900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-black-2024/</url></vehicle>
 </vehicles>
