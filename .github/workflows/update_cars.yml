@@ -6,7 +6,9 @@ on:
   push:
     paths:
       - '.github/workflows/update_cars.yml'
+      - '.github/scripts/getAirStorage.js'
       - '.github/scripts/getOneXML.py'
+      - '.github/scripts/update_cars_avito_ads_ad.py'
       - '.github/scripts/update_cars_avito.py'
       - '.github/scripts/update_cars_carcopy.py'
       - '.github/scripts/update_cars_maxposter.py'
@@ -26,6 +28,16 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+          npm install -g pnpm
+          pnpm install --no-frozen-lockfile
 
     - name: Download CSV
       if: ${{ vars.ENV_CSV_URL }}
@@ -50,6 +62,15 @@ jobs:
       env:
         REPO_NAME: ${{ github.event.repository.name }}
         CSV_URL: ${{ vars.ENV_CSV_URL }}
+
+    - name: Get air storage
+      if: ${{ vars.AIR_STORAGE_CSV_URL }}
+      run: node .github/scripts/getAirStorage.js
+      env:
+        AIR_STORAGE_CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
+        QUERY_STRING: "SELECT A, B"
+        KEY_COLUMN: "VIN"
+        OUTPUT_PATHS: "air_storage.json"
 
     - name: Get one XML
       if: ${{ vars.ENV_XML_URL }}
@@ -78,9 +99,6 @@ jobs:
       run: |
         python .github/scripts/update_cars_avito.py
       env:
-        CARS_AVAILABLE: 0
-        CARS_ONTHEWAY: 0
-        CARS_TOORDER: 0
         REPO_NAME: ${{ github.event.repository.name }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
 

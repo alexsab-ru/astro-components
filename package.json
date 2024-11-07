@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "get_report": "git log --since='2024-04-01' --until='2024-10-31' --pretty=format:'%h\t%ad\t%an\t%s' --first-parent --date=format:'%Y-%m-%d %H:%M:%S' > commit_report.csv",
     "dev": "astro dev --open --host --config astro.local.config.mjs",
     "dd": "pnpm download_json && pnpm dev",
     "ddw": "powershell -Command \"pnpm download_json_win; pnpm dev\"",
@@ -31,6 +32,7 @@
     "astro-icon": "^1.1.0",
     "astro-robots": "^2.0.0",
     "axios": "^1.7.7",
+    "csv-parse": "^5.5.6",
     "glightbox": "^3.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
