@@ -87,13 +87,6 @@ def duplicate_car(car, n, status="в пути", offset=0):
                 print(vin, new_vin, unique_id, new_unique_id)
             else:
                 print(vin, new_vin, "unique_id отсутствует")
-
-            # Обрабатываем unique_id
-            unique_id = new_car.find('Id').text
-            new_unique_id = increment_str(unique_id, offset+i+1)  # Изменяем последний символ на i
-            new_car.find('Id').text = new_unique_id  # Меняем текст unique_id
-
-            print(vin, new_vin, unique_id, new_unique_id)
             
             # Обновляем статус
             new_car.find('Availability').text = status  # Меняем статус Наличие автомобиля
