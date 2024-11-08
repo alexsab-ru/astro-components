@@ -1,4 +1,5 @@
 # python3 .github/scripts/update_cars_avito.py
+import argparse
 import os
 import yaml
 import shutil
@@ -78,6 +79,9 @@ def duplicate_car(car, n, status = "в пути", offset = 0):
     
     return duplicates
 
+parser = argparse.ArgumentParser(description='Download and merge XML files.')
+parser.add_argument('--output', default='./public/avito.xml', help='Output file path/name')
+args = parser.parse_args()
 
 # Загружаем данные из JSON файла
 air_storage_data = {}
@@ -144,8 +148,6 @@ for car in cars_to_remove:
 for new_car in all_duplicates:
     cars_element.append(new_car)
 
-
-output_path = './public/avito.xml'
 convert_to_string(root)
-tree.write(output_path, encoding='utf-8', xml_declaration=True)
+tree.write(args.output, encoding='utf-8', xml_declaration=True)
 
