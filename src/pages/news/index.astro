@@ -13,7 +13,7 @@ import { getRandomInt } from '@/js/utils/numbers.format';
 if (rawPosts && rawPosts.length > 0) {
 	posts = rawPosts.sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-	);
+	).filter((post) => !post.data.draft);
 
 	image = posts[getRandomInt(0, posts.length)].data.image;
 } else {
