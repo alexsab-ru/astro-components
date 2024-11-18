@@ -19,6 +19,12 @@ import Footer from '@/components/ExtendedFooter.astro';
 import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
+import seo from '@/data/seo.json';
+if(seo[Astro.url.pathname]){
+	title = seo[Astro.url.pathname]['title'];
+	description = seo[Astro.url.pathname]['description'];
+	h1 = seo[Astro.url.pathname]['h1'];
+}
 ---
 
 <!doctype html>
