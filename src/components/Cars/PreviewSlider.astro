@@ -14,7 +14,7 @@ import './cars.sass'
 			{
 				car.data.thumbs.map((img:string, idx:number) => (
 					idx < 5 && (
-						<a href={`/cars/${car.slug}`} class="lazy relative snap-always snap-start shrink-0 w-full aspect-[4/3] block !mb-0" data-slide={idx}>
+						<a href={`/cars/${car.slug}/`} class="lazy relative snap-always snap-start shrink-0 w-full aspect-[4/3] block !mb-0" data-slide={idx}>
 							<img class="w-full h-full object-cover object-center" src="/img/loading-simple.gif" data-src={img}>
 							{
 								idx === 4 && car.data.images.length > 5 && (
@@ -31,7 +31,7 @@ import './cars.sass'
 			{
 				car.data.thumbs.map((img:string, idx:number) => (
 					idx < 5 && (
-					<a href={`/cars/${car.slug}`} class="w-full flex items-end h-full" x-on:mouseover={`showSlideAt(${idx})`}>
+					<a href={`/cars/${car.slug}/`} class="w-full flex items-end h-full" x-on:mouseover={`showSlideAt(${idx})`}>
 						<div class="w-full h-[3px] bg-black/80 aria-selected:bg-accent-500" x-bind:aria-selected={`activeIndex == ${idx}`} aria-selected={idx === 0 ? true : false}></div>
 					</a>
 					)
@@ -39,7 +39,7 @@ import './cars.sass'
 			}
 		</div>
 			) : (
-			<a href={`/cars/${car.slug}`} class="lazy relative snap-always snap-start shrink-0 w-full aspect-[4/3] !mb-0" title="Подробнее">
+			<a href={`/cars/${car.slug}/`} class="lazy relative snap-always snap-start shrink-0 w-full aspect-[4/3] !mb-0" title="Подробнее">
 				<img src="/img/loading-simple.gif" data-src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt="No Photo">
 			</a>
 			)
