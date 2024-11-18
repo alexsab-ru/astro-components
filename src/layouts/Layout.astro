@@ -6,7 +6,7 @@ interface Props {
 	image?: string;
 	keywords?: string;
 }
-const {title, h1, description, image, keywords} = Astro.props;
+let {title, h1, description, image, keywords} = Astro.props;
 
 import {SITE_NAME, SITE_DESCR} from '@/const.js';
 
@@ -20,10 +20,22 @@ import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
 import seo from '@/data/seo.json';
-if(seo[Astro.url.pathname]){
-	title = seo[Astro.url.pathname]['title'];
-	description = seo[Astro.url.pathname]['description'];
-	h1 = seo[Astro.url.pathname]['h1'];
+
+const currentPath = Astro.url.pathname;
+if (seo[currentPath]) {
+	const pageSeo = seo[currentPath];
+
+	if (pageSeo.title && pageSeo.title.trim()) {
+		title = pageSeo.title;
+	}
+
+	if (pageSeo.description && pageSeo.description.trim()) {
+		description = pageSeo.description;
+	}
+
+	if (pageSeo.h1 && pageSeo.h1.trim()) {
+		h1 = pageSeo.h1;
+	}
 }
 ---
 
