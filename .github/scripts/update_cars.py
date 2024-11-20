@@ -46,13 +46,15 @@ def create_file(car, filename, unique_id):
     # content += f"permalink: {unique_id}\n"
     content += f"vin_hidden: {vin_hidden}\n"
 
-    h1 = build_unique_id(car, 'folder_id', 'modification_id')
+    h1 = build_unique_id(car, 'mark_id', 'folder_id', 'modification_id')
     content += f"h1: {h1}\n"
 
     content += f"breadcrumb: {build_unique_id(car, 'mark_id', 'folder_id', 'complectation_name')}\n"
 
-    title = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id')} купить у официального дилера в {dealer.get('where')}"
-    content += f"title: {title}\n"
+    content += f"title: Купить {build_unique_id(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {dealer.get('where')}\n"
+
+    content += f"description: |\n"
+    content += f"""  Купить автомобиль {build_unique_id(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {build_unique_id(car, 'mark_id', 'folder_id')} – {car.find('priceWithDiscount').text}\n"""
 
     description = ""
 
@@ -88,9 +90,7 @@ def create_file(car, filename, unique_id):
         elif child.tag == 'description' and child.text:
             description = child.text
             flat_description = description.replace('\n', '<br>\n')
-            content += f"description: |\n"
-            content += f"""  Купить автомобиль {build_unique_id(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {build_unique_id(car, 'mark_id', 'folder_id')} – {car.find('priceWithDiscount').text}\n"""
-
+            # content += f"content: |\n"
             # for line in flat_description.split("\n"):
                 # content += f"  {line}\n"
         else:
