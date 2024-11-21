@@ -7,6 +7,9 @@ const pageTitle = '404. Такая страница не найдена';
 import { getCollection } from 'astro:content';
 const cars = await getCollection('cars');
 const special = await getCollection('special-offers');
+if(Astro.url.pathname.slice(-1) != "/") {
+	return Astro.redirect(Astro.url.pathname+'/', 308);
+}
 ---
 
 <Layout title={title} description={pageTitle}>

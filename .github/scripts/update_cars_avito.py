@@ -8,7 +8,7 @@ import json
 import string
 from PIL import Image, ImageOps
 from io import BytesIO
-from config import dealer, model_mapping
+from config import *
 from utils import *
 import xml.etree.ElementTree as ET
 

@@ -4,11 +4,13 @@ interface Props {
     title: string;
     descr: string;
     image: string;
+    position?: string;
 }
-const {autoName, title, descr, image} = Astro.props
+const {autoName, title, descr, image, position = 'center'} = Astro.props;
+const classPosition = position === 'right' ? 'mx-auto md:mx-0 md:ml-auto' : position === 'left' ? 'mx-auto md:mx-0' : 'mx-auto';
 ---
 
-<div class="px-5 mx-auto flex flex-col items-center justify-center lg:text-white">
+<div class={`px-5 w-fit inline-flex flex-col items-center justify-center lg:text-white ${classPosition}`}>
     <div class="text-xl md:text-2xl xl:text-3xl font-bold uppercase"><Fragment set:html={autoName}></div>
     <img src={image} class="w-full max-w-sm xl:max-w-md" alt={title} />
     <p class="xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4"><Fragment set:html={title}></p>
