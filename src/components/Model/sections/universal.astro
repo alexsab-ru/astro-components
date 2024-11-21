@@ -27,12 +27,14 @@ const { section, class: className, ...rest } = Astro.props;
 import {Icon} from 'astro-icon/components';
 ---
 
-<section class={`sm:py-20 py-10 font-light model-section ${section?.sectionClass} ${className}`} id={section?.id} {...rest}>
+<section class={`sm:py-20 py-10 font-light model-section even:bg-gray-100 ${className}`} id={section?.id} {...rest}>
 	<div class="container">
 		{section?.suptitle && (<span class="text-sm font-bold text-greenBrand"><Fragment set:html={section?.suptitle} /></span>)}
 		{section?.title && (<h2 class="text-2xl sm:text-5xl font-normal mb-8 uppercase"><Fragment set:html={section?.title} /></h2>)}
 		{section?.text && section?.id !== 'more' ? (
-			<Fragment set:html={section?.text} />
+			<div class="mb-8">
+				<Fragment set:html={section?.text} class="mb-8" />
+			</div>
 		) : section?.text && section?.id === 'more' ? (
 			<div x-data="{showMore: false}" x-cloak>
 				<div 
@@ -49,7 +51,7 @@ import {Icon} from 'astro-icon/components';
 			</div>
 		) : ('')}
 		{section?.items && section?.items.length && (
-			<div class="xs:flex-col flex justify-center gap-4 flex-wrap pt-10 sm:pt-20">
+			<div class="xs:flex-col flex justify-center gap-4 flex-wrap">
 				{section?.items.map(item => (
 					<div class="flex-1 flex flex-col items-center justify-start gap-4 px-4">
 						<Icon name={item.icon} class="text-accent-500 text-5xl sm:text-7xl" />
@@ -79,7 +81,7 @@ import {Icon} from 'astro-icon/components';
 			<>
 			{section.images[0]?.title && <h3 class="font-bold text-lg">{section.images[0]?.title}</h3>}
 			{section.images[0]?.description && <div class="mt-1 mx-auto text-xs sm:text-sm"><Fragment set:html={section.images[0]?.description} /></div>}
-			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-10 sm:mt-20 max-w-full mx-auto" />
+			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-10 sm:mt-14 max-w-full mx-auto" />
 			</>
 		) : ('')}
 		
