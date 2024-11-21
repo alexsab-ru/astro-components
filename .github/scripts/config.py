@@ -578,6 +578,20 @@ model_mapping = {
             }
         },
     },
+    "KNEWSTAR": {
+        "001": {
+            "folder": "001",
+            "cyrillic": "001",
+            "color": {
+                "Black": "black.webp",
+                "Gray": "gray.webp",
+                "White": "white.webp",
+                "Черный": "black.webp",
+                "Серый": "gray.webp",
+                "Белый": "white.webp",
+            }
+        },
+    },
     "Jac": {
         "J7, I": {
             "folder": "j7",
