@@ -9,7 +9,7 @@
     "getOneXML": "export ENV_XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && python3 .github/scripts/getOneXML.py --xpath \"//data/cars/car\" --output cars.xml",
     "replacePlaceholdersInJson": "node .github/scripts/replacePlaceholdersInJson.js",
     "update_cars_autoru": "python3 .github/scripts/update_cars_avito.py  --output \"./public/autoru.xml\"",
-    "update_cars_avito_ads_ad": "export REPO_NAME=\"test.com\" && export XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && python3 .github/scripts/update_cars_avito_ads_ad.py",
+    "update_cars_avito_ads_ad": "export REPO_NAME=\"test.com\" && export XML_URL=$(grep '^AVITO_XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && python3 .github/scripts/update_cars_avito_ads_ad.py",
     "update_cars_avito": "python3 .github/scripts/update_cars_avito.py",
     "update_cars_carcopy": "python3 .github/scripts/update_cars_carcopy.py",
     "update_cars_maxposter": "python3 .github/scripts/update_cars_maxposter.py",
