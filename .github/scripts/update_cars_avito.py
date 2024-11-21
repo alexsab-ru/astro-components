@@ -1,4 +1,5 @@
 # python3 .github/scripts/update_cars_avito.py
+import argparse
 import os
 import yaml
 import shutil
@@ -7,7 +8,7 @@ import json
 import string
 from PIL import Image, ImageOps
 from io import BytesIO
-from config import dealer, model_mapping
+from config import *
 from utils import *
 import xml.etree.ElementTree as ET
 
@@ -54,30 +55,54 @@ def increment_str(str, increment):
     new_str_value = str_value + increment  # Увеличиваем на заданное значение
     return base36_to_str(new_str_value, len(str))  # Преобразуем обратно в строку
 
-def duplicate_car(car, n, status = "в пути", offset = 0):
+def duplicate_car(car, n, status="в пути", offset=0):
     """Функция для дублирования элемента 'car' N раз с изменением vin."""
     duplicates = []
+    
+    # Проверка наличия обязательных полей 'vin' и 'availability'
+    try:
+        if car.find('vin') is None:
+            raise ValueError("Элемент 'car' не содержит обязательного поля 'vin'")
+        if car.find('availability') is None:
+            raise ValueError("Элемент 'car' не содержит обязательного поля 'availability'")
+    except ValueError as e:
+        print(f"Ошибка: {e}")
+        return duplicates  # Вернем пустой список и продолжим выполнение скрипта
+    
     for i in range(n):
-        new_car = copy.deepcopy(car)  # Клонируем текущий элемент car
+        try:
+            new_car = copy.deepcopy(car)  # Клонируем текущий элемент car
+            
+            # Обрабатываем VIN
+            vin_element = new_car.find('vin')
+            vin = vin_element.text
+            new_vin = modify_vin(vin.lower(), offset + i + 1)
+            vin_element.text = new_vin.upper()  # Меняем текст VIN
+            
+            # Обрабатываем unique_id, если он существует
+            unique_id_element = new_car.find('unique_id')
+            if unique_id_element is not None:
+                unique_id = unique_id_element.text
+                new_unique_id = increment_str(unique_id, offset + i + 1)  # Изменяем последний символ на i
+                unique_id_element.text = new_unique_id  # Меняем текст unique_id
+                print(vin, new_vin, unique_id, new_unique_id)
+            else:
+                print(vin, new_vin, "unique_id отсутствует")
+            
+            # Обновляем статус
+            availability_element = new_car.find('availability')
+            availability_element.text = status  # Меняем статус Наличие автомобиля
 
-        # Обрабатываем VIN
-        vin = new_car.find('vin').text
-        new_vin = modify_vin(vin.lower(), offset+i+1)
-        new_car.find('vin').text = new_vin.upper()  # Меняем текст VIN
+            duplicates.append(new_car)
 
-        # Обрабатываем unique_id
-        unique_id = new_car.find('unique_id').text
-        new_unique_id = increment_str(unique_id, offset+i+1)  # Изменяем последний символ на i
-        new_car.find('unique_id').text = new_unique_id  # Меняем текст unique_id
-
-        print(vin, new_vin, unique_id, new_unique_id)
-        
-        # Обновляем статус
-        new_car.find('availability').text = status  # Меняем статус Наличие автомобиля
-        duplicates.append(new_car)
+        except AttributeError as e:
+            print(f"Ошибка при обработке элемента: {e}")
     
     return duplicates
 
+parser = argparse.ArgumentParser(description='Download and merge XML files.')
+parser.add_argument('--output', default='./public/avito.xml', help='Output file path/name')
+args = parser.parse_args()
 
 # Загружаем данные из JSON файла
 air_storage_data = {}
@@ -146,8 +171,6 @@ for car in cars_to_remove:
 for new_car in all_duplicates:
     cars_element.append(new_car)
 
-
-output_path = './public/avito.xml'
 convert_to_string(root)
-tree.write(output_path, encoding='utf-8', xml_declaration=True)
+tree.write(args.output, encoding='utf-8', xml_declaration=True)
 
