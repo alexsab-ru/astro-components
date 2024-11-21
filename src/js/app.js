@@ -34,8 +34,12 @@ const lazys = document.querySelectorAll('.lazy');
 
 if(lazys.length){
 	lazys.forEach(lazy => {
-		if(lazy.querySelector('img')){
-			imageObserver.observe(lazy.querySelector('img'))
+		const images = lazy.querySelectorAll('img');
+		if(images){
+			images.forEach(img => {
+				imageObserver.observe(img);
+				img.onload = () => {img.classList.remove('opacity-0')}
+			});
 		}
 		lazy.classList.remove('lazy')
 	})
