@@ -5,6 +5,8 @@ type TBadge = {
 	descr: string
 	image: string
 	position: string
+	colorText: string
+	bg: boolean
 }
 type TBanner = {
 	id?: number
@@ -67,6 +69,8 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 						descr={banner.badge?.descr}
 						image={banner.badge?.image}
 						position={banner.badge?.position}
+						colorText={banner.badge?.colorText}
+						bg={banner.badge?.bg}
 					/>
 				)
 			}

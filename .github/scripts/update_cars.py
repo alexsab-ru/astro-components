@@ -172,6 +172,13 @@ def update_yaml(car, filename, unique_id):
         # можно установить значение по умолчанию для 'priceWithDiscount' в data или обработать этот случай иначе
         # data.setdefault('priceWithDiscount', 0)
 
+    vin = car.find('vin').text
+    vin_hidden = process_vin_hidden(vin)
+    if vin_hidden is not None:
+        # Создаём или добавляем строку в список
+        data['vin_hidden'] += ", "+vin_hidden
+
+
     images_container = car.find('images')
     if images_container is not None:
         images = [img.text for img in images_container.findall('image')]
