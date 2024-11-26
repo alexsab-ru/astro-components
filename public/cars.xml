@@ -1077,9 +1077,9 @@
   <previousPrice>2537000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2287000</priceWithDiscount>
-  <tradeinDiscount>150000</tradeinDiscount>
-  <creditDiscount>150000</creditDiscount>
+  <priceWithDiscount>2000000</priceWithDiscount>
+  <tradeinDiscount>387000</tradeinDiscount>
+  <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -1159,7 +1159,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>300000</max_discount><sale_price>2287000</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-s-15-amt-156-лс-white-2022/</url></vehicle>
+<max_discount>587000</max_discount><sale_price>2000000</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-s-15-amt-156-лс-white-2022/</url></vehicle>
 <vehicle>
   <id>6035589</id>
   <vin>HJRPBGGB2RF033886</vin>
