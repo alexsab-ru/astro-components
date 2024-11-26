@@ -897,6 +897,7 @@ model_mapping = {
                 "Blue": "blue.webp",
                 "Gray": "gray.webp",
                 "Grey": "gray.webp",
+                "Green": "green.webp",
             }},
         "S6 Pro": {
             "folder": "s6pro",
