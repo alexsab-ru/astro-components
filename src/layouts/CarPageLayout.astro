@@ -25,12 +25,13 @@ import BackLink from '@/components/BackLink.astro';
 
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
 
+			<div class="mb-5">
+				<CarPageHeading data={data} />
+			</div>
+
 			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14">
 
 				<div class="col-span-12 lg:col-span-6">
-					<div class="block lg:hidden mb-5">
-						<CarPageHeading data={data} />
-					</div>
 
 				{ data.images && data.images.length > 0 ? (
 					<CarImageSlider data={data} />
@@ -48,10 +49,7 @@ import BackLink from '@/components/BackLink.astro';
 				</div>
 
 				<div class="col-span-12 lg:col-span-6 2xl:col-span-5 text-sm sm:text-base">
-					<div class="hidden lg:block">
-						<CarPageHeading data={data} />
-					</div>
-					<div class="lg:mt-5 *:border-b">
+					<div class="*:border-b">
 						{data.modification_id && (
 							<CarCharItem label="Двигатель" value={data.modification_id} />
 						)}
