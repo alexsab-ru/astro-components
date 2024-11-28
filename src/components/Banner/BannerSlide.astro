@@ -4,6 +4,9 @@ type TBadge = {
 	title: string
 	descr: string
 	image: string
+	position: string
+	colorText: string
+	bg: boolean
 }
 type TBanner = {
 	id?: number
@@ -65,6 +68,9 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 						title={banner.badge?.title}
 						descr={banner.badge?.descr}
 						image={banner.badge?.image}
+						position={banner.badge?.position}
+						colorText={banner.badge?.colorText}
+						bg={banner.badge?.bg}
 					/>
 				)
 			}
@@ -79,10 +85,10 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
 		) : !banner?.type && banner?.bannerUrl ? (
 			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
-				<BannerImage url={banner.imageUrl} title={banner?.title} />
+				<BannerImage url={banner.imageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 			</a>
 		) : (
-			<BannerImage url={banner.imageUrl} title={banner?.title} />
+			<BannerImage url={banner.imageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 		)
 	}
 </div>

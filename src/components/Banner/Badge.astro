@@ -1,16 +1,22 @@
 ---
 interface Props {
-    autoName: string;
-    title: string;
-    descr: string;
-    image: string;
+    autoName?: string;
+    title?: string;
+    descr?: string;
+    image?: string;
+    position?: string;
+    colorText?: string;
+    bg?: boolean;
 }
-const {autoName, title, descr, image} = Astro.props
+const {autoName, title, descr, image, position = 'center', colorText, bg} = Astro.props;
+const classPosition = position === 'right' ? 'mx-auto md:mx-0 md:ml-auto' : position === 'left' ? 'mx-auto md:mx-0' : 'mx-auto';
+const textColor = colorText === 'black' ? 'text-black' : 'text-white';
+const background = bg ? 'bg-white/30' : '';
 ---
 
-<div class="px-5 mx-auto flex flex-col items-center justify-center lg:text-white">
-    <div class="text-xl md:text-2xl xl:text-3xl font-medium uppercase"><Fragment set:html={autoName}></div>
-    <img src={image} class="w-full max-w-sm xl:max-w-md" alt={title} />
-    <p class="xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4"><Fragment set:html={title}></p>
-    <p class="xs:text-xs sm:text-lg font-medium text-center uppercase"><Fragment set:html={descr}></p>
+<div class={`px-5 py-3 w-fit inline-flex flex-col items-center justify-center ${classPosition} ${textColor} ${background}`}>
+    { autoName && (<div class="text-xl md:text-2xl xl:text-3xl font-bold uppercase"><Fragment set:html={autoName}></div>) }
+    { image && (<div class="flex-grow"></div><img src={image} class="w-full max-w-sm xl:max-w-md max-h-28 sm:max-h-36 md:max-h-[300px]" alt={title || 'Бейдж'} /></div> ) }
+    { title && (<p class="xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4"><Fragment set:html={title}></p>) }
+    { descr && (<p class="xs:text-xs sm:text-lg font-medium text-center uppercase"><Fragment set:html={descr}></p>) }
 </div>

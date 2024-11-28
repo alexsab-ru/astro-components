@@ -1,12 +1,14 @@
 ---
 interface Props{
 	title?: string;
-	url: string
+	url: string;
+	imagePosition?: string;
 }
-const {title, url} = Astro.props
+const {title, url, imagePosition} = Astro.props
+const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePosition === 'top' ? 'object-top' : 'object-center';
 ---
 <img
 	src={url}
-	class="absolute inset-0 h-full w-full object-cover object-center"
+	class={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
 	{...title ? {alt: title} : {} }
 />
