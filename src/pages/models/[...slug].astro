@@ -40,6 +40,7 @@ const cars = rawCars && rawCars.length ? rawCars.filter(
   description={model.slogan}
   image={model.image ?? model.thumb}
 >
+  <h1 class="sr-only">Автомобиль {BRAND} {model.name} в {LEGAL_CITY_WHERE}</h1>
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     sections.length > 0 && sections.map(s => ( <UniversalSection section={s} /> ))
