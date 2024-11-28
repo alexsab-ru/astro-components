@@ -28,7 +28,7 @@ salons
                 </div>
             </div>
             <div class="">
-                <h3 class="text-xl mb-3 md:mb-5">Разделы сайта</h3>
+                <div class="text-xl mb-3 md:mb-5">Разделы сайта</div>
                 <ul class="space-y-2">
                 {
                     links.map(link => (
@@ -38,7 +38,7 @@ salons
                 </ul>
             </div>
             <div class="">
-                <h3 class="text-xl mb-3 md:mb-5">Контакты</h3>
+                <div class="text-xl mb-3 md:mb-5">Контакты</div>
                 <div class="space-y-6">
                 {
                     salons.map(salon => (
@@ -59,7 +59,7 @@ salons
 
             <div class="">
                 {Object.keys(socials.footer).length ? (
-                    <h3 class="text-xl mb-3 md:mb-5">Будь в курсе выгодных предложений</h3>
+                    <div class="text-xl mb-3 md:mb-5">Будь в курсе выгодных предложений</div>
                     <SocialList data={socials.footer} />
                 ) : ('')}
             </div>
