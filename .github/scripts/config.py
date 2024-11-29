@@ -564,7 +564,7 @@ model_mapping = {
                 "Белый": "white.webp",
             }
         },
-        "GS8": {
+        "GS8, II": {
             "folder": "gs8ii",
             "cyrillic": "ГС8",
             "color": {
