@@ -137,7 +137,7 @@ model_mapping = {
         },
         "X35": {
             "folder": "x35",
-            "cyrillic": "Х35",
+            "cyrillic": "Икс 35",
             "color": {
                 "Blue": "blue.png",
                 "Bronze": "bronze.png",
@@ -154,7 +154,7 @@ model_mapping = {
         },
         "X55": {
             "folder": "x55",
-            "cyrillic": "Х55",
+            "cyrillic": "Икс 55",
             "color": {
                 "Gray-with-black-roof": "gray-with-black-roof.png",
                 "Gray": "gray.png",
@@ -181,7 +181,7 @@ model_mapping = {
         },
         "X7": {
             "folder": "x7",
-            "cyrillic": "Х7",
+            "cyrillic": "Икс 7",
             "color": {
                 "Black": "black.png",
                 "Gray": "gray.png",
@@ -196,7 +196,7 @@ model_mapping = {
         },
         "X75": {
             "folder": "x75",
-            "cyrillic": "Х75",
+            "cyrillic": "Икс 75",
             "color": {
                 "Black": "black.webp",
                 "Черный": "black.webp",
@@ -469,7 +469,7 @@ model_mapping = {
         },
         "X50": {
             "folder": "x50",
-            "cyrillic": "Х50",
+            "cyrillic": "Икс 50",
             "color": {
                 "Black": "black.webp",
                 "Черный": "black.webp",
@@ -490,7 +490,7 @@ model_mapping = {
         },
         "X70": {
             "folder": "x70",
-            "cyrillic": "Х70",
+            "cyrillic": "Икс 70",
             "color": {
                 "Black": "black.webp",
                 "Черный": "black.webp",
@@ -722,7 +722,7 @@ model_mapping = {
         },
         "X50": {
             "folder": "x50",
-            "cyrillic": "Х50",
+            "cyrillic": "Икс 50",
             "color": {
                 "Black": "black.png",
                 "Черный": "black.png",
@@ -736,7 +736,7 @@ model_mapping = {
         },
         "X70 PLUS": {
             "folder": "x70plus",
-            "cyrillic": "Х70 Плюс",
+            "cyrillic": "Икс 70 Плюс",
             "color": {
                 "White": "c1b.png",
                 "Белый": "c1b.png",
@@ -760,7 +760,7 @@ model_mapping = {
         },
         "X70": {
             "folder": "x70plus",
-            "cyrillic": "Х70 Плюс",
+            "cyrillic": "Икс 70 Плюс",
             "color": {
                 "White": "c1b.png",
                 "Белый": "c1b.png",
@@ -782,7 +782,7 @@ model_mapping = {
         },
         "X90 PLUS": {
             "folder": "x90plus",
-            "cyrillic": "Х90 Плюс",
+            "cyrillic": "Икс 90 Плюс",
             "color": {
                 "White": "c1b.png",
                 "Black": "c2b.png",
@@ -817,7 +817,7 @@ model_mapping = {
             }},
         "X3": {
             "folder": "x3",
-            "cyrillic": "Х3",
+            "cyrillic": "Икс 3",
             "color": {
                 "Black": "black.png",
                 "Blue": "blue.png",
@@ -837,7 +837,7 @@ model_mapping = {
             }},
         "X3 PRO": {
             "folder": "x3pro",
-            "cyrillic": "Х3 Про",
+            "cyrillic": "Икс 3 Про",
             "color": {
                 "Black": "black.png",
                 "Blue": "blue.png",
@@ -857,7 +857,7 @@ model_mapping = {
             }},
         "X7 Kunlun": {
             "folder": "x7-kunlun",
-            "cyrillic": "Х7 Кунлун",
+            "cyrillic": "Икс 7 Кунлун",
             "color": {
                 "Black": "black.png",
                 "Dark-blue": "dark-blue.png",
@@ -880,7 +880,7 @@ model_mapping = {
     "Livan": {
         "X3 Pro": {
             "folder": "x3pro",
-            "cyrillic": "Х3 Про",
+            "cyrillic": "Икс 3 Про",
             "color": {
                 "Beige": "gold.webp",
                 "White": "white.webp",
@@ -892,7 +892,7 @@ model_mapping = {
             }},
         "X6 Pro": {
             "folder": "x6pro",
-            "cyrillic": "Х6 Про",
+            "cyrillic": "Икс 6 Про",
             "color": {
                 "White": "white.webp",
                 "Blue": "blue.webp",
