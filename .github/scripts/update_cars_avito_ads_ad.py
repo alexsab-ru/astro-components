@@ -151,7 +151,7 @@ for car in cars_element:
     # Получаем VIN автомобиля
     vin = car.find('VIN').text if car.find('VIN') is not None else None
     
-    if vin and vin in air_storage_data:
+    if vin and vin in air_storage_data and air_storage_data.get(vin):
         # Создаем указанное количество дубликатов для машин из JSON
         duplicates = duplicate_car(car, air_storage_data[vin], "в наличии", 0)
         all_duplicates.extend(duplicates)
