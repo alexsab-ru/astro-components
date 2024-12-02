@@ -150,6 +150,7 @@ for car in cars_element:
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
     create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
+    update_element_text(car, 'color', avitoColor(car.find('color').text))
     
     # Получаем VIN автомобиля
     vin = car.find('vin').text if car.find('vin') is not None else None
