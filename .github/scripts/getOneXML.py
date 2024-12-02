@@ -53,11 +53,12 @@ def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
     parser.add_argument('--xpath', default='//data/cars/car', help='XPath to the elements to be merged')
     parser.add_argument('--output', default='merged_output.xml', help='Output file name')
+    parser.add_argument('--split', default=' ', help='Separator')
     args = parser.parse_args()
 
     # env_xml_url = os.getenv('ENV_XML_URL', '')
     env_xml_url = os.environ['ENV_XML_URL']
-    urls = env_xml_url.strip().split('\r\n')
+    urls = env_xml_url.strip().split(args.split)
 
     if not urls:
         print("No URLs found in ENV_XML_URL. Please set the environment variable.")
