@@ -169,6 +169,9 @@ def update_yaml(car, filename, friendly_url):
         # Создаём или добавляем строку в список
         data['vin_hidden'] += ", "+vin_hidden
 
+    unique_id = car.find('unique_id').text
+    data['unique_id'] += ", " + unique_id
+
     images_container = car.find('photos')
     if images_container is not None:
         images = [img.text for img in images_container.findall('photo')]
