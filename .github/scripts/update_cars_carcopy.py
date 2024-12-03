@@ -168,11 +168,17 @@ def update_yaml(car, filename, friendly_url):
 
     unique_id = car.find('unique_id')
     if unique_id is not None:
-        data['unique_id'] += ", " + unique_id.text
+        if not isinstance(data['unique_id'], str):
+            data['unique_id'] = str(data['unique_id'])
+
+        data['unique_id'] += ", " + str(unique_id.text)
     else:
         unique_id = car.find('id')
         if unique_id is not None:
-            data['id'] += ", " + unique_id.text
+            if not isinstance(data['id'], str):
+                data['id'] = str(data['id'])
+
+            data['id'] += ", " + str(unique_id.text)
 
     images_container = car.find('photos')
     if images_container is not None:
