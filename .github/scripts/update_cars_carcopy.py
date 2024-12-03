@@ -108,7 +108,6 @@ def create_file(car, filename, friendly_url):
 
 
 def update_yaml(car, filename, friendly_url):
-    """Increment the 'total' value in the YAML block of an HTML file."""
 
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
@@ -125,7 +124,6 @@ def update_yaml(car, filename, friendly_url):
     yaml_block = parts[1].strip()
     data = yaml.safe_load(yaml_block)
 
-    # Increment the 'total' value
     if 'total' in data:
         data['total'] += 1
     else:
