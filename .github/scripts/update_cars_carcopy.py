@@ -164,10 +164,10 @@ def update_yaml(car, filename, friendly_url):
     vin_hidden = process_vin_hidden(vin)
     if vin_hidden is not None:
         # Создаём или добавляем строку в список
-        data['vin_hidden'] += ", "+vin_hidden
+        data['vin_hidden'] += ", " + vin_hidden
 
     unique_id = car.find('id').text
-    data['id'] += ", " + unique_id
+    data['id'] += ", " + str(unique_id)
 
     images_container = car.find('photos')
     if images_container is not None:
