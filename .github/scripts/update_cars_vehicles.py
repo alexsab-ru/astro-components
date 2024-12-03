@@ -40,14 +40,14 @@ def create_file(car, filename, unique_id):
     # content += f"permalink: {unique_id}\n"
     content += f"vin_hidden: {vin_hidden}\n"
 
-    h1 = build_unique_id(car, 'mark_id', 'folder_id', 'modification_id')
+    h1 = join_car_data(car, 'mark_id', 'folder_id', 'modification_id')
     content += f"h1: {h1}\n"
 
-    content += f"breadcrumb: {build_unique_id(car, 'mark_id', 'folder_id', 'complectation_name')}\n"
+    content += f"breadcrumb: {join_car_data(car, 'mark_id', 'folder_id', 'complectation_name')}\n"
 
-    content += f"title: 'Купить {build_unique_id(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {dealer.get('where')}'\n"
+    content += f"title: 'Купить {join_car_data(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {dealer.get('where')}'\n"
 
-    content += f"""description: 'Купить автомобиль {build_unique_id(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {build_unique_id(car, 'mark_id', 'folder_id')} – {car.find('priceWithDiscount').text}'\n"""
+    content += f"""description: 'Купить автомобиль {join_car_data(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {join_car_data(car, 'mark_id', 'folder_id')} – {car.find('priceWithDiscount').text}'\n"""
 
     description = ""
 
@@ -253,7 +253,7 @@ for car in cars_element:
     price = int(car.find('price').text or 0)
     create_child_element(car, 'priceWithDiscount', price - max_discount)
     create_child_element(car, 'sale_price', price - max_discount)
-    unique_id = f"{build_unique_id(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
+    unique_id = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
     unique_id = f"{process_unique_id(unique_id)}"
     print(f"Уникальный идентификатор: {unique_id}")
     create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")

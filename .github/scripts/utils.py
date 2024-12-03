@@ -134,25 +134,25 @@ def localize_element_text(element, translations):
         element.text = translations[element.text]
 
 
-def build_unique_id(car, *elements):
+def join_car_data(car, *elements):
     """
-    Builds a unique ID string by extracting specified elements from the XML car data.
+    Builds a string by extracting specified elements from the XML car data.
 
     Args:
         car (Element): The XML element representing a car.
         *elements (str): Variable number of element names to extract.
 
     Returns:
-        str: The unique ID string containing extracted elements (joined by spaces).
+        str: The string containing extracted elements (joined by spaces).
     """
-    unique_id_parts = []
+    car_parts = []
 
     for element_name in elements:
         element = car.find(element_name)
         if element is not None and element.text is not None:
-            unique_id_parts.append(element.text.strip())
+            car_parts.append(element.text.strip())
 
-    return " ".join(unique_id_parts)
+    return " ".join(car_parts)
 
 def convert_to_string(element):
     if element.text is not None:
