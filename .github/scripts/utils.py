@@ -6,6 +6,7 @@ import requests
 import xml.etree.ElementTree as ET
 from PIL import Image, ImageOps
 from io import BytesIO
+import urllib.parse
 
 
 def process_friendly_url(friendly_url, replace = "-"):
@@ -55,7 +56,15 @@ def createThumbs(image_urls, friendly_url):
     # Обработка первых 5 изображений
     for index, img_url in enumerate(image_urls[:5]):
         try:
-            output_filename = f"thumb_{unique_id}_{index}.webp"
+            # Извлечение имени файла из URL и удаление расширения
+            original_filename = os.path.basename(urllib.parse.urlparse(img_url).path)
+            filename_without_extension, _ = os.path.splitext(original_filename)
+            
+            # Получение последних 5 символов имени файла (без расширения)
+            last_5_chars = filename_without_extension[-5:]
+            
+            # Формирование имени файла с учетом последних 5 символов
+            output_filename = f"thumb_{friendly_url}_{last_5_chars}_{index}.webp"
             output_path = os.path.join(output_dir, output_filename)
             relative_output_path = os.path.join(relative_output_dir, output_filename)
 
