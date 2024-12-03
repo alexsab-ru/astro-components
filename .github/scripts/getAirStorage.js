@@ -56,7 +56,11 @@ function convertCsvToJson(csvData, keyColumn) {
                         value = Number(value.replace(/\s+/g, ''));
                     }
 
-                    result[key] = value;
+                    if(result[key]) {
+                        result[key] += value;
+                    } else {
+                        result[key] = value;
+                    }
                 }
             });
 
