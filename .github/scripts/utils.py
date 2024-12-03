@@ -8,9 +8,9 @@ from PIL import Image, ImageOps
 from io import BytesIO
 
 
-def process_unique_id(unique_id, replace = "-"):
+def process_friendly_url(friendly_url, replace = "-"):
     # Удаление специальных символов
-    processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', unique_id)
+    processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', friendly_url)
 
     # Замена '+' на '-plus'
     processed_id = processed_id.replace("+", "-plus")
@@ -42,7 +42,7 @@ def process_description(desc_text):
     return '\n'.join(processed_lines)
 
 
-def createThumbs(image_urls, unique_id):
+def createThumbs(image_urls, friendly_url):
     global current_thumbs
     global output_dir
 

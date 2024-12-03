@@ -9,7 +9,7 @@ from utils import *
 import xml.etree.ElementTree as ET
 
 
-def create_file(car, filename, unique_id):
+def create_file(car, filename, friendly_url):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -37,7 +37,7 @@ def create_file(car, filename, unique_id):
     content = "---\n"
     # content += "layout: car-page\n"
     content += "total: 1\n"
-    # content += f"permalink: {unique_id}\n"
+    # content += f"permalink: {friendly_url}\n"
     content += f"vin_hidden: {vin_hidden}\n"
 
     h1 = join_car_data(car, 'mark_id', 'folder_id', 'modification_id')
@@ -66,7 +66,7 @@ def create_file(car, filename, unique_id):
             content += f"{child.tag}: '{child.text}'\n"
         elif child.tag == 'photos':
             images = [img.text for img in child.findall('photo')]
-            thumbs_files = createThumbs(images, unique_id)
+            thumbs_files = createThumbs(images, friendly_url)
             content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
         elif child.tag == 'color':
@@ -107,7 +107,7 @@ def create_file(car, filename, unique_id):
     existing_files.add(filename)
 
 
-def update_yaml(car, filename, unique_id):
+def update_yaml(car, filename, friendly_url):
     """Increment the 'total' value in the YAML block of an HTML file."""
 
     with open(filename, "r", encoding="utf-8") as f:
@@ -170,7 +170,7 @@ def update_yaml(car, filename, unique_id):
             data.setdefault('images', []).extend(images)
             # Проверяем, нужно ли добавлять эскизы
             if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, unique_id)  # Убедитесь, что эта функция реализована
+                thumbs_files = createThumbs(images, friendly_url)  # Убедитесь, что эта функция реализована
                 data.setdefault('thumbs', []).extend(thumbs_files)
 
     # Convert the data back to a YAML string
@@ -253,18 +253,18 @@ for car in cars_element:
     price = int(car.find('price').text or 0)
     create_child_element(car, 'priceWithDiscount', price - max_discount)
     create_child_element(car, 'sale_price', price - max_discount)
-    unique_id = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
-    unique_id = f"{process_unique_id(unique_id)}"
-    print(f"Уникальный идентификатор: {unique_id}")
-    create_child_element(car, 'url', f"https://{repo_name}/cars/{unique_id}/")
-    update_element_text(car, 'url_link', f"https://{repo_name}/cars/{unique_id}/")
-    file_name = f"{unique_id}.mdx"
+    friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
+    friendly_url = f"{process_friendly_url(friendly_url)}"
+    print(f"Уникальный идентификатор: {friendly_url}")
+    create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
+    update_element_text(car, 'url_link', f"https://{repo_name}/cars/{friendly_url}/")
+    file_name = f"{friendly_url}.mdx"
     file_path = os.path.join(directory, file_name)
 
     if os.path.exists(file_path):
-        update_yaml(car, file_path, unique_id)
+        update_yaml(car, file_path, friendly_url)
     else:
-        create_file(car, file_path, unique_id)
+        create_file(car, file_path, friendly_url)
 
 # Удаляем все не-BelGee машины
 for car in cars_to_remove:
