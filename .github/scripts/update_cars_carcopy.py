@@ -1,4 +1,3 @@
-# python3 .github/scripts/update_cars_carcopy.py
 import os
 import yaml
 import shutil

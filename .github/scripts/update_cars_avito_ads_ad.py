@@ -1,4 +1,3 @@
-# python3 .github/scripts/update_cars_avito.py
 import argparse
 import os
 import yaml
