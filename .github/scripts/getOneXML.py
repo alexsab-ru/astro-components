@@ -1,4 +1,3 @@
-# python3 .github/scripts/getOneXML.py --xpath "//data/cars/car" --output merged_cars.xml
 import os
 import requests
 import argparse

@@ -1,16 +1,15 @@
-# utils.py
-
 import os
 import re
 import requests
 import xml.etree.ElementTree as ET
 from PIL import Image, ImageOps
 from io import BytesIO
+import urllib.parse
 
 
-def process_unique_id(unique_id, replace = "-"):
+def process_friendly_url(friendly_url, replace = "-"):
     # Удаление специальных символов
-    processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', unique_id)
+    processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', friendly_url)
 
     # Замена '+' на '-plus'
     processed_id = processed_id.replace("+", "-plus")
@@ -42,7 +41,7 @@ def process_description(desc_text):
     return '\n'.join(processed_lines)
 
 
-def createThumbs(image_urls, unique_id):
+def createThumbs(image_urls, friendly_url):
     global current_thumbs
     global output_dir
 
@@ -55,7 +54,15 @@ def createThumbs(image_urls, unique_id):
     # Обработка первых 5 изображений
     for index, img_url in enumerate(image_urls[:5]):
         try:
-            output_filename = f"thumb_{unique_id}_{index}.webp"
+            # Извлечение имени файла из URL и удаление расширения
+            original_filename = os.path.basename(urllib.parse.urlparse(img_url).path)
+            filename_without_extension, _ = os.path.splitext(original_filename)
+            
+            # Получение последних 5 символов имени файла (без расширения)
+            last_5_chars = filename_without_extension[-5:]
+            
+            # Формирование имени файла с учетом последних 5 символов
+            output_filename = f"thumb_{friendly_url}_{last_5_chars}_{index}.webp"
             output_path = os.path.join(output_dir, output_filename)
             relative_output_path = os.path.join(relative_output_dir, output_filename)
 
@@ -134,25 +141,25 @@ def localize_element_text(element, translations):
         element.text = translations[element.text]
 
 
-def build_unique_id(car, *elements):
+def join_car_data(car, *elements):
     """
-    Builds a unique ID string by extracting specified elements from the XML car data.
+    Builds a string by extracting specified elements from the XML car data.
 
     Args:
         car (Element): The XML element representing a car.
         *elements (str): Variable number of element names to extract.
 
     Returns:
-        str: The unique ID string containing extracted elements (joined by spaces).
+        str: The string containing extracted elements (joined by spaces).
     """
-    unique_id_parts = []
+    car_parts = []
 
     for element_name in elements:
         element = car.find(element_name)
         if element is not None and element.text is not None:
-            unique_id_parts.append(element.text.strip())
+            car_parts.append(element.text.strip())
 
-    return " ".join(unique_id_parts)
+    return " ".join(car_parts)
 
 def convert_to_string(element):
     if element.text is not None:
