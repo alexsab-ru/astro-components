@@ -13,5 +13,5 @@ import FormattedDate from '@/components/FormattedDate.astro';
 		<img src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} loading="lazy">
 	</div>
 	<div class="text-black mt-2 sm:mt-4 leading-none">{post.data.caption || post.data.title}</div>
-	<FormattedDate date={post.data.pubDate} />
+	{post.data?.pubDate && (<FormattedDate date={post.data.pubDate} />)}
 </a>
