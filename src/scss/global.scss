@@ -26,6 +26,12 @@ section:not(.model-section) {
 	h1 {
 		@apply text-2xl sm:text-4xl font-medium mb-7;
 	}
+	h2{
+		@apply mb-10;
+	}
+	h3{
+		@apply text-xl mb-6;
+	}
 	p, b, ul, ol, a {
 		@apply text-sm sm:text-lg mb-4;
 	}
