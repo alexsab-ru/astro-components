@@ -31,8 +31,12 @@ let rawPosts = await getCollection(collectionName);
 let diffLimit: number;
 if (rawPosts && rawPosts.length) {
 	rawPosts = rawPosts
-		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-		.filter((post) => !post.data.draft);
+	.filter(post => !post.data.draft) // Сначала фильтруем черновики
+   .sort((a, b) => {
+		const dateA = a.data?.pubDate ? new Date(a.data.pubDate).valueOf() : 0;
+		const dateB = b.data?.pubDate ? new Date(b.data.pubDate).valueOf() : 0;
+		return dateB - dateA; // Сортируем по дате в обратном порядке
+   });
 	diffLimit = rawPosts.length < limit ? rawPosts.length : limit;
 	for (let i = offset; i < diffLimit; i++) {
 		posts[i] = rawPosts[i];
