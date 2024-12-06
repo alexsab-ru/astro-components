@@ -611,7 +611,7 @@ model_mapping = {
     "Jac": {
         "J7, I": {
             "folder": "j7",
-            "cyrillic": "Джей7",
+            "cyrillic": "Джей 7",
             "color": {
                 "Черный": "black.webp",
                 "Черный/черный": "black.webp",
@@ -624,7 +624,7 @@ model_mapping = {
             }},
         "JS3": {
             "folder": "js3",
-            "cyrillic": "ДжейС3",
+            "cyrillic": "Джей Эс 3",
             "color": {
                 "Черный": "black.webp",
                 "Черный/черный": "black.webp",
@@ -637,7 +637,7 @@ model_mapping = {
             }},
         "JS6": {
             "folder": "js6",
-            "cyrillic": "ДжейС6",
+            "cyrillic": "Джей Эс 6",
             "color": {
                 "Черный": "black.webp",
                 "Коричневый": "brown.webp",
