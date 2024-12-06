@@ -1,5 +1,5 @@
 .btn {
-	@apply cursor-pointer px-8 sm:px-14 rounded-btn border border-accent-500 py-3 bg-accent-500 text-white text-center font-medium transition-colors duration-300 hover:bg-accent-400 hover:border-accent-400;
+	@apply cursor-pointer px-8 sm:px-14 rounded-btn border border-accent-500 py-3 bg-accent-500 text-white text-center font-medium transition-colors duration-300 hover:bg-accent-400 hover:border-accent-400 inline-block;
 	&.btn-o {
 		@apply bg-transparent text-accent-500 hover:bg-accent-400 hover:text-white;
 	}
