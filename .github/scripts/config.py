@@ -1022,6 +1022,20 @@ model_mapping = {
                 "Черный": "cs95_black.webp",
             }
         },
+        "CS95, I Рестайлинг 2": {
+            "folder": "cs95",
+            "color": {
+                "White": "cs95_white.webp",
+                "Полярный белый": "cs95_white.webp",
+                "Белый": "cs95_white.webp",
+                "Grey": "cs95_grey.webp",
+                "Горный серый": "cs95_grey.webp",
+                "Серый": "cs95_grey.webp",
+                "Black": "cs95_black.webp",
+                "Благородный черный": "cs95_black.webp",
+                "Черный": "cs95_black.webp",
+            }
+        },
         "CS95PLUS": {
             "folder": "cs95new",
             "color": {
