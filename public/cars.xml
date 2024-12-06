@@ -1392,9 +1392,9 @@
   <previousPrice>3759900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3859000</priceWithDiscount>
+  <priceWithDiscount>3639000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
-  <creditDiscount />
+  <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
@@ -1570,7 +1570,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>100000</max_discount><sale_price>3859000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-voyage-brown-2024/</url></vehicle>
+<max_discount>320000</max_discount><sale_price>3639000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-voyage-brown-2024/</url></vehicle>
 <vehicle>
   <id>6231331</id>
   <vin>HJRPBGGB9PB363173</vin>
