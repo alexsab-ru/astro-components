@@ -151,3 +151,22 @@ section:not(.model-section) {
 		@apply bg-accent-500/60 rounded-lg;
 	}
 }
+
+.video-container {
+	max-width: 800px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.video-container iframe {
+	width: 100%;
+	aspect-ratio: 16/9;
+	border: 0;
+}
+
+/* На мобильных устройствах */
+@media (max-width: 768px) {
+	.video-container {
+		max-width: 100%;
+	}
+}
