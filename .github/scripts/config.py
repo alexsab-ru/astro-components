@@ -611,7 +611,7 @@ model_mapping = {
     "Jac": {
         "J7, I": {
             "folder": "j7",
-            "cyrillic": "Джей7",
+            "cyrillic": "Джей 7",
             "color": {
                 "Черный": "black.webp",
                 "Черный/черный": "black.webp",
@@ -624,19 +624,20 @@ model_mapping = {
             }},
         "JS3": {
             "folder": "js3",
-            "cyrillic": "ДжейС3",
+            "cyrillic": "Джей Эс 3",
             "color": {
                 "Черный": "black.webp",
                 "Черный/черный": "black.webp",
                 "Серебристо-темно-фиолето": "gray.webp",
                 "Серый": "gray.webp",
                 "Серый металлик": "gray.webp",
+                "Темно-серый": "gray.webp",
                 "Серебристый": "silver.webp",
                 "Белый": "white.webp",
             }},
         "JS6": {
             "folder": "js6",
-            "cyrillic": "ДжейС6",
+            "cyrillic": "Джей Эс 6",
             "color": {
                 "Черный": "black.webp",
                 "Коричневый": "brown.webp",
@@ -1009,6 +1010,20 @@ model_mapping = {
             }
         },
         "CS95": {
+            "folder": "cs95",
+            "color": {
+                "White": "cs95_white.webp",
+                "Полярный белый": "cs95_white.webp",
+                "Белый": "cs95_white.webp",
+                "Grey": "cs95_grey.webp",
+                "Горный серый": "cs95_grey.webp",
+                "Серый": "cs95_grey.webp",
+                "Black": "cs95_black.webp",
+                "Благородный черный": "cs95_black.webp",
+                "Черный": "cs95_black.webp",
+            }
+        },
+        "CS95, I Рестайлинг 2": {
             "folder": "cs95",
             "color": {
                 "White": "cs95_white.webp",
