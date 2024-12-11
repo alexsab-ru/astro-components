@@ -30,7 +30,7 @@ import { currencyFormat } from '@/js/utils/numbers.format'
 									{ model.mark_id }&nbsp;{ model.name }
 								</h2>
 							{
-								model?.benefit && (
+								(model?.benefit && !isNaN(model?.benefit)) && (
 									<span class="block text-xs sm:text-lg text-black/80">Выгода до {currencyFormat(model.benefit)}</span>
 								)
 							}
@@ -49,7 +49,7 @@ import { currencyFormat } from '@/js/utils/numbers.format'
 								/>
 							</div>
 							{
-								model?.price && (
+								(model?.price && !isNaN(model?.price)) && (
 									<div class="flex flex-col items-center xs:text-base text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5"><span><span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}</span></div>
 								)
 							}
