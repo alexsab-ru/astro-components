@@ -5010,8 +5010,8 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>1869900</priceWithDiscount>
-  <tradeinDiscount>350000</tradeinDiscount>
+  <priceWithDiscount>1919900</priceWithDiscount>
+  <tradeinDiscount>300000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount>50000</insuranceDiscount>
   <availability>available</availability>
@@ -5174,7 +5174,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>570000</max_discount><sale_price>1869900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-grey-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>1919900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-grey-2024/</url></vehicle>
 <vehicle>
   <id>6611047</id>
   <vin>HJRPBGFA2RB208265</vin>
@@ -5202,8 +5202,8 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>1869900</priceWithDiscount>
-  <tradeinDiscount>350000</tradeinDiscount>
+  <priceWithDiscount>1919900</priceWithDiscount>
+  <tradeinDiscount>300000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount>50000</insuranceDiscount>
   <availability>available</availability>
@@ -5366,5 +5366,5 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>570000</max_discount><sale_price>1869900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-green-2024/</url></vehicle>
+<max_discount>520000</max_discount><sale_price>1919900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-green-2024/</url></vehicle>
 </vehicles>
