@@ -76,7 +76,7 @@ jobs:
       if: ${{ vars.ENV_XML_URL }}
       run: |
         python3 .github/scripts/getOneXML.py --xpath "//vehicles/vehicle" --output cars.xml
-        pnpm run getDealerData
+        pnpm run getDealerPrice
       env:
         ENV_XML_URL: ${{ vars.ENV_XML_URL }}
 
