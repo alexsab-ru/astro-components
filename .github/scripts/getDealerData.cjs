@@ -5,7 +5,7 @@ const https = require('https');
 const csv = require('csv-parse');
 
 // Получение переменных среды
-let csvUrl = process.env.CSV_URL;
+let csvUrl = process.env.DEALER_PRICE_CSV_URL;
 const regex = /.*?\/d\/(.*?)\/edit.*gid=(\d+)/;
 const matches = csvUrl.match(regex);
 if (matches) {
