@@ -6,6 +6,7 @@
     "get_report": "git log --since='2024-04-01' --until='2024-10-31' --pretty=format:'%h\t%ad\t%an\t%s' --first-parent --date=format:'%Y-%m-%d %H:%M:%S' > commit_report.csv",
     "CarFeedProcessorCSV": "CSV_URL=$(grep '^CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && curl $CSV_URL -o data.csv && python3 .github/scripts/CarFeedProcessorCSV.py",
     "getAirStorage": "export AIR_STORAGE_CSV_URL=$(grep '^AIR_STORAGE_CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && export QUERY_STRING=\"SELECT A, B\" && export KEY_COLUMN=\"VIN\" && export OUTPUT_PATHS=\"air_storage.json\" && node .github/scripts/getAirStorage.js",
+    "getDealerPrice": "sh ./.github/scripts/sh/getDealerData.sh",
     "getOneXML_data_cars_car": "export ENV_XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && python3 .github/scripts/getOneXML.py --xpath \"//data/cars/car\" --output cars.xml",
     "getOneXML_Ads_Ad": "export ENV_XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && python3 .github/scripts/getOneXML.py --xpath \"//Ads/Ad\" --output cars.xml",
     "getOneXML_vehicles_vehicle": "export ENV_XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && python3 .github/scripts/getOneXML.py --xpath \"//vehicles/vehicle\" --output cars.xml",
