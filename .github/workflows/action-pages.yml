@@ -17,8 +17,10 @@ on:
   push:
     branches: ["main"]
     paths-ignore:
+      - '.github/scripts/sh/getDealerData.sh'
       - '.github/workflows/update_cars.yml'
       - '.github/scripts/getAirStorage.js'
+      - '.github/scripts/getDealerData.cjs'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/update_cars_avito_ads_ad.py'
       - '.github/scripts/update_cars_avito.py'

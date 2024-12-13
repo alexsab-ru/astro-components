@@ -5,8 +5,10 @@ on:
     # - cron: '0 */4 * * *'  # Запускается каждые 4 часа
   # push:
     # paths:
+      # - '.github/scripts/sh/getDealerData.sh'
       # - '.github/workflows/update_cars.yml'
       # - '.github/scripts/getAirStorage.js'
+      # - '.github/scripts/getDealerData.cjs'
       # - '.github/scripts/getOneXML.py'
       # - '.github/scripts/update_cars_avito_ads_ad.py'
       # - '.github/scripts/update_cars_avito.py'
