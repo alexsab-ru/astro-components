@@ -5,7 +5,7 @@ caption: Время выгоды
 breadcrumb: Время выгоды
 pubDate: 2024-12-01
 image: /img/specials/jetour-vigoda/37f94ea6f5c37acf5ddd82142a5ec173.webp
-description: "Время выгоды - это выгода на покупку, специальное предложение по trade-in, а также привлекательные условия кредитования на автомобили X90 Plus, X70 Plus, Dashing от 4 банков: Альфа-Банк, СОВКОМБАНК, РОСБАНК АВТО, ВТБ."
+description: "Время выгоды - это выгода на покупку, специальное предложение по trade-in, а также привлекательные условия кредитования на автомобили X90 Plus, X70 Plus, Dashing, T2 от 4 банков: Альфа-Банк, СОВКОМБАНК, РОСБАНК АВТО, ВТБ."
 ---
 
 import Button from '@/components/Button/Button.astro';
@@ -20,79 +20,306 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
     <img src="/img/banners/dashing-kv.webp" class="mb-10 lg:mb-20 w-full" alt="Время выгоды" />
 </picture>
 
-Время выгоды - это выгода на покупку, специальное предложение по trade-in, а также привлекательные условия кредитования на автомобили X90 Plus, X70 Plus, Dashing от 4 банков: Альфа-Банк, СОВКОМБАНК, РОСБАНК АВТО, ВТБ.
+<h3 class="font-bold !text-xl sm:!text-2xl md:!text-4xl mt-0 !mb-3 text-center">Специальные предложения на автомобили Jetour</h3>
+<div class="sm:!text-xl mt-0 mb-7 md:mb-14 text-center">Выберите модель, чтобы увидеть доступные выгоды</div>
 
-<div class="flex flex-col lg:flex-row lg:items-center my-10 lg:my-20">
-    <div class="mb-4 lg:mb-0 flex-shrink-0">
-        <img src="/img/specials/vesennee-obnovlenie-s-jetour/x90-plus.webp" class="w-full lg:w-[520px] h-auto object-cover !m-0" alt="Jetour X90 Plus" loading="lazy" />
+<div x-data="{
+    models: [
+        {id: 'dashing', name: 'Dashing'},
+        {id: 't2', name: 'T2'},
+        {id: 'x70plus', name: 'X70 Plus'},
+        {id: 'x90plus', name: 'X90 Plus'},
+    ], 
+    tabActive: 'dashing',
+    scroll(){
+        document.getElementById('scroll').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        })
+    }
+}">
+
+	<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <template x-for="model in models">
+            <div 
+                class="cursor-pointer opacity-50 transition-opacity duration-300 hover:opacity-80"
+                x-bind:class="{'!opacity-100': tabActive === model.id}"
+                x-on:click="tabActive = model.id; scroll()"
+            >
+                <img x-bind:src="`/img/specials/jetour-vigoda/tab-${model.id}.webp`" x-bind:alt="`Jetour ${model.name}`" />
+            </div>
+        </template>
+	</div>
+
+    <div class="pt-14" id="scroll">
+        <h3 class="font-bold !text-xl sm:!text-2xl md:!text-4xl mb-3 text-center" x-text="`Доступные ВЫГОДЫ
+при покупке JETOUR ${models.find(model => model.id === tabActive).name}`"></h3>
+        <div class="sm:!text-xl mt-0 mb-7 md:mb-14 text-center" x-text="`Выберите подходящее спецпредложения,
+    чтобы приобрести Jetour ${models.find(model => model.id === tabActive).name} с максимальной выгодой.`"></div>
     </div>
-    <div class="lg:pl-20">
-        <h3 class="text-xl sm:text-2xl lg:text-4xl font-bold uppercase mb-4 lg:mb-8">Выгода при покупке Jetour</h3>
-        <p class="!mb-5">Получите выгоду до 250 000 рублей при покупке автомобилей X70 Plus в комплектации Comfort и X90 Plus 2023 года выпуска.</p>
-        <p class="!mb-5">Получите выгоду до 150 000 рублей при покупке автомобилей Dashing, X70 Plus и X90 Plus 2024 года выпуска.</p>
-        <p class="!mb-5 font-bold">С 1.09.2024 г. по {DateTo} г.</p>
-        <Button
-            classes="popup-link inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline"
-            url="#common-modal"
-            title="Записаться на тест-драйв"
-            dataTitle="Записаться на тест-драйв"
-            dataFormName="Время выгоды. Записаться на тест-драйв"
-        />
+
+    <div class="flex justify-center mb-10">
+        <img x-bind:src="`/img/specials/jetour-vigoda/${tabActive}.webp`" class="w-full !max-w-[500px]" alt="" />
     </div>
+
+    <div class="relative mb-10 md:mb-14" x-show="tabActive === 'dashing'">
+        <img src="/img/specials/jetour-vigoda/icon-swipe.gif" class="absolute left-1/2 -translate-x-1/2 w-10 sm:w-20 md:!hidden" alt="Swipe" />
+        <div class="flex md:grid grid-cols-2 xl:grid-cols-4 gap-4 snap-x snap-mandatory scroll-smooth overflow-x-auto md:overflow-x-hidden">
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Прямая выгода</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-4">
+                        <b>Получите выгоду до 150 000 рублей</b>
+                        <div class="!text-sm">при покупке Jetour Dashing, в комплектациях Elite, Luxury 1.5T и Comfort Plus.</div>
+                    </div>
+                    <div class="mb-4">
+                        <b>Получите выгоду до 280 000 рублей</b>
+                        <div class="!text-sm">при покупке Jetour Dashing, в комплектации Luxury 1.6T</div>
+                    </div>
+                    <div class="mb-8">
+                        <b>Получите выгоду до 300 000 рублей</b>
+                        <div class="!text-sm">при покупке Jetour Dashing, в комплектации Comfort.</div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/cars/?model=dashing"
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Приобретайте Jetour Dashing в кредит</div>
+                        <b>от 0% или получите выгоду до 220 000 рублей!</b>
+                    </div>
+                </div>
+                <Button
+                    classes="popup-link !m-0 !text-white !no-underline !px-4"
+                    url="#common-modal"
+                    title="Рассчитать кредит"
+                    dataTitle="Рассчитать кредит на&nbsp;Jetour Dashing"
+                    dataFormName="Рассчитать кредит на Jetour Dashing"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
+                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour Dashing в любой комплектации <b>2024 года выпуска.</b></div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/cars/?model=dashing"
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <b>Получите выгоду до 200 000 рублей</b>
+                        <div class="!text-sm">при обмене старого авто на новый</div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/special-offers/treyd-in-s-vygodoy-do-250-000-rubley/"
+                    title="Подробнее о трейд-ин"
+                />
+            </div>
+        </div>
+    </div>
+    <div class="relative mb-10 md:mb-14" x-show="tabActive === 't2'">
+        <img src="/img/specials/jetour-vigoda/icon-swipe.gif" class="absolute left-1/2 -translate-x-1/2 w-10 sm:w-20 md:!hidden" alt="Swipe" />
+        <div class="flex md:grid grid-cols-2 xl:grid-cols-4 gap-4 snap-x snap-mandatory scroll-smooth overflow-x-auto md:overflow-x-hidden">
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Приобретайте Jetour T2, в любой комплектации, в кредит</div>
+                        <b>и получите выгоду до 220 000 рублей!</b>
+                    </div>
+                </div>
+                <Button
+                    classes="popup-link !m-0 !text-white !no-underline !px-4"
+                    url="#common-modal"
+                    title="Рассчитать кредит"
+                    dataTitle="Рассчитать кредит на&nbsp;Jetour T2"
+                    dataFormName="Рассчитать кредит на Jetour T2"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
+                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour T2 в любой комплектации <b>2024 года выпуска.</b></div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/cars/?model=t2"
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <b>Получите выгоду до 100 000 рублей</b>
+                        <div class="!text-sm">на покупку автомобилей T2 в любой комплектации при обмене старого авто на новый.</div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/special-offers/treyd-in-s-vygodoy-do-250-000-rubley/"
+                    title="Подробнее о трейд-ин"
+                />
+            </div>
+        </div>
+    </div>
+    <div class="relative mb-10 md:mb-14" x-show="tabActive === 'x70plus'">
+        <img src="/img/specials/jetour-vigoda/icon-swipe.gif" class="absolute left-1/2 -translate-x-1/2 w-10 sm:w-20 md:!hidden" alt="Swipe" />
+        <div class="flex md:grid grid-cols-2 xl:grid-cols-4 gap-4 snap-x snap-mandatory scroll-smooth overflow-x-auto md:overflow-x-hidden">
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Прямая выгода</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <b>Получите выгоду до 250 000 рублей</b>
+                        <div class="!text-sm">при покупке автомобилей X70 Plus в комплектации Comfort 2023 года выпуска, или <b>выгоду до 100 000 рублей</b> на модель X70 Plus 2024 года выпуска.</div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/cars/?model=x70+plus"
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Приобретайте Jetour X70 Plus в кредит</div>
+                        <b>от 0% или получите выгоду до 220 000 рублей!</b>
+                    </div>
+                </div>
+                <Button
+                    classes="popup-link !m-0 !text-white !no-underline !px-4"
+                    url="#common-modal"
+                    title="Рассчитать кредит"
+                    dataTitle="Рассчитать кредит на&nbsp;Jetour X70 Plus"
+                    dataFormName="Рассчитать кредит на Jetour X70 Plus"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
+                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour X70 Plus в любой комплектации <b>2023 и 2024 года выпуска.</b></div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/cars/?model=x70+plus"
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Оцените и обменяйте ваш автомобиль по выгодной стоимости и дополнительно получите <b>выгоду до 200 000 рублей,</b> а покупку X70 Plus 2023 года  комплектации Comfort, или X70 Plus 2024 года в любой комплектации</div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/special-offers/treyd-in-s-vygodoy-do-250-000-rubley/"
+                    title="Подробнее о трейд-ин"
+                />
+            </div>
+        </div>
+    </div>
+    <div class="relative mb-10 md:mb-14" x-show="tabActive === 'x90plus'">
+        <img src="/img/specials/jetour-vigoda/icon-swipe.gif" class="absolute left-1/2 -translate-x-1/2 w-10 sm:w-20 md:!hidden" alt="Swipe" />
+        <div class="flex md:grid grid-cols-2 xl:grid-cols-4 gap-4 snap-x snap-mandatory scroll-smooth overflow-x-auto md:overflow-x-hidden">
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Прямая выгода</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <b>Получите выгоду до 250 000 рублей</b>
+                        <div class="!text-sm">при покупке автомобилей X90 Plus 2023 года выпуска или <b>выгоду до 150 000 рублей</b> при покупке автомобилей X90 Plus 2024 года выпуска</div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/cars/?model=x90+plus"
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Приобретайте Jetour X90 Plus в кредит от <b>0% или получите выгоду до 220 000 рублей</b> на автомобили X90 Plus 2023 и 2024</div>
+                    </div>
+                </div>
+                <Button
+                    classes="popup-link !m-0 !text-white !no-underline !px-4"
+                    url="#common-modal"
+                    title="Рассчитать кредит"
+                    dataTitle="Рассчитать кредит на&nbsp;Jetour X90 Plus"
+                    dataFormName="Рассчитать кредит на Jetour X90 Plus"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
+                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour X90 Plus в любой комплектации <b>2023 и 2024 года выпуска.</b></div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/cars/?model=x90+plus"
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
+                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <div class="mb-8">
+                        <div class="!text-sm">Оцените и обменяйте ваш автомобиль по выгодной стоимости и дополнительно получите <b>выгоду до 250 000 рублей</b> на автомобили X90 Plus 2023 или
+2024 года выпуска.</div>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url="/special-offers/treyd-in-s-vygodoy-do-250-000-rubley/"
+                    title="Подробнее о трейд-ин"
+                />
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<div class="flex flex-col lg:flex-row lg:items-center my-10 lg:my-20">
-    <div class="mb-4 lg:mb-0 flex-shrink-0">
-        <img src="/img/specials/vesennee-obnovlenie-s-jetour/trade-in.webp" class="w-full lg:w-[520px] h-auto object-cover !m-0" alt="Выгода по программе трейд-ин" loading="lazy" />
-    </div>
-    <div class="lg:pl-20">
-        <h3 class="text-xl sm:text-2xl lg:text-4xl font-bold uppercase mb-4 lg:mb-8">Выгода по программе трейд-ин!</h3>
-        <p class="!mb-5">Оцените и обменяйте ваш автомобиль по выгодной стоимости и дополнительно получите выгоду до 250 000 рублей на автомобили X90 Plus 2023 года выпуска, а также до 200 000 рублей на покупку автомобилей X70 Plus 2023 года выпуска комплектации Comfort.</p>
-        <p class="!mb-5">Оцените и обменяйте ваш автомобиль по выгодной стоимости и дополнительно получите выгоду до 200 000 рублей на покупку автомобилей Dashing, X70 Plus, до 250 000 рублей на автомобили X90 Plus 2024 года выпуска, а также до 100 000 рублей на покупку автомобилей T2 комплектации Voyage.</p>
-        <p class="!mb-5 font-bold">С 1.09.2024 г. по {DateTo} г.</p>
-        <Button
-            classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline"
-            url="/special-offers/treyd-in-s-vygodoy-do-250-000-rubley/"
-            title="Подробнее о трейд-ин"
-        />
-    </div>
-</div>
-
-<div class="flex flex-col lg:flex-row lg:items-center my-10 lg:my-20 hidden">
-    <div class="mb-4 lg:mb-0 flex-shrink-0">
-        <img src="/img/specials/zharkoe-leto-s-jetour/dlya_akcii_kasko.webp" class="w-full lg:w-[520px] h-auto object-cover !m-0" alt="Выгода по программе трейд-ин" loading="lazy" />
-    </div>
-    <div class="lg:pl-20">
-        <h3 class="text-xl sm:text-2xl lg:text-4xl font-bold uppercase mb-4 lg:mb-8">КАСКО за покупку автомобиля</h3>
-        <p class="!mb-5">Только до {DateTo} г. при покупке автомобиля  X70 Plus 2023 года выпуска комплектации Comfort, а также автомобилей Dashing, X70 Plus, X90 Plus или Т2 2024 года выпуска в официальных дилерских центрах Jetour получите полис КАСКО одной из страховых компаний: Альфа Страхование, Ренессанс Страхование, ВСК или Ресо Гарантия за наш счёт. <sup>5</sup></p>
-        <p class="!mb-5 font-bold">С 1.09.2024 г. по {DateTo} г.</p>
-        <Button
-            classes="popup-link inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline"
-            url="#common-modal"
-            title="Получить предложение"
-            dataTitle="Получить предложение КАСКО"
-            dataFormName="Время выгоды. Получить предложение КАСКО"
-        />
-    </div>
-</div>
-
-<div class="flex flex-col lg:flex-row lg:items-center my-10 lg:my-20">
-    <div class="mb-4 lg:mb-0 flex-shrink-0">
-        <img src="/img/specials/vesennee-obnovlenie-s-jetour/x70-plus.webp" class="w-full lg:w-[520px] h-auto object-cover !m-0" alt="Jetour X70 Plus" loading="lazy" />
-    </div>
-    <div class="lg:pl-20">
-        <h3 class="text-xl sm:text-2xl lg:text-4xl font-bold uppercase mb-4 lg:mb-8">Кредитование</h3>
-        <p class="!mb-5">Приобретайте Jetour в кредит от 0% или получите выгоду до 220 000 рублей! <sup>6</sup></p>
-        <p class="!mb-5 font-bold">С 1.09.2024 г. по {DateTo} г.</p>
-        <Button
-            classes="popup-link inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline"
-            url="#common-modal"
-            title="Получить предложение"
-            dataTitle="Получить предложение на кредитование"
-            dataFormName="Время выгоды. Получить предложение на кредитование"
-        />
-    </div>
-</div>
 
 <h3 class="font-bold text-2xl md:text-4xl mt-0 mb-5 md:my-10 text-center">Программы кредитования</h3>
 
