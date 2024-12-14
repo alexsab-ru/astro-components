@@ -47,6 +47,7 @@ import { Icon } from 'astro-icon/components';
 					<a
 						href={socials[key]?.url || '#!'}
 						title={socials[key]?.title}
+						aria-label={socials[key]?.title}
 						class={
 							border
 								? `icon-link social-link ${key}`
