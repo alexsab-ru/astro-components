@@ -1,5 +1,5 @@
 ---
-const { data = {} } = Astro.props;
+const { data = {}, totalShow = true } = Astro.props;
 import { declOfNums } from '@/js/utils/numbers.format';
 ---
 
@@ -16,7 +16,7 @@ import { declOfNums } from '@/js/utils/numbers.format';
 		<p class="text-gray-400 text-lg font-light">
 			{data.complectation_name !== "" ? (
 				<Fragment
-					set:html={data.complectation_name + ",&nbsp;" + data.year}
+					set:html={`${data.complectation_name}${data?.year ? ",&nbsp;" + data.year : ""}`}
 				/>
 			) : (
 				data.year
@@ -24,4 +24,4 @@ import { declOfNums } from '@/js/utils/numbers.format';
 		</p>
 	)
 }
-<p class="my-2">{data.total}&nbsp;{declOfNums(data.total)} в наличии</p>
+{(data.total && totalShow) && (<p class="my-2">{data.total}&nbsp;{declOfNums(data.total)} в наличии</p>)}
