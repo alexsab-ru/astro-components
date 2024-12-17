@@ -21,7 +21,7 @@ import socials from '@/data/socials.json';
 ---
 <div
 	x-data="header"
-	class="bg-white sticky top-0 transition-all duration-300 z-30"
+	class="bg-white sticky top-0 transition-all duration-300 z-50"
 	:class="{'shadow-3xl': scrolling}"
 >
 	<header>
@@ -69,6 +69,8 @@ import socials from '@/data/socials.json';
 						<a
 							href="#common-modal"
 							class="lg:hidden popup-link shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow"
+							aria-label="Заказать звонок"
+							title="Заказать звонок"
 							data-title="Заказать звонок"
 							data-form_name="Заказ звонка. Шапка"
 						>
@@ -80,6 +82,9 @@ import socials from '@/data/socials.json';
 					</div>
 					<button
 						class="lg:hidden shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow"
+						id="mobile-menu" 
+						title="Mobile menu"
+						aria-label="Mobile menu"
 						@click.prevent="open = !open"
 					>
 						<Icon name="mdi:hamburger-menu" class="text-2xl" />
