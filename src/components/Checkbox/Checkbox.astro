@@ -20,6 +20,7 @@ const {
 	errorText = '',
 	errorClasses = '',
 	classes = '',
+	...rest
 } = Astro.props;
 import './checkbox.scss';
 ---
@@ -30,6 +31,7 @@ import './checkbox.scss';
 		name={name}
 		value={value}
 		class="absolute w-0 h-0 opacity-0 invisible"
+		{...rest}
 	/>
 	<div class={`flex items-center flex-wrap gap-x-2 text-${color}/80`}>
 		<span class={`fake-${type}-${color}`}></span>

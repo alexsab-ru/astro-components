@@ -13,3 +13,8 @@ input[type='checkbox']:checked ~ div > span[class^='fake-checkbox'],
 input[type='radio']:checked ~ div > span[class^='fake-radio'] {
 	@apply before:opacity-100;
 }
+
+input[type='checkbox']:disabled ~ div,
+input[type='radio']:disabled ~ div {
+	@apply opacity-40;
+}
