@@ -2,6 +2,7 @@ import './data.alpine';
 import './modules/scroll';
 import './modules/modals';
 import './modules/latest.posts';
+import './modules/stock-slider';
 
 import { connectForms, cookiecook } from '@alexsab-ru/scripts';
 cookiecook();
