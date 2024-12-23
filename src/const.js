@@ -31,7 +31,7 @@ export const LINKS_MENU = [
 	// {url: 'catalog/', name: 'Каталог'},
 	// {url: 'used_cars/', name: 'Авто с пробегом'},
 	{url: 'models/', name: 'Модели'},
-	// {url: 'trade-in/', name: 'Оценка автомобиля'}
+	// {url: 'trade-in/', name: 'Оценка автомобиля'},
 	{url: 'special-offers/', name: 'Спецпредложения'},
 	// {url: 'news/', name: 'Новости'},
 	{url: 'test-drive/', name: 'Запись на тест-драйв'},
