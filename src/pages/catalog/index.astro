@@ -24,7 +24,7 @@ export async function getReadyCars() {
             model.colors.forEach(color => {
                 cars.push({
                     id,
-                    slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}`,
+                    slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' / ', '-').replace(/ \//g, '-').replace(/ /g, '-')}`,
                     color: color.name,
                     data: {
                         mark_id: model.mark_id,
