@@ -14,42 +14,76 @@ import rawModels from '@/data/models.json';
 let image = '/img/banners/17014202243826.webp';
 
 export async function getReadyCars() {
-	const cars = [];
-	rawModels.filter(m => m.show).forEach(model => {
-		const id = model.id;
-		const benefit = Number(model?.benefit);
-		model.colors.forEach(color => {
-			model.complectations.forEach(compl => {
-				cars.push({
-					id,
-					slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}-${compl.engine.toLowerCase().replace(' ', '-')}-${compl.name.toLowerCase().replace(' ', '-')}`,
-					color: color.name,
-					data: {
-						mark_id: model.mark_id,
-						folder_id: model.name,
-						price: Number(compl.price),
-						priceWithDiscount: Number(compl.price),
-						max_discount: benefit,
-						color: color.name,
-						image: color.carImage,
-						engine: compl.engine,
-						enginePower: compl.engine_power,
-						drive: compl.drive,
-						fuel: compl.fuel,
-						modification_id: `${compl.engine} (${compl.engine_power} л.с.)`,
-						body_type: compl.bodytype,
-						complectation_name: compl.name,
-						breadcrumb: `${model.mark_id} ${model.name} ${compl.name}`,
-						h1: `${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.)`,
-						title: `Купить ${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}`,
-						description: `Купить автомобиль ${model.mark_id} ${model.name}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}. Стоимость данного автомобиля ${model.mark_id} ${model.name} – ${Number(compl.price)}`,
-						total: 1
-					}
-				});
-			});
-		});
-	});
-	return cars;
+    const cars = [];
+    rawModels.filter(m => m.show).forEach(model => {
+        const id = model.id;
+        const benefit = Number(model?.benefit);
+
+        // Если у модели нет комплектаций, создаём базовую карточку
+        if (!model.complectations || model.complectations.length === 0) {
+            model.colors.forEach(color => {
+                cars.push({
+                    id,
+                    slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}`,
+                    color: color.name,
+                    data: {
+                        mark_id: model.mark_id,
+                        folder_id: model.name,
+                        price: 0, // или другое значение по умолчанию
+                        priceWithDiscount: 0,
+                        max_discount: benefit,
+                        color: color.name,
+                        image: color.carImage,
+                        engine: 'Н/Д',
+                        enginePower: 'Н/Д',
+                        drive: 'Н/Д',
+                        fuel: 'Н/Д',
+                        modification_id: 'Н/Д',
+                        body_type: 'Н/Д',
+                        complectation_name: 'Н/Д',
+                        breadcrumb: `${model.mark_id} ${model.name}`,
+                        h1: `${model.mark_id} ${model.name}`,
+                        title: `Купить ${model.mark_id} ${model.name} у официального дилера в ${LEGAL_CITY_WHERE}`,
+                        description: `Купить автомобиль ${model.mark_id} ${model.name}, цвет - ${color.name} у официального дилера в ${LEGAL_CITY_WHERE}`,
+                        total: 1
+                    }
+                });
+            });
+        } else {
+            // Стандартная обработка при наличии комплектаций
+            model.colors.forEach(color => {
+                model.complectations.forEach(compl => {
+                    cars.push({
+                        id,
+                        slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}-${compl.engine.toLowerCase().replace(' ', '-')}-${compl.name.toLowerCase().replace(' ', '-')}`,
+                        color: color.name,
+                        data: {
+                            mark_id: model.mark_id,
+                            folder_id: model.name,
+                            price: Number(compl.price),
+                            priceWithDiscount: Number(compl.price),
+                            max_discount: benefit,
+                            color: color.name,
+                            image: color.carImage,
+                            engine: compl.engine,
+                            enginePower: compl.engine_power,
+                            drive: compl.drive,
+                            fuel: compl.fuel,
+                            modification_id: `${compl.engine} (${compl.engine_power} л.с.)`,
+                            body_type: compl.bodytype,
+                            complectation_name: compl.name,
+                            breadcrumb: `${model.mark_id} ${model.name} ${compl.name}`,
+                            h1: `${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.)`,
+                            title: `Купить ${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}`,
+                            description: `Купить автомобиль ${model.mark_id} ${model.name}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}. Стоимость данного автомобиля ${model.mark_id} ${model.name} – ${Number(compl.price)}`,
+                            total: 1
+                        }
+                    });
+                });
+            });
+        }
+    });
+    return cars;
 }
 let colors = [];
 let complectations = [];
@@ -69,7 +103,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 <PageLayout
 	h1={`Модельный ряд автомобилей ${BRAND} в ${LEGAL_CITY_WHERE}`}
 	title={`Каталог новых автомобилей ${BRAND} от официального дилера «${SITE_NAME}» в ${LEGAL_CITY_WHERE}`}
-	description="Каталог новых автомобилей Jetour в Самаре от официального дилера. Широкий модельный ряд, надёжные авто, проверенные временем, наличие запчастей, качественный сервис. Автомобили в наличии. Скидки, акции, подарки, льготные автокредиты."
+	description={`Каталог новых автомобилей ${BRAND} в ${LEGAL_CITY_WHERE} от официального дилера. Широкий модельный ряд, надёжные авто, проверенные временем, наличие запчастей, качественный сервис. Автомобили в наличии. Скидки, акции, подарки, льготные автокредиты.`}
 	keywords=""
 	breadcrumb={[breadcrumb]}
 	image={image ? image : ""}
