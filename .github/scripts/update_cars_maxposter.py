@@ -46,7 +46,15 @@ def create_file(car, filename, friendly_url):
 
     content += f"title: 'Купить {join_car_data(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {dealer.get('where')}'\n"
 
-    content += f"""description: 'Купить автомобиль {join_car_data(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {join_car_data(car, 'mark_id', 'folder_id')} – {car.find('priceWithDiscount').text}'\n"""
+    description = (
+        f'Купить автомобиль {join_car_data(car, "mark_id", "folder_id")}'
+        f'{" " + car.find("year").text + " года выпуска" if car.find("year").text else ""}'
+        f'{", комплектация " + car.find("complectation_name").text if car.find("complectation_name").text != None else ""}'
+        f'{", цвет - " + car.find("color").text if car.find("color").text != None else ""}'
+        f'{", двигатель - " + car.find("modification_id").text if car.find("modification_id").text != None else ""}'
+        f' у официального дилера в г. {dealer.get("city")}. Стоимость данного автомобиля {join_car_data(car, "mark_id", "folder_id")} – {car.find("priceWithDiscount").text}'
+    )
+    content += f"description: '{description}'\n"
 
     description = ""
 
@@ -144,6 +152,16 @@ def update_yaml(car, filename, friendly_url):
             car_priceWithDiscount_value = int(priceWithDiscount_element.text)
             data_priceWithDiscount_value = int(data['priceWithDiscount'])
             data['priceWithDiscount'] = min(data_priceWithDiscount_value, car_priceWithDiscount_value)
+            data['sale_price'] = min(data_priceWithDiscount_value, car_priceWithDiscount_value)
+            description = (
+                f'Купить автомобиль {join_car_data(car, "mark_id", "folder_id")}'
+                f'{" " + car.find("year").text + " года выпуска" if car.find("year").text else ""}'
+                f'{", комплектация " + car.find("complectation_name").text if car.find("complectation_name").text != None else ""}'
+                f'{", цвет - " + car.find("color").text if car.find("color").text != None else ""}'
+                f'{", двигатель - " + car.find("modification_id").text if car.find("modification_id").text != None else ""}'
+                f' у официального дилера в г. {dealer.get("city")}. Стоимость данного автомобиля {join_car_data(car, "mark_id", "folder_id")} – {car.find("priceWithDiscount").text}'
+            )
+            data["description"] = description
         except ValueError:
             # В случае, если не удается преобразовать значения в int,
             # можно оставить текущее значение data['priceWithDiscount'] или установить его в 0,
@@ -153,6 +171,19 @@ def update_yaml(car, filename, friendly_url):
         # Если элемент 'priceWithDiscount' отсутствует в одном из источников,
         # можно установить значение по умолчанию для 'priceWithDiscount' в data или обработать этот случай иначе
         # data.setdefault('priceWithDiscount', 0)
+
+    max_discount_element = car.find('max_discount')
+    if 'max_discount' in data and max_discount_element is not None:
+        try:
+            car_max_discount_value = int(max_discount_element.text)
+            data_max_discount_value = int(data['max_discount'])
+            data['max_discount'] = max(data_max_discount_value, car_max_discount_value)
+        except ValueError:
+            # В случае, если не удается преобразовать значения в int,
+            # можно оставить текущее значение data['max_discount'] или установить его в 0,
+            # либо выполнить другое действие по вашему выбору
+            pass
+
 
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
@@ -265,6 +296,8 @@ for car in cars_element:
     create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
     file_name = f"{friendly_url}.mdx"
     file_path = os.path.join(directory, file_name)
+
+    update_car_prices(car, prices_data)
 
     if os.path.exists(file_path):
         update_yaml(car, file_path, friendly_url)

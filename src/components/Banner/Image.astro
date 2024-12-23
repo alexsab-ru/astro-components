@@ -10,5 +10,5 @@ const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePositi
 <img
 	src={url}
 	class={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
-	{...title ? {alt: title} : {} }
+	{...title ? {alt: title} : {alt: "banner"} }
 />

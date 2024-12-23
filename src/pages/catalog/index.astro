@@ -1,0 +1,222 @@
+---
+import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+
+import PageLayout from "@/layouts/PageLayout.astro";
+import CarItem from "@/components/Cars/Item.astro";
+import SortSelect from "@/components/Cars/SortSelect.astro";
+import Checkbox from "@/components/Checkbox/Checkbox.astro";
+import SeoText from '@/components/Seo/Index.astro';
+import {Icon} from 'astro-icon/components';
+
+import rawModels from '@/data/models.json';
+let image = '';
+
+export async function getReadyCars() {
+    const cars = [];
+    rawModels.filter(m => m.show).forEach(model => {
+        const id = model.id;
+        const benefit = Number(model?.benefit);
+
+        // Если у модели нет комплектаций, создаём базовую карточку
+        if (!model.complectations || model.complectations.length === 0) {
+            model.colors.forEach(color => {
+                cars.push({
+                    id,
+                    slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}`,
+                    color: color.name,
+                    data: {
+                        mark_id: model.mark_id,
+                        folder_id: model.name,
+                        price: 0, // или другое значение по умолчанию
+                        priceWithDiscount: 0,
+                        max_discount: benefit,
+                        color: color.name,
+                        image: color.carImage,
+                        engine: 'Н/Д',
+                        enginePower: 'Н/Д',
+                        drive: 'Н/Д',
+                        fuel: 'Н/Д',
+                        modification_id: 'Н/Д',
+                        body_type: 'Н/Д',
+                        complectation_name: 'Н/Д',
+                        breadcrumb: `${model.mark_id} ${model.name}`,
+                        h1: `${model.mark_id} ${model.name}`,
+                        title: `Купить ${model.mark_id} ${model.name} у официального дилера в ${LEGAL_CITY_WHERE}`,
+                        description: `Купить автомобиль ${model.mark_id} ${model.name}, цвет - ${color.name} у официального дилера в ${LEGAL_CITY_WHERE}`,
+                        total: 1
+                    }
+                });
+            });
+        } else {
+            // Стандартная обработка при наличии комплектаций
+            model.colors.forEach(color => {
+                model.complectations.forEach(compl => {
+                    cars.push({
+                        id,
+                        slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}-${compl.engine.toLowerCase().replace(' ', '-')}-${compl.name.toLowerCase().replace(' ', '-')}`,
+                        color: color.name,
+                        data: {
+                            mark_id: model.mark_id,
+                            folder_id: model.name,
+                            price: Number(compl.price),
+                            priceWithDiscount: Number(compl.price),
+                            max_discount: benefit,
+                            color: color.name,
+                            image: color.carImage,
+                            engine: compl.engine,
+                            enginePower: compl.engine_power,
+                            drive: compl.drive,
+                            fuel: compl.fuel,
+                            modification_id: `${compl.engine} (${compl.engine_power} л.с.)`,
+                            body_type: compl.bodytype,
+                            complectation_name: compl.name,
+                            breadcrumb: `${model.mark_id} ${model.name} ${compl.name}`,
+                            h1: `${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.)`,
+                            title: `Купить ${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}`,
+                            description: `Купить автомобиль ${model.mark_id} ${model.name}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}. Стоимость данного автомобиля ${model.mark_id} ${model.name} – ${Number(compl.price)}`,
+                            total: 1
+                        }
+                    });
+                });
+            });
+        }
+    });
+    return cars;
+}
+let colors = [];
+let complectations = [];
+let engines = [];
+let drives = [];
+let cars = await getReadyCars();
+cars.map(car => {
+	if(!colors.includes(car.color)) colors.push(car.color);
+	if(!complectations.includes(car.data.complectation_name)) complectations.push(car.data.complectation_name);
+	const engine = `${car.data.engine} (${car.data.enginePower} л.с.)`;
+	if(!engines.includes(engine)) engines.push(engine);
+	if(!drives.includes(car.data.drive)) drives.push(car.data.drive);
+});
+export const breadcrumb = { name: "Каталог", href: "/catalog/" };
+---
+
+<PageLayout
+	h1={`Модельный ряд автомобилей ${BRAND} в ${LEGAL_CITY_WHERE}`}
+	title={`Каталог новых автомобилей ${BRAND} от официального дилера «${SITE_NAME}» в ${LEGAL_CITY_WHERE}`}
+	description={`Каталог новых автомобилей ${BRAND} в ${LEGAL_CITY_WHERE} от официального дилера. Широкий модельный ряд, надёжные авто, проверенные временем, наличие запчастей, качественный сервис. Автомобили в наличии. Скидки, акции, подарки, льготные автокредиты.`}
+	keywords=""
+	breadcrumb={[breadcrumb]}
+	image={image ? image : ""}
+	backLink={true}
+>
+	{
+		cars.length > 0 ? (
+			<div x-data="sorting" class="lg:grid grid-cols-12 gap-5 mb-10 md:mb-14" x-cloak>
+				<div 
+					class="fixed top-0 left-0 h-screen w-full bg-black/50 z-50 invisible opacity-0 transition-opacity lg:!hidden"
+					x-bind:class="{'!visible': open, '!opacity-100': open}"
+					x-on:click="open = false"
+				></div>
+				<div 
+					class="col-span-3 fixed lg:relative max-w-[400px] lg:max-w-full w-full bg-white lg:!translate-x-0 z-[60] lg:z-[1] top-0 left-0 transition-transform -translate-x-full"
+					x-bind:class="{'!translate-x-0': open}"
+				>
+					<div class="absolute w-10 h-10 flex items-center justify-center top-0 right-0 text-2xl opacity-60" x-on:click="open = false"><Icon name="mdi:close-circle-outline" /></div>
+					<div class="lg:sticky top-4 lg:top-[70px] lg:bg-gray-100 p-4 space-y-4 divide-y overflow-y-auto h-screen lg:h-[90vh] custom-scrollbar">
+						<div class="space-y-2">
+							<h3 class="!mb-2">Модель</h3>
+							{rawModels.map((model) => (
+								<Checkbox value={model.name.toLocaleLowerCase()} id={model.id} color="black" label={model.name} @change={`toggleFilter('Models', '${model.name.toLocaleLowerCase()}')`} />
+							))}
+						</div>
+						<div class="pt-4 space-y-2">
+							<h3 class="!mb-2">Цвет</h3>
+							{colors.map((color) =>(
+								<Checkbox value={color.toLocaleLowerCase()} id={color} color="black" label={color} @change={`toggleFilter('Colors', '${color.toLocaleLowerCase()}')`} />
+							))}
+						</div>
+						<div class="pt-4 space-y-2">
+							<h3 class="!mb-2">Комплектация</h3>
+							{complectations.map((complectation) =>(
+								<Checkbox value={complectation.toLocaleLowerCase()} id={complectation} color="black" label={complectation} @change={`toggleFilter('Complectations', '${complectation.toLocaleLowerCase()}')`} />
+							))}
+						</div>
+						<div class="pt-4 space-y-2">
+							<h3 class="!mb-2">Двигатель</h3>
+							{engines.map((engine) =>(
+								<Checkbox value={engine.toLocaleLowerCase()} id={engine} color="black" label={engine} @change={`toggleFilter('Engines', '${engine.toLocaleLowerCase()}')`} />
+							))}
+						</div>
+						<div class="pt-4 space-y-2">
+							<h3 class="!mb-2">Привод</h3>
+							{drives.map((drive) =>(
+								<Checkbox value={drive.toLocaleLowerCase()} id={drive} color="black" label={drive} @change={`toggleFilter('Drives', '${drive.toLocaleLowerCase()}')`} />
+							))}
+						</div>
+						<div class="pt-4 space-y-2">
+							<h3 class="!mb-2">Тип топлива</h3>
+							<Checkbox value="Бензин" id="benzin" color="black" label="Бензин" checked disabled @change={`toggleFilter('', 'бензин')`} />
+						</div>
+					</div>
+				</div>
+				<div class="col-span-9">
+					<p x-text="`${total} ${declOfNums(total)}`"></p>
+					<hr class="my-5" />
+					<div class="flex items-center flex-wrap justify-end sm:justify-start gap-4">
+						<SortSelect />
+						<div class="flex items-center flex-nowrap gap-2 justify-between xs:px-2 px-3 h-[34px] sm:h-[42px] lg:hidden border" x-on:click="open = true">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"></path></svg>
+							<span class="xs:text-[10px] text-xs sm:text-base !leading-none">Параметры</span>
+						</div>
+					</div>
+					<hr class="my-5" />
+					<div class="sticky top-4 lg:top-[70px] z-30 shadow-xl">
+						<div class="stock-slider swiper w-full bg-accent-400">
+							<div class="swiper-wrapper">
+								<a href="/special-offers/snegopad-vygod-jetour-t2-so-skidkoy/" class="swiper-slide !text-white !no-underline !m-0 py-4 px-8" data-swiper-autoplay="5000">
+									<div class="flex flex-col justify-center gap-4 h-full">
+										<div class="md:text-2xl leading-none font-bold">Снегопад выгод — обновленный прайс-лист!</div>
+										<div class="text-xs sm:text-sm md:text-base">Выгода до&nbsp;320 000 ₽ только до&nbsp;{dateTo}&nbsp;г.<br/>Каско в подарок</div>
+									</div>
+								</a>
+							</div>
+							<button class="stock-slider-nav stock-slider-prev"><Icon name="mdi:chevron-left" /></button>
+							<button class="stock-slider-nav stock-slider-next"><Icon name="mdi:chevron-right" /></button>
+						</div>
+					</div>
+					<hr class="my-5" />
+					<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+						{cars.map((car) => (
+							<CarItem car={car} slug={`/catalog/${car.slug}`} totalShow={false} />
+						))}
+					</div>
+					<p x-show="!total" class="px-4">Ничего не найдено</p>
+				</div>
+			</div>
+		) : (
+			<p>Скоро здесь появится список автомобилей.</p>
+		)
+	}
+	<SeoText mdx="catalog" noPadding={true} />
+</PageLayout>
+
+<style lang="scss">
+	.filter-model-link{
+		@apply text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0;
+	}
+	.stock-slider-nav{
+		@apply w-8 h-8 flex items-center justify-center absolute top-1/2 -translate-y-1/2 z-40 text-white text-3xl font-light opacity-50 transition-opacity hover:opacity-100;
+		&.swiper-button-lock{
+			@apply hidden;
+		} 
+		&.swiper-button-disabled{
+			@apply cursor-not-allowed;
+		}
+	}
+	.stock-slider-prev{
+		@apply left-0;
+	}
+	.stock-slider-next{
+		@apply right-0;
+	}
+</style>

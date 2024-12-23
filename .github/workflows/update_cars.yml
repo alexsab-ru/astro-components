@@ -5,8 +5,10 @@ on:
     - cron: '0 */4 * * *'  # Запускается каждые 4 часа
   push:
     paths:
+      - '.github/scripts/sh/getDealerData.sh'
       - '.github/workflows/update_cars.yml'
       - '.github/scripts/getAirStorage.js'
+      - '.github/scripts/getDealerData.cjs'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/update_cars_avito_ads_ad.py'
       - '.github/scripts/update_cars_avito.py'
@@ -75,9 +77,17 @@ jobs:
     - name: Get one XML
       if: ${{ vars.ENV_XML_URL }}
       run: |
-        python3 .github/scripts/getOneXML.py --xpath "//data/cars/car" --output cars.xml
+        python3 .github/scripts/getOneXML.py --xpath "//vehicles/vehicle" --output cars.xml
       env:
         ENV_XML_URL: ${{ vars.ENV_XML_URL }}
+
+    - name: Get Dealer JSON cars price
+      if: ${{ vars.DEALER_PRICE_CSV_URL }}
+      run: |
+        pnpm run getDealerPrice
+      continue-on-error: true
+      env:
+        DEALER_PRICE_CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
 
     - name: Generate files
       if: ${{ vars.ENV_XML_URL }}

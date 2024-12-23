@@ -5,8 +5,9 @@ interface Props {
 	breadcrumb?: TBreadcrumb[];
 	backLink? : boolean;
 	keywords?: string;
+	totalShow?: boolean
 }
-const {car = {}, breadcrumb, backLink = false, keywords} = Astro.props;
+const {car = {}, breadcrumb, backLink = false, keywords, totalShow = true} = Astro.props;
 const data = car?.data || {};
 const thumb = data.thumbs && data.thumbs.length ? data.thumbs[0] : data.image;
 const price = data.priceWithDiscount ? data.priceWithDiscount : (data.max_discount ? data.price - data.max_discount : data.price);
@@ -26,7 +27,7 @@ import BackLink from '@/components/BackLink.astro';
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
 
 			<div class="mb-5">
-				<CarPageHeading data={data} />
+				<CarPageHeading data={data} totalShow={totalShow} />
 			</div>
 
 			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14">

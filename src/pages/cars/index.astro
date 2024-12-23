@@ -37,17 +37,13 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 				<hr class="my-5">
 				{models.length && (
 					<div class="flex flex-wrap gap-2 sm:gap-4">
-						<button 
-							class="filter-model-link"
-							:class="currentModel === 'all' ? 'bg-accent-500 text-white' : 'bg-gray-200'"
-							@click.prevent="filteredCars('all')"
-						>Все</button>
 						{models.map(model => (
-							<button
-								class="filter-model-link"
-								:class={`currentModel === '${model.toLowerCase()}' ? 'bg-accent-500 text-white' : 'bg-gray-200'`}
-								@click.prevent={`filteredCars('${model.toLowerCase()}')`}
-							>{model}</button>
+							<div class="relative">
+								<label class="peer w-full h-full absolute bottom-3 cursor-pointer z-50">
+									<input type="checkbox" value={model.toLocaleLowerCase()} id={model.id} class="asbsolute opacity-0" @change={`toggleFilter('Models', '${model.toLocaleLowerCase()}')`} />
+								</label>
+								<div class="filter-model-link bg-gray-200 peer-has-[:checked]:bg-accent-500 peer-has-[:checked]:text-white">{model}</div>
+							</div>
 						))}
 					</div>
 				)}

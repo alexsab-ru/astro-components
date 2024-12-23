@@ -1,29 +1,42 @@
 ---
 interface Props {
-	car: any
+	car: any;
+	slug?: string;
+	totalShow?: boolean;
 }
-const {car = {}} = Astro.props;
+const {car = {}, slug, totalShow = true} = Astro.props;
+const url = slug ? slug : `/cars/${car.slug}`;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';
 const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.data.max_discount ? car.data.price - car.data.max_discount : car.data.price);
 ---
 
-<div class="car-item flex flex-col justify-between shadow-2xl pb-3 xl:pb-4 relative" data-price={ price } data-model={ car.data.folder_id } data-total={ car.data.total }>
-	<PreviewSlider car={car} />
+<div 
+	class="car-item flex flex-col justify-between shadow-2xl pb-3 xl:pb-4 relative" 
+	data-price={ price } 
+	data-model={ car.data.folder_id } 
+	data-color={ car.data?.color } 
+	data-complectation={ car.data?.complectation_name } 
+	data-engine={ `${car.data?.engine} (${car.data?.enginePower} л.с.)` } 
+	data-drive={ car.data?.drive } 
+	data-total={ car.data.total }
+>
+	<PreviewSlider car={car} slug={slug} />
 	<div class="flex-grow mb-3 md:mb-5 px-3 xl:px-4 flex flex-col justify-end">
 		{ car.data.max_discount ? (
 			<noindex><div class="discount">с&nbsp;учетом выгоды до&nbsp;<span class="font-medium">{ currencyFormat(car.data.max_discount) }</span></div></noindex>
 		): ('')}
 		<div class="sm:text-lg md:text-xl xl:text-3xl font-medium mt-3"><span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(price)}</div>
-		<h2 class="xs:!text-xs sm:!text-base md:!text-lg xl:!text-xl font-normal mt-1 transition-colors hover:text-accent flex-grow !ml-0 !mr-0 !p-0 before:!hidden">
-			<a href={ `/cars/${car.slug}` } class="!no-underline !text-black !mb-0"><b class="font-bold">{ car.data.mark_id } { car.data.folder_id }</b> { car.data.complectation_name }</a>
+		<h2 class="xs:!text-xs sm:!text-base md:!text-lg xl:!text-xl font-normal mt-1 !mb-0 transition-colors hover:text-accent flex-grow !ml-0 !mr-0 !p-0 before:!hidden">
+			<a href={ url } class="!no-underline !text-black !mb-0"><b class="font-bold">{ car.data.mark_id } { car.data.folder_id }</b> { car.data.complectation_name }</a>
 		</h2>
+		{car?.color && (<small class="text-gray-700">{car.data.color}</small>)}
 		<noindex><div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">
-			{ car.data.modification_id } · { car.data.year }
+			{ car.data.modification_id }{ car.data?.year && ` · ${car.data.year}` }
 			{car.data.run ? <Fragment set:html={`&nbsp;/&nbsp;${car.data.run}&nbsp;км`} /> : ''}
 		</div></noindex>
-		<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>
+		{(car.data.total && totalShow) && (<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>)}
 	</div>
 	<div class="px-3 xl:px-4 flex flex-wrap justify-between gap-y-2 sm:gap-y-3">
 		<Button 
@@ -49,7 +62,7 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 		/>
 		<Button 
 			classes="block !px-2 !py-2 md:!text-base sm:!text-sm !text-xs !no-underline !mb-0 !text-white w-full md:w-[48%]" 
-			url={ `/cars/${car.slug}` }
+			url={ url }
 			view="link"
 			title="Подробнее"
 		/>

@@ -3,9 +3,10 @@ import { getEntryBySlug } from 'astro:content';
 
 interface Props {
   mdx: string;
+  noPadding?: boolean;
 }
 
-const { mdx } = Astro.props;
+const { mdx, noPadding = false } = Astro.props;
 
 // Попробуем получить запись из коллекции 'seo' по слагу
 const content = await getEntryBySlug('seo', mdx);
@@ -21,12 +22,12 @@ if (content) {
 
 { showseo ? ( 
 <section class="!pt-0">
-	<div class="container">
+	<div class={`container ${noPadding ? '!px-0' : ''}`}>
 		<div class="seo-content">
 			<Content />
 		</div>
 		<div class="flex justify-center mt-6">
-			<a href="javascript:void(0)" class="seo-show-more text-sm opacity-50 transition-opacity hover:opacity-90 leading-none py-3 relative">
+			<a href="javascript:void(0)" class="seo-show-more text-sm opacity-50 transition-opacity hover:opacity-90 leading-none py-3 relative !no-underline">
 				<span class="seo-show-more-text">читать полностью</span>
 				<span class="seo-show-more-arrow inline-block rotate-90 transition-transform absolute bottom-0 left-1/2 transform -translate-x-1/2 origin-center">&#187;</span>
 			</a>

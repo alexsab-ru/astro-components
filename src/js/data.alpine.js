@@ -117,20 +117,23 @@ document.addEventListener('alpine:init', () => {
 	Alpine.data("sorting", () => ({
 		open: false,
 		carItems: document.querySelectorAll(".car-item"),
-		carListWrapper: document.querySelector(".car-list"), //wrapper
+		carListWrapper: document.querySelector(".car-list"), // wrapper
 		cars: [],
 		options: [
-			// { id: "default", title: "По умолчанию" },
 			{ id: "price_up", title: "По возрастанию цены" },
 			{ id: "price_down", title: "По убыванию цены" },
-			// { id: "asc", title: "По моделям" },
 		],
 		current: "price_up",
-		currentModel: "all",
+		selectedModels: [], // массив выбранных моделей
+		selectedColors: [],
+		selectedComplectations: [],
+		selectedEngines: [],
+		selectedDrives: [],
 		value: "",
 		total: 0,
 		declOfNums,
 		firstLoadPage: true,
+  
 		setTitle() {
 			this.options.find((c) => {
 				if (c.id === this.current) {
@@ -138,84 +141,161 @@ document.addEventListener('alpine:init', () => {
 				}
 			});
 		},
+  
 		sortBy(id) {
 			this.current = id;
 			this.setTitle();
 			this.open = false;
-			if(id != 'default'){
-				this.cars.sort(function (a, b) {
-					var priceA = parseFloat(a.getAttribute("data-price"));
-					var priceB = parseFloat(b.getAttribute("data-price"));
-					var modelA = a.getAttribute('data-model').toLowerCase();
-					var modelB = b.getAttribute('data-model').toLowerCase();
-					if(id === "price_up"){
-						return priceA - priceB; //увелечение
-					}else if(id == "price_down"){
-						return priceB - priceA; //уменьшение
-					}else if(id === 'asc'){
-						if (modelA < modelB) {
-							return -1;
-						}
+
+			if (id !== "default") {
+				this.cars.sort((a, b) => {
+					const priceA = parseFloat(a.getAttribute("data-price"));
+					const priceB = parseFloat(b.getAttribute("data-price"));
+
+					if (id === "price_up") {
+							return priceA - priceB; // увеличение
+					} else if (id === "price_down") {
+							return priceB - priceA; // уменьшение
 					}
-				})
-			}else{
+				});
+			} else {
 				this.cars = Array.from(this.carItems);
 			}
+
 			while (this.carListWrapper.firstChild) {
 				this.carListWrapper.removeChild(this.carListWrapper.firstChild);
 			}
-			this.cars.forEach(function (element) {
-				document.querySelector(".car-list").appendChild(element);
+
+			this.cars.forEach((element) => {
+				this.carListWrapper.appendChild(element);
 			});
-			if(!this.firstLoadPage){
-				this.addQueryParam('sort_by', id);
+
+			if (!this.firstLoadPage) {
+				this.addQueryParam("sort_by", id);
 			}
 		},
+  
 		addQueryParam(key, value) {
 			const url = new URL(window.location.href);
 			url.searchParams.set(key, value);
-			window.history.pushState({path:url.href}, '', url.href);
+			window.history.pushState({ path: url.href }, "", url.href);
 		},
-		filteredCars(model){
+		deleteQueryParam(key) {
+			const url = new URL(window.location.href);
+			url.searchParams.delete(key);
+			window.history.pushState({ path: url.href }, "", url.href);
+		},  
+		filteredCars() {
 			this.total = 0;
 			const vm = this;
-			this.currentModel = model;
-			this.cars.forEach(function (element) {
-				element.style.display = 'none';
-				if(model){
-					if(element.dataset.model.toLowerCase() == model){
-						element.style.display = 'flex';
-						vm.total = vm.total+Number(element.dataset.total)
-					}else if(!model || model == 'all'){
-						element.style.display = 'flex';
-						vm.total = vm.total+Number(element.dataset.total)
-					}
+
+			this.cars.forEach((element) => {
+				const carModel = element.dataset.model.toLowerCase();
+				const carColor = element.dataset.color?.toLowerCase();
+				const carComplectation = element.dataset.complectation?.toLowerCase();
+				const carEngine = element.dataset.engine?.toLowerCase();
+				const carDrive = element.dataset.drive?.toLowerCase();
+
+				const isVisible = (
+					(this.selectedModels.length === 0 || this.selectedModels.includes(carModel)) &&
+					(this.selectedColors.length === 0 || this.selectedColors.includes(carColor)) &&
+					(this.selectedComplectations.length === 0 || this.selectedComplectations.includes(carComplectation)) &&
+					(this.selectedEngines.length === 0 || this.selectedEngines.includes(carEngine)) &&
+					(this.selectedDrives.length === 0 || this.selectedDrives.includes(carDrive))
+				);
+
+				element.style.display = isVisible ? "flex" : "none";
+
+				if (isVisible) {
+					vm.total += Number(element.dataset.total);
 				}
 			});
-			this.addQueryParam('model', model);
+			
+			this.selectedModels.length ? this.addQueryParam("model", this.selectedModels.join(",")) : this.deleteQueryParam('model');
+			this.selectedColors.length ? this.addQueryParam("color", this.selectedColors.join(",")) : this.deleteQueryParam('color');
+			this.selectedComplectations.length ? this.addQueryParam("complectation", this.selectedComplectations.join(",")) : this.deleteQueryParam('complectation');
+			this.selectedEngines.length ? this.addQueryParam("engine", this.selectedEngines.join(",")) : this.deleteQueryParam('engine');
+			this.selectedDrives.length ? this.addQueryParam("drive", this.selectedDrives.join(",")) : this.deleteQueryParam('drive');
 		},
+  
+		toggleFilter(type, value) {
+			const targetArray = this[`selected${type}`];
+			const index = targetArray.indexOf(value);
+
+			if (index > -1) {
+				targetArray.splice(index, 1);
+			} else {
+				targetArray.push(value);
+			}
+
+			this.filteredCars();
+		},
+  
 		init() {
 			const vm = this;
 			this.cars = Array.from(this.carItems);
 			this.setTitle();
+
 			const params = new URLSearchParams(document.location.search);
-			const modelParams = params.get('model');
-			const sort_by = params.get('sort_by');
-			if(sort_by){
-				this.sortBy(sort_by)
-			}else{
-				this.sortBy(this.current)
+			const modelParams = params.get("model");
+			const colorParams = params.get("color");
+			const complectationParams = params.get("complectation");
+			const engineParams = params.get("engine");
+			const driveParams = params.get("drive");
+			const sort_by = params.get("sort_by");
+
+			if (sort_by) {
+				this.sortBy(sort_by);
+			} else {
+				this.sortBy(this.current);
 			}
-			if(modelParams){
-				this.filteredCars(modelParams);
-			}else{
-				this.cars.reduce((acc, val) => {
-					return vm.total = acc+Number(val.dataset.total);
-				}, 0)
+
+			if (modelParams) {
+				this.selectedModels = modelParams.split(",").map((m) => m.toLowerCase());
+				this.selectedModels.forEach((model) => {
+					const checkbox = document.querySelector(`input[type='checkbox'][value='${model}']`);
+					if (checkbox) checkbox.checked = true;
+				});
 			}
-			this.firstLoadPage = false
+
+			if (colorParams) {
+				this.selectedColors = colorParams.split(",").map((c) => c.toLowerCase());
+				this.selectedColors.forEach((color) => {
+					const checkbox = document.querySelector(`input[type='checkbox'][value='${color}']`);
+					if (checkbox) checkbox.checked = true;
+				});
+			}
+
+			if (complectationParams) {
+				this.selectedComplectations = complectationParams.split(",").map((c) => c.toLowerCase());
+				this.selectedComplectations.forEach((complectation) => {
+					const checkbox = document.querySelector(`input[type='checkbox'][value='${complectation}']`);
+					if (checkbox) checkbox.checked = true;
+				});
+			}
+
+			if (engineParams) {
+				this.selectedEngines = engineParams.split(",").map((e) => e.toLowerCase());
+				this.selectedEngines.forEach((engine) => {
+					const checkbox = document.querySelector(`input[type='checkbox'][value='${engine}']`);
+					if (checkbox) checkbox.checked = true;
+				});
+			}
+
+			if (driveParams) {
+				this.selectedDrives = driveParams.split(",").map((d) => d.toLowerCase());
+				this.selectedDrives.forEach((drive) => {
+					const checkbox = document.querySelector(`input[type='checkbox'][value='${drive}']`);
+					if (checkbox) checkbox.checked = true;
+				});
+			}
+
+			this.filteredCars();
+
+			this.firstLoadPage = false;
 		},
-	}));
+  }));
+	
 	Alpine.data('complectation', (t) => ({
 		currentModel: {},
 		currentModelComplectation: {},

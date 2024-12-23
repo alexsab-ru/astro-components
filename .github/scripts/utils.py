@@ -1,10 +1,14 @@
 import os
 import re
+import json
 import requests
 import xml.etree.ElementTree as ET
 from PIL import Image, ImageOps
 from io import BytesIO
 import urllib.parse
+from pathlib import Path
+from typing import Dict, Tuple
+
 
 
 def process_friendly_url(friendly_url, replace = "-"):
@@ -293,3 +297,46 @@ def avitoColor(color):
         with open('output.txt', 'a') as file:
             file.write(f"{error_text}\n")
         return color  # Возвращаем оригинальный ключ, если он не найден
+
+def load_price_data(file_path: str = "./src/data/cars_dealer_price.json") -> Dict[str, Dict[str, int]]:
+    """
+    Загружает данные о ценах из JSON файла.
+    
+    Args:
+        file_path (str): Путь к JSON файлу
+        
+    Returns:
+        Dict[str, Dict[str, int]]: Словарь с ценами по VIN
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return json.load(file)
+    except Exception as e:
+        print(f"Ошибка при загрузке файла цен: {str(e)}")
+        return {}
+
+# Пример использования:
+def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
+    """
+    Обновляет цены в XML элементе автомобиля.
+    
+    Args:
+        car: XML элемент автомобиля
+        prices_data: Данные о ценах из JSON
+    """
+
+    vin = car.find('vin').text
+    current_sale_price = int(car.find('priceWithDiscount').text)
+
+    if vin in prices_data:
+        car_prices = prices_data[vin]
+        final_price = car_prices["Конечная цена"]
+        if final_price < current_sale_price:
+            discount = car_prices["Скидка"]
+            rrp = car_prices["РРЦ"]
+            car.find('priceWithDiscount').text = str(final_price)
+            car.find('sale_price').text = str(final_price)
+            car.find('max_discount').text = str(discount)
+            car.find('price').text = str(rrp)
+
+prices_data = load_price_data()
