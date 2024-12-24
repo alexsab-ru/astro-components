@@ -4203,7 +4203,7 @@
   <priceWithDiscount>1919900</priceWithDiscount>
   <tradeinDiscount>300000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
-  <insuranceDiscount>50000</insuranceDiscount>
+  <insuranceDiscount />
   <availability>available</availability>
   <ptsType />
   <country />
@@ -4557,4 +4557,202 @@
     <reserved />
   </status>
 <max_discount>520000</max_discount><sale_price>1919900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-green-2024/</url></vehicle>
+<vehicle>
+  <id>6653151</id>
+  <vin>LVTDD21B3RD308222</vin>
+  <uin />
+  <dealer id="6372">Автоцентр Альфа Jetour</dealer>
+  <category id="1">Легковые</category>
+  <subcategory />
+  <type>new</type>
+  <year>2024</year>
+  <mark_id>Jetour</mark_id><folder_id>Dashing</folder_id><generation id="93652">I</generation>
+  <bodyConfiguration id="12641">Внедорожник 5 дв.</bodyConfiguration>
+  <modification_id>1.6 AT (185 л.с.) 4WD</modification_id><complectation_name>Luxury</complectation_name><brandComplectationCode />
+  <engineType>Бензин</engineType>
+  <engineVolume>1598</engineVolume>
+  <enginePower>185</enginePower>
+  <bodyNumber />
+  <body_type>SUV</body_type><bodyDoorCount>5</bodyDoorCount>
+  <seatCount>5</seatCount>
+  <color>Серый</color><bodyColorMetallic>0</bodyColorMetallic>
+  <driveType>Постоянный полный</driveType>
+  <gearboxType>Автомат</gearboxType>
+  <gearboxGearCount />
+  <wheel>Левый</wheel><run>0</run><mileageUnit>km</mileageUnit>
+  <price>3649000</price>
+  <previousPrice />
+  <specialOffer>0</specialOffer>
+  <specialOfferPreviousPrice />
+  <priceWithDiscount>3229000</priceWithDiscount>
+  <tradeinDiscount>200000</tradeinDiscount>
+  <creditDiscount>220000</creditDiscount>
+  <insuranceDiscount />
+  <availability>available</availability>
+  <ptsType />
+  <country />
+  <operatingTime />
+  <ecoClass />
+  <driveWheel />
+  <axisCount />
+  <brakeType />
+  <cabinType />
+  <maximumPermittedMass />
+  <saddleHeight />
+  <cabinSuspension />
+  <chassisSuspension />
+  <length />
+  <width />
+  <bodyVolume />
+  <bucketVolume />
+  <tractionClass />
+  <refrigeratorClass />
+  <craneArrowRadius />
+  <craneArrowLength />
+  <craneArrowPayload />
+  <loadHeight />
+  <photoCount>1</photoCount>
+  <description />
+  <address>Самара, Новоурицкая 22</address>
+  <ownersCount>0</ownersCount>
+  <vehicleCondition>excellent</vehicleCondition>
+  <equipment>
+    <group id="1" name="Активная безопасность">
+      <element id="1">Антиблокировочная система</element>
+      <element id="2">Антипробуксовочная система</element>
+      <element id="3">Система курсовой устойчивости</element>
+      <element id="4">Система контроля слепых зон</element>
+      <element id="5">Система помощи при экстренном торможении</element>
+      <element id="6">Система предотвращения столкновения</element>
+      <element id="8">Датчик давления в шинах</element>
+      <element id="223">ЭРА-ГЛОНАСС</element>
+    </group>
+    <group id="2" name="Пассивная безопасность">
+      <element id="10">Подушки безопасности водителя</element>
+      <element id="12">Подушки безопасности пассажира</element>
+      <element id="14">Боковые передние подушки безопасности</element>
+      <element id="18">Блокировка замков задних дверей</element>
+      <element id="19">Система крепления детских автокресел</element>
+    </group>
+    <group id="3" name="Противоугонная система">
+      <element id="22">Дистанционный запуск двигателя</element>
+      <element id="24">Иммобилайзер</element>
+      <element id="25">Центральный замок</element>
+    </group>
+    <group id="4" name="Помощь при вождении">
+      <element id="26">Бортовой компьютер</element>
+      <element id="28">Адаптивный круиз-контроль</element>
+      <element id="31">Парктроник передний и задний</element>
+      <element id="34">Камера 360°</element>
+      <element id="36">Система помощи при старте в гору</element>
+      <element id="225">Система помощи при спуске с горы</element>
+      <element id="37">Система контроля за полосой движения</element>
+      <element id="41">Датчик света</element>
+      <element id="42">Датчик дождя</element>
+    </group>
+    <group id="5" name="Комфорт">
+      <element id="45">Электро усилитель руля</element>
+      <element id="49">Запуск двигателя с кнопки</element>
+      <element id="51">Система доступа без ключа</element>
+      <element id="52">Регулировка руля</element>
+      <element id="59">Электрорегулировка сиденья водителя с памятью положения</element>
+      <element id="62">Электрорегулировка сиденья пассажира</element>
+      <element id="67">Электростеклоподъемники передние и задние</element>
+      <element id="68">Электропривод зеркал</element>
+      <element id="69">Электропривод крышки багажника</element>
+      <element id="237">Декоративное освещение салона</element>
+    </group>
+    <group id="6" name="Управление климатом и обогрев">
+      <element id="76">Климат-контроль 2-зонный</element>
+      <element id="82">Вентиляция сидений водителя и пассажира</element>
+      <element id="87">Подогрев сидений водителя, пассажира и задних пассажиров</element>
+      <element id="88">Подогрев руля</element>
+      <element id="89">Обогрев зеркал</element>
+      <element id="91">Обогрев лобового стекла</element>
+      <element id="94">Обогрев форсунок стеклоомывателей</element>
+    </group>
+    <group id="7" name="Мультимедиа и навигация">
+      <element id="101">USB</element>
+      <element id="105">TV</element>
+      <element id="106">Функция Apple CarPlay</element>
+      <element id="107">Функция Android Auto</element>
+      <element id="108">Голосовое управление</element>
+      <element id="116">8+ колонок</element>
+      <element id="264">Электронная приборная панель</element>
+      <element id="121">Мультифункциональное рулевое колесо</element>
+      <element id="122">Беспроводная зарядка для телефона</element>
+    </group>
+    <group id="8" name="Салон и интерьер">
+      <element id="126">Кожаная обивка салона</element>
+      <element id="130">Светлый салон</element>
+      <element id="133">Кожаный руль</element>
+      <element id="136">Электрический люк</element>
+      <element id="137">Панорамная крыша</element>
+      <element id="141">Третий задний подголовник</element>
+      <element id="143">Передний центральный подлокотник</element>
+      <element id="148">Накладки на пороги</element>
+    </group>
+    <group id="9" name="Экстерьер">
+      <element id="151">Литые легкосплавные диски</element>
+      <element id="161">Размер дисков 19″</element>
+      <element id="172">Задние тонированные стекла</element>
+      <element id="174">Рейлинги на крыше</element>
+    </group>
+    <group id="10" name="Освещение">
+      <element id="182">Светодиодные фары</element>
+      <element id="183">Противотуманные фары</element>
+      <element id="184">Адаптивные фары</element>
+      <element id="252">Автоматический корректор фар</element>
+    </group>
+    <group id="12" name="Комплектность">
+      <element id="215">Докатка</element>
+    </group>
+  </equipment>
+  <photos>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/740d6e3ee33c85bab247a8537762d9db.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/f0be6a09cde80d41d89de1d9f768b068.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/7802af534bf100ce7678c08ddc9f2b65.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/6dab266d3d22fbe7878feb77cd686b94.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/b75991e859d95c30a90ef0ebd8a8e2d1.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/d4ea2ad4c075eb6e1e171b6bc732623e.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/c8b4c97fd7fbeca599781e35f181a298.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/43fbafa18f6b06614feb929896cf573c.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/ada7b5f44cd81441d0f1b44b6dfa31e2.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/e49c9f3e16a718178646a1e71fb99c2b.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/2898bc29c6f261237622e310b5216c0e.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/bff1c0e41a2d14f8c76d2a5f861797f2.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/a2c763612749d07e373e9cde6b8f2c95.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/8fb7e1dc7a8911ef61ad2472beba39c0.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/8c3f11f55fd8b5f03c57c589b37dfeb2.jpg?sid=42</photo>
+    <photo>https://s1.maxposter.ru/photo/6372/6653151/orig/1404618ce6976112db21c494f95120f8.jpg?sid=42</photo>
+  </photos>
+  <phones>
+    <phone number="78469777779" callFrom="8" callTo="20">+7(846)977-77-79</phone>
+  </phones>
+  <brandColorCode />
+  <brandInteriorCode />
+  <certificationProgram />
+  <avitoId />
+  <autoruId />
+  <dromId />
+  <siteUrl>https://jetour-alpha.ru/</siteUrl>
+  <avitoUrl />
+  <autoruUrl />
+  <dromUrl />
+  <siteUrls>
+    <url sourceId="0" source="Ссылка по шаблону">https://jetour-alpha.ru/</url>
+  </siteUrls>
+  <acquisitionSource />
+  <acquisitionDate>2024-12-19</acquisitionDate>
+  <manufactureDate />
+  <status>
+    <inPresalePreparation />
+    <inRepair />
+    <inLogistics />
+    <inLegal />
+    <inProblems />
+    <inContent />
+    <reserved />
+  </status>
+<max_discount>420000</max_discount><sale_price>3229000</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-at-185-лс-4wd-luxury-grey-2024/</url></vehicle>
 </vehicles>
