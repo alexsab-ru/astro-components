@@ -11,7 +11,7 @@ node .github/scripts/getAirStorage.js
 
 ```sh
 export ENV_XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
-python3 .github/scripts/getOneXML.py --xpath "//Ads/Ad" --output cars.xml
+python3 .github/scripts/getOneXML.py
 
 export REPO_NAME="test.com"
 export XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
