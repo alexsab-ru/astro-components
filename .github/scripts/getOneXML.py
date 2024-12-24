@@ -8,6 +8,35 @@ def download_xml(url):
     response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
     return response.content
 
+def detect_xpath(xml_content):
+    # Список известных XPath шаблонов
+    xpath_patterns = [
+        "//data/cars/car",
+        "//vehicles/vehicle",
+        "//Ads/Ad",
+        "//carcopy/offers/offer"
+    ]
+    
+    try:
+        # Убрать BOM, если он присутствует
+        if xml_content.startswith(b'\xef\xbb\xbf'):
+            xml_content = xml_content[3:]
+            
+        root = etree.fromstring(xml_content)
+        
+        # Проверяем каждый шаблон
+        for xpath in xpath_patterns:
+            elements = root.xpath(xpath)
+            if elements:
+                print(f"Detected XPath pattern: {xpath}")
+                return xpath
+                
+        # Если ни один шаблон не подошел
+        raise ValueError("No matching XPath pattern found in XML")
+        
+    except etree.XMLSyntaxError as e:
+        raise ValueError(f"Invalid XML content: {str(e)}")
+
 def merge_xml_files(xml_contents, xpath):
     # Определяем путь до родительского элемента для объединения
     path = xpath.strip('/').split('/')[:-1]
@@ -47,15 +76,13 @@ def merge_xml_files(xml_contents, xpath):
     
     return merged_root
 
-
 def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
-    parser.add_argument('--xpath', default='//data/cars/car', help='XPath to the elements to be merged')
-    parser.add_argument('--output', default='merged_output.xml', help='Output file name')
+    parser.add_argument('--xpath', help='XPath to the elements to be merged (optional)')
+    parser.add_argument('--output', default='cars.xml', help='Output file name')
     parser.add_argument('--split', default=' ', help='Separator')
     args = parser.parse_args()
 
-    # env_xml_url = os.getenv('ENV_XML_URL', '')
     env_xml_url = os.environ['ENV_XML_URL']
     urls = env_xml_url.strip().split(args.split)
 
@@ -64,7 +91,16 @@ def main():
         return
 
     xml_contents = [download_xml(url) for url in urls]
-    merged_root = merge_xml_files(xml_contents, args.xpath)
+    
+    # Если xpath не указан, определяем его автоматически из первого XML
+    if not args.xpath:
+        detected_xpath = detect_xpath(xml_contents[0])
+        print(f"Using detected XPath: {detected_xpath}")
+        xpath = detected_xpath
+    else:
+        xpath = args.xpath
+
+    merged_root = merge_xml_files(xml_contents, xpath)
 
     merged_tree = etree.ElementTree(merged_root)
     merged_tree.write(args.output, encoding="UTF-8", xml_declaration=True, pretty_print=True)
