@@ -77,7 +77,7 @@ jobs:
     - name: Get one XML
       if: ${{ vars.ENV_XML_URL }}
       run: |
-        python3 .github/scripts/getOneXML.py --xpath "//vehicles/vehicle" --output cars.xml
+        python3 .github/scripts/getOneXML.py
       env:
         ENV_XML_URL: ${{ vars.ENV_XML_URL }}
 
@@ -100,7 +100,7 @@ jobs:
     - name: Get XML for auto.ru
       if: ${{ vars.AUTORU_XML_URL }}
       run: |
-        python3 .github/scripts/getOneXML.py --xpath "//data/cars/car" --output cars.xml
+        python3 .github/scripts/getOneXML.py
       env:
         ENV_XML_URL: ${{ vars.AUTORU_XML_URL }}
 
@@ -115,7 +115,7 @@ jobs:
     - name: Get XML for avito
       if: ${{ vars.AVITO_XML_URL }}
       run: |
-        python3 .github/scripts/getOneXML.py --xpath "//data/cars/car" --output cars.xml
+        python3 .github/scripts/getOneXML.py
       env:
         ENV_XML_URL: ${{ vars.AVITO_XML_URL }}
 
