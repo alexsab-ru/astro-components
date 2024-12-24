@@ -79,7 +79,7 @@ def merge_xml_files(xml_contents, xpath):
 def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
     parser.add_argument('--xpath', help='XPath to the elements to be merged (optional)')
-    parser.add_argument('--output', default='merged_output.xml', help='Output file name')
+    parser.add_argument('--output', default='cars.xml', help='Output file name')
     parser.add_argument('--split', default=' ', help='Separator')
     args = parser.parse_args()
 
