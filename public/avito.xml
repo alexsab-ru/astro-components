@@ -1,72 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <data>
   <cars><car>
-			<unique_id>8a11154d1dbf62193e5fac17ee6058b9</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Active</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>2480190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z0RB938383</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
-		<car>
 			<unique_id>2c5046640f632b41455ce0e02d0b83f9</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X50</folder_id>
@@ -138,6 +72,149 @@
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<car>
+			<unique_id>8a11154d1dbf62193e5fac17ee6058b9</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Active</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>2480190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z0RB938383</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Active.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<car>
+			<unique_id>b697e7745a410bd90800a5db75e107d6</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серебряный</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>6</run>
+			<year>2024</year>
+			<price>2690190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z4RB944641</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Active.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 656 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/c01c9cb7565ce2c1b47f7ed1e8f1ce40.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/d0a0fb45d9a8eb741e83ecb84d017ef8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/9e2010bede521d31734342e069922606.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/fddcd71e814d7c611f0a59cfef919842.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/9f756353bd0344e130a3499eefabf333.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/91dc1b514423c90cd2e7da458c5b76c9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/657481974ff271cb7caff7b50b1df944.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/c03805655d65d441dbd883c4f8fb4f62.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/349daefce93a750259aa5fede6d1df63.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/04f55d20ebba7c88058f358e577478a6.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/c9afdeac7b1c8275c3280e03ebc17816.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/7576d359a66a144f7c942349b0de411f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/cc0d837de59d9c4122e176e00d98fd23.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/968db9bd4b321c708b67c4946d1dc38f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/76dd1c585f733d674e12562e2dae5ddc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/bae1dae1df497fc0bb32fddec6de8e07.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/5056e75570f4f839347e1c842cac6dff.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/3ccac4bbf7d0b3e404118d21e7a921c9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/4c9ae024612da47bfd253498a943f8c5.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/02980d9c77e84b9d14ef2ea6e6d72deb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/3b6561df0be4ada618c09299496bc386.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/311e90277d88e0808e16ad492a304354.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/bec94ff4bd72d947c9f2db5a754cd5f6.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/a324e4624b90b3653d1a077cc50f9c4a.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-prestige-серебристый-2024/</url></car>
 		<car>
 			<unique_id>0b637d140608e5483a521f2b28d6028f</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -217,146 +294,6 @@
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-prestige-белый-2024/</url></car>
 		<car>
-			<unique_id>b697e7745a410bd90800a5db75e107d6</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серебряный</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>6</run>
-			<year>2024</year>
-			<price>2690190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z4RB944641</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 656 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/c01c9cb7565ce2c1b47f7ed1e8f1ce40.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/d0a0fb45d9a8eb741e83ecb84d017ef8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/9e2010bede521d31734342e069922606.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/fddcd71e814d7c611f0a59cfef919842.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/9f756353bd0344e130a3499eefabf333.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/91dc1b514423c90cd2e7da458c5b76c9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/657481974ff271cb7caff7b50b1df944.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/c03805655d65d441dbd883c4f8fb4f62.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/349daefce93a750259aa5fede6d1df63.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/04f55d20ebba7c88058f358e577478a6.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/c9afdeac7b1c8275c3280e03ebc17816.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/7576d359a66a144f7c942349b0de411f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/cc0d837de59d9c4122e176e00d98fd23.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/968db9bd4b321c708b67c4946d1dc38f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/76dd1c585f733d674e12562e2dae5ddc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/bae1dae1df497fc0bb32fddec6de8e07.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/5056e75570f4f839347e1c842cac6dff.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/3ccac4bbf7d0b3e404118d21e7a921c9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/4c9ae024612da47bfd253498a943f8c5.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/02980d9c77e84b9d14ef2ea6e6d72deb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/3b6561df0be4ada618c09299496bc386.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/311e90277d88e0808e16ad492a304354.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/bec94ff4bd72d947c9f2db5a754cd5f6.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z4RB944641/a324e4624b90b3653d1a077cc50f9c4a.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-prestige-серебристый-2024/</url></car>
-		<car>
-			<unique_id>8554115c8b155453234e3e51b2ccdbd9</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Style</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Черный</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>9</run>
-			<year>2024</year>
-			<price>2590190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z2RB943293</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 556 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/789386fe11da80bda97a3e53746c4e93.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/d7a533fb039ee714cada887d9bd4db83.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/a478aafbbfdb412676d8ec8624c13cff.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/d564dd299aa83105f4d7d1f9ddcc4d06.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/570597d2d461fecac5a49370a9955cca.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/2da1d68a022244edd68e9a937ece1081.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/d79ef68eef0b8f74977e7f8955d629fd.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/c3fb70a76fd7a28beba005b6ba6622bb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/e396843e89b80a703e810b62418041f1.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/3953981aa718faf9f0d96f6dd00bbf2c.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-черный-2024/</url></car>
-		<car>
 			<unique_id>8cad912a41acbab5d615064886a1ac2f</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X50</folder_id>
@@ -431,6 +368,143 @@
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-белый-2024/</url></car>
+		<car>
+			<unique_id>8554115c8b155453234e3e51b2ccdbd9</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Style</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Черный</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>9</run>
+			<year>2024</year>
+			<price>2590190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z2RB943293</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 556 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/789386fe11da80bda97a3e53746c4e93.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/d7a533fb039ee714cada887d9bd4db83.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/a478aafbbfdb412676d8ec8624c13cff.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/d564dd299aa83105f4d7d1f9ddcc4d06.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/570597d2d461fecac5a49370a9955cca.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/2da1d68a022244edd68e9a937ece1081.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/d79ef68eef0b8f74977e7f8955d629fd.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/c3fb70a76fd7a28beba005b6ba6622bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/e396843e89b80a703e810b62418041f1.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z2RB943293/3953981aa718faf9f0d96f6dd00bbf2c.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-черный-2024/</url></car>
+		<car>
+			<unique_id>9832de57395512c5463cf6a4d93d74c3</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>3321190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>500000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D3RB328432</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X70, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
 		<car>
 			<unique_id>c80e7845d65b209cd60db20f3b41a74a</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -508,80 +582,6 @@
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
-		<car>
-			<unique_id>9832de57395512c5463cf6a4d93d74c3</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D3RB328432</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X70, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
 		<car>
 			<unique_id>8061d0bc6079e256fa8a0a689dd50294</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -829,6 +829,81 @@
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
 		<car>
+			<unique_id>d8cab77cb01c9d9acdb35328450fb74d</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Style</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Черный</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>9</run>
+			<year>2024</year>
+			<price>3121190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>500000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D0RB326024</vin>
+			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X70, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 3 080 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/8167bb3f2b8519ed38025403d4a44591.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/51e2ce86c1f0812710f3512fea65249c.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/11d4ef58e2f8d5437b2dae9aa6b77690.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e494154d2f537f3bc27a0cda9457baa6.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e1a711432ee3bc8085355b87b9583910.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/3a38319be242416371c111ebf7c7e8ab.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/1c05790087eee4d37de7739765af17b6.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/f0bcce000530fc3ab1606a09874fc92e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/b22a8f663bf5e496a7afaeea8dc53f2f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/3ba22c9a8f71da0a34e1f0d8e47dfcc7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/7b2e8c7fd61eef82ca8d4ffe7f0ee5f2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/18537c1ab532da301a46b28d35112099.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/dd6f7a5ece38b16971d76aa50e453fdc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/1dbe845f729a04a335c16cda349abe33.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e5db20c1de64398cc7635db2af694184.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/38416d6619229a4e49a650051b16b648.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/551922e650df4590f21972bae19fb17a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/ed5c1c001149ecabf1c5bbd6b046cae5.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/2942281bdc10a21a7464f8d2d1ae8b49.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e30e80b01d54920cb2c4eaa51f9fc915.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/45ce876000c7ef91f2e4a72dc9314324.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/b97fc21d5a7741999110c5525795e640.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-черный-2024/</url></car>
+		<car>
 			<unique_id>0b66d6ec88a31e130560d2b6d85e3a99</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X70</folder_id>
@@ -1064,81 +1139,6 @@
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-белый-2024/</url></car>
 		<car>
-			<unique_id>d8cab77cb01c9d9acdb35328450fb74d</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Style</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Черный</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>9</run>
-			<year>2024</year>
-			<price>3121190</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D0RB326024</vin>
-			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X70, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 3 080 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/8167bb3f2b8519ed38025403d4a44591.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/51e2ce86c1f0812710f3512fea65249c.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/11d4ef58e2f8d5437b2dae9aa6b77690.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e494154d2f537f3bc27a0cda9457baa6.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e1a711432ee3bc8085355b87b9583910.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/3a38319be242416371c111ebf7c7e8ab.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/1c05790087eee4d37de7739765af17b6.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/f0bcce000530fc3ab1606a09874fc92e.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/b22a8f663bf5e496a7afaeea8dc53f2f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/3ba22c9a8f71da0a34e1f0d8e47dfcc7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/7b2e8c7fd61eef82ca8d4ffe7f0ee5f2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/18537c1ab532da301a46b28d35112099.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/dd6f7a5ece38b16971d76aa50e453fdc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/1dbe845f729a04a335c16cda349abe33.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e5db20c1de64398cc7635db2af694184.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/38416d6619229a4e49a650051b16b648.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/551922e650df4590f21972bae19fb17a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/ed5c1c001149ecabf1c5bbd6b046cae5.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/2942281bdc10a21a7464f8d2d1ae8b49.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/e30e80b01d54920cb2c4eaa51f9fc915.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/45ce876000c7ef91f2e4a72dc9314324.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D0RB326024/b97fc21d5a7741999110c5525795e640.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-черный-2024/</url></car>
-		<car>
 			<unique_id>93a0f3b972c95323546aa447ff0862a3</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X70</folder_id>
@@ -1218,336 +1218,6 @@
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-серебристый-2024/</url></car>
-		<car>
-			<unique_id>8a11154d1dbf62193e5fac17ee6058ca</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Active</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>2480190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z0RB938384</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
-		<car>
-			<unique_id>8a11154d1dbf62193e5fac17ee6058cb</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Active</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>2480190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z0RB938385</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
-		<car>
-			<unique_id>8a11154d1dbf62193e5fac17ee6058cc</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Active</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>2480190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z0RB938386</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
-		<car>
-			<unique_id>8a11154d1dbf62193e5fac17ee6058cd</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Active</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>2480190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z0RB938387</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
-		<car>
-			<unique_id>8a11154d1dbf62193e5fac17ee6058ce</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X50</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Active</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>2480190</price>
-			<credit_discount>135000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>185000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8622Z0RB938388</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X50, 2024 года, в комплектации Active.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
-
-Цена указана с учётом максимальной выгоды.
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
 		<car>
 			<unique_id>2c5046640f632b41455ce0e02d0b83ga</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -1903,6 +1573,336 @@
 				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938397/cfb554673f758fdaf83004bd788f2cf2.jpeg</image>
 				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938397/66f51aa4fbaa4bab7196e160f8dfc8aa.jpeg</image>
 				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938397/ae96e108f81ecde74cdc07e5df342504.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<car>
+			<unique_id>8a11154d1dbf62193e5fac17ee6058ca</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Active</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>2480190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z0RB938384</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Active.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<car>
+			<unique_id>8a11154d1dbf62193e5fac17ee6058cb</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Active</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>2480190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z0RB938385</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Active.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<car>
+			<unique_id>8a11154d1dbf62193e5fac17ee6058cc</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Active</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>2480190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z0RB938386</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Active.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<car>
+			<unique_id>8a11154d1dbf62193e5fac17ee6058cd</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Active</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>2480190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z0RB938387</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Active.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<car>
+			<unique_id>8a11154d1dbf62193e5fac17ee6058ce</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X50</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Active</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>2480190</price>
+			<credit_discount>135000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>185000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>370000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8622Z0RB938388</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X50, 2024 года, в комплектации Active.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стоимость автомобиля 2 446 190 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/609a37b0b73adfaac8a04ffb2f7eeb97.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f3322672628694afbebf90533c328bdb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/f27d54fb23b8256c4fdbcb6ada1af99f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/12fbb2bab27ec1208b708244add9bdb9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/16b4f35486a6dca14a4a6e91f7f0a466.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/1ff8b0b6f6599fd6df5e40c5b4ac0201.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/e7ccc23c93353d96db027d6cb461d2bb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9c7674edcad8a4ccadd03d333f0e405b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/9eb816401acebd4e548503871cd03233.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/fbf6f1aa118ee1e9ed5912e3d0a6b321.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/2db0ab51833d2e9cc964ed92fe439328.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/bb027fa37d02d785696175ea30ce9ee8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8622Z0RB938383/60e487b5f980d30ad34da9e410c0fff2.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
@@ -2609,6 +2609,376 @@
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-черный-2024/</url></car>
 		<car>
+			<unique_id>9832de57395512c5463cf6a4d93d74c4</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>3321190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>500000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D3RB328433</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X70, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<car>
+			<unique_id>9832de57395512c5463cf6a4d93d74c5</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>3321190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>500000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D3RB328434</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X70, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<car>
+			<unique_id>9832de57395512c5463cf6a4d93d74c6</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>3321190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>500000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D3RB328435</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X70, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<car>
+			<unique_id>9832de57395512c5463cf6a4d93d74c7</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>3321190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>500000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D3RB328436</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X70, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<car>
+			<unique_id>9832de57395512c5463cf6a4d93d74c8</unique_id>
+			<mark_id>BelGee</mark_id>
+			<folder_id>X70</folder_id>
+			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
+			<complectation_name>Prestige</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>3321190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>250000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>500000</max_discount>
+			<currency>RUR</currency>
+			<vin>Y4K8722D3RB328437</vin>
+			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
+
+В наличии новый Belgee X70, 2024 года, в комплектации Style.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Если новый BelGee , то в BelGee ПАPTHEP АВТО.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
+				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<car>
 			<unique_id>c80e7845d65b209cd60db20f3b41a74b</unique_id>
 			<mark_id>BelGee</mark_id>
 			<folder_id>X70</folder_id>
@@ -2993,376 +3363,6 @@
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
-		<car>
-			<unique_id>9832de57395512c5463cf6a4d93d74c4</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D3RB328433</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X70, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
-		<car>
-			<unique_id>9832de57395512c5463cf6a4d93d74c5</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D3RB328434</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X70, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
-		<car>
-			<unique_id>9832de57395512c5463cf6a4d93d74c6</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D3RB328435</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X70, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
-		<car>
-			<unique_id>9832de57395512c5463cf6a4d93d74c7</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D3RB328436</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X70, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
-		<car>
-			<unique_id>9832de57395512c5463cf6a4d93d74c8</unique_id>
-			<mark_id>BelGee</mark_id>
-			<folder_id>X70</folder_id>
-			<modification_id>1.5 AMT (177 л.с.) 4WD</modification_id>
-			<complectation_name>Prestige</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
-			<currency>RUR</currency>
-			<vin>Y4K8722D3RB328437</vin>
-			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
-
-В наличии новый Belgee X70, 2024 года, в комплектации Style.
-
-✅ ГАPAHТИЯ 5 ЛET
-
-✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
-
-✅ PАССPOЧКA
-
-✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
-
-Если новый BelGee , то в BelGee ПАPTHEP АВТО.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/45b74387c9a4471fc9b486ffe5e90c45.jpg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/707ecab0b977a495a38a33cec144daf2.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/cc54e302860e4a6952e63fad77a939d0.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/7664350205daacd65491269b67cb5625.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/1a324fd3edeeb2343b360120e8badbfc.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/412938c2260ed607acc7b2d7348769a7.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/e708272af84959413ce2d8ed6e2eebdf.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8f28cf5dc2ed69df3f8c206bbbf54c0f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/20e30bee6a998f6e619eba01dc8c2299.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/2961e47f95866d11729ebf5b764dd9d9.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/0b94414f54b674a0de030492521dc02d.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c6f745c31fc43be43ed028cf75f002c8.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/c96cfd5b633d11be779ae589d6a26b60.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/01f8aeade400f64350fc6926da82b30f.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/869146593e40886c2afb07056a533910.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bbe3690437148ac856a8b4d50b54362a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/908301fbcbe1e1d988f457741a70488a.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/a9a9d22fed2cab9b9606fc1656d3df0e.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/6345726397497e04ddfa38cdc45bc59b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/bb9accb512a667ef63ab0459790ec7be.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/d889df59124f6a865680656f61195634.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/8096b34126e31279eb62a6b755697370.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/58d09fb34e8b53b6b6b506b0eaf33d4b.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/4271022ab5f923b4f6b29c1d53b532eb.jpeg</image>
-				<image>https://photo.toyotasever.ru/Y4K8722D3RB328432/974249c17ea79c1730c87e2e0327e313.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
 		<car>
 			<unique_id>8061d0bc6079e256fa8a0a689dd50295</unique_id>
 			<mark_id>BelGee</mark_id>
