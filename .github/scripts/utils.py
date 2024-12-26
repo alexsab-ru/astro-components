@@ -172,40 +172,6 @@ def convert_to_string(element):
         convert_to_string(child)
 
 
-filename = 'cars.xml'
-# repo_name = os.environ('REPO_NAME')
-repo_name = os.getenv('REPO_NAME', 'localhost')
-
-
-if os.path.exists(filename):
-    tree = ET.parse(filename)
-    root = tree.getroot()
-else:
-    XML_URL = os.environ['XML_URL']
-
-    response = requests.get(XML_URL)
-    response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
-    content = response.content
-
-    # Убрать BOM, если он присутствует
-    if content.startswith(b'\xef\xbb\xbf'):
-        content = content[3:]
-
-    # Декодируем содержимое из байтов в строку
-    xml_content = content.decode('utf-8')
-
-    # Parsing the provided XML data
-    root = ET.fromstring(xml_content)
-
-    tree = ET.ElementTree(root)
-
-# Путь к папке для сохранения уменьшенных изображений
-output_dir = "public/img/thumbs/"
-
-# Проверка наличия папки, если нет - создаем
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
-
 # Глобальный список для хранения путей к текущим превьюшкам
 current_thumbs = []
 
@@ -339,4 +305,3 @@ def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
             car.find('max_discount').text = str(discount)
             car.find('price').text = str(rrp)
 
-prices_data = load_price_data()
