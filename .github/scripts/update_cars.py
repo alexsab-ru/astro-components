@@ -273,6 +273,10 @@ def main():
     with open('output.txt', 'w') as file:
         file.write("")
 
+    # Предполагаем, что у вас есть элементы с именами
+    elements_to_localize = [
+    ]
+
     # Списки для удаления
     remove_mark_ids = [
     ]
