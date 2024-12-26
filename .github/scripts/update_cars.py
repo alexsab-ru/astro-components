@@ -96,6 +96,12 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existin
             # content += f"content: |\n"
             # for line in flat_description.split("\n"):
                 # content += f"  {line}\n"
+        elif child.tag == 'equipment' and child.text:
+            description = child.text
+            flat_description = description.replace('\n', '<br>\n')
+            content += f"{child.tag}: |\n"
+            for line in flat_description.split("\n"):
+                content += f"  {line}\n"
         else:
             if child.tag in encountered_tags:  # Проверяем, встречался ли уже такой тег
                 continue  # Если встречался, переходим к следующей итерации цикла
