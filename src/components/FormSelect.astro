@@ -2,9 +2,11 @@
 interface Props {
 	name: string;
 	placeholder?: string;
-	options?: any
+	required?: boolean;
+	errorMessage?: string;
+	options?: {id: string | number; name: string;}[];
 }
-const {name, placeholder = 'Выберите значение', options = []} = Astro.props
+const {name, placeholder = 'Выберите значение', required = false, errorMessage = 'Это поле обязательное', options = []} = Astro.props
 import { Icon } from 'astro-icon/components';
 ---
 <div x-data={ `{
@@ -17,16 +19,17 @@ import { Icon } from 'astro-icon/components';
 			this.currentOption = this.options.find(o => o.id === id);
 			this.value = this.currentOption.name || null;
 			this.open = false;
+			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
 		}
 	}` }
 	x-cloak>
-	<input type="hidden" name={name} :value="value"/>
+	<input type="hidden" name={name} :value="value" {...(required ? { required: true } : {})} />
 	<div 
 		class="relative min-w-[160px] xs:w-full sm:min-w-[250px] w-auto" 
 		@click.outside="open = false"
 	>
 		<span 
-			class="border-2 border-gray-100 py-2.5 px-4 cursor-pointer flex items-center justify-between gap-5 flex-nowrap outline-none" 
+			class="border-2 border-gray-100 py-2.5 px-4 cursor-pointer flex items-center justify-between gap-5 flex-nowrap outline-none select-none" 
 			tabindex="-1" 
 			@click="open = !open" 
 			@keydown.escape="open = false">
@@ -53,4 +56,5 @@ import { Icon } from 'astro-icon/components';
 			</template>
 		</div>
 	</div>
+	{required && (<div class={`${name} error-message text-xs hidden text-red-500`} x-ref="error"><Fragment set:html={errorMessage} /></div>)}
 </div>
