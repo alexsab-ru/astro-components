@@ -251,14 +251,14 @@ def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir, skip_th
     return filename
 
 
-def process_car(car: ET.Element, repo_name: str, directory: str, existing_files: set, current_thumbs, thumbs_dir, prices_data, elements_to_localize, skip_thumbs) -> None:
+def process_car(car: ET.Element, repo_name: str, cars_dir: str, existing_files: set, current_thumbs, thumbs_dir, prices_data, elements_to_localize, skip_thumbs) -> None:
     """
     Обрабатывает данные отдельной машины.
     
     Args:
         car: XML элемент машины
         repo_name: Имя репозитория
-        directory: Директория для сохранения файлов
+        cars_dir: Директория для сохранения файлов
         existing_files: Множество существующих файлов
     """
     price = int(car.find('price').text or 0)
@@ -275,7 +275,7 @@ def process_car(car: ET.Element, repo_name: str, directory: str, existing_files:
     create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
     
     file_name = f"{friendly_url}.mdx"
-    file_path = os.path.join(directory, file_name)
+    file_path = os.path.join(cars_dir, file_name)
 
     update_car_prices(car, prices_data)
 
