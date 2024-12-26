@@ -319,25 +319,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-for car in cars_element:
-
-    price = int(car.find('price').text or 0)
-    max_discount = int(car.find('max_discount').text or 0)
-    create_child_element(car, 'priceWithDiscount', price - max_discount)
-    create_child_element(car, 'sale_price', price - max_discount)
-    friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
-    friendly_url = f"{process_friendly_url(friendly_url)}"
-    print(f"Уникальный идентификатор: {friendly_url}")
-    create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
-    file_name = f"{friendly_url}.mdx"
-    file_path = os.path.join(directory, file_name)
-
-    if os.path.exists(file_path):
-        update_yaml(car, file_path, friendly_url)
-    else:
-        create_file(car, file_path, friendly_url)
-
