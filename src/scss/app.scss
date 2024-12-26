@@ -1,5 +1,1 @@
-@import "mixins";
-
-@import 'fonts';
-@import 'tailwind';
-@import 'global';
+@use "imports" as *;
