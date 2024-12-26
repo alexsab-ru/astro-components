@@ -29,8 +29,7 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir):
             file.write(f"{errorText}\n")
         # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
         thumb = "/img/404.jpg"
-        global error_404_found
-        error_404_found = True
+
 
     # Forming the YAML frontmatter
     content = "---\n"
@@ -270,8 +269,10 @@ def main():
     setup_directories(args.thumbs_dir, args.cars_dir)
     
     existing_files = set()
-    error_404_found = False
-    
+
+    with open('output.txt', 'w') as file:
+        file.write("")
+
     # Списки для удаления
     remove_mark_ids = [
     ]
@@ -307,7 +308,7 @@ def main():
         if filepath not in existing_files:
             os.remove(filepath)
     
-    if error_404_found:
+    if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
         print("error 404 found")
 
 if __name__ == "__main__":
