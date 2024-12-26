@@ -8,7 +8,7 @@ from utils import *
 import xml.etree.ElementTree as ET
 
 
-def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize, skip_thumbs):
+def create_file(car, filename, friendly_url, current_thumbs, existing_files, elements_to_localize, config):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -69,16 +69,16 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existin
     encountered_tags = set()  # Создаем множество для отслеживания встреченных тегов
 
     for child in car:
-        # Skip nodes with child nodes (except images) and attributes
-        if list(child) and child.tag != 'images':
+        # Skip nodes with child nodes (except image_tag) and attributes
+        if list(child) and child.tag != f'{config["image_tag"]}s':
             continue
         if child.tag == 'total':
             continue
         if child.tag == 'folder_id':
             content += f"{child.tag}: '{child.text}'\n"
-        elif child.tag == 'images':
-            images = [img.text for img in child.findall('image')]
-            thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir, skip_thumbs)
+        elif child.tag == f'{config["image_tag"]}s':
+            images = [img.text for img in child.findall(config['image_tag'])]
+            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
             content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
         elif child.tag == 'color':
@@ -90,7 +90,7 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existin
             content += f"{child.tag}: |\n"
             for line in flat_extras.split("\n"):
                 content += f"  {line}\n"
-        elif child.tag == 'description' and child.text:
+        elif child.tag == config['description_tag'] and child.text:
             description = child.text
             flat_description = description.replace('\n', '<br>\n')
             # content += f"content: |\n"
@@ -119,7 +119,7 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existin
     existing_files.add(filename)
 
 
-def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir, skip_thumbs):
+def update_yaml(car, filename, friendly_url, current_thumbs, config):
 
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
@@ -228,14 +228,14 @@ def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir, skip_th
             data['id'] += ", " + str(unique_id.text)
 
 
-    images_container = car.find('images')
+    images_container = car.find(f"{config['image_tag']}s")
     if images_container is not None:
-        images = [img.text for img in images_container.findall('image')]
+        images = [img.text for img in images_container.findall(config['image_tag'])]
         if len(images) > 0:
             data.setdefault('images', []).extend(images)
             # Проверяем, нужно ли добавлять эскизы
             if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir, skip_thumbs)
+                thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
                 data.setdefault('thumbs', []).extend(thumbs_files)
 
     # Convert the data back to a YAML string
@@ -251,15 +251,23 @@ def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir, skip_th
     return filename
 
 
-def process_car(car: ET.Element, repo_name: str, cars_dir: str, existing_files: set, current_thumbs, thumbs_dir, prices_data, elements_to_localize, skip_thumbs) -> None:
+def process_car(car: ET.Element, existing_files: set, current_thumbs, prices_data, elements_to_localize, config) -> None:
     """
     Обрабатывает данные отдельной машины.
     
     Args:
         car: XML элемент машины
-        repo_name: Имя репозитория
-        cars_dir: Директория для сохранения файлов
         existing_files: Множество существующих файлов
+        current_thumbs: Список путей к текущим превьюшкам
+        prices_data: Данные о ценах
+        elements_to_localize: Список элементов для локализации
+        config: Словарь с конфигурацией
+            repo_name: Имя репозитория
+            cars_dir: Директория для сохранения файлов
+            thumbs_dir: Директория для сохранения превьюшек
+            skip_thumbs: Пропускать создание превьюшек
+            image_tag: Имя тега с изображениями
+            description_tag: Имя тега с описанием
     """
     price = int(car.find('price').text or 0)
     max_discount = int(car.find('max_discount').text or 0)
@@ -272,17 +280,17 @@ def process_car(car: ET.Element, repo_name: str, cars_dir: str, existing_files: 
     )
     print(f"Уникальный идентификатор: {friendly_url}")
     
-    create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
+    create_child_element(car, 'url', f"https://{config['repo_name']}/cars/{friendly_url}/")
     
     file_name = f"{friendly_url}.mdx"
-    file_path = os.path.join(cars_dir, file_name)
+    file_path = os.path.join(config['cars_dir'], file_name)
 
     update_car_prices(car, prices_data)
 
     if os.path.exists(file_path):
-        update_yaml(car, file_path, friendly_url, current_thumbs, thumbs_dir, skip_thumbs)
+        update_yaml(car, file_path, friendly_url, current_thumbs, config)
     else:
-        create_file(car, file_path, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize, skip_thumbs)
+        create_file(car, file_path, friendly_url, current_thumbs, existing_files, elements_to_localize, config)
 
 
 def main():
@@ -297,6 +305,8 @@ def main():
     parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
+    parser.add_argument('--image_tag', default='image', help='Image tag name')
+    parser.add_argument('--description_tag', default='description', help='Description tag name')
     args = parser.parse_args()
     config = vars(args)
 
@@ -305,7 +315,7 @@ def main():
     # Инициализация
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
-    setup_directories(args.thumbs_dir, args.cars_dir)
+    setup_directories(config['thumbs_dir'], args.cars_dir)
     
     existing_files = set()
 
@@ -334,7 +344,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        process_car(car, args.repo_name, args.cars_dir, existing_files, current_thumbs, args.thumbs_dir, prices_data, elements_to_localize, args.skip_thumbs)
+        process_car(car, existing_files, current_thumbs, prices_data, elements_to_localize, config)
     
     # Удаление ненужных машин
     for car in cars_to_remove:
@@ -344,7 +354,7 @@ def main():
     tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
     
     # Очистка
-    cleanup_unused_thumbs(current_thumbs, args.thumbs_dir)
+    cleanup_unused_thumbs(current_thumbs, config['thumbs_dir'])
     
     for existing_file in os.listdir(args.cars_dir):
         filepath = os.path.join(args.cars_dir, existing_file)
