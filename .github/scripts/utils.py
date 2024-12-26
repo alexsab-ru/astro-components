@@ -166,6 +166,7 @@ def join_car_data(car, *elements):
 
     return " ".join(car_parts)
 
+
 def convert_to_string(element):
     if element.text is not None:
         element.text = str(element.text)
@@ -231,6 +232,7 @@ translations = {
 
 }
 
+
 def avitoColor(color):
     mapping = {
         'бежевый': 'бежевый',
@@ -265,6 +267,7 @@ def avitoColor(color):
             file.write(f"{error_text}\n")
         return color  # Возвращаем оригинальный ключ, если он не найден
 
+
 def load_price_data(file_path: str = "./src/data/cars_dealer_price.json") -> Dict[str, Dict[str, int]]:
     """
     Загружает данные о ценах из JSON файла.
@@ -281,6 +284,7 @@ def load_price_data(file_path: str = "./src/data/cars_dealer_price.json") -> Dic
     except Exception as e:
         print(f"Ошибка при загрузке файла цен: {str(e)}")
         return {}
+
 
 # Пример использования:
 def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
