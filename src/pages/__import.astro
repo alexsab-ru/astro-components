@@ -3,6 +3,7 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import Button from '@/components/Button/Button.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import Input from '@/components/Input.astro';
+import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import {SITE_NAME, BRAND, AGREE_LABEL, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
 
 const includeModels = ['k5', 'sportage', 'sorento'];
@@ -183,6 +184,7 @@ const models = rawModels.filter(model => includeModels.includes(model.id));
 				required
 				errorClasses="text-red-500"
 			/>
+			<ChoosingDealerSelect required={true} />
 			<Checkbox
 				name="agree"
 				label={AGREE_LABEL}
