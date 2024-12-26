@@ -215,6 +215,39 @@ def update_yaml(car, filename, friendly_url):
     return filename
 
 
+def process_car(car: ET.Element, repo_name: str, directory: str, existing_files: set, current_thumbs, thumbs_dir, prices_data) -> None:
+    """
+    Обрабатывает данные отдельной машины.
+    
+    Args:
+        car: XML элемент машины
+        repo_name: Имя репозитория
+        directory: Директория для сохранения файлов
+        existing_files: Множество существующих файлов
+    """
+    price = int(car.find('price').text or 0)
+    max_discount = int(car.find('max_discount').text or 0)
+    
+    create_child_element(car, 'priceWithDiscount', price - max_discount)
+    create_child_element(car, 'sale_price', price - max_discount)
+    
+    friendly_url = process_friendly_url(
+        join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')
+    )
+    
+    create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
+    
+    file_name = f"{friendly_url}.mdx"
+    file_path = os.path.join(directory, file_name)
+    existing_files.add(file_path)
+
+    update_car_prices(car, prices_data)
+
+    if os.path.exists(file_path):
+        update_yaml(car, file_path, friendly_url, current_thumbs, thumbs_dir)
+    else:
+        create_file(car, file_path, friendly_url, current_thumbs, thumbs_dir)
+
 def main():
     """
     Основная функция программы.
@@ -252,7 +285,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        process_car(car, repo_name, args.cars_dir, existing_files)
+        process_car(car, args.repo_name, args.cars_dir, existing_files, current_thumbs, args.thumbs_dir, prices_data)
     
     # Удаление ненужных машин
     for car in cars_to_remove:
