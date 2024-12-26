@@ -255,7 +255,8 @@ def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
-    parser.add_argument('--output', default='cars.xml', help='Output file name')
+    parser.add_argument('--input_file', default='cars.xml', help='Input to file')
+    parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
     parser.add_argument('--split', default=' ', help='Separator')
     parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
@@ -266,7 +267,7 @@ def main():
     prices_data = load_price_data()
     
     # Инициализация
-    root = get_xml_content(args.output, xml_url)
+    root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
     setup_directories(args.thumbs_dir, args.cars_dir)
     
@@ -297,10 +298,8 @@ def main():
     for car in cars_to_remove:
         cars_element.remove(car)
     
-    # Сохранение результатов
-    output_path = './public/cars.xml'
     convert_to_string(root)
-    tree.write(output_path, encoding='utf-8', xml_declaration=True)
+    tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
     
     # Очистка
     cleanup_unused_thumbs(current_thumbs, args.thumbs_dir)
