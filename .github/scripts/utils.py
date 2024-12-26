@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import shutil
 import requests
 import xml.etree.ElementTree as ET
 from PIL import Image, ImageOps
@@ -305,3 +306,69 @@ def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
             car.find('max_discount').text = str(discount)
             car.find('price').text = str(rrp)
 
+
+def get_xml_content(filename: str, xml_url: str) -> ET.Element:
+    """
+    Получает XML контент либо из локального файла, либо по URL.
+    
+    Args:
+        filename: Путь к локальному XML файлу
+        xml_url: URL для загрузки XML если локальный файл отсутствует
+    
+    Returns:
+        ET.Element: Корневой элемент XML
+    """
+    if os.path.exists(filename):
+        tree = ET.parse(filename)
+        return tree.getroot()
+    
+    response = requests.get(xml_url)
+    response.raise_for_status()
+    content = response.content
+
+    # Убрать BOM, если он присутствует
+    if content.startswith(b'\xef\xbb\xbf'):
+        content = content[3:]
+
+    xml_content = content.decode('utf-8')
+    return ET.fromstring(xml_content)
+
+
+def setup_directories(thumbs_dir: str, cars_dir: str) -> None:
+    """
+    Создает необходимые директории для работы программы.
+    
+    Args:
+        thumbs_dir: Путь к директории для уменьшенных изображений
+        cars_dir: Путь к директории для файлов машин
+    """
+    if not os.path.exists(thumbs_dir):
+        os.makedirs(thumbs_dir)
+    
+    if os.path.exists(cars_dir):
+        shutil.rmtree(cars_dir)
+    os.makedirs(cars_dir)
+
+def should_remove_car(car: ET.Element, mark_ids: list, folder_ids: list) -> bool:
+    """
+    Проверяет, нужно ли удалить машину по заданным критериям.
+    
+    Args:
+        car: XML элемент машины
+        mark_ids: Список ID марок для удаления
+        folder_ids: Список ID папок для удаления
+    
+    Returns:
+        bool: True если машину нужно удалить
+    """
+    if mark_ids:
+        car_mark = car.find('mark_id').text
+        if car_mark in mark_ids:
+            return True
+    
+    if folder_ids:
+        car_folder = car.find('folder_id').text
+        if car_folder in folder_ids:
+            return True
+    
+    return False
