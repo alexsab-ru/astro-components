@@ -8,7 +8,7 @@ from utils import *
 import xml.etree.ElementTree as ET
 
 
-def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir):
+def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -214,7 +214,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir):
     return filename
 
 
-def process_car(car: ET.Element, repo_name: str, directory: str, existing_files: set, current_thumbs, thumbs_dir, prices_data) -> None:
+def process_car(car: ET.Element, repo_name: str, directory: str, existing_files: set, current_thumbs, thumbs_dir, prices_data, elements_to_localize) -> None:
     """
     Обрабатывает данные отдельной машины.
     
@@ -233,19 +233,20 @@ def process_car(car: ET.Element, repo_name: str, directory: str, existing_files:
     friendly_url = process_friendly_url(
         join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')
     )
+    print(f"Уникальный идентификатор: {friendly_url}")
     
     create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
     
     file_name = f"{friendly_url}.mdx"
     file_path = os.path.join(directory, file_name)
-    existing_files.add(file_path)
 
     update_car_prices(car, prices_data)
 
     if os.path.exists(file_path):
         update_yaml(car, file_path, friendly_url, current_thumbs, thumbs_dir)
     else:
-        create_file(car, file_path, friendly_url, current_thumbs, thumbs_dir)
+        create_file(car, file_path, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize)
+
 
 def main():
     """
@@ -260,9 +261,10 @@ def main():
     parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     args = parser.parse_args()
+    config = vars(args)
 
     prices_data = load_price_data()
-    
+
     # Инициализация
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
@@ -295,7 +297,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        process_car(car, args.repo_name, args.cars_dir, existing_files, current_thumbs, args.thumbs_dir, prices_data)
+        process_car(car, args.repo_name, args.cars_dir, existing_files, current_thumbs, args.thumbs_dir, prices_data, elements_to_localize)
     
     # Удаление ненужных машин
     for car in cars_to_remove:
