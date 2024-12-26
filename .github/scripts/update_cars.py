@@ -1,6 +1,6 @@
 import os
 import yaml
-import shutil
+import argparse
 from PIL import Image, ImageOps
 from io import BytesIO
 from config import *
@@ -214,6 +214,66 @@ def update_yaml(car, filename, friendly_url):
 
     return filename
 
+
+def main():
+    """
+    Основная функция программы.
+    """
+    parser = argparse.ArgumentParser(description='Download and merge XML files.')
+    parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
+    parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
+    parser.add_argument('--output', default='cars.xml', help='Output file name')
+    parser.add_argument('--split', default=' ', help='Separator')
+    args = parser.parse_args()
+
+    repo_name = os.getenv('REPO_NAME', 'localhost')
+    xml_url = os.environ['XML_URL']
+    prices_data = load_price_data()
+    
+    # Инициализация
+    root = get_xml_content(args.output, xml_url)
+    tree = ET.ElementTree(root)
+    setup_directories(args.thumbs_dir, args.cars_dir)
+    
+    existing_files = set()
+    error_404_found = False
+    
+    # Списки для удаления
+    remove_mark_ids = []
+    remove_folder_ids = []
+    cars_to_remove = []
+    
+    # Обработка машин
+    cars_element = root.find('cars')
+    for car in cars_element:
+        if should_remove_car(car, remove_mark_ids, remove_folder_ids):
+            cars_to_remove.append(car)
+            continue
+        
+        process_car(car, repo_name, args.cars_dir, existing_files)
+    
+    # Удаление ненужных машин
+    for car in cars_to_remove:
+        cars_element.remove(car)
+    
+    # Сохранение результатов
+    output_path = './public/cars.xml'
+    convert_to_string(root)
+    tree.write(output_path, encoding='utf-8', xml_declaration=True)
+    
+    # Очистка
+    cleanup_unused_thumbs()
+    
+    for existing_file in os.listdir(args.cars_dir):
+        filepath = os.path.join(args.cars_dir, existing_file)
+        if filepath not in existing_files:
+            os.remove(filepath)
+    
+    if error_404_found:
+        print("error 404 found")
+
+if __name__ == "__main__":
+    main()
 
 # Переменная для отслеживания наличия 404 ошибки
 error_404_found = False
