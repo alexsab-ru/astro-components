@@ -24,7 +24,6 @@ def process_car(car: ET.Element, existing_files: set, current_thumbs, prices_dat
     """
     price = int(car.find('price').text or 0)
     max_discount = int(car.find('max_discount').text or 0)
-    
     create_child_element(car, 'priceWithDiscount', price - max_discount)
     create_child_element(car, 'sale_price', price - max_discount)
     
