@@ -274,9 +274,12 @@ def main():
     error_404_found = False
     
     # Списки для удаления
-    remove_mark_ids = []
-    remove_folder_ids = []
-    cars_to_remove = []
+    remove_mark_ids = [
+    ]
+    remove_folder_ids = [
+    ]
+    cars_to_remove = [
+    ]
 
     # Список для хранения путей к текущим превьюшкам
     current_thumbs = []
