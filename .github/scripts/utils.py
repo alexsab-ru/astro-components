@@ -136,7 +136,61 @@ def update_element_text(parent, element_name, new_text):
         print(f"Элемент '{element_name}' не найден.")
 
 
-def localize_element_text(element, translations):
+def localize_element_text(element):
+    translations = {
+        # engineType
+        "hybrid": "Гибрид",
+        "petrol": "Бензин",
+        "diesel": "Дизель",
+        "petrol_and_gas": "Бензин и газ",
+        "electric": "Электро",
+
+        # driveType
+        "full_4wd": "Постоянный полный",
+        "optional_4wd": "Подключаемый полный",
+        "front": "Передний",
+        "rear": "Задний",
+
+        # gearboxType
+        "robotized": "Робот",
+        "variator": "Вариатор",
+        "manual": "Механика",
+        "automatic": "Автомат",
+
+        # transmission
+        "RT": "Робот",
+        "CVT": "Вариатор",
+        "MT": "Механика",
+        "AT": "Автомат",
+
+        # ptsType
+        "duplicate": "Дубликат",
+        "original": "Оригинал",
+        "electronic": "Электронный",
+
+        # bodyColor
+        "black": "Черный",
+        "white": "Белый",
+        "blue": "Синий",
+        "gray": "Серый",
+        "silver": "Серебристый",
+        "brown": "Коричневый",
+        "red": "Красный",
+        "grey": "Серый",
+        "azure": "Лазурный",
+        "beige": "Бежевый",
+
+        # steeringWheel
+        "left": "Левый",
+        "right": "Правый",
+        "L": "Левый",
+        "R": "Правый",
+
+        # bodyType
+        "suv": "SUV",
+
+    }
+
     if element is not None and element.text in translations:
         element.text = translations[element.text]
 
@@ -167,62 +221,6 @@ def convert_to_string(element):
         element.text = str(element.text)
     for child in element:
         convert_to_string(child)
-
-
-# Перевод некоторых свойств, для читабельности
-translations = {
-     # engineType
-    "hybrid": "Гибрид",
-    "petrol": "Бензин",
-    "diesel": "Дизель",
-    "petrol_and_gas": "Бензин и газ",
-    "electric": "Электро",
-
-     # driveType
-    "full_4wd": "Постоянный полный",
-    "optional_4wd": "Подключаемый полный",
-    "front": "Передний",
-    "rear": "Задний",
-
-     # gearboxType
-    "robotized": "Робот",
-    "variator": "Вариатор",
-    "manual": "Механика",
-    "automatic": "Автомат",
-
-     # transmission
-    "RT": "Робот",
-    "CVT": "Вариатор",
-    "MT": "Механика",
-    "AT": "Автомат",
-
-    # ptsType
-    "duplicate": "Дубликат",
-    "original": "Оригинал",
-    "electronic": "Электронный",
-
-    # bodyColor
-    "black": "Черный",
-    "white": "Белый",
-    "blue": "Синий",
-    "gray": "Серый",
-    "silver": "Серебристый",
-    "brown": "Коричневый",
-    "red": "Красный",
-    "grey": "Серый",
-    "azure": "Лазурный",
-    "beige": "Бежевый",
-
-    # steeringWheel
-    "left": "Левый",
-    "right": "Правый",
-    "L": "Левый",
-    "R": "Правый",
-
-    # bodyType
-    "suv": "SUV",
-
-}
 
 
 def avitoColor(color):

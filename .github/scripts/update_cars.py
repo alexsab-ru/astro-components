@@ -56,7 +56,7 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir):
 
     for elem_name in elements_to_localize:
         elem = car.find(elem_name)
-        localize_element_text(elem, translations)
+        localize_element_text(elem)
 
     color = car.find('color').text.strip().capitalize()
     encountered_tags = set()  # Создаем множество для отслеживания встреченных тегов
