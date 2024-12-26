@@ -224,10 +224,12 @@ def main():
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--output', default='cars.xml', help='Output file name')
     parser.add_argument('--split', default=' ', help='Separator')
+    parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
+    parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     args = parser.parse_args()
 
-    repo_name = os.getenv('REPO_NAME', 'localhost')
-    xml_url = os.environ['XML_URL']
+    repo_name = args.repo_name
+    xml_url = args.xml_url
     prices_data = load_price_data()
     
     # Инициализация
