@@ -8,7 +8,7 @@ from utils import *
 import xml.etree.ElementTree as ET
 
 
-def create_file(car, filename, friendly_url):
+def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -71,7 +71,7 @@ def create_file(car, filename, friendly_url):
             content += f"{child.tag}: '{child.text}'\n"
         elif child.tag == 'images':
             images = [img.text for img in child.findall('image')]
-            thumbs_files = createThumbs(images, friendly_url)
+            thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir)
             content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
         elif child.tag == 'color':
@@ -106,7 +106,7 @@ def create_file(car, filename, friendly_url):
     existing_files.add(filename)
 
 
-def update_yaml(car, filename, friendly_url):
+def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir):
 
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
@@ -199,7 +199,7 @@ def update_yaml(car, filename, friendly_url):
             data.setdefault('images', []).extend(images)
             # Проверяем, нужно ли добавлять эскизы
             if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, friendly_url)  # Убедитесь, что эта функция реализована
+                thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir)
                 data.setdefault('thumbs', []).extend(thumbs_files)
 
     # Convert the data back to a YAML string
@@ -277,6 +277,9 @@ def main():
     remove_mark_ids = []
     remove_folder_ids = []
     cars_to_remove = []
+
+    # Список для хранения путей к текущим превьюшкам
+    current_thumbs = []
     
     # Обработка машин
     cars_element = root.find('cars')
@@ -297,7 +300,7 @@ def main():
     tree.write(output_path, encoding='utf-8', xml_declaration=True)
     
     # Очистка
-    cleanup_unused_thumbs()
+    cleanup_unused_thumbs(current_thumbs, args.thumbs_dir)
     
     for existing_file in os.listdir(args.cars_dir):
         filepath = os.path.join(args.cars_dir, existing_file)

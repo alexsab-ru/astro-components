@@ -46,12 +46,10 @@ def process_description(desc_text):
     return '\n'.join(processed_lines)
 
 
-def createThumbs(image_urls, friendly_url):
-    global current_thumbs
-    global output_dir
+def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir):
 
     # Определение относительного пути для возврата
-    relative_output_dir = "/img/thumbs/"
+    relative_thumbs_dir = thumbs_dir.replace("public", "")
 
     # Список для хранения путей к новым или существующим файлам
     new_or_existing_files = []
@@ -68,8 +66,8 @@ def createThumbs(image_urls, friendly_url):
             
             # Формирование имени файла с учетом последних 5 символов
             output_filename = f"thumb_{friendly_url}_{last_5_chars}_{index}.webp"
-            output_path = os.path.join(output_dir, output_filename)
-            relative_output_path = os.path.join(relative_output_dir, output_filename)
+            output_path = os.path.join(thumbs_dir, output_filename)
+            relative_output_path = os.path.join(relative_thumbs_dir, output_filename)
 
             # Проверка существования файла
             if not os.path.exists(output_path):
@@ -94,11 +92,8 @@ def createThumbs(image_urls, friendly_url):
     return new_or_existing_files
 
 
-def cleanup_unused_thumbs():
-    global current_thumbs
-    global output_dir
-
-    all_thumbs = [os.path.join(output_dir, f) for f in os.listdir(output_dir)]
+def cleanup_unused_thumbs(current_thumbs, thumbs_dir):
+    all_thumbs = [os.path.join(thumbs_dir, f) for f in os.listdir(thumbs_dir)]
     unused_thumbs = [thumb for thumb in all_thumbs if thumb not in current_thumbs]
 
     for thumb in unused_thumbs:
@@ -173,9 +168,6 @@ def convert_to_string(element):
     for child in element:
         convert_to_string(child)
 
-
-# Глобальный список для хранения путей к текущим превьюшкам
-current_thumbs = []
 
 # Перевод некоторых свойств, для читабельности
 translations = {
