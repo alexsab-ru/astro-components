@@ -1,2 +1,4 @@
-// @include font("Gilroy", normal, 300, "/fonts/gilroy-light.woff2");
-// @include font("Gilroy", normal, 800, "/fonts/gilroy-extrabold.woff2");
+@use "mixins";
+
+// @include mixins.font("Gilroy", normal, 300, "/fonts/gilroy-light.woff2");
+// @include mixins.font("Gilroy", normal, 800, "/fonts/gilroy-extrabold.woff2");
