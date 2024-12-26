@@ -262,8 +262,6 @@ def main():
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     args = parser.parse_args()
 
-    repo_name = args.repo_name
-    xml_url = args.xml_url
     prices_data = load_price_data()
     
     # Инициализация
