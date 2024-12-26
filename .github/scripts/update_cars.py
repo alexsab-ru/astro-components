@@ -8,7 +8,7 @@ from utils import *
 import xml.etree.ElementTree as ET
 
 
-def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize):
+def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize, skip_thumbs):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -70,7 +70,7 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existin
             content += f"{child.tag}: '{child.text}'\n"
         elif child.tag == 'images':
             images = [img.text for img in child.findall('image')]
-            thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir)
+            thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir, skip_thumbs)
             content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
         elif child.tag == 'color':
@@ -105,7 +105,7 @@ def create_file(car, filename, friendly_url, current_thumbs, thumbs_dir, existin
     existing_files.add(filename)
 
 
-def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir):
+def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir, skip_thumbs):
 
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
@@ -198,7 +198,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir):
             data.setdefault('images', []).extend(images)
             # Проверяем, нужно ли добавлять эскизы
             if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir)
+                thumbs_files = createThumbs(images, friendly_url, current_thumbs, thumbs_dir, skip_thumbs)
                 data.setdefault('thumbs', []).extend(thumbs_files)
 
     # Convert the data back to a YAML string
@@ -214,7 +214,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, thumbs_dir):
     return filename
 
 
-def process_car(car: ET.Element, repo_name: str, directory: str, existing_files: set, current_thumbs, thumbs_dir, prices_data, elements_to_localize) -> None:
+def process_car(car: ET.Element, repo_name: str, directory: str, existing_files: set, current_thumbs, thumbs_dir, prices_data, elements_to_localize, skip_thumbs) -> None:
     """
     Обрабатывает данные отдельной машины.
     
@@ -243,9 +243,9 @@ def process_car(car: ET.Element, repo_name: str, directory: str, existing_files:
     update_car_prices(car, prices_data)
 
     if os.path.exists(file_path):
-        update_yaml(car, file_path, friendly_url, current_thumbs, thumbs_dir)
+        update_yaml(car, file_path, friendly_url, current_thumbs, thumbs_dir, skip_thumbs)
     else:
-        create_file(car, file_path, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize)
+        create_file(car, file_path, friendly_url, current_thumbs, thumbs_dir, existing_files, elements_to_localize, skip_thumbs)
 
 
 def main():
@@ -257,9 +257,9 @@ def main():
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--input_file', default='cars.xml', help='Input to file')
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
-    parser.add_argument('--split', default=' ', help='Separator')
     parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
+    parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
     args = parser.parse_args()
     config = vars(args)
 
@@ -297,7 +297,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        process_car(car, args.repo_name, args.cars_dir, existing_files, current_thumbs, args.thumbs_dir, prices_data, elements_to_localize)
+        process_car(car, args.repo_name, args.cars_dir, existing_files, current_thumbs, args.thumbs_dir, prices_data, elements_to_localize, args.skip_thumbs)
     
     # Удаление ненужных машин
     for car in cars_to_remove:

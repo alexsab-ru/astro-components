@@ -46,7 +46,7 @@ def process_description(desc_text):
     return '\n'.join(processed_lines)
 
 
-def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir):
+def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False):
 
     # Определение относительного пути для возврата
     relative_thumbs_dir = thumbs_dir.replace("public", "")
@@ -70,7 +70,7 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir):
             relative_output_path = os.path.join(relative_thumbs_dir, output_filename)
 
             # Проверка существования файла
-            if not os.path.exists(output_path):
+            if not os.path.exists(output_path) and not skip_thumbs:
                 # Загрузка и обработка изображения, если файла нет
                 response = requests.get(img_url)
                 image = Image.open(BytesIO(response.content))
