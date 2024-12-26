@@ -318,49 +318,10 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Переменная для отслеживания наличия 404 ошибки
-error_404_found = False
 
-# Создание директории для автомобилей
-directory = "src/content/cars"
-if os.path.exists(directory):
-    shutil.rmtree(directory)
-os.makedirs(directory)
 
-# для сохранения имен созданных или обновленных файлов
-existing_files = set()
-
-with open('output.txt', 'w') as file:
-    file.write("")
-
-# Предполагаем, что у вас есть элементы с именами
-elements_to_localize = []
-# Создаем список машин для удаления
-cars_to_remove = []
-remove_mark_ids = [
-]
-remove_folder_ids = [
-]
-cars_element = root.find('cars')
 
 for car in cars_element:
-    should_remove = False
-    
-    # Проверяем mark_id только если список не пустой
-    if remove_mark_ids:
-        car_mark = car.find('mark_id').text
-        if car_mark in remove_mark_ids:
-            should_remove = True
-    
-    # Проверяем folder_id только если список не пустой
-    if remove_folder_ids:
-        car_folder = car.find('folder_id').text
-        if car_folder in remove_folder_ids:
-            should_remove = True
-    
-    if should_remove:
-        cars_to_remove.append(car)
-        continue  # Пропускаем остальные операции для этой машины
 
     price = int(car.find('price').text or 0)
     max_discount = int(car.find('max_discount').text or 0)
@@ -377,24 +338,4 @@ for car in cars_element:
         update_yaml(car, file_path, friendly_url)
     else:
         create_file(car, file_path, friendly_url)
-
-# Удаляем все не-BelGee машины
-for car in cars_to_remove:
-    cars_element.remove(car)
-
-output_path = './public/cars.xml'
-convert_to_string(root)
-tree.write(output_path, encoding='utf-8', xml_declaration=True)
-
-# Удаление неиспользуемых превьюшек
-cleanup_unused_thumbs()
-
-
-for existing_file in os.listdir(directory):
-    filepath = os.path.join(directory, existing_file)
-    if filepath not in existing_files:
-        os.remove(filepath)
-
-if error_404_found:
-    print("error 404 found")
 
