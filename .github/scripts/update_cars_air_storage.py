@@ -70,7 +70,7 @@ def main():
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
     parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
-    parser.add_argument('--vin_tag', default='Vin', help='VIN tag name')
+    parser.add_argument('--vin_tag', default='VIN', help='VIN tag name')
     parser.add_argument('--availability_tag', default='Availability', help='Availability tag name')
     parser.add_argument('--unique_id_tag', default='Id', help='Unique_id tag name')
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
