@@ -15,7 +15,7 @@ python3 .github/scripts/getOneXML.py
 
 export REPO_NAME="test.com"
 export XML_URL=$(grep '^XML_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
-python3 .github/scripts/update_cars_avito_ads_ad.py
+python3 .github/scripts/update_cars_air_storage.py --source_type avito
 
-python3 .github/scripts/update_cars_avito.py
+python3 .github/scripts/update_cars_air_storage.py --source_type autoru
 ```
