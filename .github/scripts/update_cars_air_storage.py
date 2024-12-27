@@ -41,19 +41,43 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
     """
     Обрабатывает отдельный автомобиль в XML.
     """
+    print("\n")
     if config.get('generate_friendly_url', False):
         friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
         friendly_url = f"{process_friendly_url(friendly_url)}"
         print(f"Уникальный идентификатор: {friendly_url}")
         create_child_element(car, 'url', f"https://{config['repo_name']}/cars/{friendly_url}/")
-    
+
     # Заменяем цвет фида на цвет для Avito
-    color = car.find('Color').text if car.find('Color') is not None else None
+    color = car.find(config['color_tag']).text if car.find(config['color_tag']) is not None else None
     if color:
-        update_element_text(car, 'Color', avitoColor(car.find('Color').text))
+        update_element_text(car, config['color_tag'], avitoColor(car.find(config['color_tag']).text))
     
     # Получаем VIN автомобиля
-    vin = car.find('VIN').text if car.find('VIN') is not None else None
+    vin = car.find(config['vin_tag']).text if car.find(config['vin_tag']) is not None else None
+    if vin:
+        # Сдвигаем VIN, если указано
+        move_vin_id_up = config.get('move_vin_id_up', 0)
+        if move_vin_id_up:
+            try:
+                new_vin = modify_vin(vin.lower(), move_vin_id_up).upper()
+                update_element_text(car, config['vin_tag'], new_vin)
+                print(f"VIN сдвинут на {move_vin_id_up}: {vin} -> {new_vin}")
+            except ValueError:
+                print(f"Ошибка: VIN '{vin}' не может быть сдвинут.")
+
+    # Получаем уникальный идентификатор
+    unique_id = car.find(config.get('unique_id_tag', 'Id')).text if car.find(config.get('unique_id_tag', 'Id')) is not None else None
+    if unique_id:
+        # Сдвигаем unique_id, если указано
+        move_vin_id_up = config.get('move_vin_id_up', 0)
+        if move_vin_id_up:
+            try:
+                new_unique_id = increment_str(unique_id, move_vin_id_up)
+                update_element_text(car, config.get('unique_id_tag', 'Id'), new_unique_id)
+                print(f"unique_id сдвинут на {move_vin_id_up}: {unique_id} -> {new_unique_id}")
+            except ValueError:
+                print(f"Ошибка: unique_id '{unique_id}' не может быть сдвинут.")
     
     if vin and vin in air_storage_data and air_storage_data.get(vin):
         # Создаем указанное количество дубликатов для машин из JSON
@@ -72,10 +96,19 @@ def main():
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     parser.add_argument('--vin_tag', default='VIN', help='VIN tag name')
     parser.add_argument('--availability_tag', default='Availability', help='Availability tag name')
+    parser.add_argument('--color_tag', default='Color', help='Color tag name')
     parser.add_argument('--unique_id_tag', default='Id', help='Unique_id tag name')
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
     parser.add_argument('--config_path', default='./.github/scripts/config_air_storage.json', help='Path to configuration file')
     args = parser.parse_args()
+
+    # Приведение тегов к нижнему регистру для autoru
+    if args.source_type == 'autoru':
+        args.vin_tag = args.vin_tag.lower()
+        args.availability_tag = args.availability_tag.lower()
+        args.color_tag = args.color_tag.lower()
+        args.unique_id_tag = 'unique_id'  # Устанавливаем фиксированное значение
+
     config = vars(args)
     
     # Добавляем специфичные настройки в зависимости от типа источника
