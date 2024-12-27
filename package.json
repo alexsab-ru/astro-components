@@ -20,7 +20,7 @@
     "update_cars_carcopy": "python3 .github/scripts/update_cars_carcopy.py --image_tag=\"photo\" --description_tag=\"comment\" --skip_thumbs",
     "update_cars_maxposter": "python3 .github/scripts/update_cars_maxposter.py --image_tag=\"photo\" --skip_thumbs",
     "update_cars_vehicles": "python3 .github/scripts/update_cars_vehicles.py --image_tag=\"photo\" --skip_thumbs",
-    "update_cars_data_cars_car": "python3 .github/scripts/update_cars.py --skip_thumbs",
+    "update_cars_data_cars_car": "python3 .github/scripts/update_cars_data_cars_car.py --skip_thumbs",
     "dev": "astro dev --open --host --config astro.local.config.mjs",
     "dd": "pnpm download_json && pnpm dev",
     "ddw": "powershell -Command \"pnpm download_json_win; pnpm dev\"",

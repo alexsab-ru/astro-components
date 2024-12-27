@@ -27,7 +27,7 @@ on:
       - '.github/scripts/update_cars_carcopy.py'
       - '.github/scripts/update_cars_maxposter.py'
       - '.github/scripts/update_cars_vehicles.py'
-      - '.github/scripts/update_cars.py'
+      - '.github/scripts/update_cars_data_cars_car.py'
       - '.github/scripts/config.py'
 
   # Allows you to run this workflow manually from the Actions tab
