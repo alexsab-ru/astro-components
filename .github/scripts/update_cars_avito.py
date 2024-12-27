@@ -25,14 +25,14 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
         # Создаем указанное количество дубликатов для машин из JSON
         duplicates = duplicate_car(car, config, air_storage_data[vin], "в наличии", 0)
         all_duplicates.extend(duplicates)
-        
+
 
 def main():
     """
     Основная функция программы.
     """
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
-    parser.add_argument('--input_file', default='cars.xml', help='Input to file')
+    parser.add_argument('--input_file', default='cars.xml', help='Input file')
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
     parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
@@ -96,7 +96,6 @@ def main():
 
     convert_to_string(root)
     tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
-
 
 
 if __name__ == "__main__":
