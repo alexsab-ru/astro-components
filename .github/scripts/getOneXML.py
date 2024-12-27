@@ -3,10 +3,16 @@ import requests
 import argparse
 from lxml import etree
 
-def download_xml(url):
-    response = requests.get(url)
-    response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
-    return response.content
+def download_or_read_file(path):
+    """Скачать XML по URL или прочитать локальный файл."""
+    if os.path.isfile(path):
+        with open(path, 'rb') as file:
+            content = file.read()
+    else:
+        response = requests.get(path)
+        response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
+        content = response.content
+    return content
 
 def detect_xpath(xml_content):
     # Список известных XPath шаблонов
@@ -79,18 +85,26 @@ def merge_xml_files(xml_contents, xpath):
 def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
     parser.add_argument('--xpath', help='XPath to the elements to be merged (optional)')
-    parser.add_argument('--output', default='cars.xml', help='Output file name')
+    parser.add_argument('--output_path', default='cars.xml', help='Output file name')
     parser.add_argument('--split', default=' ', help='Separator')
+    parser.add_argument('--urls', nargs='*', help='List of XML URLs to download')
     args = parser.parse_args()
 
-    env_xml_url = os.environ['ENV_XML_URL']
-    urls = env_xml_url.strip().split(args.split)
+    # Используем переменную окружения, если она задана
+    env_xml_url = os.getenv('ENV_XML_URL')
+    if env_xml_url:
+        env_urls = env_xml_url.strip().split(args.split)
+    else:
+        env_urls = []
+
+    # Объединяем URL из переменной окружения и аргументов командной строки
+    urls = env_urls + (args.urls if args.urls else [])
 
     if not urls:
-        print("No URLs found in ENV_XML_URL. Please set the environment variable.")
+        print("No URLs provided. Please specify them using --urls or ENV_XML_URL.")
         return
 
-    xml_contents = [download_xml(url) for url in urls]
+    xml_contents = [download_or_read_file(url) for url in urls]
     
     # Если xpath не указан, определяем его автоматически из первого XML
     if not args.xpath:
@@ -103,9 +117,9 @@ def main():
     merged_root = merge_xml_files(xml_contents, xpath)
 
     merged_tree = etree.ElementTree(merged_root)
-    merged_tree.write(args.output, encoding="UTF-8", xml_declaration=True, pretty_print=True)
+    merged_tree.write(args.output_path, encoding="UTF-8", xml_declaration=True, pretty_print=True)
 
-    print(f"XML files successfully downloaded and merged into {args.output}")
+    print(f"XML files successfully downloaded and merged into {args.output_path}")
 
 if __name__ == "__main__":
     main()
