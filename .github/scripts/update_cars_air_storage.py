@@ -48,7 +48,9 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
         create_child_element(car, 'url', f"https://{config['repo_name']}/cars/{friendly_url}/")
     
     # Заменяем цвет фида на цвет для Avito
-    update_element_text(car, 'Color', avitoColor(car.find('Color').text))
+    color = car.find('Color').text if car.find('Color') is not None else None
+    if color:
+        update_element_text(car, 'Color', avitoColor(car.find('Color').text))
     
     # Получаем VIN автомобиля
     vin = car.find('VIN').text if car.find('VIN') is not None else None
