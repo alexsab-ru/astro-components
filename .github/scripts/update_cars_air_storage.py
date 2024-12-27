@@ -37,7 +37,7 @@ def load_config(config_path: str, source_type: str) -> Dict[str, Any]:
             "remove_folder_ids": []
         }
 
-def process_car(car: ET.Element, config, all_duplicates, air_storage_data, elements_to_localize) -> None:
+def process_car(car: ET.Element, config, all_duplicates, air_storage_data, elements_to_localize, replacements) -> None:
     """
     Обрабатывает отдельный автомобиль в XML.
     """
@@ -52,6 +52,21 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
     color = car.find(config['color_tag']).text if car.find(config['color_tag']) is not None else None
     if color:
         update_element_text(car, config['color_tag'], avitoColor(car.find(config['color_tag']).text))
+
+    description = car.find(config['description_tag']).text if car.find(config['description_tag']) is not None else None
+    if description:
+        updated_text = description
+        for old_text, new_text in replacements.items():
+            # Замена частей текста
+            updated_text = re.sub(re.escape(old_text), new_text, updated_text)
+        # Обновляем текст, если он изменился
+        if updated_text != description:
+            update_element_text(car, config['description_tag'], updated_text)
+    
+    if config.get('new_address', False):
+        address = car.find(config['address_tag']).text if car.find(config['address_tag']) is not None else None
+        if address:
+            update_element_text(car, config['address_tag'], config['new_address'])
     
     # Получаем VIN автомобиля
     vin = car.find(config['vin_tag']).text if car.find(config['vin_tag']) is not None else None
@@ -78,7 +93,7 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
                 print(f"unique_id сдвинут на {move_vin_id_up}: {unique_id} -> {new_unique_id}")
             except ValueError:
                 print(f"Ошибка: unique_id '{unique_id}' не может быть сдвинут.")
-    
+
     if vin and vin in air_storage_data and air_storage_data.get(vin):
         # Создаем указанное количество дубликатов для машин из JSON
         duplicates = duplicate_car(car, config, air_storage_data[vin], "в наличии", 0)
@@ -97,6 +112,8 @@ def main():
     parser.add_argument('--vin_tag', default='VIN', help='VIN tag name')
     parser.add_argument('--availability_tag', default='Availability', help='Availability tag name')
     parser.add_argument('--color_tag', default='Color', help='Color tag name')
+    parser.add_argument('--address_tag', default='Address', help='Address tag name')
+    parser.add_argument('--description_tag', default='Description', help='Description tag name')
     parser.add_argument('--unique_id_tag', default='Id', help='Unique_id tag name')
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
     parser.add_argument('--config_path', default='./.github/scripts/config_air_storage.json', help='Path to configuration file')
@@ -107,6 +124,8 @@ def main():
         args.vin_tag = args.vin_tag.lower()
         args.availability_tag = args.availability_tag.lower()
         args.color_tag = args.color_tag.lower()
+        args.address_tag = args.address_tag.lower()
+        args.description_tag = args.description_tag.lower()
         args.unique_id_tag = 'unique_id'  # Устанавливаем фиксированное значение
 
     config = vars(args)
@@ -117,11 +136,13 @@ def main():
     # Загружаем дополнительные параметры из конфигурационного файла
     source_config = load_config(args.config_path, args.source_type)
     
+    replacements = source_config['replacements']
     elements_to_localize = source_config['elements_to_localize']
     remove_cars_after_duplicate = source_config['remove_cars_after_duplicate']
     remove_mark_ids = source_config['remove_mark_ids']
     remove_folder_ids = source_config['remove_folder_ids']
     config['move_vin_id_up'] = source_config['move_vin_id_up']
+    config['new_address'] = source_config['new_address']
 
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
@@ -153,9 +174,10 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        process_car(car, config, all_duplicates, air_storage_data, elements_to_localize)
-        
         vin = car.find('VIN').text if car.find('VIN') is not None else None
+        
+        process_car(car, config, all_duplicates, air_storage_data, elements_to_localize, replacements)
+        
         if vin and vin in remove_cars_after_duplicate:
             cars_to_remove.append(car)
 
