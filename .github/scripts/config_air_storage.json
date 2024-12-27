@@ -1,7 +1,8 @@
 {
     "autoru": {
         "move_vin_id_up": 0,
-        "new_address": "", 
+        "new_address": "",
+        "new_phone": "",
         "replacements": {
         },
         "elements_to_localize": [
@@ -15,7 +16,8 @@
     },
     "avito": {
         "move_vin_id_up": 0,
-        "new_address": "", 
+        "new_address": "",
+        "new_phone": "",
         "replacements": {
         },
         "elements_to_localize": [
