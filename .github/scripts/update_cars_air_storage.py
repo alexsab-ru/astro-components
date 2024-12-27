@@ -3,7 +3,39 @@ import argparse
 import json
 from utils import *
 import xml.etree.ElementTree as ET
+from typing import Dict, Any
 
+
+
+def load_config(config_path: str, source_type: str) -> Dict[str, Any]:
+    """
+    Загружает конфигурацию из JSON файла.
+    """
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+            return config.get(source_type, {
+                "elements_to_localize": [],
+                "remove_cars_after_duplicate": [],
+                "remove_mark_ids": [],
+                "remove_folder_ids": []
+            })
+    except FileNotFoundError:
+        print(f"Конфигурационный файл {config_path} не найден. Используются значения по умолчанию.")
+        return {
+            "elements_to_localize": [],
+            "remove_cars_after_duplicate": [],
+            "remove_mark_ids": [],
+            "remove_folder_ids": []
+        }
+    except json.JSONDecodeError:
+        print(f"Ошибка при чтении {config_path}. Используются значения по умолчанию.")
+        return {
+            "elements_to_localize": [],
+            "remove_cars_after_duplicate": [],
+            "remove_mark_ids": [],
+            "remove_folder_ids": []
+        }
 
 def process_car(car: ET.Element, config, all_duplicates, air_storage_data, elements_to_localize) -> None:
     """
@@ -40,11 +72,21 @@ def main():
     parser.add_argument('--availability_tag', default='Availability', help='Availability tag name')
     parser.add_argument('--unique_id_tag', default='Id', help='Unique_id tag name')
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
+    parser.add_argument('--config_path', default='./.github/scripts/config_air_storage.json', help='Path to configuration file')
     args = parser.parse_args()
     config = vars(args)
     
     # Добавляем специфичные настройки в зависимости от типа источника
     config['generate_friendly_url'] = (args.source_type == 'autoru')
+
+    # Загружаем дополнительные параметры из конфигурационного файла
+    source_config = load_config(args.config_path, args.source_type)
+    
+    elements_to_localize = source_config['elements_to_localize']
+    remove_cars_after_duplicate = source_config['remove_cars_after_duplicate']
+    remove_mark_ids = source_config['remove_mark_ids']
+    remove_folder_ids = source_config['remove_folder_ids']
+    config['move_vin_id_up'] = source_config['move_vin_id_up']
 
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
@@ -60,21 +102,13 @@ def main():
         except Exception as e:
             print(f"Произошла ошибка при работе с файлом: {e}")
 
-    # Предполагаем, что у вас есть элементы с именами
-    elements_to_localize = [
-    ]
-
     # Список для хранения всех дубликатов
     all_duplicates = [
     ]
     # Создаем список машин для удаления
     cars_to_remove = [
     ]
-    remove_mark_ids = [
-    ]
-    remove_folder_ids = [
-    ]
-    
+        
     # Определяем корневой элемент в зависимости от типа источника
     cars_element = root.find('cars') if args.source_type == 'autoru' else root
     
@@ -85,6 +119,10 @@ def main():
             continue
         
         process_car(car, config, all_duplicates, air_storage_data, elements_to_localize)
+        
+        vin = car.find('VIN').text if car.find('VIN') is not None else None
+        if vin and vin in remove_cars_after_duplicate:
+            cars_to_remove.append(car)
 
     # Удаление ненужных машин
     for car in cars_to_remove:
