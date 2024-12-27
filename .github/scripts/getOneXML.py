@@ -82,6 +82,26 @@ def merge_xml_files(xml_contents, xpath):
     
     return merged_root
 
+def remove_duplicates(root, xpath):
+    """Удаление дубликатов элементов по XPath."""
+    unique_elements = set()
+    elements_to_remove = []
+    
+    for element in root.xpath(xpath):
+        element_str = etree.tostring(element, encoding='unicode', method='xml')
+        if element_str in unique_elements:
+            elements_to_remove.append(element)
+        else:
+            unique_elements.add(element_str)
+    
+    for element in elements_to_remove:
+        parent = element.getparent()
+        if parent is not None:
+            parent.remove(element)
+    
+    print(f"Removed {len(elements_to_remove)} duplicate elements.")
+    return root
+
 def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
     parser.add_argument('--xpath', help='XPath to the elements to be merged (optional)')
@@ -115,8 +135,9 @@ def main():
         xpath = args.xpath
 
     merged_root = merge_xml_files(xml_contents, xpath)
+    deduplicated_root = remove_duplicates(merged_root, xpath)
 
-    merged_tree = etree.ElementTree(merged_root)
+    merged_tree = etree.ElementTree(deduplicated_root)
     merged_tree.write(args.output_path, encoding="UTF-8", xml_declaration=True, pretty_print=True)
 
     print(f"XML files successfully downloaded and merged into {args.output_path}")
