@@ -150,6 +150,7 @@ def main():
     remove_folder_ids = source_config['remove_folder_ids']
     config['move_vin_id_up'] = source_config['move_vin_id_up']
     config['new_address'] = source_config['new_address']
+    config['new_phone'] = source_config['new_phone']
 
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
