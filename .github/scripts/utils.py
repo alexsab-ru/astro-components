@@ -350,23 +350,42 @@ def should_remove_car(car: ET.Element, mark_ids: list, folder_ids: list) -> bool
     Проверяет, нужно ли удалить машину по заданным критериям.
     
     Args:
-        car: XML элемент машины
-        mark_ids: Список ID марок для удаления
-        folder_ids: Список ID папок для удаления
+        car (ET.Element): XML элемент машины.
+        mark_ids (list): Список ID марок для удаления.
+        folder_ids (list): Список ID папок для удаления.
     
     Returns:
-        bool: True если машину нужно удалить
+        bool: True если машину нужно удалить, иначе False.
     """
-    if mark_ids:
-        car_mark = car.find('mark_id').text
-        if car_mark in mark_ids:
-            return True
+    def element_in_list(element_names, check_list):
+        """
+        Проверяет, есть ли значение элемента в заданном списке.
+        
+        Args:
+            element_names (list): Список имен элементов для проверки.
+            check_list (list): Список значений для сравнения.
+        
+        Returns:
+            bool: True, если значение элемента есть в check_list.
+        """
+        for name in element_names:
+            try:
+                value = car.find(name)
+                if value is not None and value.text in check_list:
+                    return True
+            except Exception as e:
+                print(f"Ошибка при обработке элемента '{name}': {e}")
+        return False
     
-    if folder_ids:
-        car_folder = car.find('folder_id').text
-        if car_folder in folder_ids:
-            return True
+    # Проверяем наличие марки автомобиля
+    if mark_ids and element_in_list(['mark_id', 'Make', 'brand'], mark_ids):
+        return True
     
+    # Проверяем наличие папки автомобиля
+    if folder_ids and element_in_list(['folder_id', 'Model', 'model'], folder_ids):
+        return True
+    
+    # Если ни одно условие не выполнено, автомобиль оставляем
     return False
 
 
@@ -663,9 +682,9 @@ def duplicate_car(car, config, n, status="в пути", offset=0):
     # Проверка наличия обязательных полей 'VIN' и 'Availability'
     try:
         if car.find(config['vin_tag']) is None:
-            raise ValueError(f"Элемент 'car' не содержит обязательного поля '${config['vin_tag']}'")
+            raise ValueError(f"Элемент 'car' не содержит обязательного поля '{config['vin_tag']}'")
         if car.find(config['availability_tag']) is None:
-            raise ValueError(f"Элемент 'car' не содержит обязательного поля '${config['availability_tag']}'")
+            raise ValueError(f"Элемент 'car' не содержит обязательного поля '{config['availability_tag']}'")
     except ValueError as e:
         print(f"Ошибка: {e}")
         return duplicates  # Вернем пустой список и продолжим выполнение скрипта
