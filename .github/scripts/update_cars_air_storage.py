@@ -68,6 +68,11 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
         if address:
             update_element_text(car, config['address_tag'], config['new_address'])
     
+    if config.get('new_phone', False):
+        phone = car.find(config['phone_tag']).text if car.find(config['phone_tag']) is not None else None
+        if phone:
+            update_element_text(car, config['phone_tag'], config['new_phone'])
+    
     # Получаем VIN автомобиля
     vin = car.find(config['vin_tag']).text if car.find(config['vin_tag']) is not None else None
     if vin:
@@ -113,6 +118,7 @@ def main():
     parser.add_argument('--availability_tag', default='Availability', help='Availability tag name')
     parser.add_argument('--color_tag', default='Color', help='Color tag name')
     parser.add_argument('--address_tag', default='Address', help='Address tag name')
+    parser.add_argument('--phone_tag', default='ContactPhone', help='Phone tag name')
     parser.add_argument('--description_tag', default='Description', help='Description tag name')
     parser.add_argument('--unique_id_tag', default='Id', help='Unique_id tag name')
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
@@ -125,6 +131,7 @@ def main():
         args.availability_tag = args.availability_tag.lower()
         args.color_tag = args.color_tag.lower()
         args.address_tag = args.address_tag.lower()
+        args.phone_tag = args.phone_tag.lower()
         args.description_tag = args.description_tag.lower()
         args.unique_id_tag = 'unique_id'  # Устанавливаем фиксированное значение
 
