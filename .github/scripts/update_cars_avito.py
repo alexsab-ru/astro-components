@@ -6,11 +6,14 @@ import xml.etree.ElementTree as ET
 
 
 def process_car(car: ET.Element, config, all_duplicates, air_storage_data, elements_to_localize) -> None:
-    
-    friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
-    friendly_url = f"{process_friendly_url(friendly_url)}"
-    print(f"Уникальный идентификатор: {friendly_url}")
-    create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
+    """
+    Обрабатывает отдельный автомобиль в XML.
+    """
+    if config.get('generate_friendly_url', False):
+        friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
+        friendly_url = f"{process_friendly_url(friendly_url)}"
+        print(f"Уникальный идентификатор: {friendly_url}")
+        create_child_element(car, 'url', f"https://{config['repo_name']}/cars/{friendly_url}/")
     
     # Заменяем цвет фида на цвет для Avito
     update_element_text(car, 'Color', avitoColor(car.find('Color').text))
@@ -36,8 +39,12 @@ def main():
     parser.add_argument('--vin_tag', default='Vin', help='VIN tag name')
     parser.add_argument('--availability_tag', default='Availability', help='Availability tag name')
     parser.add_argument('--unique_id_tag', default='Id', help='Unique_id tag name')
+    parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
     args = parser.parse_args()
     config = vars(args)
+    
+    # Добавляем специфичные настройки в зависимости от типа источника
+    config['generate_friendly_url'] = (args.source_type == 'autoru')
 
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
@@ -68,8 +75,10 @@ def main():
     remove_folder_ids = [
     ]
     
+    # Определяем корневой элемент в зависимости от типа источника
+    cars_element = root.find('cars') if args.source_type == 'autoru' else root
+    
     # Обработка машин
-    cars_element = root.find('cars')
     for car in cars_element:
         if should_remove_car(car, remove_mark_ids, remove_folder_ids):
             cars_to_remove.append(car)
