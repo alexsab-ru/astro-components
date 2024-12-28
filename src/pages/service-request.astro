@@ -5,6 +5,7 @@ import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
+import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import models from '@/data/models.json';
 const options = models.filter(m => {
 	if(m.show){
@@ -38,7 +39,7 @@ const options = models.filter(m => {
 				required
 				errorClasses="text-red-500"
 			/>
-
+			<ChoosingDealerSelect required={true} />
 			<Checkbox
 				name="agree"
 				label={AGREE_LABEL}

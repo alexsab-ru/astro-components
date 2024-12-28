@@ -1,5 +1,5 @@
 ---
-import { getEntryBySlug } from 'astro:content';
+import { getEntry } from 'astro:content';
 
 interface Props {
   mdx: string;
@@ -9,7 +9,7 @@ interface Props {
 const { mdx, noPadding = false } = Astro.props;
 
 // Попробуем получить запись из коллекции 'seo' по слагу
-const content = await getEntryBySlug('seo', mdx);
+const content = await getEntry('seo', mdx);
 let showseo = false;
 let Content = null;
 

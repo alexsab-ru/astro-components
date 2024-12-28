@@ -4,6 +4,7 @@ import { BRAND, LEGAL_CITY_WHERE, AGREE_LABEL } from '@/const';
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import salons from '@/data/salons.json'
 const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
 import modelsJSON from '@/data/models.json';
@@ -91,6 +92,8 @@ const optionsJSON = JSON.stringify(options);
 					required
 					errorClasses="text-red-500"
 				/>
+
+				<ChoosingDealerSelect required={true} />
 
 				<Checkbox
 					name="agree"

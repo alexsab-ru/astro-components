@@ -4,6 +4,9 @@ import Model from '@/components/Model/Model.astro';
 import ModelComplectations from '@/components/Model/Complectations.astro';
 import CarItem from "@/components/Cars/Item.astro";
 import UniversalSection from '@/components/Model/sections/universal.astro';
+import SeoText from '@/components/Seo/Index.astro';
+const { slug } = Astro.params;
+const seoname = 'models-'+slug;
 
 
 import models from '@/data/models.json';
@@ -48,6 +51,7 @@ const cars = rawCars && rawCars.length ? rawCars.filter(
   {
     (model?.complectations !== undefined && model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={BRAND} />
   }
+  <SeoText mdx={seoname} />
   {cars.length > 0 && (
     <section class="odd:bg-gray-100">
       <div class="container">
@@ -58,5 +62,4 @@ const cars = rawCars && rawCars.length ? rawCars.filter(
       </div>
     </section>
   )}
-    
 </Layout>

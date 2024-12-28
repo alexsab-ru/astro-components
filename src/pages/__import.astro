@@ -1,0 +1,229 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/Button/Button.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import Input from '@/components/Input.astro';
+import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
+import {SITE_NAME, BRAND, AGREE_LABEL, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
+
+const includeModels = ['k5', 'sportage', 'sorento'];
+const termsOfPurchase = ['Кредит', 'Лизинг', 'Рассрочка', 'Полная оплата'];
+const initialPayments = [0, 10, 20, 30];
+const planningPurchases = ['В ближайшие время', 'Готов сейчас', 'Планирую на будущее'];
+
+import rawModels from '@/data/models.json';
+const models = rawModels.filter(model => includeModels.includes(model.id));
+---
+<PageLayout
+	h1="Новые и&nbsp;автомобили с&nbsp;пробегом из&nbsp;Казахстана от&nbsp;2019 года с&nbsp;выгодой до&nbsp;60%"
+	title={`Автомобили ${BRAND} из Казахстана`}
+	breadcrumb={[{name:"Автомобили из Казахстана", href:""}]}
+	description={`Подбор и доставка автомобилей ${BRAND} из Казахстана в Россию под ключ.`}
+>
+	<form 
+		x-data 
+		x-cloak 
+		x-init={`
+			$store.import.models = ${JSON.stringify(models)};
+			$store.import.brand = '${BRAND}';
+			$store.import.termOfPurchase = 'Кредит';
+			$store.import.initialPayment = '0%';
+			$store.import.planningPurchase = 'Готов сейчас';
+		`}
+		class="mt-10"
+	>
+		<div x-show="$store.import.step === 0">
+			<ul>
+				<li> - Вы получите эПТС и тех. паспорт на авто</li>
+				<li> - Рассрочка на услуги ДЦ {SITE_NAME}</li>
+				<li> - Депозитный договор и инвойс на Ваше имя.</li>
+			</ul>
+		
+			<Button 
+				classes="!text-white !no-underline"
+				title="Подобрать авто"
+				x-on:click.prevent="$store.import.step = 1"
+			/>
+		</div>
+
+		<div x-show="$store.import.step === 1" class="grid lg:grid-cols-3 xl:grid-cols-5 gap-y-5 xl:divide-x divide-black/20">
+			<div class="lg:px-5 first:pl-0">
+				<div class="text-xl font-bold mb-3">Выберите модель:</div>
+				<template x-for="m in $store.import.models" :key="m.id">
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+						<input type="radio" x-model="$store.import.model" :value="m.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.modelSelected(m.id)" />
+						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
+							<span class="fake-radio-black rounded-full before:rounded-full"></span>
+							<span class="pt-1 font-bold" x-text="m.name"></span>
+						</div>
+					</label>
+				</template>
+			</div>
+			<div x-ref="complectationBlock" x-show="$store.import.currentModel" class="lg:col-span-2 lg:px-5 first:pl-0">
+				<template x-if="$store.import.currentModel">
+					<div>
+						<div class="text-xl font-bold mb-3">Выберите комплектацию:</div>
+						<div class="grid xs:grid-cols-1 grid-cols-2 gap-4 sm:gap-5">
+							<template x-for="(compl, idx) in $store.import.currentModel.complectations" :key="compl.name+idx">
+								<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20">
+									<input type="radio" x-model="$store.import.complectation" :value="compl.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.colorsBlock)" />
+									<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
+										<span class="fake-radio-black rounded-full before:rounded-full"></span>
+										<span class="pt-1 font-bold" x-text="compl.name"></span>
+									</div>
+								</label>
+							</template>
+						</div>
+					</div>
+				</template>
+			</div>
+			<div x-ref="colorsBlock" x-show="$store.import.currentModel && $store.import.complectation" class="lg:px-5 first:pl-0">
+				<template x-if="$store.import.currentModel && $store.import.complectation">
+					<div>
+						<div class="text-xl font-bold mb-3">Выберите цвет:</div>
+						<template x-for="(c, idx) in $store.import.currentModel?.colors" :key="c.id+idx">
+							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+								<input type="radio" x-model="$store.import.color" :value="c.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.drivesBlock)" />
+								<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
+									<span class="fake-radio-black rounded-full before:rounded-full"></span>
+									<span class="pt-1 font-bold" x-text="c.name"></span>
+								</div>
+							</label>
+						</template>
+					</div>
+				</template>
+			</div>
+			<div x-ref="drivesBlock" x-show="$store.import.currentModel && $store.import.color" class="lg:px-5 first:pl-0">
+				<template x-if="$store.import.currentModel && $store.import.color">
+					<div>
+						<div class="text-xl font-bold mb-3">Привод:</div>
+						<template x-for="(d, idx) in $store.import.drives" :key="d+idx">
+							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+								<input type="radio" x-model="$store.import.drive" :value="d" class="absolute w-0 h-0 opacity-0 invisible peer" />
+								<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
+									<span class="fake-radio-black rounded-full before:rounded-full"></span>
+									<span class="pt-1 font-bold" x-text="d"></span>
+								</div>
+							</label>
+						</template>
+					</div>
+				</template>
+			</div>
+		</div>
+
+		<div x-show="$store.import.step === 2" class="grid lg:grid-cols-3 gap-y-5 lg:divide-x divide-black/20">
+			<div class="lg:px-5 first:pl-0" x-ref="termsOfPurchaseBlock">
+				<div class="text-xl font-bold mb-3">Условия покупки:</div>
+				{termsOfPurchase.map(item => (
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+						<input type="radio" x-model="$store.import.termOfPurchase" value={item} class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.initialPaymentsBlock)" />
+						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
+							<span class="fake-radio-black rounded-full before:rounded-full"></span>
+							<span class="pt-1 font-bold">{item}</span>
+						</div>
+					</label>
+				))}
+			</div>
+			<div class="lg:px-5 first:pl-0" x-ref="initialPaymentsBlock">
+				<div class="text-xl font-bold mb-3">Первоначальный взнос:</div>
+				{initialPayments.map(item => (
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+						<input type="radio" x-model="$store.import.initialPayment" value={item+'%'} class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.planningPurchasesBlock)" />
+						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
+							<span class="fake-radio-black rounded-full before:rounded-full"></span>
+							<span class="pt-1 font-bold">{item+'%'}</span>
+						</div>
+					</label>
+				))}
+			</div>
+			<div class="lg:px-5 first:pl-0" x-ref="planningPurchasesBlock">
+				<div class="text-xl font-bold mb-3">Когда планируете покупку?</div>
+				{planningPurchases.map(item => (
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+						<input type="radio" x-model="$store.import.planningPurchase" value={item} class="absolute w-0 h-0 opacity-0 invisible peer" />
+						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
+							<span class="fake-radio-black rounded-full before:rounded-full"></span>
+							<span class="pt-1 font-bold">{item}</span>
+						</div>
+					</label>
+				))}
+			</div>
+		</div>
+
+		<div class="space-y-6 max-w-screen-sm w-full mx-auto mb-5" x-show="$store.import.step === 3">
+			<ul class="space-y-5">
+				<li class="flex items-end justify-between leading-none"><span>Модель</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.brand + ' ' + $store.import.model"></span>
+				</li>
+				<li class="flex items-end justify-between leading-none"><span>Комплектация</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.complectation"></span>
+				</li>
+				<li class="flex items-end justify-between leading-none"><span>Цвет</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.color"></span>
+				</li>
+				<li class="flex items-end justify-between leading-none"><span>Привод</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.drive"></span>
+				</li>
+				<li class="flex items-end justify-between leading-none"><span>Условия покупки</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.termOfPurchase"></span>
+				</li>
+				<li class="flex items-end justify-between leading-none"><span>Первоначальный взнос</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.initialPayment"></span>
+				</li>
+				<li class="flex items-end justify-between leading-none"><span>Покупка</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.planningPurchase"></span>
+				</li>
+			</ul>
+			<input type="hidden" name="form" value="" />
+			<input
+				type="email"
+				tabindex="-1"
+				name="email"
+				class="h-0 opacity-0 absolute -z-[100]"
+				placeholder="mail@example.com"
+			/>
+			<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+			<Input
+				type="tel"
+				name="phone"
+				classes="border-gray-100"
+				placeholder="+7 (999) 999-99-99*"
+				required
+				errorClasses="text-red-500"
+			/>
+			<ChoosingDealerSelect required={true} />
+			<Checkbox
+				name="agree"
+				label={AGREE_LABEL}
+				color="black"
+				required
+				errorClasses="text-red-500 w-full"
+				errorText="Чтобы продолжить, установите флажок"
+			/>
+
+			<input
+				type="checkbox"
+				name="subscribe"
+				class="absolute w-0 h-0 opacity-0 invisible"
+			/>
+		</div>
+
+		<div 
+			class="sticky border-t py-4 flex items-center gap-4 justify-end w-full left-0 bottom-0 bg-white z-10 transition-all duration-300 ease-in-out"
+			:class="{'translate-y-0 opacity-100': $store.import.color && $store.import.drive && $store.import.step !== 0, 'translate-y-full opacity-0': !$store.import.color || !$store.import.drive || $store.import.step === 0}"
+		>
+			<Button 
+				classes="!no-underline btn-o black !m-0"
+				title="Назад"
+				x-on:click.prevent="$store.import.step--; $store.import.scrollToElement(window)"
+				:style="$store.import.step < 2 ? 'display: none' : ''"
+			/>
+			<Button 
+				classes="!text-white !no-underline !m-0"
+				title="Далее"
+				x-on:click.prevent="$store.import.step++; $store.import.scrollToElement(window)"
+				:style="$store.import.step > 2 ? 'display: none' : ''"
+			/>
+			<div :class="{'hidden': $store.import.step < 3}">
+				<Button 
+					view="form-button"
+					classes="!text-white !no-underline !m-0 sm:!py-3.5"
+					title="Отправить"
+				/>
+			</div>
+		</div>
+	</form>
+</PageLayout>
