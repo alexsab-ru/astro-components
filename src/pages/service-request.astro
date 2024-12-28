@@ -20,42 +20,46 @@ const options = models.filter(m => {
 			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на сервис {BRAND}</h1>
 			<p class="text-center mt-1 text-gray-500">Профессиональное обслуживание с сохранением гарантии</p>
 		</div>
-		<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
-			<input type="hidden" name="form" value="Запись на сервис" />
-			<input
-				type="email"
-				tabindex="-1"
-				name="email"
-				class="h-0 opacity-0 absolute -z-[100]"
-				placeholder="mail@example.com"
-			/>
-			<FormSelect name="model" placeholder="Выберите модель" options={options} />
-			<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
-			<Input
-				type="tel"
-				name="phone"
-				classes="border-gray-100"
-				placeholder="+7 (999) 999-99-99*"
-				required
-				errorClasses="text-red-500"
-			/>
-			<ChoosingDealerSelect required={true} />
-			<Checkbox
-				name="agree"
-				label={AGREE_LABEL}
-				color="black"
-				required
-				errorClasses="text-red-500 w-full"
-				errorText="Чтобы продолжить, установите флажок"
-			/>
+		<div class="flex flex-col-reverse lg:grid grid-cols-2 items-center gap-10">
+			<form class="flex flex-col gap-4 mx-auto w-full">
+				<input type="hidden" name="form" value="Запись на сервис" />
+				<input
+					type="email"
+					tabindex="-1"
+					name="email"
+					class="h-0 opacity-0 absolute -z-[100]"
+					placeholder="mail@example.com"
+				/>
+				<FormSelect name="model" placeholder="Выберите модель" options={options} />
+				<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+				<Input
+					type="tel"
+					name="phone"
+					classes="border-gray-100"
+					placeholder="+7 (999) 999-99-99*"
+					required
+					errorClasses="text-red-500"
+				/>
+				<ChoosingDealerSelect required={true} />
+				<Checkbox
+					name="agree"
+					label={AGREE_LABEL}
+					color="black"
+					required
+					errorClasses="text-red-500 w-full"
+					errorText="Чтобы продолжить, установите флажок"
+				/>
+	
+				<input
+					type="checkbox"
+					name="subscribe"
+					class="absolute w-0 h-0 opacity-0 invisible"
+				/>
+	
+				<Button view="form-button" classes="w-full" title="Отправить" />
+			</form>
 
-			<input
-				type="checkbox"
-				name="subscribe"
-				class="absolute w-0 h-0 opacity-0 invisible"
-			/>
-
-			<Button view="form-button" classes="w-full" title="Отправить" />
-		</form>
+			<img src="/img/banners/moyka-dnishcha.webp" alt="Мойка днища на подъемнике">	
+		</div>
 	</div>
 </Layout>
