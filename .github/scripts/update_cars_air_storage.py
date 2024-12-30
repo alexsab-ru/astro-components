@@ -217,7 +217,7 @@ def main():
     """
     Основная функция программы.
     """
-    parser = argparse.ArgumentParser(description='Download and merge XML files.')
+    parser = argparse.ArgumentParser(description='Download and update Avito|AutoRu XML files.')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
     parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
