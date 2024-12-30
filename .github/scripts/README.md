@@ -21,3 +21,28 @@ python3 .github/scripts/update_cars_air_storage.py --source_type avito --input_f
 export ENV_XML_URL="./public/avito_dc.xml ./public/avito_friend.xml"
 python3 .github/scripts/getOneXML.py --output_path="./public/avito.xml"
 ```
+
+## Загрузка конфигурации
+
+### Из GitHub репозитория:
+
+```bash
+python update_cars.py --source_type autoru \
+    --config_type github \
+    --github_repo "your_username/your_repo" \
+    --github_path "config"
+```
+
+### Из GitHub Gist:
+
+```bash
+python update_cars.py --source_type autoru \
+    --config_type github \
+    --gist_id "your_gist_id"
+```
+
+### Из локального файла (по умолчанию):
+
+```bash
+python update_cars.py --source_type autoru
+```

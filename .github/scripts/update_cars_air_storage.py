@@ -6,6 +6,60 @@ import xml.etree.ElementTree as ET
 from typing import Dict, Any
 
 
+def load_github_config(source_type: str, github_config: Dict[str, str]) -> Dict[str, Any]:
+    """
+    Загружает конфигурацию из GitHub репозитория или Gist.
+    
+    :param source_type: Тип источника (autoru или avito)
+    :param github_config: Словарь с настройками GitHub
+    :return: Загруженная конфигурация
+    """
+    if 'GITHUB_TOKEN' in os.environ:
+        headers = {'Authorization': f'token {os.environ["GITHUB_TOKEN"]}'}
+    else:
+        headers = {}
+
+    try:
+        if 'gist_id' in github_config:
+            # Загрузка из Gist
+            gist_url = f"https://api.github.com/gists/{github_config['gist_id']}"
+            response = requests.get(gist_url, headers=headers)
+            response.raise_for_status()
+            gist_data = response.json()
+            
+            # Ищем файл конфигурации для нужного источника
+            for filename, file_data in gist_data['files'].items():
+                if source_type in filename.lower():
+                    return json.loads(file_data['content'])
+                    
+        elif 'repo' in github_config and 'path' in github_config:
+            # Загрузка из репозитория
+            repo = github_config['repo']
+            path = github_config['path']
+            file_url = f"https://api.github.com/repos/{repo}/contents/{path}/{source_type}.json"
+            
+            response = requests.get(file_url, headers=headers)
+            response.raise_for_status()
+            
+            content = response.json()['content']
+            import base64
+            decoded_content = base64.b64decode(content).decode('utf-8')
+            return json.loads(decoded_content)
+            
+    except requests.RequestException as e:
+        print(f"Ошибка при загрузке конфигурации из GitHub: {e}")
+    except json.JSONDecodeError:
+        print("Ошибка при парсинге JSON конфигурации")
+    except KeyError as e:
+        print(f"Отсутствует обязательный параметр в конфигурации: {e}")
+        
+    # Возвращаем конфигурацию по умолчанию в случае ошибки
+    return {
+        "elements_to_localize": [],
+        "remove_cars_after_duplicate": [],
+        "remove_mark_ids": [],
+        "remove_folder_ids": []
+    }
 
 def load_config(config_path: str, source_type: str) -> Dict[str, Any]:
     """
@@ -122,7 +176,11 @@ def main():
     parser.add_argument('--description_tag', default='Description', help='Description tag name')
     parser.add_argument('--unique_id_tag', default='Id', help='Unique_id tag name')
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
+    parser.add_argument('--config_type', choices=['local', 'github'], default='local', help='Config source type')
     parser.add_argument('--config_path', default='./.github/scripts/config_air_storage.json', help='Path to configuration file')
+    parser.add_argument('--github_repo', help='GitHub repository in format owner/repo')
+    parser.add_argument('--github_path', default='config', help='Path to config directory in GitHub repository')
+    parser.add_argument('--gist_id', help='GitHub Gist ID with configuration')
     args = parser.parse_args()
 
     # Приведение тегов к нижнему регистру для autoru
@@ -140,8 +198,21 @@ def main():
     # Добавляем специфичные настройки в зависимости от типа источника
     config['generate_friendly_url'] = (args.source_type == 'autoru')
 
-    # Загружаем дополнительные параметры из конфигурационного файла
-    source_config = load_config(args.config_path, args.source_type)
+    # Загружаем конфигурацию в зависимости от источника
+    if args.config_type == 'github':
+        github_config = {}
+        if args.gist_id:
+            github_config['gist_id'] = args.gist_id
+        elif args.github_repo:
+            github_config['repo'] = args.github_repo
+            github_config['path'] = args.github_path
+        else:
+            print("Для использования GitHub необходимо указать --gist_id или --github_repo")
+            return
+            
+        source_config = load_github_config(args.source_type, github_config)
+    else:
+        source_config = load_config(args.config_path, args.source_type)
     
     replacements = source_config['replacements']
     elements_to_localize = source_config['elements_to_localize']
