@@ -175,7 +175,7 @@ def localize_element_text(element):
         "white": "Белый",
         "blue": "Синий",
         "gray": "Серый",
-        "silver": "Серебристый",
+        "silver": "Серебряный",
         "brown": "Коричневый",
         "red": "Красный",
         "grey": "Серый",
