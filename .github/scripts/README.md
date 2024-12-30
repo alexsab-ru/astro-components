@@ -46,3 +46,16 @@ python update_cars.py --source_type autoru \
 ```bash
 python update_cars.py --source_type autoru
 ```
+
+### Из переменных окружения
+
+```bash
+# Установка переменных окружения
+export CARS_AUTORU_ELEMENTS_TO_LOCALIZE='["elem1", "elem2"]'
+export CARS_AUTORU_REMOVE_CARS_AFTER_DUPLICATE='["vin1", "vin2"]'
+export CARS_AUTORU_REMOVE_MARK_IDS='["mark1", "mark2"]'
+export CARS_AUTORU_REMOVE_FOLDER_IDS='["folder1", "folder2"]'
+
+# Запуск скрипта
+python update_cars.py --source_type autoru
+```
