@@ -5,15 +5,17 @@ caption: Выгода до 250 000 рублей по программе трей
 breadcrumb: Трейд-ин с выгодой до 250 000 рублей
 pubDate: 2024-03-01
 image: /img/specials/treyd-in-s-vygodoy/e7cbcae3b97265382b92eee607fc06ca.webp
-description: "Скидка предоставляется при приобретении нового автомобиля физическим или юридическим лицом, являющимся законным собственником сдаваемого в зачет приобретения нового автомобиля Jetour. Акция действует с 1 марта по 31 декабря 2024 года"
+description: "Скидка предоставляется при приобретении нового автомобиля физическим или юридическим лицом, являющимся законным собственником сдаваемого в зачет приобретения нового автомобиля Jetour"
 ---
-export const DateTo = "31.12.2024"
-
 import Button from '@/components/Button/Button.astro';
 import { SITE_NAME, PHONE } from '@/const';
 import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 import { LEGAL_CITY_WHERE } from '@/const'
+
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 
 <picture>
     <source media="(min-width: 1025px)" srcset="/img/specials/treyd-in-s-vygodoy/THyE8v__frame-40145-1.webp" />
@@ -26,7 +28,7 @@ import { LEGAL_CITY_WHERE } from '@/const'
 
 <h3 class="font-bold text-xl md:text-2xl mb-5">Получите выгоду на&nbsp;покупку автомобиля Jetour 250&nbsp;000&nbsp;рублей. При сдаче вашего автомобиля в&nbsp;Трейд-ин!</h3>
 
-Выгоду можно получить в **Дилерском центре &laquo;Jetour Альфа&raquo;** в {LEGAL_CITY_WHERE} c 1 марта по 31 декабря 2024 года. 
+Выгоду можно получить в **Дилерском центре &laquo;Jetour Альфа&raquo;** в {LEGAL_CITY_WHERE} в {dateToPrepositional}. 
 
 Акция действует на модели: Dashing, X70 Plus, X90 Plus 2023 и 2024 годов выпуска<sup>*</sup>
 

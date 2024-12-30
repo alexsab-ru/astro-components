@@ -10,9 +10,12 @@ description: "Время выгоды - это выгода на покупку,
 
 import Button from '@/components/Button/Button.astro';
 import { LEGAL_CITY_WHERE, LEGAL_ENTITY } from '@/const';
-import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 
-export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
 
 <picture>
     <source media="(min-width: 768px)" srcset="/img/banners/dashing-kv.webp" />
@@ -68,7 +71,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Прямая выгода</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-4">
                         <b>Получите выгоду до 150 000 рублей</b>
                         <div class="!text-sm">при покупке Jetour Dashing, в комплектациях Elite, Luxury 1.5T и Comfort Plus.</div>
@@ -91,7 +94,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Приобретайте Jetour Dashing в кредит</div>
                         <b>от 0% или получите выгоду до 220 000 рублей!</b>
@@ -108,7 +111,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
-                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour Dashing в любой комплектации <b>2024 года выпуска.</b></div>
                     </div>
@@ -122,7 +125,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <b>Получите выгоду до 200 000 рублей</b>
                         <div class="!text-sm">при обмене старого авто на новый</div>
@@ -142,7 +145,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Приобретайте Jetour T2, в любой комплектации, в кредит</div>
                         <b>и получите выгоду до 220 000 рублей!</b>
@@ -159,7 +162,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
-                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour T2 в любой комплектации <b>2024 года выпуска.</b></div>
                     </div>
@@ -173,7 +176,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <b>Получите выгоду до 100 000 рублей</b>
                         <div class="!text-sm">на покупку автомобилей T2 в любой комплектации при обмене старого авто на новый.</div>
@@ -193,7 +196,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Прямая выгода</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <b>Получите выгоду до 250 000 рублей</b>
                         <div class="!text-sm">при покупке автомобилей X70 Plus в комплектации Comfort 2023 года выпуска, или <b>выгоду до 100 000 рублей</b> на модель X70 Plus 2024 года выпуска.</div>
@@ -208,7 +211,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Приобретайте Jetour X70 Plus в кредит</div>
                         <b>от 0% или получите выгоду до 220 000 рублей!</b>
@@ -225,7 +228,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
-                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour X70 Plus в любой комплектации <b>2023 и 2024 года выпуска.</b></div>
                     </div>
@@ -239,7 +242,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Оцените и обменяйте ваш автомобиль по выгодной стоимости и дополнительно получите <b>выгоду до 200 000 рублей,</b> а покупку X70 Plus 2023 года  комплектации Comfort, или X70 Plus 2024 года в любой комплектации</div>
                     </div>
@@ -258,7 +261,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Прямая выгода</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <b>Получите выгоду до 250 000 рублей</b>
                         <div class="!text-sm">при покупке автомобилей X90 Plus 2023 года выпуска или <b>выгоду до 150 000 рублей</b> при покупке автомобилей X90 Plus 2024 года выпуска</div>
@@ -273,7 +276,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредитование</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Приобретайте Jetour X90 Plus в кредит от <b>0% или получите выгоду до 220 000 рублей</b> на автомобили X90 Plus 2023 и 2024</div>
                     </div>
@@ -289,7 +292,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
-                    <small class="block mb-5">С 7 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour X90 Plus в любой комплектации <b>2023 и 2024 года выпуска.</b></div>
                     </div>
@@ -303,7 +306,7 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
             <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
                 <div class="flex-grow">
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по программе трейд-ин</div>
-                    <small class="block mb-5">С 1 декабря по 31 декабря 2024 года</small>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div class="!text-sm">Оцените и обменяйте ваш автомобиль по выгодной стоимости и дополнительно получите <b>выгоду до 250 000 рублей</b> на автомобили X90 Plus 2023 или
 2024 года выпуска.</div>

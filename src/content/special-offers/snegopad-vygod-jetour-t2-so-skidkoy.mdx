@@ -5,16 +5,15 @@ caption: "Снегопад выгод: Jetour T2 со скидкой!"
 breadcrumb: "Снегопад выгод на Jetour T2"
 pubDate: 2024-11-26
 image: "/img/specials/snegopad-vygod-jetour-t2-so-skidkoy/thumb.webp"
-description: "Успейте воспользоваться уникальным предложением на Jetour T2! Обновленный прайс-лист с выгодой до 320 000 рублей. Специальные условия кредитования от Альфа-Банка. Акция действует до 31 декабря 2024 года."
+description: "Успейте воспользоваться уникальным предложением на Jetour T2! Обновленный прайс-лист с выгодой до 320 000 рублей. Специальные условия кредитования от Альфа-Банка."
 ---
 import Button from '@/components/Button/Button.astro';
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import { SITE_NAME, PHONE } from '@/const';
 import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 
-export const from = '01.07.2024';
-export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
 <picture>
 	<source media="(min-width: 1280px)" srcset="/img/specials/snegopad-vygod-jetour-t2-so-skidkoy/jetour-T2-winter-1920x1080.webp" />
@@ -29,8 +28,12 @@ export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
 **Jetour T2 Voyage:** 3 639 000 рублей с учётом выгоды по программе трейд-ин.
 
+<br/>
+
 Кроме того, Альфа-Банк предлагает специальную кредитную ставку на Jetour T2.
 
-Предложение действует только до 31 декабря 2024 года.
+<br/>
 
 <SpecialSalonsInfo dataFormName="Узнать подробнее. Снегопад выгод на Jetour T2" />
+
+> Предложение действует только до {dateTo}.

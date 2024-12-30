@@ -1,6 +1,6 @@
 ---
 import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
-import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
 import PageLayout from "@/layouts/PageLayout.astro";
@@ -204,7 +204,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 								</a>
 								<a href="/cars/" class="swiper-slide !text-white !no-underline !m-0 py-4 px-8 !h-auto" data-swiper-autoplay="5000">
 									<div class="flex flex-col justify-center gap-4 h-full">
-										<div class="md:text-2xl leading-none font-bold">До конца декабря Jetour на выгодных условиях</div>
+										<div class="md:text-2xl leading-none font-bold">До конца {MONTH_GENITIVE} Jetour на выгодных условиях</div>
 										<div class="text-xs sm:text-sm md:text-base">Подробности по телефону и в автосалоне. Каско в подарок</div>
 									</div>
 								</a>

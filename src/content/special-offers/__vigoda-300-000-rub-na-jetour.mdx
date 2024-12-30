@@ -6,13 +6,15 @@ pubDate: 2024-03-01
 image: /img/specials/vigoda-300-000-rub-na-jetour/thumb.webp
 description: "Приобретайте автомобиль Jetour Dashing в любой комплектации с выгодой 300 тысяч рублей в Дилерском центре Jetour Альфа в Самаре"
 ---
-export const DateTo = "30.04.2024"
-
 import Button from '@/components/Button/Button.astro';
 import { SITE_NAME, PHONE } from '@/const';
 import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 import { LEGAL_CITY_WHERE } from '@/const'
+
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 
 <picture>
     <source media="(min-width: 1025px)" srcset="/img/specials/vigoda-300-000-rub-na-jetour/vigoda-300-000-rub-na-jetour.webp" />
