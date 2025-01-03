@@ -59,3 +59,13 @@ export CARS_AUTORU_REMOVE_FOLDER_IDS='["folder1", "folder2"]'
 # Запуск скрипта
 python update_cars.py --source_type autoru
 ```
+
+
+## Обновление АВН на сайте
+
+```bash
+python update_cars.py --source_type carcopy
+python update_cars.py --source_type data_cars
+python update_cars.py --source_type maxposter
+python update_cars.py --source_type vehicles
+```

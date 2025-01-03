@@ -81,7 +81,7 @@ jobs:
       if: ${{ vars.XML_URL }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars_data_cars_car.py
+        python .github/scripts/update_cars.py --source_type data_cars
       env:
         REPO_NAME: ${{ github.event.repository.name }}
         XML_URL: ${{ vars.XML_URL }}
