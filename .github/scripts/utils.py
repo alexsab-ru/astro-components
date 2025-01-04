@@ -407,7 +407,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, ele
     if folder and color_image:
         thumb_path = os.path.join("img", "models", folder, "colors", color_image)
         # Проверяем, существует ли файл
-        if os.path.exists(thumb_path):
+        if os.path.exists(f"public/{thumb_path}"):
             thumb = f"/{thumb_path}"
         else:
             print("")
