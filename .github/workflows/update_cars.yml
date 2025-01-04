@@ -14,6 +14,7 @@ on:
       # - '.github/scripts/GSheetFetcher.js'
       # - '.github/scripts/update_cars_air_storage.py'
       # - '.github/scripts/update_cars.py'
+      # - '.github/scripts/utils.py'
       # - '.github/workflows/update_cars.yml'
   workflow_dispatch:
 
