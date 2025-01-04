@@ -110,7 +110,6 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
     """
     Обрабатывает отдельный автомобиль в XML.
     """
-    print("\n")
     if config.get('generate_friendly_url', False):
         friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
         friendly_url = f"{process_friendly_url(friendly_url)}"
