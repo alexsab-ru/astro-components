@@ -18,7 +18,7 @@ python3 .github/scripts/update_cars_air_storage.py --source_type avito --input_f
 # увеличиваем ID и VIN на заранее заданное число (для каждого ДЦ своё)
 # для этого нам нужна функция сдвига значения на заданное число, находится в конфиге.json
 # объединяем все XML в один и сохраняем его как avito_full.xml
-export ENV_XML_URL="./public/avito_dc.xml ./public/avito_friend.xml"
+export XML_URL="./public/avito_dc.xml ./public/avito_friend.xml"
 python3 .github/scripts/getOneXML.py --output_path="./public/avito.xml"
 ```
 

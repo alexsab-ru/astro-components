@@ -111,9 +111,9 @@ def main():
     args = parser.parse_args()
 
     # Используем переменную окружения, если она задана
-    env_xml_url = os.getenv('ENV_XML_URL')
-    if env_xml_url:
-        env_urls = env_xml_url.strip().split(args.split)
+    xml_url = os.getenv('XML_URL')
+    if xml_url:
+        env_urls = xml_url.strip().split(args.split)
     else:
         env_urls = []
 
@@ -121,7 +121,7 @@ def main():
     urls = env_urls + (args.urls if args.urls else [])
 
     if not urls:
-        print("No URLs provided. Please specify them using --urls or ENV_XML_URL.")
+        print("No URLs provided. Please specify them using --urls or XML_URL.")
         return
 
     xml_contents = [download_or_read_file(url) for url in urls]
