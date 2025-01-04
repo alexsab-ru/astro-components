@@ -62,12 +62,11 @@ jobs:
 
     - name: Get air storage
       if: ${{ vars.AIR_STORAGE_CSV_URL }}
-      run: node .github/scripts/getAirStorage.js
+      run: |
+        pnpm run getAirStorage
       env:
-        AIR_STORAGE_CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
-        QUERY_STRING: "SELECT A, B"
-        KEY_COLUMN: "VIN"
-        OUTPUT_PATHS: "air_storage.json"
+        CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
+        
 
     - name: Get Dealer JSON cars price
       if: ${{ vars.DEALER_PRICE_CSV_URL }}
@@ -75,7 +74,7 @@ jobs:
         pnpm run getDealerPrice
       continue-on-error: true
       env:
-        DEALER_PRICE_CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
+        CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
 
     - name: Get cars data_cars_car XML and generate cars file
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
