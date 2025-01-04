@@ -82,24 +82,44 @@ def merge_xml_files(xml_contents, xpath):
     
     return merged_root
 
-def remove_duplicates(root, xpath):
-    """Удаление дубликатов элементов по XPath."""
-    unique_elements = set()
+def remove_duplicates(root, xpath, attribute="VIN"):
+    """Удаление дубликатов элементов по значению атрибута (например, VIN)."""
+    unique_values = set()
     elements_to_remove = []
     
-    for element in root.xpath(xpath):
-        element_str = etree.tostring(element, encoding='unicode', method='xml')
-        if element_str in unique_elements:
-            elements_to_remove.append(element)
-        else:
-            unique_elements.add(element_str)
+    elements = root.xpath(xpath)
+    print(f"Found {len(elements)} elements with XPath '{xpath}'")
     
+    for element in elements:
+        vin_attr = element.get("VIN")
+        if vin_attr:
+            print(f"Found VIN as attribute: {vin_attr}")
+            if vin_attr in unique_values:
+                elements_to_remove.append(element)
+            else:
+                unique_values.add(vin_attr)
+            continue
+        
+        # Поиск VIN как вложенного элемента
+        vin_element = element.xpath('.//VIN')
+        if vin_element:
+            print(f"Found VIN as nested element: {vin_element[0].text}")
+            if vin_element[0].text in unique_values:
+                elements_to_remove.append(element)
+            else:
+                unique_values.add(vin_element[0].text)
+            continue
+        
+        # Если ничего не найдено
+        print(f"VIN not found in element: {etree.tostring(element, pretty_print=True).decode()}")
+    
+    # Удаляем дубликаты
     for element in elements_to_remove:
         parent = element.getparent()
         if parent is not None:
             parent.remove(element)
     
-    print(f"Removed {len(elements_to_remove)} duplicate elements.")
+    print(f"Removed {len(elements_to_remove)} duplicate elements based on attribute '{attribute}'.")
     return root
 
 def main():
