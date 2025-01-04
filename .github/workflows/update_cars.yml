@@ -11,10 +11,7 @@ on:
       # - '.github/scripts/getDealerData.cjs'
       # - '.github/scripts/getOneXML.py'
       # - '.github/scripts/update_cars_air_storage.py'
-      # - '.github/scripts/update_cars_carcopy.py'
-      # - '.github/scripts/update_cars_maxposter.py'
-      # - '.github/scripts/update_cars_vehicles.py'
-      # - '.github/scripts/update_cars_data_cars_car.py'
+      # - '.github/scripts/update_cars.py'
       # - '.github/scripts/config.py'
   workflow_dispatch:
 
