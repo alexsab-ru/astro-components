@@ -27,7 +27,7 @@ python3 .github/scripts/getOneXML.py --output_path="./public/avito.xml"
 ### Из GitHub репозитория:
 
 ```bash
-python update_cars_air_storage.py --source_type autoru \
+python .github/scripts/update_cars_air_storage.py --source_type autoru \
     --config_type github \
     --github_repo "your_username/your_repo" \
     --github_path "config"
@@ -36,7 +36,7 @@ python update_cars_air_storage.py --source_type autoru \
 ### Из GitHub Gist:
 
 ```bash
-python update_cars_air_storage.py --source_type autoru \
+python .github/scripts/update_cars_air_storage.py --source_type autoru \
     --config_type github \
     --gist_id "your_gist_id"
 ```
@@ -44,32 +44,30 @@ python update_cars_air_storage.py --source_type autoru \
 ### Из локального файла (по умолчанию):
 
 ```bash
-python update_cars_air_storage.py --source_type autoru
+python .github/scripts/update_cars_air_storage.py --source_type autoru
 ```
 
 ### Из переменных окружения
 
 ```bash
 # Установка переменных окружения
-export CARS_AUTORU_MOVE_VIN_ID_UP=0
-export CARS_AUTORU_NEW_ADDRESS=''
-export CARS_AUTORU_NEW_PHONE=''
-export CARS_AUTORU_REPLACEMENTS='{}'
-export CARS_AUTORU_ELEMENTS_TO_LOCALIZE='["elem1", "elem2"]'
-export CARS_AUTORU_REMOVE_CARS_AFTER_DUPLICATE='["vin1", "vin2"]'
-export CARS_AUTORU_REMOVE_MARK_IDS='["mark1", "mark2"]'
-export CARS_AUTORU_REMOVE_FOLDER_IDS='["folder1", "folder2"]'
-
-# Запуск скрипта
-python update_cars_air_storage.py --source_type autoru
+export CARS_AVITO_MOVE_VIN_ID_UP=1
+export CARS_AVITO_NEW_ADDRESS='"Новый адрес"'
+export CARS_AVITO_NEW_PHONE='"0987654"'
+export CARS_AVITO_REPLACEMENTS='{"официального дилера":"Новое название"}'
+export CARS_AVITO_ELEMENTS_TO_LOCALIZE='["elem1", "elem2"]'
+export CARS_AVITO_REMOVE_CARS_AFTER_DUPLICATE='["vin1", "vin2"]'
+export CARS_AVITO_REMOVE_MARK_IDS='["mark1", "mark2"]'
+export CARS_AVITO_REMOVE_FOLDER_IDS='["folder1", "folder2"]'
+python .github/scripts/update_cars_air_storage.py --source_type avito --config_source env
 ```
 
 
 ## Обновление АВН на сайте
 
 ```bash
-python update_cars.py --source_type carcopy
-python update_cars.py --source_type data_cars
-python update_cars.py --source_type maxposter
-python update_cars.py --source_type vehicles
+python .github/scripts/update_cars.py --source_type carcopy
+python .github/scripts/update_cars.py --source_type data_cars
+python .github/scripts/update_cars.py --source_type maxposter
+python .github/scripts/update_cars.py --source_type vehicles
 ```

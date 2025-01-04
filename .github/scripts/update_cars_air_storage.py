@@ -20,10 +20,10 @@ def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
     
     # Маппинг переменных окружения на ключи конфигурации
     env_mapping = {
-        f"{prefix}MOVE_VIN_ID_UP": "elements_to_localize",
-        f"{prefix}NEW_ADDRESS": "elements_to_localize",
-        f"{prefix}NEW_PHONE": "elements_to_localize",
-        f"{prefix}REPLACEMENTS": "elements_to_localize",
+        f"{prefix}MOVE_VIN_ID_UP": "move_vin_id_up",
+        f"{prefix}NEW_ADDRESS": "new_address",
+        f"{prefix}NEW_PHONE": "new_phone",
+        f"{prefix}REPLACEMENTS": "replacements",
         f"{prefix}ELEMENTS_TO_LOCALIZE": "elements_to_localize",
         f"{prefix}REMOVE_CARS_AFTER_DUPLICATE": "remove_cars_after_duplicate",
         f"{prefix}REMOVE_MARK_IDS": "remove_mark_ids",
@@ -227,11 +227,11 @@ def main():
         "remove_folder_ids": []
     }
     # Загружаем конфигурацию в зависимости от источника
-    if args.config_type == 'file':
-        return load_file_config(args.config_path, args.source_type, default_config)  # Существующая функция загрузки из файла
-    elif args.config_type == 'env':
-        return load_env_config(args.source_type, default_config)
-    elif args.config_type == 'github':
+    if args.config_source == 'file':
+        source_config = load_file_config(args.config_path, args.source_type, default_config)  # Существующая функция загрузки из файла
+    elif args.config_source == 'env':
+        source_config = load_env_config(args.source_type, default_config)
+    elif args.config_source == 'github':
         github_config = {}
         if args.gist_id:
             github_config['gist_id'] = args.gist_id
@@ -244,7 +244,7 @@ def main():
 
         source_config = load_github_config(args.source_type, github_config, default_config)
     else:
-        raise ValueError(f"Неподдерживаемый источник конфигурации: {args.config_type}")
+        raise ValueError(f"Неподдерживаемый источник конфигурации: {args.config_source}")
     
     replacements = source_config['replacements']
     elements_to_localize = source_config['elements_to_localize']
