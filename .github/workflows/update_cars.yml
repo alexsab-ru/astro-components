@@ -83,6 +83,33 @@ jobs:
         REPO_NAME: ${{ github.event.repository.name }}
         XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
 
+    - name: Get cars maxposter XML and generate cars file
+      if: ${{ vars.XML_URL_MAXPOSTER }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars.py --source_type maxposter
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.XML_URL_MAXPOSTER }}
+
+    - name: Get cars vehicles_vehicle XML and generate cars file
+      if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars.py --source_type vehicles
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+
+    - name: Get cars carcopy XML and generate cars file
+      if: ${{ vars.XML_URL_CARCOPY }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars.py --source_type carcopy
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.XML_URL_CARCOPY }}
+
     - name: Get Dealer XML for auto.ru and generate auto.ru xml
       if: ${{ vars.AUTORU_XML_URL }}
       run: |
