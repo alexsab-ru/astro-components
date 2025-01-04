@@ -46,60 +46,29 @@ jobs:
           # checkout full tree
           fetch-depth: 0
 
-      - name: Work with commits
-        id: with_commits
+      - name: Prepare commit messages
+        id: prepare
         run: |
-          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
-            git fetch origin HEAD
-            git checkout HEAD
-            mapfile -t COMMITS_ARRAY < <(git log --pretty=format:"'<code>%h</code>' - %an, %ar : %s" HEAD..${{ github.sha }})
-            echo "before=${{ github.sha }}" >> $GITHUB_OUTPUT
-          else
-            mapfile -t COMMITS_ARRAY < <(git log --pretty=format:"'<code>%h</code>' - %an, %ar : %s" ${{ github.event.before }}..${{ github.sha }})
-            echo "before=${{ github.event.before }}..${{ github.sha }}" >> $GITHUB_OUTPUT
-          fi
+          source ./.github/scripts/sh/utils.sh
+          source ./.github/scripts/sh/prepare_commits.sh
+          total_parts=$(prepare_commits \
+            "${{ github.event.repository.name }}" \
+            "${{ github.ref_name }}" \
+            "${{ github.event.before }}" \
+            "${{ github.sha }}" \
+            "${{ github.actor }}" \
+            "${{ github.repository }}")
+          echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 
-          # Process each commit
-          echo "full_list<<EOF" >> $GITHUB_OUTPUT
-          for COMMIT in "${COMMITS_ARRAY[@]}"; do
-            echo "$COMMIT" >> $GITHUB_OUTPUT
-          done
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          LINES_COUNT=${#COMMITS_ARRAY[*]}
-          if [ "$LINES_COUNT" == "1" ]; then
-            echo "lines_count=$LINES_COUNT new commit" >> $GITHUB_OUTPUT
-          else
-            echo "lines_count=$LINES_COUNT new commits" >> $GITHUB_OUTPUT
-          fi
-
-
-      - name: Set outputs
-        id: set_outputs
-        # The part of this solution to focus on is that we’re substituting the %, \n, and \r characters
+      - name: Send messages to Telegram
+        if: ${{ steps.prepare.outputs.total_parts != '0' }}
         run: |
-          additional_text="${{ inputs.additional-text || '' }}"
-          if [ "$additional_text" != "" ]; then
-            echo "additional_text<<EOF" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo $additional_text >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Send message to Telegram
-        if: ${{ steps.with_commits.outputs.full_list != '' }}
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          disable_web_page_preview: true
-          format: html
-          message: |
-            <b>[${{ github.event.repository.name }}:${{ github.ref_name }}]</b> <b><a href="https://github.com/${{ github.repository }}/compare/${{ steps.with_commits.outputs.before }}">${{ steps.with_commits.outputs.lines_count }}</a></b> by <b><a href="https://github.com/${{ github.actor }}">${{ github.actor }}</a></b>
-            ${{ steps.set_outputs.outputs.additional_text }}
-            ${{ steps.with_commits.outputs.full_list }}
-
+          source ./.github/scripts/sh/utils.sh
+          source ./.github/scripts/sh/send_telegram.sh
+          send_telegram_messages \
+            "${{ secrets.TELEGRAM_TOKEN }}" \
+            "${{ secrets.TELEGRAM_TO }}" \
+            "${{ steps.prepare.outputs.total_parts }}"
 
   create:
 
