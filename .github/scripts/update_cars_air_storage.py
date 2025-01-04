@@ -6,24 +6,7 @@ import xml.etree.ElementTree as ET
 from typing import Dict, Any
 
 
-def load_config(source_type: str, config_source: str = 'env') -> Dict[str, Any]:
-    """
-    Универсальная функция загрузки конфигурации.
-    
-    :param source_type: Тип источника (autoru или avito)
-    :param config_source: Источник конфигурации ('env', 'file', 'github')
-    :return: Загруженная конфигурация
-    """
-    if config_source == 'env':
-        return load_env_config(source_type)
-    elif config_source == 'file':
-        return load_file_config(source_type)  # Существующая функция загрузки из файла
-    elif config_source == 'github':
-        return load_github_config(source_type)  # Существующая функция загрузки из GitHub
-    else:
-        raise ValueError(f"Неподдерживаемый источник конфигурации: {config_source}")
-
-def load_env_config(source_type: str) -> Dict[str, Any]:
+def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
     """
     Загружает конфигурацию из переменных окружения.
     Формат переменных:
@@ -34,15 +17,13 @@ def load_env_config(source_type: str) -> Dict[str, Any]:
     CARS_AVITO_ELEMENTS_TO_LOCALIZE = '["elem1", "elem2"]'
     """
     prefix = f"CARS_{source_type.upper()}_"
-    config = {
-        "elements_to_localize": [],
-        "remove_cars_after_duplicate": [],
-        "remove_mark_ids": [],
-        "remove_folder_ids": []
-    }
     
     # Маппинг переменных окружения на ключи конфигурации
     env_mapping = {
+        f"{prefix}MOVE_VIN_ID_UP": "elements_to_localize",
+        f"{prefix}NEW_ADDRESS": "elements_to_localize",
+        f"{prefix}NEW_PHONE": "elements_to_localize",
+        f"{prefix}REPLACEMENTS": "elements_to_localize",
         f"{prefix}ELEMENTS_TO_LOCALIZE": "elements_to_localize",
         f"{prefix}REMOVE_CARS_AFTER_DUPLICATE": "remove_cars_after_duplicate",
         f"{prefix}REMOVE_MARK_IDS": "remove_mark_ids",
@@ -53,14 +34,14 @@ def load_env_config(source_type: str) -> Dict[str, Any]:
         if env_var in os.environ:
             try:
                 value = json.loads(os.environ[env_var])
-                config[config_key] = value
+                default_config[config_key] = value
             except json.JSONDecodeError:
                 print(f"Ошибка при парсинге значения переменной {env_var}")
                 # Оставляем значение по умолчанию
     
-    return config
+    return default_config
 
-def load_github_config(source_type: str, github_config: Dict[str, str]) -> Dict[str, Any]:
+def load_github_config(source_type: str, github_config: Dict[str, str], default_config) -> Dict[str, Any]:
     """
     Загружает конфигурацию из GitHub репозитория или Gist.
     
@@ -108,42 +89,22 @@ def load_github_config(source_type: str, github_config: Dict[str, str]) -> Dict[
         print(f"Отсутствует обязательный параметр в конфигурации: {e}")
         
     # Возвращаем конфигурацию по умолчанию в случае ошибки
-    return {
-        "elements_to_localize": [],
-        "remove_cars_after_duplicate": [],
-        "remove_mark_ids": [],
-        "remove_folder_ids": []
-    }
+    return default_config
 
-def load_file_config(config_path: str, source_type: str) -> Dict[str, Any]:
+def load_file_config(config_path: str, source_type: str, default_config) -> Dict[str, Any]:
     """
     Загружает конфигурацию из JSON файла.
     """
     try:
         with open(config_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
-            return config.get(source_type, {
-                "elements_to_localize": [],
-                "remove_cars_after_duplicate": [],
-                "remove_mark_ids": [],
-                "remove_folder_ids": []
-            })
+            return config.get(source_type, default_config)
     except FileNotFoundError:
         print(f"Конфигурационный файл {config_path} не найден. Используются значения по умолчанию.")
-        return {
-            "elements_to_localize": [],
-            "remove_cars_after_duplicate": [],
-            "remove_mark_ids": [],
-            "remove_folder_ids": []
-        }
+        return default_config
     except json.JSONDecodeError:
         print(f"Ошибка при чтении {config_path}. Используются значения по умолчанию.")
-        return {
-            "elements_to_localize": [],
-            "remove_cars_after_duplicate": [],
-            "remove_mark_ids": [],
-            "remove_folder_ids": []
-        }
+        return default_config
 
 def process_car(car: ET.Element, config, all_duplicates, air_storage_data, elements_to_localize, replacements) -> None:
     """
@@ -232,8 +193,8 @@ def main():
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
     parser.add_argument('--config_source', 
                     choices=['env', 'file', 'github'], 
-                    default='env',
-                    help='Config source type (env, file, or github)')
+                    default='file',
+                    help='Config source type (file, env, or github)')
     parser.add_argument('--config_path', default='./.github/scripts/config_air_storage.json', help='Path to configuration file')
     parser.add_argument('--github_repo', help='GitHub repository in format owner/repo')
     parser.add_argument('--github_path', default='config', help='Path to config directory in GitHub repository')
@@ -255,12 +216,35 @@ def main():
     # Добавляем специфичные настройки в зависимости от типа источника
     config['generate_friendly_url'] = (args.source_type == 'autoru')
 
-    try:
-        # Загружаем конфигурацию из выбранного источника
-        source_config = load_config(args.source_type, args.config_source)
-    except Exception as e:
-        print(f"Ошибка при загрузке конфигурации: {e}")
-        return
+    default_config = {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {},
+        "elements_to_localize": [],
+        "remove_cars_after_duplicate": [],
+        "remove_mark_ids": [],
+        "remove_folder_ids": []
+    }
+    # Загружаем конфигурацию в зависимости от источника
+    if args.config_type == 'file':
+        return load_file_config(args.config_path, args.source_type, default_config)  # Существующая функция загрузки из файла
+    elif args.config_type == 'env':
+        return load_env_config(args.source_type, default_config)
+    elif args.config_type == 'github':
+        github_config = {}
+        if args.gist_id:
+            github_config['gist_id'] = args.gist_id
+        elif args.github_repo:
+            github_config['repo'] = args.github_repo
+            github_config['path'] = args.github_path
+        else:
+            print("Для использования GitHub необходимо указать --gist_id или --github_repo")
+            return
+
+        source_config = load_github_config(args.source_type, github_config, default_config)
+    else:
+        raise ValueError(f"Неподдерживаемый источник конфигурации: {args.config_type}")
     
     replacements = source_config['replacements']
     elements_to_localize = source_config['elements_to_localize']
