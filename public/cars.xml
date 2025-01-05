@@ -26,7 +26,6 @@
   <previousPrice>3789900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3119900</priceWithDiscount>
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -223,7 +222,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>720000</max_discount><sale_price>3119900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-blue-2023/</url></vehicle>
+<max_discount>720000</max_discount><priceWithDiscount>3119900</priceWithDiscount><sale_price>3119900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-blue-2023/</url></vehicle>
 <vehicle>
   <id>4622324</id>
   <vin>HJRPBGJB1PF074824</vin>
@@ -251,7 +250,6 @@
   <previousPrice>3669900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2999900</priceWithDiscount>
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -432,7 +430,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>720000</max_discount><sale_price>2999900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-elite-white-2023/</url></vehicle>
+<max_discount>720000</max_discount><priceWithDiscount>2999900</priceWithDiscount><sale_price>2999900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-elite-white-2023/</url></vehicle>
 <vehicle>
   <id>4771991</id>
   <vin>HJRPBGJB0PF090674</vin>
@@ -460,7 +458,6 @@
   <previousPrice>3789900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3119900</priceWithDiscount>
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -643,7 +640,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>720000</max_discount><sale_price>3119900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-grey-2023/</url></vehicle>
+<max_discount>720000</max_discount><priceWithDiscount>3119900</priceWithDiscount><sale_price>3119900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-20-amt-244-лс-luxury-grey-2023/</url></vehicle>
 <vehicle>
   <id>4848423</id>
   <vin>HJRPBGGB6PB360957</vin>
@@ -671,7 +668,6 @@
   <previousPrice>3089900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2569900</priceWithDiscount>
   <tradeinDiscount>350000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -852,7 +848,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>570000</max_discount><sale_price>2569900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
+<max_discount>570000</max_discount><priceWithDiscount>2569900</priceWithDiscount><sale_price>2569900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
 <vehicle>
   <id>4913262</id>
   <vin>HJRPBGGB5PF098678</vin>
@@ -880,7 +876,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2719900</priceWithDiscount>
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -1049,7 +1044,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>800000</max_discount><sale_price>2719900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-black-2023/</url></vehicle>
+<max_discount>800000</max_discount><priceWithDiscount>2719900</priceWithDiscount><sale_price>2719900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-black-2023/</url></vehicle>
 <vehicle>
   <id>5188229</id>
   <vin>LDNHC8FC1N0007947</vin>
@@ -1077,7 +1072,6 @@
   <previousPrice>2537000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2000000</priceWithDiscount>
   <tradeinDiscount>387000</tradeinDiscount>
   <creditDiscount>200000</creditDiscount>
   <insuranceDiscount />
@@ -1159,7 +1153,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>587000</max_discount><sale_price>2000000</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-s-15-amt-156-лс-white-2022/</url></vehicle>
+<max_discount>587000</max_discount><priceWithDiscount>2000000</priceWithDiscount><sale_price>2000000</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-s-15-amt-156-лс-white-2022/</url></vehicle>
 <vehicle>
   <id>6035589</id>
   <vin>HJRPBGGB2RF033886</vin>
@@ -1187,7 +1181,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2679900</priceWithDiscount>
   <tradeinDiscount>400000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -1364,7 +1357,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>620000</max_discount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-white-2024/</url></vehicle>
+<max_discount>620000</max_discount><priceWithDiscount>2679900</priceWithDiscount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-white-2024/</url></vehicle>
 <vehicle>
   <id>6190243</id>
   <vin>HJRPBGJB0RB361839</vin>
@@ -1392,7 +1385,6 @@
   <previousPrice>3759900</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3639000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -1570,7 +1562,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>320000</max_discount><sale_price>3639000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-voyage-brown-2024/</url></vehicle>
+<max_discount>320000</max_discount><priceWithDiscount>3639000</priceWithDiscount><sale_price>3639000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-voyage-brown-2024/</url></vehicle>
 <vehicle>
   <id>6231331</id>
   <vin>HJRPBGGB9PB363173</vin>
@@ -1598,7 +1590,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2569900</priceWithDiscount>
   <tradeinDiscount>350000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -1774,7 +1765,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>570000</max_discount><sale_price>2569900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
+<max_discount>570000</max_discount><priceWithDiscount>2569900</priceWithDiscount><sale_price>2569900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-azure-2023/</url></vehicle>
 <vehicle>
   <id>6231892</id>
   <vin>HJRPBGGB5PF096204</vin>
@@ -1802,7 +1793,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2599900</priceWithDiscount>
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -1969,7 +1959,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>800000</max_discount><sale_price>2599900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-comfort-black-2023/</url></vehicle>
+<max_discount>800000</max_discount><priceWithDiscount>2599900</priceWithDiscount><sale_price>2599900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-comfort-black-2023/</url></vehicle>
 <vehicle>
   <id>6276724</id>
   <vin>HJRPBGGB2RF028610</vin>
@@ -1997,7 +1987,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2379900</priceWithDiscount>
   <tradeinDiscount>400000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -2162,7 +2151,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>620000</max_discount><sale_price>2379900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-white-2024/</url></vehicle>
+<max_discount>620000</max_discount><priceWithDiscount>2379900</priceWithDiscount><sale_price>2379900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-white-2024/</url></vehicle>
 <vehicle>
   <id>6277032</id>
   <vin>HJRPBGGB8RF035268</vin>
@@ -2190,7 +2179,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2679900</priceWithDiscount>
   <tradeinDiscount>400000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -2355,7 +2343,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>620000</max_discount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-red-2024/</url></vehicle>
+<max_discount>620000</max_discount><priceWithDiscount>2679900</priceWithDiscount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-red-2024/</url></vehicle>
 <vehicle>
   <id>6277055</id>
   <vin>HJRPBGGBXRF025356</vin>
@@ -2374,7 +2362,7 @@
   <bodyNumber />
   <body_type>SUV</body_type><bodyDoorCount>5</bodyDoorCount>
   <seatCount>5</seatCount>
-  <color>Серебристый</color><bodyColorMetallic>0</bodyColorMetallic>
+  <color>Серебряный</color><bodyColorMetallic>0</bodyColorMetallic>
   <driveType>Передний</driveType>
   <gearboxType>Робот</gearboxType>
   <gearboxGearCount />
@@ -2383,7 +2371,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2379900</priceWithDiscount>
   <tradeinDiscount>400000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -2544,7 +2531,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>620000</max_discount><sale_price>2379900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-silver-2024/</url></vehicle>
+<max_discount>620000</max_discount><priceWithDiscount>2379900</priceWithDiscount><sale_price>2379900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-comfort-silver-2024/</url></vehicle>
 <vehicle>
   <id>6299555</id>
   <vin>HJRPBGJB9RB385430</vin>
@@ -2572,7 +2559,6 @@
   <previousPrice>4290000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3929000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -2755,7 +2741,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>320000</max_discount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
+<max_discount>320000</max_discount><priceWithDiscount>3929000</priceWithDiscount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
 <vehicle>
   <id>6299590</id>
   <vin>HJRPBGJB6RB382677</vin>
@@ -2783,7 +2769,6 @@
   <previousPrice>3999000</previousPrice>
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3929000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -2966,7 +2951,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>320000</max_discount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
+<max_discount>320000</max_discount><priceWithDiscount>3929000</priceWithDiscount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-brown-2024/</url></vehicle>
 <vehicle>
   <id>6390185</id>
   <vin>HJRPBGJB2RB383504</vin>
@@ -2994,7 +2979,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3929000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -3173,7 +3157,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>320000</max_discount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-black-2024/</url></vehicle>
+<max_discount>320000</max_discount><priceWithDiscount>3929000</priceWithDiscount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-black-2024/</url></vehicle>
 <vehicle>
   <id>6393046</id>
   <vin>HJRPBGFB6PB369501</vin>
@@ -3201,7 +3185,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2269900</priceWithDiscount>
   <tradeinDiscount>350000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -3369,7 +3352,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>570000</max_discount><sale_price>2269900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-amt-147-лс-elite-black-2023/</url></vehicle>
+<max_discount>570000</max_discount><priceWithDiscount>2269900</priceWithDiscount><sale_price>2269900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-amt-147-лс-elite-black-2023/</url></vehicle>
 <vehicle>
   <id>6393048</id>
   <vin>HJRPBGFB1PB394340</vin>
@@ -3397,7 +3380,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2379900</priceWithDiscount>
   <tradeinDiscount>350000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -3570,7 +3552,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>600000</max_discount><sale_price>2379900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-amt-147-лс-luxury-black-2023/</url></vehicle>
+<max_discount>600000</max_discount><priceWithDiscount>2379900</priceWithDiscount><sale_price>2379900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-amt-147-лс-luxury-black-2023/</url></vehicle>
 <vehicle>
   <id>6395950</id>
   <vin>HJRPBGGB1RF031627</vin>
@@ -3598,7 +3580,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2679900</priceWithDiscount>
   <tradeinDiscount>400000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -3769,7 +3750,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>620000</max_discount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-green-2024/</url></vehicle>
+<max_discount>620000</max_discount><priceWithDiscount>2679900</priceWithDiscount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-green-2024/</url></vehicle>
 <vehicle>
   <id>6408910</id>
   <vin>HJRPBGGB9RF029642</vin>
@@ -3797,7 +3778,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2679900</priceWithDiscount>
   <tradeinDiscount>400000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -3969,7 +3949,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>620000</max_discount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-black-2024/</url></vehicle>
+<max_discount>620000</max_discount><priceWithDiscount>2679900</priceWithDiscount><sale_price>2679900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x70-plus-16-amt-190-лс-luxury-black-2024/</url></vehicle>
 <vehicle>
   <id>6610873</id>
   <vin>HJRPBGFA4RB194577</vin>
@@ -3997,7 +3977,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>1919900</priceWithDiscount>
   <tradeinDiscount>300000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -4158,7 +4137,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>520000</max_discount><sale_price>1919900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-grey-2024/</url></vehicle>
+<max_discount>520000</max_discount><priceWithDiscount>1919900</priceWithDiscount><sale_price>1919900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-grey-2024/</url></vehicle>
 <vehicle>
   <id>6611047</id>
   <vin>HJRPBGFA2RB208265</vin>
@@ -4186,7 +4165,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>1919900</priceWithDiscount>
   <tradeinDiscount>300000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount>50000</insuranceDiscount>
@@ -4350,7 +4328,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>520000</max_discount><sale_price>1919900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-green-2024/</url></vehicle>
+<max_discount>520000</max_discount><priceWithDiscount>1919900</priceWithDiscount><sale_price>1919900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-15-mt-147-лс-comfort-plus-green-2024/</url></vehicle>
 <vehicle>
   <id>6653151</id>
   <vin>LVTDD21B3RD308222</vin>
@@ -4378,7 +4356,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3229000</priceWithDiscount>
   <tradeinDiscount>200000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -4561,7 +4538,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>420000</max_discount><sale_price>3229000</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-at-185-лс-4wd-luxury-grey-2024/</url></vehicle>
+<max_discount>420000</max_discount><priceWithDiscount>3229000</priceWithDiscount><sale_price>3229000</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-at-185-лс-4wd-luxury-grey-2024/</url></vehicle>
 <vehicle>
   <id>6666315</id>
   <vin>HJRPBGGB3RB169838</vin>
@@ -4589,7 +4566,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2489900</priceWithDiscount>
   <tradeinDiscount>480000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -4767,7 +4743,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>700000</max_discount><sale_price>2489900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-black-2024/</url></vehicle>
+<max_discount>700000</max_discount><priceWithDiscount>2489900</priceWithDiscount><sale_price>2489900</sale_price><url>https://jetour-alpha.ru/cars/jetour-dashing-16-amt-190-лс-luxury-black-2024/</url></vehicle>
 <vehicle>
   <id>6666436</id>
   <vin>HJRPBGJB2RB435570</vin>
@@ -4786,7 +4762,7 @@
   <bodyNumber />
   <body_type>SUV</body_type><bodyDoorCount>5</bodyDoorCount>
   <seatCount>5</seatCount>
-  <color>Серебристый</color><bodyColorMetallic>0</bodyColorMetallic>
+  <color>Серебряный</color><bodyColorMetallic>0</bodyColorMetallic>
   <driveType>Постоянный полный</driveType>
   <gearboxType>Робот</gearboxType>
   <gearboxGearCount />
@@ -4795,7 +4771,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>4199000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -4986,7 +4961,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>320000</max_discount><sale_price>4199000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-silver-2024/</url></vehicle>
+<max_discount>320000</max_discount><priceWithDiscount>4199000</priceWithDiscount><sale_price>4199000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-silver-2024/</url></vehicle>
 <vehicle>
   <id>6666460</id>
   <vin>HJRPBGJB3RB398125</vin>
@@ -5014,7 +4989,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>3929000</priceWithDiscount>
   <tradeinDiscount>100000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -5194,7 +5168,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>320000</max_discount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-silver-2024/</url></vehicle>
+<max_discount>320000</max_discount><priceWithDiscount>3929000</priceWithDiscount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-silver-2024/</url></vehicle>
 <vehicle>
   <id>6666476</id>
   <vin>HJRPBGGB2PF098315</vin>
@@ -5222,7 +5196,6 @@
   <previousPrice />
   <specialOffer>0</specialOffer>
   <specialOfferPreviousPrice />
-  <priceWithDiscount>2799900</priceWithDiscount>
   <tradeinDiscount>500000</tradeinDiscount>
   <creditDiscount>220000</creditDiscount>
   <insuranceDiscount />
@@ -5387,5 +5360,5 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>720000</max_discount><sale_price>2799900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-grey-2024/</url></vehicle>
+<max_discount>720000</max_discount><priceWithDiscount>2799900</priceWithDiscount><sale_price>2799900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-grey-2024/</url></vehicle>
 </vehicles>
