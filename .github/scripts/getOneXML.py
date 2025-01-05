@@ -110,6 +110,25 @@ def remove_duplicates(root, xpath, attribute="VIN"):
                 unique_values.add(vin_element[0].text)
             continue
         
+        vin_attr = element.get("vin")
+        if vin_attr:
+            print(f"Found VIN as attribute: {vin_attr}")
+            if vin_attr in unique_values:
+                elements_to_remove.append(element)
+            else:
+                unique_values.add(vin_attr)
+            continue
+        
+        # Поиск VIN как вложенного элемента
+        vin_element = element.xpath('.//vin')
+        if vin_element:
+            print(f"Found VIN as nested element: {vin_element[0].text}")
+            if vin_element[0].text in unique_values:
+                elements_to_remove.append(element)
+            else:
+                unique_values.add(vin_element[0].text)
+            continue
+        
         # Если ничего не найдено
         print(f"VIN not found in element: {etree.tostring(element, pretty_print=True).decode()}")
     
