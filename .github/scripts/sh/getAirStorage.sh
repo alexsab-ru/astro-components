@@ -1,21 +1,21 @@
 #!/bin/bash
 
 # Если CSV_URL не установлен, пытаемся получить его из .env
-if [ -z "$DEALER_PRICE_CSV_URL" ] && [ -f .env ]; then
-    export CSV_URL=$(grep '^DEALER_PRICE_CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
+if [ -z "$AIR_STORAGE_CSV_URL" ] && [ -f .env ]; then
+    export CSV_URL=$(grep '^AIR_STORAGE_CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
 fi
 
 # Проверяем, что CSV_URL установлен
 if [ -z "$CSV_URL" ]; then
-    echo "Error: DEALER_PRICE_CSV_URL is not found"
+    echo "Error: AIR_STORAGE_CSV_URL is not found"
     exit 1
 fi
 
 # Устанавливаем остальные переменные
-export QUERY_STRING="SELECT A, B, C, D"
+export QUERY_STRING="SELECT A, B"
 export KEY_COLUMN="VIN"
-export OUTPUT_PATHS="./src/data/cars_dealer_price.json"
-export OUTPUT_FORMAT="detailed"
+export OUTPUT_PATHS="./air_storage.json"
+export OUTPUT_FORMAT="simple"
 
 # Запускаем скрипт
 node .github/scripts/GSheetFetcher.js

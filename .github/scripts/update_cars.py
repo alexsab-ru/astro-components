@@ -1,297 +1,213 @@
 import os
-import yaml
-import shutil
-from PIL import Image, ImageOps
-from io import BytesIO
-from config import *
+import argparse
 from utils import *
 import xml.etree.ElementTree as ET
+from typing import Dict, List, Optional
 
+class CarProcessor:
+    def __init__(self, source_type: str):
+        self.source_type = source_type
+        self.setup_source_config()
 
-def create_file(car, filename, friendly_url):
-    vin = car.find('vin').text
-    vin_hidden = process_vin_hidden(vin)
-    # Преобразование цвета
-    color = car.find('color').text.strip().capitalize()
-    model = car.find('folder_id').text.strip()
-    brand = car.find('mark_id').text.strip()
+    def setup_source_config(self):
+        """Настройка конфигурации в зависимости от типа источника"""
+        configs = {
+            'data_cars': {
+                'root_element': 'cars',
+                'rename_map': {},
+                'elements_to_localize': []
+            },
+            'carcopy': {
+                'root_element': 'offers',
+                'rename_map': {
+                    'make': 'mark_id',
+                    'model': 'folder_id',
+                    'version': 'modification_id',
+                    'complectation': 'complectation_name',
+                    'body-type': 'body_type',
+                    'drive-type': 'drive_type',
+                    'steering-wheel': 'wheel',
+                    'max-discount': 'max_discount'
+                },
+                'elements_to_localize': [
+                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
+            },
+            'maxposter': {
+                'root_element': None,  # корневой элемент
+                'rename_map': {
+                    'brand': 'mark_id',
+                    'model': 'folder_id',
+                    'modification': 'modification_id',
+                    'complectation': 'complectation_name',
+                    'bodyColor': 'color',
+                    'mileage': 'run',
+                    'bodyType': 'body_type',
+                    'steeringWheel': 'wheel'
+                },
+                'elements_to_localize': [
+                    'engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
+            },
+            'vehicles': {
+                'root_element': 'vehicles',
+                'rename_map': {
+                    'mark': 'mark_id',
+                    'model': 'folder_id',
+                    'modification': 'modification_id',
+                    'сomplectation-name': 'complectation_name',
+                    'complectation-code': 'complectation_code',
+                    'engine-type': 'engineType',
+                    'body-type': 'body_type',
+                    'drive-type': 'drive_type',
+                    'steering-wheel': 'wheel',
+                    'max-discount': 'max_discount',
+                    'tradein-discount': 'tradeinDiscount',
+                    'credit-discount': 'creditDiscount',
+                    'insurance-discount': 'insuranceDiscount'
+                },
+                'elements_to_localize': [
+                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
+            }
+        }
+        
+        self.config = configs.get(self.source_type)
+        if not self.config:
+            raise ValueError(f"Неизвестный тип источника: {self.source_type}")
 
-    folder = get_folder(brand, model)
-    color_image = get_color_filename(brand, model, color)
-    if folder and color_image:
-        thumb = f"/img/models/{folder}/colors/{color_image}"
-    else:
-        print("")
-        errorText = f"VIN: {vin}. Не хватает модели: {model} или цвета: {color}"
-        print(errorText)
-        print("")
-        with open('output.txt', 'a') as file:
-            file.write(f"{errorText}\n")
-        # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
-        thumb = "/img/404.jpg"
-        global error_404_found
-        error_404_found = True
-
-    # Forming the YAML frontmatter
-    content = "---\n"
-    # content += "layout: car-page\n"
-    total_element = car.find('total')
-    if total_element is not None:
-        content += f"total: {int(total_element.text)}\n"
-    else:
-        content += "total: 1\n"
-    # content += f"permalink: {friendly_url}\n"
-    content += f"vin_hidden: {vin_hidden}\n"
-
-    h1 = join_car_data(car, 'mark_id', 'folder_id', 'modification_id')
-    content += f"h1: {h1}\n"
-
-    content += f"breadcrumb: {join_car_data(car, 'mark_id', 'folder_id', 'complectation_name')}\n"
-
-    content += f"title: 'Купить {join_car_data(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {dealer.get('where')}'\n"
-
-    content += f"""description: 'Купить автомобиль {join_car_data(car, 'mark_id', 'folder_id')}{f' {car.find("year").text} года выпуска' if car.find("year").text else ''}{f', комплектация {car.find("complectation_name").text}' if car.find("complectation_name").text != None else ''}{f', цвет - {car.find("color").text}' if car.find("color").text != None else ''}{f', двигатель - {car.find("modification_id").text}' if car.find("modification_id").text != None else ''} у официального дилера в г. {dealer.get('city')}. Стоимость данного автомобиля {join_car_data(car, 'mark_id', 'folder_id')} – {car.find('priceWithDiscount').text}'\n"""
-
-    description = ""
-
-    for elem_name in elements_to_localize:
-        elem = car.find(elem_name)
-        localize_element_text(elem, translations)
-
-    color = car.find('color').text.strip().capitalize()
-    encountered_tags = set()  # Создаем множество для отслеживания встреченных тегов
-
-    for child in car:
-        # Skip nodes with child nodes (except images) and attributes
-        if list(child) and child.tag != 'images':
-            continue
-        if child.tag == 'total':
-            continue
-        if child.tag == 'folder_id':
-            content += f"{child.tag}: '{child.text}'\n"
-        elif child.tag == 'images':
-            images = [img.text for img in child.findall('image')]
-            thumbs_files = createThumbs(images, friendly_url)
-            content += f"images: {images}\n"
-            content += f"thumbs: {thumbs_files}\n"
-        elif child.tag == 'color':
-            content += f"{child.tag}: {color}\n"
-            content += f"image: {thumb}\n"
-        elif child.tag == 'extras' and child.text:
-            extras = child.text
-            flat_extras = extras.replace('\n', '<br>\n')
-            content += f"{child.tag}: |\n"
-            for line in flat_extras.split("\n"):
-                content += f"  {line}\n"
-        elif child.tag == 'description' and child.text:
-            description = child.text
-            flat_description = description.replace('\n', '<br>\n')
-            # content += f"content: |\n"
-            # for line in flat_description.split("\n"):
-                # content += f"  {line}\n"
+    def calculate_max_discount(self, car: ET.Element) -> int:
+        """Расчёт максимальной скидки в зависимости от типа источника"""
+        if self.source_type in ['maxposter', 'vehicles']:
+            credit_discount = int(car.find('creditDiscount').text or 0)
+            tradein_discount = int(car.find('tradeinDiscount').text or 0)
+            return credit_discount + tradein_discount
         else:
-            if child.tag in encountered_tags:  # Проверяем, встречался ли уже такой тег
-                continue  # Если встречался, переходим к следующей итерации цикла
-            encountered_tags.add(child.tag)  # Добавляем встреченный тег в множество
-            if child.text:  # Only add if there's content
-                content += f"{child.tag}: {child.text}\n"
+            return int(car.find('max_discount').text or 0)
 
-    content += "---\n"
-    content += process_description(description)
+    def process_car(self, car: ET.Element, existing_files: set, current_thumbs: List[str], 
+                   prices_data: Dict, config: Dict) -> None:
+        """Обработка отдельного автомобиля"""
+        # Базовые расчёты цены и скидки
+        price = int(car.find('price').text or 0)
+        max_discount = self.calculate_max_discount(car)
+        
+        # Создание/обновление элементов
+        create_child_element(car, 'max_discount', max_discount)
+        sale_price = price - max_discount
+        
+        # Обработка priceWithDiscount в зависимости от источника
+        if self.source_type == 'maxposter' and car.find('priceWithDiscount').text is not None:
+            sale_price = int(car.find('priceWithDiscount').text)
+        create_child_element(car, 'priceWithDiscount', sale_price)
+        create_child_element(car, 'sale_price', sale_price)
+        
+        # Создание URL
+        friendly_url = process_friendly_url(
+            join_car_data(car, 'mark_id', 'folder_id', 'modification_id',
+                         'complectation_name', 'color', 'year')
+        )
+        print(f"Уникальный идентификатор: {friendly_url}")
+        
+        url = f"https://{config['repo_name']}/cars/{friendly_url}/"
+        create_child_element(car, 'url', url)
+        if self.source_type in ['carcopy', 'vehicles']:
+            update_element_text(car, 'url_link', url)
+        
+        # Обработка файла
+        file_name = f"{friendly_url}.mdx"
+        file_path = os.path.join(config['cars_dir'], file_name)
 
-    with open(filename, 'w') as f:
-        f.write(content)
+        update_car_prices(car, prices_data)
 
-    print(filename);
-    existing_files.add(filename)
+        if os.path.exists(file_path):
+            update_yaml(car, file_path, friendly_url, current_thumbs, config)
+        else:
+            create_file(car, file_path, friendly_url, current_thumbs,
+                       existing_files, self.config['elements_to_localize'], config)
 
+    def rename_elements(self, car: ET.Element) -> None:
+        """Переименование элементов согласно карте переименований"""
+        for old_name, new_name in self.config['rename_map'].items():
+            rename_child_element(car, old_name, new_name)
 
-def update_yaml(car, filename, friendly_url):
+    def get_cars_element(self, root: ET.Element) -> ET.Element:
+        """Получение элемента, содержащего список машин"""
+        return root if self.config['root_element'] is None else root.find(self.config['root_element'])
 
-    with open(filename, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    # Split the content by the YAML delimiter
-    yaml_delimiter = "---\n"
-    parts = content.split(yaml_delimiter)
-
-    # If there's no valid YAML block, raise an exception
-    if len(parts) < 3:
-        raise ValueError("No valid YAML block found in the provided file.")
-
-    # Parse the YAML block
-    yaml_block = parts[1].strip()
-    data = yaml.safe_load(yaml_block)
-
-    total_element = car.find('total')
-    if 'total' in data and total_element is not None:
-        try:
-            car_total_value = int(total_element.text)
-            data_total_value = int(data['total'])
-            data['total'] = data_total_value + car_total_value
-        except ValueError:
-            # В случае, если не удается преобразовать значения в int,
-            # можно оставить текущее значение data['total'] или установить его в 0,
-            # либо выполнить другое действие по вашему выбору
-            pass
-    else:
-        # Если элемент 'total' отсутствует в одном из источников,
-        # можно установить значение по умолчанию для 'total' в data или обработать этот случай иначе
-        data['total'] += 1
-
-    run_element = car.find('run')
-    if 'run' in data and run_element is not None:
-        try:
-            car_run_value = int(run_element.text)
-            data_run_value = int(data['run'])
-            data['run'] = min(data_run_value, car_run_value)
-        except ValueError:
-            # В случае, если не удается преобразовать значения в int,
-            # можно оставить текущее значение data['run'] или установить его в 0,
-            # либо выполнить другое действие по вашему выбору
-            pass
-    else:
-        # Если элемент 'run' отсутствует в одном из источников,
-        # можно установить значение по умолчанию для 'run' в data или обработать этот случай иначе
-        data.setdefault('run', 0)
-
-    priceWithDiscount_element = car.find('priceWithDiscount')
-    if 'priceWithDiscount' in data and priceWithDiscount_element is not None:
-        try:
-            car_priceWithDiscount_value = int(priceWithDiscount_element.text)
-            data_priceWithDiscount_value = int(data['priceWithDiscount'])
-            data['priceWithDiscount'] = min(data_priceWithDiscount_value, car_priceWithDiscount_value)
-        except ValueError:
-            # В случае, если не удается преобразовать значения в int,
-            # можно оставить текущее значение data['priceWithDiscount'] или установить его в 0,
-            # либо выполнить другое действие по вашему выбору
-            pass
-    # else:
-        # Если элемент 'priceWithDiscount' отсутствует в одном из источников,
-        # можно установить значение по умолчанию для 'priceWithDiscount' в data или обработать этот случай иначе
-        # data.setdefault('priceWithDiscount', 0)
-
-    vin = car.find('vin').text
-    vin_hidden = process_vin_hidden(vin)
-    if vin_hidden is not None:
-        # Создаём или добавляем строку в список
-        data['vin_hidden'] += ", " + vin_hidden
-
-    unique_id = car.find('unique_id')
-    if unique_id is not None:
-        if not isinstance(data['unique_id'], str):
-            data['unique_id'] = str(data['unique_id'])
-
-        data['unique_id'] += ", " + str(unique_id.text)
-    else:
-        unique_id = car.find('id')
-        if unique_id is not None:
-            if not isinstance(data['id'], str):
-                data['id'] = str(data['id'])
-
-            data['id'] += ", " + str(unique_id.text)
-
-
-    images_container = car.find('images')
-    if images_container is not None:
-        images = [img.text for img in images_container.findall('image')]
-        if len(images) > 0:
-            data.setdefault('images', []).extend(images)
-            # Проверяем, нужно ли добавлять эскизы
-            if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, friendly_url)  # Убедитесь, что эта функция реализована
-                data.setdefault('thumbs', []).extend(thumbs_files)
-
-    # Convert the data back to a YAML string
-    updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
-
-    # Reassemble the content with the updated YAML block
-    updated_content = yaml_delimiter.join([parts[0], updated_yaml_block, yaml_delimiter.join(parts[2:])])
-
-    # Save the updated content to the output file
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(updated_content)
-
-    return filename
-
-
-# Переменная для отслеживания наличия 404 ошибки
-error_404_found = False
-
-# Создание директории для автомобилей
-directory = "src/content/cars"
-if os.path.exists(directory):
-    shutil.rmtree(directory)
-os.makedirs(directory)
-
-# для сохранения имен созданных или обновленных файлов
-existing_files = set()
-
-with open('output.txt', 'w') as file:
-    file.write("")
-
-# Предполагаем, что у вас есть элементы с именами
-elements_to_localize = []
-# Создаем список машин для удаления
-cars_to_remove = []
-remove_mark_ids = [
-]
-remove_folder_ids = [
-]
-cars_element = root.find('cars')
-
-for car in cars_element:
-    should_remove = False
+def main():
+    """
+    Основная функция программы.
+    """
+    parser = argparse.ArgumentParser(description='Process cars from different sources')
+    parser.add_argument('--source_type', required=True, choices=['carcopy', 'data_cars', 'maxposter', 'vehicles'], help='Type of source data')
+    parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
+    parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
+    parser.add_argument('--input_file', default='cars.xml', help='Input file')
+    parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
+    parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
+    parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
+    parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
+    parser.add_argument('--image_tag', default='image', help='Image tag name')
+    parser.add_argument('--description_tag', default='description', help='Description tag name')
     
-    # Проверяем mark_id только если список не пустой
-    if remove_mark_ids:
-        car_mark = car.find('mark_id').text
-        if car_mark in remove_mark_ids:
-            should_remove = True
+    args = parser.parse_args()
+    config = vars(args)
+
+    # Инициализация процессора для конкретного источника
+    processor = CarProcessor(args.source_type)
     
-    # Проверяем folder_id только если список не пустой
-    if remove_folder_ids:
-        car_folder = car.find('folder_id').text
-        if car_folder in remove_folder_ids:
-            should_remove = True
+    prices_data = load_price_data()
+
+    # Инициализация
+    root = get_xml_content(args.input_file, args.xml_url)
+    tree = ET.ElementTree(root)
+    setup_directories(config['thumbs_dir'], args.cars_dir)
     
-    if should_remove:
-        cars_to_remove.append(car)
-        continue  # Пропускаем остальные операции для этой машины
+    existing_files = set()
+    # Список для хранения путей к текущим превьюшкам
+    current_thumbs = []
 
-    price = int(car.find('price').text or 0)
-    max_discount = int(car.find('max_discount').text or 0)
-    create_child_element(car, 'priceWithDiscount', price - max_discount)
-    create_child_element(car, 'sale_price', price - max_discount)
-    friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
-    friendly_url = f"{process_friendly_url(friendly_url)}"
-    print(f"Уникальный идентификатор: {friendly_url}")
-    create_child_element(car, 'url', f"https://{repo_name}/cars/{friendly_url}/")
-    file_name = f"{friendly_url}.mdx"
-    file_path = os.path.join(directory, file_name)
+    with open('output.txt', 'w') as file:
+        file.write("")
 
-    if os.path.exists(file_path):
-        update_yaml(car, file_path, friendly_url)
-    else:
-        create_file(car, file_path, friendly_url)
+    # Списки для удаления
+    remove_mark_ids = [
+    ]
+    remove_folder_ids = [
+    ]
+    cars_to_remove = [
+    ]
+    
+    # Обработка машин
+    # cars_element = root.find('cars')
+    cars_element = processor.get_cars_element(root)
+    for car in cars_element:
+        processor.rename_elements(car)
 
-# Удаляем все не-BelGee машины
-for car in cars_to_remove:
-    cars_element.remove(car)
+        if should_remove_car(car, remove_mark_ids, remove_folder_ids):
+            cars_to_remove.append(car)
+            continue
+        
+        processor.process_car(car, existing_files, current_thumbs, prices_data, config)
+    
+    # Удаление ненужных машин
+    for car in cars_to_remove:
+        cars_element.remove(car)
+    
+    convert_to_string(root)
+    tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
+    
+    # Очистка
+    cleanup_unused_thumbs(current_thumbs, config['thumbs_dir'])
+    
+    for existing_file in os.listdir(args.cars_dir):
+        filepath = os.path.join(args.cars_dir, existing_file)
+        if filepath not in existing_files:
+            os.remove(filepath)
+    
+    if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
+        print("error 404 found")
 
-output_path = './public/cars.xml'
-convert_to_string(root)
-tree.write(output_path, encoding='utf-8', xml_declaration=True)
-
-# Удаление неиспользуемых превьюшек
-cleanup_unused_thumbs()
-
-
-for existing_file in os.listdir(directory):
-    filepath = os.path.join(directory, existing_file)
-    if filepath not in existing_files:
-        os.remove(filepath)
-
-if error_404_found:
-    print("error 404 found")
-
+if __name__ == "__main__":
+    main()
