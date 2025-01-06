@@ -183,7 +183,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        vin = car.find('VIN').text if car.find('VIN') is not None else None
+        vin = car.find(config['vin_tag']).text if car.find(config['vin_tag']) is not None else None
         
         process_car(car, config, all_duplicates, air_storage_data, elements_to_localize, replacements)
         
