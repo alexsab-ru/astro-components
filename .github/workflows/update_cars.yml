@@ -107,7 +107,7 @@ jobs:
       if: ${{ vars.XML_URL_CARCOPY }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type carcopy --image_tag="photo"
+        python .github/scripts/update_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment"
       env:
         REPO_NAME: ${{ github.event.repository.name }}
         XML_URL: ${{ vars.XML_URL_CARCOPY }}

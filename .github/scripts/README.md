@@ -66,7 +66,7 @@ python .github/scripts/update_cars_air_storage.py --source_type avito --config_s
 ## Обновление АВН на сайте
 
 ```bash
-python .github/scripts/update_cars.py --source_type carcopy --image_tag="photo"
+python .github/scripts/update_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment"
 python .github/scripts/update_cars.py --source_type data_cars --image_tag="image"
 python .github/scripts/update_cars.py --source_type maxposter --image_tag="photo"
 python .github/scripts/update_cars.py --source_type vehicles --image_tag="photo"
