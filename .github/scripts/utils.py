@@ -406,9 +406,12 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, ele
     color_image = get_color_filename(brand, model, color)
     if folder and color_image:
         thumb_path = os.path.join("img", "models", folder, "colors", color_image)
+        thumb_brand_path = os.path.join("img", "models", brand.lower(), folder, "colors", color_image)
         # Проверяем, существует ли файл
         if os.path.exists(f"public/{thumb_path}"):
             thumb = f"/{thumb_path}"
+        elif os.path.exists(f"public/{thumb_brand_path}"):
+            thumb = f"/{thumb_brand_path}"
         else:
             print("")
             errorText = f"VIN: {vin}. Не хватает файла цвета: {color}, {thumb_path}"
