@@ -1,18 +1,28 @@
 import os
+import time
 import requests
 import argparse
 from lxml import etree
+from requests.exceptions import ConnectionError, Timeout
 
-def download_or_read_file(path):
-    """Скачать XML по URL или прочитать локальный файл."""
+
+def download_or_read_file(path, retries=3, delay=5):
+    """Скачать XML по URL или прочитать локальный файл с обработкой повторных попыток."""
     if os.path.isfile(path):
         with open(path, 'rb') as file:
-            content = file.read()
-    else:
-        response = requests.get(path)
-        response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
-        content = response.content
-    return content
+            return file.read()
+
+    for attempt in range(retries):
+        try:
+            response = requests.get(path, timeout=10)  # Установим тайм-аут
+            response.raise_for_status()
+            return response.content
+        except (ConnectionError, Timeout) as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < retries - 1:
+                time.sleep(delay)  # Ждем перед повторной попыткой
+            else:
+                raise
 
 def detect_xpath(xml_content):
     # Список известных XPath шаблонов
