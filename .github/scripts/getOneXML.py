@@ -91,46 +91,32 @@ def remove_duplicates(root, xpath, attribute="VIN"):
     print(f"Found {len(elements)} elements with XPath '{xpath}'")
     
     for element in elements:
-        vin_attr = element.get("VIN")
-        if vin_attr:
-            print(f"Found VIN as attribute: {vin_attr}")
-            if vin_attr in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_attr)
-            continue
-        
-        # Поиск VIN как вложенного элемента
-        vin_element = element.xpath('.//VIN')
-        if vin_element:
-            print(f"Found VIN as nested element: {vin_element[0].text}")
-            if vin_element[0].text in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_element[0].text)
-            continue
-        
-        vin_attr = element.get("vin")
-        if vin_attr:
-            print(f"Found VIN as attribute: {vin_attr}")
-            if vin_attr in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_attr)
-            continue
-        
-        # Поиск VIN как вложенного элемента
-        vin_element = element.xpath('.//vin')
-        if vin_element:
-            print(f"Found VIN as nested element: {vin_element[0].text}")
-            if vin_element[0].text in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_element[0].text)
-            continue
-        
-        # Если ничего не найдено
-        print(f"VIN not found in element: {etree.tostring(element, pretty_print=True).decode()}")
+        # Поиск VIN в атрибутах (учитываем разный регистр)
+        for attr_name in [attribute.lower(), attribute.upper()]:
+            vin_attr = element.get(attr_name)
+            if vin_attr:
+                print(f"Found VIN as attribute: {vin_attr}")
+                if vin_attr in unique_values:
+                    elements_to_remove.append(element)
+                else:
+                    unique_values.add(vin_attr)
+                break  # Переход к следующему элементу
+
+        # Поиск VIN как вложенного элемента (учитываем разный регистр)
+        for vin_tag in [attribute.lower(), attribute.upper()]:
+            vin_element = element.xpath(f'.//{vin_tag}')
+            if vin_element:
+                vin_text = vin_element[0].text.strip() if vin_element[0].text else None
+                print(f"Found VIN as nested element: {vin_text}")
+                if vin_text and vin_text in unique_values:
+                    elements_to_remove.append(element)
+                else:
+                    unique_values.add(vin_text)
+                break  # Переход к следующему элементу
+
+        else:
+            # Если ничего не найдено, логируем элемент
+            print(f"VIN not found in element: {etree.tostring(element, pretty_print=True).decode()}")
     
     # Удаляем дубликаты
     for element in elements_to_remove:
