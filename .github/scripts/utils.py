@@ -11,8 +11,9 @@ from PIL import Image, ImageOps
 from io import BytesIO
 import urllib.parse
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Any
 from config import *
+
 
 def process_friendly_url(friendly_url, replace = "-"):
     # Удаление специальных символов
@@ -738,3 +739,103 @@ def duplicate_car(car, config, n, status="в пути", offset=0):
             print(f"Ошибка при обработке элемента: {e}")
     
     return duplicates
+
+def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
+    """
+    Загружает конфигурацию из переменных окружения.
+    Формат переменных:
+    CARS_[SOURCE_TYPE]_[PARAM_NAME] = value
+    
+    Например:
+    CARS_AUTORU_REMOVE_MARK_IDS = '["mark1", "mark2"]'
+    CARS_AVITO_ELEMENTS_TO_LOCALIZE = '["elem1", "elem2"]'
+    """
+    prefix = f"CARS_{source_type.upper()}_"
+    
+    # Маппинг переменных окружения на ключи конфигурации
+    env_mapping = {
+        f"{prefix}MOVE_VIN_ID_UP": "move_vin_id_up",
+        f"{prefix}NEW_ADDRESS": "new_address",
+        f"{prefix}NEW_PHONE": "new_phone",
+        f"{prefix}REPLACEMENTS": "replacements",
+        f"{prefix}ELEMENTS_TO_LOCALIZE": "elements_to_localize",
+        f"{prefix}REMOVE_CARS_AFTER_DUPLICATE": "remove_cars_after_duplicate",
+        f"{prefix}REMOVE_MARK_IDS": "remove_mark_ids",
+        f"{prefix}REMOVE_FOLDER_IDS": "remove_folder_ids"
+    }
+    
+    for env_var, config_key in env_mapping.items():
+        if env_var in os.environ:
+            try:
+                value = json.loads(os.environ[env_var])
+                default_config[config_key] = value
+            except json.JSONDecodeError:
+                print(f"Ошибка при парсинге значения переменной {env_var}")
+                # Оставляем значение по умолчанию
+    
+    return default_config
+
+def load_github_config(source_type: str, github_config: Dict[str, str], default_config) -> Dict[str, Any]:
+    """
+    Загружает конфигурацию из GitHub репозитория или Gist.
+    
+    :param source_type: Тип источника (autoru или avito)
+    :param github_config: Словарь с настройками GitHub
+    :return: Загруженная конфигурация
+    """
+    if 'GITHUB_TOKEN' in os.environ:
+        headers = {'Authorization': f'token {os.environ["GITHUB_TOKEN"]}'}
+    else:
+        headers = {}
+
+    try:
+        if 'gist_id' in github_config:
+            # Загрузка из Gist
+            gist_url = f"https://api.github.com/gists/{github_config['gist_id']}"
+            response = requests.get(gist_url, headers=headers)
+            response.raise_for_status()
+            gist_data = response.json()
+            
+            # Ищем файл конфигурации для нужного источника
+            for filename, file_data in gist_data['files'].items():
+                if source_type in filename.lower():
+                    return json.loads(file_data['content'])
+                    
+        elif 'repo' in github_config and 'path' in github_config:
+            # Загрузка из репозитория
+            repo = github_config['repo']
+            path = github_config['path']
+            file_url = f"https://api.github.com/repos/{repo}/contents/{path}/{source_type}.json"
+            
+            response = requests.get(file_url, headers=headers)
+            response.raise_for_status()
+            
+            content = response.json()['content']
+            import base64
+            decoded_content = base64.b64decode(content).decode('utf-8')
+            return json.loads(decoded_content)
+            
+    except requests.RequestException as e:
+        print(f"Ошибка при загрузке конфигурации из GitHub: {e}")
+    except json.JSONDecodeError:
+        print("Ошибка при парсинге JSON конфигурации")
+    except KeyError as e:
+        print(f"Отсутствует обязательный параметр в конфигурации: {e}")
+        
+    # Возвращаем конфигурацию по умолчанию в случае ошибки
+    return default_config
+
+def load_file_config(config_path: str, source_type: str, default_config) -> Dict[str, Any]:
+    """
+    Загружает конфигурацию из JSON файла.
+    """
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+            return config.get(source_type, default_config)
+    except FileNotFoundError:
+        print(f"Конфигурационный файл {config_path} не найден. Используются значения по умолчанию.")
+        return default_config
+    except json.JSONDecodeError:
+        print(f"Ошибка при чтении {config_path}. Используются значения по умолчанию.")
+        return default_config
