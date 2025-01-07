@@ -12,7 +12,7 @@ class CarProcessor:
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
         configs = {
-            'data_cars': {
+            'data_cars_cars': {
                 'root_element': 'cars',
                 'rename_map': {},
                 'elements_to_localize': []
@@ -49,7 +49,7 @@ class CarProcessor:
                     'engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
                 ]
             },
-            'vehicles': {
+            'vehicles_vehicle': {
                 'root_element': 'vehicles',
                 'rename_map': {
                     'mark': 'mark_id',
@@ -78,7 +78,7 @@ class CarProcessor:
 
     def calculate_max_discount(self, car: ET.Element) -> int:
         """Расчёт максимальной скидки в зависимости от типа источника"""
-        if self.source_type in ['maxposter', 'vehicles']:
+        if self.source_type in ['maxposter', 'vehicles_vehicle']:
             credit_discount = int(car.find('creditDiscount').text or 0)
             tradein_discount = int(car.find('tradeinDiscount').text or 0)
             return credit_discount + tradein_discount
@@ -111,7 +111,7 @@ class CarProcessor:
         
         url = f"https://{config['repo_name']}/cars/{friendly_url}/"
         create_child_element(car, 'url', url)
-        if self.source_type in ['carcopy', 'vehicles']:
+        if self.source_type in ['carcopy', 'vehicles_vehicle']:
             update_element_text(car, 'url_link', url)
         
         # Обработка файла
@@ -140,7 +140,7 @@ def main():
     Основная функция программы.
     """
     parser = argparse.ArgumentParser(description='Process cars from different sources')
-    parser.add_argument('--source_type', required=True, choices=['carcopy', 'data_cars', 'maxposter', 'vehicles'], help='Type of source data')
+    parser.add_argument('--source_type', required=True, choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle'], help='Type of source data')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')
