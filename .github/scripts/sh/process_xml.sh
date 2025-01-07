@@ -88,7 +88,7 @@ handle_test() {
             ;;
         "avito_friend")
             handle_getone "AVITO_XML_URL"
-            handle_getone "AVITO_FRIEND_XML_URL"
+            handle_getone "AVITO_FRIEND_XML_URL" "cars_friend.xml"
             handle_update "avito_friend"
             ;;
         "autoru")

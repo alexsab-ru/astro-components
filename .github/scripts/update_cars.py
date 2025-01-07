@@ -12,7 +12,7 @@ class CarProcessor:
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
         configs = {
-            'data_cars_cars': {
+            'data_cars_car': {
                 'root_element': 'cars',
                 'rename_map': {},
                 'elements_to_localize': []
