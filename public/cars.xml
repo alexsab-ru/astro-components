@@ -19,7 +19,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>185000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938383</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -65,7 +64,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2110190</priceWithDiscount><sale_price>2110190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<max_discount>370000</max_discount><priceWithDiscount>2110190</priceWithDiscount><sale_price>2110190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
 		<car>
 			<unique_id>2c5046640f632b41455ce0e02d0b83f9</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -85,7 +84,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>185000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938397</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -137,7 +135,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2110190</priceWithDiscount><sale_price>2110190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<max_discount>370000</max_discount><priceWithDiscount>2110190</priceWithDiscount><sale_price>2110190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
 		<car>
 			<unique_id>0b637d140608e5483a521f2b28d6028f</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -157,7 +155,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>185000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622ZXRB942568</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -215,7 +212,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2320190</priceWithDiscount><sale_price>2320190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-prestige-белый-2024/</url></car>
+		<max_discount>370000</max_discount><priceWithDiscount>2320190</priceWithDiscount><sale_price>2320190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-prestige-белый-2024/</url></car>
 		<car>
 			<unique_id>8554115c8b155453234e3e51b2ccdbd9</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -235,7 +232,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>185000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z2RB943293</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -278,7 +274,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2220190</priceWithDiscount><sale_price>2220190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-черный-2024/</url></car>
+		<max_discount>370000</max_discount><priceWithDiscount>2220190</priceWithDiscount><sale_price>2220190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-черный-2024/</url></car>
 		<car>
 			<unique_id>8cad912a41acbab5d615064886a1ac2f</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -298,7 +294,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>185000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>370000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z5RB939075</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -353,7 +348,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2220190</priceWithDiscount><sale_price>2220190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-белый-2024/</url></car>
+		<max_discount>370000</max_discount><priceWithDiscount>2220190</priceWithDiscount><sale_price>2220190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-белый-2024/</url></car>
 		<car>
 			<unique_id>9832de57395512c5463cf6a4d93d74c3</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -373,7 +368,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328432</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -427,7 +421,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2821190</priceWithDiscount><sale_price>2821190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2821190</priceWithDiscount><sale_price>2821190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
 		<car>
 			<unique_id>c80e7845d65b209cd60db20f3b41a74a</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -447,7 +441,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327572</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -504,7 +497,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2821190</priceWithDiscount><sale_price>2821190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2821190</priceWithDiscount><sale_price>2821190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
 		<car>
 			<unique_id>8061d0bc6079e256fa8a0a689dd50294</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -524,7 +517,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318842</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -583,7 +575,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2926190</priceWithDiscount><sale_price>2926190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-plus-черный-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2926190</priceWithDiscount><sale_price>2926190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-plus-черный-2024/</url></car>
 		<car>
 			<unique_id>93a0f3b972c95323546aa447ff0862a3</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -603,7 +595,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D1RB332205</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -663,7 +654,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2621190</priceWithDiscount><sale_price>2621190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-серебристый-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2621190</priceWithDiscount><sale_price>2621190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-серебристый-2024/</url></car>
 		<car>
 			<unique_id>1283ec4d4105fae6d06a1eb9908efafc</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -683,7 +674,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332091</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -748,7 +738,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
 		<car>
 			<unique_id>348d29a135b869bb840105c220d2b7b6</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -768,7 +758,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332012</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -830,7 +819,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
 		<car>
 			<unique_id>bb58c77749ddc6d970103dcdb56bd6c2</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -850,7 +839,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330227</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -911,7 +899,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
 		<car>
 			<unique_id>0b66d6ec88a31e130560d2b6d85e3a99</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -931,7 +919,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330244</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -990,7 +977,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
 		<car>
 			<unique_id>545bfa15a648f3c4ab9722194fcddc9b</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -1010,7 +997,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z6RB330204</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -1065,7 +1051,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-белый-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-белый-2024/</url></car>
 		<car>
 			<unique_id>d8cab77cb01c9d9acdb35328450fb74d</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -1085,7 +1071,6 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>250000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D0RB326024</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -1140,6 +1125,6 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<priceWithDiscount>2621190</priceWithDiscount><sale_price>2621190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-черный-2024/</url></car>
+		<max_discount>500000</max_discount><priceWithDiscount>2621190</priceWithDiscount><sale_price>2621190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-style-черный-2024/</url></car>
 		</cars>
 </data>
