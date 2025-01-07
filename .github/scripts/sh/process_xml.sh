@@ -150,7 +150,6 @@ handle_update() {
             python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --repo_name=$DOMAIN
             export XML_URL="./public/avito_dc.xml ./public/avito_friend.xml" 
             python3 .github/scripts/getOneXML.py --output_path="./public/avito.xml"
-            python3 .github/scripts/update_cars_air_storage.py --source_type avito --input_file avito.xml --output_path="./public/avito.xml" --repo_name=$DOMAIN
             ;;
         "autoru")
             python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru.xml" --repo_name="$DOMAIN"
