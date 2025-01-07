@@ -17,22 +17,6 @@ class CarProcessor:
                 'rename_map': {},
                 'elements_to_localize': []
             },
-            'carcopy': {
-                'root_element': 'offers',
-                'rename_map': {
-                    'make': 'mark_id',
-                    'model': 'folder_id',
-                    'version': 'modification_id',
-                    'complectation': 'complectation_name',
-                    'body-type': 'body_type',
-                    'drive-type': 'drive_type',
-                    'steering-wheel': 'wheel',
-                    'max-discount': 'max_discount'
-                },
-                'elements_to_localize': [
-                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
-                ]
-            },
             'maxposter': {
                 'root_element': None,  # корневой элемент
                 'rename_map': {
@@ -47,6 +31,22 @@ class CarProcessor:
                 },
                 'elements_to_localize': [
                     'engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
+            },
+            'carcopy': {
+                'root_element': 'offers',
+                'rename_map': {
+                    'make': 'mark_id',
+                    'model': 'folder_id',
+                    'version': 'modification_id',
+                    'complectation': 'complectation_name',
+                    'body-type': 'body_type',
+                    'drive-type': 'drive_type',
+                    'steering-wheel': 'wheel',
+                    'max-discount': 'max_discount'
+                },
+                'elements_to_localize': [
+                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
                 ]
             },
             'vehicles_vehicle': {
