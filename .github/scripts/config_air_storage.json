@@ -10,8 +10,10 @@
         "remove_cars_after_duplicate": [
         ],
         "remove_mark_ids": [
+            "Geely"
         ],
         "remove_folder_ids": [
+            "001"
         ]
     },
     "avito": {
@@ -25,8 +27,10 @@
         "remove_cars_after_duplicate": [
         ],
         "remove_mark_ids": [
+            "Geely"
         ],
         "remove_folder_ids": [
+            "001"
         ]
     },
     "data_cars_car": {
@@ -40,8 +44,10 @@
         "remove_cars_after_duplicate": [
         ],
         "remove_mark_ids": [
+            "Geely"
         ],
         "remove_folder_ids": [
+            "001"
         ]
     },
     "maxposter": {
