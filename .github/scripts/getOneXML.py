@@ -1,18 +1,28 @@
 import os
+import time
 import requests
 import argparse
 from lxml import etree
+from requests.exceptions import ConnectionError, Timeout
 
-def download_or_read_file(path):
-    """Скачать XML по URL или прочитать локальный файл."""
+
+def download_or_read_file(path, retries=3, delay=5):
+    """Скачать XML по URL или прочитать локальный файл с обработкой повторных попыток."""
     if os.path.isfile(path):
         with open(path, 'rb') as file:
-            content = file.read()
-    else:
-        response = requests.get(path)
-        response.raise_for_status()  # Если возникла ошибка, будет выброшено исключение
-        content = response.content
-    return content
+            return file.read()
+
+    for attempt in range(retries):
+        try:
+            response = requests.get(path, timeout=10)  # Установим тайм-аут
+            response.raise_for_status()
+            return response.content
+        except (ConnectionError, Timeout) as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < retries - 1:
+                time.sleep(delay)  # Ждем перед повторной попыткой
+            else:
+                raise
 
 def detect_xpath(xml_content):
     # Список известных XPath шаблонов
@@ -91,46 +101,32 @@ def remove_duplicates(root, xpath, attribute="VIN"):
     print(f"Found {len(elements)} elements with XPath '{xpath}'")
     
     for element in elements:
-        vin_attr = element.get("VIN")
-        if vin_attr:
-            print(f"Found VIN as attribute: {vin_attr}")
-            if vin_attr in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_attr)
-            continue
-        
-        # Поиск VIN как вложенного элемента
-        vin_element = element.xpath('.//VIN')
-        if vin_element:
-            print(f"Found VIN as nested element: {vin_element[0].text}")
-            if vin_element[0].text in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_element[0].text)
-            continue
-        
-        vin_attr = element.get("vin")
-        if vin_attr:
-            print(f"Found VIN as attribute: {vin_attr}")
-            if vin_attr in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_attr)
-            continue
-        
-        # Поиск VIN как вложенного элемента
-        vin_element = element.xpath('.//vin')
-        if vin_element:
-            print(f"Found VIN as nested element: {vin_element[0].text}")
-            if vin_element[0].text in unique_values:
-                elements_to_remove.append(element)
-            else:
-                unique_values.add(vin_element[0].text)
-            continue
-        
-        # Если ничего не найдено
-        print(f"VIN not found in element: {etree.tostring(element, pretty_print=True).decode()}")
+        # Поиск VIN в атрибутах (учитываем разный регистр)
+        for attr_name in [attribute.lower(), attribute.upper()]:
+            vin_attr = element.get(attr_name)
+            if vin_attr:
+                print(f"Found VIN as attribute: {vin_attr}")
+                if vin_attr in unique_values:
+                    elements_to_remove.append(element)
+                else:
+                    unique_values.add(vin_attr)
+                break  # Переход к следующему элементу
+
+        # Поиск VIN как вложенного элемента (учитываем разный регистр)
+        for vin_tag in [attribute.lower(), attribute.upper()]:
+            vin_element = element.xpath(f'.//{vin_tag}')
+            if vin_element:
+                vin_text = vin_element[0].text.strip() if vin_element[0].text else None
+                print(f"Found VIN as nested element: {vin_text}")
+                if vin_text and vin_text in unique_values:
+                    elements_to_remove.append(element)
+                else:
+                    unique_values.add(vin_text)
+                break  # Переход к следующему элементу
+
+        else:
+            # Если ничего не найдено, логируем элемент
+            print(f"VIN not found in element: {etree.tostring(element, pretty_print=True).decode()}")
     
     # Удаляем дубликаты
     for element in elements_to_remove:
@@ -145,16 +141,13 @@ def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
     parser.add_argument('--xpath', help='XPath to the elements to be merged (optional)')
     parser.add_argument('--output_path', default='cars.xml', help='Output file name')
+    parser.add_argument('--xml_url', default=os.getenv('XML_URL', ''), help='XML URL')
     parser.add_argument('--split', default=' ', help='Separator')
     parser.add_argument('--urls', nargs='*', help='List of XML URLs to download')
     args = parser.parse_args()
 
     # Используем переменную окружения, если она задана
-    xml_url = os.getenv('XML_URL')
-    if xml_url:
-        env_urls = xml_url.strip().split(args.split)
-    else:
-        env_urls = []
+    env_urls = args.xml_url.strip().split(args.split)
 
     # Объединяем URL из переменной окружения и аргументов командной строки
     urls = env_urls + (args.urls if args.urls else [])

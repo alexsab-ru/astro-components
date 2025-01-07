@@ -12,26 +12,10 @@ class CarProcessor:
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
         configs = {
-            'data_cars': {
+            'data_cars_car': {
                 'root_element': 'cars',
                 'rename_map': {},
                 'elements_to_localize': []
-            },
-            'carcopy': {
-                'root_element': 'offers',
-                'rename_map': {
-                    'make': 'mark_id',
-                    'model': 'folder_id',
-                    'version': 'modification_id',
-                    'complectation': 'complectation_name',
-                    'body-type': 'body_type',
-                    'drive-type': 'drive_type',
-                    'steering-wheel': 'wheel',
-                    'max-discount': 'max_discount'
-                },
-                'elements_to_localize': [
-                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
-                ]
             },
             'maxposter': {
                 'root_element': None,  # корневой элемент
@@ -49,7 +33,23 @@ class CarProcessor:
                     'engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
                 ]
             },
-            'vehicles': {
+            'carcopy': {
+                'root_element': 'offers',
+                'rename_map': {
+                    'make': 'mark_id',
+                    'model': 'folder_id',
+                    'version': 'modification_id',
+                    'complectation': 'complectation_name',
+                    'body-type': 'body_type',
+                    'drive-type': 'drive_type',
+                    'steering-wheel': 'wheel',
+                    'max-discount': 'max_discount'
+                },
+                'elements_to_localize': [
+                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
+            },
+            'vehicles_vehicle': {
                 'root_element': 'vehicles',
                 'rename_map': {
                     'mark': 'mark_id',
@@ -78,7 +78,7 @@ class CarProcessor:
 
     def calculate_max_discount(self, car: ET.Element) -> int:
         """Расчёт максимальной скидки в зависимости от типа источника"""
-        if self.source_type in ['maxposter', 'vehicles']:
+        if self.source_type in ['maxposter', 'vehicles_vehicle']:
             credit_discount = int(car.find('creditDiscount').text or 0)
             tradein_discount = int(car.find('tradeinDiscount').text or 0)
             return credit_discount + tradein_discount
@@ -111,7 +111,7 @@ class CarProcessor:
         
         url = f"https://{config['repo_name']}/cars/{friendly_url}/"
         create_child_element(car, 'url', url)
-        if self.source_type in ['carcopy', 'vehicles']:
+        if self.source_type in ['carcopy', 'vehicles_vehicle']:
             update_element_text(car, 'url_link', url)
         
         # Обработка файла
@@ -140,7 +140,7 @@ def main():
     Основная функция программы.
     """
     parser = argparse.ArgumentParser(description='Process cars from different sources')
-    parser.add_argument('--source_type', required=True, choices=['carcopy', 'data_cars', 'maxposter', 'vehicles'], help='Type of source data')
+    parser.add_argument('--source_type', required=True, choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle'], help='Type of source data')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')
@@ -150,10 +150,57 @@ def main():
     parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
     parser.add_argument('--image_tag', default='image', help='Image tag name')
     parser.add_argument('--description_tag', default='description', help='Description tag name')
+    parser.add_argument('--config_source', 
+                    choices=['env', 'file', 'github'], 
+                    default='file',
+                    help='Config source type (file, env, or github)')
+    parser.add_argument('--config_path', default='./.github/scripts/config_air_storage.json', help='Path to configuration file')
+    parser.add_argument('--github_repo', help='GitHub repository in format owner/repo')
+    parser.add_argument('--github_path', default='config', help='Path to config directory in GitHub repository')
+    parser.add_argument('--gist_id', help='GitHub Gist ID with configuration')
     
     args = parser.parse_args()
     config = vars(args)
 
+    default_config = {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {},
+        "elements_to_localize": [],
+        "remove_cars_after_duplicate": [],
+        "remove_mark_ids": [],
+        "remove_folder_ids": []
+    }
+    # Загружаем конфигурацию в зависимости от источника
+    if args.config_source == 'file':
+        source_config = load_file_config(args.config_path, args.source_type, default_config)  # Существующая функция загрузки из файла
+    elif args.config_source == 'env':
+        source_config = load_env_config(args.source_type, default_config)
+    elif args.config_source == 'github':
+        github_config = {}
+        if args.gist_id:
+            github_config['gist_id'] = args.gist_id
+        elif args.github_repo:
+            github_config['repo'] = args.github_repo
+            github_config['path'] = args.github_path
+        else:
+            print("Для использования GitHub необходимо указать --gist_id или --github_repo")
+            return
+
+        source_config = load_github_config(args.source_type, github_config, default_config)
+    else:
+        raise ValueError(f"Неподдерживаемый источник конфигурации: {args.config_source}")
+    
+    replacements = source_config['replacements']
+    elements_to_localize = source_config['elements_to_localize']
+    remove_cars_after_duplicate = source_config['remove_cars_after_duplicate']
+    remove_mark_ids = source_config['remove_mark_ids']
+    remove_folder_ids = source_config['remove_folder_ids']
+    config['move_vin_id_up'] = source_config['move_vin_id_up']
+    config['new_address'] = source_config['new_address']
+    config['new_phone'] = source_config['new_phone']
+    
     # Инициализация процессора для конкретного источника
     processor = CarProcessor(args.source_type)
     
@@ -171,11 +218,6 @@ def main():
     with open('output.txt', 'w') as file:
         file.write("")
 
-    # Списки для удаления
-    remove_mark_ids = [
-    ]
-    remove_folder_ids = [
-    ]
     cars_to_remove = [
     ]
     
