@@ -29,6 +29,16 @@ show_help() {
     echo "  carcopy              - Update from Carcopy source"
     echo "  vehicles_vehicle     - Update from Vehicles Vehicle source"
     echo
+    echo "Test Types for 'test':"
+    echo "  avito                - Test from Avito source"
+    echo "  avito_data_cars_car  - Test from Avito with Data Cars Car source"
+    echo "  avito_friend         - Test from Avito with Friend source"
+    echo "  autoru               - Test from AutoRu source"
+    echo "  data_cars_car        - Test from Data Cars Car source"
+    echo "  maxposter            - Test from Maxposter source"
+    echo "  carcopy              - Test from Carcopy source"
+    echo "  vehicles_vehicle     - Test from Vehicles Vehicle source"
+    echo
     echo "Examples:"
     echo "  $0 getone AVITO_XML_URL"
     echo "  $0 getone AVITO_FRIEND_XML_URL cars_friend.xml"
