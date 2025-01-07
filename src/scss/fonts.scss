@@ -1,3 +1,5 @@
-@include font("Neo Sans Cyr", normal, 300, "/fonts/NeoSansCyr-Light.woff2");
-@include font("Neo Sans Cyr", normal, 400, "/fonts/NeoSansCyr-Regular.woff2");
-@include font("Neo Sans Cyr", normal, 500, "/fonts/NeoSansCyr-Medium.woff2");
+@use "mixins";
+
+@include mixins.font("Neo Sans Cyr", normal, 300, "/fonts/NeoSansCyr-Light.woff2");
+@include mixins.font("Neo Sans Cyr", normal, 400, "/fonts/NeoSansCyr-Regular.woff2");
+@include mixins.font("Neo Sans Cyr", normal, 500, "/fonts/NeoSansCyr-Medium.woff2");

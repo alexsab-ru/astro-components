@@ -3,10 +3,7 @@
 // 	mapImg: string;
 // 	salons?: any;
 // }
-const {salons = [], mapImg, class: className, ...rest} = Astro.props
-
-import './map.sass';
-
+const {salons = [], mapImg, class: className, ...rest} = Astro.props;
 ---
 
 <div style={`background-image: url(${mapImg})`} class={`map ${className}`} {...rest}>
@@ -195,3 +192,6 @@ if (parent) {
 }
 
 </script>
+<style lang="scss">
+	@use './map.sass';
+</style>

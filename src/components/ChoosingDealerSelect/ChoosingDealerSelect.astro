@@ -1,0 +1,15 @@
+---
+interface Props {
+	required?: boolean;
+	errorMessage?: string;
+}
+const { required, errorMessage = 'Выберите дилерский центр' } = Astro.props;
+import FormSelect from '@/components/FormSelect.astro';
+import salons from '@/data/salons.json';
+const options = salons.map((salon, idx) => ({id: idx, name: salon.name}));
+---
+{options.length > 1 && (
+	<div class="w-full">
+		<FormSelect name="dealer" placeholder="Выберите дилерский центр" options={options} required={required} errorMessage={errorMessage} />
+	</div>
+)}

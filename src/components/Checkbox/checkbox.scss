@@ -14,6 +14,11 @@ input[type='radio']:checked ~ div > span[class^='fake-radio'] {
 	@apply before:opacity-100;
 }
 
+.label input[type='checkbox']:checked ~ div > span[class^='fake-checkbox'],
+.label input[type='radio']:checked ~ div > span[class^='fake-radio'] {
+	@apply border-white before:bg-white;
+}
+
 input[type='checkbox']:disabled ~ div,
 input[type='radio']:disabled ~ div {
 	@apply opacity-40;

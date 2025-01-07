@@ -1,31 +1,33 @@
 ---
-h1: Фестиваль продаж Jetour
-title: Фестиваль продаж Jetour
-breadcrumb: Фестиваль продаж Jetour
+h1: Заголовок акции
+title: Тайтл акции
+breadcrumb: Акция
 pubDate: 2023-12-14
-image: https://jetour-ru.com/cn/upload/images/202312/17014189954493.jpg
-description: "Выгодные условия кредитования на автомобили Jetour X90 Plus, Jetour X70 Plus, Jetour Dashing от 4 банков: Альфа-Банк, СОВКОМБАНК, РОСБАНК АВТО, БАНК ОТКРЫТИЕ"
+image: /img/model-bg.webp
+description: "Описание акции"
 ---
 import Button from '@/components/Button/Button.astro';
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import { SITE_NAME, PHONE } from '@/const';
 import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 
-export const from = '01.07.2024';
-export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 
 <picture>
-	<source media="(min-width: 942px)" srcset="https://jetour-ru.com/cn/upload/images/202312/17014189954493.jpg" />
-	<source media="(min-width: 320px)" srcset="https://jetour-ru.com/cn/upload/images/202312/17014189954493.jpg" />
-	<img src="https://jetour-ru.com/cn/upload/images/202312/17014189954493.jpg" class="w-full mb-10" alt="Фестиваль продаж Jetour" />
+	<source media="(min-width: 942px)" srcset="/img/model-bg.webp" />
+	<source media="(min-width: 320px)" srcset="/img/model-bg.webp" />
+	<img src="/img/model-bg.webp" class="w-full mb-10" alt="Фестиваль продаж Jetour" />
 </picture>
 
-В декабре 2023 года стартует «Фестиваль продаж Jetour» — выгодные условия кредитования на автомобили Jetour X90 Plus, Jetour X70 Plus, Jetour Dashing от 4 банков: Альфа-Банк, СОВКОМБАНК, РОСБАНК АВТО, БАНК ОТКРЫТИЕ. Также клиентам доступна выгода в 150 тысяч рублей на все комплектации модели Jetour Dashing.
+Текст акции
 
-- ☑ Партнеры программы — ведущие российские страховые компании
-- ☑ Ремонт автомобиля осуществляется в официальном дилерском центре **{SITE_NAME}**<sup>*</sup>
-- ☑ Клиентам предлагается широкая линейка страховых продуктов
+- ☑ Пункт 1
+- ☑ Пункт 2
+- ☑ Пункт 3
 
 <div class="overflow-auto min-w-full my-14">
 	<table border="1">
@@ -34,14 +36,14 @@ export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
 				<th>Модель нового автомобиля</th>
 				<th>Комплектация нового автомобиля</th>
 				<th>Выгода по программе Трейд-ин<sup>1</sup>, руб.</th>
-				<th>Выгода по программе Belgee Finance<sup>2</sup>, руб.</th>
+				<th>Выгода по программе Finance<sup>2</sup>, руб.</th>
 				<th>Выгода по программе Лояльный / Специальный Трейд-ин, руб.<sup>3</sup></th>
 				<th>Максимальная выгода до, руб.</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>X50</td>
+				<td>Модель 1</td>
 				<td>Все комплектации</td>
 				<td>135 000</td>
 				<td>135 000</td>
@@ -49,7 +51,7 @@ export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
 				<td>320 000<sup>*</sup></td>
 			</tr>
 			<tr>
-				<td>X70</td>
+				<td>Модель 2</td>
 				<td>Все комплектации</td>
 				<td>200 000</td>
 				<td>200 000</td>
@@ -62,4 +64,4 @@ export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
 <SpecialSalonsInfo dataFormName="Узнать подробнее. Фестиваль продаж" />
 
-> <sup>1</sup> Предложение действительно с {from} до {to} года, распространяется на комплектации Comfort Plus, Comfort, Elite, Luxury. Выгода предоставляется путем прямого снижения РРЦ на автомобиль выбранной комплектации.
+> <sup>1</sup> Предложение действительно с {dateFrom} до {dateTo} года

@@ -17,19 +17,17 @@ on:
   push:
     branches: ["main"]
     paths-ignore:
+      - '.github/scripts/sh/getAirStorage.sh'
       - '.github/scripts/sh/getDealerData.sh'
-      - '.github/workflows/update_cars.yml'
-      - '.github/scripts/getAirStorage.js'
-      - '.github/scripts/getDealerData.cjs'
-      - '.github/scripts/getOneXML.py'
-      - '.github/scripts/update_cars_avito_ads_ad.py'
-      - '.github/scripts/update_cars_avito.py'
-      - '.github/scripts/update_cars_carcopy.py'
-      - '.github/scripts/update_cars_maxposter.py'
-      - '.github/scripts/update_cars_vehicles.py'
-      - '.github/scripts/update_cars.py'
+      - '.github/scripts/CarFeedProcessorCSV.py'
+      - '.github/scripts/config_air_storage.json'
       - '.github/scripts/config.py'
-
+      - '.github/scripts/getOneXML.py'
+      - '.github/scripts/GSheetFetcher.js'
+      - '.github/scripts/update_cars_air_storage.py'
+      - '.github/scripts/update_cars.py'
+      - '.github/scripts/utils.py'
+      - '.github/workflows/update_cars.yml'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 

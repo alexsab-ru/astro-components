@@ -31,7 +31,14 @@ export default defineConfig({
 		react(),
 	],
 	vite: {
-		plugins: [yaml()]
+		plugins: [yaml()],
+		css: {
+			preprocessorOptions: {
+			  	scss: {
+					silenceDeprecations: ['legacy-js-api'],
+				},
+			},
+		},
 	},
 	site: 'https://belgee-orenburg.ru',
 	base: '/'

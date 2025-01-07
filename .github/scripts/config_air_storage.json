@@ -1,0 +1,92 @@
+{
+    "autoru": {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {
+        },
+        "elements_to_localize": [
+        ],
+        "remove_cars_after_duplicate": [
+        ],
+        "remove_mark_ids": [
+        ],
+        "remove_folder_ids": [
+        ]
+    },
+    "avito": {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {
+        },
+        "elements_to_localize": [
+        ],
+        "remove_cars_after_duplicate": [
+        ],
+        "remove_mark_ids": [
+        ],
+        "remove_folder_ids": [
+        ]
+    },
+    "data_cars_car": {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {
+        },
+        "elements_to_localize": [
+        ],
+        "remove_cars_after_duplicate": [
+        ],
+        "remove_mark_ids": [
+        ],
+        "remove_folder_ids": [
+        ]
+    },
+    "maxposter": {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {
+        },
+        "elements_to_localize": [
+        ],
+        "remove_cars_after_duplicate": [
+        ],
+        "remove_mark_ids": [
+        ],
+        "remove_folder_ids": [
+        ]
+    },
+    "carcopy": {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {
+        },
+        "elements_to_localize": [
+        ],
+        "remove_cars_after_duplicate": [
+        ],
+        "remove_mark_ids": [
+        ],
+        "remove_folder_ids": [
+        ]
+    },
+    "vehicles_vehicle": {
+        "move_vin_id_up": 0,
+        "new_address": "",
+        "new_phone": "",
+        "replacements": {
+        },
+        "elements_to_localize": [
+        ],
+        "remove_cars_after_duplicate": [
+        ],
+        "remove_mark_ids": [
+        ],
+        "remove_folder_ids": [
+        ]
+    }
+}
