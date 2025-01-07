@@ -141,16 +141,13 @@ def main():
     parser = argparse.ArgumentParser(description='Download and merge XML files.')
     parser.add_argument('--xpath', help='XPath to the elements to be merged (optional)')
     parser.add_argument('--output_path', default='cars.xml', help='Output file name')
+    parser.add_argument('--xml_url', default=os.getenv('XML_URL', ''), help='XML URL')
     parser.add_argument('--split', default=' ', help='Separator')
     parser.add_argument('--urls', nargs='*', help='List of XML URLs to download')
     args = parser.parse_args()
 
     # Используем переменную окружения, если она задана
-    xml_url = os.getenv('XML_URL')
-    if xml_url:
-        env_urls = xml_url.strip().split(args.split)
-    else:
-        env_urls = []
+    env_urls = args.xml_url.strip().split(args.split)
 
     # Объединяем URL из переменной окружения и аргументов командной строки
     urls = env_urls + (args.urls if args.urls else [])
