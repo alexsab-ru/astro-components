@@ -40,6 +40,6 @@ export default defineConfig({
 			},
 		},
 	},
-	site: 'https://site.com',
+	site: 'https://knewstar.alexsab.ru',
 	base: "/"
 });
