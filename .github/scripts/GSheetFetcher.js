@@ -56,10 +56,15 @@ class GSheetFetcher {
     }
 
     convertToNumber(value) {
-        if (/^-?\d+(\s\d+)*(\.\d+)?$/.test(value)) {
-            return Number(value.replace(/\s+/g, ''));
+        if (typeof value === 'string' && value.trim() === '') {
+            return null; // Пустые строки приводятся к null
         }
-        return value;
+        
+        if (/^-?\d+(\s\d+)*(\.\d+)?$/.test(value)) {
+            return Number(value.replace(/\s+/g, '').replace(',', '.'));
+        }
+        
+        return value; // Если не число, возвращаем оригинальное значение
     }
 
     async convertCsvToJson(csvData) {
