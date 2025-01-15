@@ -129,6 +129,7 @@ document.addEventListener('alpine:init', () => {
 		selectedComplectations: [],
 		selectedEngines: [],
 		selectedDrives: [],
+		selectedYears: [],
 		value: "",
 		total: 0,
 		declOfNums,
@@ -195,13 +196,15 @@ document.addEventListener('alpine:init', () => {
 				const carComplectation = element.dataset.complectation?.toLowerCase();
 				const carEngine = element.dataset.engine?.toLowerCase();
 				const carDrive = element.dataset.drive?.toLowerCase();
+				const carYear = element.dataset.year;
 
 				const isVisible = (
 					(this.selectedModels.length === 0 || this.selectedModels.includes(carModel)) &&
 					(this.selectedColors.length === 0 || this.selectedColors.includes(carColor)) &&
 					(this.selectedComplectations.length === 0 || this.selectedComplectations.includes(carComplectation)) &&
 					(this.selectedEngines.length === 0 || this.selectedEngines.includes(carEngine)) &&
-					(this.selectedDrives.length === 0 || this.selectedDrives.includes(carDrive))
+					(this.selectedDrives.length === 0 || this.selectedDrives.includes(carDrive)) &&
+					(this.selectedYears.length === 0 || this.selectedYears.includes(carYear))
 				);
 
 				element.style.display = isVisible ? "flex" : "none";
@@ -216,6 +219,7 @@ document.addEventListener('alpine:init', () => {
 			this.selectedComplectations.length ? this.addQueryParam("complectation", this.selectedComplectations.join(",")) : this.deleteQueryParam('complectation');
 			this.selectedEngines.length ? this.addQueryParam("engine", this.selectedEngines.join(",")) : this.deleteQueryParam('engine');
 			this.selectedDrives.length ? this.addQueryParam("drive", this.selectedDrives.join(",")) : this.deleteQueryParam('drive');
+			this.selectedYears.length ? this.addQueryParam("year", this.selectedYears.join(",")) : this.deleteQueryParam('year');
 		},
   
 		toggleFilter(type, value) {
@@ -242,6 +246,7 @@ document.addEventListener('alpine:init', () => {
 			const complectationParams = params.get("complectation");
 			const engineParams = params.get("engine");
 			const driveParams = params.get("drive");
+			const yearParams = params.get("year");
 			const sort_by = params.get("sort_by");
 
 			if (sort_by) {
@@ -286,6 +291,14 @@ document.addEventListener('alpine:init', () => {
 				this.selectedDrives = driveParams.split(",").map((d) => d.toLowerCase());
 				this.selectedDrives.forEach((drive) => {
 					const checkbox = document.querySelector(`input[type='checkbox'][value='${drive}']`);
+					if (checkbox) checkbox.checked = true;
+				});
+			}
+
+			if (yearParams) {
+				this.selectedYears = yearParams.split(",").map((d) => d);
+				this.selectedYears.forEach((year) => {
+					const checkbox = document.querySelector(`input[type='checkbox'][value='${year}']`);
 					if (checkbox) checkbox.checked = true;
 				});
 			}

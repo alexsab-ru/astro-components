@@ -20,6 +20,7 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 	data-complectation={ car.data?.complectation_name } 
 	data-engine={ `${car.data?.engine} (${car.data?.enginePower} л.с.)` } 
 	data-drive={ car.data?.drive } 
+	data-year={ car.data?.year } 
 	data-total={ car.data.total }
 >
 	<PreviewSlider car={car} slug={slug} />
