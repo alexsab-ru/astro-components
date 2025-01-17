@@ -513,7 +513,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, ele
                 continue  # Если встречался, переходим к следующей итерации цикла
             encountered_tags.add(child.tag)  # Добавляем встреченный тег в множество
             if child.text:  # Only add if there's content
-                content += f"{child.tag}: {child.text}\n"
+                content += f"{child.tag}: {format_value(child.text)}\n"
 
     content += "---\n"
     content += process_description(description)
@@ -524,6 +524,21 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, ele
     print(f"Создан файл: {filename}")
     existing_files.add(filename)
 
+def format_value(value: str) -> str:
+    """
+    Форматирует значение в зависимости от наличия специальных символов.
+    
+    Args:
+        value (str): Исходное значение.
+        
+    Returns:
+        str: Отформатированное значение.
+    """
+    if "'" in value:  # Если есть одинарная кавычка, используем двойные кавычки
+        return f'"{value}"'
+    elif ":" in value:  # Если есть двоеточие, используем одинарные кавычки
+        return f"'{value}'"
+    return value
 
 def update_yaml(car, filename, friendly_url, current_thumbs, config):
 
