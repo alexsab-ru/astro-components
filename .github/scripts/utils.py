@@ -398,7 +398,7 @@ def should_remove_car(car: ET.Element, mark_ids: list, folder_ids: list) -> bool
     return False
 
 
-def create_file(car, filename, friendly_url, current_thumbs, existing_files, elements_to_localize, config):
+def create_file(car, filename, friendly_url, current_thumbs, existing_files, config):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -464,10 +464,6 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, ele
     content += f"description: '{description}'\n"
 
     description = ""
-
-    for elem_name in elements_to_localize:
-        elem = car.find(elem_name)
-        localize_element_text(elem)
 
     color = car.find('color').text.strip().capitalize()
     encountered_tags = set()  # Создаем множество для отслеживания встреченных тегов
