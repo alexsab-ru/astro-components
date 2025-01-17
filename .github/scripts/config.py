@@ -830,7 +830,7 @@ model_mapping = {
                 "White": "white.png",
                 "Черный": "black.png",
                 "Синий": "blue.png",
-                "Серый": "dark-gray.png",
+                "Серый": "light-gray.png",
                 "Темно-серый": "dark-gray.png",
                 "Светло-серый": "light-gray.png",
                 "Красный": "red.png",
