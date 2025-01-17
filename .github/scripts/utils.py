@@ -302,7 +302,7 @@ def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
     if vin in prices_data:
         car_prices = prices_data[vin]
         final_price = car_prices["Конечная цена"]
-        if final_price < current_sale_price:
+        if final_price <= current_sale_price:
             discount = car_prices["Скидка"]
             rrp = car_prices["РРЦ"]
             car.find('priceWithDiscount').text = str(final_price)
