@@ -365,8 +365,8 @@ document.addEventListener('alpine:init', () => {
 				if (this.drives.length === 1) {
 					this.drive = this.drives[0];
 				}
+				this.scrollToElement(document.querySelector('[x-ref="complectationBlock"]'));
 			});
-			this.scrollToElement(document.querySelector('[x-ref="complectationBlock"]'));
 		},
   	});
 });
