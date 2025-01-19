@@ -7,9 +7,6 @@ import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDeal
 import {SITE_NAME, BRAND, AGREE_LABEL, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
 
 const includeModels = ['k5', 'sportage', 'sorento'];
-const termsOfPurchase = ['Кредит', 'Лизинг', 'Рассрочка', 'Полная оплата'];
-const initialPayments = [0, 10, 20, 30];
-const planningPurchases = ['В ближайшие время', 'Готов сейчас', 'Планирую на будущее'];
 
 import rawModels from '@/data/models.json';
 const models = rawModels.filter(model => includeModels.includes(model.id));
@@ -26,9 +23,6 @@ const models = rawModels.filter(model => includeModels.includes(model.id));
 		x-init={`
 			$store.import.models = ${JSON.stringify(models)};
 			$store.import.brand = '${BRAND}';
-			$store.import.termOfPurchase = 'Кредит';
-			$store.import.initialPayment = '0%';
-			$store.import.planningPurchase = 'Готов сейчас';
 		`}
 		class="mt-10"
 	>
@@ -49,12 +43,12 @@ const models = rawModels.filter(model => includeModels.includes(model.id));
 		<div x-show="$store.import.step === 1" class="grid lg:grid-cols-3 xl:grid-cols-5 gap-y-5 xl:divide-x divide-black/20">
 			<div class="lg:px-5 first:pl-0">
 				<div class="text-xl font-bold mb-3">Выберите модель:</div>
-				<template x-for="m in $store.import.models" :key="m.id">
+				<template x-for="(item, index) in $store.import.models" :key="item+index">
 					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
-						<input type="radio" x-model="$store.import.model" :value="m.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.modelSelected(m.id)" />
+						<input type="radio" x-model="$store.import.model" :value="item.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.modelSelected(item.id)" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
-							<span class="pt-1 font-bold" x-text="m.name"></span>
+							<span class="pt-1 font-bold" x-text="item.name"></span>
 						</div>
 					</label>
 				</template>
@@ -64,12 +58,12 @@ const models = rawModels.filter(model => includeModels.includes(model.id));
 					<div>
 						<div class="text-xl font-bold mb-3">Выберите комплектацию:</div>
 						<div class="grid xs:grid-cols-1 grid-cols-2 gap-4 sm:gap-5">
-							<template x-for="(compl, idx) in $store.import.currentModel.complectations" :key="compl.name+idx">
+							<template x-for="(item, index) in $store.import.currentModel.complectations" :key="item+index">
 								<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20">
-									<input type="radio" x-model="$store.import.complectation" :value="compl.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.colorsBlock)" />
+									<input type="radio" x-model="$store.import.complectation" :value="item.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.colorsBlock)" />
 									<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 										<span class="fake-radio-black rounded-full before:rounded-full"></span>
-										<span class="pt-1 font-bold" x-text="compl.name"></span>
+										<span class="pt-1 font-bold" x-text="item.name"></span>
 									</div>
 								</label>
 							</template>
@@ -81,12 +75,12 @@ const models = rawModels.filter(model => includeModels.includes(model.id));
 				<template x-if="$store.import.currentModel && $store.import.complectation">
 					<div>
 						<div class="text-xl font-bold mb-3">Выберите цвет:</div>
-						<template x-for="(c, idx) in $store.import.currentModel?.colors" :key="c.id+idx">
+						<template x-for="(item, index) in $store.import.currentModel?.colors" :key="item.id+index">
 							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
-								<input type="radio" x-model="$store.import.color" :value="c.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.drivesBlock)" />
+								<input type="radio" x-model="$store.import.color" :value="item.name" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.drivesBlock)" />
 								<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 									<span class="fake-radio-black rounded-full before:rounded-full"></span>
-									<span class="pt-1 font-bold" x-text="c.name"></span>
+									<span class="pt-1 font-bold" x-text="item.name"></span>
 								</div>
 							</label>
 						</template>
@@ -97,12 +91,12 @@ const models = rawModels.filter(model => includeModels.includes(model.id));
 				<template x-if="$store.import.currentModel && $store.import.color">
 					<div>
 						<div class="text-xl font-bold mb-3">Привод:</div>
-						<template x-for="(d, idx) in $store.import.drives" :key="d+idx">
+						<template x-for="(item, index) in $store.import.drives" :key="item+index">
 							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
-								<input type="radio" x-model="$store.import.drive" :value="d" class="absolute w-0 h-0 opacity-0 invisible peer" />
+								<input type="radio" x-model="$store.import.drive" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" />
 								<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 									<span class="fake-radio-black rounded-full before:rounded-full"></span>
-									<span class="pt-1 font-bold" x-text="d"></span>
+									<span class="pt-1 font-bold" x-text="item"></span>
 								</div>
 							</label>
 						</template>
@@ -114,39 +108,39 @@ const models = rawModels.filter(model => includeModels.includes(model.id));
 		<div x-show="$store.import.step === 2" class="grid lg:grid-cols-3 gap-y-5 lg:divide-x divide-black/20">
 			<div class="lg:px-5 first:pl-0" x-ref="termsOfPurchaseBlock">
 				<div class="text-xl font-bold mb-3">Условия покупки:</div>
-				{termsOfPurchase.map(item => (
+				<template x-for="(item, index) in $store.import.termsOfPurchase" :key="item+index">
 					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
-						<input type="radio" x-model="$store.import.termOfPurchase" value={item} class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.initialPaymentsBlock)" />
+						<input type="radio" x-model="$store.import.termOfPurchase" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.initialPaymentsBlock)" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
-							<span class="pt-1 font-bold">{item}</span>
+							<span class="pt-1 font-bold" x-text="item"></span>
 						</div>
 					</label>
-				))}
+				</template>
 			</div>
 			<div class="lg:px-5 first:pl-0" x-ref="initialPaymentsBlock">
 				<div class="text-xl font-bold mb-3">Первоначальный взнос:</div>
-				{initialPayments.map(item => (
+				<template x-for="(item, index) in $store.import.initialPayments" :key="item+index">
 					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
-						<input type="radio" x-model="$store.import.initialPayment" value={item+'%'} class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.planningPurchasesBlock)" />
+						<input type="radio" x-model="$store.import.initialPayment" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.planningPurchasesBlock)" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
-							<span class="pt-1 font-bold">{item+'%'}</span>
+							<span class="pt-1 font-bold" x-text="item"></span>
 						</div>
 					</label>
-				))}
+				</template>
 			</div>
 			<div class="lg:px-5 first:pl-0" x-ref="planningPurchasesBlock">
 				<div class="text-xl font-bold mb-3">Когда планируете покупку?</div>
-				{planningPurchases.map(item => (
+				<template x-for="(item, index) in $store.import.planningPurchases" :key="item+index">
 					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
-						<input type="radio" x-model="$store.import.planningPurchase" value={item} class="absolute w-0 h-0 opacity-0 invisible peer" />
+						<input type="radio" x-model="$store.import.planningPurchase" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
-							<span class="pt-1 font-bold">{item}</span>
+							<span class="pt-1 font-bold" x-text="item"></span>
 						</div>
 					</label>
-				))}
+				</template>
 			</div>
 		</div>
 

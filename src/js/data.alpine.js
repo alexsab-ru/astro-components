@@ -333,10 +333,13 @@ document.addEventListener('alpine:init', () => {
 		complectation: null,
 		color: null,
 		drive: null,
-		termOfPurchase: null,
-		initialPayment: null,
-		planningPurchase: null,
 		drives: [],
+		termOfPurchase: 'Кредит',
+		termsOfPurchase: ['Кредит', 'Лизинг', 'Рассрочка', 'Полная оплата'],
+		initialPayment: '0%',
+		initialPayments: ['0%', '10%', '20%', '30%'],
+		planningPurchase: 'Готов сейчас',
+		planningPurchases: ['В ближайшие время', 'Готов сейчас', 'Планирую на будущее'],
 		
 		// Методы
 		scrollToElement(element) {
