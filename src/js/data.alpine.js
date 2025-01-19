@@ -344,13 +344,15 @@ document.addEventListener('alpine:init', () => {
 		// Методы
 		scrollToElement(element) {
 			if (element) {
-				Alpine.nextTick(() => {
-					 window.scrollTo({
-							top: element.offsetTop + 40,
-							left: 0,
-							behavior: 'smooth',
-					 });
-				});
+				setTimeout(()=>{
+					Alpine.nextTick(() => {
+						window.scrollTo({
+								top: element.offsetTop - 40,
+								left: 0,
+								behavior: 'smooth',
+						});
+					});
+				}, 100);
 		  	}
 		},
 
