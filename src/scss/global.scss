@@ -35,7 +35,7 @@ section:not(.model-section) {
 	p, b, ul, ol, a {
 		@apply text-sm sm:text-lg mb-4;
 	}
-	a:not(.filter-model-link, .k-select-head, .k-select-dropdown a) {
+	a:not(.filter-model-link, .k-select-head, .k-select-dropdown a, .btn) {
 		@apply text-accent-500 underline hover:no-underline;
 	}
 	li {

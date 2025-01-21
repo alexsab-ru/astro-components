@@ -8,6 +8,7 @@ on:
       - '.github/scripts/sh/getAirStorage.sh'
       - '.github/scripts/sh/getDealerData.sh'
       - '.github/scripts/CarFeedProcessorCSV.py'
+      - '.github/scripts/config_air_storage-friend.json'
       - '.github/scripts/config_air_storage.json'
       - '.github/scripts/config.py'
       - '.github/scripts/getOneXML.py'
@@ -113,13 +114,39 @@ jobs:
         XML_URL: ${{ vars.XML_URL_CARCOPY }}
 
     - name: Get Dealer XML for auto.ru and generate auto.ru xml
-      if: ${{ vars.AUTORU_XML_URL }}
+      if: ${{ vars.AUTORU_XML_URL && !vars.AUTORU_FRIEND_XML_URL }}
       run: |
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars_air_storage.py --source_type autoru  --output_path "./public/autoru.xml"
       env:
         REPO_NAME: ${{ github.event.repository.name }}
         XML_URL: ${{ vars.AUTORU_XML_URL }}
+
+    - name: Get Dealer AutoRu xml if friend url exists
+      if: ${{ vars.AUTORU_XML_URL && vars.AUTORU_FRIEND_XML_URL }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru_dc.xml"
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.AUTORU_XML_URL }}
+
+    - name: Get friends AutoRu xml
+      if: ${{ vars.AUTORU_FRIEND_XML_URL }}
+      run: |
+        python .github/scripts/getOneXML.py --output="cars_friend.xml"
+        python .github/scripts/update_cars_air_storage.py --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.AUTORU_FRIEND_XML_URL }}
+
+    - name: Merge AutoRu xmls
+      if: ${{ vars.AUTORU_FRIEND_XML_URL }}
+      run: |
+        python .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: "./public/autoru_dc.xml ./public/autoru_friend.xml"
 
     - name: Get Dealer XML for avito and generate avito xml if friend url not exists
       if: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
@@ -168,9 +195,10 @@ jobs:
     - name: Set output
       id: set_output
       run: |
-        if [ -f output.txt ]; then
+        if [ -s output.txt ]; then
+          echo "<pre>$(cat output.txt)</pre>" > output_wrapped.txt
           # Кодируем содержимое файла в base64
-          encoded_output=$(base64 -w 0 output.txt)
+          encoded_output=$(base64 -w 0 output_wrapped.txt)
           # Передаем закодированное значение
           echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
         fi
