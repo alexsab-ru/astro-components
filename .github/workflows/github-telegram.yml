@@ -172,8 +172,7 @@ jobs:
             
             echo "additional_text<<EOF" >> $GITHUB_OUTPUT
             echo "" >> $GITHUB_OUTPUT
-            echo "<pre>$additional_text" >> $GITHUB_OUTPUT
-            echo "</pre>" >> $GITHUB_OUTPUT
+            echo "$additional_text" >> $GITHUB_OUTPUT
             echo "" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           fi

@@ -169,7 +169,8 @@ jobs:
     if: needs.build.outputs.changes == 'true'
     uses: ./.github/workflows/github-telegram.yml
     with:
-      additional-text: $(echo -n 'After deploy' | base64)
+      additional-text: |
+        $(echo -n '<blockquote>After deploy</blockquote>' | base64)
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
