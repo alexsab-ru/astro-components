@@ -101,6 +101,10 @@ class CarProcessor:
             sale_price = int(car.find('priceWithDiscount').text)
         create_child_element(car, 'priceWithDiscount', sale_price)
         create_child_element(car, 'sale_price', sale_price)
+
+        for elem_name in self.config['elements_to_localize']:
+            elem = car.find(elem_name)
+            localize_element_text(elem)
         
         # Создание URL
         friendly_url = process_friendly_url(
@@ -124,7 +128,7 @@ class CarProcessor:
             update_yaml(car, file_path, friendly_url, current_thumbs, config)
         else:
             create_file(car, file_path, friendly_url, current_thumbs,
-                       existing_files, self.config['elements_to_localize'], config)
+                       existing_files, config)
 
     def rename_elements(self, car: ET.Element) -> None:
         """Переименование элементов согласно карте переименований"""

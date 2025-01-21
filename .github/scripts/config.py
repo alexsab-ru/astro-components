@@ -528,6 +528,7 @@ model_mapping = {
             "folder": "gs3",
             "cyrillic": "ГС3",
             "color": {
+                "Голубой": "blue.webp",
                 "Синий": "blue.webp",
                 "Серый": "gray.webp",
                 "Графитовый": "grey-graphite.webp",
@@ -561,6 +562,20 @@ model_mapping = {
                 "Коричневый": "brown.webp",
                 "Серый": "gray.webp",
                 "Голубой": "ice-blue.webp",
+                "Белый": "white.webp",
+            }
+        },
+        "GS8": {
+            "folder": "gs8ii",
+            "cyrillic": "ГС8",
+            "color": {
+                "Черный": "black.webp",
+                "Чёрный": "black.webp",
+                "Серый": "gray.webp",
+                "Зеленый": "green.webp",
+                "Зелёный": "green.webp",
+                "Серебристый": "silver.webp",
+                "Серебряный": "silver.webp",
                 "Белый": "white.webp",
             }
         },
@@ -830,7 +845,7 @@ model_mapping = {
                 "White": "white.png",
                 "Черный": "black.png",
                 "Синий": "blue.png",
-                "Серый": "dark-gray.png",
+                "Серый": "light-gray.png",
                 "Темно-серый": "dark-gray.png",
                 "Светло-серый": "light-gray.png",
                 "Красный": "red.png",
@@ -1227,13 +1242,13 @@ model_mapping = {
             }
         },
         "Sorento, IV Рестайлинг": {
-            "folder": "sorento",
+            "folder": "sorento2024",
             "cyrillic": "Соренто",
             "color": {
-                "Белый": "snow-white.webp",
-                "Серый": "steel-gray.webp",
-                "Темно-серый": "platinum-graphite.webp",
-                "Черный": "aurora-black-pearl.webp",
+                "Белый": "white.webp",
+                "Серый": "gray.webp",
+                "Темно-серый": "gray.webp",
+                "Черный": "black.webp",
             }
         },
         "Sportage, V": {
