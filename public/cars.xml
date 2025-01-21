@@ -4154,7 +4154,7 @@
   <bodyNumber />
   <body_type>SUV</body_type><bodyDoorCount>5</bodyDoorCount>
   <seatCount>5</seatCount>
-  <color>Серебряный</color><bodyColorMetallic>0</bodyColorMetallic>
+  <color>Синий</color><bodyColorMetallic>0</bodyColorMetallic>
   <driveType>Постоянный полный</driveType>
   <gearboxType>Робот</gearboxType>
   <gearboxGearCount />
@@ -4342,7 +4342,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>320000</max_discount><priceWithDiscount>3929000</priceWithDiscount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-серебряный-2024/</url></vehicle>
+<max_discount>320000</max_discount><priceWithDiscount>3929000</priceWithDiscount><sale_price>3929000</sale_price><url>https://jetour-alpha.ru/cars/jetour-t2-20-amt-245-лс-4wd-expedition-синий-2024/</url></vehicle>
 <vehicle>
   <id>6666476</id>
   <vin>HJRPBGGB2PF098315</vin>
@@ -4351,7 +4351,7 @@
   <category id="1">Легковые</category>
   <subcategory />
   <type>new</type>
-  <year>2024</year>
+  <year>2023</year>
   <mark_id>Jetour</mark_id><folder_id>X90 PLUS</folder_id><generation />
   <bodyConfiguration id="12833">Внедорожник 5 дв.</bodyConfiguration>
   <modification_id>1.6 AMT (190 л.с.)</modification_id><complectation_name>Luxury</complectation_name><brandComplectationCode />
@@ -4534,7 +4534,7 @@
     <inContent />
     <reserved />
   </status>
-<max_discount>720000</max_discount><priceWithDiscount>2799900</priceWithDiscount><sale_price>2799900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-серый-2024/</url></vehicle>
+<max_discount>720000</max_discount><priceWithDiscount>2799900</priceWithDiscount><sale_price>2799900</sale_price><url>https://jetour-alpha.ru/cars/jetour-x90-plus-16-amt-190-лс-luxury-серый-2023/</url></vehicle>
 <vehicle>
   <id>6696583</id>
   <vin>HJRPBGFB2RB176703</vin>
