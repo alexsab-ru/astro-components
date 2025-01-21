@@ -908,6 +908,7 @@ model_mapping = {
                 "Красный": "red.webp",
                 "Blue": "blue.webp",
                 "Azure": "blue.webp",
+                "Лазурный": "blue.webp",
                 "Синий": "blue.webp",
                 "Голубой": "blue.webp",
                 "Gray": "gray.webp",
