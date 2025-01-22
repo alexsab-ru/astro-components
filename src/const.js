@@ -15,7 +15,7 @@ export const SITE_DESCR = 'Официальный дилерский центр'
 // Телефон по умолчанию
 export const PHONE = '+7 (999) 000-00-00';
 // Бренд
-export const BRAND = 'Baic';
+export const BRAND = 'KNEWSTAR';
 // Конечное время для таймера
 //string 2024-04-26 or 2024-04-26 23:59:59 or December 31 2015 or December 31 2015 23:59:59 GMT+02:00
 export const TIMER_ENDTIME = '';
