@@ -5,7 +5,7 @@ interface Props {
 	totalShow?: boolean;
 }
 const {car = {}, slug, totalShow = true} = Astro.props;
-const url = slug ? slug : `/cars/${car.slug}`;
+const url = slug ? slug : `/cars/${car.slug}/`;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';
