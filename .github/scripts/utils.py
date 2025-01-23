@@ -182,6 +182,7 @@ def localize_element_text(element):
         "grey": "Серый",
         "azure": "Лазурный",
         "beige": "Бежевый",
+        "Dark grey": "Темно-серый",
 
         # steeringWheel
         "left": "Левый",
