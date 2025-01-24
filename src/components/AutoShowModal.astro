@@ -22,8 +22,8 @@ const {
 	<div class={`flex sm:grid grid-cols-5 ${imgPosition === 'right' ? 'flex-col-reverse' : 'flex-col'}`}>
 
 		{imgPosition === 'left' && img ? (
-			<div class="col-span-2 relative left bg-gray-100">
-				<img src={img} alt="ALT">
+			<div class="lazy col-span-2 relative left bg-gray-100">
+				<img loading="lazy" src={img} alt="ALT" width="639" height="1108" />
 			</div>
 		) : ('')}
 
