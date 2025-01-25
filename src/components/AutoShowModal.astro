@@ -23,7 +23,7 @@ const {
 
 		{imgPosition === 'left' && img ? (
 			<div class="col-span-2 relative left bg-gray-100">
-				<img src={img} alt="ALT">
+				<img data-src={img} class="h-full w-full object-cover object-center" id="lazy-image" alt="ALT" width="280" height="702" />
 			</div>
 		) : ('')}
 
@@ -69,7 +69,7 @@ const {
 
 		{imgPosition === 'right' && img ? (
 			<div class="col-span-2 relative left bg-gray-100">
-				<img src={img} alt="ALT">
+				<img data-src={img} class="h-full w-full object-cover object-center" id="lazy-image" alt="ALT" width="280" height="702" />
 			</div>
 		) : ('')}
 
@@ -98,16 +98,17 @@ const {
 </style>
 
 <script define:vars={{seconds: modalShow, position: modalPosition}} is:inline>
+	const commonModalWithImg = document.getElementById('common-modal-with-img');
+	const lazyImage = commonModalWithImg.querySelector('#lazy-image');
 	setTimeout(() => {
-		document.getElementById('common-modal-with-img').classList.remove('hidden');
+		if(lazyImage){
+			lazyImage.src = lazyImage.dataset.src;
+		}
+		commonModalWithImg.classList.remove('hidden');
 		if(position === 'center'){
 			document.getElementById('modal-overlay').classList.remove('hidden');
 		}
 	}, seconds);
-	// document.getElementById('modal-overlay').addEventListener('click', function(e){
-	// 	this.classList.add('hidden');
-	// 	document.querySelectorAll('.modal').forEach(modal => modal.classList.add('hidden'))
-	// });
 	document.querySelectorAll('[data-close]').forEach(close => {
 		close.addEventListener('click', () => {
 			document.querySelectorAll('.modal').forEach(modal => modal.classList.add('hidden'))

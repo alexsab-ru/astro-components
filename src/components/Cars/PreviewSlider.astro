@@ -4,7 +4,7 @@ interface Props {
 	slug?: string
 }
 const { car= {}, slug } = Astro.props;
-const url = slug ? slug : `/cars/${car.slug}`;
+const url = slug ? slug : `/cars/${car.slug}/`;
 import { BRAND, LEGAL_CITY_WHERE } from '@/const.js';
 import './cars.sass'
 ---
