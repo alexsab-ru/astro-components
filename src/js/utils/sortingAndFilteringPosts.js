@@ -1,4 +1,5 @@
 const now = new Date();
+now.setHours(0, 0, 0, 0);
 
 export function sortingAndFilteringPosts(posts) {
 	return posts
@@ -10,7 +11,7 @@ export function sortingAndFilteringPosts(posts) {
 		.filter((post) => !post.data.draft)
 		.filter((post) => {
 			if (post.data?.toDate && typeof post.data?.toDate === 'object') {
-				return now < post.data?.toDate ? post : null;
+				return now <= post.data?.toDate ? post : null;
 			}
 			return post;
 		});
