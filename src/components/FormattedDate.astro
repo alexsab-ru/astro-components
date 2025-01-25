@@ -1,18 +1,20 @@
 ---
 interface Props {
 	date: Date;
+	toDate?: boolean
 }
 
-const { date } = Astro.props;
+const { date, toDate = false } = Astro.props;
 ---
-<div class="text-xs text-gray-500">от 
-<time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('ru-RU', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		})
-	}
-</time>
+<div class="text-xs text-gray-500">
+	{toDate ? 'до ' : 'от '}
+	<time datetime={date.toISOString()}>
+		{
+			date.toLocaleDateString('ru-RU', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+			})
+		}
+	</time>
 </div>
