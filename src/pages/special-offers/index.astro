@@ -1,9 +1,9 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
 import { getCollection } from 'astro:content';
-import FormattedDate from '@/components/FormattedDate.astro';
 import { SITE_NAME } from '@/const';
-import PostItem from '@/components/Post/Item.astro'
+import PostItem from '@/components/Post/Item.astro';
+import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 
 const rawPosts = await getCollection('special-offers');
 
@@ -11,10 +11,7 @@ let posts, image;
 // Проверяем, что массив rawPosts не пустой перед сортировкой
 import { getRandomInt } from '@/js/utils/numbers.format';
 if (rawPosts && rawPosts.length > 0) {
-	posts = rawPosts.sort(
-		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-	).filter((post) => !post.data.draft);
-
+	posts = sortingAndFilteringPosts(rawPosts);
 	image = posts[getRandomInt(0, posts.length)].data.image;
 } else {
 	// Если массив пустой, можно присвоить image значение по умолчанию или обработать этот случай
