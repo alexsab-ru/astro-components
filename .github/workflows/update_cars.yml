@@ -77,6 +77,15 @@ jobs:
       env:
         CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
 
+    - name: Get Used Cars data_cars_car XML and generate cars file
+      if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml"
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+
     - name: Get cars data_cars_car XML and generate cars file
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
       run: |
