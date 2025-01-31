@@ -241,7 +241,9 @@ jobs:
         git config --local user.name "github-actions-bot"
         if [[ -d public/img/thumbs && $(find public/img/thumbs -type f -name "*.webp") ]]; then git add public/img/thumbs/*.webp; fi
         if [[ -d src/content/cars && $(find src/content/cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
+        if [[ -d src/content/used_cars && $(find src/content/used_cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
         if [[ -f public/cars.xml ]]; then git add public/cars.xml; fi
+        if [[ -f public/used_cars.xml ]]; then git add public/used_cars.xml; fi
         if [[ -f public/autoru.xml ]]; then git add public/autoru.xml; fi
         if [[ -f public/avito.xml ]]; then git add public/avito.xml; fi
         git commit -m "Update cars from XML" -a || echo "No changes to commit"
