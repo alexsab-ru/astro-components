@@ -179,7 +179,7 @@ handle_update() {
             python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --repo_name="$DOMAIN"
             ;;
         "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --repo_name="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/"
+            python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --repo_name="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
             ;;
         "maxposter")
             python3 .github/scripts/update_cars.py --source_type maxposter --image_tag="photo" --skip_thumbs --repo_name="$DOMAIN"
