@@ -19,7 +19,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>456724</max_discount>
+			<max_discount>580190</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938383</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -85,7 +85,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>444532</max_discount>
+			<max_discount>555200</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z2RB943293</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -144,11 +144,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327572</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -221,11 +221,11 @@
 			<run>8</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328432</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -295,11 +295,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3426190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>650000</max_discount>
+			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318842</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -454,11 +454,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>580000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332091</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -539,11 +539,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332012</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -621,11 +621,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330244</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -700,11 +700,11 @@
 			<run>7</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>486990</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330227</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -781,9 +781,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
@@ -860,7 +860,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>456724</max_discount>
+			<max_discount>580190</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938384</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -926,7 +926,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>456724</max_discount>
+			<max_discount>580190</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938385</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -992,7 +992,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>456724</max_discount>
+			<max_discount>580190</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938386</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1058,7 +1058,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>456724</max_discount>
+			<max_discount>580190</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938387</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1124,7 +1124,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>456724</max_discount>
+			<max_discount>580190</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z0RB938388</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1190,7 +1190,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>444532</max_discount>
+			<max_discount>555200</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z2RB943294</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1253,7 +1253,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>444532</max_discount>
+			<max_discount>555200</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z2RB943295</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1316,7 +1316,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>444532</max_discount>
+			<max_discount>555200</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z2RB943296</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1379,7 +1379,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>444532</max_discount>
+			<max_discount>555200</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z2RB943297</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1442,7 +1442,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>444532</max_discount>
+			<max_discount>555200</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8622Z2RB943298</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1501,11 +1501,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327573</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1578,11 +1578,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327574</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1655,11 +1655,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327575</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1732,11 +1732,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327576</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1809,11 +1809,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327577</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1886,11 +1886,11 @@
 			<run>8</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328433</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -1960,11 +1960,11 @@
 			<run>8</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328434</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2034,11 +2034,11 @@
 			<run>8</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328435</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2108,11 +2108,11 @@
 			<run>8</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328436</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2182,11 +2182,11 @@
 			<run>8</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>658084</max_discount>
+			<max_discount>704790</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328437</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2256,11 +2256,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3426190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>650000</max_discount>
+			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318843</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2335,11 +2335,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3426190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>650000</max_discount>
+			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318844</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2414,11 +2414,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3426190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>650000</max_discount>
+			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318845</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2493,11 +2493,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3426190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>650000</max_discount>
+			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318846</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -2572,11 +2572,11 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3426190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>650000</max_discount>
+			<max_discount>450000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318847</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер BelGee в городе Оренбурге.
@@ -3051,11 +3051,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>580000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332092</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3136,11 +3136,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>580000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332093</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3221,11 +3221,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>580000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332094</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3306,11 +3306,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>580000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332095</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3391,11 +3391,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>580000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332096</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3476,11 +3476,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332013</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3558,11 +3558,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332014</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3640,11 +3640,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332015</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3722,11 +3722,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332016</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3804,11 +3804,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332017</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3886,11 +3886,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330245</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -3965,11 +3965,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330246</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4044,11 +4044,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330247</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4123,11 +4123,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330248</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4202,11 +4202,11 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>420000</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330249</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4281,11 +4281,11 @@
 			<run>7</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>486990</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330228</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4362,11 +4362,11 @@
 			<run>7</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>486990</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330229</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4443,11 +4443,11 @@
 			<run>7</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>486990</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330230</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4524,11 +4524,11 @@
 			<run>7</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>486990</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330231</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4605,11 +4605,11 @@
 			<run>7</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>486990</max_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330232</vin>
 			<description>ПАРТНЕР - новый официальный дилер BelGee в городе Оренбурге.
@@ -4686,9 +4686,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
@@ -4761,9 +4761,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
@@ -4836,9 +4836,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
@@ -4911,9 +4911,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>
@@ -4986,9 +4986,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>500000</max_discount>
 			<currency>RUR</currency>

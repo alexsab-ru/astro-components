@@ -64,7 +64,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>456724</max_discount><priceWithDiscount>2023466</priceWithDiscount><sale_price>2023466</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
+		<max_discount>580190</max_discount><priceWithDiscount>1900000</priceWithDiscount><sale_price>1900000</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-active-белый-2024/</url></car>
 		<car>
 			<unique_id>8554115c8b155453234e3e51b2ccdbd9</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -126,7 +126,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>444532</max_discount><priceWithDiscount>2145658</priceWithDiscount><sale_price>2145658</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-черный-2024/</url></car>
+		<max_discount>555200</max_discount><priceWithDiscount>2034990</priceWithDiscount><sale_price>2034990</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x50-15-amt-150-лс-style-черный-2024/</url></car>
 		<car>
 			<unique_id>c80e7845d65b209cd60db20f3b41a74a</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -142,9 +142,9 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB327572</vin>
@@ -202,7 +202,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>658084</max_discount><priceWithDiscount>2663106</priceWithDiscount><sale_price>2663106</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
+		<max_discount>704790</max_discount><priceWithDiscount>2616400</priceWithDiscount><sale_price>2616400</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-черный-2024/</url></car>
 		<car>
 			<unique_id>9832de57395512c5463cf6a4d93d74c3</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -218,9 +218,9 @@
 			<run>8</run>
 			<year>2024</year>
 			<price>3321190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D3RB328432</vin>
@@ -275,7 +275,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>658084</max_discount><priceWithDiscount>2663106</priceWithDiscount><sale_price>2663106</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
+		<max_discount>704790</max_discount><priceWithDiscount>2616400</priceWithDiscount><sale_price>2616400</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-серый-2024/</url></car>
 		<car>
 			<unique_id>8061d0bc6079e256fa8a0a689dd50294</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -291,9 +291,9 @@
 			<run>10</run>
 			<year>2024</year>
 			<price>3426190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722D5RB318842</vin>
@@ -353,7 +353,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>650000</max_discount><priceWithDiscount>2776190</priceWithDiscount><sale_price>2776190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-plus-черный-2024/</url></car>
+		<max_discount>450000</max_discount><priceWithDiscount>2976190</priceWithDiscount><sale_price>2976190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-amt-177-лс-4wd-prestige-plus-черный-2024/</url></car>
 		<car>
 			<unique_id>93a0f3b972c95323546aa447ff0862a3</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -448,9 +448,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332091</vin>
@@ -516,7 +516,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
+		<max_discount>580000</max_discount><priceWithDiscount>2366190</priceWithDiscount><sale_price>2366190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
 		<car>
 			<unique_id>348d29a135b869bb840105c220d2b7b6</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -532,9 +532,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB332012</vin>
@@ -597,7 +597,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
+		<max_discount>420000</max_discount><priceWithDiscount>2526190</priceWithDiscount><sale_price>2526190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серый-2024/</url></car>
 		<car>
 			<unique_id>0b66d6ec88a31e130560d2b6d85e3a99</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -613,9 +613,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330244</vin>
@@ -675,7 +675,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
+		<max_discount>420000</max_discount><priceWithDiscount>2526190</priceWithDiscount><sale_price>2526190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
 		<car>
 			<unique_id>bb58c77749ddc6d970103dcdb56bd6c2</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -691,9 +691,9 @@
 			<run>7</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z7RB330227</vin>
@@ -755,7 +755,7 @@
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>500000</max_discount><priceWithDiscount>2446190</priceWithDiscount><sale_price>2446190</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
+		<max_discount>486990</max_discount><priceWithDiscount>2459200</priceWithDiscount><sale_price>2459200</sale_price><url>https://belgee-orenburg.ru/cars/belgee-x70-15-at-150-лс-style-серебристый-2024/</url></car>
 		<car>
 			<unique_id>545bfa15a648f3c4ab9722194fcddc9b</unique_id>
 			<mark_id>BelGee</mark_id>
@@ -771,9 +771,9 @@
 			<run>6</run>
 			<year>2024</year>
 			<price>2946190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>200000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>Y4K8722Z6RB330204</vin>
