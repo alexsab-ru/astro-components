@@ -1,0 +1,19 @@
+---
+import type { TInfoLink } from './types';
+import { Icon } from 'astro-icon/components';
+interface Props {
+    item: TInfoLink;
+    classes?: string;
+}
+const { item, classes } = Astro.props;
+const { title, url, icon, iconClasses = 'size-[50px] text-accent-400', target } = item;
+---
+
+<a 
+    href={item?.url ? item.url : 'javascript:void(0)'} 
+    class={classes} 
+    { ...item?.target && item?.url ? {target: item.target} : {} }
+>
+    <span>{item.title}</span>
+    {item?.icon && (<Icon name={item.icon} class={iconClasses} />)}
+</a>
