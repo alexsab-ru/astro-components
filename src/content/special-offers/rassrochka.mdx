@@ -1,0 +1,33 @@
+---
+h1: Рассрочка на Belgee
+title: Рассрочка на Belgee
+breadcrumb: Рассрочка
+pubDate: 2025-02-04
+image: /img/specials/rassrochka/rassrochka-1920x1080.webp
+description: "Рассрочка на Белджи — До конца месяца ставка от 0,01%, первоначальный взнос от 40%, срок от 12 до 96 месяцев."
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import { SITE_NAME, PHONE } from '@/const';
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+
+export const dateFrom = '01.02.2025';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+<picture>
+	<source media="(min-width: 942px)" srcset="/img/specials/rassrochka/rassrochka-1304x480.webp" />
+	<source media="(min-width: 640px)" srcset="/img/specials/rassrochka/rassrochka-1420x960.webp" />
+	<source media="(min-width: 320px)" srcset="/img/specials/rassrochka/rassrochka-640x800.webp" />
+	<img src="/img/specials/rassrochka/rassrochka-640x800.webp" class="w-full mb-10" alt="Рассрочка Belgee" />
+</picture>
+
+**Условия программы:** 
+
+До конца месяца ставка от <b>0,01%</b>, первоначальный взнос от <b>40%</b>, срок от <b>12</b> до <b>96</b> месяцев<sup>*</sup>
+
+<SpecialSalonsInfo dataFormName="Узнать подробнее. Рассрочка 0.01%" />
+
+> <sup>*</sup> ПАО "Альфабанк". Не является публичной офертой.
