@@ -117,7 +117,7 @@ model_mapping = {
                 "Светло-синий": "light-blue.png",
                 "Голубой": "light-blue.png",
                 "Красный": "red.png",
-                "Белый": ".pngwhite",
+                "Белый": "white.png",
             }
         },
         "U5 Plus": {
