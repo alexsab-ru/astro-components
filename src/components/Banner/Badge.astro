@@ -9,7 +9,7 @@ interface Props {
     bg?: boolean;
 }
 const {autoName, title, descr, image, position = 'center', colorText, bg} = Astro.props;
-const classPosition = position === 'right' ? 'mx-auto md:mx-0 md:ml-auto' : position === 'left' ? 'mx-auto md:mx-0' : 'mx-auto';
+const classPosition = position === 'right' ? 'mx-auto md:mx-0 md:ml-auto pr-0' : position === 'left' ? 'mx-auto md:mx-0 pl-0' : 'mx-auto';
 const textColor = colorText === 'black' ? 'text-black' : 'text-white';
 const background = bg ? 'bg-white/30' : '';
 ---

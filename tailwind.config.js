@@ -3,7 +3,7 @@ import colors from 'tailwindcss/colors'
 import plugin from 'tailwindcss/plugin'
 
 module.exports = {
-	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,json}'],
+	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,json,yml}'],
 	theme: {
 		container: {
 			center: true,

@@ -15,6 +15,8 @@ type TBanner = {
 	view?: string
 	videoUrl?: string
 	imageUrl: string
+	mobileImageUrl?: string
+	imagePosition: string
 	bannerUrl?: string
 	target?: string
 	title?: string
@@ -85,10 +87,10 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
 		) : !banner?.type && banner?.bannerUrl ? (
 			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
-				<BannerImage url={banner.imageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+				<BannerImage imageUrl={banner.imageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 			</a>
 		) : (
-			<BannerImage url={banner.imageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+			<BannerImage imageUrl={banner.imageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 		)
 	}
 </div>

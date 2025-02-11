@@ -1,10 +1,9 @@
 ---
 interface Props {
 	car: any;
-	slug?: string
+	url: string
 }
-const { car= {}, slug } = Astro.props;
-const url = slug ? slug : `/cars/${car.slug}`;
+const { car= {}, url } = Astro.props;
 import { BRAND, LEGAL_CITY_WHERE } from '@/const.js';
 import './cars.sass'
 ---

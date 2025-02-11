@@ -4,6 +4,15 @@ interface Props {
 }
 const { post } = Astro.props;
 import FormattedDate from '@/components/FormattedDate.astro';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+let date = null;
+post.data?.toDate && typeof post.data?.toDate === 'boolean'
+	? (date = new Date(`${YEAR}-${MONTH}-${LAST_DAY}`))
+	: post.data?.toDate && typeof post.data?.toDate === 'object'
+		? (date = post.data?.toDate)
+		: post.data?.pubDate
+			? (date = post.data?.pubDate)
+			: null;
 ---
 <a 
 	href={`/${post.collection}/${post.slug}/`}
@@ -13,5 +22,5 @@ import FormattedDate from '@/components/FormattedDate.astro';
 		<img src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} loading="lazy">
 	</div>
 	<div class="text-black mt-2 sm:mt-4 leading-none">{post.data.caption || post.data.title}</div>
-	{post.data?.pubDate && (<FormattedDate date={post.data.pubDate} />)}
+	{date && (<FormattedDate date={date} toDate={post.data?.toDate ? true : false} />)}
 </a>
