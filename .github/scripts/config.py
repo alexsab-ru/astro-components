@@ -1285,5 +1285,124 @@ model_mapping = {
                 "Черный": "modern-black.webp",
             }
         },
+    },
+    "Haval": {
+        "H9": {
+            "folder": "h9",
+            "cyrillic": "H9",
+            "color": {
+                "Сумрачный изумруд": "dusky-emerald.webp",
+                "Лунный базальт": "lunar-basalt.webp",
+                "Снежный оникс": "snow-onyx.webp",
+                "Черный нефрит": "black-jade.webp",
+            }
+        },
+        "H3": {
+            "folder": "h3",
+            "cyrillic": "H3",
+            "color": {
+                "Неоновый турмалин": "neon-tourmaline.webp",
+                "Галактический черный": "galactic-black.webp",
+                "Пепельный антрацит": "ashy-anthracite.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Терракотовый сапфир": "terracotta-sapphire.webp",
+            }
+        },
+        "H5": {
+            "folder": "h5",
+            "cyrillic": "H5",
+            "color": {
+                "Черный нефрит": "black-jade.webp",
+                "Снежный опал": "snow-opal.webp",
+                "Туманный базальт": "foggy-basalt.webp",
+                "Сумеречный аметист": "twilight-amethyst.webp",
+            }
+        },
+        "F7": {
+            "folder": "f7",
+            "cyrillic": "F7",
+            "color": {
+                "Океанический лазурит": "oceanic-lapis-lazuli.webp",
+                "Галактический черный": "galactic-black.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Дымчатый жемчуг": "smoky-pearls.webp",
+            }
+        },
+        "JOLION": {
+            "folder": "jolion",
+            "cyrillic": "JOLION",
+            "color": {
+                "Благородный агат": "noble-agate.webp",
+                "Океанический лазурит": "heavenly-topaz.webp",
+                "Магматический красный": "magmatic-red.webp",
+                "Платиновый неон": "platinum-neon.webp",
+                "Галактический черный": "galactic-black.webp",
+                "Дымчатый жемчуг": "smoky-pearls.webp",
+            }
+        },
+        "M6": {
+            "folder": "m6",
+            "cyrillic": "M6",
+            "color": {
+                "Серый": "gray.webp",
+                "Черный": "black.webp",
+                "Белый": "white.webp",
+            }
+        },
+        "DARGO X": {
+            "folder": "dargo-x",
+            "cyrillic": "DARGO X",
+            "color": {
+                "Терракотовый сапфир": "terracotta-sapphire.webp",
+                "Красный": "terracotta-sapphire.webp",
+                "Графитовый кварц": "graphite-quartz.webp",
+                "Серый": "graphite-quartz.webp",
+                "Галактический черный / Черный нефрит": "galactic-black.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Белый": "noble-agate.webp",
+            }
+        },
+        "DARGO": {
+            "folder": "dargo-x",
+            "cyrillic": "DARGO",
+            "color": {
+                "Графитовый кварц": "graphite-quartz.webp",
+                "Серый": "graphite-quartz.webp",
+                "Терракотовый сапфир": "terracotta-sapphire.webp",
+                "Красный": "terracotta-sapphire.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Белый": "noble-agate.webp",
+                "Галактический черный / Черный нефрит": "galactic-black.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+            }
+        },
+        "POER KINGKONG": {
+            "folder": "poer-king-kong",
+            "cyrillic": "POER KINGKONG",
+            "color": {
+                "Голубой": "blue.webp",
+                "Черный": "black.webp",
+                "Красный": "red.webp",
+                "Серый": "gray.webp",
+                "Серебристый": "silver.webp",
+                "Белый": "white.webp",
+
+            }
+        },
+        "POER": {
+            "folder": "poer",
+            "cyrillic": "POER",
+            "color": {
+                "Коричневый": "brown.webp",
+                "Черный": "black.webp",
+                "Красный": "red.webp",
+                "Синий": "blue.webp",
+                "Серый": "gray.webp",
+                "Белый": "white.webp",
+            }
+        },
     }
 }
