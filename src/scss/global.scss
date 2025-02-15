@@ -170,3 +170,16 @@ section:not(.model-section) {
 		max-width: 100%;
 	}
 }
+
+.model-page-seo-text{
+	@apply space-y-5;
+	h2{
+		@apply text-3xl font-normal -mb-2 #{!important};
+	}
+	h3{
+		@apply text-2xl font-normal -mb-2 #{!important};
+	}
+	ul{
+		@apply list-disc pl-4;
+	}
+}
