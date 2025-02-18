@@ -1,8 +1,10 @@
 ---
-// interface Props{
-// 	mapImg: string;
-// 	salons?: any;
-// }
+interface Props {
+	mapImg: string;
+	salons?: any[];
+	class?: string;
+	[key: string]: any;
+}
 const {salons = [], mapImg, class: className, ...rest} = Astro.props;
 ---
 
