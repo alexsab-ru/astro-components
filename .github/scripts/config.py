@@ -1406,7 +1406,7 @@ model_mapping = {
         },
     },
     "Omoda": {
-        "C5": {
+        "C5, I": {
             "folder": "c5",
             "cyrillic": "ЦЕ 5",
             "color": {
@@ -1428,7 +1428,7 @@ model_mapping = {
                 "Белый": "white.webp"
             }
         },
-        "C5FL": {
+        "C5, I Рестайлинг": {
             "folder": "c5fl",
             "cyrillic": "ЦЕ 5 ЭФ ЭЛ",
             "color": {
@@ -1468,7 +1468,7 @@ model_mapping = {
                 "Белый": "white.webp"
             }
         },
-        "S5GT": {
+        "S5 GT": {
             "folder": "s5gt",
             "cyrillic": "ЭС 5 ДЖЕЙ ТИ",
             "color": {
