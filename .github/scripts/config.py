@@ -696,7 +696,7 @@ model_mapping = {
             }},
     },
     "Jetour": {
-        "Dashing": {
+        "Dashing, I": {
             "folder": "dashing",
             "cyrillic": "Дашинг",
             "color": {
@@ -752,7 +752,31 @@ model_mapping = {
                 "Белый": "white.png",
             }
         },
-        "X70 PLUS": {
+        "X70 PLUS, I": {
+            "folder": "x70plus",
+            "cyrillic": "Икс 70 Плюс",
+            "color": {
+                "White": "c1b.png",
+                "Белый": "c1b.png",
+                "Grey": "c2b.png",
+                "Silver": "c2b.png",
+                "Серебряный": "c2b.png",
+                "Серый": "c2b.png",
+                "Red": "c3b.png",
+                "Красный": "c3b.png",
+                "Gray": "c4b.png",
+                "Серый": "c4b.png",
+                "Blue": "c5b.png",
+                "Синий": "c5b.png",
+                "Darkblue": "c6b.png",
+                "Темно-синий": "c6b.png",
+                "Black": "c7b.png",
+                "Черный": "c7b.png",
+                "Зеленый": "green.png",
+                "Green": "green.png",
+            }
+        },
+        "X70 PLUS, I Рестайлинг": {
             "folder": "x70plus",
             "cyrillic": "Икс 70 Плюс",
             "color": {
