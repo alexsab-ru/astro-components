@@ -1,0 +1,15 @@
+---
+import type { TAdvantagesItem } from './types';
+interface Props {
+	items: TAdvantagesItem[];
+	classes?: string;
+};
+const { items = [], classes = 'grid sm:grid-cols-3 gap-5 lg:gap-10 text-center mb-10 md:mb-20', ...rest } = Astro.props;
+
+import AdvantagesItem from './Item.astro';
+---
+{items.length > 0 && (
+	<div class={ classes } {...rest}>
+		{items.map( item => <AdvantagesItem item={item} /> )}
+	</div>
+)}

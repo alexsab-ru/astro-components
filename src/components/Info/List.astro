@@ -1,0 +1,26 @@
+---
+import InfoItem from './Item.astro';
+import type { TInfoLink } from './types';
+interface Props {
+    items: TInfoLink[];
+    title?: string;
+    classes?: string;
+    id?: string;
+    grid?: boolean;
+}
+
+const { items, title, classes, id, grid = false, ...rest } = Astro.props;
+const wrapClasses = grid ? 'flex justify-between flex-wrap gap-5' : '';
+---
+{items.length && (
+    <section class={`${classes}`} { ...id ? {id} : '' } {...rest}>
+        <div class="container">
+            {title && (<h2 class="mb-10 md:mb-20">{title}</h2>)}
+            <div class={wrapClasses}>
+                {items.map((link):TInfoLink => (
+                    <InfoItem item={link} classes="min-w-[186px] py-5 px-3 lg:p-[2vw] flex-1 flex flex-col-reverse items-center justify-between gap-y-2 border rounded text-center text-sm lg:text-lg xl:text-xl font-medium transition-all hover:text-accent-300 hover:shadow-md" />
+                ))}
+            </div>
+        </div>
+    </section>
+)}

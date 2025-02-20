@@ -6,6 +6,8 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('service'));
 import models from '@/data/models.json';
 const options = models.filter(m => {
 	if(m.show){
@@ -21,7 +23,7 @@ const options = models.filter(m => {
 			<p class="text-center mt-1 text-gray-500">Профессиональное обслуживание с сохранением гарантии</p>
 		</div>
 		<div class="flex flex-col-reverse lg:grid grid-cols-2 items-center gap-10">
-			<form class="flex flex-col gap-4 mx-auto w-full">
+			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
 				<input type="hidden" name="form" value="Запись на сервис" />
 				<input
 					type="email"
@@ -40,7 +42,7 @@ const options = models.filter(m => {
 					required
 					errorClasses="text-red-500"
 				/>
-				<ChoosingDealerSelect required={true} />
+				<ChoosingDealerSelect required={true} salons={salons} />
 				<Checkbox
 					name="agree"
 					label={AGREE_LABEL}
@@ -48,12 +50,6 @@ const options = models.filter(m => {
 					required
 					errorClasses="text-red-500 w-full"
 					errorText="Чтобы продолжить, установите флажок"
-				/>
-	
-				<input
-					type="checkbox"
-					name="subscribe"
-					class="absolute w-0 h-0 opacity-0 invisible"
 				/>
 	
 				<Button view="form-button" classes="w-full" title="Отправить" />

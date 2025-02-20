@@ -13,9 +13,10 @@ import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
 import Morquee from '@/components/Marquee/Index.astro';
 import models from '@/data/models.json'
-import salons from '@/data/salons.json'
-const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length))
-const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('index'));
+const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import SeoText from '@/components/Seo/Index.astro';
 ---
 
