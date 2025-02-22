@@ -67,6 +67,9 @@ section:not(.model-section) {
 			}
 		}
 	}
+	ul{
+		@apply list-disc pl-5;
+	}
 }
 
 .overflow-auto.min-w-full.my-14 {
