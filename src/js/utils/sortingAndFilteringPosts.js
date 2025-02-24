@@ -4,7 +4,7 @@ nowWithoutTime.setHours(0, 0, 0, 0);
 
 export function sortingAndFilteringPosts(posts) {
 	return posts
-		.sort((a, b) => a.data.pubDate && b.data.pubDate ? b.data.pubDate.valueOf() - a.data.pubDate.valueOf() : 0)
+		.sort((a, b) => a.data.pubDate && b.data.pubDate ? b.data.pubDate.valueOf() - a.data.pubDate.valueOf() : parseInt(a.data.title.split('_')[0], 10) - parseInt(b.data.title.split('_')[0], 10))
 		.filter(post => !post.data.draft)
 		.filter(post => {
 			if (post.data?.toDate && typeof post.data?.toDate === 'object') {
