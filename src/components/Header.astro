@@ -100,7 +100,7 @@ import socials from '@/data/socials.json';
 	<div id="site_nav" class={'hidden lg:block border-t'+classBottom}>
 		<div class="container">
 			<div class="h-full">
-				<ul class="flex">
+				<ul class="overflow-hidden flex relative">
 				{
 					links.map(link => (
 						<li class="relative group">
@@ -115,7 +115,7 @@ import socials from '@/data/socials.json';
 								]}
 							>{link.name}</a>
 							{link?.children && link.children.length > 0 && (
-								<ul class="lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible bg-white group-hover:opacity-100 group-hover:visible lg:shadow-2xl z-[1000]">
+								<ul class="lg:absolute top-[calc(100%+1px)] min-w-full w-fit lg:opacity-0 lg:invisible bg-white group-hover:opacity-100 group-hover:visible lg:shadow-2xl z-[1000]">
 									{link.children.map( child => (
 										<a
 											href={child.url === 'javascript:void(0)' || path === '/' ? child.url : '/'+child.url}
@@ -197,7 +197,6 @@ import socials from '@/data/socials.json';
 					</div>
 				))}
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -214,4 +213,5 @@ import socials from '@/data/socials.json';
 	.header-child-link{
 		@apply block text-black pl-10 lg:pl-5;
 	}
+
 </style>
