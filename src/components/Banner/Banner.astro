@@ -1,6 +1,11 @@
 ---
+import type { TBanner } from './types';
+interface Props {
+	banners?: TBanner[]
+}
 import BannerSlide from './BannerSlide.astro';
-import banners from '@/data/banners.json'
+import bannersData from '@/data/banners.json'
+const { banners = bannersData } = Astro.props;
 ---
 
 {
