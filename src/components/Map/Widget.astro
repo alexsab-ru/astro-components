@@ -22,12 +22,9 @@ import './map.sass';
 			const iframe = document.createElement("iframe");
 			iframe.classList.add('absolute', 'w-full', 'h-full', 'z-20');
 			iframe.onload = function(e) {
-				if(!iframe.contentWindow.length){
-					widgetWrapper.setAttribute('style', '');
-					showError(widgetWrapper);
-				}
-				// console.log("iframe загрузился");
+				widgetWrapper.setAttribute('style', '');
 				widgetWrapper.classList.remove('is-active');
+				// console.log("iframe загрузился");
 			};
 			iframe.onerror = function() {
 				// console.log("Что-то пошло не так, давай, ищи ошибку!");
