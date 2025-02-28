@@ -45,6 +45,11 @@ export const LINKS_MENU = [
 	{url: '#services', name: 'Услуги'},
 	{url: 'contacts/', name: 'Контакты'},
 ];
+// Коллекции
+export const COLLECTIONS = [
+	{name: 'special-offers', title: 'Спецпредложения'},
+	{name: 'news', title: 'Новости'},
+];
 // Текстовая строка над хедером
 export const HEADER_TOP_LINE = '';
 // Текст согласия в формах
