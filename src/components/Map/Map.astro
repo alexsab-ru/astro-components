@@ -191,6 +191,17 @@ if (parent) {
 	}
 }
 
+const cb = function(entries, observer) {
+	entries.forEach((entry) => {
+		if (entry.isIntersecting) {
+			ymap();
+			observer.unobserve(entry.target);
+		}
+	})
+}
+let mapObserver = new IntersectionObserver(cb);
+mapObserver.observe(document.querySelector('#map'));
+
 }
 
 </script>
