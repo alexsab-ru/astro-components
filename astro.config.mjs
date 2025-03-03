@@ -19,11 +19,17 @@ export default defineConfig({
 		robots({
 			policy: [
 				{
+					userAgent: "Yandex",
+					allow: ["/"],
+					disallow: ["/?*"],
+					cleanParam: "calltouch_tm"
+				},
+				{
 					userAgent: ["*"],
 					allow: ["/"],
 					disallow: ["/?*"],
 				},
-			  ],
+			],
 		}),
 		alpinejs(),
 		mdx(),

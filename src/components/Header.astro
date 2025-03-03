@@ -1,5 +1,6 @@
 ---
-import salons from '@/data/salons.json'
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('header'));
 
 import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
 
@@ -21,7 +22,7 @@ import socials from '@/data/socials.json';
 ---
 <div
 	x-data="header"
-	class="bg-white sticky top-0 transition-all duration-300 z-50"
+	class="bg-white sticky top-0 transition-all duration-300 z-[2147483649999]"
 	:class="{'shadow-3xl': scrolling}"
 >
 	<header>
@@ -98,21 +99,40 @@ import socials from '@/data/socials.json';
 {links && (
 	<div id="site_nav" class={'hidden lg:block border-t'+classBottom}>
 		<div class="container">
-			<div class="flex overflow-x-auto">
-			{
-				links.map(link => (
-				<a
-					href={path === '/' ? link.url : '/'+link.url}
-					class:list={[
-						{
-							'scroll-link': link.url.includes('#'),
-							'header-link': !link.url.includes('#'),
-							'active': path.replace(/\//g, '') === link.url.replace(/\//g, '')
-						}
-					]}
-				>{link.name}</a>
-				))
-			}
+			<div class="h-full">
+				<ul class="overflow-hidden flex relative">
+				{
+					links.map(link => (
+						<li class="relative group">
+							<a
+								href={link.url === 'javascript:void(0)' || path === '/' ? link.url : '/'+link.url}
+								class:list={[
+									{
+										'scroll-link': link.url.includes('#'),
+										'header-link': !link.url.includes('#'),
+										'active': path.replace(/\//g, '') === link.url.replace(/\//g, '')
+									}
+								]}
+							>{link.name}</a>
+							{link?.children && link.children.length > 0 && (
+								<ul class="lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible bg-white group-hover:opacity-100 group-hover:visible lg:shadow-2xl z-[1000]">
+									{link.children.map( child => (
+										<a
+											href={child.url === 'javascript:void(0)' || path === '/' ? child.url : '/'+child.url}
+											class:list={[
+												{
+													'header-child-link': !child.url.includes('#'),
+													'active': path.replace(/\//g, '') === child.url.replace(/\//g, '')
+												}
+											]}
+										>{child.name}</a>
+									) )}
+								</ul>
+							)}
+						</li>
+					))
+				}
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -135,20 +155,38 @@ import socials from '@/data/socials.json';
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
 				{links.length &&
-				<div class="flex flex-col border-b lg:hidden">
+				<ul class="flex flex-col border-b lg:hidden">
 					{links.map(link => (
-					<a
-						href={path === '/' ? link.url : '/'+link.url}
-						class:list={[
-							{
-								'scroll-link': link.url.includes('#'),
-								'header-link': !link.url.includes('#'),
-								'active': path.replace(/\//g, '') === link.url.replace(/\//g, ''),
-							}
-						]}
-					>{link.name}</a>
+						<li>
+							<a
+								href={path === '/' ? link.url : '/'+link.url}
+								class:list={[
+									{
+										'font-bold': link?.children && link.children.length > 0,
+										'scroll-link': link.url.includes('#'),
+										'header-link': !link.url.includes('#'),
+										'active': path.replace(/\//g, '') === link.url.replace(/\//g, ''),
+									}
+								]}
+							>{link.name}</a>
+							{link?.children && link.children.length > 0 && (
+								<ul class="">
+									{link.children.map( child => (
+										<a
+											href={child.url === 'javascript:void(0)' || path === '/' ? child.url : '/'+child.url}
+											class:list={[
+												{
+													'header-child-link': !child.url.includes('#'),
+													'active': path.replace(/\//g, '') === child.url.replace(/\//g, '')
+												}
+											]}
+										>{child.name}</a>
+									) )}
+								</ul>
+							)}
+						</li>
 					))}
-				</div>
+				</ul>
 				}
 				<div>
 				{salons.length && salons.map(salon => (
@@ -159,7 +197,6 @@ import socials from '@/data/socials.json';
 					</div>
 				))}
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -167,10 +204,14 @@ import socials from '@/data/socials.json';
 
 
 <style lang="scss">
-	.scroll-link, .header-link{
-		@apply inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-400 hover:text-white whitespace-nowrap;
+	.scroll-link, .header-link, .header-child-link{
+		@apply block lg:inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-400 hover:text-white whitespace-nowrap;
 		&.active{
 			@apply bg-accent-400 text-white;
 		}
 	}
+	.header-child-link{
+		@apply block text-black pl-10 lg:pl-5;
+	}
+
 </style>

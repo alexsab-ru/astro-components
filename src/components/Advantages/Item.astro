@@ -1,0 +1,17 @@
+---
+import type { TAdvantagesItem } from './types';
+interface Props {
+	item: TAdvantagesItem;
+	classes?: string;
+};
+const { item, classes = 'bg-gray-100 py-6 lg:py-10 px-2 flex flex-col items-center', ...rest } = Astro.props;
+const { iconName, iconClass = '', title, text } = item;
+ 
+import { Icon } from 'astro-icon/components';
+---
+
+<div class={classes} {...rest}>
+	{ iconName && <Icon name={iconName} class={`text-4xl lg:text-6xl mb-3 lg:mb-6 ${iconClass}`} /> }
+	<div class="text-lg lg:text-2xl mb-3 lg:mb-6 !leading-none"><Fragment set:html={ title } /></div>
+	{ text && <div class="text-gray-600 text-xs md:text-sm"><Fragment set:html={ text } /></div> }
+</div>

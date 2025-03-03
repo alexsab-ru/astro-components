@@ -10,7 +10,7 @@ const {title, imageUrl, mobileImageUrl, imagePosition} = Astro.props
 const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePosition === 'top' ? 'object-top' : 'object-center';
 ---
 <picture>
-	<source media="(min-width: 1024px)" srcset={imageUrl} />
+	<source media="(min-width: 768px)" srcset={imageUrl} />
 	{mobileImageUrl && <source media="(min-width: 320px)" srcset={mobileImageUrl} />}
 	<img
 		src={imageUrl}

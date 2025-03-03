@@ -4,12 +4,14 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import CloseModalBtn from '@/components/CloseModalBtn.astro';
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('common_modal'));
 import {AGREE_LABEL} from '@/const'
 ---
 
 <!-- MODALS -->
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-50"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-[3000000000]"
 	id="common-modal"
 	data-close>
 	<div
@@ -40,7 +42,7 @@ import {AGREE_LABEL} from '@/const'
 				errorClasses="text-red-500"
 			/>
 
-			<ChoosingDealerSelect required={true} />
+			<ChoosingDealerSelect required={true} salons={salons}/>
 
 			<Checkbox
 				name="agree"
@@ -63,7 +65,7 @@ import {AGREE_LABEL} from '@/const'
 </div>
 
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black/70 z-50 overflow-x-hidden overflow-y-auto hidden modal-overlay"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/70 z-[3000000000] overflow-x-hidden overflow-y-auto hidden modal-overlay"
 	id="message-modal"
 	data-close>
 	<div
@@ -77,7 +79,7 @@ import {AGREE_LABEL} from '@/const'
 </div>
 
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black/50 z-50 overflow-x-hidden overflow-y-auto hidden modal-overlay"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/50 z-[3000000000] overflow-x-hidden overflow-y-auto hidden modal-overlay"
 	id="confirm-modal"
 	data-close>
 	<div

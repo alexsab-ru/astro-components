@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="chat" viewBox="0 0 24 24">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 5V17H8V19L10.667 17H20V5H4ZM6 23V19H4C2.897 19 2 18.103 2 17V5C2 3.897 2.897 3 4 3H20C21.103 3 22 3.897 22 5V17C22 18.103 21.103 19 20 19H11.333L6 23Z"/>
+<path d="M7 8H17V10H7V8Z"/>
+<path d="M7 12H17V14H7V12Z"/>
+</svg>

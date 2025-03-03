@@ -5,7 +5,8 @@ interface Props {
 }
 
 const {mapImg, title} = Astro.props;
-import salons from '@/data/salons.json'
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('map'));
 
 import Map from './Map/Map.astro';
 

@@ -1,5 +1,9 @@
 ---
-import salons from '@/data/salons.json'
+interface Props {
+    salons?: any[];
+}
+
+const {salons = []} = Astro.props;
 
 import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN } from '@/const'
 
