@@ -1,7 +1,7 @@
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 // Название сайта по умолчанию
-export const SITE_NAME = 'Белджи Партнер';
+export const SITE_NAME = 'Партнер';
 // Юр лицо
 export const LEGAL_ENTITY = 'ООО "ПАРТНЕР"';
 // ИНН
