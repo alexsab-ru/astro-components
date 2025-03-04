@@ -9,7 +9,12 @@ interface Props {
 const { mdx, noPadding = false } = Astro.props;
 
 // Попробуем получить запись из коллекции 'seo' по слагу
-const content = await getEntry('seo', mdx);
+let content = null;
+try {
+	content = await getEntry('seo', mdx)
+} catch (error) {
+	
+}
 let showseo = false;
 let Content = null;
 
