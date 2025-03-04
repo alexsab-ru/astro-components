@@ -17,7 +17,12 @@ export async function getStaticPaths() {
 
 const { collection } = Astro.params;
 const { title } = Astro.props;
-const entries = await getCollection(collection);
+let entries = [];
+try {
+	entries = await getCollection(collection);	
+} catch (error) {
+	
+}
 let posts: TCollection[], image = '';
 if (entries && entries.length > 0) {
 	posts = sortingAndFilteringPosts(entries);

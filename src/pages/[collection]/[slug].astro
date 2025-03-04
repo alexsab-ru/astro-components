@@ -9,7 +9,12 @@ export async function getStaticPaths() {
   const paths = [];
 
   for (const collection of COLLECTIONS) {
-    const entries = await getCollection(collection.name);
+    let entries = [];
+    try {
+      entries = await getCollection(collection.name);
+    } catch (error) {
+      
+    }
     for (const entry of entries) {
       paths.push({ 
         params: { collection: collection.name, slug: entry.slug },
@@ -23,7 +28,12 @@ export async function getStaticPaths() {
 
 const { collection, slug } = Astro.params;
 const { title } = Astro.props;
-const entries = await getCollection(collection);
+let entries = [];
+try {
+  entries = await getCollection(collection);
+} catch (error) {
+  
+}
 const entry = entries.find((entry: TCollection) => entry.slug === slug) || {};
 
 if (!entry) {

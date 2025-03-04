@@ -27,7 +27,12 @@ const {
 	limit = 10,
 } = Astro.props;
 let posts = [];
-let rawPosts = await getCollection(collectionName);
+let rawPosts = [];
+try {
+	rawPosts = await getCollection(collectionName);	
+} catch (error) {
+}
+
 let diffLimit: number;
 if (rawPosts && rawPosts.length) {
 	rawPosts = rawPosts
