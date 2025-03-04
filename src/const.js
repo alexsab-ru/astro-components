@@ -24,7 +24,7 @@ export const MARQUEE = {title: 'Тотальная распродажа до', d
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылка организации для виджета
-export const LINK_WIDGET_ORGNIZATION = 'CDdoJCk8';
+export const LINK_WIDGET_ORGNIZATION = ''; // CDdoJCk8
 // Ссылки под хедером
 import modelsData from '@/data/models.json';
 const models = modelsData.filter(model => model.show);
