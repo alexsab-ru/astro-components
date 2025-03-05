@@ -58,10 +58,10 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
 		) : !banner?.type && banner?.bannerUrl ? (
 			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
-				<BannerImage imageUrl={banner.imageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+				<BannerImage imageUrl={banner.imageUrl} tabletImageUrl={banner?.tabletImageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 			</a>
 		) : (
-			<BannerImage imageUrl={banner.imageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+			<BannerImage imageUrl={banner.imageUrl} tabletImageUrl={banner?.tabletImageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 		)
 	}
 </div>
