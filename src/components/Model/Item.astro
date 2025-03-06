@@ -1,0 +1,78 @@
+---
+interface Props {
+	model: any
+}
+const { model } = Astro.props;
+import {Icon} from 'astro-icon/components';
+import { currencyFormat } from '@/js/utils/numbers.format';
+---
+
+<a
+	href={`/models/${model.id}/`}
+	class="mb-[4%] lg:mb-0 w-[48%] lg:w-[calc(33%-20px)] xl:w-[calc(25%-20px)] flex flex-col border p-3 sm:pt-10 sm:pb-4 sm:px-5 overflow-hidden shadow-xl transition-all duration-500 in-expo group hover:border-gray-400 hover:shadow-md !no-underline"
+>
+	<div>
+		<h2
+			class="xs:!text-[10px] leading-none !text-lg sm:!text-2xl uppercase font-bold transition-colors duration-500 group-hover:text-accent-500 !m-0 !p-0 before:!hidden"
+		>
+			{model.mark_id}&nbsp;{model.name}
+		</h2>
+		{
+			model?.benefit && !isNaN(model?.benefit) && (
+				<span class="block text-xs sm:text-lg text-black/80">
+					Выгода до {currencyFormat(model.benefit)}
+				</span>
+			)
+		}
+		<span class=""></span>
+	</div>
+	<div
+		class="relative flex-grow flex items-center aspect-[4/3] justify-center lazy"
+	>
+		{
+			model?.badge && (
+				<img
+					data-src={model?.badge.img}
+					alt={model?.badge.alt}
+					class="opacity-0 absolute right-0 top-0 xs:h-7 h-8 sm:h-14 w-auto z-10"
+				/>
+			)
+		}
+		<img
+			src="/img/loading-simple.gif"
+			data-src={model.thumb}
+			class="scale-100 transition-transform duration-500 in-expo group-hover:scale-105 max-h-full"
+			alt={model.name}
+			loading="lazy"
+		/>
+	</div>
+	{
+		model?.price && !isNaN(model?.price) && (
+			<div class="flex flex-col items-center xs:text-base text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5">
+				<span>
+					<span class="text-sm text-gray-400">от</span>&nbsp;
+					{currencyFormat(model.price)}
+				</span>
+			</div>
+		)
+	}
+	<div class="flex flex-col sm:flex-row sm:mt-10 sm:divide-x">
+		{
+			Object.keys(model.chars).map((key) => (
+				<div class="flex-1 py-1.5 sm:py-0 sm:p-4 flex sm:flex-col items-center gap-0.5 sm:gap-2">
+					<Icon
+						name={
+							key === 'seats'
+								? 'mdi:car-seat'
+								: key === 'fuel'
+									? 'mdi:fuel-pump'
+									: 'mdi:car-manual-transmission'
+						}
+						class="text-gray-700 text-2xl sm:text-3xl"
+					/>
+					<span>{model.chars[key]}</span>
+				</div>
+			))
+		}
+	</div>
+</a>
