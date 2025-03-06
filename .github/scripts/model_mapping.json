@@ -1219,6 +1219,34 @@
             }
         }
     },
+    "Great Wall": {
+        "Poer King Kong": {
+            "folder": "poer-king-kong",
+            "cyrillic": "POER KINGKONG",
+            "color": {
+                "Голубой": "blue.webp",
+                "Черный": "black.webp",
+                "Чёрный": "black.webp",
+                "Красный": "red.webp",
+                "Серый": "gray.webp",
+                "Серебристый": "silver.webp",
+                "Белый": "white.webp"
+            }
+        },
+        "Poer, I": {
+            "folder": "poer",
+            "cyrillic": "POER",
+            "color": {
+                "Коричневый": "brown.webp",
+                "Черный": "black.webp",
+                "Чёрный": "black.webp",
+                "Красный": "red.webp",
+                "Синий": "blue.webp",
+                "Серый": "gray.webp",
+                "Белый": "white.webp"
+            }
+        }
+    },
     "Haval": {
         "H9, II": {
             "folder": "h9",
@@ -1308,32 +1336,6 @@
                 "Белый": "noble-agate.webp",
                 "Черный": "galactic-black.webp",
                 "Чёрный": "galactic-black.webp"
-            }
-        },
-        "Poer King Kong": {
-            "folder": "poer-king-kong",
-            "cyrillic": "POER KINGKONG",
-            "color": {
-                "Голубой": "blue.webp",
-                "Черный": "black.webp",
-                "Чёрный": "black.webp",
-                "Красный": "red.webp",
-                "Серый": "gray.webp",
-                "Серебристый": "silver.webp",
-                "Белый": "white.webp"
-            }
-        },
-        "Poer, I": {
-            "folder": "poer",
-            "cyrillic": "POER",
-            "color": {
-                "Коричневый": "brown.webp",
-                "Черный": "black.webp",
-                "Чёрный": "black.webp",
-                "Красный": "red.webp",
-                "Синий": "blue.webp",
-                "Серый": "gray.webp",
-                "Белый": "white.webp"
             }
         }
     },
