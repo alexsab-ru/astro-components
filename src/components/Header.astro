@@ -32,7 +32,7 @@ import socials from '@/data/socials.json';
 		<div class="container">
 			<div class="flex items-center justify-between xs:py-2 xs:h-auto h-[60px] md:h-[80px]">
 				<Logo />
-				<div class="flex items-center xs:gap-3 gap-4 xl:gap-10">
+				<div class="flex items-center xs:gap-2 gap-4 xl:gap-10">
 					<div class="hidden md:flex flex-col">
 					{
 						salons.length && salons.map((salon: any, index) => {
@@ -59,7 +59,7 @@ import socials from '@/data/socials.json';
 							</div>
 						)
 					}
-					<div class="flex items-center gap-4 flex-shrink-0">
+					<div class="flex items-center xs:gap-2 gap-4 flex-shrink-0">
 						<Button
 							classes="popup-link hidden lg:block !px-4 xl:!px-4 !py-2 xl:!py-3"
 							url="#common-modal"
@@ -82,7 +82,7 @@ import socials from '@/data/socials.json';
 					  	) : ('')}
 					</div>
 					<button
-						class="lg:hidden shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow"
+						class="lg:hidden shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow shrink-0"
 						id="mobile-menu" 
 						title="Mobile menu"
 						aria-label="Mobile menu"
@@ -115,7 +115,7 @@ import socials from '@/data/socials.json';
 								]}
 							>{link.name}</a>
 							{link?.children && link.children.length > 0 && (
-								<ul class="lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible bg-white group-hover:opacity-100 group-hover:visible lg:shadow-2xl z-[1000]">
+								<ul class={`lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible bg-white group-hover:opacity-100 group-hover:visible lg:shadow-2xl z-[1000] ${link.children.length > 10 && 'lg:max-h-[65vh] lg:overflow-y-auto custom-scrollbar'}`}>
 									{link.children.map( child => (
 										<a
 											href={child.url === 'javascript:void(0)' || path === '/' ? child.url : '/'+child.url}
