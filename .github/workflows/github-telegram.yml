@@ -46,8 +46,8 @@ jobs:
           # checkout full tree
           fetch-depth: 0
 
-      - name: Checkout repository and collect commits
-        id: collect
+      - name: Prepare commit messages
+        id: prepare
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/prepare_commits.sh
@@ -58,12 +58,6 @@ jobs:
             "${{ github.sha }}" \
             "${{ github.actor }}" \
             "${{ github.repository }}"
-
-      - name: Prepare commit messages
-        id: prepare
-        run: |
-          source ./.github/scripts/sh/utils.sh
-          source ./.github/scripts/sh/prepare_commits.sh
           total_parts=$(prepare_commits_message \
             "${{ github.event.repository.name }}" \
             "${{ github.ref_name }}" \
