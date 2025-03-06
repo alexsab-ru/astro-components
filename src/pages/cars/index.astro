@@ -4,15 +4,19 @@ import { getCollection } from "astro:content";
 import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
 import CarItem from "@/components/Cars/Item.astro";
 import SortSelect from "@/components/Cars/SortSelect.astro";
+import FilterItemBtn from '@/components/Filter/ItemBtn.astro'
 const rawCars = await getCollection("cars");
-let cars: any, image: string, models = [], years = [];
+let cars: any, image: string, brands = [], models = [], years = [];
 import { getRandomInt, declOfNums } from "@/js/utils/numbers.format";
 if (rawCars && rawCars.length > 0) {
 	cars = rawCars;
 	image = cars[getRandomInt(0, cars.length)].data.image;
 	cars.map((car) => {
+		if(!brands.includes(car.data.mark_id)){
+			brands.push(car.data.mark_id);
+		}
 		if(!models.includes(car.data.folder_id)){
-			models.push(car.data.folder_id)
+			models.push(car.data.folder_id);
 		}
 		if(!years.includes(car.data.year)){
 			years.push(car.data.year);
@@ -35,18 +39,21 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 		cars ? (
 			<div x-data="sorting" x-cloak>
 				<p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
-				<hr class="my-5">
+				<hr class="my-5" />
 				<SortSelect />
-				<hr class="my-5">
+				<hr class="my-5" />
+				{brands.length > 1 && (
+					<div class="flex flex-wrap gap-2 sm:gap-4">
+						{brands.map(brand => (
+							<FilterItemBtn name={brand} value={brand.toLocaleLowerCase()} id={brand.toLocaleLowerCase()} filterType="Brands" />
+						))}
+					</div>
+					<hr class="my-5" />
+				)}
 				{models.length && (
 					<div class="flex flex-wrap gap-2 sm:gap-4">
 						{models.map(model => (
-							<div class="relative">
-								<label class="peer w-full h-full absolute bottom-3 cursor-pointer z-50">
-									<input type="checkbox" value={model.toLocaleLowerCase()} id={model.id} class="asbsolute opacity-0" @change={`toggleFilter('Models', '${model.toLocaleLowerCase()}')`} />
-								</label>
-								<div class="filter-model-link bg-gray-200 peer-has-[:checked]:bg-accent-500 peer-has-[:checked]:text-white">{model}</div>
-							</div>
+							<FilterItemBtn name={model} value={model.toLocaleLowerCase()} id={model.toLocaleLowerCase()} filterType="Models" />
 						))}
 					</div>
 				)}
@@ -54,12 +61,7 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 					<hr class="my-5" />
 					<div class="flex flex-wrap gap-2 sm:gap-4">
 						{years.map(year => (
-							<div class="relative">
-								<label class="peer w-full h-full absolute bottom-3 cursor-pointer z-50">
-									<input type="checkbox" value={year} id={year} class="asbsolute opacity-0" @change={`toggleFilter('Years', '${year}')`} />
-								</label>
-								<div class="filter-model-link bg-gray-200 peer-has-[:checked]:bg-accent-500 peer-has-[:checked]:text-white">{year}</div>
-							</div>
+							<FilterItemBtn name={year} id={year} filterType="Years" />
 						))}
 					</div>
 				)}

@@ -124,6 +124,7 @@ document.addEventListener('alpine:init', () => {
 			{ id: "price_down", title: "По убыванию цены" },
 		],
 		current: "price_up",
+		selectedBrands: [], 
 		selectedModels: [], // массив выбранных моделей
 		selectedColors: [],
 		selectedComplectations: [],
@@ -191,6 +192,7 @@ document.addEventListener('alpine:init', () => {
 			const vm = this;
 
 			this.cars.forEach((element) => {
+				const carBrand = element.dataset.brand.toLowerCase();
 				const carModel = element.dataset.model.toLowerCase();
 				const carColor = element.dataset.color?.toLowerCase();
 				const carComplectation = element.dataset.complectation?.toLowerCase();
@@ -199,6 +201,7 @@ document.addEventListener('alpine:init', () => {
 				const carYear = element.dataset.year;
 
 				const isVisible = (
+					(this.selectedBrands.length === 0 || this.selectedBrands.includes(carBrand)) &&
 					(this.selectedModels.length === 0 || this.selectedModels.includes(carModel)) &&
 					(this.selectedColors.length === 0 || this.selectedColors.includes(carColor)) &&
 					(this.selectedComplectations.length === 0 || this.selectedComplectations.includes(carComplectation)) &&
@@ -214,6 +217,7 @@ document.addEventListener('alpine:init', () => {
 				}
 			});
 			
+			this.selectedBrands.length ? this.addQueryParam("brand", this.selectedBrands.join(",")) : this.deleteQueryParam('brand');
 			this.selectedModels.length ? this.addQueryParam("model", this.selectedModels.join(",")) : this.deleteQueryParam('model');
 			this.selectedColors.length ? this.addQueryParam("color", this.selectedColors.join(",")) : this.deleteQueryParam('color');
 			this.selectedComplectations.length ? this.addQueryParam("complectation", this.selectedComplectations.join(",")) : this.deleteQueryParam('complectation');
@@ -241,6 +245,7 @@ document.addEventListener('alpine:init', () => {
 			this.setTitle();
 
 			const params = new URLSearchParams(document.location.search);
+			const brandParams = params.get("brand");
 			const modelParams = params.get("model");
 			const colorParams = params.get("color");
 			const complectationParams = params.get("complectation");
@@ -253,6 +258,14 @@ document.addEventListener('alpine:init', () => {
 				this.sortBy(sort_by);
 			} else {
 				this.sortBy(this.current);
+			}
+
+			if (brandParams) {
+				this.selectedBrands = brandParams.split(",").map((b) => b.toLowerCase());
+				this.selectedBrands.forEach((brand) => {
+					const checkbox = document.querySelector(`input[type='checkbox'][value='${brand}']`);
+					if (checkbox) checkbox.checked = true;
+				});
 			}
 
 			if (modelParams) {
@@ -307,7 +320,7 @@ document.addEventListener('alpine:init', () => {
 
 			this.firstLoadPage = false;
 		},
-  }));
+	}));
 	
 	Alpine.data('complectation', (t) => ({
 		currentModel: {},
