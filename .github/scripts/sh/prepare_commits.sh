@@ -99,7 +99,11 @@ prepare_commits_message() {
         if [ $COMMIT_LENGTH -gt $MAX_COMMIT_LENGTH ]; then
             echo "Warning: Commit message is too long and will be truncated" >&2
             # Обрезаем коммит с учетом места под эллипсис
-            COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...\n"
+            if [[ "$COMMIT_WITH_NEWLINE" == *"<pre>"* ]]; then
+                COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...</pre>\n"
+            else
+                COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...\n"
+            fi
             COMMIT_LENGTH=${#COMMIT_WITH_NEWLINE}
         fi
 
