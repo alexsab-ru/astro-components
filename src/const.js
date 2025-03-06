@@ -18,9 +18,9 @@ export const PHONE = '+7 (999) 000-00-00';
 export const BRAND = 'Baic';
 // Конечное время для таймера
 //string 2024-04-26 or 2024-04-26 23:59:59 or December 31 2015 or December 31 2015 23:59:59 GMT+02:00
-export const TIMER_ENDTIME = '';
+export const TIMER = { title: 'До конца акции осталось',subtitle: '', endtime: `${YEAR}.${MONTH}.${LAST_DAY} 23:59:59`, btnName: 'Зафиксировать цену', show: false };
 // Объект для бегущей строки
-export const MARQUEE = {title: 'Тотальная распродажа до', dateTo: `${LAST_DAY}.${MONTH}.${YEAR}`, count: [1,2,3,4,5,6,7,8], show: false };
+export const MARQUEE = { title: 'Тотальная распродажа до', dateTo: `${LAST_DAY}.${MONTH}.${YEAR}`, count: [1,2,3,4,5,6,7,8], show: false };
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылка организации для виджета
