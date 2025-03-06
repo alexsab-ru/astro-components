@@ -1,8 +1,10 @@
 ---
-// interface Props{
-// 	mapImg: string;
-// 	salons?: any;
-// }
+interface Props {
+	mapImg: string;
+	salons?: any[];
+	class?: string;
+	[key: string]: any;
+}
 const {salons = [], mapImg, class: className, ...rest} = Astro.props;
 ---
 
@@ -160,6 +162,10 @@ function loadScript(url, callback) {
 	document.getElementsByTagName("head")[0].appendChild(script);
 }
 
+const mouseEnterHandler = function() {
+	ymap();
+};
+
 // Основная функция, которая проверяет когда мы навели на блок с классом "ymap-container"
 function ymap() {
 	if (!start_load_script) {
@@ -170,6 +176,7 @@ function ymap() {
 
 		// Чтобы не было повторной загрузки карты, мы изменяем значение переменной
 		start_load_script = true;
+		parent.removeEventListener('mouseenter', mouseEnterHandler);
 
 		// Загружаем API Яндекс.Карт
 		loadScript(
@@ -184,10 +191,19 @@ function ymap() {
 }
 
 if (parent) {
-	parent.onmouseenter = function () {
-		ymap();
-	}
+	parent.addEventListener('mouseenter', mouseEnterHandler);
 }
+
+const cb = function(entries, observer) {
+	entries.forEach((entry) => {
+		if (entry.isIntersecting) {
+			ymap();
+			observer.unobserve(entry.target);
+		}
+	})
+}
+let mapObserver = new IntersectionObserver(cb);
+mapObserver.observe(document.querySelector('#map'));
 
 }
 

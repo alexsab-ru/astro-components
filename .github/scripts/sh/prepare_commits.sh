@@ -1,7 +1,13 @@
 #!/bin/bash
 # prepare_commits.sh
 
-prepare_commits() {
+########################################
+# Функция для сбора коммитов из git log
+# Принимает параметры:
+#   repository_name, ref_name, before_sha, after_sha, actor, repository
+# Результат: глобальные переменные COMMIT_ARRAY и COMPARE_HASH
+########################################
+collect_commits() {
     # Очищаем входные параметры от кавычек
     local repository_name=$(trim_quotes "$1")
     local ref_name=$(trim_quotes "$2")
@@ -16,29 +22,53 @@ prepare_commits() {
         echo "Usage: prepare_commits repository_name ref_name before_sha after_sha actor repository" >&2
         return 1
     fi
-
-    # Максимальная длина сообщения в Telegram
-    local MAX_LENGTH=4096
-    # Длина для эллипсиса и дополнительного пробела
-    local ELLIPSIS_LENGTH=4
     
     # Инициализируем массив
-    declare -a readarray
+    local commits=()
+    # Инициализируем строку для запоминания хеша
+    local compare_hash=""
 
     if [ "$before_sha" = "0000000000000000000000000000000000000000" ]; then
         git fetch origin HEAD || { echo "Error: Failed to fetch git repository" >&2; return 1; }
         git checkout HEAD || { echo "Error: Failed to checkout HEAD" >&2; return 1; }
         
         # Читаем вывод git log в массив
-        mapfile -t readarray < <(git log --pretty=format:"<code>%h</code> - %an, %ar : %s" "HEAD..${after_sha}")
-        COMPARE_HASH="${after_sha}"
+        mapfile -t commits < <(git log --pretty=format:"<code>%h</code> - %an, %ar : %s" "HEAD..${after_sha}")
+        compare_hash="${after_sha}"
     else
         # Читаем вывод git log в массив
-        mapfile -t readarray < <(git log --pretty=format:"<code>%h</code> - %an, %ar : %s" "${before_sha}..${after_sha}")
-        COMPARE_HASH="${before_sha}..${after_sha}"
+        mapfile -t commits < <(git log --pretty=format:"<code>%h</code> - %an, %ar : %s" "${before_sha}..${after_sha}")
+        compare_hash="${before_sha}..${after_sha}"
     fi
 
-    TOTAL_COMMITS=${#readarray[@]}
+    # Сохраняем результат в глобальные переменные
+    COMMIT_ARRAY=("${commits[@]}")
+    COMPARE_HASH="$compare_hash"
+    return 0
+}
+
+########################################
+# Функция для создания заголовка и разделения текста на части
+# Принимает:
+#   repository_name, ref_name, actor, repository, compare_hash и массив commit_messages
+# Результат: разбитые чанки сохраняются в ./tmp_messages/part_X.txt,
+#          функция возвращает количество частей.
+########################################
+prepare_commits_message() {
+    local repository_name=$(trim_quotes "$1")
+    local ref_name=$(trim_quotes "$2")
+    local actor=$(trim_quotes "$3")
+    local repository=$(trim_quotes "$4")
+    local compare_hash=$(trim_quotes "$5")
+    shift 5
+    local commit_messages=("$@")
+    
+    # Максимальная длина сообщения в Telegram
+    local MAX_LENGTH=4096
+    # Длина для эллипсиса и дополнительного пробела
+    local ELLIPSIS_LENGTH=4
+
+    local TOTAL_COMMITS=${#commit_messages[@]}
     
     if [ "$TOTAL_COMMITS" -eq 1 ]; then
         COMMITS_TEXT="$TOTAL_COMMITS new commit"
@@ -47,20 +77,20 @@ prepare_commits() {
     fi
 
     # Подготовка заголовка
-    HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/compare/${COMPARE_HASH}\">$COMMITS_TEXT</a></b> by <b><a href=\"https://github.com/${actor}\">${actor}</a></b>"
+    HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/compare/${compare_hash}\">$COMMITS_TEXT</a></b> by <b><a href=\"https://github.com/${actor}\">${actor}</a></b>"
 
     # Создаем временную директорию для сообщений
     mkdir -p ./tmp_messages || { echo "Error: Failed to create tmp_messages directory" >&2; return 1; }
 
     # Разбиваем сообщение на части по количеству символов
-    PART_INDEX=0
-    CHUNK="$HEADER\n\n"
-    CURRENT_LENGTH=${#CHUNK}
+    local PART_INDEX=0
+    local CHUNK="$HEADER\n\n"
+    local CURRENT_LENGTH=${#CHUNK}
     
     # Максимальная длина для одного коммита (с учетом заголовка и отступов)
     local MAX_COMMIT_LENGTH=$((MAX_LENGTH - ${#HEADER} - 2))
 
-    for COMMIT in "${readarray[@]}"; do
+    for COMMIT in "${commit_messages[@]}"; do
         # Добавляем перевод строки к коммиту
         COMMIT_WITH_NEWLINE="$COMMIT\n"
         COMMIT_LENGTH=${#COMMIT_WITH_NEWLINE}
@@ -69,7 +99,11 @@ prepare_commits() {
         if [ $COMMIT_LENGTH -gt $MAX_COMMIT_LENGTH ]; then
             echo "Warning: Commit message is too long and will be truncated" >&2
             # Обрезаем коммит с учетом места под эллипсис
-            COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...\n"
+            if [[ "$COMMIT_WITH_NEWLINE" == *"<pre>"* ]]; then
+                COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...</pre>\n"
+            else
+                COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...\n"
+            fi
             COMMIT_LENGTH=${#COMMIT_WITH_NEWLINE}
         fi
 

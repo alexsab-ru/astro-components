@@ -1,14 +1,22 @@
 ---
 interface Props{
 	title?: string;
-	url: string;
+	imageUrl: string;
+	mobileImageUrl?: string;
+	tabletImageUrl?: string;
 	imagePosition?: string;
 }
-const {title, url, imagePosition} = Astro.props
+import { SITE_NAME, SITE_DESCR, LEGAL_CITY_WHERE } from '@/const';
+const {title, imageUrl, mobileImageUrl, tabletImageUrl, imagePosition} = Astro.props
 const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePosition === 'top' ? 'object-top' : 'object-center';
 ---
-<img
-	src={url}
-	class={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
-	{...title ? {alt: title} : {alt: "banner"} }
-/>
+<picture>
+	<source media="(min-width: 1024px)" srcset={imageUrl} />
+	{tabletImageUrl && <source media="(min-width: 768px)" srcset={tabletImageUrl} />}
+	<img
+		src={mobileImageUrl || imageUrl}
+		class={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
+		{...title ? {alt: title.replace(/<[^>]*>/g, '')} : {alt: `${SITE_NAME} ${SITE_DESCR} в ${LEGAL_CITY_WHERE}`} }
+		loading="lazy"
+	/>
+</picture>

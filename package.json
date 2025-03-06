@@ -5,6 +5,8 @@
   "scripts": {
     "start": "cp .env.example .env",
     "get_report": "git log --since='2024-04-01' --until='2024-10-31' --pretty=format:'%h\t%ad\t%an\t%s' --first-parent --date=format:'%Y-%m-%d %H:%M:%S' > commit_report.csv",
+    "pull_without_merge": "COUNT=$(git rev-list --count origin/main..main) && git checkout -b new-branch-for-pull-without-merge && git checkout main && git reset --hard HEAD~$COUNT && git pull origin main && git checkout new-branch-for-pull-without-merge && git rebase main && git checkout main && git merge new-branch-for-pull-without-merge && git branch -D new-branch-for-pull-without-merge",
+    
     "CarFeedProcessorCSV": "CSV_URL=$(grep '^CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && curl $CSV_URL -o data.csv && python3 .github/scripts/CarFeedProcessorCSV.py",
     "getAirStorage": "sh ./.github/scripts/sh/getAirStorage.sh",
     "getDealerPrice": "sh ./.github/scripts/sh/getDealerData.sh",
@@ -19,6 +21,7 @@
     "getOne_XML_URL_MAXPOSTER": "pnpm run cars getone XML_URL_MAXPOSTER",
     "getOne_XML_URL_CARCOPY": "pnpm run cars getone XML_URL_CARCOPY",
     "getOne_XML_URL_VEHICLES_VEHICLE": "pnpm run cars getone XML_URL_VEHICLES_VEHICLE",
+    "getOne_USED_CARS_DATA_CARS_CAR": "pnpm run cars getone USED_CARS_DATA_CARS_CAR",
 
     "update_cars_air_storage_avito": "pnpm run cars update avito",
     "update_cars_air_storage_avito_data_cars_car": "pnpm run cars update avito_data_cars_car",
@@ -27,6 +30,7 @@
     "update_cars_maxposter": "pnpm run cars update maxposter",
     "update_cars_carcopy": "pnpm run cars update carcopy",
     "update_cars_vehicles_vehicle": "pnpm run cars update vehicles",
+    "update_cars_used_cars_data_cars_car": "pnpm run cars update used_cars_data_cars_car",
 
     "test_AVITO_XML_URL": "pnpm cars test avito",
     "test_AVITO_XML_URL_DATA_CARS_CAR": "pnpm cars test avito_data_cars_car",
@@ -37,6 +41,7 @@
     "test_XML_URL_MAXPOSTER": "pnpm cars test maxposter --dev",
     "test_XML_URL_CARCOPY": "pnpm cars test carcopy --dev",
     "test_XML_URL_VEHICLES_VEHICLE": "pnpm cars test vehicles_vehicle --dev",
+    "test_USED_CARS_DATA_CARS_CAR": "pnpm cars test used_cars_data_cars_car --dev",
 
     "dev": "astro dev --open --host --config astro.local.config.mjs",
     "dd": "pnpm download_json && pnpm dev",
@@ -52,7 +57,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@alexsab-ru/scripts": "^0.11.0",
+    "@alexsab-ru/scripts": "^0.12.0",
     "@astrojs/alpinejs": "^0.4.1",
     "@astrojs/mdx": "^4.0.3",
     "@astrojs/react": "^4.1.2",

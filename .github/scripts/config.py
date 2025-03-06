@@ -117,7 +117,7 @@ model_mapping = {
                 "Светло-синий": "light-blue.png",
                 "Голубой": "light-blue.png",
                 "Красный": "red.png",
-                "Белый": ".pngwhite",
+                "Белый": "white.png",
             }
         },
         "U5 Plus": {
@@ -696,7 +696,7 @@ model_mapping = {
             }},
     },
     "Jetour": {
-        "Dashing": {
+        "Dashing, I": {
             "folder": "dashing",
             "cyrillic": "Дашинг",
             "color": {
@@ -709,10 +709,13 @@ model_mapping = {
                 "Lightgray": "c7b.png",
                 "Белый": "c1b.png",
                 "Черный": "c2b.png",
+                "Чёрный": "c2b.png",
                 "Красный": "c3b.png",
                 "Лазурный": "c4b.png",
+                "Cиний": "c4b.png",
                 "Серый": "c5b.png",
                 "Зеленый": "c6b.png",
+                "Зелёный": "c6b.png",
                 "Светло-серый": "c7b.png",
             }
         },
@@ -722,6 +725,7 @@ model_mapping = {
             "color": {
                 "Black": "c1b.png",
                 "Черный": "c1b.png",
+                "Чёрный": "c1b.png",
                 "Silver": "c2b.png",
                 "Lightgray": "c2b.png",
                 "Серебряный": "c2b.png",
@@ -733,8 +737,9 @@ model_mapping = {
                 "Brown": "c3b.png",
                 "Gray": "c4b.png",
                 "Grey": "c4b.png",
-                "Blue": "blue.png",
                 "Серый": "c4b.png",
+                "Blue": "blue.png",
+                "Синий": "blue.png",
             }
         },
         "X50": {
@@ -743,6 +748,7 @@ model_mapping = {
             "color": {
                 "Black": "black.png",
                 "Черный": "black.png",
+                "Чёрный": "black.png",
                 "Gray": "gray.png",
                 "Серый": "gray.png",
                 "Lightgray": "light-gray.png",
@@ -751,7 +757,7 @@ model_mapping = {
                 "Белый": "white.png",
             }
         },
-        "X70 PLUS": {
+        "X70 PLUS, I": {
             "folder": "x70plus",
             "cyrillic": "Икс 70 Плюс",
             "color": {
@@ -772,6 +778,33 @@ model_mapping = {
                 "Black": "c7b.png",
                 "Черный": "c7b.png",
                 "Зеленый": "green.png",
+                "Зелёный": "green.png",
+                "Green": "green.png",
+            }
+        },
+        "X70 PLUS, I Рестайлинг": {
+            "folder": "x70plus",
+            "cyrillic": "Икс 70 Плюс",
+            "color": {
+                "White": "c1b.png",
+                "Белый": "c1b.png",
+                "Grey": "c2b.png",
+                "Silver": "c2b.png",
+                "Серебряный": "c2b.png",
+                "Серый": "c2b.png",
+                "Red": "c3b.png",
+                "Красный": "c3b.png",
+                "Gray": "c4b.png",
+                "Серый": "c4b.png",
+                "Blue": "c5b.png",
+                "Синий": "c5b.png",
+                "Darkblue": "c6b.png",
+                "Темно-синий": "c6b.png",
+                "Black": "c7b.png",
+                "Черный": "c7b.png",
+                "Чёрный": "c7b.png",
+                "Зеленый": "green.png",
+                "Зелёный": "green.png",
                 "Green": "green.png",
             }
         },
@@ -900,31 +933,53 @@ model_mapping = {
             "cyrillic": "Икс 3 Про",
             "color": {
                 "Beige": "gold.webp",
+                "Золотой": "gold.webp",
+                "Бежевый": "gold.webp",
+                "Желтый": "gold.webp",
                 "White": "white.webp",
+                "Белый": "white.webp",
                 "Red": "red.webp",
+                "Красный": "red.webp",
                 "Blue": "blue.webp",
                 "Azure": "blue.webp",
+                "Лазурный": "blue.webp",
+                "Синий": "blue.webp",
+                "Голубой": "blue.webp",
                 "Gray": "gray.webp",
                 "Grey": "gray.webp",
+                "Серый": "gray.webp",
             }},
         "X6 Pro": {
             "folder": "x6pro",
             "cyrillic": "Икс 6 Про",
             "color": {
                 "White": "white.webp",
+                "Белый": "white.webp",
                 "Blue": "blue.webp",
+                "Синий": "blue.webp",
+                "Голубой": "blue.webp",
                 "Gray": "gray.webp",
                 "Grey": "gray.webp",
+                "Dark grey": "gray.webp",
+                "Темно-серый": "gray.webp",
+                "Серый": "gray.webp",
                 "Green": "green.webp",
+                "Зеленый": "green.webp",
             }},
         "S6 Pro": {
             "folder": "s6pro",
             "cyrillic": "С6 Про",
             "color": {
                 "White": "white.webp",
+                "Белый": "white.webp",
                 "Blue": "blue.webp",
+                "Синий": "blue.webp",
+                "Голубой": "blue.webp",
                 "Gray": "gray.webp",
                 "Grey": "gray.webp",
+                "Dark grey": "gray.webp",
+                "Темно-серый": "gray.webp",
+                "Серый": "gray.webp",
             }},
     },
     "Changan": {
@@ -1260,6 +1315,258 @@ model_mapping = {
                 "Серый (basalt gray)": "steel-gray.webp",
                 "Темно-серый": "gravity-gray.webp",
                 "Черный": "modern-black.webp",
+            }
+        },
+    },
+    "Haval": {
+        "H9": {
+            "folder": "h9",
+            "cyrillic": "H9",
+            "color": {
+                "Сумрачный изумруд": "dusky-emerald.webp",
+                "Лунный базальт": "lunar-basalt.webp",
+                "Снежный оникс": "snow-onyx.webp",
+                "Черный нефрит": "black-jade.webp",
+            }
+        },
+        "H3": {
+            "folder": "h3",
+            "cyrillic": "H3",
+            "color": {
+                "Неоновый турмалин": "neon-tourmaline.webp",
+                "Галактический черный": "galactic-black.webp",
+                "Пепельный антрацит": "ashy-anthracite.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Терракотовый сапфир": "terracotta-sapphire.webp",
+            }
+        },
+        "H5": {
+            "folder": "h5",
+            "cyrillic": "H5",
+            "color": {
+                "Черный нефрит": "black-jade.webp",
+                "Снежный опал": "snow-opal.webp",
+                "Туманный базальт": "foggy-basalt.webp",
+                "Сумеречный аметист": "twilight-amethyst.webp",
+            }
+        },
+        "F7": {
+            "folder": "f7",
+            "cyrillic": "F7",
+            "color": {
+                "Океанический лазурит": "oceanic-lapis-lazuli.webp",
+                "Галактический черный": "galactic-black.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Дымчатый жемчуг": "smoky-pearls.webp",
+            }
+        },
+        "JOLION": {
+            "folder": "jolion",
+            "cyrillic": "JOLION",
+            "color": {
+                "Благородный агат": "noble-agate.webp",
+                "Океанический лазурит": "heavenly-topaz.webp",
+                "Магматический красный": "magmatic-red.webp",
+                "Платиновый неон": "platinum-neon.webp",
+                "Галактический черный": "galactic-black.webp",
+                "Дымчатый жемчуг": "smoky-pearls.webp",
+            }
+        },
+        "M6": {
+            "folder": "m6",
+            "cyrillic": "M6",
+            "color": {
+                "Серый": "gray.webp",
+                "Черный": "black.webp",
+                "Белый": "white.webp",
+            }
+        },
+        "DARGO X": {
+            "folder": "dargo-x",
+            "cyrillic": "DARGO X",
+            "color": {
+                "Терракотовый сапфир": "terracotta-sapphire.webp",
+                "Красный": "terracotta-sapphire.webp",
+                "Графитовый кварц": "graphite-quartz.webp",
+                "Серый": "graphite-quartz.webp",
+                "Галактический черный / Черный нефрит": "galactic-black.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Белый": "noble-agate.webp",
+            }
+        },
+        "DARGO": {
+            "folder": "dargo-x",
+            "cyrillic": "DARGO",
+            "color": {
+                "Графитовый кварц": "graphite-quartz.webp",
+                "Серый": "graphite-quartz.webp",
+                "Терракотовый сапфир": "terracotta-sapphire.webp",
+                "Красный": "terracotta-sapphire.webp",
+                "Благородный агат": "noble-agate.webp",
+                "Белый": "noble-agate.webp",
+                "Галактический черный / Черный нефрит": "galactic-black.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+            }
+        },
+        "POER KINGKONG": {
+            "folder": "poer-king-kong",
+            "cyrillic": "POER KINGKONG",
+            "color": {
+                "Голубой": "blue.webp",
+                "Черный": "black.webp",
+                "Красный": "red.webp",
+                "Серый": "gray.webp",
+                "Серебристый": "silver.webp",
+                "Белый": "white.webp",
+
+            }
+        },
+        "POER": {
+            "folder": "poer",
+            "cyrillic": "POER",
+            "color": {
+                "Коричневый": "brown.webp",
+                "Черный": "black.webp",
+                "Красный": "red.webp",
+                "Синий": "blue.webp",
+                "Серый": "gray.webp",
+                "Белый": "white.webp",
+            }
+        },
+    },
+    "Omoda": {
+        "C5, I": {
+            "folder": "c5",
+            "cyrillic": "ЦЕ 5",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Dark-blue": "dark-blue.webp",
+                "Темно-синий": "dark-blue.webp",
+                "Синий": "dark-blue.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Green": "green.webp",
+                "Зеленый": "green.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Silver": "silver.webp",
+                "Серебряный": "silver.webp",
+                "Vanila Blue": "vanila-blue.webp",
+                "Ванильный синий": "vanila-blue.webp",
+                "White": "white.webp",
+                "Белый": "white.webp"
+            }
+        },
+        "C5, I Рестайлинг": {
+            "folder": "c5fl",
+            "cyrillic": "ЦЕ 5 ЭФ ЭЛ",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Blue": "blue.webp",
+                "Синий": "blue.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Silver-black": "silver-black.webp",
+                "Серебряный-чёрный": "silver-black.webp",
+                "Silver": "silver.webp",
+                "Серебряный": "silver.webp",
+                "White-black": "white-black.webp",
+                "Белый-чёрный": "white-black.webp",
+                "White": "white.webp",
+                "Белый": "white.webp"
+            }
+        },
+        "S5": {
+            "folder": "s5",
+            "cyrillic": "ЭС 5",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Blue": "blue.webp",
+                "Синий": "blue.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Steel": "steel.webp",
+                "Стальной": "steel.webp",
+                "White": "white.webp",
+                "Белый": "white.webp"
+            }
+        },
+        "S5 GT": {
+            "folder": "s5gt",
+            "cyrillic": "ЭС 5 ДЖЕЙ ТИ",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Blue": "blue.webp",
+                "Синий": "blue.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Green": "green.webp",
+                "Зеленый": "green.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Steel": "steel.webp",
+                "Стальной": "steel.webp",
+                "White": "white.webp",
+                "Белый": "white.webp"
+            }
+        }
+    },
+    "Jaecoo": {
+        "J7": {
+            "folder": "j7",
+            "cyrillic": "Джей 7",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Gray-blue-black": "gray-blue-black.webp",
+                "Серо-голубой-черный": "gray-blue-black.webp",
+                "Gray-blue": "gray-blue.webp",
+                "Серо-голубой": "gray-blue.webp",
+                "Green-black": "green-black.webp",
+                "Зеленый-черный": "green-black.webp",
+                "Green": "green.webp",
+                "Зеленый": "green.webp",
+                "Silver-black": "silver-black.webp",
+                "Серебристо-черный": "silver-black.webp",
+                "Silver": "silver.webp",
+                "Серебряный": "silver.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+            }
+        },
+        "J8": {
+            "folder": "j8",
+            "cyrillic": "Джей 8",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Dark-gray-black": "dark-gray-black.webp",
+                "Темно-серый-черный": "dark-gray-black.webp",
+                "Dark-gray": "dark-gray.webp",
+                "Темно-серый": "dark-gray.webp",
+                "Gray-black": "gray-black.webp",
+                "Серый-черный": "gray-black.webp",
+                "Gray-blue-black": "gray-blue-black.webp",
+                "Серо-голубой-черный": "gray-blue-black.webp",
+                "Gray-blue": "gray-blue.webp",
+                "Серо-голубой": "gray-blue.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "White-black": "white-black.webp",
+                "Белый-черный": "white-black.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
             }
         },
     }

@@ -1,16 +1,22 @@
 ---
 import type {TButtonData} from '@/components/Button/types';
-interface Props extends TButtonData {}
+interface Props extends TButtonData {
+    type?: string;
+}
 const {
     view = 'link',
     url = '#common-modal',
     title = 'Узнать подробнее',
     dataTitle = 'Узнать подробнее',
-    dataFormName = 'Узнать подробнее'
+    dataFormName = 'Узнать подробнее',
+    type = 'sales'
 } = Astro.props;
 import Button from '@/components/Button/Button.astro';
 import { phoneFormat } from '@/js/utils/numbers.format';
-import salons from '@/data/salons.json';
+import salonsData from '@/data/salons.json';
+const salons = type 
+    ? salonsData.filter(salon => !salon.type || salon.type.includes(type))
+    : salonsData;
 const LEGAL_SALONS_INFO = salons.length > 1 
     ? `<p class="font-bold">Подробности по телефону:</p>` + salons.map(s => `<p class="text-sm">${s.name}&nbsp;- <a class="whitespace-nowrap" href="tel:${phoneFormat(s.phone)}">${s.phone}</a></p>`).join('')
     : salons.length === 1 

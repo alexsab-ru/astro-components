@@ -83,7 +83,10 @@ class CarProcessor:
             tradein_discount = int(car.find('tradeinDiscount').text or 0)
             return credit_discount + tradein_discount
         else:
-            return int(car.find('max_discount').text or 0)
+            if(car.find('max_discount')):
+                return int(car.find('max_discount').text or 0)
+            else:
+                return 0
 
     def process_car(self, car: ET.Element, existing_files: set, current_thumbs: List[str], 
                    prices_data: Dict, config: Dict) -> None:
@@ -113,7 +116,7 @@ class CarProcessor:
         )
         print(f"Уникальный идентификатор: {friendly_url}")
         
-        url = f"https://{config['repo_name']}/cars/{friendly_url}/"
+        url = f"https://{config['repo_name']}{config['path_car_page']}{friendly_url}/"
         create_child_element(car, 'url', url)
         if self.source_type in ['carcopy', 'vehicles_vehicle']:
             update_element_text(car, 'url_link', url)
@@ -145,6 +148,7 @@ def main():
     """
     parser = argparse.ArgumentParser(description='Process cars from different sources')
     parser.add_argument('--source_type', required=True, choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle'], help='Type of source data')
+    parser.add_argument('--path_car_page', default='/cars/', help='Default path to cars pages')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')

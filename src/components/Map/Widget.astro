@@ -16,18 +16,19 @@ import './map.sass';
 	const widgetWrapper = document.getElementById('map-widget-wrapper');
 	const widget = document.getElementById('map-widget');
 	let onHover = false;
-	widgetWrapper.addEventListener('mouseenter', e => {
+	const mouseEnterHandler = function() {
+		ymap();
+	};
+	const ymap = function() {
 		if(!onHover){
+			widgetWrapper.removeEventListener('mouseenter', mouseEnterHandler);
 			widgetWrapper.classList.add('is-active');
 			const iframe = document.createElement("iframe");
 			iframe.classList.add('absolute', 'w-full', 'h-full', 'z-20');
 			iframe.onload = function(e) {
-				if(!iframe.contentWindow.length){
-					widgetWrapper.setAttribute('style', '');
-					showError(widgetWrapper);
-				}
-				// console.log("iframe загрузился");
+				widgetWrapper.setAttribute('style', '');
 				widgetWrapper.classList.remove('is-active');
+				// console.log("iframe загрузился");
 			};
 			iframe.onerror = function() {
 				// console.log("Что-то пошло не так, давай, ищи ошибку!");
@@ -38,8 +39,22 @@ import './map.sass';
 			widget.appendChild(iframe);
 			onHover = true;
 		}
-	});
+	}
+	widgetWrapper.addEventListener('mouseenter', mouseEnterHandler);
+	
 	function showError(el: HTMLElement){
 		el.innerHTML = '<p class="text-center font-medium text-lg">Упс! Что-то пошло не так :( <br /> Перезагрузите страницу и попробуйте снова... </p>'
 	}
+
+	const cb = function(entries, observer) {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				ymap();
+				observer.unobserve(entry.target);
+			}
+		})
+	}
+	let mapObserver = new IntersectionObserver(cb);
+	mapObserver.observe(document.querySelector('#map-widget'));
+
 </script>

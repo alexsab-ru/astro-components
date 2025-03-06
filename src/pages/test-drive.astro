@@ -5,8 +5,9 @@ import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
-import salons from '@/data/salons.json'
-const salonsPhone = salons.map((salon: any) => { return salons[0].phone }).join(', ');
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('test_drive'));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import modelsJSON from '@/data/models.json';
 function filterAndExtractKeys(items) {
     return items.reduce((acc, item) => {
@@ -93,7 +94,7 @@ const optionsJSON = JSON.stringify(options);
 					errorClasses="text-red-500"
 				/>
 
-				<ChoosingDealerSelect required={true} />
+				<ChoosingDealerSelect required={true} salons={salons} />
 
 				<Checkbox
 					name="agree"

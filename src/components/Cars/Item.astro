@@ -1,11 +1,12 @@
 ---
 interface Props {
 	car: any;
+	path?: string;
 	slug?: string;
 	totalShow?: boolean;
 }
-const {car = {}, slug, totalShow = true} = Astro.props;
-const url = slug ? slug : `/cars/${car.slug}`;
+const {car = {}, path = '/cars/', slug, totalShow = true} = Astro.props;
+const url = slug ? slug : `${path}${car.slug}/`;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';
@@ -23,7 +24,7 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 	data-year={ car.data?.year } 
 	data-total={ car.data.total }
 >
-	<PreviewSlider car={car} slug={slug} />
+	<PreviewSlider car={car} url={url} />
 	<div class="flex-grow mb-3 md:mb-5 px-3 xl:px-4 flex flex-col justify-end">
 		{ car.data.max_discount ? (
 			<noindex><div class="discount">с&nbsp;учетом выгоды до&nbsp;<span class="font-semibold">{ currencyFormat(car.data.max_discount) }</span></div></noindex>

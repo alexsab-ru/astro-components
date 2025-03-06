@@ -2,11 +2,11 @@
 interface Props {
 	required?: boolean;
 	errorMessage?: string;
+	salons: any[];
 }
-const { required, errorMessage = 'Выберите дилерский центр' } = Astro.props;
+const { required, errorMessage = 'Выберите дилерский центр', salons } = Astro.props;
 import FormSelect from '@/components/FormSelect.astro';
-import salons from '@/data/salons.json';
-const options = salons.map((salon, idx) => ({id: idx, name: salon.name}));
+const options = salons.map((salon, idx) => ({ id: idx, name: salon.name }));
 ---
 {options.length > 1 && (
 	<div class="w-full">

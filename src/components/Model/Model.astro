@@ -93,10 +93,12 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 	</div>
 
 	<div class={`w-full lg:w-3/4 2xl:w-3/5 relative z-10 top-0 lg:top-[150px] xl:top-[120px] lg:pb-[120px] xl:pb-[120px] ${model?.centered ? 'mx-auto' : 'ml-auto'}`}>
-		<div class="flex flex-col justify-center">
+		<div class="flex flex-col justify-center lazy">
 			<img
-				src={carImagePath}
+				data-src={carImagePath}
 				class="w-full color-img-preview"
+				width="1142"
+				height="492"
 				alt={`${model.mark_id} ${model?.name}`}
 			/>
 			<div class="flex flex-wrap justify-center gap-4 sm:gap-5 color-links">

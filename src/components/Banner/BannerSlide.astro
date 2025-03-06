@@ -1,32 +1,5 @@
 ---
-type TBadge = {
-	autoname: string
-	title: string
-	descr: string
-	image: string
-	position: string
-	colorText: string
-	bg: boolean
-}
-type TBanner = {
-	id?: number
-	show?: boolean
-	type?: string
-	view?: string
-	videoUrl?: string
-	imageUrl: string
-	bannerUrl?: string
-	target?: string
-	title?: string
-	descr?: string
-	btn?: string
-	btnUrl?: string
-	btnColor?: string
-	dataTitle?: string
-	dataFormName?: string
-	badge?: TBadge
-	autoplay?: number
-}
+import type { TBanner } from './types';
 interface Props {
 	banner: TBanner;
 }
@@ -85,10 +58,10 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
 		) : !banner?.type && banner?.bannerUrl ? (
 			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
-				<BannerImage url={banner.imageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+				<BannerImage imageUrl={banner.imageUrl} tabletImageUrl={banner?.tabletImageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 			</a>
 		) : (
-			<BannerImage url={banner.imageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+			<BannerImage imageUrl={banner.imageUrl} tabletImageUrl={banner?.tabletImageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
 		)
 	}
 </div>

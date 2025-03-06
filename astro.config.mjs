@@ -10,7 +10,6 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-	trailingSlash: 'always',
 	integrations: [
 		tailwind({
 			configFile: './tailwind.knewstar.js'
@@ -19,11 +18,17 @@ export default defineConfig({
 		robots({
 			policy: [
 				{
+					userAgent: "Yandex",
+					allow: ["/"],
+					disallow: ["/?*"],
+					cleanParam: "calltouch_tm"
+				},
+				{
 					userAgent: ["*"],
 					allow: ["/"],
 					disallow: ["/?*"],
 				},
-			  ],
+			],
 		}),
 		alpinejs(),
 		mdx(),

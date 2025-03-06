@@ -19,6 +19,7 @@ show_help() {
     echo "  XML_URL_MAXPOSTER"
     echo "  XML_URL_CARCOPY"
     echo "  XML_URL_VEHICLES_VEHICLE"
+    echo "  USED_CARS_DATA_CARS_CAR"
     echo
     echo "Update Types for 'update':"
     echo "  avito                - Update from Avito source"
@@ -30,6 +31,7 @@ show_help() {
     echo "  maxposter            - Update from Maxposter source"
     echo "  carcopy              - Update from Carcopy source"
     echo "  vehicles_vehicle     - Update from Vehicles Vehicle source"
+    echo "  used_cars_data_cars_car  - Update Used Cars from Data Cars Car source"
     echo
     echo "Test Types for 'test':"
     echo "  avito                - Test from Avito source"
@@ -41,6 +43,7 @@ show_help() {
     echo "  maxposter            - Test from Maxposter source"
     echo "  carcopy              - Test from Carcopy source"
     echo "  vehicles_vehicle     - Test from Vehicles Vehicle source"
+    echo "  used_cars_data_cars_car  - Test Used Cars from Data Cars Car source"
     echo
     echo "Examples:"
     echo "  $0 getone AVITO_XML_URL"
@@ -117,6 +120,10 @@ handle_test() {
             handle_getone "XML_URL_DATA_CARS_CAR"
             handle_update "data_cars_car"
             ;;
+        "used_cars_data_cars_car")
+            handle_getone "USED_CARS_DATA_CARS_CAR"
+            handle_update "used_cars_data_cars_car"
+            ;;
         "maxposter")
             handle_getone "XML_URL_MAXPOSTER"
             handle_update "maxposter"
@@ -170,6 +177,9 @@ handle_update() {
             ;;
         "data_cars_car")
             python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --repo_name="$DOMAIN"
+            ;;
+        "used_cars_data_cars_car")
+            python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --repo_name="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
             ;;
         "maxposter")
             python3 .github/scripts/update_cars.py --source_type maxposter --image_tag="photo" --skip_thumbs --repo_name="$DOMAIN"

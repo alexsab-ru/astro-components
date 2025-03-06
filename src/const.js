@@ -26,11 +26,17 @@ export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылка организации для виджета
 export const LINK_WIDGET_ORGNIZATION = '';
 // Ссылки под хедером
+import modelsData from '@/data/models.json';
+const models = modelsData.filter(model => model.show);
 export const LINKS_MENU = [
 	{url: 'cars/', name: 'Авто в наличии'},
 	// {url: 'catalog/', name: 'Каталог'},
 	// {url: 'used_cars/', name: 'Авто с пробегом'},
-	{url: 'models/', name: 'Модели'},
+	{ 
+		url: 'models/', 
+		name: 'Модели',
+		children: models.map(model => ( { url: `models/${model.id}/`, name: `${model?.mark_id} ${model.name.toUpperCase()}` } ) )
+	},
 	// {url: 'trade-in/', name: 'Оценка автомобиля'},
 	{url: 'special-offers/', name: 'Спецпредложения'},
 	{url: 'news/', name: 'Новости'},
@@ -39,12 +45,18 @@ export const LINKS_MENU = [
 	{url: '#services', name: 'Услуги'},
 	{url: 'contacts/', name: 'Контакты'},
 ];
+// Коллекции
+export const COLLECTIONS = [
+	{name: 'special-offers', title: 'Спецпредложения'},
+	{name: 'news', title: 'Новости'},
+];
 // Текстовая строка над хедером
 export const HEADER_TOP_LINE = '';
 // Текст согласия в формах
 export const AGREE_LABEL = '<span>Я согласен на</span><a href="/privacy-policy" class="underline transition-all hover:no-underline" target="_blank">обработку персональных данных</a>';
 // Текст информации в футере
-import salons from '@/data/salons.json';
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('footer_info'));
 const phones = PHONE ? [`<a class="whitespace-nowrap" href="tel:${phoneFormat(PHONE)}">${PHONE}</a>`] : salons.map((salon) => { return `<span>${salon.name}</span> <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a>` });
 
 export const FOOTER_INFO = '<sup>*</sup> Вся представленная на сайте информация, касающаяся автомобилей и сервисного обслуживания, носит информационный характер и не является публичной офертой, определяемой положениями ст. 437 ГК РФ. Все цены, указанные на данном сайте, носят информационный характер. Для получения подробной информации просьба обращаться к менеджерам отдела продаж по номеру телефона '+phones.join(', ')+'. Опубликованная на данном сайте информация может быть изменена в любое время без предварительного уведомления.';

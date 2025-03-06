@@ -2,7 +2,7 @@ name: Generate Astro Files from XML
 
 on:
   # schedule:
-    # - cron: '0 */4 * * *'  # Запускается каждые 4 часа
+    # - cron: '0 3-17 * * *'  # Запускается каждый час с 3 до 17 (UTC)
   # push:
     # paths:
       # - '.github/scripts/sh/getAirStorage.sh'
@@ -76,6 +76,15 @@ jobs:
       continue-on-error: true
       env:
         CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
+
+    - name: Get Used Cars data_cars_car XML and generate cars file
+      if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
 
     - name: Get cars data_cars_car XML and generate cars file
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
@@ -206,6 +215,10 @@ jobs:
     - name: ls files
       run: |
         if [[ -d src/content/cars ]]; then ls -al src/content/cars; fi
+        if [[ -d src/content/used_cars ]]; then ls -al src/content/used_cars; fi
+        if [[ -d src/content/special-offers ]]; then ls -al src/content/special-offers; fi
+        if [[ -d src/content/news ]]; then ls -al src/content/news; fi
+        if [[ -d src/content/seo ]]; then ls -al src/content/seo; fi
 
     - name: Check for changes
       id: check_changes
@@ -231,8 +244,11 @@ jobs:
         git config --local user.email "support+actions@github.com"
         git config --local user.name "github-actions-bot"
         if [[ -d public/img/thumbs && $(find public/img/thumbs -type f -name "*.webp") ]]; then git add public/img/thumbs/*.webp; fi
+        if [[ -d public/img/thumbs_used && $(find public/img/thumbs_used -type f -name "*.webp") ]]; then git add public/img/thumbs_used/*.webp; fi
         if [[ -d src/content/cars && $(find src/content/cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
+        if [[ -d src/content/used_cars && $(find src/content/used_cars -type f -name "*.mdx") ]]; then git add src/content/used_cars/*.mdx; fi
         if [[ -f public/cars.xml ]]; then git add public/cars.xml; fi
+        if [[ -f public/used_cars.xml ]]; then git add public/used_cars.xml; fi
         if [[ -f public/autoru.xml ]]; then git add public/autoru.xml; fi
         if [[ -f public/avito.xml ]]; then git add public/avito.xml; fi
         git commit -m "Update cars from XML" -a || echo "No changes to commit"
