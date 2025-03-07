@@ -45,7 +45,7 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 				{brands.length > 1 && (
 					<div class="flex flex-wrap gap-2 sm:gap-4">
 						{brands.map(brand => (
-							<FilterItemBtn name={brand} value={brand.toLocaleLowerCase()} id={brand.toLocaleLowerCase()} filterType="Brands" />
+							<FilterItemBtn name={brand} value={brand.toLocaleLowerCase().replace(',', '')} id={brand.toLocaleLowerCase()} filterType="Brands" />
 						))}
 					</div>
 					<hr class="my-5" />
@@ -53,7 +53,7 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 				{models.length && (
 					<div class="flex flex-wrap gap-2 sm:gap-4">
 						{models.map(model => (
-							<FilterItemBtn name={model} value={model.toLocaleLowerCase()} id={model.toLocaleLowerCase()} filterType="Models" />
+							<FilterItemBtn name={model} value={model.toLocaleLowerCase().replace(',', '')} id={model.toLocaleLowerCase()} filterType="Models" />
 						))}
 					</div>
 				)}
