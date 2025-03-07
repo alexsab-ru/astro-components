@@ -83,7 +83,7 @@
 }
 
 .banner{
-	.swiper-slide{
+	.swiper-slide.gradient{
 		&::before{
 			content: "";
 			position: absolute;

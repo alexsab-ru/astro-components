@@ -9,7 +9,7 @@ interface Props {
 const { 
 	title, 
 	subtitle, 
-	endtime = '2024-12-31 23:59:59', 
+	endtime = '2025-12-31 23:59:59', 
 	btnName, 
 	class: className,
 	...rest 
@@ -50,7 +50,7 @@ import Button from '@/components/Button/Button.astro';
 					url="#common-modal" 
 					title={btnName}
 					dataTitle={btnName}
-					dataFormName={`Акция с таймера. ${btnName}`}
+					dataFormName={`${title}. ${btnName}. Таймер`}
 				/>
 			</div>
 		)}

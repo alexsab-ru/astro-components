@@ -1,0 +1,54 @@
+---
+import type { TDataCollection, TCollection } from '@/types/TCollection';
+import { getCollection, getEntry } from "astro:content";
+import { COLLECTIONS } from '@/const';
+import PageLayout from '@/layouts/PageLayout.astro';
+import SeoText from '@/components/Seo/Index.astro';
+
+export async function getStaticPaths() {
+  const paths = [];
+
+  for (const collection of COLLECTIONS) {
+    const entries = await getCollection(collection.name);
+    for (const entry of entries) {
+      paths.push({ 
+        params: { collection: collection.name, slug: entry.slug },
+        props: { title: collection.title }
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { collection, slug } = Astro.params;
+const { title } = Astro.props;
+const entries = await getCollection(collection);
+const entry = entries.find((entry: TCollection) => entry.slug === slug) || {};
+
+if (!entry) {
+  throw new Error(`Запись не найдена: ${slug} в коллекции ${collection}`);
+}
+
+const data: TDataCollection = entry?.data || {};
+
+const breadcrumb = { name: title, href: `/${collection}/` };
+const content = await getEntry(collection, slug);
+let Content = null;
+if (content) {
+  const result = await content.render();
+  Content = result.Content;
+}
+---
+<PageLayout 
+  {...data} 
+  breadcrumb={[
+    breadcrumb, 
+    { name: data?.breadcrumb, href: Astro.url.pathname }
+  ]} 
+  backLink={true}
+>
+
+	<Content />
+  <SeoText mdx={`${collection}-${slug}`} noPadding />
+</PageLayout>

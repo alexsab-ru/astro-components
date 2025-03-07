@@ -51,13 +51,20 @@ jobs:
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/prepare_commits.sh
-          total_parts=$(prepare_commits \
+          collect_commits \
             "${{ github.event.repository.name }}" \
             "${{ github.ref_name }}" \
             "${{ github.event.before }}" \
             "${{ github.sha }}" \
             "${{ github.actor }}" \
-            "${{ github.repository }}")
+            "${{ github.repository }}"
+          total_parts=$(prepare_commits_message \
+            "${{ github.event.repository.name }}" \
+            "${{ github.ref_name }}" \
+            "${{ github.actor }}" \
+            "${{ github.repository }}" \
+            "${COMPARE_HASH}" \
+            "${COMMIT_ARRAY[@]}")
           echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 
       - name: Send messages to Telegram
@@ -157,38 +164,31 @@ jobs:
           echo "author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
           echo "hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
 
-      - name: Set outputs
-        id: set_outputs
-        # The part of this solution to focus on is that we’re substituting the %, \n, and \r characters
+      - name: Prepare commit messages
+        id: prepare
         run: |
+          source ./.github/scripts/sh/utils.sh
+          source ./.github/scripts/sh/prepare_commits.sh
           additional_text=$(echo "${{ inputs.additional-text || '' }}" | base64 -d)
-          if [ "$additional_text" != "" ]; then
-            # Форматируем текст с переносами строк
-            additional_text=$(echo -e "$additional_text")
-            
-            # Debug: print the formatted text
-            echo "Formatted additional_text:"
-            echo "$additional_text"
-            
-            echo "additional_text<<EOF" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "$additional_text" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          fi
+          total_parts=$(prepare_commits_message \
+            "${{ github.event.repository.name }}" \
+            "${{ github.ref_name }}" \
+            "${{ github.actor }}" \
+            "${{ github.repository }}" \
+            "${COMPARE_HASH}" \
+            "$additional_text")
+          echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 
-      - name: Send message to Telegram
-        if: ${{ steps.get_commits.outputs.hash != '' }}
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          disable_web_page_preview: true
-          format: html
-          message: |
-            <b>[${{ github.event.repository.name }}:${{ github.ref_name }}]</b> <b><a href="https://github.com/${{ github.repository }}/commit/${{ steps.get_commits.outputs.hash }}">Last commit</a></b> by <b>${{ steps.get_commits.outputs.author }}</b>
-            ${{ steps.set_outputs.outputs.additional_text }}
-            ${{ steps.get_commits.outputs.message }}
+      - name: Send messages to Telegram
+        if: ${{ steps.prepare.outputs.total_parts != '0' }}
+        run: |
+          source ./.github/scripts/sh/utils.sh
+          source ./.github/scripts/sh/send_telegram.sh
+          send_telegram_messages \
+            "${{ secrets.TELEGRAM_TOKEN }}" \
+            "${{ secrets.TELEGRAM_TO }}" \
+            "${{ steps.prepare.outputs.total_parts }}"
+
 
 
   # log-github-event-goodies:

@@ -7,7 +7,6 @@ const url = `https://alexsab.ru?utm_source=client&utm_medium=${BRAND}&utm_compai
 import salonsData from '@/data/salons.json';
 const salons = salonsData.filter(salon => !salon.type || salon.type.includes('footer'));
 const path = Astro.url.pathname;
-import logo from '@/components/Logo/logo.svg';
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
@@ -25,7 +24,7 @@ salons
             <div class="">
                 <a href="/" class="uppercase text-2xl inline-block mb-5 transition-opacity hover:opacity-70">{ SITE_NAME }</a>
                 <div class="flex flex-wrap items-center gap-5">
-                    <img src={logo.src} class="h-8 w-auto filter brightness-0 invert opacity-70" alt={SITE_NAME} />
+                    <img src="/img/logo/logo.svg" class="h-8 w-auto filter brightness-0 invert opacity-70" alt={SITE_NAME} />
                 </div>
             </div>
             <div class="">

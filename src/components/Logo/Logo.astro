@@ -1,16 +1,15 @@
 ---
-import logo from './logo.svg'; //return object
 import { SITE_NAME } from '@/const';
 const path = Astro.url.pathname;
 ---
 {path === '/' ? (
 <div class="flex xs:flex-col flex-nowrap items-center xs:gap-2 gap-3 xs:divide-x-0 divide-x divide-black/20 cursor-pointer" x-data="scrollTop" x-on:click="onClick">
-    <img src={logo.src} class="h-4 sm:h-5 xl:h-10" alt={SITE_NAME} />
+    <img src="/img/logo/logo.svg" class="h-4 sm:h-5 xl:h-10" alt={SITE_NAME} />
     <span class="xs:pl-0 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{SITE_NAME}</span>
 </div>
 ) : (
 <a href="/" class="flex xs:flex-col flex-nowrap items-center xs:gap-2 gap-3 xs:divide-x-0 divide-x divide-black/20">
-    <img src={logo.src} class="h-4 sm:h-5 xl:h-10" alt={SITE_NAME} />
+    <img src="/img/logo/logo.svg" class="h-4 sm:h-5 xl:h-10" alt={SITE_NAME} />
     <span class="xs:pl-0 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{SITE_NAME}</span>
 </a>
 )}

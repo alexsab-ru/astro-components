@@ -1,4 +1,9 @@
 ---
+type TImage = {
+	url: string
+	title?: string
+	description?: string
+}
 interface Props {
 	section: {
 		id?: string;
@@ -12,13 +17,7 @@ interface Props {
 		title?: string;
 		sectionClass?: string;
 		text?: string;
-		images?: [
-			{
-				url: string
-				title?: string
-				description?: string
-			}
-		];
+		images?: TImage[];
 		button?: string;
 	};
 	class?: string

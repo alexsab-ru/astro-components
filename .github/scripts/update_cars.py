@@ -83,7 +83,10 @@ class CarProcessor:
             tradein_discount = int(car.find('tradeinDiscount').text or 0)
             return credit_discount + tradein_discount
         else:
-            return int(car.find('max_discount').text or 0)
+            if(car.find('max_discount')):
+                return int(car.find('max_discount').text or 0)
+            else:
+                return 0
 
     def process_car(self, car: ET.Element, existing_files: set, current_thumbs: List[str], 
                    prices_data: Dict, config: Dict) -> None:
