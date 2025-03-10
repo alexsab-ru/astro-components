@@ -10,8 +10,9 @@ description: "Время выгоды - это выгода на покупку,
 ---
 
 import Button from '@/components/Button/Button.astro';
-import { LEGAL_CITY_WHERE, LEGAL_ENTITY } from '@/const';
+import { LEGAL_CITY_WHERE, LEGAL_ENTITY, TIMER } from '@/const';
 import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+import Timer from '@/components/Timer/Timer.astro';
 
 export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
@@ -23,6 +24,8 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
     <source media="(min-width: 320px)" srcset="/img/specials/jetour-vigoda/jetour-t2-320.webp" />
     <img src="/img/specials/jetour-vigoda/jetour-t2-full.webp" class="mb-10 lg:mb-20 w-full" alt="Время выгоды" />
 </picture>
+
+{TIMER.show && <Timer endtime={TIMER.endtime} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
 
 <h3 class="font-bold !text-xl sm:!text-2xl md:!text-4xl mt-0 !mb-3 text-center">Специальные предложения на автомобили Jetour</h3>
 <div class="sm:!text-xl mt-0 mb-7 md:mb-14 text-center">Выберите модель, чтобы увидеть доступные выгоды</div>
