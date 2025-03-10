@@ -19,9 +19,9 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 
 
 <picture>
-    <source media="(min-width: 768px)" srcset="/img/banners/dashing-kv.webp" />
-    <source media="(min-width: 320px)" srcset="/img/specials/jetour-vigoda/37f94ea6f5c37acf5ddd82142a5ec173.webp" />
-    <img src="/img/banners/dashing-kv.webp" class="mb-10 lg:mb-20 w-full" alt="Время выгоды" />
+    <source media="(min-width: 768px)" srcset="/img/specials/jetour-vigoda/jetour-t2-full.webp" />
+    <source media="(min-width: 320px)" srcset="/img/specials/jetour-vigoda/jetour-t2-320.webp" />
+    <img src="/img/specials/jetour-vigoda/jetour-t2-full.webp" class="mb-10 lg:mb-20 w-full" alt="Время выгоды" />
 </picture>
 
 <h3 class="font-bold !text-xl sm:!text-2xl md:!text-4xl mt-0 !mb-3 text-center">Специальные предложения на автомобили Jetour</h3>
@@ -33,6 +33,8 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
         {id: 't2', name: 'T2'},
         {id: 'x70plus', name: 'X70 Plus'},
         {id: 'x90plus', name: 'X90 Plus'},
+        {id: 'x50', name: 'X50'},
+        {id: 'x70', name: 'X70'},
     ], 
     tabActive: 'dashing',
     scroll(){
@@ -43,7 +45,7 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
     }
 }">
 
-	<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+	<div class="grid grid-cols-2 md:grid-cols-6 gap-4">
         <template x-for="model in models">
             <div 
                 class="cursor-pointer opacity-50 transition-opacity duration-300 hover:opacity-80"
@@ -78,6 +80,10 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
                         <div class="!text-sm">при покупке Jetour Dashing, в комплектациях Elite, Luxury 1.5T и Comfort Plus.</div>
                     </div>
                     <div class="mb-4">
+                        <b>Получите выгоду до 200 000 рублей</b>
+                        <div class="!text-sm">при покупке Jetour Dashing, в комплектации Luxury AWD и Sport AWD.</div>
+                    </div>
+                    <div class="mb-4">
                         <b>Получите выгоду до 280 000 рублей</b>
                         <div class="!text-sm">при покупке Jetour Dashing, в комплектации Luxury 1.6T</div>
                     </div>
@@ -98,7 +104,7 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
                     <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
                         <div>Приобретайте Jetour Dashing в кредит</div>
-                        <b>от 0% или получите выгоду до 220 000 рублей!</b>
+                        <b>от 0% или получите выгоду до 400 000 рублей!</b>
                     </div>
                 </div>
                 <Button
@@ -114,7 +120,7 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
                     <div class="font-bold uppercase text-xl 2xl:text-2xl">КАСКО</div>
                     <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
                     <div class="mb-8">
-                        <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour Dashing в любой комплектации <b>2024 года выпуска.</b></div>
+                        <div>Получите <b>полис КАСКО в подарок</b> при покупке автомобиля Jetour Dashing в любой комплектации <b>2024 года выпуска.</b><sup>6</sup></div>
                     </div>
                 </div>
                 <Button
@@ -130,6 +136,13 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
                     <div class="mb-8">
                         <b>Получите выгоду до 200 000 рублей</b>
                         <div class="!text-sm">при обмене старого авто на новый</div>
+                    </div>
+                    <div class="mb-8">
+                        <b>Лояльный Trade-in Dashing AWD:</b>
+                    </div>
+                    <div class="mb-8">
+                        <div><b>Получите выгоду до 400 000 рублей</b></div>
+                        <div>На комплектации Luxury и Sport при сдаче в Trade-in любой модели Jetour</div>
                     </div>
                 </div>
                 <Button
@@ -321,7 +334,72 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
             </div>
         </div>
     </div>
-
+    <div class="relative mb-10 md:mb-14" x-show="tabActive === 'x50'">
+        <img src="/img/specials/jetour-vigoda/icon-swipe.gif" class="absolute left-1/2 -translate-x-1/2 w-10 sm:w-20 md:!hidden" alt="Swipe" />
+        <div class="flex md:grid grid-cols-2 xl:grid-cols-4 gap-4 snap-x snap-mandatory scroll-smooth overflow-x-auto md:overflow-x-hidden">
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Кредит X50</div>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
+                    <div class="mb-8">
+                        Субсидированные ставки банков-партнеров: Альфа Банк, Совкомбанк, Т-Банк, ВТБ.
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url=""
+                    title="Получить предложение"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Каско</div>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
+                    <div class="mb-8">
+                        При покупке автомобиля Jetour X50, <b>2024 года выпуска</b>, получите <b>полис КАСКО за наш счёт</b>.<sup>6</sup>
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url=""
+                    title="Авто в наличии"
+                />
+            </div>
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Выгода по стандартным ставкам банков-партнеров</div>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
+                    <div class="mb-8">
+                        Выгода в размере <b>220 000 рублей</b> при кредитовании по стандартным ставкам банков-партнеров
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url=""
+                    title="Рассчитать кредит"
+                />
+            </div>
+        </div>
+    </div>
+    <div class="relative mb-10 md:mb-14" x-show="tabActive === 'x70'">
+        <img src="/img/specials/jetour-vigoda/icon-swipe.gif" class="absolute left-1/2 -translate-x-1/2 w-10 sm:w-20 md:!hidden" alt="Swipe" />
+        <div class="flex md:grid grid-cols-2 xl:grid-cols-4 gap-4 snap-x snap-mandatory scroll-smooth overflow-x-auto md:overflow-x-hidden">
+            <div class="bg-gray-200 rounded-lg p-5 flex flex-col justify-between flex-auto min-w-[280px] sm:min-w-[360px] snap-start">
+                <div class="flex-grow">
+                    <div class="font-bold uppercase text-xl 2xl:text-2xl">Прямая выгода</div>
+                    <small class="block mb-5">С 1 {MONTH_GENITIVE} по {dateToGenitive} года</small>
+                    <div class="mb-8">
+                        <b>Получите выгоду до 100 000 рублей</b> при покупке автомобиля Jetour X70 2024 года выпуска.
+                    </div>
+                </div>
+                <Button
+                    classes="!m-0 !text-white !no-underline !px-4"
+                    url=""
+                    title="Авто в наличии"
+                />
+            </div>
+        </div>
+    </div>
 </div>
 
 
