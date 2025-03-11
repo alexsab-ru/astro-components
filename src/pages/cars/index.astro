@@ -4,20 +4,38 @@ import { getCollection } from "astro:content";
 import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
 import CarItem from "@/components/Cars/Item.astro";
 import SortSelect from "@/components/Cars/SortSelect.astro";
+import FilterItemBtn from '@/components/Filter/ItemBtn.astro'
 const rawCars = await getCollection("cars");
-let cars: any, image: string, models = [], years = [];
+let cars: any, image: string, models = {}, years = {}, groupCars = {};
 import { getRandomInt, declOfNums } from "@/js/utils/numbers.format";
+import { groupArrayByKey } from "@/js/utils/groupArrayByKey";
 if (rawCars && rawCars.length > 0) {
 	cars = rawCars;
 	image = cars[getRandomInt(0, cars.length)].data.image;
-	cars.map((car) => {
-		if(!models.includes(car.data.folder_id)){
-			models.push(car.data.folder_id)
+
+	groupCars = groupArrayByKey(cars, 'mark_id');
+	
+	Object.keys(groupCars).map(key => {
+		models[key] = [];
+		groupCars[key].map(car => {
+			if(!models[key].includes(car.data.folder_id)){
+				models[key].push(car.data.folder_id);
+			}
+		});
+	});
+	years = cars.reduce((acc, car) => {
+		const { year, mark_id, folder_id } = car.data;		
+		if (!acc[year]) {
+			acc[year] = { brands: [], models: [] };
 		}
-		if(!years.includes(car.data.year)){
-			years.push(car.data.year);
+		if (!acc[year].brands.includes(mark_id)) {
+			acc[year].brands.push(mark_id);
 		}
-	})
+		if (!acc[year].models.includes(folder_id)) {
+			acc[year].models.push(folder_id);
+		}
+		return acc;
+	}, {});
 } else {
 	image = "";
 }
@@ -35,31 +53,31 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 		cars ? (
 			<div x-data="sorting" x-cloak>
 				<p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
-				<hr class="my-5">
+				<hr class="my-5" />
 				<SortSelect />
-				<hr class="my-5">
-				{models.length && (
+				<hr class="my-5" />
+				{Object.keys(groupCars).length > 1 && (
 					<div class="flex flex-wrap gap-2 sm:gap-4">
-						{models.map(model => (
-							<div class="relative">
-								<label class="peer w-full h-full absolute bottom-3 cursor-pointer z-50">
-									<input type="checkbox" value={model.toLocaleLowerCase()} id={model.id} class="asbsolute opacity-0" @change={`toggleFilter('Models', '${model.toLocaleLowerCase()}')`} />
-								</label>
-								<div class="filter-model-link bg-gray-200 peer-has-[:checked]:bg-accent-500 peer-has-[:checked]:text-white">{model}</div>
-							</div>
+						{Object.keys(groupCars).map(brand => (
+							<FilterItemBtn name={brand} value={brand.toLocaleLowerCase().replace(',', '')} id={brand.toLocaleLowerCase()} filterType="Brands" data-filter-type="brand" />
+						))}
+					</div>
+					<hr class="my-5" />
+				)}
+				{Object.keys(models).length && (
+					<div class="flex flex-wrap gap-2 sm:gap-4">
+						{Object.keys(models).map((key) => (
+							models[key].map(model => (
+								<FilterItemBtn name={model} value={model.toLocaleLowerCase().replace(',', '')} id={model.toLocaleLowerCase()} filterType="Models" data-filter-type="model" data-filter-brand={key.toLocaleLowerCase()} />
+							))
 						))}
 					</div>
 				)}
-				{years.length && (
+				{Object.keys(years).length && (
 					<hr class="my-5" />
 					<div class="flex flex-wrap gap-2 sm:gap-4">
-						{years.map(year => (
-							<div class="relative">
-								<label class="peer w-full h-full absolute bottom-3 cursor-pointer z-50">
-									<input type="checkbox" value={year} id={year} class="asbsolute opacity-0" @change={`toggleFilter('Years', '${year}')`} />
-								</label>
-								<div class="filter-model-link bg-gray-200 peer-has-[:checked]:bg-accent-500 peer-has-[:checked]:text-white">{year}</div>
-							</div>
+						{Object.keys(years).map(key => (
+							<FilterItemBtn name={key} id={key} filterType="Years" data-filter-type="year" data-filter-brand={years[key].brands.join(';')} data-filter-model={years[key].models.join(';')} />
 						))}
 					</div>
 				)}

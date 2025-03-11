@@ -16,7 +16,8 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 <div 
 	class="car-item flex flex-col justify-between shadow-2xl pb-3 xl:pb-4 relative" 
 	data-price={ price } 
-	data-model={ car.data.folder_id } 
+	data-brand={ car.data.mark_id.replace(',', '') } 
+	data-model={ car.data.folder_id.replace(',', '') } 
 	data-color={ car.data?.color } 
 	data-complectation={ car.data?.complectation_name } 
 	data-engine={ `${car.data?.engine} (${car.data?.enginePower} л.с.)` } 

@@ -1,0 +1,15 @@
+---
+interface Props {
+	name: string;
+	value?: string;
+	id?: string;
+	filterType: string;
+}
+const { name, value, id, filterType, ...rest } = Astro.props;
+---
+<div class="relative" {...rest}>
+	<label class="peer w-full h-full absolute cursor-pointer z-50">
+		<input type="checkbox" value={value || name} { ...id && {id} } class="asbsolute opacity-0" @change={`toggleFilter('${filterType}', '${value || name}', event)`} />
+	</label>
+	<div class="text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0 bg-gray-200 peer-has-[:checked]:bg-accent-500 peer-has-[:checked]:text-white">{name}</div>
+</div>

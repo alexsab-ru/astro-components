@@ -1,5 +1,5 @@
 ---
-import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER_ENDTIME, MARQUEE} from '@/const.js';
+import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
 import PageTitle from '@/components/PageTitle/Index.astro';
@@ -24,7 +24,7 @@ import SeoText from '@/components/Seo/Index.astro';
 	<Banner />
 	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
 	<PageTitle />
-	{TIMER_ENDTIME && <Timer endtime={TIMER_ENDTIME} title="До конца акции осталось" subtitle="Подзаголовок" />}
+	{TIMER.show && <Timer endtime={TIMER.endtime} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
 	<ModelList />
 	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" />
 	<Callback bgUrl="/img/konkurenty.webp" />

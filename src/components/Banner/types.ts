@@ -14,10 +14,12 @@ export type TBanner = {
 	view?: string
 	videoUrl?: string
 	imageUrl: string
+	tabletImageUrl?: string
 	mobileImageUrl?: string
 	imagePosition?: string
 	bannerUrl?: string
 	target?: string
+	gradient?: boolean
 	title?: string
 	descr?: string
 	btn?: string
