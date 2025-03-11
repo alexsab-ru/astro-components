@@ -236,7 +236,47 @@ document.addEventListener('alpine:init', () => {
 				targetArray.push(value);
 			}
 
+			this.updateFilterVisibility();
 			this.filteredCars();
+		},
+
+		updateFilterVisibility() {
+			const filters = ["brand", "model", "year"];
+			const selectedValues = {
+					brand: this.selectedBrands || [],
+					model: this.selectedModels || [],
+					year: this.selectedYears || []
+			};
+		
+			filters.forEach((filter, index) => {
+				const elements = document.querySelectorAll(`[data-filter-type=${filter}]`);
+				if (!elements.length) return;
+	
+				// Определяем родительские фильтры
+				const parentFilters = filters.slice(0, index); // ["brand"] для моделей, ["brand", "model"] для годов
+				const parentSelectedValues = parentFilters.map(f => selectedValues[f] || []);
+	
+				elements.forEach((el) => {
+					if (parentFilters.length === 0 || parentSelectedValues.every(arr => arr.length === 0)) {
+						// Если нет родительских фильтров или они не выбраны, показываем всё
+						el.style.display = 'block';
+						return;
+					}
+	
+					// Проверяем, связан ли элемент с родительскими фильтрами (может иметь несколько брендов/моделей)
+					const isVisible = parentFilters.some((parentFilter, i) => {
+						const parentValue = el.dataset[`filter${parentFilter.charAt(0).toUpperCase() + parentFilter.slice(1)}`];
+						if (!parentValue) return true; // Если у элемента нет привязки, он остаётся видимым
+						let parentValues = parentValue.split(";").map(v => v.trim().toLocaleLowerCase().replace(',', '')); // Разбиваем, если несколько значений
+						if (filter === "year" && selectedValues.model.length > 0) {
+							parentValues = el.dataset.filterModel.split(";").map(v => v.trim().toLocaleLowerCase().replace(',', '')); // Для моделей также разбиваем
+						}
+						return parentValues.some(v => parentSelectedValues[i].includes(v));
+					});
+	
+					el.style.display = isVisible ? 'block' : 'none';
+				});
+			});
 		},
   
 		init() {
@@ -316,6 +356,7 @@ document.addEventListener('alpine:init', () => {
 				});
 			}
 
+			this.updateFilterVisibility();
 			this.filteredCars();
 
 			this.firstLoadPage = false;
