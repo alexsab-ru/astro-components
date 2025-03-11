@@ -18,7 +18,7 @@ export const PHONE = '+7 (846) 9 777-779';
 export const BRAND = 'Jetour';
 // Конечное время для таймера
 //string 2024-04-26 or 2024-04-26 23:59:59 or December 31 2015 or December 31 2015 23:59:59 GMT+02:00
-export const TIMER = { title: 'До конца акции осталось',subtitle: '', endtime: `${YEAR}.${MONTH}.${LAST_DAY} 23:59:59`, btnName: 'Зафиксировать цену', show: false };
+export const TIMER = { title: 'До конца акции осталось',subtitle: '', endtime: `${YEAR}.${MONTH}.${LAST_DAY} 23:59:59`, btnName: 'Зафиксировать цену', show: true };
 // Объект для бегущей строки
 export const MARQUEE = { title: 'Тотальная распродажа до', dateTo: `${LAST_DAY}.${MONTH}.${YEAR}`, count: [1,2,3,4,5,6,7,8], show: false };
 // Ссылка яндекс-виджета
