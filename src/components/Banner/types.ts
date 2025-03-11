@@ -19,6 +19,7 @@ export type TBanner = {
 	imagePosition?: string
 	bannerUrl?: string
 	target?: string
+	gradient?: boolean
 	title?: string
 	descr?: string
 	btn?: string
