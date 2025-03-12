@@ -5,15 +5,16 @@ interface Props {
     item: TInfoLink;
     classes?: string;
 }
-const { item, classes } = Astro.props;
+const { item, classes, ...rest } = Astro.props;
 const { title, url, icon, iconClasses = 'size-[50px] text-accent-400', target } = item;
 ---
 
 <a 
-    href={item?.url ? item.url : 'javascript:void(0)'} 
+    href={url ? url : 'javascript:void(0)'} 
     class={classes} 
-    { ...item?.target && item?.url ? {target: item.target} : {} }
+    { ...target && url ? {target: target} : {} }
+    {...rest}
 >
-    <span>{item.title}</span>
-    {item?.icon && (<Icon name={item.icon} class={iconClasses} />)}
+    <span><Fragment set:html={title} /></span>
+    {icon && (<Icon name={icon} class={iconClasses} />)}
 </a>
