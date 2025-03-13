@@ -37,10 +37,14 @@ const cars = rawCars && rawCars.length ? rawCars.filter(
     || (model?.feed_names ? model?.feed_names.includes(car.data.folder_id) : false) )
   )
 ) : [];
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('index'));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
+
 ---
 <Layout 
   title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${LEGAL_CITY_WHERE}`} 
-  description={model.slogan}
+  description={`${model.mark_id} ${model.name} купить в ${LEGAL_CITY_WHERE}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={model.image ?? model.thumb}
 >
   <h1 class="sr-only">Автомобиль {BRAND} {model.name} в {LEGAL_CITY_WHERE}</h1>
