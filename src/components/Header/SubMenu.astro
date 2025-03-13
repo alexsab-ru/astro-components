@@ -5,22 +5,21 @@ interface Props {
 const { children } = Astro.props;
 import MenuLink from './MenuLink.astro';
 let classes = 'left-0 lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible lg:-translate-y-1 transition-all bg-white group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 lg:shadow-2xl z-[1000] lg:border-t';
-classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes + ' lg:flex' : classes;
+classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes + ' lg:flex lg:justify-center' : classes;
 ---
 {children && (
 	<div class={classes}>
 		{!Array.isArray(children) && Object.keys(children).length > 0 ? Object.keys(children).map( key => (
-			<div class={`relative flex-auto border-b lg:border-b-0 lg:border-r ${children[key].length > 10 && 'cols-' + Math.min(Math.floor((children[key].length / 10) + 1), 5)} ${Object.keys(children).length > 1 && 'pt-[46px]'}`}>
-				{Object.keys(children).length > 1 && (<div class="absolute top-0 left-0 w-full font-bold px-5 text-lg border-b pt-2.5 pb-2">{key}</div>)}
-				{
-					children[key].map(child => (
-						<MenuLink link={child} sublink={true} />
-					))
-				}
+			<div class={`
+				relative min-w-[150px] border-b lg:border-b-0 lg:border-r lg:first:border-l
+				${children[key].length > 10 && 'cols-' + Math.min(Math.floor((children[key].length / 10) + 1), 5)} 
+				${Object.keys(children).length > 1 && 'pt-[46px]'}
+			`}>
+				{ Object.keys(children).length > 1 && (<div class="absolute top-0 left-0 w-full font-bold px-5 text-lg border-b pt-2.5 pb-2">{key}</div>) }
+
+				{ children[key].map(child => (<MenuLink link={child} sublink={true} />)) }
 			</div>
-		) ) : Array.isArray(children) && children.length > 0 ? children.map(child => (
-			<MenuLink link={child} sublink={true} />
-		)) : ('')
+		) ) : Array.isArray(children) && children.length > 0 ? children.map(child => (<MenuLink link={child} sublink={true} />)) : ('')
 		}
 	</div>
 )}
