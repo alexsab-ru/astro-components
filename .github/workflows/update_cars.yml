@@ -13,6 +13,7 @@ on:
       - '.github/scripts/config.py'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
+      - '.github/scripts/model_mapping.json'
       - '.github/scripts/update_cars_air_storage.py'
       - '.github/scripts/update_cars.py'
       - '.github/scripts/utils.py'
