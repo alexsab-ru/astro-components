@@ -3,23 +3,23 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('header'));
 
-import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
-
-import { Icon } from 'astro-icon/components';
-
-import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
-
-import Button from '@/components/Button/Button.astro';
-import Logo from '@/components/Logo/Logo.astro';
-import HeaderTopLine from '@/components/HeaderTopLine.astro';
-
 const path = Astro.url.pathname;
 
-const classBottom = path != '/' ? ' border-b' : '';
+import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
+import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
+
+import { Icon } from 'astro-icon/components';
+import Button from '@/components/Button/Button.astro';
+import Logo from '@/components/Logo/Logo.astro';
+import HeaderTopLine from './HeaderTopLine.astro';
+import HeaderMenu from './Menu.astro';
+import HeaderMenuList from './MenuList.astro';
 
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
+
+import './styles.scss';
 ---
 <div
 	x-data="header"
@@ -97,47 +97,7 @@ import socials from '@/data/socials.json';
 	</header>
 
 
-{links && (
-	<div id="site_nav" class={'hidden lg:block border-t'+classBottom}>
-		<div class="container">
-			<div class="h-full">
-				<ul class="overflow-hidden flex relative">
-				{
-					links.map(link => (
-						<li class="relative group">
-							<a
-								href={link.url === 'javascript:void(0)' || path === '/' ? link.url : '/'+link.url}
-								class:list={[
-									{
-										'scroll-link': link.url.includes('#'),
-										'header-link': !link.url.includes('#'),
-										'active': path.replace(/\//g, '') === link.url.replace(/\//g, '')
-									}
-								]}
-							>{link.name}</a>
-							{link?.children && link.children.length > 0 && (
-								<ul class={`lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible bg-white group-hover:opacity-100 group-hover:visible lg:shadow-2xl z-[1000] ${link.children.length > 10 && 'lg:max-h-[65vh] lg:overflow-y-auto custom-scrollbar'}`}>
-									{link.children.map( child => (
-										<a
-											href={child.url === 'javascript:void(0)' || path === '/' ? child.url : '/'+child.url}
-											class:list={[
-												{
-													'header-child-link': !child.url.includes('#'),
-													'active': path.replace(/\//g, '') === child.url.replace(/\//g, '')
-												}
-											]}
-										>{child.name}</a>
-									) )}
-								</ul>
-							)}
-						</li>
-					))
-				}
-				</ul>
-			</div>
-		</div>
-	</div>
-)}
+	{links.length > 0 && ( <HeaderMenu links={links} /> )}
 
 	<div
 		x-cloak
@@ -155,40 +115,7 @@ import socials from '@/data/socials.json';
 
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
-				{links.length &&
-				<ul class="flex flex-col border-b lg:hidden">
-					{links.map(link => (
-						<li>
-							<a
-								href={path === '/' ? link.url : '/'+link.url}
-								class:list={[
-									{
-										'font-bold': link?.children && link.children.length > 0,
-										'scroll-link': link.url.includes('#'),
-										'header-link': !link.url.includes('#'),
-										'active': path.replace(/\//g, '') === link.url.replace(/\//g, ''),
-									}
-								]}
-							>{link.name}</a>
-							{link?.children && link.children.length > 0 && (
-								<ul class="">
-									{link.children.map( child => (
-										<a
-											href={child.url === 'javascript:void(0)' || path === '/' ? child.url : '/'+child.url}
-											class:list={[
-												{
-													'header-child-link': !child.url.includes('#'),
-													'active': path.replace(/\//g, '') === child.url.replace(/\//g, '')
-												}
-											]}
-										>{child.name}</a>
-									) )}
-								</ul>
-							)}
-						</li>
-					))}
-				</ul>
-				}
+				{links.length > 0 && ( <HeaderMenuList links={links} /> )}
 				<div>
 				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
@@ -202,17 +129,3 @@ import socials from '@/data/socials.json';
 		</div>
 	</div>
 </div>
-
-
-<style lang="scss">
-	.scroll-link, .header-link, .header-child-link{
-		@apply block lg:inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-400 hover:text-white whitespace-nowrap;
-		&.active{
-			@apply bg-accent-400 text-white;
-		}
-	}
-	.header-child-link{
-		@apply block text-black pl-10 lg:pl-5;
-	}
-
-</style>
