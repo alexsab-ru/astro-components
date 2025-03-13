@@ -6,7 +6,7 @@ const { link } = Astro.props;
 import MenuLink from './MenuLink.astro';
 import SubMenu from './SubMenu.astro';
 ---
-<li class="relative group">
+<li class="group">
 	<MenuLink link={link} />
 	{link?.children && <SubMenu children={link.children} />}
 </li>
