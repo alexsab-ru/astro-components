@@ -19,6 +19,25 @@
                 "Белый": "white.png"
             }
         },
+        "BJ40, I Рестайлинг": {
+            "folder": "bj40",
+            "cyrillic": "БДЖ40",
+            "color": {
+                "Black": "black.png",
+                "Blue": "blue.png",
+                "Green": "green.png",
+                "Light-blue": "light-blue.png",
+                "Red": "red.png",
+                "White": "white.png",
+                "Черный": "black.png",
+                "Синий": "blue.png",
+                "Зеленый": "green.png",
+                "Светло-синий": "light-blue.png",
+                "Голубой": "light-blue.png",
+                "Красный": "red.png",
+                "Белый": "white.png"
+            }
+        },
         "U5 Plus": {
             "folder": "u5-plus",
             "cyrillic": "Ю5 Плюс",
