@@ -83,9 +83,12 @@ class CarProcessor:
             tradein_discount = int(car.find('tradeinDiscount').text or 0)
             return credit_discount + tradein_discount
         else:
-            if(car.find('max_discount')):
-                return int(car.find('max_discount').text or 0)
+            max_discount_elem = car.find('max_discount')
+            if max_discount_elem is not None and max_discount_elem.text:
+                print("max_discount: " + max_discount_elem.text)
+                return int(max_discount_elem.text)
             else:
+                print("Элемент max_discount отсутствует или пустой")
                 return 0
 
     def process_car(self, car: ET.Element, existing_files: set, current_thumbs: List[str], 
