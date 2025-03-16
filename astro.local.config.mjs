@@ -23,5 +23,5 @@ export default defineConfig({
 		plugins: [yaml()]
 	},
 	site: 'https://alexsab-ru.github.io',
-	base: 'astro-website'
+	base: '/'
 });
