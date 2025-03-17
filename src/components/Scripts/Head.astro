@@ -1,280 +1,41 @@
 ---
 import scripts_json from '@/data/scripts.json';
 ---
-{ scripts_json.gtm && (
-    <script>
-        function runGTM(scripts_json_gtm) {
-            console.log("gtm", scripts_json_gtm);
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer',scripts_json_gtm);
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.gtm && (
+    <script src="@/js/head/runGTM.js"></script>
 )}
-{ scripts_json.metrika && scripts_json.metrika.length > 0 && (
-    <script>
-        function runMETRIKA(scripts_json_metrika) {
-            console.log("metrika", scripts_json_metrika);
-            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-            if(location.hostname != "localhost") {
-                scripts_json_metrika.forEach(metrika => {
-                    ym(metrika.id, "init", metrika);
-                });
-                ym(94754424, "init", {
-                    "clickmap": true,
-                    "trackLinks": true,
-                    "accurateTrackBounce": true
-                });
-            }
-        }
-    </script>
+{ process.env.NODE_ENV !== "production" && (
+    <script src="@/js/head/runMETRIKA_DEV.js"></script>
 )}
-{ scripts_json.ga4 && scripts_json.ga4.length > 0 && (
-    <script>
-        function runGA4(scripts_json_ga4) {
-            console.log("ga4", scripts_json_ga4);
-            scripts_json_ga4.forEach(ga => {
-                var script = document.createElement('script');
-                script.src = `https://www.googletagmanager.com/gtag/js?id=${ga.id}`;
-                script.async = true;
-                document.head.appendChild(script);
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', ga.id);
-            });
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.metrika && scripts_json.metrika.length > 0 && scripts_json.metrika[0].id != "" && (
+    <script src="@/js/head/runMETRIKA.js"></script>
 )}
-{ scripts_json.re && (
-    <script>
-        function runRE(scripts_json_re) {
-            console.log("re", scripts_json_re);
-            var script = document.createElement('script');
-            script.src = `https://www.google.com/recaptcha/api.js?render=${scripts_json_re}`;
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.ga4 && scripts_json.ga4.length > 0 && scripts_json.ga4[0].id != "" && (
+    <script src="@/js/head/runGA4.js"></script>
 )}
-{ scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0 && (
-    <script>
-        function runVK_RTRG(vk_rtrg) {
-            console.log("vk-rtrg", vk_rtrg);
-            vk_rtrg.forEach(vk => {
-                if (vk.id && vk.id.trim() !== "") {
-                    var script = document.createElement('script');
-                    script.innerHTML = `!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?169",t.onload=function(){VK.Retargeting.Init("${vk.id}"),VK.Retargeting.Hit()},document.head.appendChild(t)}();`;
-                    document.head.appendChild(script);
-                }
-            });
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.re && (
+    <script src="@/js/head/runRE.js"></script>
 )}
-{ scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0 && (
-    <script>
-        function runTOP_MAIL_RU(top_mail_ru) {
-            console.log("top.mail.ru", top_mail_ru);
-            top_mail_ru.forEach(mail => {
-                if (mail.id && mail.id.trim() !== "") {
-                    var script = document.createElement('script');
-                    script.innerHTML = `var _tmr = window._tmr || (window._tmr = []); _tmr.push({id: "${mail.id}", type: "pageView", start: (new Date()).getTime()}); (function (d, w, id) { if (d.getElementById(id)) return; var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id; ts.src = "https://top-fwz1.mail.ru/js/code.js"; var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);}; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "topmailru-code");`;
-                    document.head.appendChild(script);
-                }
-            });
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0 && scripts_json['vk-rtrg'][0].id != "" && (
+    <script src="@/js/head/runVK_RTRG.js"></script>
 )}
-{ scripts_json.calltouch.client_id && (
-    <script>
-        function runCALLTOUCH(calltouch) {
-            console.log("calltouch", calltouch);
-            var script = document.createElement('script');
-            script.src = `https://mod.calltouch.ru/init.js?id=${calltouch.client_id}`;
-            script.async = true;
-            document.head.appendChild(script);
-            window.calltouch_params = {
-                site_id: calltouch.site_id
-            };
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0 && scripts_json['top.mail.ru'][0].id != "" && (
+    <script src="@/js/head/runTOP_MAIL_RU.js"></script>
 )}
-{ scripts_json.konget && (
-    <script>
-        function runKONGET(konget) {
-            console.log("konget", konget);
-            var script = document.createElement('script');
-            script.src = `//app.konget.ru/inject?token=${konget}`;
-            script.async = true;
-            document.head.appendChild(script);
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.calltouch.client_id && (
+    <script src="@/js/head/runCALLTOUCH.js"></script>
 )}
-{ scripts_json.streamwood && (scripts_json.streamwood.swKey || scripts_json.streamwood.swDomainKey) && (
-    <script>
-        function runSTREAMWOOD(streamwood) {
-            console.log("streamwood", streamwood);
-            if (streamwood.swKey && streamwood.swDomainKey) {
-                // Основной скрипт
-                var mainScript = document.createElement('script');
-                mainScript.src = `https://clients.streamwood.ru/code?swKey=${streamwood.swKey}&swDomainKey=${streamwood.swDomainKey}`;
-                mainScript.defer = true;
-                mainScript.charset = 'utf-8';
-                document.head.appendChild(mainScript);
-
-                // Скрипт для квиза
-                var quizScript = document.createElement('script');
-                quizScript.src = `https://clients.streamwood.ru/quiz/code/?swKey=${streamwood.swKey}&swDomainKey=${streamwood.swDomainKey}`;
-                quizScript.defer = true;
-                quizScript.charset = 'utf-8';
-                document.head.appendChild(quizScript);
-            }
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.konget && (
+    <script src="@/js/head/runKONGET.js"></script>
 )}
-{ scripts_json.smartpoint && (
-    <script>
-        function runSMARTPOINT(smartpoint) {
-            console.log("smartpoint", smartpoint);
-            (function(w, p) {
-                var a, s;
-                (w[p] = w[p] || []).push(
-                    `uid=${smartpoint}`,
-                    `site=${encodeURIComponent(window.location.href)}`
-                );
-                a = document.createElement('script');
-                a.type = 'text/javascript';
-                a.async = true;
-                a.charset = 'utf-8';
-                a.src = 'https://panel.smartpoint.pro/collectwidgets/?'+window.SMP_params.join('&');
-                s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(a, s);
-            })(window, 'SMP_params');
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.streamwood && (scripts_json.streamwood.swKey || scripts_json.streamwood.swDomainKey) && (
+    <script src="@/js/head/runSTREAMWOOD.js"></script>
 )}
-{ scripts_json.widgets && scripts_json.widgets.length > 0 && (
-    <script>
-        function runWIDGETS(widgets) {
-            console.log("widgets", widgets);
-            widgets.forEach(widget => {
-                if (widget && widget.trim() !== "") {
-                    // Создаем временный div для парсинга HTML
-                    var div = document.createElement('div');
-                    div.innerHTML = widget.trim();
-                    
-                    // Получаем элемент script из временного div
-                    var scriptTag = div.querySelector('script');
-                    
-                    if (scriptTag) {
-                        // Создаем новый script элемент
-                        var script = document.createElement('script');
-                        
-                        // Копируем все атрибуты из исходного тега
-                        Array.from(scriptTag.attributes).forEach(attr => {
-                            script.setAttribute(attr.name, attr.value);
-                        });
-                        
-                        // Если есть внутренний текст скрипта, копируем его
-                        if (scriptTag.innerHTML) {
-                            script.innerHTML = scriptTag.innerHTML;
-                        }
-                        
-                        document.head.appendChild(script);
-                    }
-                }
-            });
-        }
-    </script>
+{ process.env.NODE_ENV === "production" && scripts_json.smartpoint && (
+    <script src="@/js/head/runSMARTPOINT.js"></script>
 )}
-
-<script define:vars={{ scripts_json }}>
-(function() {
-    var analyticsLoaded = false;
-    var startTime = Date.now();
-
-    function loadAnalyticsScripts() {
-        console.log("loadAnalyticsScripts", (Date.now() - startTime));
-        if (!analyticsLoaded) {
-            analyticsLoaded = true;
-            window.removeEventListener('scroll', loadAnalyticsScripts);
-            document.removeEventListener('mousemove', loadAnalyticsScripts);
-
-            // Google Tag Managers
-            if (scripts_json.gtm && scripts_json.gtm.length > 0) {
-                runGTM(scripts_json.gtm);
-            }
-
-            // Яндекс Метрика
-            if (scripts_json.gtm == "" && scripts_json.metrika && scripts_json.metrika.length > 0) {
-                runMETRIKA(scripts_json.metrika);
-            }
-
-            // Google Analytics 4
-            if (scripts_json.gtm == "" && scripts_json.ga4 && scripts_json.ga4.length > 0) {
-                runGA4(scripts_json.ga4);
-            }
-
-            // reCAPTCHA
-            if (scripts_json.re && scripts_json.re.trim() !== "") {
-                runRE(scripts_json.re);
-            }
-
-            // VK Retargeting
-            if (scripts_json.gtm == "" && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0) {
-                runVK_RTRG(scripts_json['vk-rtrg']);
-            }
-
-            // Top Mail.ru
-            if (scripts_json.gtm == "" && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0) {
-                runTOP_MAIL_RU(scripts_json['top.mail.ru']);
-            }
-
-            // Calltouch
-            if (scripts_json.gtm == "" && scripts_json.calltouch && scripts_json.calltouch.client_id && scripts_json.calltouch.site_id) {
-                runCALLTOUCH(scripts_json.calltouch);
-            }
-
-            // Konget
-            if (scripts_json.gtm == "" && scripts_json.konget && scripts_json.konget.trim() !== "") {
-                runKONGET(scripts_json.konget);
-            }
-
-            // Streamwood
-            if (scripts_json.gtm == "" && scripts_json.streamwood && scripts_json.streamwood.swKey && scripts_json.streamwood.swDomainKey) {
-                runSTREAMWOOD(scripts_json.streamwood);
-            }
-
-            // Smartpoint
-            if (scripts_json.gtm == "" && scripts_json.smartpoint) {
-                runSMARTPOINT(scripts_json.smartpoint);
-            }
-
-            // Widgets
-            if (scripts_json.gtm == "" && scripts_json.widgets && scripts_json.widgets.length > 0) {
-                runWIDGETS(scripts_json.widgets);
-            }
-        }
-    }
-
-    function initializeEventListeners() {
-        window.addEventListener('scroll', loadAnalyticsScripts);
-        document.addEventListener('mousemove', loadAnalyticsScripts);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeEventListeners);
-    } else {
-        initializeEventListeners();
-    }
-})();
-</script>
-
+{ process.env.NODE_ENV === "production" && scripts_json.widgets && scripts_json.widgets.length > 0 && (
+    <script src="@/js/head/runWIDGETS.js"></script>
+)}
+<script id="scripts_json" type="application/ld+json" set:html={JSON.stringify(scripts_json)}/>
+<script src="@/js/head/loadAnalyticsScripts.js"></script>
