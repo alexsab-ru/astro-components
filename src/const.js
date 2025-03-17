@@ -38,6 +38,7 @@ export const LINKS_MENU = [
 		children: models.map(model => ( { url: `models/${model.id}/`, name: `${model?.mark_id} ${model.name.toUpperCase()}` } ) )
 	},
 	// {url: 'trade-in/', name: 'Оценка автомобиля'},
+	{url: 'for-owners/', name: 'Владельцам'},
 	{url: 'special-offers/', name: 'Спецпредложения'},
 	{url: 'news/', name: 'Новости'},
 	{url: 'test-drive/', name: 'Запись на тест-драйв'},
