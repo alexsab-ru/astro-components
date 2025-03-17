@@ -140,6 +140,27 @@ import scripts_json from '@/data/scripts.json';
         }
     </script>
 )}
+{ scripts_json.smartpoint && (
+    <script>
+        function runSMARTPOINT(smartpoint) {
+            console.log("smartpoint", smartpoint);
+            (function(w, p) {
+                var a, s;
+                (w[p] = w[p] || []).push(
+                    `uid=${smartpoint}`,
+                    `site=${encodeURIComponent(window.location.href)}`
+                );
+                a = document.createElement('script');
+                a.type = 'text/javascript';
+                a.async = true;
+                a.charset = 'utf-8';
+                a.src = 'https://panel.smartpoint.pro/collectwidgets/?'+window.SMP_params.join('&');
+                s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(a, s);
+            })(window, 'SMP_params');
+        }
+    </script>
+)}
 { scripts_json.widgets && scripts_json.widgets.length > 0 && (
     <script>
         function runWIDGETS(widgets) {
@@ -230,6 +251,11 @@ import scripts_json from '@/data/scripts.json';
             // Streamwood
             if (scripts_json.gtm == "" && scripts_json.streamwood && scripts_json.streamwood.swKey && scripts_json.streamwood.swDomainKey) {
                 runSTREAMWOOD(scripts_json.streamwood);
+            }
+
+            // Smartpoint
+            if (scripts_json.gtm == "" && scripts_json.smartpoint) {
+                runSMARTPOINT(scripts_json.smartpoint);
             }
 
             // Widgets
