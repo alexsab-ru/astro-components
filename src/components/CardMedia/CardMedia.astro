@@ -1,0 +1,23 @@
+---
+const {
+     imgPlacement = 'left',
+} = Astro.props;
+---
+
+{
+  imgPlacement === 'left' ? (
+  <article class="!p-0 flex flex-col lg:flex-row bg-zinc-50 mb-12 rounded-2xl overflow-hidden">
+    <div><slot name="card-image" /></div>
+    <div class="flex lg:flex-shrink-0 lg:w-1/2 flex-col justify-center gap-6 lg:gap-12 px-6 py-12 lg:px-12">
+      <slot name="card-content" />
+    </div>
+  </article>
+  ) : imgPlacement === 'right' ? (
+  <article class="!p-0 flex flex-col lg:flex-row bg-zinc-50 mb-12 rounded-2xl overflow-hidden">
+    <div class="flex lg:flex-shrink-0 lg:w-1/2 order-2 lg:order-1 flex-col justify-center gap-6 lg:gap-12 px-6 py-12 lg:px-12">
+      <slot name="card-content" />
+    </div>
+    <div class="order-1 lg:order-2"><slot name="card-image" /></div>
+  </article>
+  ) : ('')
+}
