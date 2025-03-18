@@ -27,8 +27,8 @@ import '@/components/Banner/banner.scss';
 	<div class="swiper-wrapper">
 			{
 				data.images.map(img => (
-					<div class="swiper-slide select-none min-w-[73px] !w-fit">
-						<img src={img} class="select-none h-full w-auto" alt={data.folder_id} loading="lazy" />
+					<div class="lazy swiper-slide select-none min-w-[73px] !w-fit">
+						<img data-src={img} class="select-none h-full w-auto" alt={data.folder_id} loading="lazy" />
 						<div class="swiper-lazy-preloader"></div>
 					</div>
 				))
