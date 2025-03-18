@@ -18,37 +18,37 @@ console.log("loadAnalyticsScripts load");
             document.removeEventListener('mousemove', loadAnalyticsScripts);
 
             // Google Tag Manager
-            process.env.NODE_ENV === "production" && scripts_json.gtm && scripts_json.gtm.length > 0 && runGTM(scripts_json.gtm);
+            process.env.NODE_ENV === "production" && typeof runGTM === 'function' && scripts_json.gtm && scripts_json.gtm.length > 0 && runGTM(scripts_json.gtm);
 
             // Яндекс Метрика - только если GTM не используется и метрика настроена
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json.metrika && scripts_json.metrika.length > 0 && runMETRIKA(scripts_json.metrika);
+            process.env.NODE_ENV === "production" && typeof runMETRIKA === 'function' && scripts_json.gtm == "" && scripts_json.metrika && scripts_json.metrika.length > 0 && runMETRIKA(scripts_json.metrika);
 
             // Google Analytics 4 - только если GTM не используется и GA4 настроен
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json.ga4 && scripts_json.ga4.length > 0 && runGA4(scripts_json.ga4);
+            process.env.NODE_ENV === "production" && typeof runGA4 === 'function' && scripts_json.gtm == "" && scripts_json.ga4 && scripts_json.ga4.length > 0 && runGA4(scripts_json.ga4);
 
             // reCAPTCHA
-            process.env.NODE_ENV === "production" && scripts_json.re && scripts_json.re.trim() !== "" && runRE(scripts_json.re);
+            process.env.NODE_ENV === "production" && typeof runRE === 'function' && scripts_json.re && scripts_json.re.trim() !== "" && runRE(scripts_json.re);
 
             // VK Retargeting - только если GTM не используется и VK настроен
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0 && runVK_RTRG(scripts_json['vk-rtrg']);
+            process.env.NODE_ENV === "production" && typeof runVK_RTRG === 'function' && scripts_json.gtm == "" && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0 && runVK_RTRG(scripts_json['vk-rtrg']);
 
             // Top Mail.ru - только если GTM не используется и Mail.ru настроен
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0 && runTOP_MAIL_RU(scripts_json['top.mail.ru']);
+            process.env.NODE_ENV === "production" && typeof runTOP_MAIL_RU === 'function' && scripts_json.gtm == "" && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0 && runTOP_MAIL_RU(scripts_json['top.mail.ru']);
 
             // Calltouch - только если GTM не используется и Calltouch настроен
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json.calltouch && scripts_json.calltouch.client_id && scripts_json.calltouch.site_id && runCALLTOUCH(scripts_json.calltouch);
+            process.env.NODE_ENV === "production" && typeof runCALLTOUCH === 'function' && scripts_json.gtm == "" && scripts_json.calltouch && scripts_json.calltouch.client_id && scripts_json.calltouch.site_id && runCALLTOUCH(scripts_json.calltouch);
 
             // Konget - только если GTM не используется и Konget настроен
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json.konget && scripts_json.konget.trim() !== "" && runKONGET(scripts_json.konget);
+            process.env.NODE_ENV === "production" && typeof runKONGET === 'function' && scripts_json.gtm == "" && scripts_json.konget && scripts_json.konget.trim() !== "" && runKONGET(scripts_json.konget);
 
             // Streamwood - только если GTM не используется и Streamwood настроен
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json.streamwood && scripts_json.streamwood.swKey && scripts_json.streamwood.swDomainKey && runSTREAMWOOD(scripts_json.streamwood);
+            process.env.NODE_ENV === "production" && typeof runSTREAMWOOD === 'function' && scripts_json.gtm == "" && scripts_json.streamwood && scripts_json.streamwood.swKey && scripts_json.streamwood.swDomainKey && runSTREAMWOOD(scripts_json.streamwood);
 
             // Smartpoint - только если GTM не используется и Smartpoint настроен
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json.smartpoint && runSMARTPOINT(scripts_json.smartpoint);
+            process.env.NODE_ENV === "production" && typeof runSMARTPOINT === 'function' && scripts_json.gtm == "" && scripts_json.smartpoint && runSMARTPOINT(scripts_json.smartpoint);
 
             // Widgets - только если GTM не используется и виджеты настроены
-            process.env.NODE_ENV === "production" && scripts_json.gtm == "" && scripts_json.widgets && scripts_json.widgets.length > 0 && runWIDGETS(scripts_json.widgets);
+            process.env.NODE_ENV === "production" && typeof runWIDGETS === 'function' && scripts_json.gtm == "" && scripts_json.widgets && scripts_json.widgets.length > 0 && runWIDGETS(scripts_json.widgets);
         }
     }
 
