@@ -1,4 +1,6 @@
+console.log("runSMARTPOINT load");
 function runSMARTPOINT(smartpoint) {
+    console.log("runSMARTPOINT", smartpoint);
     (function(w, p) {
         var a, s;
         (w[p] = w[p] || []).push(
@@ -14,3 +16,4 @@ function runSMARTPOINT(smartpoint) {
         s.parentNode.insertBefore(a, s);
     })(window, 'SMP_params');
 }
+window.runSMARTPOINT = runSMARTPOINT;

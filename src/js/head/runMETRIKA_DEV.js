@@ -1,4 +1,6 @@
+console.log("runMETRIKA_DEV load", typeof runMETRIKA);
 function runMETRIKA(scripts_json_metrika) {
+    console.log("runMETRIKA_DEV", scripts_json_metrika);
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
     m[i].l=1*new Date();
     for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -10,4 +12,5 @@ function runMETRIKA(scripts_json_metrika) {
         "trackLinks": true,
         "accurateTrackBounce": true
     });
-} 
+}
+window.runMETRIKA = runMETRIKA;

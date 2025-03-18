@@ -1,4 +1,6 @@
+console.log("runSTREAMWOOD load");
 function runSTREAMWOOD(streamwood) {
+    console.log("runSTREAMWOOD", streamwood);
     if (streamwood.swKey && streamwood.swDomainKey) {
         // Основной скрипт
         var mainScript = document.createElement('script');
@@ -14,4 +16,5 @@ function runSTREAMWOOD(streamwood) {
         quizScript.charset = 'utf-8';
         document.head.appendChild(quizScript);
     }
-} 
+}
+window.runSTREAMWOOD = runSTREAMWOOD;

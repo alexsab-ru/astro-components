@@ -1,4 +1,6 @@
+console.log("runGA4 load");
 function runGA4(scripts_json_ga4) {
+    console.log("runGA4", scripts_json_ga4);
     scripts_json_ga4.forEach(ga => {
         var script = document.createElement('script');
         script.src = `https://www.googletagmanager.com/gtag/js?id=${ga.id}`;
@@ -10,3 +12,4 @@ function runGA4(scripts_json_ga4) {
         gtag('config', ga.id);
     });
 }
+window.runGA4 = runGA4;

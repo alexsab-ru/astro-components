@@ -1,4 +1,6 @@
+console.log("runWIDGETS load");
 function runWIDGETS(widgets) {
+    console.log("runWIDGETS", widgets);
     widgets.forEach(widget => {
         if (widget && widget.trim() !== "") {
             // Создаем временный div для парсинга HTML
@@ -27,3 +29,4 @@ function runWIDGETS(widgets) {
         }
     });
 }
+window.runWIDGETS = runWIDGETS;

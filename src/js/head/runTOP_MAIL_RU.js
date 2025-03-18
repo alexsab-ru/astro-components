@@ -1,4 +1,6 @@
+console.log("runTOP_MAIL_RU load");
 function runTOP_MAIL_RU(top_mail_ru) {
+    console.log("runTOP_MAIL_RU", top_mail_ru);
     top_mail_ru.forEach(mail => {
         if (mail.id && mail.id.trim() !== "") {
             var script = document.createElement('script');
@@ -6,4 +8,5 @@ function runTOP_MAIL_RU(top_mail_ru) {
             document.head.appendChild(script);
         }
     });
-} 
+}
+window.runTOP_MAIL_RU = runTOP_MAIL_RU;

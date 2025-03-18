@@ -1,4 +1,6 @@
+console.log("runVK_RTRG load");
 function runVK_RTRG(vk_rtrg) {
+    console.log("runVK_RTRG", vk_rtrg);
     vk_rtrg.forEach(vk => {
         if (vk.id && vk.id.trim() !== "") {
             var script = document.createElement('script');
@@ -6,4 +8,5 @@ function runVK_RTRG(vk_rtrg) {
             document.head.appendChild(script);
         }
     });
-} 
+}
+window.runVK_RTRG = runVK_RTRG;
