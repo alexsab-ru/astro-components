@@ -13,10 +13,44 @@ import { SITE_NAME, PHONE } from '@/const';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 import { LEGAL_CITY_WHERE } from '@/const'
+import Faq from '@/components/Faq/Index.astro';
 
 export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
 export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+export const faqData = [
+    {
+		"id": 1,
+		"question": "Dashing 200 000 руб.",
+		"answer": "<p>Преимущество по трейд-ин при покупке нового JETOUR DASHING - 200 000 руб.</p><p>Лояльный Trade-in Dashing AWD: Получите выгоду до 400 000 рублей на комплектации Luxury и Sport при сдаче в Trade-in любой модели Jetour</p>",
+		"open": false
+	},
+    {
+		"id": 2,
+		"question": "X70 Plus 200 000 руб.",
+		"answer": "<p>Преимущество по трейд-ин при покупке нового JETOUR X70 PLUS - 200 000 руб.</p>",
+		"open": false
+	},
+    {
+		"id": 3,
+		"question": "X90 Plus 250 000 руб.",
+		"answer": "<p>Преимущество по трейд-ин при покупке нового JETOUR X90 PLUS - 250 000 руб.</p>",
+		"open": false
+	},
+    {
+		"id": 4,
+		"question": "T2 100 000 руб.",
+		"answer": "<p>Преимущество по трейд-ин при покупке нового JETOUR T2 - 100 000 руб.</p>",
+		"open": false
+	},
+    {
+		"id": 5,
+		"question": "Дополнительная информация",
+		"answer": "<p>Выгода – это прямая скидка на автомобиль, которая предоставляется только официальными дилерами ООО “Джетур Мотор Рус” (список авторизованных дилеров можно узнать на сайте https://jetour-ru.com/purchase/find-dealer). Сдаваемый в зачет автомобиль может иметь возраст не более 15 (пятнадцати) лет. Скидка предоставляется при приобретении нового автомобиля физическим или юридическим лицом, являющимся законным собственником сдаваемого в зачет приобретения нового автомобиля Jetour. Предложение не является публичной офертой.</p>",
+		"open": false
+	}
+];
 
 <picture>
     <source media="(min-width: 1025px)" srcset="/img/specials/treyd-in-s-vygodoy/THyE8v__frame-40145-1.webp" />
@@ -115,6 +149,8 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
         />
     </div>
 </div>
+
+<Faq items={faqData} title="Выгода до 400 000 рублей по программе трейд-ин!" class="bg-gray-100 mb-12 rounded-2xl" />
 
 ><sup>*</sup>
 Сдаваемый в зачет автомобиль может иметь возраст не более 10 (десяти) лет. Скидка предоставляется при приобретении нового автомобиля физическим или юридическим лицом, являющимся законным собственником сдаваемого в зачет приобретения нового автомобиля Jetour. Скидки по настоящей программе не суммируются с другими скидками в рамках программ, осуществляемых **Дилерским центром &laquo;Jetour Альфа&raquo;** в {LEGAL_CITY_WHERE}. Предложение не является публичной офертой.
