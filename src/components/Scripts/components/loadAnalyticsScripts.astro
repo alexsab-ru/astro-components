@@ -13,6 +13,116 @@ console.log("loadAnalyticsScripts load");
     var analyticsLoaded = false;
     var startTime = Date.now();
 
+    // Функция для проверки значимого значения (строки или числа)
+    function isNonEmptyValue(value) {
+        if (value === undefined || value === null) return false;
+        if (typeof value === 'string') return value.trim() !== "";
+        if (typeof value === 'number') return value !== 0;
+        return Boolean(value);
+    }
+
+    // Функция для проверки и запуска скриптов аналитики
+    function runTrackingScript(config) {
+        const {
+            functionName,
+            jsonKey,
+            isProduction = true,
+            validator = null,
+            isArray = false
+        } = config;
+        
+        // Проверка на production окружение, если требуется
+        if (isProduction && process.env.NODE_ENV !== "production") return;
+        
+        // Проверка существования функции
+        if (typeof window[functionName] !== 'function') return;
+        
+        // Получение данных из конфигурационного объекта
+        const scriptConfig = scripts_json[jsonKey];
+        
+        // Проверка на существование конфигурации
+        if (!scriptConfig) return;
+        
+        // Для массивов проверяем первый элемент
+        if (isArray) {
+            if (!Array.isArray(scriptConfig) || scriptConfig.length === 0) return;
+            
+            // Проверка на непустой ID в первом элементе массива
+            if (validator) {
+                if (!validator(scriptConfig)) return;
+            } else {
+                const id = scriptConfig[0].id;
+                if (!isNonEmptyValue(id)) return;
+            }
+        } else {
+            // Для строк проверяем на непустую строку
+            if (typeof scriptConfig === 'string' && !isNonEmptyValue(scriptConfig)) return;
+            
+            // Для объектов используем кастомный валидатор
+            if (validator && !validator(scriptConfig)) return;
+        }
+        
+        // Запускаем функцию с соответствующими параметрами
+        window[functionName](scriptConfig);
+    }
+
+    // Конфигурация для всех скриптов
+    const trackingConfigs = [
+        {
+            functionName: 'runGTM',
+            jsonKey: 'gtm'
+        },
+        {
+            functionName: 'runMETRIKA',
+            jsonKey: 'metrika',
+            isProduction: false,
+            isArray: true
+        },
+        {
+            functionName: 'runGA4',
+            jsonKey: 'ga4',
+            isArray: true
+        },
+        {
+            functionName: 'runRE',
+            jsonKey: 're'
+        },
+        {
+            functionName: 'runVK_RTRG',
+            jsonKey: 'vk-rtrg',
+            isArray: true
+        },
+        {
+            functionName: 'runTOP_MAIL_RU',
+            jsonKey: 'top.mail.ru',
+            isArray: true
+        },
+        {
+            functionName: 'runCALLTOUCH',
+            jsonKey: 'calltouch',
+            validator: (config) => isNonEmptyValue(config.client_id)
+        },
+        {
+            functionName: 'runKONGET',
+            jsonKey: 'konget'
+        },
+        {
+            functionName: 'runSTREAMWOOD',
+            jsonKey: 'streamwood',
+            validator: (config) => isNonEmptyValue(config.swKey) && isNonEmptyValue(config.swDomainKey)
+        },
+        {
+            functionName: 'runSMARTPOINT',
+            jsonKey: 'smartpoint'
+        },
+        {
+            functionName: 'runWIDGETS',
+            jsonKey: 'widgets',
+            isArray: true,
+            validator: (config) => config.length > 0 && isNonEmptyValue(config[0])
+        }
+    ];
+
     function loadAnalyticsScripts() {
         console.log("process.env.NODE_ENV", process.env.NODE_ENV);
         console.log("loadAnalyticsScripts", (Date.now() - startTime), scripts_json);
@@ -21,38 +131,14 @@ console.log("loadAnalyticsScripts load");
             window.removeEventListener('scroll', loadAnalyticsScripts);
             document.removeEventListener('mousemove', loadAnalyticsScripts);
 
-            // Google Tag Manager
-            process.env.NODE_ENV === "production" && typeof runGTM === 'function' && scripts_json.gtm && scripts_json.gtm.length > 0 && runGTM(scripts_json.gtm);
-
-            // Яндекс Метрика - только если GTM не используется и метрика настроена
-            typeof runMETRIKA === 'function' && scripts_json.gtm == "" && scripts_json.metrika && scripts_json.metrika.length > 0 && runMETRIKA(scripts_json.metrika);
-
-            // Google Analytics 4 - только если GTM не используется и GA4 настроен
-            process.env.NODE_ENV === "production" && typeof runGA4 === 'function' && scripts_json.gtm == "" && scripts_json.ga4 && scripts_json.ga4.length > 0 && runGA4(scripts_json.ga4);
-
-            // reCAPTCHA
-            process.env.NODE_ENV === "production" && typeof runRE === 'function' && scripts_json.re && scripts_json.re.trim() !== "" && runRE(scripts_json.re);
-
-            // VK Retargeting - только если GTM не используется и VK настроен
-            process.env.NODE_ENV === "production" && typeof runVK_RTRG === 'function' && scripts_json.gtm == "" && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0 && runVK_RTRG(scripts_json['vk-rtrg']);
-
-            // Top Mail.ru - только если GTM не используется и Mail.ru настроен
-            process.env.NODE_ENV === "production" && typeof runTOP_MAIL_RU === 'function' && scripts_json.gtm == "" && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0 && runTOP_MAIL_RU(scripts_json['top.mail.ru']);
-
-            // Calltouch - только если GTM не используется и Calltouch настроен
-            process.env.NODE_ENV === "production" && typeof runCALLTOUCH === 'function' && scripts_json.gtm == "" && scripts_json.calltouch && scripts_json.calltouch.client_id && scripts_json.calltouch.site_id && runCALLTOUCH(scripts_json.calltouch);
-
-            // Konget - только если GTM не используется и Konget настроен
-            process.env.NODE_ENV === "production" && typeof runKONGET === 'function' && scripts_json.gtm == "" && scripts_json.konget && scripts_json.konget.trim() !== "" && runKONGET(scripts_json.konget);
-
-            // Streamwood - только если GTM не используется и Streamwood настроен
-            process.env.NODE_ENV === "production" && typeof runSTREAMWOOD === 'function' && scripts_json.gtm == "" && scripts_json.streamwood && scripts_json.streamwood.swKey && scripts_json.streamwood.swDomainKey && runSTREAMWOOD(scripts_json.streamwood);
-
-            // Smartpoint - только если GTM не используется и Smartpoint настроен
-            process.env.NODE_ENV === "production" && typeof runSMARTPOINT === 'function' && scripts_json.gtm == "" && scripts_json.smartpoint && runSMARTPOINT(scripts_json.smartpoint);
-
-            // Widgets - только если GTM не используется и виджеты настроены
-            process.env.NODE_ENV === "production" && typeof runWIDGETS === 'function' && scripts_json.gtm == "" && scripts_json.widgets && scripts_json.widgets.length > 0 && runWIDGETS(scripts_json.widgets);
+            // Запускаем все скрипты с проверками
+            trackingConfigs.forEach(config => {
+                try {
+                    runTrackingScript(config);
+                } catch (error) {
+                    console.error(`Ошибка при запуске ${config.functionName}:`, error);
+                }
+            });
         }
     }
 
