@@ -1,3 +1,4 @@
+console.log("loadAnalyticsScripts load");
 (function() {
     const e = document.querySelector("#scripts_json");
 
@@ -10,7 +11,7 @@
     var startTime = Date.now();
 
     function loadAnalyticsScripts() {
-        console.log("loadAnalyticsScripts", (Date.now() - startTime));
+        console.log("loadAnalyticsScripts", (Date.now() - startTime), scripts_json);
         if (!analyticsLoaded) {
             analyticsLoaded = true;
             window.removeEventListener('scroll', loadAnalyticsScripts);
@@ -52,10 +53,12 @@
     }
 
     function initializeEventListeners() {
+        console.log("initializeEventListeners", analyticsLoaded);
         window.addEventListener('scroll', loadAnalyticsScripts);
         document.addEventListener('mousemove', loadAnalyticsScripts);
     }
 
+    console.log("document.readyState", document.readyState);
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeEventListeners);
     } else {

@@ -1,5 +1,6 @@
 ---
 import scripts_json from '@/data/scripts.json';
+console.log("rocess.env.NODE_ENV", process.env.NODE_ENV)
 ---
 { process.env.NODE_ENV === "production" && scripts_json.gtm && (
     <script src="@/js/head/runGTM.js"></script>
@@ -37,5 +38,6 @@ import scripts_json from '@/data/scripts.json';
 { process.env.NODE_ENV === "production" && scripts_json.widgets && scripts_json.widgets.length > 0 && (
     <script src="@/js/head/runWIDGETS.js"></script>
 )}
+<script>console.log("process.env.NODE_ENV", process.env.NODE_ENV);</script>
 <script id="scripts_json" type="application/ld+json" set:html={JSON.stringify(scripts_json)}/>
 <script src="@/js/head/loadAnalyticsScripts.js"></script>
