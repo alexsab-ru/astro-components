@@ -1,3 +1,10 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0 && scripts_json['vk-rtrg'][0].id != "" && (
+<script>
 console.log("runVK_RTRG load");
 function runVK_RTRG(vk_rtrg) {
     console.log("runVK_RTRG", vk_rtrg);
@@ -10,3 +17,5 @@ function runVK_RTRG(vk_rtrg) {
     });
 }
 window.runVK_RTRG = runVK_RTRG;
+</script>
+)}

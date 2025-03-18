@@ -1,3 +1,10 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.widgets && scripts_json.widgets.length > 0 && scripts_json.widgets[0] != "" && (
+<script>
 console.log("runWIDGETS load");
 function runWIDGETS(widgets) {
     console.log("runWIDGETS", widgets);
@@ -30,3 +37,5 @@ function runWIDGETS(widgets) {
     });
 }
 window.runWIDGETS = runWIDGETS;
+</script>
+)}

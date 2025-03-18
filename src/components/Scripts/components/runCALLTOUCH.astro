@@ -1,3 +1,10 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.calltouch.client_id && scripts_json.calltouch.client_id != "" && (
+<script>
 console.log("runCALLTOUCH load");
 function runCALLTOUCH(calltouch) {
     console.log("runCALLTOUCH", calltouch);
@@ -10,3 +17,5 @@ function runCALLTOUCH(calltouch) {
     };
 }
 window.runCALLTOUCH = runCALLTOUCH;
+</script>
+)}

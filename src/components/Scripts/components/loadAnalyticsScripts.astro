@@ -1,3 +1,6 @@
+---
+---
+<script>
 console.log("loadAnalyticsScripts load");
 (function() {
     const e = document.querySelector("#scripts_json");
@@ -11,6 +14,7 @@ console.log("loadAnalyticsScripts load");
     var startTime = Date.now();
 
     function loadAnalyticsScripts() {
+        console.log("process.env.NODE_ENV", process.env.NODE_ENV);
         console.log("loadAnalyticsScripts", (Date.now() - startTime), scripts_json);
         if (!analyticsLoaded) {
             analyticsLoaded = true;
@@ -65,3 +69,4 @@ console.log("loadAnalyticsScripts load");
         initializeEventListeners();
     }
 })();
+</script>

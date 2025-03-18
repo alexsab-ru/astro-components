@@ -1,3 +1,10 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.smartpoint && scripts_json.smartpoint != "" && (
+<script>
 console.log("runSMARTPOINT load");
 function runSMARTPOINT(smartpoint) {
     console.log("runSMARTPOINT", smartpoint);
@@ -17,3 +24,5 @@ function runSMARTPOINT(smartpoint) {
     })(window, 'SMP_params');
 }
 window.runSMARTPOINT = runSMARTPOINT;
+</script>
+)}
