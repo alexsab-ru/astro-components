@@ -1,4 +1,9 @@
+---
+import scripts_json from '@/data/scripts.json';
+---
+{ process.env.NODE_ENV === "production" && scripts_json.gtm && (
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMDLDB3F"
+<noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${scripts_json.gtm}`}
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+)}

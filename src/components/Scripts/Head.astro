@@ -1,10 +1,41 @@
-<!-- Google Tag Manager -->
-<script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-NMDLDB3F');</script>
-<!-- End Google Tag Manager -->
-
-<script async defer src="https://www.google.com/recaptcha/api.js?render=6Lepfy4pAAAAAAGHFP655qNe6Bb_BcskklcxajC6"></script>
-
+---
+import scripts_json from '@/data/scripts.json';
+---
+{ process.env.NODE_ENV === "production" && scripts_json.gtm && (
+    <script src="@/js/head/runGTM.js"></script>
+)}
+{ process.env.NODE_ENV !== "production" && (
+    <script src="@/js/head/runMETRIKA_DEV.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.metrika && scripts_json.metrika.length > 0 && scripts_json.metrika[0].id != "" && (
+    <script src="@/js/head/runMETRIKA.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.ga4 && scripts_json.ga4.length > 0 && scripts_json.ga4[0].id != "" && (
+    <script src="@/js/head/runGA4.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.re && (
+    <script src="@/js/head/runRE.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].length > 0 && scripts_json['vk-rtrg'][0].id != "" && (
+    <script src="@/js/head/runVK_RTRG.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0 && scripts_json['top.mail.ru'][0].id != "" && (
+    <script src="@/js/head/runTOP_MAIL_RU.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.calltouch.client_id && (
+    <script src="@/js/head/runCALLTOUCH.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.konget && (
+    <script src="@/js/head/runKONGET.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.streamwood && (scripts_json.streamwood.swKey || scripts_json.streamwood.swDomainKey) && (
+    <script src="@/js/head/runSTREAMWOOD.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.smartpoint && (
+    <script src="@/js/head/runSMARTPOINT.js"></script>
+)}
+{ process.env.NODE_ENV === "production" && scripts_json.widgets && scripts_json.widgets.length > 0 && (
+    <script src="@/js/head/runWIDGETS.js"></script>
+)}
+<script id="scripts_json" type="application/ld+json" set:html={JSON.stringify(scripts_json)}/>
+<script src="@/js/head/loadAnalyticsScripts.js"></script>
