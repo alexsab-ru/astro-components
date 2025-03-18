@@ -9,6 +9,7 @@ description: "Гарантия на автомобили JETOUR — технич
 ---
 
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Button from '@/components/Button/Button.astro';
 
 <picture>
 	<source media="(min-width: 942px)" srcset="/img/for-owners/warranty/thumb.webp" />
@@ -25,8 +26,8 @@ import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 
 Гарантия начинается с момента продажи автомобиля или его регистрации. Узнайте подробные сведения о гарантии.
 
-<a href="https://jetour-ru.com/media-link/jetour-warranty-terms" target="newtab">Посмотреть</a>
-<a href="https://jetour-ru.com/media-link/jetour-warranty-terms" download>Скачать</a>
+<Button type="link" classes="bg-gray-800 border-transparent" url="https://jetour-ru.com/media-link/jetour-warranty-terms" target="newtab" title="Посмотреть" />
+<Button type="link" classes="bg-white border-gray-500 text-black" url="https://jetour-ru.com/media-link/jetour-warranty-terms" download title="Скачать" />
 <br />
 <br />
 <br />
@@ -38,7 +39,7 @@ import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 
 Любые повреждения из-за несоблюдения правил периодического технического обслуживания не покрываются гарантией автомобиля.
 
-<a href="https://jetour-ru.com/media-link/service-map" target="newtab">Карта ТО</a>
+<Button type="url" classes="bg-gray-800 border-transparent" url="https://jetour-ru.com/media-link/service-map" target="newtab" title="Карта ТО" />
 <br />
 <br />
 <br />
