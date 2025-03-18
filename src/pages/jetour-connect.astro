@@ -3,9 +3,22 @@ import Layout from '@/layouts/Layout.astro';
 ---
 
 <Layout title={`JETOUR Connect`} description="JETOUR Connect — система управления и защиты автомобиля. С преимуществами и возможностями сервиса можно ознакомиться на сайте официального дилера Самары. Сделайте каждую поездку комфортной и уверенной!">
-	<div class="container">
-		<section class="content">
-			<h1 class="text-3xl sm:text-4xl font-bold">JETOUR Connect</h1>
-		</section>
+	
+	<div class="bg-[#121416] md:relative md:h-[400px] md:bg-[url('/img/banners/jetour-connect/desktop-banner.webp')] md:bg-no-repeat md:bg-center md:bg-cover lg:h-[500px] xl:h-[700px]">
+		<div class="container">
+			<img class="object-cover w-full md:hidden" src="/img/banners/jetour-connect/mobile-banner.webp" alt="JETOUR Connect — система управления и защиты автомобиля" />
+			<div class="pb-12 text-white md:absolute md:bottom-0 xl:pb-20">
+				<h1 class="text-4xl font-bold mb-8 xl:text-5xl">Будь на связи со<br>своим автомобилем</h1>
+				<p class="mb-8 md:w-1/2 xl:w-full">JETOUR Connect<sup>1</sup> — система управления и защиты автомобиля</p>
+				<div class="flex flex-col sm:flex-row gap-4">
+					<a href="https://apps.apple.com/us/app/jetour-connect/id6478954137">
+						<img src="/img/jetour-connect/button-app-store.webp" alt="Приложение Jetour Connect для iOS">
+					</a>
+					<a href="https://play.google.com/store/apps/details?id=ru.jetour.smartdriving">
+						<img src="/img/jetour-connect/button-google-play.webp" alt="Приложение Jetour Connect для Android">
+					</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </Layout>
