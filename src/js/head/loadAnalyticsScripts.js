@@ -21,7 +21,7 @@ console.log("loadAnalyticsScripts load");
             process.env.NODE_ENV === "production" && typeof runGTM === 'function' && scripts_json.gtm && scripts_json.gtm.length > 0 && runGTM(scripts_json.gtm);
 
             // Яндекс Метрика - только если GTM не используется и метрика настроена
-            process.env.NODE_ENV === "production" && typeof runMETRIKA === 'function' && scripts_json.gtm == "" && scripts_json.metrika && scripts_json.metrika.length > 0 && runMETRIKA(scripts_json.metrika);
+            typeof runMETRIKA === 'function' && scripts_json.gtm == "" && scripts_json.metrika && scripts_json.metrika.length > 0 && runMETRIKA(scripts_json.metrika);
 
             // Google Analytics 4 - только если GTM не используется и GA4 настроен
             process.env.NODE_ENV === "production" && typeof runGA4 === 'function' && scripts_json.gtm == "" && scripts_json.ga4 && scripts_json.ga4.length > 0 && runGA4(scripts_json.ga4);
