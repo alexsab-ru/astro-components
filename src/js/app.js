@@ -44,10 +44,12 @@ if(lazys.length){
 		if(images){
 			images.forEach(img => {
 				imageObserver.observe(img);
-				img.onload = () => {img.classList.remove('opacity-0')}
+				img.onload = () => {
+					img.classList.remove('opacity-0');
+					lazy.classList.remove('lazy');
+				}
 			});
 		}
-		lazy.classList.remove('lazy')
 	})
 }
 
