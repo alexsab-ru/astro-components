@@ -16,7 +16,7 @@ import { phoneFormat } from '@/js/utils/numbers.format';
 import { Icon } from 'astro-icon/components';
 ---
 <div class="w-full sm:w-[49%] lg:w-[32%] xl:w-[24%] p-4 bg-white flex flex-col">
-	{workerPhoto && (<img src={workerPhoto} alt={worker?.name} class="w-full sm:max-h-[490px] object-cover object-left-top h-auto mb-5">)}
+	{workerPhoto && (<img src={workerPhoto} alt={worker?.name} class="w-full sm:max-h-[490px] object-cover object-left-top h-auto mb-5" loading="lazy" />)}
 	<div class="flex-grow flex flex-col gap-4 justify-between">
 		<div>
 			<div class="text-lg font-bold !leading-none">{worker.name}</div>

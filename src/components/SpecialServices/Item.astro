@@ -18,6 +18,7 @@ const { item } = Astro.props;
 				src={item.img}
 				alt={item.title}
 				class="absolute w-full h-full object-cover object-center transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-2"
+				loading="lazy"
 			/>
 		</div>
 		<div class="relative flex-grow">

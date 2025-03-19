@@ -31,6 +31,7 @@ const { item } = Astro.props;
 					src={item.img}
 					alt={item.title}
 					class="w-auto h-10 transition-all group-hover:invert"
+					loading="lazy"
 				/>
 			) : (
 				''

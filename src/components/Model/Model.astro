@@ -26,7 +26,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
 	{model?.badge && (
-		<img src={model?.badge?.imgModelPage || model?.badge.img} alt={model?.badge.alt} class="absolute right-4 top-4 xs:h-10 h-16 sm:h-24 w-auto z-10">
+		<img src={model?.badge?.imgModelPage || model?.badge.img} alt={model?.badge.alt} class="absolute right-4 top-4 xs:h-10 h-16 sm:h-24 w-auto z-10" loading="lazy" />
 	)}
 	<div
 		class="model__info"
