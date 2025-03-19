@@ -172,7 +172,7 @@ jobs:
     uses: ./.github/workflows/github-telegram.yml
     with:
       additional-text: |
-        $(echo -n '<blockquote>After deploy</blockquote>' | base64)
+        $(echo -n '<blockquote>After deploy: https://${{vars.DOMAIN}}</blockquote>' | base64)
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
