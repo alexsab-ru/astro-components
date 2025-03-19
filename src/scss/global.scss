@@ -186,3 +186,14 @@ section:not(.model-section) {
 		@apply list-disc pl-4;
 	}
 }
+
+.lazy{
+	position: relative;
+	img{
+		position: absolute;
+		max-height: 70px;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}

@@ -42,7 +42,7 @@ import BackLink from '@/components/BackLink.astro';
 						class="block cursor-zoom-in w-full glightbox"
 						data-gallery={data.vin_hidden}
 					>
-						<img src={data.image} class="w-full h-auto" alt={data.folder_id} />
+						<img src={data.image} class="w-full h-auto" alt={data.folder_id} loading="lazy" />
 					</a>
 					)
 				}

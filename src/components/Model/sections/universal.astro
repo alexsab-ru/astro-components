@@ -65,7 +65,7 @@ import {Icon} from 'astro-icon/components';
 					{section?.images.map(img => (
 						<a href={img.url} class="swiper-slide text-center glightbox" data-title={img?.title} data-description={img?.description?.replace(/<[^>]*>/g, '').trim()} data-effect="slide" data-gallery={`gallery-${section?.id}`}>
 							<div class="aspect-video relative mb-4 lazy">
-								<img data-src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" width="485" height="273" />
+								<img data-src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" width="485" height="273" loading="lazy" />
 							</div>
 							{img?.title && (<div class="font-bold text-lg">{img?.title}</div>)}
 							{img?.description && (<div class="mt-1 mx-auto text-xs sm:text-sm"><Fragment set:html={img?.description} /></div>)}

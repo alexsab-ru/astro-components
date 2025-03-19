@@ -15,6 +15,6 @@ const { section } = Astro.props;
 		{section?.name && (<p class="text-accent-400 text-sm"><Fragment set:html={section?.name} /></p>)}
 		{section?.title && (<h2 class="text-3xl sm:text-5xl font-normal"><Fragment set:html={section?.title} /></h2>)}
 		{section?.descr && (<p class="sm:text-lg mt-2 sm:mt-5 lg:w-1/2"><Fragment set:html={section?.descr} /></p>)}
-		{section?.img && (<img src={ section.img } class="max-w-full w-full h-auto mt-10" alt={ section?.name || 'ALT' } />)}
+		{section?.img && (<img src={ section.img } class="max-w-full w-full h-auto mt-10" alt={ section?.name || 'ALT' } loading="lazy" />)}
 	</div>
 </section>

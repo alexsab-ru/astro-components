@@ -17,6 +17,7 @@ const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePositi
 		src={mobileImageUrl || imageUrl}
 		class={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
 		{...title ? {alt: title.replace(/<[^>]*>/g, '')} : {alt: `${SITE_NAME} ${SITE_DESCR} в ${LEGAL_CITY_WHERE}`} }
+		fetchpriority="high"
 		loading="lazy"
 	/>
 </picture>

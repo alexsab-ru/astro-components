@@ -34,7 +34,7 @@ const { section } = Astro.props;
 					</div>
 				)}
 			</div>
-			{section?.img && (<img src={ section.img } class="max-w-full w-full h-auto" alt={ section?.name || 'ALT' } />)}
+			{section?.img && (<img src={ section.img } class="max-w-full w-full h-auto" alt={ section?.name || 'ALT' } loading="lazy" />)}
 		</div>
 	</div>
 </section>
