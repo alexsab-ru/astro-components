@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Faq from '@/components/Faq/Index.astro';
-import Banner from '@/components/Banner/Banner.astro';
+// import Banner from '@/components/Banner/Banner.astro';
 const faqData = [
     {
 		"id": 1,
@@ -10,72 +10,72 @@ const faqData = [
 		"open": false
 	}
 ];
-const banners = [
-{
-		"id": 1,
-		"show": true,
-		"type": "",
-		"view": "scroll-link",
-		"videoUrl": "",
-		"imageUrl": "",
-		"mobileImageUrl": "/img/banners/jetour-connect/app-1.webp",
-		"title": "",
-		"descr": "",
-		"btn": "",
-		"btnColor": " ",
-		"btnUrl": "",
-		"autoplay": 3000,
-		"gradient": false
-	},
-	{
-		"id": 1,
-		"show": true,
-		"type": "",
-		"view": "scroll-link",
-		"videoUrl": "",
-		"imageUrl": "",
-		"mobileImageUrl": "/img/banners/jetour-connect/app-2.webp",
-		"title": "",
-		"descr": "",
-		"btn": "",
-		"btnColor": " ",
-		"btnUrl": "",
-		"autoplay": 3000,
-		"gradient": false
-	},
-	{
-		"id": 1,
-		"show": true,
-		"type": "",
-		"view": "scroll-link",
-		"videoUrl": "",
-		"imageUrl": "",
-		"mobileImageUrl": "/img/banners/jetour-connect/app-3.webp",
-		"title": "",
-		"descr": "",
-		"btn": "",
-		"btnColor": " ",
-		"btnUrl": "",
-		"autoplay": 3000,
-		"gradient": false
-	},
-	{
-		"id": 1,
-		"show": true,
-		"type": "",
-		"view": "scroll-link",
-		"videoUrl": "",
-		"imageUrl": "",
-		"mobileImageUrl": "/img/banners/jetour-connect/app-4.webp",
-		"title": "",
-		"descr": "",
-		"btn": "",
-		"btnColor": " ",
-		"btnUrl": "",
-		"autoplay": 3000,
-		"gradient": false
-	}
-]
+// const banners = [
+// {
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-1.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	},
+// 	{
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-2.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	},
+// 	{
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-3.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	},
+// 	{
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-4.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	}
+// ]
 ---
 
 <Layout title={`JETOUR Connect`} description="JETOUR Connect — система управления и защиты автомобиля. С преимуществами и возможностями сервиса можно ознакомиться на сайте официального дилера Самары. Сделайте каждую поездку комфортной и уверенной!">
@@ -193,7 +193,8 @@ const banners = [
 
 	<section class="bg-[#121416] md:bg-black md:pt-0 md:bg-[url('/img/jetour-connect/app-desktop.webp')] md:bg-no-repeat md:bg-right md:bg-contain">
 		<div class="container py-8 ">
-			<Banner banners={banners} classes="w-[320px] h-[675px] mx-auto mb-12 md:hidden" />
+			<!-- <Banner banners={banners} classes="w-[320px] h-[675px] mx-auto mb-12 md:hidden" /> -->
+			<p class="mb-12 text-center"><img class="inline md:hidden" src="/img/banners/jetour-connect/app-1.webp" alt="Приложение Jetour Connect"></p>
 			<div class="text-white">
 				<h2 class="text-center mb-12 md:!ml-0 md:!w-[400px] md:!text-left lg:!w-[600px]">Мобильное приложение Jetour Connect</h2>
 				<ul class="list-disc list-outside ml-4 mb-12">
