@@ -1,0 +1,73 @@
+---
+import { getCollection } from "astro:content";
+import CarItem from "@/components/Cars/Item.astro";
+import SortSelect from "@/components/Cars/SortSelect.astro";
+import FilterItemBtn from '@/components/Filter/ItemBtn.astro'
+const rawCars = await getCollection("cars");
+let cars: any, models = {}, years = {}, groupCars = {};
+import { groupArrayByKey } from "@/js/utils/groupArrayByKey";
+if (rawCars && rawCars.length > 0) {
+	cars = rawCars;
+
+	groupCars = groupArrayByKey(cars, 'mark_id');
+	
+	Object.keys(groupCars).map(key => {
+		models[key] = [];
+		groupCars[key].map(car => {
+			if(!models[key].includes(car.data.folder_id)){
+				models[key].push(car.data.folder_id);
+			}
+		});
+	});
+	years = cars.reduce((acc, car) => {
+		const { year, mark_id, folder_id } = car.data;		
+		if (!acc[year]) {
+			acc[year] = { brands: [], models: [] };
+		}
+		if (!acc[year].brands.includes(mark_id)) {
+			acc[year].brands.push(mark_id);
+		}
+		if (!acc[year].models.includes(folder_id)) {
+			acc[year].models.push(folder_id);
+		}
+		return acc;
+	}, {});
+}
+console.log(Object.keys(groupCars).length);
+---
+<div x-data="sorting" x-cloak>
+    <p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
+    <hr class="my-5" />
+    <SortSelect />
+    <hr class="my-5" />
+    {Object.keys(groupCars).length > 1 && (
+        <div class="flex flex-wrap gap-2 sm:gap-4">
+            {Object.keys(groupCars).map(brand => (
+                <FilterItemBtn name={brand} value={brand.toLocaleLowerCase().replace(',', '')} id={brand.toLocaleLowerCase()} filterType="Brands" data-filter-type="brand" />
+            ))}
+        </div>
+        <hr class="my-5" />
+    )}
+    {Object.keys(models).length && (
+        <div class="flex flex-wrap gap-2 sm:gap-4">
+            {Object.keys(models).map((key) => (
+                models[key].map(model => (
+                    <FilterItemBtn name={model} value={model.toLocaleLowerCase().replace(',', '')} id={model.toLocaleLowerCase()} filterType="Models" data-filter-type="model" data-filter-brand={key.toLocaleLowerCase()} />
+                ))
+            ))}
+        </div>
+    )}
+    {Object.keys(years).length && (
+        <hr class="my-5" />
+        <div class="flex flex-wrap gap-2 sm:gap-4">
+            {Object.keys(years).map(key => (
+                <FilterItemBtn name={key} id={key} filterType="Years" data-filter-type="year" data-filter-brand={years[key].brands.join(';')} data-filter-model={years[key].models.join(';')} />
+            ))}
+        </div>
+    )}
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+        {cars.map((car) => (
+            <CarItem car={car} />
+        ))}
+    </div>
+</div>
