@@ -1,7 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Faq from '@/components/Faq/Index.astro';
-export const faqData = [
+import Banner from '@/components/Banner/Banner.astro';
+const faqData = [
     {
 		"id": 1,
 		"question": "Подробная информация",
@@ -9,6 +10,72 @@ export const faqData = [
 		"open": false
 	}
 ];
+const banners = [
+{
+		"id": 1,
+		"show": true,
+		"type": "",
+		"view": "scroll-link",
+		"videoUrl": "",
+		"imageUrl": "",
+		"mobileImageUrl": "/img/banners/jetour-connect/app-1.webp",
+		"title": "",
+		"descr": "",
+		"btn": "",
+		"btnColor": " ",
+		"btnUrl": "",
+		"autoplay": 3000,
+		"gradient": false
+	},
+	{
+		"id": 1,
+		"show": true,
+		"type": "",
+		"view": "scroll-link",
+		"videoUrl": "",
+		"imageUrl": "",
+		"mobileImageUrl": "/img/banners/jetour-connect/app-2.webp",
+		"title": "",
+		"descr": "",
+		"btn": "",
+		"btnColor": " ",
+		"btnUrl": "",
+		"autoplay": 3000,
+		"gradient": false
+	},
+	{
+		"id": 1,
+		"show": true,
+		"type": "",
+		"view": "scroll-link",
+		"videoUrl": "",
+		"imageUrl": "",
+		"mobileImageUrl": "/img/banners/jetour-connect/app-3.webp",
+		"title": "",
+		"descr": "",
+		"btn": "",
+		"btnColor": " ",
+		"btnUrl": "",
+		"autoplay": 3000,
+		"gradient": false
+	},
+	{
+		"id": 1,
+		"show": true,
+		"type": "",
+		"view": "scroll-link",
+		"videoUrl": "",
+		"imageUrl": "",
+		"mobileImageUrl": "/img/banners/jetour-connect/app-4.webp",
+		"title": "",
+		"descr": "",
+		"btn": "",
+		"btnColor": " ",
+		"btnUrl": "",
+		"autoplay": 3000,
+		"gradient": false
+	}
+]
 ---
 
 <Layout title={`JETOUR Connect`} description="JETOUR Connect — система управления и защиты автомобиля. С преимуществами и возможностями сервиса можно ознакомиться на сайте официального дилера Самары. Сделайте каждую поездку комфортной и уверенной!">
@@ -122,5 +189,29 @@ export const faqData = [
 			<p class="text-gray-400 text-sm text-left">* Не является офертой, подробности уточняйте у дилера</p>
 		</div>
 		<Faq items={faqData} title="" class="bg-white text-left" />
+	</section>
+
+	<section class="bg-[#121416] md:bg-black md:pt-0 md:bg-[url('/img/jetour-connect/app-desktop.webp')] md:bg-no-repeat md:bg-right md:bg-contain">
+		<div class="container py-8 ">
+			<Banner banners={banners} classes="w-[320px] h-[675px] mx-auto mb-12 md:hidden" />
+			<div class="text-white">
+				<h2 class="text-center mb-12 md:!ml-0 md:!w-[400px] md:!text-left lg:!w-[600px]">Мобильное приложение Jetour Connect</h2>
+				<ul class="list-disc list-outside ml-4 mb-12">
+					<li>Автомобиль в вашем телефоне</li>
+					<li>Управление функциями автомобиля</li>
+					<li>Удаленный контроль и безопасность</li>
+					<li>Запуск двигателя по команде и расписанию</li>
+					<li>История поездок и уведомлений</li>
+				</ul>
+				<div class="flex flex-col lg:flex-row gap-4">
+					<a href="https://apps.apple.com/us/app/jetour-connect/id6478954137">
+						<img src="/img/jetour-connect/button-app-store.webp" alt="Приложение Jetour Connect для iOS">
+					</a>
+					<a href="https://play.google.com/store/apps/details?id=ru.jetour.smartdriving">
+						<img src="/img/jetour-connect/button-google-play.webp" alt="Приложение Jetour Connect для Android">
+					</a>
+				</div>
+			</div>
+		</div>
 	</section>
 </Layout>
