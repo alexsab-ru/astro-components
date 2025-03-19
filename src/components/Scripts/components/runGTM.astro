@@ -5,9 +5,9 @@ const isProd = import.meta.env.PROD;
 ---
 { isProd && scripts_json && scripts_json.gtm && typeof scripts_json.gtm === 'string' && scripts_json.gtm.trim() !== "" && (
 <script>
-console.log("runGTM load");
+// console.log("runGTM load");
 function runGTM(scripts_json_gtm) {
-    console.log("runGTM", scripts_json_gtm);
+    // console.log("runGTM", scripts_json_gtm);
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=

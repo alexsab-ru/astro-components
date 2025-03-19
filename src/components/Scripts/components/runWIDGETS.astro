@@ -5,9 +5,9 @@ const isProd = import.meta.env.PROD;
 ---
 { isProd && scripts_json.widgets && scripts_json.widgets.length > 0 && scripts_json.widgets[0] != "" && (
 <script>
-console.log("runWIDGETS load");
+// console.log("runWIDGETS load");
 function runWIDGETS(widgets) {
-    console.log("runWIDGETS", widgets);
+    // console.log("runWIDGETS", widgets);
     widgets.forEach(widget => {
         if (widget && widget.trim() !== "") {
             // Создаем временный div для парсинга HTML

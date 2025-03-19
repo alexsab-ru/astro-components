@@ -1,7 +1,7 @@
 ---
 ---
 <script>
-console.log("loadAnalyticsScripts load");
+// console.log("loadAnalyticsScripts load");
 (function() {
     const e = document.querySelector("#scripts_json");
 
@@ -124,8 +124,8 @@ console.log("loadAnalyticsScripts load");
     ];
 
     function loadAnalyticsScripts() {
-        console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-        console.log("loadAnalyticsScripts", (Date.now() - startTime), scripts_json);
+        // console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+        // console.log("loadAnalyticsScripts", (Date.now() - startTime), scripts_json);
         if (!analyticsLoaded) {
             analyticsLoaded = true;
             window.removeEventListener('scroll', loadAnalyticsScripts);
@@ -143,12 +143,12 @@ console.log("loadAnalyticsScripts load");
     }
 
     function initializeEventListeners() {
-        console.log("initializeEventListeners", analyticsLoaded);
+        // console.log("initializeEventListeners", analyticsLoaded);
         window.addEventListener('scroll', loadAnalyticsScripts);
         document.addEventListener('mousemove', loadAnalyticsScripts);
     }
 
-    console.log("document.readyState", document.readyState);
+    // console.log("document.readyState", document.readyState);
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeEventListeners);
     } else {

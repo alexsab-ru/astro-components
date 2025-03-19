@@ -5,9 +5,9 @@ const isProd = import.meta.env.PROD;
 ---
 { isProd && scripts_json.konget && scripts_json.konget != "" && (
 <script>
-console.log("runKONGET load");
+// console.log("runKONGET load");
 function runKONGET(konget) {
-    console.log("runKONGET", konget);
+    // console.log("runKONGET", konget);
     var script = document.createElement('script');
     script.src = `//app.konget.ru/inject?token=${konget}`;
     script.async = true;
