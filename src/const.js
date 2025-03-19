@@ -38,7 +38,17 @@ export const LINKS_MENU = [
 		children: models.map(model => ( { url: `models/${model.id}/`, name: `${model?.mark_id} ${model.name.toUpperCase()}` } ) )
 	},
 	// {url: 'trade-in/', name: 'Оценка автомобиля'},
-	{url: 'for-owners/', name: 'Владельцам'},
+	{
+		url: 'javascript:void(0)',
+		name: 'Владельцам',
+		children: [
+			{ url: 'for-owners/warranty/', name: 'Гарантия Jetour' },
+			{ url: 'for-owners/manual/', name: 'Руководства по эксплуатации' },
+			{ url: 'for-owners/assistance/', name: 'Правила программы Джетур Ассистанс' },
+			{ url: 'for-owners/club/', name: 'Клуб Jetour' },
+			{ url: 'jetour-connect/', name: 'Jetour Connect' },
+		],
+	},
 	{url: 'special-offers/', name: 'Спецпредложения'},
 	{url: 'news/', name: 'Новости'},
 	{url: 'test-drive/', name: 'Запись на тест-драйв'},
