@@ -17,6 +17,9 @@ module.exports = {
 			fontFamily: {
 				...baseConfig.theme.extend.fontFamily
 			},
+			borderRadius: {
+				btn: '5px'
+			}
 		},
 	},
 }

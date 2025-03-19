@@ -1,0 +1,218 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Faq from '@/components/Faq/Index.astro';
+// import Banner from '@/components/Banner/Banner.astro';
+const faqData = [
+    {
+		"id": 1,
+		"question": "Подробная информация",
+		"answer": "<p>1 «Jetour Connect Security» — телематическая противоугонная система для управления функциями Jetour и обеспечения безопасности, которая позволяет отслеживать местоположение автомобиля Jetour в реальном времени и сохранять историю поездок с детальным анализом. Управление центральным замком из любой точки мира с помощью мобильного приложения и интеллектуальная настройка дистанционного запуска двигателя автомобиля (по расписанию, температуре и заряду АКБ) поможет организовать уникальные сценарии использования. Система оснащена противоугонным устройством — Меткой безопасности. При выключенном зажигании, закрытых дверях и отсутствии метки в зоне считывания, система автоматически переходит в охранный режим. В случае попытки открыть двери, включить зажигание или эвакуировать автомобиль, Jetour Connect Security отправит клиенту уведомление о тревоге. Метка безопасности защищена от радиоудлинителей, что делает её надё жным средством защиты автомобиля. Jetour Connect предоставляет круглосуточную техническую поддержку для клиентов.</p><p>2 «Jetour Connect» — мониторинговая телематическая система для управления функциями автомобиля Jetour. Можно управлять центральным замком из любой точки мира с помощью мобильного приложения, находить автомобиль на парковке и отслеживать местоположение в реальном времени. Встроенная энергонезависимая память сохраняет информацию с датчиков устройства даже при отсутствии GSM сигнала. Управление центральным замком из любой точки мира с помощью мобильного приложения и интеллектуальная настройка дистанционного запуска двигателя автомобиля (по расписанию, температуре и заряду АКБ) поможет организовать уникальные сценарии использования. Jetour Connect предоставляет круглосуточную техническую поддержку для клиентов.</p>",
+		"open": false
+	}
+];
+// const banners = [
+// {
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-1.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	},
+// 	{
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-2.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	},
+// 	{
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-3.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	},
+// 	{
+// 		"id": 1,
+// 		"show": true,
+// 		"type": "",
+// 		"view": "scroll-link",
+// 		"videoUrl": "",
+// 		"imageUrl": "",
+// 		"mobileImageUrl": "/img/banners/jetour-connect/app-4.webp",
+// 		"title": "",
+// 		"descr": "",
+// 		"btn": "",
+// 		"btnColor": " ",
+// 		"btnUrl": "",
+// 		"autoplay": 3000,
+// 		"gradient": false
+// 	}
+// ]
+---
+
+<Layout title={`JETOUR Connect`} description="JETOUR Connect — система управления и защиты автомобиля. С преимуществами и возможностями сервиса можно ознакомиться на сайте официального дилера Самары. Сделайте каждую поездку комфортной и уверенной!">
+	
+	<div class="bg-[#121416] md:relative md:h-[400px] md:bg-[url('/img/banners/jetour-connect/desktop-banner.webp')] md:bg-no-repeat md:bg-center md:bg-cover lg:h-[500px] xl:h-[700px]">
+		<div class="container">
+			<img class="object-cover w-full md:hidden" src="/img/banners/jetour-connect/mobile-banner.webp" alt="JETOUR Connect — система управления и защиты автомобиля" />
+			<div class="pb-12 text-white md:absolute md:bottom-0 xl:pb-20">
+				<h1 class="text-4xl font-bold mb-8 xl:text-5xl">Будь на связи со<br>своим автомобилем</h1>
+				<p class="mb-8 md:w-1/2 xl:w-full">JETOUR Connect<sup>1</sup> — система управления и защиты автомобиля</p>
+				<div class="flex flex-col sm:flex-row gap-4">
+					<a href="https://apps.apple.com/us/app/jetour-connect/id6478954137">
+						<img src="/img/jetour-connect/button-app-store.webp" alt="Приложение Jetour Connect для iOS">
+					</a>
+					<a href="https://play.google.com/store/apps/details?id=ru.jetour.smartdriving">
+						<img src="/img/jetour-connect/button-google-play.webp" alt="Приложение Jetour Connect для Android">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section>
+		<div class="container">
+			<h2 class="text-center mb-12">Технологии на службе контроля</h2>
+			<p class="text-center mb-12 md:mb-40">Jetour Connect<sup>1</sup> – ваш надежный помощник в управлении автомобилем. Сделайте каждую поездку комфортной и уверенной!</p>
+
+			<div class="flex flex-col md:flex-row-reverse md:gap-5">
+				<div class="md:w-1/2">
+					<p class="text-center mb-12 md:hidden"><img class="inline" src="/img/jetour-connect/technology-mobile.webp" alt="Jetour Connect"></p>
+					<p class="text-center mb-12 md:hidden"><img class="inline" src="/img/jetour-connect/settings-mobile.webp" alt="Jetour Connect"></p>
+					<img class="hidden md:inline" src="/img/jetour-connect/technology-desktop.webp" alt="Jetour Connect">
+				</div>
+	
+				<div class="md:w-1/2">
+					<h3 class="text-2xl font-bold mb-4">Безопасность и контроль над вашим автомобилем</h3>
+					<p class="mb-4">Открыть двери авто за 10 000 км или найти свой автомобиль на паркинге? Нужно просто запустить приложение на смартфоне Jetour Connect<sup>1</sup> незамедлительно предоставляет информацию о состояния автомобиля своему владельцу:</p>
+					<ul class="list-disc list-outside ml-5">
+						<li>Активность охранной системы</li>
+						<li>Сигнал Check Engine<sup>2</sup></li>
+						<li>Количество топлива в баке</li>
+						<li>Уровень заряда АКБ</li>
+						<li>Количество пройденных километров</li>
+					</ul>
+		
+					<h3 class="text-2xl font-bold mb-4 mt-12">Технологии на службе комфорта</h3>
+					<p class="mb-4">Jetour Connect<sup>1</sup> подготовит автомобиль для комфортной поездки. Удаленный запуск двигателя, управление системой подогрева* на любом расстоянии сделают поездку комфортной с первых минут. Система доступна для всех моделей Jetour.</p>
+					<p class="mb-4"><small>1 - Подключённый (на связи) </small></p>
+					<p class="mb-4"><small>2 - Проверка двигателя</small></p>
+					<p><small>*Зависит от комплектации автомобиля JETOUR</small></p>
+					<hr class="my-12">
+					<p>
+						СЕРВИС-ПРОВАЙДЕР<br>
+						Российский телематический оператор<br>
+						ООО “Лаборатория умного вождения”
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container">
+			<h2 class="mb-12">Преимущества и возможности сервиса</h2>
+			<div class="flex flex-wrap justify-center gap-2 mb-8 mx-auto max-w-[980px] sm:gap-3 xl:gap-6 xl:pt-12">
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-1.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-2.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-3.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-4.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-5.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-6.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-7.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-8.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-9.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-10.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-11.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-12.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-13.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-14.webp" alt="Jetour Connect"></div>
+				<div class="w-[30%] sm:w-[170px]"><img src="/img/jetour-connect/advantages-15.webp" alt="Jetour Connect"></div>
+			</div>
+			<p class="text-gray-400 text-sm text-center">* Зависит от комплектации оборудования Jetour Connect</p>
+			<p class="text-gray-400 text-sm text-center">** Зависит от комплектации автомобиля Jetour</p>
+		</div>
+	</section>
+
+	<section>
+		<div class="container text-center">
+			<div class="mb-12"><img class="inline" src="/img/jetour-connect/prices.webp" alt="Jetour Connect"></div>
+			<table class="table-fixed w-full border-collapse mb-4">
+				<thead>
+					<tr>
+						<th class="border-b-2 border-gray-200 p-4 sm:text-lg md:text-2xl">Артикул</th>
+						<th class="border-b-2 border-gray-200 p-4 sm:text-lg md:text-2xl">Наименование</th>
+						<th class="border-b-2 border-gray-200 p-4 sm:text-lg md:text-2xl">Цена с НДС*</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="border-b border-gray-200 p-4 md:text-lg">ASDL001</td>
+						<td class="border-b border-gray-200 p-4 md:text-lg">Телематическая система «Jetour Connect Security» <sup>1</sup></td>
+						<td class="border-b border-gray-200 p-4 md:text-lg"><span class="text-nowrap">29 000 ₽</span></td>
+					</tr>
+					<tr>
+						<td class="border-b border-gray-200 p-4 md:text-lg">ASDL002</td>
+						<td class="border-b border-gray-200 p-4 md:text-lg">Телематическая система «Jetour Connect» <sup>2</sup></td>
+						<td class="border-b border-gray-200 p-4 md:text-lg"><span class="text-nowrap">24 000 ₽</span></td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="text-gray-400 text-sm text-left">* Не является офертой, подробности уточняйте у дилера</p>
+		</div>
+		<Faq items={faqData} title="" class="bg-white text-left" />
+	</section>
+
+	<section class="bg-[#121416] md:bg-black md:pt-0 md:bg-[url('/img/jetour-connect/app-desktop.webp')] md:bg-no-repeat md:bg-right md:bg-contain">
+		<div class="container py-8 ">
+			<!-- <Banner banners={banners} classes="w-[320px] h-[675px] mx-auto mb-12 md:hidden" /> -->
+			<p class="mb-12 text-center"><img class="inline md:hidden" src="/img/banners/jetour-connect/app-1.webp" alt="Приложение Jetour Connect"></p>
+			<div class="text-white">
+				<h2 class="text-center mb-12 md:!ml-0 md:!w-[400px] md:!text-left lg:!w-[600px]">Мобильное приложение Jetour Connect</h2>
+				<ul class="list-disc list-outside ml-4 mb-12">
+					<li>Автомобиль в вашем телефоне</li>
+					<li>Управление функциями автомобиля</li>
+					<li>Удаленный контроль и безопасность</li>
+					<li>Запуск двигателя по команде и расписанию</li>
+					<li>История поездок и уведомлений</li>
+				</ul>
+				<div class="flex flex-col lg:flex-row gap-4">
+					<a href="https://apps.apple.com/us/app/jetour-connect/id6478954137">
+						<img src="/img/jetour-connect/button-app-store.webp" alt="Приложение Jetour Connect для iOS">
+					</a>
+					<a href="https://play.google.com/store/apps/details?id=ru.jetour.smartdriving">
+						<img src="/img/jetour-connect/button-google-play.webp" alt="Приложение Jetour Connect для Android">
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>

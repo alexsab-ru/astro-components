@@ -12,6 +12,7 @@ export type TBanner = {
 	show?: boolean
 	type?: string
 	view?: string
+	classes?: string
 	videoUrl?: string
 	imageUrl: string
 	tabletImageUrl?: string
