@@ -188,12 +188,10 @@ section:not(.model-section) {
 }
 
 .lazy{
-	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	img{
-		position: absolute;
 		max-height: 70px;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
 	}
 }
