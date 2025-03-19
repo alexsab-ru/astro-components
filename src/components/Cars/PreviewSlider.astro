@@ -17,7 +17,7 @@ import './cars.sass'
 				car.data.thumbs.map((img:string, idx:number) => (
 					idx < 5 && (
 						<a href={url} class="lazy relative snap-always snap-start shrink-0 w-full aspect-[4/3] block !mb-0" data-slide={idx}>
-							<img class="w-full h-full object-cover object-center" src="/img/loading-simple.gif" data-src={img} alt={`Купить ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.color} ${car.data?.modification_id} от ${car.data?.priceWithDiscount} ₽. в ${LEGAL_CITY_WHERE}`}>
+							<img class="w-full h-full object-cover object-center" src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={img} alt={`Купить ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.color} ${car.data?.modification_id} от ${car.data?.priceWithDiscount} ₽. в ${LEGAL_CITY_WHERE}`}>
 							{
 								idx === 4 && car.data.images.length > 5 && (
 								<div class="absolute inset-0 bg-black/60 text-center flex items-center justify-center z-10 text-white text-sm sm:text-base"> Еще <br> { car.data.images.length - 5} фото</div>
@@ -42,7 +42,7 @@ import './cars.sass'
 		</div>
 			) : (
 			<a href={url} class="lazy relative snap-always snap-start shrink-0 w-full aspect-[4/3] !mb-0" title="Подробнее">
-				<img src="/img/loading-simple.gif" data-src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt={`Купить ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.color} ${car.data?.modification_id} от ${car.data?.priceWithDiscount} ₽. в ${LEGAL_CITY_WHERE}`}>
+				<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt={`Купить ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.color} ${car.data?.modification_id} от ${car.data?.priceWithDiscount} ₽. в ${LEGAL_CITY_WHERE}`}>
 			</a>
 			)
 		}
