@@ -3,16 +3,17 @@ import scripts_json from '@/data/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json.calltouch.client_id && scripts_json.calltouch.client_id != "" && (
+{ isProd && scripts_json.calltouch.mod_id && scripts_json.calltouch.mod_id != "" && (
 <script>
 // console.log("runCALLTOUCH load");
 function runCALLTOUCH(calltouch) {
     // console.log("runCALLTOUCH", calltouch);
     var script = document.createElement('script');
-    script.src = `https://mod.calltouch.ru/init.js?id=${calltouch.client_id}`;
+    script.src = `https://mod.calltouch.ru/init.js?id=${calltouch.mod_id}`;
     script.async = true;
     document.head.appendChild(script);
     window.calltouch_params = {
+        mod_id: calltouch.mod_id,
         site_id: calltouch.site_id
     };
 }

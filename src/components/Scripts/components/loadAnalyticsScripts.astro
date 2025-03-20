@@ -100,7 +100,8 @@
         {
             functionName: 'runCALLTOUCH',
             jsonKey: 'calltouch',
-            validator: (config) => isNonEmptyValue(config.client_id)
+            isProduction: false,
+            validator: (config) => isNonEmptyValue(config.mod_id)
         },
         {
             functionName: 'runKONGET',
