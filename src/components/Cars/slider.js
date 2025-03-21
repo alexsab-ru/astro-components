@@ -10,6 +10,18 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 	slidesPerView: 'auto',
 	slideToClickedSlide: true,
 	watchSlidesProgress: true,
+	on: {
+		init: function (slider) {
+			if(slider.slides.length){
+				setTimeout(() => {
+					slider.slides.map(slide => {
+						slide.classList.remove('min-w-[170px]');
+						slide.classList.add('min-w-[73px]');
+					});
+				}, 1000)
+			}
+		},
+	},
 });
 
 const carImageSlider = new Swiper('.car-image-slider', {
