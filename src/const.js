@@ -39,7 +39,7 @@ export const LINKS_MENU = [
 	},
 	// {url: 'trade-in/', name: 'Оценка автомобиля'},
 	{
-		url: 'javascript:void(0)',
+		url: 'for-owners',
 		name: 'Владельцам',
 		children: [
 			{ url: 'for-owners/warranty/', name: 'Гарантия Jetour' },
