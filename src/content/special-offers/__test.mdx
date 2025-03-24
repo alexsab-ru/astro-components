@@ -5,7 +5,7 @@ caption: "Заголовок в плитке"
 breadcrumb: "Акция"
 pubDate: "2025-02-27" # необязательно - дата публикации в формате YYYY-MM-DD, возможность планирования публикации
 toDate: true # необязательно - дата окончания акции в формате YYYY-MM-DD или true для показа последнего дня месяца
-image: "/img/model-bg.webp"
+image: "https://cdn.alexsab.ru/models/default-model-bg.webp"
 description: "Описание акции"
 ---
 import Button from '@/components/Button/Button.astro';
@@ -20,9 +20,9 @@ export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
 export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 
 <picture>
-	<source media="(min-width: 942px)" srcset="/img/model-bg.webp" />
-	<source media="(min-width: 320px)" srcset="/img/model-bg.webp" />
-	<img src="/img/model-bg.webp" class="w-full mb-10" alt="Фестиваль продаж Jetour" />
+	<source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/models/default-model-bg.webp" />
+	<source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/models/default-model-bg.webp" />
+	<img src="https://cdn.alexsab.ru/models/default-model-bg.webp" class="w-full mb-10" alt="Фестиваль продаж Jetour" />
 </picture>
 
 Текст акции
