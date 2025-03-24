@@ -18,7 +18,7 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 			{model.mark_id}&nbsp;{model.name}
 		</h2>
 		{
-			model?.benefit && !isNaN(model?.benefit) && (
+			model?.benefit && !isNaN(model?.benefit) && model?.benefit != 0 && model?.benefit != '' && (
 				<span class="block text-xs sm:text-lg text-black/80">
 					Выгода до {currencyFormat(model.benefit)}
 				</span>

@@ -49,7 +49,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 					{LINK_WIDGET_ORGNIZATION ? (
 						<MapWidget class="h-full" />
 					) : (
-						<Map mapImg="/img/map-bg.webp" salons={salons} class="h-full" />
+						<Map mapImg="https://cdn.alexsab.ru/maps/map-bg.webp" salons={salons} class="h-full" />
 					)}
 				</div>
 
@@ -74,7 +74,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 	modalShow - Количество милесекунд до показа окна (по умолчанию 20000)
 	title - Заголовок
 	modalPosition - позиция окна left-top|right-top|right-bottom|left-bottom|center (по умолчанию center)
-	img - фото человека (по умолчанию /img/people/user.webp)
+	img - фото человека (по умолчанию https://cdn.alexsab.ru/people/user.webp)
 	imgPosition - позиция фото right|left (по умолчанию right)
 -->
 
@@ -82,7 +82,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 	modalShow = 20000
 	title="Здравствуйте, оставьте телефон, я&nbsp;перезвоню и&nbsp;расскажу о&nbsp;преимуществах работы"
 	modalPosition="right-bottom"
-	img="/img/people/user.webp"
+	img="https://cdn.alexsab.ru/people/user.webp"
 	imgPosition="right"
 	formName="Форма со страницы - Контакты"
 />
