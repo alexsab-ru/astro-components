@@ -425,7 +425,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, con
             print("")
             with open('output.txt', 'a') as file:
                 file.write(f"{errorText}\n")
-            thumb = "/img/404.jpg"
+            thumb = "https://cdn.alexsab.ru/errors/404.webp"
     else:
         print("")
         errorText = f"VIN: {vin}. Не хватает бренд: {brand}, модели: {model}, цвета: {color}"
@@ -434,7 +434,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, con
         with open('output.txt', 'a') as file:
             file.write(f"{errorText}\n")
         # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
-        thumb = "/img/404.jpg"
+        thumb = "https://cdn.alexsab.ru/errors/404.webp"
 
 
     # Forming the YAML frontmatter
