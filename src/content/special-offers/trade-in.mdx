@@ -9,6 +9,7 @@ image: /img/specials/treyd-in-s-vygodoy/e7cbcae3b97265382b92eee607fc06ca.webp
 description: "Скидка предоставляется при приобретении нового автомобиля физическим или юридическим лицом, являющимся законным собственником сдаваемого в зачет приобретения нового автомобиля Jetour"
 ---
 import Button from '@/components/Button/Button.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import { SITE_NAME, PHONE } from '@/const';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
@@ -170,12 +171,7 @@ export const faqData = [
 ><sup>*</sup>
 Сдаваемый в зачет автомобиль может иметь возраст не более 10 (десяти) лет. Скидка предоставляется при приобретении нового автомобиля физическим или юридическим лицом, являющимся законным собственником сдаваемого в зачет приобретения нового автомобиля Jetour. Скидки по настоящей программе не суммируются с другими скидками в рамках программ, осуществляемых **Дилерским центром &laquo;Jetour Альфа&raquo;** в {LEGAL_CITY_WHERE}. Предложение не является публичной офертой.
 
-<div class="flex justify-center mt-10">
-    <Button 
-        classes="popup-link block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
-        url="#common-modal" 
-        title="Получить предложение"
-        dataTitle="Получить предложение с выгодой до 400 000 рублей"
-        dataFormName="Получить предложение. Трейд-ин с выгодой до 400 000 рублей"
-    />
+<div class="mt-16">
+    <FeedbackForm title="Узнать подробнее" />
 </div>
+

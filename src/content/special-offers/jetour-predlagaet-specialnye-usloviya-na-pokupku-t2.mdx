@@ -10,6 +10,7 @@ description: "Бренд Jetour предлагает новые выгодные
 ---
 
 import Button from '@/components/Button/Button.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import { LEGAL_CITY_WHERE, LEGAL_ENTITY } from '@/const';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 
@@ -31,14 +32,8 @@ export const DateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
 Jetour&nbsp;T2 оснащается надежным двухлитровым четырехцилиндровым двигателем 2.0TGDI с турбонаддувом и непосредственным впрыском топлива. Максимальная мощность – 245 л. с., максимальный крутящий момент – 375 Н·м. Двигатель работает в паре с роботизированной семиступенчатой коробкой передач 7DCT с двойным сцеплением. Это первая модель в линейке Jetour в России, оснащенная системой полного привода XWD от BorgWarner шестого поколения.
 
-<div class="flex justify-center mt-10 mb-5">
-    <Button
-        classes="popup-link block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline"
-        url="#common-modal"
-        title="Записаться на тест-драйв"
-        dataTitle="Записаться на тест-драйв"
-        dataFormName={`Запись на тест-драйв`}
-    />
+<div class="mt-10 mb-12">
+    <FeedbackForm title="Узнать подробнее" />
 </div>
 
 > <sup>1</sup> Максимальный размер выгоды с учетом выгоды 100&nbsp;000 рублей при приобретении автомобиля по программе trade-in, а также выгоды в 220&nbsp;000 рублей при покупке автомобиля в кредит по стандартным ставкам банков-партнеров Совкомбанк, Альфа-банк, ВТБ, Росбанк.
