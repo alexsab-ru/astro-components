@@ -6,7 +6,8 @@ import Input from '@/components/Input.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import {SITE_NAME, BRAND, AGREE_LABEL, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
 import salonsData from '@/data/salons.json';
-const salons = salonsData.filter(salon => !salon.type || salon.type.includes('import'));
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('import'));
 ---
 <PageLayout
 	h1="Новые и&nbsp;автомобили с&nbsp;пробегом из&nbsp;Казахстана от&nbsp;2024 года"

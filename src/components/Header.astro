@@ -1,6 +1,7 @@
 ---
 import salonsData from '@/data/salons.json';
-const salons = salonsData.filter(salon => !salon.type || salon.type.includes('header'));
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('header'));
 
 import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
 

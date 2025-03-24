@@ -2,7 +2,8 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
 import salonsData from '@/data/salons.json';
-const salons = salonsData.filter(salon => !salon.type || salon.type.includes('privacy_policy'));
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('privacy_policy'));
 const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
 [`<span>${LEGAL_ENTITY} (ИНН:&nbsp;${LEGAL_INN})</span>`] : 
 salons
