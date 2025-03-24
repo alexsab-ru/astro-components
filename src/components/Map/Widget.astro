@@ -3,7 +3,7 @@ interface Props{
 	mapImg?: string;
 	class?: string;
 }
-const {mapImg = '/img/map-bg.webp', class: className = '', ...rest} = Astro.props
+const {mapImg = 'https://cdn.alexsab.ru/maps/map-bg.webp', class: className = '', ...rest} = Astro.props
 import './map.sass';
 ---
 <div style={`background-image: url(${mapImg})`} class={`relative overflow-hidden w-full flex items-center justify-center bg-gray-100 bg-cover bg-center z-10 cursor-pointer ${className}`} {...rest} id="map-widget-wrapper">
