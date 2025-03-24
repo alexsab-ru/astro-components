@@ -1,0 +1,85 @@
+---
+import { AGREE_LABEL } from '@/const';
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('test_drive'));
+const {
+  title = 'Узнать подробнее',
+  image = ''
+} = Astro.props;
+---
+{image.length ? (
+  <div class="flex flex-col lg:flex-row lg:gap-10 lg:items-center lg:justify-center">
+    <img src={image} alt="Записаться на тест-драйв" class="hidden lg:block md:w-1/2">
+    <div class="flex-shrink-0">
+      <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
+      <form class="flex flex-col gap-4 max-w-[500px] mx-auto">
+        <input type="hidden" name="form" :value="Форма обратной связи" />
+        <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+        <Input
+          type="tel"
+          name="phone"
+          classes="border-gray-100"
+          placeholder="+7 (999) 999-99-99*"
+          required
+          errorClasses="text-red-500" 
+        />
+
+        <ChoosingDealerSelect required={true} salons={salons} />
+
+        <Checkbox
+          name="agree"
+          label={AGREE_LABEL}
+          color="black"
+          required
+          errorClasses="text-red-500 w-full"
+          errorText="Чтобы продолжить, установите флажок"
+        />
+
+        <input
+          type="checkbox"
+          name="subscribe"
+          class="absolute w-0 h-0 opacity-0 invisible"
+        />
+
+        <Button view="form-button" classes="w-full" title="Отправить" />
+      </form>
+    </div>
+  </div>
+) : (
+  <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
+  <form class="flex flex-col gap-4 max-w-[500px] mx-auto">
+    <input type="hidden" name="form" :value="Форма обратной связи" />
+    <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+    <Input
+      type="tel"
+      name="phone"
+      classes="border-gray-100"
+      placeholder="+7 (999) 999-99-99*"
+      required
+      errorClasses="text-red-500"
+    />
+
+    <ChoosingDealerSelect required={true} salons={salons} />
+
+    <Checkbox
+      name="agree"
+      label={AGREE_LABEL}
+      color="black"
+      required
+      errorClasses="text-red-500 w-full"
+      errorText="Чтобы продолжить, установите флажок"
+    />
+
+    <input
+      type="checkbox"
+      name="subscribe"
+      class="absolute w-0 h-0 opacity-0 invisible"
+    />
+
+    <Button view="form-button" classes="w-full" title="Отправить" />
+  </form>
+)}

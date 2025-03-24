@@ -4,6 +4,7 @@ import Model from '@/components/Model/Model.astro';
 import ModelComplectations from '@/components/Model/Complectations.astro';
 import CarItem from "@/components/Cars/Item.astro";
 import UniversalSection from '@/components/Model/sections/universal.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import SeoText from '@/components/Seo/Index.astro';
 const { slug } = Astro.params;
 const seoname = 'models-'+slug;
@@ -57,6 +58,11 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
     (model?.complectations !== undefined && model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={BRAND} />
   }
   <SeoText mdx={seoname} />
+  <section>
+    <div class="container">
+      <FeedbackForm title="Записаться на тест-драйв" image=`/img/models/${model.id}/sections/1.webp` />
+    </div>
+  </section>
   {cars.length > 0 && (
     <section class="odd:bg-gray-100">
       <div class="container">
