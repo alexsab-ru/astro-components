@@ -1,11 +1,11 @@
-type TBadge = {
-	autoname: string
-	title: string
-	descr: string
-	image: string
-	position: string
-	colorText: string
-	bg: boolean
+export type TBadge = {
+	autoname?: string
+	title?: string
+	descr?: string
+	image?: string
+	position?: string
+	colorText?: string
+	bg?: boolean
 }
 export type TBanner = {
 	id?: number
