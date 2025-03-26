@@ -26,7 +26,7 @@ jobs:
 
     # Указываете окружение и его переменные
     environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/brand' || github.ref == 'refs/heads/dealer' ? 'production' : 'development' }}
 
     steps:
     - name: Checkout repo
