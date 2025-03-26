@@ -15,7 +15,7 @@ export const SITE_DESCR = 'Официальный дилерский центр'
 // Телефон по умолчанию
 export const PHONE = '+7 (999) 000-00-00';
 // Бренд
-export const BRAND = 'Baic';
+export const BRAND = 'BRAND';
 // Конечное время для таймера
 //string 2025-12-31T23:59:59+04:00
 export const TIMER = { title: 'До конца акции осталось',subtitle: '', endtime: `${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00`, btnName: 'Зафиксировать цену', show: false };
