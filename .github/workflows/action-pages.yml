@@ -110,26 +110,27 @@ jobs:
       - name: Download JSONs
         run: |
           mkdir src/data
-          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/banners.json -o src/data/banners.json
-          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/models.json -o src/data/models.json
-          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/salons.json -o src/data/salons.json
-          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/seo.json -o src/data/seo.json
-          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/services.json -o src/data/services.json
-          curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/socials.json -o src/data/socials.json
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/cars.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/cars.json -o src/data/cars.json 
+          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/banners.json -o src/data/banners.json
+          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models.json -o src/data/models.json
+          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/salons.json -o src/data/salons.json
+          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/scripts.json -o src/data/scripts.json
+          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/seo.json -o src/data/seo.json
+          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/services.json -o src/data/services.json
+          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/socials.json -o src/data/socials.json
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/cars.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/cars.json -o src/data/cars.json 
           fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/special-services.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/special-services.json -o src/data/special-services.json 
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/special-services.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/special-services.json -o src/data/special-services.json 
           fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/faq.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/faq.json -o src/data/faq.json 
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/faq.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/faq.json -o src/data/faq.json 
           fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/reviews.json -o src/data/reviews.json 
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/reviews.json; then
+            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/reviews.json -o src/data/reviews.json 
           fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/models-sections.yml; then
-            curl ${{ secrets.JSON_PATH }}/${{ github.event.repository.name }}/data/models-sections.yml -o src/data/models-sections.yml 
+          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models-sections.yml; then
+            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models-sections.yml -o src/data/models-sections.yml 
           fi
           ls -al src/data
 
@@ -171,7 +172,7 @@ jobs:
     uses: ./.github/workflows/github-telegram.yml
     with:
       additional-text: |
-        $(echo -n '<blockquote>After deploy</blockquote>' | base64)
+        $(echo -n '<blockquote>After deploy: https://${{vars.DOMAIN}}</blockquote>' | base64)
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}

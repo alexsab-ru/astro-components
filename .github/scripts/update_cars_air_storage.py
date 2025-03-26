@@ -13,7 +13,7 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
         friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
         friendly_url = f"{process_friendly_url(friendly_url)}"
         print(f"Уникальный идентификатор: {friendly_url}")
-        create_child_element(car, 'url', f"https://{config['repo_name']}/cars/{friendly_url}/")
+        create_child_element(car, 'url', f"https://{config['domain']}/cars/{friendly_url}/")
 
     # Заменяем цвет фида на цвет для Avito
     color = car.find(config['color_tag']).text if car.find(config['color_tag']) is not None else None
@@ -79,7 +79,7 @@ def main():
     parser = argparse.ArgumentParser(description='Download and update Avito|AutoRu XML files.')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
-    parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
+    parser.add_argument('--domain', default=os.getenv('DOMAIN', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     parser.add_argument('--vin_tag', default='VIN', help='VIN tag name')
     parser.add_argument('--availability_tag', default='Availability', help='Availability tag name')
