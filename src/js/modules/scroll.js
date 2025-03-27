@@ -36,24 +36,29 @@ export function scroll(hash) {
 	}
 }
 const navOffset = $nav ? $nav.offsetHeight * 2.5 : 0;
-const sections = document.querySelectorAll('.section');
+const sections = document.querySelectorAll('section');
 const scrollLinks = document.querySelectorAll('.scroll-link');
-if(sections.length && scrollLinks.length){
+if (sections.length && scrollLinks.length) {
 	window.addEventListener('scroll', () => {
-		let scrollDistance = window.scrollY;
-		sections.forEach((el, i) => {
-			if (el.offsetTop - navOffset <= scrollDistance) {
-				scrollLinks.forEach((elem) => {
-					if (elem.classList.contains('active')) {
-						elem.classList.remove('active');
-					}
-				});
-	
-				scrollLinks[i].classList.add('active');
-			}
-			if (scrollDistance < sections[0].offsetTop - navOffset) {
-				scrollLinks.forEach((elem) => {
-					elem.classList.remove('active');
+		const scrollDistance = window.scrollY;
+
+		// Убираем активный класс у всех ссылок перед проверкой
+		scrollLinks.forEach((link) => link.classList.remove('active'));
+
+		sections.forEach((section) => {
+			const sectionId = section.getAttribute('id');
+
+			// Проверяем, находится ли секция в области видимости
+			const isInView = section.offsetTop - navOffset <= scrollDistance &&
+				section.offsetTop + section.offsetHeight - navOffset > scrollDistance;
+
+			if (isInView && sectionId) {
+				// Убираем активный класс у всех ссылок
+				scrollLinks.forEach((link) => {
+					link.classList.toggle(
+						'active',
+						link.getAttribute('href') === `#${sectionId}`
+					);
 				});
 			}
 		});
