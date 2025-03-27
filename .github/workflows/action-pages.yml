@@ -63,16 +63,39 @@ jobs:
             echo "pages_enabled=false" >> $GITHUB_OUTPUT
           fi
 
+  determine_env:
+    needs: check-pages
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.set_env.outputs.env_name }}
+    steps:
+      - id: set_env
+        run: |
+          PROD_BRANCHES=("main" "master" "brand" "dealer") # Bash array
+          CURRENT_BRANCH="${{ github.ref_name }}"
+          IS_PROD=false
+          for branch in "${PROD_BRANCHES[@]}"; do
+            if [[ "$CURRENT_BRANCH" == "$branch" ]]; then
+              IS_PROD=true
+              break
+            fi
+          done
+          if $IS_PROD; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          else
+            echo "env_name=development" >> $GITHUB_OUTPUT
+          fi
+
   # Build job
   build:
-    needs: check-pages
+    needs: [check-pages, determine_env]
     if: needs.check-pages.outputs.pages_enabled == 'true'
     concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
 
     # Указываете окружение и его переменные
     environment:
-      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/brand' || github.ref == 'refs/heads/dealer' ? 'production' : 'development' }}
+      name: ${{ needs.determine_env.outputs.env_name }}
 
     steps:
       - name: Checkout
