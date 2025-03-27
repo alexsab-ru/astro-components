@@ -50,14 +50,14 @@ import Reviews from '@/components/Reviews/Index.astro';
 		</div>
 	</section>
 
-	<Timer endtime=`${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00` title={`Утвердите спецусловия только до ${LAST_DAY} ${MONTH_GENITIVE}!`} subtitle={TIMER.subtitle} btnName="Получить выгоду" class="bg-[url('/img/model-bg.webp')] bg-cover bg-center bg-fixed text-white" />
+	<Timer endtime=`${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00` title={`Утвердите спецусловия только до ${LAST_DAY} ${MONTH_GENITIVE}!`} subtitle={TIMER.subtitle} btnName="Получить выгоду" class="bg-[url('https://cdn.alexsab.ru/models/default-model-bg.webp')] bg-cover bg-center bg-fixed text-white" />
 	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="section bg-gray-100" />
 
 	{ false && ( <ModelList /> )}
 
 	{ false && models.length > 0 && models.filter(m => m.show).map(model => ( <Model model={model} /> ))}
 
-	<Callback bgUrl="/img/model-bg.webp" title="Запишитесь на тест-драйв!" subtitle="Пройдите тест-драйв на интересном маршруте" formName="Секция. Запись на тест-драйв" id="test-drive" />
+	<Callback bgUrl="https://cdn.alexsab.ru/models/default-model-bg.webp" title="Запишитесь на тест-драйв!" subtitle="Пройдите тест-драйв на интересном маршруте" formName="Секция. Запись на тест-драйв" id="test-drive" />
 
 	{cars.length > 0 && (
 		<section class="section bg-gray-100" id="cars">
@@ -68,7 +68,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 		</section>
 	)}
 
-	<section class="!py-32 bg-[url('/img/model-bg.webp')] bg-cover bg-center text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1]" id="special-credit">
+	<section class="!py-32 bg-[url('https://cdn.alexsab.ru/models/default-model-bg.webp')] bg-cover bg-center text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1]" id="special-credit">
 		<div class="container flex flex-col items-center">
 			<h2 class="text-xl sm:text-4xl font-normal mb-8 !p-0 before:!hidden">{`${BRAND} в кредит`}<sup>**</sup></h2>
 			<p class="text-2xl mb-10">Предложим дополнительную выгоду при покупке в кредит</p>
@@ -76,7 +76,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 		</div>
 	</section>
 
-	<section class="!py-32 bg-[url('/img/model-bg.webp')] bg-fixed bg-cover bg-center text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1]" id="trade-in">
+	<section class="!py-32 bg-[url('https://cdn.alexsab.ru/models/default-model-bg.webp')] bg-fixed bg-cover bg-center text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1]" id="trade-in">
 		<div class="container flex flex-col items-center">
 			<h2 class="text-xl sm:text-4xl font-normal mb-8 !p-0 before:!hidden uppercase">Trade-In</h2>
 			<p class="text-2xl mb-5">Дополнительные выгоды от {SITE_NAME} за Trade-In</p>
