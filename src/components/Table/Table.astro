@@ -1,0 +1,19 @@
+---
+interface DataItem {
+  name: string;
+  price: string;
+}
+
+const {
+  data = []
+} = Astro.props;
+---
+{
+  data.length ? (
+    <table class="table-fixed">
+      <tbody>
+        {data.map((item: DataItem) => (<tr><td>{item.name}</td><td>{item.price}</td></tr>))}
+      </tbody>
+    </table>
+  ) : ('')
+}
