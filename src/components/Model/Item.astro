@@ -46,16 +46,19 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 			loading="lazy"
 		/>
 	</div>
+	<div class="flex flex-col items-center xs:text-base text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5">
 	{
-		model?.price && !isNaN(model?.price) && (
-			<div class="flex flex-col items-center xs:text-base text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5">
-				<span>
-					<span class="text-sm text-gray-400">от</span>&nbsp;
-					{currencyFormat(model.price)}
-				</span>
-			</div>
+		model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ?  (
+			<span>
+				<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+			</span>
+		) : (
+			<span>
+				<span class="text-lg">по запросу</span>
+			</span>
 		)
 	}
+	</div>
 	<div class="flex flex-col sm:flex-row sm:mt-10 sm:divide-x">
 		{
 			Object.keys(model.chars).map((key) => (
