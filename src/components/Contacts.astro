@@ -4,7 +4,7 @@ interface Props {
 	title?: string;
 }
 
-const {mapImg, title} = Astro.props;
+const {mapImg, title = "Наши контакты"} = Astro.props;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('map'));
