@@ -1,8 +1,9 @@
 ---
+import type { ISalon } from '@/types/ISalon';
 interface Props {
 	required?: boolean;
 	errorMessage?: string;
-	salons: any[];
+	salons: ISalon[];
 }
 const { required, errorMessage = 'Выберите дилерский центр', salons } = Astro.props;
 import FormSelect from '@/components/FormSelect.astro';

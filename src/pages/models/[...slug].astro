@@ -39,7 +39,8 @@ const cars = rawCars && rawCars.length ? rawCars.filter(
   )
 ) : [];
 import salonsData from '@/data/salons.json';
-const salons = salonsData.filter(salon => !salon.type || salon.type.includes('index'));
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 
 ---

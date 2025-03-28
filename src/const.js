@@ -20,7 +20,7 @@ export const BRAND = 'Jetour';
 //string 2025-12-31T23:59:59+04:00
 export const TIMER = { title: 'До конца акции осталось',subtitle: '', endtime: `${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00`, btnName: 'Зафиксировать цену', show: false };
 // Объект для бегущей строки
-export const MARQUEE = { title: 'Тотальная распродажа до', dateTo: `${LAST_DAY}.${MONTH}.${YEAR}`, count: [1,2,3,4,5,6,7,8], show: false };
+export const MARQUEE = { title: `Тотальная распродажа до ${LAST_DAY}.${MONTH}.${YEAR}`, count: 8, speed: 20, show: false };
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылка организации для виджета
@@ -68,7 +68,7 @@ export const HEADER_TOP_LINE = '';
 export const AGREE_LABEL = '<span>Я согласен на</span><a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">обработку персональных данных</a>';
 // Текст информации в футере
 import salonsData from '@/data/salons.json';
-const salons = salonsData.filter(salon => !salon.type || salon.type.includes('footer_info'));
+const salons = salonsData.filter(salon => !salon?.type || salon?.type.includes('footer_info'));
 const phones = PHONE ? [`<a class="whitespace-nowrap" href="tel:${phoneFormat(PHONE)}">${PHONE}</a>`] : salons.map((salon) => { return `<span>${salon.name}</span> <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a>` });
 
 export const FOOTER_INFO = '<sup>*</sup> Вся представленная на сайте информация, касающаяся автомобилей и сервисного обслуживания, носит информационный характер и не является публичной офертой, определяемой положениями ст. 437 ГК РФ. Все цены, указанные на данном сайте, носят информационный характер. Для получения подробной информации просьба обращаться к менеджерам отдела продаж по номеру телефона '+phones.join(', ')+'. Опубликованная на данном сайте информация может быть изменена в любое время без предварительного уведомления.';

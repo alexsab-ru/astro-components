@@ -20,7 +20,7 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 .vscode
-src/data/*.json
-src/data/*.yml
-src/data/*.yaml
+src/data/**/*.json
+src/data/**/*.yml
+src/data/**/*.yaml
 /.github/scripts/__pycache__

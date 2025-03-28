@@ -119,7 +119,7 @@ class CarProcessor:
         )
         print(f"Уникальный идентификатор: {friendly_url}")
         
-        url = f"https://{config['repo_name']}{config['path_car_page']}{friendly_url}/"
+        url = f"https://{config['domain']}{config['path_car_page']}{friendly_url}/"
         create_child_element(car, 'url', url)
         if self.source_type in ['carcopy', 'vehicles_vehicle']:
             update_element_text(car, 'url_link', url)
@@ -156,7 +156,7 @@ def main():
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
-    parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
+    parser.add_argument('--domain', default=os.getenv('DOMAIN', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
     parser.add_argument('--image_tag', default='image', help='Image tag name')

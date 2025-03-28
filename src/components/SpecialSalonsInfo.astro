@@ -14,8 +14,9 @@ const {
 import Button from '@/components/Button/Button.astro';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
 const salons = type 
-    ? salonsData.filter(salon => !salon.type || salon.type.includes(type))
+    ? salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes(type))
     : salonsData;
 const LEGAL_SALONS_INFO = salons.length > 1 
     ? `<p class="font-bold">Подробности по телефону:</p>` + salons.map(s => `<p class="text-sm">${s.name}&nbsp;- <a class="whitespace-nowrap" href="tel:${phoneFormat(s.phone)}">${s.phone}</a></p>`).join('')

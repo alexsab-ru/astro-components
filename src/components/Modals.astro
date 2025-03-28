@@ -5,7 +5,8 @@ import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import CloseModalBtn from '@/components/CloseModalBtn.astro';
 import salonsData from '@/data/salons.json';
-const salons = salonsData.filter(salon => !salon.type || salon.type.includes('common_modal'));
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('common_modal'));
 import {AGREE_LABEL} from '@/const'
 ---
 
