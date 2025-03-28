@@ -16,7 +16,8 @@ import MapInfo from './Map/MapInfo.astro';
 
 <section
 	class={`section bg-gray-50 ${title ? 'pt-8 sm:pt-16 !pb-0' : 'p-0'}`}
-	id="contacts">
+	id="contacts"
+>
 	<div class="container relative">
 		{
 			title && (
@@ -25,10 +26,17 @@ import MapInfo from './Map/MapInfo.astro';
 				</h2>
 			)
 		}
-			<MapInfo salons={salons} />
+			<MapInfo salons={salons} classes={title ? 'lg:top-[135px]' : 'top-[var(--y-offset)]'} />
 	</div>
 
-	<Map mapImg={mapImg} salons={salons} class="h-[400px] lg:h-[540px]"></Map>
+	<Map mapImg={mapImg} salons={salons} class="h-[400px] lg:h-[calc(var(--mapHeight)+var(--y-offset)*2)]"></Map>
 
 
 </section>
+
+<style>
+	:root{
+		--mapHeight: 500px; 
+		--y-offset: 20px;		
+	}
+</style>
