@@ -5,12 +5,14 @@ interface Props{
 }
 const {poster, url} = Astro.props
 ---
-<video
-	muted
-	loop
-	autoplay
-	playsinline
-	poster={poster}
-	class="absolute inset-0 h-full w-full object-cover">
-	<source src={url} type="video/mp4" />
-</video>
+<div class="lazy absolute inset-0">
+	<video
+		muted
+		loop
+		autoplay
+		playsinline
+		poster={poster}
+		class="absolute inset-0 h-full w-full object-cover">
+		<source data-src={url} type="video/mp4" />
+	</video>
+</div>
