@@ -1553,6 +1553,72 @@
             }
         }
     },
+    "Wey": {
+        "Wey 07": {
+           "folder": "wey07",
+            "cyrillic": "ВЕЙ 07",
+            "color": {
+                "Black": "black.webp",
+                "Blue": "blue.webp",
+                "Green": "green.webp",
+                "White": "white.webp",
+                "Beige": "beige.webp",
+                "Черный": "black.webp",
+                "Синий": "blue.webp",
+                "Зеленый": "green.webp",
+                "Белый": "white.webp",
+                "Бежевый": "beige.webp"
+            } 
+        },
+        "Wey 05": {
+           "folder": "wey05",
+            "cyrillic": "ВЕЙ 05",
+            "color": {
+                "Black": "black.webp",
+                "Blue": "blue.webp",
+                "Light-blue": "light-blue.webp",
+                "White": "white.webp",
+                "Brown": "brown.webp",
+                "Gray": "gray.webp",
+                "Черный": "black.webp",
+                "Синий": "blue.webp",
+                "Голубой": "light-blue.webp",
+                "Белый": "white.webp",
+                "Коричневый": "brown.webp",
+                "Серый": "gray.webp"
+            } 
+        },
+        "Wey 80": {
+           "folder": "wey80",
+            "cyrillic": "ВЕЙ 80",
+            "color": {
+                "Black": "black.webp",
+                "White": "white.webp",
+                "Beige": "beige.webp",
+                "Green": "green.webp",
+                "Gray": "gray.webp",
+                "Черный": "black.webp",
+                "Белый": "white.webp",
+                "Бежевый": "brown.webp",
+                "Зеленый": "green.webp",
+                "Серый": "gray.webp"
+            } 
+        },
+        "Wey 80 Lounge": {
+           "folder": "wey80lounge",
+            "cyrillic": "ВЕЙ 80 лаундж",
+            "color": {
+                "Black": "black.webp",
+                "White": "white.webp",
+                "Green": "green.webp",
+                "Gray": "gray.webp",
+                "Черный": "black.webp",
+                "Белый": "white.webp",
+                "Зеленый": "green.webp",
+                "Серый": "gray.webp"
+            }
+        }
+    },
     "Chery": {
         "Tiggo 4": {
             "folder": "tiggo4",
