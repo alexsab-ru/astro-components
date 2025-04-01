@@ -15,7 +15,7 @@ on:
       - completed
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["main","brand","dealer"]
     paths-ignore:
       - '.github/scripts/sh/getAirStorage.sh'
       - '.github/scripts/sh/getDealerData.sh'
