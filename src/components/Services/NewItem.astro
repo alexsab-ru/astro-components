@@ -18,13 +18,13 @@ const { item } = Astro.props;
 		: {}}
 >
 	<span
-		class="rounded-full size-20 flex items-center justify-center mb-3 mx-auto border-2 border-black transition-color duration-300 group-hover:bg-black"
+		class="rounded-full size-20 flex items-center justify-center mb-3 mx-auto border-2 text-black border-black transition-color duration-300 group-hover:bg-black"
 	>
 		{
 			item.icon ? (
 				<Icon
 					name={item?.icon || 'mdi:1123'}
-					class="text-4xl transition-color duration-300 group-hover:text-white"
+					class="text-4xl transition-color duration-300 group-hover:text-white text-current"
 				/>
 			) : item.img ? (
 				<img
