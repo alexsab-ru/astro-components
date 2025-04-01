@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" id="road-help" viewBox="0 0 24 24" fill="transparent">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 19.5C12.5 19.776 12.276 20 12 20C11.724 20 11.5 19.776 11.5 19.5C11.5 19.224 11.724 19 12 19C12.276 19 12.5 19.224 12.5 19.5Z" stroke="#A6B7BE"/>
-<path d="M12 8V16" stroke="#A6B7BE" stroke-linecap="round" stroke-linejoin="round"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M12 1L1 23H23L12 1Z" stroke="#A6B7BE" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 19.5C12.5 19.776 12.276 20 12 20C11.724 20 11.5 19.776 11.5 19.5C11.5 19.224 11.724 19 12 19C12.276 19 12.5 19.224 12.5 19.5Z" stroke="currentColor"/>
+<path d="M12 8V16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M12 1L1 23H23L12 1Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
