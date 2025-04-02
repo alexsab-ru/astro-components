@@ -28,6 +28,6 @@
 		}
 	}
 	&[disabled]{
-		@apply bg-gray-300 border-gray-300 cursor-not-allowed;
+		@apply bg-gray-300 border-gray-300 cursor-not-allowed hover:bg-gray-300 hover:border-gray-300;
 	}
 }
