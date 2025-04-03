@@ -51,10 +51,18 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						)
 					}
 					{
-						model?.price && (
-						<p class="uppercase text-3xl sm:text-4xl">
-							<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
-						</p>
+						model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ? (
+							<p class="uppercase text-3xl sm:text-4xl">
+								<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+							</p>
+						) : (
+							<Button
+								classes="popup-link btn !px-20 mt-5 flex-1 whitespace-nowrap"
+								url="#common-modal"
+								title="Узнать цену"
+								dataTitle={`Узнать цену ${model.mark_id} ${model.name}`}
+								dataFormName={`Узнать цену. ${model.mark_id} ${model.name}`}
+							/>
 						)
 					}
 				</div>

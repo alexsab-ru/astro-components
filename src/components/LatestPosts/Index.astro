@@ -32,14 +32,20 @@ let diffLimit: number;
 if (rawPosts && rawPosts.length) {
 	rawPosts = rawPosts
 	.filter(post => !post.data.draft) // Сначала фильтруем черновики
-   .sort((a, b) => {
-		const dateA = a.data?.pubDate ? new Date(a.data.pubDate).valueOf() : 0;
-		const dateB = b.data?.pubDate ? new Date(b.data.pubDate).valueOf() : 0;
-		return dateB - dateA; // Сортируем по дате в обратном порядке
-   });
-	diffLimit = rawPosts.length < limit ? rawPosts.length : limit;
+	.sort((a, b) => {
+			const dateA = a.data?.pubDate ? new Date(a.data.pubDate).valueOf() : 0;
+			const dateB = b.data?.pubDate ? new Date(b.data.pubDate).valueOf() : 0;
+			return dateB - dateA; // Сортируем по дате в обратном порядке
+	});
+	diffLimit = Math.min(rawPosts.length, offset + limit); // Ограничиваем пределы
+	if (offset >= rawPosts.length) {
+		diffLimit = offset; // Если offset больше длины массива, ничего не берем
+	}
+		
+	let index = 0;
 	for (let i = offset; i < diffLimit; i++) {
-		posts[i] = rawPosts[i];
+		posts[index] = rawPosts[i];
+		index++;
 	}
 }
 ---
@@ -82,7 +88,7 @@ if (rawPosts && rawPosts.length) {
 						/>
 					)}
 				</div>
-				{posts.length > limit && (
+				{rawPosts.length > diffLimit - limit && rawPosts.length !== diffLimit && (
 					<div class="flex justify-center mt-10">
 						<Button 
 							classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 

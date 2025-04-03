@@ -22,6 +22,7 @@ export async function getStaticPaths() {
 
 
 import { LEGAL_CITY_WHERE, BRAND } from '@/const';
+import { getRandomInt } from '@/js/utils/numbers.format';
 import { breadcrumb } from './index.astro';
 const { model } = Astro.props;
 
@@ -60,7 +61,13 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   <SeoText mdx={seoname} />
   <section>
     <div class="container">
-      <FeedbackForm title="Записаться на тест-драйв" image=`/img/models/${model.id}/sections/1.webp` />
+      <FeedbackForm 
+        title="Записаться на тест-драйв" 
+        image={sections.length > 0
+          ? `/img/models/${model.id}/sections/1.webp` 
+          : model.colors[getRandomInt(0, model.colors.length)].carImage
+        } 
+      />
     </div>
   </section>
   {cars.length > 0 && (

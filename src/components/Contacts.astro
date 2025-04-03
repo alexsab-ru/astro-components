@@ -2,9 +2,16 @@
 interface Props {
 	mapImg?: string;
 	title?: string;
+	height?: number;
+	yOffset?: number;
 }
 
-const {mapImg, title} = Astro.props;
+const {
+	mapImg = 'https://cdn.alexsab.ru/maps/map-bg.webp', 
+	title = 'Наши контакты',
+	height = 500,
+	yOffset = 20,
+} = Astro.props;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('map'));
@@ -16,7 +23,9 @@ import MapInfo from './Map/MapInfo.astro';
 
 <section
 	class={`section bg-gray-50 ${title ? 'pt-8 sm:pt-16 !pb-0' : 'p-0'}`}
-	id="contacts">
+	id="contacts"
+	style=`--height: ${height}px; --y-offset: ${yOffset}px`
+>
 	<div class="container relative">
 		{
 			title && (
@@ -25,10 +34,10 @@ import MapInfo from './Map/MapInfo.astro';
 				</h2>
 			)
 		}
-			<MapInfo salons={salons} />
+			<MapInfo salons={salons} classes={`h-[var(--height)] ${title ? 'lg:top-[135px]' : 'top-[var(--y-offset)]'}`} />
 	</div>
 
-	<Map mapImg={mapImg} salons={salons} class="h-[400px] lg:h-[540px]"></Map>
+	<Map mapImg={mapImg} salons={salons} classes="h-[400px] lg:h-[calc(var(--height)+var(--y-offset)*2)]"></Map>
 
 
 </section>
