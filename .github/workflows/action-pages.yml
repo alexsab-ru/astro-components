@@ -173,8 +173,15 @@ jobs:
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3
 
+      - name: Create After_deploy text
+        if: steps.check_changes.outputs.changes == 'true'
+        id: after_deploy
+        run: |
+          echo text="<blockquote>After deploy: https://${{ vars.DOMAIN }}</blockquote>" >> $GITHUB_OUTPUT
+
     outputs:
       changes: ${{ steps.check_changes.outputs.changes }}
+      after_deploy: ${{ steps.after_deploy.outputs.text }}
 
   # Deployment job
   deploy:
@@ -190,12 +197,12 @@ jobs:
         uses: actions/deploy-pages@v4
 
   notify_telegram:
-    needs: deploy
+    needs: [build, deploy]
     if: needs.build.outputs.changes == 'true'
     uses: ./.github/workflows/github-telegram.yml
     with:
       additional-text: |
-        $(echo -n '<blockquote>After deploy: https://${{vars.DOMAIN}}</blockquote>' | base64)
+        $(echo -n '${{ needs.build.outputs.after_deploy }}' | base64)
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
