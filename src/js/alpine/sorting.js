@@ -66,7 +66,7 @@ export function sorting() {
 							return yearA - yearB;
 						case "year_down":
 							return yearB - yearA;
-						default:
+						case "name":
 							return nameA.localeCompare(nameB);
 					}
 				});
