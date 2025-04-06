@@ -1,16 +1,20 @@
 ---
 interface Props{
 	poster: string;
-	url: string
+	url: string;
+	mobileUrl?: string;
 }
-const {poster, url} = Astro.props
+const {poster, url, mobileUrl} = Astro.props
 ---
-<video
-	muted
-	loop
-	autoplay
-	playsinline
-	poster={poster}
-	class="absolute inset-0 h-full w-full object-cover">
-	<source src={url} type="video/mp4" />
-</video>
+<div class="lazy absolute inset-0">
+	<video
+		muted
+		loop
+		autoplay
+		playsinline
+		poster={poster}
+		class="absolute inset-0 h-full w-full object-cover">
+		{ mobileUrl != "" && <source data-src={mobileUrl} type="video/mp4" media="(max-width: 767px)" /> }
+		<source data-src={url} type="video/mp4" />
+	</video>
+</div>
