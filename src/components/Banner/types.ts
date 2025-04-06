@@ -13,6 +13,7 @@ export type TBanner = {
 	type?: string
 	view?: string
 	videoUrl?: string
+	mobileVideoUrl?: string
 	imageUrl: string
 	tabletImageUrl?: string
 	mobileImageUrl?: string

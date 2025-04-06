@@ -52,10 +52,10 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 	{
 		banner?.type === 'video' && banner?.bannerUrl ? (
 			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
-				<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
+				<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} mobileUrl={banner?.mobileVideoUrl} />
 			</a>			
 		) : banner?.type === 'video' && !banner?.bannerUrl ? (
-			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} />
+			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} mobileUrl={banner?.mobileVideoUrl} />
 		) : banner?.type !== 'video' && banner?.bannerUrl ? (
 			<a href={banner.bannerUrl} class="absolute inset-0 h-full w-full z-10 block" {...banner?.target ? {target: banner.target} : {} }>
 				<BannerImage imageUrl={banner.imageUrl} tabletImageUrl={banner?.tabletImageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
