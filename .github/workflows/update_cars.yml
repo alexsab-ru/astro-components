@@ -105,7 +105,7 @@ jobs:
       if: ${{ vars.DEALER_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage
-        pnpm update_cars_data_cars_car
+        python .github/scripts/update_cars.py --source_type data_cars_car
       continue-on-error: true
       env:
         CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
@@ -115,7 +115,7 @@ jobs:
       if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage
-        pnpm update_cars_used_cars_data_cars_car
+        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
       continue-on-error: true
       env:
         CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
