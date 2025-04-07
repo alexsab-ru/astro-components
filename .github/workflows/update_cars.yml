@@ -91,7 +91,6 @@ jobs:
         pnpm run getAirStorage
       env:
         CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
-        
 
     - name: Get Dealer JSON cars price
       if: ${{ vars.DEALER_PRICE_CSV_URL }}
@@ -100,6 +99,26 @@ jobs:
       continue-on-error: true
       env:
         CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
+
+    - name: Get Dealer cars Storage
+      if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getDealerStorage
+        pnpm update_cars_data_cars_car
+      continue-on-error: true
+      env:
+        CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
+        QUERY_STRING: ${{ vars.DEALER_STORAGE_CSV_COLUMN }}
+
+    - name: Get Dealer used_cars Storage
+      if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getDealerStorage
+        pnpm update_cars_used_cars_data_cars_car
+      continue-on-error: true
+      env:
+        CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+        QUERY_STRING: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
 
     - name: Get Used Cars data_cars_car XML and generate cars file
       if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
