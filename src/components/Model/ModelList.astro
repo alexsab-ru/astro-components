@@ -8,14 +8,14 @@ import ModelItem from './Item.astro';
 import modelsData from '@/data/models.json';
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 
-const {models = modelsData, title = 'Модельный ряд', classes} = Astro.props;
+const {models = modelsData, title = 'Модельный ряд', classes, ...rest} = Astro.props;
 const filteredModels = models.filter(model => model.show);
 const groupModelsByBrand = groupArrayByKey(filteredModels, 'mark_id');
 ---
 
 {
 	Object.keys(groupModelsByBrand).length > 0 && (
-		<section class={`models py-10 sm:py-20 ${classes}`}>
+		<section class={`models py-10 sm:py-20 ${classes}`} {...rest}>
 			<div class="container">
 				{title && ( <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
 				{Object.keys(groupModelsByBrand).map(key => (
