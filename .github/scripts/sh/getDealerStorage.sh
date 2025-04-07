@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Если CSV_URL не установлен, пытаемся получить его из .env
 if [ -z "$CSV_URL" ] && [ -f .env ]; then
@@ -25,17 +25,12 @@ fi
 # Кодируем QUERY_STRING для URL
 QUERY_STRING=$(echo "$QUERY_STRING" | sed 's/ /%20/g')
 
-# Регулярное выражение для извлечения идентификатора документа и gid
-regex=".*/d/([^/]+)/edit.*gid=([0-9]+)"
+# Извлечение document_id с помощью sed
+document_id=$(echo "$CSV_URL" | sed -n 's/.*\/d\/\([^\/]*\)\/edit.*/\1/p')
+# Извлечение gid с помощью sed
+gid=$(echo "$CSV_URL" | sed -n 's/.*gid=\([0-9]*\).*/\1/p')
 
-echo "Исходный URL: $CSV_URL"
-echo "соответствие: $CSV_URL =~ $regex"
-
-if [[ $CSV_URL =~ $regex ]]; then
-    # Извлекаем document_id и gid из URL
-    document_id="${BASH_REMATCH[1]}"
-    gid="${BASH_REMATCH[2]}"
-    
+if [ -n "$document_id" ] && [ -n "$gid" ]; then
     # Формируем новый URL для скачивания
     DOWNLOAD_URL="https://docs.google.com/spreadsheets/d/${document_id}/gviz/tq?gid=${gid}&tqx=out:CSV&headers=1&tq=${QUERY_STRING}"
     
