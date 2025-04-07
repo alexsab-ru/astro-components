@@ -7,6 +7,7 @@ on:
     # paths:
       # - '.github/scripts/sh/getAirStorage.sh'
       # - '.github/scripts/sh/getDealerData.sh'
+      # - '.github/scripts/sh/getDealerStorage.sh'
       # - '.github/scripts/CarFeedProcessorCSV.py'
       # - '.github/scripts/config_air_storage-friend.json'
       # - '.github/scripts/config_air_storage.json'
@@ -101,7 +102,7 @@ jobs:
         CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
 
     - name: Get Dealer cars Storage
-      if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+      if: ${{ vars.DEALER_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage
         pnpm update_cars_data_cars_car

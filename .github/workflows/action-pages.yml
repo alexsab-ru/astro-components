@@ -19,6 +19,7 @@ on:
     paths-ignore:
       - '.github/scripts/sh/getAirStorage.sh'
       - '.github/scripts/sh/getDealerData.sh'
+      - '.github/scripts/sh/getDealerStorage.sh'
       - '.github/scripts/CarFeedProcessorCSV.py'
       - '.github/scripts/config_air_storage-friend.json'
       - '.github/scripts/config_air_storage.json'
