@@ -12,17 +12,43 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 	watchSlidesProgress: true,
 	on: {
 		init: function (slider) {
-			if(slider.slides.length){
-				setTimeout(() => {
-					slider.slides.map(slide => {
-						slide.classList.remove('min-w-[170px]');
-						slide.classList.add('min-w-[73px]');
-					});
-				}, 1000)
+			if (slider.slides.length) {
+				// Отслеживаем загрузку первых трех изображений
+				const firstThreeSlides = Array.from(slider.slides).slice(0, 3);
+				const images = firstThreeSlides.map(slide => slide.querySelector('img'));
+				let loadedCount = 0;
+	
+				images.forEach(img => {
+					if (img.complete) {
+						// Если изображение уже загружено
+						loadedCount++;
+					} else {
+						// Если изображение еще не загружено, добавляем обработчик
+						img.onload = () => {
+							loadedCount++;
+							if (loadedCount === 3) {
+								updateSlideClasses(slider);
+							}
+						};
+					}
+				});
+	
+				// Если все три изображения уже загружены
+				if (loadedCount === 3) {
+					updateSlideClasses(slider);
+				}
 			}
 		},
 	},
 });
+
+// Функция для обновления классов слайдов
+function updateSlideClasses(slider) {
+    slider.slides.forEach(slide => {
+        slide.classList.remove('min-w-[200px]');
+        slide.classList.add('min-w-[73px]', '!w-fit');
+    });
+}
 
 const carImageSlider = new Swiper('.car-image-slider', {
 	rewind: true,
