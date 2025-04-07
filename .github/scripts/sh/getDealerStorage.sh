@@ -28,6 +28,9 @@ QUERY_STRING=$(echo "$QUERY_STRING" | sed 's/ /%20/g')
 # Регулярное выражение для извлечения идентификатора документа и gid
 regex=".*/d/([^/]+)/edit.*gid=([0-9]+)"
 
+echo "Исходный URL: $CSV_URL"
+echo "соответствие: $CSV_URL =~ $regex"
+
 if [[ $CSV_URL =~ $regex ]]; then
     # Извлекаем document_id и gid из URL
     document_id="${BASH_REMATCH[1]}"
