@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Используем переменные из окружения или загружаем из .env
-CSV_URL="$DEALER_STORAGE_CSV_URL"
-QUERY_STRING="$DEALER_STORAGE_CSV_COLUMN"
-
 # Если CSV_URL не установлен, пытаемся получить его из .env
 if [ -z "$CSV_URL" ] && [ -f .env ]; then
     CSV_URL=$(grep '^DEALER_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')
@@ -11,7 +7,7 @@ fi
 
 # Проверяем, что CSV_URL установлен
 if [ -z "$CSV_URL" ]; then
-    echo "Error: DEALER_STORAGE_CSV_URL is not found"
+    echo "Error: DEALER_STORAGE_CSV_URL or USED_CARS_STORAGE_CSV_URL is not found"
     exit 1
 fi
 
@@ -22,7 +18,7 @@ fi
 
 # Проверяем, что QUERY_STRING установлен
 if [ -z "$QUERY_STRING" ]; then
-    echo "Error: DEALER_STORAGE_CSV_COLUMN is not found"
+    echo "Error: DEALER_STORAGE_CSV_COLUMN or USED_CARS_STORAGE_CSV_COLUMN is not found"
     exit 1
 fi
 
