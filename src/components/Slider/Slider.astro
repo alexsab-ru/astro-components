@@ -1,0 +1,32 @@
+---
+import SliderItem from './SliderItem.astro';
+
+interface Props {
+  data: [],
+  image?: string,
+  title?: string,
+  description?: string
+};
+
+const { data } = Astro.props;
+---
+
+<div class="swiper simple-slider pb-10">
+  <div class="swiper-wrapper">
+    {
+      data.length && (
+        data.map((item: Props) => (
+          <SliderItem item={item} />
+        ))
+      )
+    }
+  </div>
+  <div class="swiper-pagination simple-slider-pagination bottom-0"></div>
+  <div class="swiper-button-prev simple-slider-button-prev"></div>
+  <div class="swiper-button-next simple-slider-button-next"></div>
+</div>
+
+<script>
+	import './slider';
+	import '@/components/Banner/banner.scss';
+</script>
