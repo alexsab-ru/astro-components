@@ -17,4 +17,11 @@ const path = Astro.url.pathname;
 		}
 	]}
 	{...rest}
->{link.name}</a>
+>
+{link.name}
+{link?.thumb && (
+	<div class="aspect-video hidden lg:block w-full relative">
+		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" />
+	</div>
+)}
+</a>

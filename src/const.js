@@ -30,14 +30,12 @@ import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import modelsData from '@/data/models.json';
 const groupModelsByBrand = groupArrayByKey(modelsData.filter(model => model.show), 'mark_id');
 const children = Object.keys(groupModelsByBrand).reduce((acc, key) => {
-	acc[key] = groupModelsByBrand[key].map(model => ( { url: `models/${model.id}/`, name: `${model.name.toUpperCase()}` } ) );
+	acc[key] = groupModelsByBrand[key].map(model => ( { url: `models/${model.id}/`, name: `${model.name.toUpperCase()}`, thumb: model.thumb } ) );
 	return acc;
 }, {});
 
 export const LINKS_MENU = [
-	{url: 'cars/', name: 'Авто в наличии', children: [
-		{url: 'cars/', name: 'Авто в наличии'},
-	]},
+	{url: 'cars/', name: 'Авто в наличии'},
 	// {url: 'catalog/', name: 'Каталог'},
 	// {url: 'used_cars/', name: 'Авто с пробегом'},
 	{ 
