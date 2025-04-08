@@ -1,6 +1,7 @@
 import Swiper from "swiper";
 import { Navigation, Thumbs, Keyboard, FreeMode } from "swiper/modules";
 import "swiper/css/bundle";
+import LazyLoader from '@/js/modules/LazyLoader';
 
 const carThumbSlider = new Swiper('.car-thumb-slider', {
 	rewind: true,
@@ -16,37 +17,41 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 				// Отслеживаем загрузку первых трех изображений
 				const firstThreeSlides = Array.from(slider.slides).slice(0, 3);
 				const images = firstThreeSlides.map(slide => slide.querySelector('img'));
-				let loadedCount = 0;
-	
-				images.forEach(img => {
-					if (img.complete) {
-						// Если изображение уже загружено
-						loadedCount++;
-					} else {
-						// Если изображение еще не загружено, добавляем обработчик
-						img.onload = () => {
-							loadedCount++;
-							if (loadedCount === 3) {
-								updateSlideClasses(slider);
-							}
-						};
-					}
+				
+				// Создаем массив промисов для отслеживания загрузки изображений
+				const imageLoadPromises = images.map(img => {					
+					return new Promise(resolve => {						
+						img.src = img.dataset.src;
+						if (img.complete) {
+							// Если изображение уже загружено
+							resolve();
+						} else {
+							// Если изображение еще не загружено, добавляем обработчик
+							img.onload = () => resolve();
+						}
+					});
 				});
 	
-				// Если все три изображения уже загружены
-				if (loadedCount === 3) {
-					updateSlideClasses(slider);
-				}
+				// Ждем загрузки всех изображений
+				Promise.all(imageLoadPromises)
+					.then(() => {
+						console.log('Все изображения загружены');
+						updateSlideClasses(slider, images.length-1);
+					})
+					.then(() => new LazyLoader());
 			}
 		},
 	},
 });
 
 // Функция для обновления классов слайдов
-function updateSlideClasses(slider) {
-    slider.slides.forEach(slide => {
+function updateSlideClasses(slider, length) {
+    slider.slides.forEach((slide, idx) => {
+        slide.classList.add('min-w-[73px]');
         slide.classList.remove('min-w-[200px]');
-        slide.classList.add('min-w-[73px]', '!w-fit');
+		if(idx > length) {
+			slide.classList.add('lazy');
+		}
     });
 }
 

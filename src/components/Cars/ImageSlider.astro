@@ -7,7 +7,7 @@ import '@/components/Banner/banner.scss';
 	<div class="swiper-wrapper">
 			{
 				data.images.map(img => (
-					<div class="swiper-slide !w-fit sm:!w-full">
+					<div class="swiper-slide !w-fit sm:!w-full" style="--swiper-theme-color: #00000080;">
 						<a 
 							href={img} 
 							class="inline-block sm:block cursor-zoom-in h-full w-auto sm:w-full select-none glightbox"
@@ -23,12 +23,12 @@ import '@/components/Banner/banner.scss';
 	<div class="swiper-button-prev car-image-slider-prev !hidden sm:!flex"></div>
 	<div class="swiper-button-next car-image-slider-next !hidden sm:!flex"></div>
 </div>
-<div class="swiper car-thumb-slider !hidden sm:!block h-[130px]">
+<div class="swiper car-thumb-slider !hidden sm:!block h-[130px]" style="--swiper-theme-color: #00000080;">
 	<div class="swiper-wrapper">
 		{
 			data.images.map(img => (
-				<div class="lazy swiper-slide select-none min-w-[200px]">
-					<img src="https://cdn.alexsab.ru/loaders/simple-loading.svg" data-src={img} class="select-none h-full w-auto" alt={data.folder_id} loading="lazy" />
+				<div class="swiper-slide select-none min-w-[200px] !w-fit">
+					<img src="https://cdn.alexsab.ru/loaders/simple-loading.svg" data-src={img} class="select-none h-full w-auto" alt={data.folder_id} />
 					<div class="swiper-lazy-preloader"></div>
 				</div>
 			))
