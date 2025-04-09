@@ -5,7 +5,7 @@ interface Props {
 	classes?: string;
 	[key: string]: any;
 }
-const {salons = [], mapImg, classes, ...rest} = Astro.props;
+const {salons = [], mapImg, classes = '', ...rest} = Astro.props;
 ---
 
 <div style={`background-image: url(${mapImg})`} class={`map ${classes}`} {...rest}>
