@@ -33,17 +33,19 @@ import './checkbox.scss';
 		class="absolute w-0 h-0 opacity-0 invisible"
 		{...rest}
 	/>
-	<div class={`text-${color}/80 !leading-[52px] sm:!leading-9 `}>
-		<span class={`fake-${type}-${color} align-middle mr-1 -mt-0.5 sm:-mt-1`}></span>
-		<Fragment set:html={label} />
+	<div class={`text-${color}/80 text-sm sm:text-base flex items-start`}>
+		<span class={`fake-${type}-${color} mr-2 mt-0.5 sm:mt-1`}></span>
+		<div>
+			<Fragment set:html={label} />
+			{
+				required ? (
+					<div class={`error-message text-xs mt-2 hidden ${name} ${errorClasses}`}>
+						{errorText}
+					</div>
+				) : (
+					''
+				)
+			}
+		</div>
 	</div>
-	{
-		required ? (
-			<div class={`error-message text-xs mt-2 hidden ${name} ${errorClasses}`}>
-				{errorText}
-			</div>
-		) : (
-			''
-		)
-	}
 </label>
