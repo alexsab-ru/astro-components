@@ -73,7 +73,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   {cars.length > 0 && (
     <section class="odd:bg-gray-100">
       <div class="container">
-        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${LEGAL_CITY_WHERE}`} /></h2>
+        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили <span class="text-nowrap">${model.mark_id} ${model.name}</span> в наличии в ${LEGAL_CITY_WHERE}`} /></h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
           {cars.map((car) => ( <CarItem car={car} /> ))}
         </div>

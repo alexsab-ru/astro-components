@@ -13,10 +13,10 @@ import { declOfNums } from '@/js/utils/numbers.format';
 
 {
 	data.complectation_name && data.complectation_name !== "" && (
-		<p class="text-gray-400 text-lg font-light">
+		<p class="text-gray-400 text-lg font-light text-nowrap">
 			{data.complectation_name !== "" ? (
 				<Fragment
-					set:html={`${data.complectation_name}${data?.year ? ",&nbsp;" + data.year : ""}`}
+					set:html={`${data.complectation_name}${data?.year ? ", " + data.year : ""}`}
 				/>
 			) : (
 				data.year
@@ -24,4 +24,4 @@ import { declOfNums } from '@/js/utils/numbers.format';
 		</p>
 	)
 }
-{(data.total && totalShow) && (<p class="my-2">{data.total}&nbsp;{declOfNums(data.total)} в наличии</p>)}
+{(data.total && totalShow) && (<p class="my-2 text-nowrap">{data.total+' '+declOfNums(data.total)} в наличии</p>)}
