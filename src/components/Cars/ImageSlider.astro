@@ -10,11 +10,10 @@ import '@/components/Banner/banner.scss';
 					<div class="swiper-slide !w-fit sm:!w-full" style="--swiper-theme-color: #00000080;">
 						<a 
 							href={img} 
-							class="inline-block sm:block cursor-zoom-in h-full w-auto sm:w-full select-none glightbox"
+							class="lazy-image-slider inline-block sm:block cursor-zoom-in h-full w-auto sm:w-full select-none glightbox min-w-[200px] xs:min-w-[150px]"
 							data-gallery={data.vin_hidden}
 						>
-							<img src={img} class="w-auto sm:mx-auto h-full object-cover select-none" alt={data.folder_id} loading="lazy" />
-							<div class="swiper-lazy-preloader"></div>
+							<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={img} class="w-auto sm:mx-auto h-full object-cover select-none" alt={data.folder_id}  />
 						</a>
 					</div>
 				))
