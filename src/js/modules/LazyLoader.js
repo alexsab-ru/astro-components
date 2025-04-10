@@ -1,6 +1,7 @@
 class LazyLoader {
     constructor(selector = '.lazy', options = { threshold: 0.5 }) {
-        this.elements = document.querySelectorAll(selector);
+        this.selector = selector;
+        this.elements = document.querySelectorAll(this.selector);
         this.observer = new IntersectionObserver(this.handleIntersect.bind(this), options);
         this.init();
     }
@@ -30,10 +31,10 @@ class LazyLoader {
                         const sources = lazyElement.querySelectorAll('source[data-src]');
                         sources.forEach((source) => {
                             source.src = source.dataset.src;
-                            source.closest('.lazy')?.classList.remove('lazy');
+                            source.closest(this.selector)?.classList.remove(this.selector.replace('.', ''));
                         });
                         lazyElement.load(); // Перезагрузка видео с новыми источниками
-                        lazyElement.closest('.lazy')?.classList.remove('lazy');
+                        lazyElement.closest(this.selector)?.classList.remove(this.selector.replace('.', ''));
                     }
 
                     // Если это изображение
@@ -44,7 +45,7 @@ class LazyLoader {
                     // Удаляем класс "lazy" после загрузки
                     lazyElement.onload = () => {
                         lazyElement.classList.remove('opacity-0');
-                        lazyElement.closest('.lazy')?.classList.remove('lazy');
+                        lazyElement.closest(this.selector)?.classList.remove(this.selector.replace('.', ''));
                     };
 
                     observer.unobserve(lazyElement);
