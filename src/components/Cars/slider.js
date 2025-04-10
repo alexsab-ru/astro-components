@@ -79,5 +79,10 @@ const carImageSlider = new Swiper('.car-image-slider', {
 	},
 	thumbs: {
 		swiper: carThumbSlider,
+	},
+	on: {
+		init: function (slider) {
+			new LazyLoader('.lazy-image-slider', {threshold: 0.1})
+		}
 	}
 })
