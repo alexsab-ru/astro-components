@@ -45,11 +45,11 @@ if (carsData.length > 0) {
   carsData.forEach(car => {
     if (car.id !== undefined && car.price !== undefined) {
       carsPlaceholder[`{{price-${car.id}}}`] = car.price;
-      carsPlaceholder[`{{priceb-${car.id}}}`] = currencyFormat(car.price);
+      carsPlaceholder[`{{priceb-${car.id}}}`] = `<span class=\\"text-nowrap\\">${currencyFormat(car.price).replace(/\u00A0/g, ' ')}</span>`;
     }
     if (car.id !== undefined && car.benefit !== undefined) {
       carsPlaceholder[`{{benefit-${car.id}}}`] = car.benefit;
-      carsPlaceholder[`{{benefitb-${car.id}}}`] = currencyFormat(car.benefit);
+      carsPlaceholder[`{{benefitb-${car.id}}}`] = `<span class=\\"text-nowrap\\">${currencyFormat(car.benefit).replace(/\u00A0/g, ' ')}</span>`;
     }
   });
 }
