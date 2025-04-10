@@ -20,7 +20,7 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 		{
 			model?.benefit && !isNaN(model?.benefit) && model?.benefit != 0 && model?.benefit != '' && (
 				<span class="block text-xs sm:text-lg text-black/80 text-nowrap">
-					Выгода до {currencyFormat(model.benefit)}
+					Выгода до {currencyFormat(model.benefit).replace(/\u00A0/g, ' ')}
 				</span>
 			)
 		}
@@ -50,7 +50,7 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 	{
 		model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ?  (
 			<span class="text-nowrap">
-				<span class="text-sm text-gray-400">от</span> {currencyFormat(model.price)}
+				<span class="text-sm text-gray-400">от</span> {currencyFormat(model.price).replace(/\u00A0/g, ' ')}
 			</span>
 		) : (
 			<span class="text-lg text-nowrap">по запросу</span>
