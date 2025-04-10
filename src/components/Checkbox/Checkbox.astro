@@ -25,7 +25,7 @@ const {
 import './checkbox.scss';
 ---
 
-<label class={'cursor-pointer flex items-center flex-wrap ' + classes}>
+<label class={'cursor-pointer ' + classes}>
 	<input
 		type={type}
 		name={name}
@@ -33,17 +33,19 @@ import './checkbox.scss';
 		class="absolute w-0 h-0 opacity-0 invisible"
 		{...rest}
 	/>
-	<div class={`flex items-center flex-wrap gap-x-2 text-${color}/80 leading-8`}>
-		<span class={`fake-${type}-${color}`}></span>
-		<Fragment set:html={label} />
+	<div class={`text-${color}/80 text-sm sm:text-base flex items-start`}>
+		<span class={`fake-${type}-${color} mr-2 mt-0.5 sm:mt-1`}></span>
+		<div>
+			<Fragment set:html={label} />
+			{
+				required ? (
+					<div class={`error-message text-xs mt-2 hidden ${name} ${errorClasses}`}>
+						{errorText}
+					</div>
+				) : (
+					''
+				)
+			}
+		</div>
 	</div>
-	{
-		required ? (
-			<div class={`error-message text-xs hidden ${name} ${errorClasses}`}>
-				{errorText}
-			</div>
-		) : (
-			''
-		)
-	}
 </label>

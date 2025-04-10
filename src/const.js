@@ -53,7 +53,7 @@ export const COLLECTIONS = [
 // Текстовая строка над хедером
 export const HEADER_TOP_LINE = '';
 // Текст согласия в формах
-export const AGREE_LABEL = '<span>Я согласен на</span><a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">обработку персональных данных</a>';
+export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';
 // Текст информации в футере
 import salonsData from '@/data/salons.json';
 const salons = salonsData.filter(salon => !salon?.type || salon?.type.includes('footer_info'));
