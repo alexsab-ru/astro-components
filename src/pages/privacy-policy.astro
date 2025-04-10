@@ -5,10 +5,10 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('privacy_policy'));
 const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
-[`<span>${LEGAL_ENTITY} (ИНН:&nbsp;${LEGAL_INN})</span>`] : 
+[`<span>${LEGAL_ENTITY} <span class="text-nowrap">(ИНН: ${LEGAL_INN})</span></span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
-    .map(s => `<span><b>${s?.legal_entity}</b> (ИНН:&nbsp;${s?.legal_inn})</span>`);
+    .map(s => `<span><b>${s?.legal_entity}</b> <span class="text-nowrap">(ИНН: ${s?.legal_inn})</span></span>`);
 ---
 
 <PageLayout

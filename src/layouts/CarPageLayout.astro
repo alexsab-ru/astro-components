@@ -55,7 +55,7 @@ import BackLink from '@/components/BackLink.astro';
 							<CarCharItem label="Двигатель" value={data.modification_id} />
 						)}
 						{(data.run !== undefined && data.run !== null) && (
-							<CarCharItem label="Пробег" value={`${data.run.toLocaleString('ru-RU')}&nbsp;км`} />
+							<CarCharItem label="Пробег" value={`<span class="text-nowrap">${data.run.toLocaleString('ru-RU')} км</span>`} />
 						)}
 						{data.body_type && (
 							<CarCharItem label="Кузов" value={data.body_type} />
@@ -70,16 +70,16 @@ import BackLink from '@/components/BackLink.astro';
 							<CarCharItem label="VIN" value={data.vin_hidden} />
 						)}
 						{data.max_discount != null && data.max_discount != 0 && (
-							<CarCharItem label="Выгода" value={`до&nbsp;${currencyFormat(data.max_discount)}`} />
+							<CarCharItem label="Выгода" value={`<span class="text-nowrap">до ${currencyFormat(data.max_discount).replace(/\u00A0/g, ' ')}</span>`} />
 						)}
 					</div>
 					<div class="my-8">
 						<div class="text-gray-400 font-light mb-1">Стоимость</div>
-						<div class="font-bold text-4xl"><span class="text-sm text-gray-400 font-normal">от</span>&nbsp;{currencyFormat(price)}</div>
+						<div class="font-bold text-4xl text-nowrap"><span class="text-sm text-gray-400 font-normal">от</span> {currencyFormat(price).replace(/\u00A0/g, ' ')}</div>
 					</div>
 					<div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
-						<a href="#common-modal" class="popup-link btn flex-grow !p-2" data-title="Получить предложение" data-form_name={`Получить предложение. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Получить предложение</a>
-						<a href="#common-modal" class="popup-link btn gray flex-grow !p-2" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Рассчитать кредит</a>
+						<a href="#common-modal" class="popup-link btn flex-grow !p-2" data-title="Получить предложение" data-form_name={`Получить предложение. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price).replace(/\u00A0/g, ' ')}`}>Получить предложение</a>
+						<a href="#common-modal" class="popup-link btn gray flex-grow !p-2" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price).replace(/\u00A0/g, ' ')}`}>Рассчитать кредит</a>
 					</div>
 				</div>
 

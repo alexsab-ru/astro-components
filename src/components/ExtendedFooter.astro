@@ -12,10 +12,10 @@ const path = Astro.url.pathname;
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
 const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
-[`<p class="text-sm">${LEGAL_ENTITY}&nbsp;- ИНН:&nbsp;${LEGAL_INN}</p>`] : 
+[`<p class="text-sm text-nowrap">${LEGAL_ENTITY} - ИНН: ${LEGAL_INN}</p>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
-    .map(s => `<p class="text-sm">${s?.legal_entity}&nbsp;- ИНН:&nbsp;${s?.legal_inn}</p>`);
+    .map(s => `<p class="text-sm text-nowrap">${s?.legal_entity} - ИНН: ${s?.legal_inn}</p>`);
 ---
 
 <footer class="bg-black/90 text-white py-14 relative">

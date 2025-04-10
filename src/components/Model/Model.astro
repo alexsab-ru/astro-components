@@ -52,8 +52,8 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 					}
 					{
 						model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ? (
-							<p class="uppercase text-3xl sm:text-4xl">
-								<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+							<p class="uppercase text-3xl sm:text-4xl text-nowrap">
+								<span class="text-sm text-gray-400">от</span> {currencyFormat(model.price).replace(/\u00A0/g, ' ')}
 							</p>
 						) : (
 							<Button

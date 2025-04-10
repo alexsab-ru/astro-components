@@ -432,7 +432,7 @@ function AvtoInfoForm() {
 								Шаг назад
 							</span>
 						</div>
-						<button type="submit" className="btn px-5 sm:px-20 flex-grow sm:flex-grow-0" disabled={isSubmitting}><span>Получить&nbsp;оценку</span></button>
+						<button type="submit" className="btn px-5 sm:px-20 flex-grow sm:flex-grow-0" disabled={isSubmitting}><span className="text-nowrap">Получить оценку</span></button>
 					</div>
 				</div>
 

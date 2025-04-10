@@ -43,7 +43,7 @@ def process_description(desc_text):
     processed_lines = []
     for line in lines:
         if line.strip() == '':
-            processed_lines.append("<p>&nbsp;</p>")
+            processed_lines.append("<p class=\"mb-6\"></p>")
         else:
             processed_lines.append(f"<p>{line}</p>")
     return '\n'.join(processed_lines)
