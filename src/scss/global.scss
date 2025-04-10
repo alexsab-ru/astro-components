@@ -16,6 +16,9 @@ section:not(.model-section) {
 	h2 {
 		@apply relative pb-3 text-3xl sm:text-5xl w-fit mx-auto font-extrabold before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:h-1 before:w-32 before:bg-accent-500;
 	}
+	h3 {
+		@apply text-2xl sm:text-3xl;
+	}
 }
 
 .dz-remove {
@@ -52,6 +55,12 @@ section:not(.model-section) {
 		a {
 			@apply text-xs;
 		}
+		ul {
+			@apply text-xs list-disc pl-5;
+		}
+		h3 {
+			@apply text-sm mb-2;
+		}
 	}
 	table {
 		@apply border-collapse w-full bg-white text-center text-xs sm:text-sm md:text-base;
@@ -67,7 +76,7 @@ section:not(.model-section) {
 			}
 		}
 	}
-	ul{
+	ul {
 		@apply list-disc pl-5;
 	}
 }
