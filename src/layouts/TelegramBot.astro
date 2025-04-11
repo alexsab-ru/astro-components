@@ -57,12 +57,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 						console.log("getMetrikaID:",metrikaID);
 
 						if (metrikaID) {
-							scripts_json.metrika.forEach(metrika => {
-								ym(metrika.id, 'reachGoal', goal, function() {
-									console.log('Цель отправлена, выполняем редирект');
-									window.location.href = redirectUrl;
+							setTimeout(function() {
+								scripts_json.metrika.forEach(metrika => {
+									ym(metrika.id, 'reachGoal', goal, function() {
+										console.log('Цель отправлена, выполняем редирект');
+										window.location.href = redirectUrl;
+									});
 								});
-							});
+							}, 2000);
 						}
 						return metrikaID;
 					},
@@ -70,6 +72,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 						for (var property in object) {
 							if (object.hasOwnProperty(property) &&
 								property.toString().startsWith(prefix)) {
+									console.log("findPropertyByPrefix:",property);
 								return property;
 							}
 						}
