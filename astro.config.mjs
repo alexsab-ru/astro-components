@@ -15,7 +15,7 @@ export default defineConfig({
 			configFile: './tailwind.config.js'
 		}),
 		sitemap({
-			filter: (page) => !page.endsWith('telegrambot/')
+			filter: (page) => !page.endsWith('telegram-bot/')
 		}),
 		robots({
 			policy: [
