@@ -1,0 +1,68 @@
+---
+interface Props {
+	title?: string;
+	h1?: string;
+	description?: string;
+	image?: string;
+	keywords?: string;
+}
+let {title, h1, description, image, keywords} = Astro.props;
+
+import scripts_json from '@/data/scripts.json';
+const canonicalURL = new URL(Astro.url.pathname, Astro.url);
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<!-- Canonical URL -->
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+		{keywords && <meta name="keywords" content={keywords} />}
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+
+		<script define:vars={{ scripts_json }}>
+			(function() {
+				// Яндекс Метрика
+				if (scripts_json.metrika && scripts_json.metrika.length > 0) {
+					(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+					m[i].l=1*new Date();
+					for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+					k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+					(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+	
+					scripts_json.metrika.forEach(metrika => {
+						ym(metrika.id, "init", metrika);
+						ym(metrika.id, "ready", function() {
+							console.log(`Счетчик с ID ${metrika.id} готов`);
+							
+							// Пример: отправка цели и редирект
+							ym(metrika.id, 'reachGoal', 'telegram_click', function() {
+								console.log('Цель отправлена, выполняем редирект');
+								window.location.href = 'https://t.me/alexsab_ru';
+							});
+						});
+					});
+				}
+			})();
+		</script>
+	</head>
+	<body>
+		<h2>Вы будете перенаправлены в Telegram через 3 секунды...</h2>
+	</body>
+</html>

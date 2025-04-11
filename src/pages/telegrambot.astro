@@ -1,0 +1,14 @@
+---
+import {SITE_NAME, BRAND, LEGAL_CITY_WHERE} from '@/const.js';
+import salonsData from '@/data/salons.json';
+const salons = salonsData.filter(salon => !salon.type || salon.type.includes('index'));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
+import TelegramBot from '@/layouts/TelegramBot.astro';
+
+---
+
+<TelegramBot
+	title=`Купить ${BRAND} у официального дилера ${SITE_NAME}`
+	description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${BRAND} в ${LEGAL_CITY_WHERE}! ☎️ ${salonsPhone}`>
+	
+</TelegramBot>
