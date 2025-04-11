@@ -13,7 +13,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="h-full">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -45,7 +45,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 					for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
 					k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
 					(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-	
+					
 					scripts_json.metrika.forEach(metrika => {
 						ym(metrika.id, "init", metrika);
 						ym(metrika.id, "ready", function() {
@@ -62,7 +62,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 			})();
 		</script>
 	</head>
-	<body>
+	<body class="h-full flex justify-center items-center">
 		<h2>Вы будете перенаправлены в Telegram через 3 секунды...</h2>
 	</body>
 </html>
