@@ -40,29 +40,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 		<script define:vars={{ scripts_json, goal, redirectUrl }}>
 			(function() {
 
-				var getMetrikaID = function() {
-					return (typeof ym != 'undefined' && typeof ym.a != 'undefined') ? ym.a[0][0] : findPropertyByPrefix(window, "yaCounter").substr(9);
-				},
-				findPropertyByPrefix = function(object, prefix) {
-					for (var property in object) {
-						if (object.hasOwnProperty(property) &&
-							property.toString().startsWith(prefix)) {
-							return property;
-						}
-					}
-					setTimeout(function() {
-						metrika = getMetrikaID();
-						console.log("metrika:",metrika);
-
-						ym(metrika, 'reachGoal', goal, function() {
-							console.log('Цель отправлена, выполняем редирект');
-							window.location.href = redirectUrl;
-						});
-					}, 100);
-					return "";
-				},
-				metrika = getMetrikaID();
-
 				// Яндекс Метрика
 				if (scripts_json.metrika && scripts_json.metrika.length > 0) {
 					(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -74,6 +51,35 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 					scripts_json.metrika.forEach(metrika => {
 						ym(metrika.id, "init", metrika);
 					});
+
+					var getMetrikaID = function() {
+						let metrikaID = (typeof ym != 'undefined' && typeof ym.a != 'undefined') ? ym.a[0][0] : findPropertyByPrefix(window, "yaCounter").substr(9);
+						console.log("getMetrikaID:",metrikaID);
+
+						if (metrikaID) {
+							scripts_json.metrika.forEach(metrika => {
+								ym(metrika.id, 'reachGoal', goal, function() {
+									console.log('Цель отправлена, выполняем редирект');
+									window.location.href = redirectUrl;
+								});
+							});
+						}
+						return metrikaID;
+					},
+					findPropertyByPrefix = function(object, prefix) {
+						for (var property in object) {
+							if (object.hasOwnProperty(property) &&
+								property.toString().startsWith(prefix)) {
+								return property;
+							}
+						}
+						setTimeout(function() {
+							metrikaID = getMetrikaID();
+							console.log("setTimeout:",metrikaID);
+						}, 100);
+						return "";
+					},
+					metrikaID = getMetrikaID();
 				}
 			})();
 		</script>
