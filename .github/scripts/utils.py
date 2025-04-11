@@ -446,6 +446,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, con
     else:
         content += "total: 1\n"
     # content += f"permalink: {friendly_url}\n"
+    content += f"vin_list: {vin}\n"
     content += f"vin_hidden: {vin_hidden}\n"
 
     h1 = join_car_data(car, 'mark_id', 'folder_id', 'modification_id')
@@ -628,6 +629,10 @@ def update_yaml(car, filename, friendly_url, current_thumbs, config):
 
 
     vin = car.find('vin').text
+    if vin is not None:
+        # Создаём или добавляем строку в список
+        data['vin_list'] += ", " + vin
+
     vin_hidden = process_vin_hidden(vin)
     if vin_hidden is not None:
         # Создаём или добавляем строку в список
