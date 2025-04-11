@@ -1,12 +1,13 @@
 ---
 interface Props {
 	title?: string;
-	h1?: string;
 	description?: string;
 	image?: string;
 	keywords?: string;
+	goal?: string;
+	redirectUrl?: string;
 }
-let {title, h1, description, image, keywords} = Astro.props;
+let {title, description, image, keywords, goal = 'telegram_redirect', redirectUrl = 'https://t.me/alexsab_ru'} = Astro.props;
 
 import scripts_json from '@/data/scripts.json';
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
@@ -36,8 +37,32 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 
-		<script define:vars={{ scripts_json }}>
+		<script define:vars={{ scripts_json, goal, redirectUrl }}>
 			(function() {
+
+				var getMetrikaID = function() {
+					return (typeof ym != 'undefined' && typeof ym.a != 'undefined') ? ym.a[0][0] : findPropertyByPrefix(window, "yaCounter").substr(9);
+				},
+				findPropertyByPrefix = function(object, prefix) {
+					for (var property in object) {
+						if (object.hasOwnProperty(property) &&
+							property.toString().startsWith(prefix)) {
+							return property;
+						}
+					}
+					setTimeout(function() {
+						metrika = getMetrikaID();
+						console.log("metrika:",metrika);
+
+						ym(metrika, 'reachGoal', goal, function() {
+							console.log('Цель отправлена, выполняем редирект');
+							window.location.href = redirectUrl;
+						});
+					}, 100);
+					return "";
+				},
+				metrika = getMetrikaID();
+
 				// Яндекс Метрика
 				if (scripts_json.metrika && scripts_json.metrika.length > 0) {
 					(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -48,21 +73,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 					
 					scripts_json.metrika.forEach(metrika => {
 						ym(metrika.id, "init", metrika);
-						ym(metrika.id, "ready", function() {
-							console.log(`Счетчик с ID ${metrika.id} готов`);
-							
-							// Пример: отправка цели и редирект
-							ym(metrika.id, 'reachGoal', 'telegram_click', function() {
-								console.log('Цель отправлена, выполняем редирект');
-								window.location.href = 'https://t.me/alexsab_ru';
-							});
-						});
 					});
 				}
 			})();
 		</script>
 	</head>
 	<body class="h-full flex justify-center items-center">
-		<h2 class="font-bold md:text-3xl text-center p-3">Вы будете перенаправлены в Telegram через 3 секунды...</h2>
+		<h2 class="font-bold md:text-3xl text-center p-3">Вы будете перенаправлены в Telegram<br/>через 3 секунды...</h2>
 	</body>
 </html>
