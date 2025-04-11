@@ -1,0 +1,84 @@
+---
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+	keywords?: string;
+	goal?: string;
+	redirectUrl?: string;
+}
+let {title, description, image, keywords, goal = 'telegram_redirect', redirectUrl = 'https://t.me/alexsab_ru'} = Astro.props;
+
+import scripts_json from '@/data/scripts.json';
+const canonicalURL = new URL(Astro.url.pathname, Astro.url);
+---
+
+<!doctype html>
+<html lang="ru" class="h-full">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<!-- Canonical URL -->
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+		{keywords && <meta name="keywords" content={keywords} />}
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+
+		<script define:vars={{ scripts_json, goal, redirectUrl }}>
+			(function() {
+
+				var getMetrikaID = function() {
+					return (typeof ym != 'undefined' && typeof ym.a != 'undefined') ? ym.a[0][0] : findPropertyByPrefix(window, "yaCounter").substr(9);
+				},
+				findPropertyByPrefix = function(object, prefix) {
+					for (var property in object) {
+						if (object.hasOwnProperty(property) &&
+							property.toString().startsWith(prefix)) {
+							return property;
+						}
+					}
+					setTimeout(function() {
+						metrika = getMetrikaID();
+						console.log("metrika:",metrika);
+
+						ym(metrika, 'reachGoal', goal, function() {
+							console.log('Цель отправлена, выполняем редирект');
+							window.location.href = redirectUrl;
+						});
+					}, 100);
+					return "";
+				},
+				metrika = getMetrikaID();
+
+				// Яндекс Метрика
+				if (scripts_json.metrika && scripts_json.metrika.length > 0) {
+					(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+					m[i].l=1*new Date();
+					for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+					k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+					(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+					
+					scripts_json.metrika.forEach(metrika => {
+						ym(metrika.id, "init", metrika);
+					});
+				}
+			})();
+		</script>
+	</head>
+	<body class="h-full flex justify-center items-center">
+		<h2 class="font-bold md:text-3xl text-center p-3">Вы будете перенаправлены в Telegram<br/>через 3 секунды...</h2>
+	</body>
+</html>
