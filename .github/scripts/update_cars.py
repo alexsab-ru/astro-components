@@ -173,6 +173,18 @@ def main():
     args = parser.parse_args()
     config = vars(args)
 
+    # Получаем конфигурацию FTP
+    ftp_config = None
+    if all(os.getenv(key) for key in ['FTP_HOST', 'FTP_USER', 'FTP_PASSWORD', 'FTP_PATH', 'FTP_BASE_URL']):
+        ftp_config = {
+            'host': os.getenv('FTP_HOST'),
+            'user': os.getenv('FTP_USER'),
+            'password': os.getenv('FTP_PASSWORD'),
+            'path': os.getenv('FTP_PATH'),
+            'base_url': os.getenv('FTP_BASE_URL')
+        }
+    config['ftp_config'] = ftp_config
+
     default_config = {
         "move_vin_id_up": 0,
         "new_address": "",

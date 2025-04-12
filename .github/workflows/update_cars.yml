@@ -85,6 +85,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.CSV_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get air storage
       if: ${{ vars.AIR_STORAGE_CSV_URL }}
@@ -92,6 +97,11 @@ jobs:
         pnpm run getAirStorage
       env:
         CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer JSON cars price
       if: ${{ vars.DEALER_PRICE_CSV_URL }}
@@ -100,6 +110,11 @@ jobs:
       continue-on-error: true
       env:
         CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer cars Storage
       if: ${{ vars.DEALER_STORAGE_CSV_URL }}
@@ -111,6 +126,11 @@ jobs:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
         QUERY_STRING: ${{ vars.DEALER_STORAGE_CSV_COLUMN }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer used_cars Storage
       if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
@@ -122,6 +142,11 @@ jobs:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
         QUERY_STRING: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Used Cars data_cars_car XML and generate cars file
       if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
@@ -131,6 +156,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get cars data_cars_car XML and generate cars file
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
@@ -140,6 +170,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get cars maxposter XML and generate cars file
       if: ${{ vars.XML_URL_MAXPOSTER }}
@@ -149,6 +184,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_MAXPOSTER }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get cars vehicles_vehicle XML and generate cars file
       if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
@@ -158,6 +198,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get cars carcopy XML and generate cars file
       if: ${{ vars.XML_URL_CARCOPY }}
@@ -167,6 +212,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_CARCOPY }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer XML for auto.ru and generate auto.ru xml
       if: ${{ vars.AUTORU_XML_URL && !vars.AUTORU_FRIEND_XML_URL }}
@@ -176,6 +226,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_XML_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer AutoRu xml if friend url exists
       if: ${{ vars.AUTORU_XML_URL && vars.AUTORU_FRIEND_XML_URL }}
@@ -185,6 +240,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_XML_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get friends AutoRu xml
       if: ${{ vars.AUTORU_FRIEND_XML_URL }}
@@ -194,6 +254,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_FRIEND_XML_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Merge AutoRu xmls
       if: ${{ vars.AUTORU_FRIEND_XML_URL }}
@@ -202,6 +267,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: "./public/autoru_dc.xml ./public/autoru_friend.xml"
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer XML for avito and generate avito xml if friend url not exists
       if: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
@@ -211,6 +281,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer XML for avito and generate avito xml if friend url not exists
       if: ${{ vars.AVITO_XML_URL && !vars.AVITO_FRIEND_XML_URL }}
@@ -220,6 +295,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get Dealer Avito xml if friend url exists
       if: ${{ vars.AVITO_XML_URL && vars.AVITO_FRIEND_XML_URL }}
@@ -229,6 +309,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Get friends Avito xml
       if: ${{ vars.AVITO_FRIEND_XML_URL }}
@@ -238,6 +323,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_FRIEND_XML_URL }}
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Merge Avito xmls
       if: ${{ vars.AVITO_FRIEND_XML_URL }}
@@ -246,6 +336,11 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: "./public/avito_dc.xml ./public/avito_friend.xml"
+        FTP_HOST: ${{ vars.FTP_HOST }}
+        FTP_USER: ${{ vars.FTP_USER }}
+        FTP_PASSWORD: ${{ vars.FTP_PASSWORD }}
+        FTP_PATH: ${{ vars.FTP_PATH }}
+        FTP_BASE_URL: ${{ vars.FTP_BASE_URL }}
 
     - name: Set output
       id: set_output

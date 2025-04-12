@@ -481,9 +481,23 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, con
             content += f"{child.tag}: '{child.text}'\n"
         elif child.tag == f'{config["image_tag"]}s':
             images = [img.text for img in child.findall(config['image_tag'])]
-            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
+            
+            # Создаем изображения разных размеров
+            resized_images = create_resized_images(
+                images, 
+                friendly_url, 
+                current_thumbs, 
+                config['thumbs_dir'], 
+                config['skip_thumbs'],
+                config['ftp_config'],
+                config
+            )
+            
+            # Добавляем пути к изображениям в YAML
             content += f"images: {images}\n"
-            content += f"thumbs: {thumbs_files}\n"
+            for size, urls in resized_images.items():
+                content += f"images_{size}: {urls}\n"
+            
         elif child.tag == 'color':
             content += f"{child.tag}: {color}\n"
             content += f"image: {thumb}\n"
@@ -540,7 +554,6 @@ def format_value(value: str) -> str:
     return value
 
 def update_yaml(car, filename, friendly_url, current_thumbs, config):
-
     print(f"Обновление файла: {filename}")
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
@@ -557,6 +570,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, config):
     yaml_block = parts[1].strip()
     data = yaml.safe_load(yaml_block)
 
+    # Обновление базовых полей
     total_element = car.find('total')
     if 'total' in data and total_element is not None:
         try:
@@ -627,7 +641,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, config):
             # либо выполнить другое действие по вашему выбору
             pass
 
-
+    # Обновление VIN и уникальных идентификаторов
     vin = car.find('vin').text
     if vin is not None:
         # Создаём или добавляем строку в список
@@ -642,26 +656,37 @@ def update_yaml(car, filename, friendly_url, current_thumbs, config):
     if unique_id is not None:
         if not isinstance(data['unique_id'], str):
             data['unique_id'] = str(data['unique_id'])
-
         data['unique_id'] += ", " + str(unique_id.text)
     else:
         unique_id = car.find('id')
         if unique_id is not None:
             if not isinstance(data['id'], str):
                 data['id'] = str(data['id'])
-
             data['id'] += ", " + str(unique_id.text)
 
-
+    # Обработка изображений
     images_container = car.find(f"{config['image_tag']}s")
     if images_container is not None:
         images = [img.text for img in images_container.findall(config['image_tag'])]
         if len(images) > 0:
             data.setdefault('images', []).extend(images)
-            # Проверяем, нужно ли добавлять эскизы
-            if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
-                data.setdefault('thumbs', []).extend(thumbs_files)
+            
+            # Создаем изображения разных размеров
+            resized_images = create_resized_images(
+                images, 
+                friendly_url, 
+                current_thumbs, 
+                config['thumbs_dir'], 
+                config['skip_thumbs'],
+                config['ftp_config'],
+                config
+            )
+            
+            # Обновляем пути к изображениям в YAML
+            for size, urls in resized_images.items():
+                if f'images_{size}' not in data:
+                    data[f'images_{size}'] = []
+                data[f'images_{size}'].extend(urls)
 
     # Convert the data back to a YAML string
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
@@ -860,3 +885,120 @@ def load_file_config(config_path: str, source_type: str, default_config) -> Dict
     except json.JSONDecodeError:
         print(f"Ошибка при чтении {config_path}. Используются значения по умолчанию.")
         return default_config
+
+def create_resized_images(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False, ftp_config=None, config=None):
+    """
+    Создает уменьшенные копии изображений с разными размерами и загружает их на FTP сервер.
+    
+    Args:
+        image_urls: Список URL изображений
+        friendly_url: Уникальный идентификатор автомобиля
+        current_thumbs: Список для хранения путей к текущим превьюшкам
+        thumbs_dir: Директория для локального хранения превьюшек
+        skip_thumbs: Пропустить создание превьюшек
+        ftp_config: Конфигурация FTP сервера (если None, загрузка на FTP не производится)
+        config: Общая конфигурация с доменом
+    
+    Returns:
+        Dict[str, List[str]]: Словарь с путями к изображениям разных размеров
+    """
+    import ftplib
+    from urllib.parse import urlparse
+    
+    # Размеры изображений
+    sizes = {
+        'full': 1920,
+        'large': 540,
+        'medium': 384,
+        'small': 192,
+        'thumb': 19
+    }
+    
+    # Словарь для хранения путей к изображениям разных размеров
+    resized_images = {size: [] for size in sizes.keys()}
+    
+    # Определение относительного пути для возврата
+    relative_thumbs_dir = thumbs_dir.replace("public", "")
+    
+    # Получаем домен из конфигурации
+    domain = config.get('domain', 'localhost') if config else 'localhost'
+
+    # Обработка первых 5 изображений
+    for index, img_url in enumerate(image_urls[:5]):
+        try:
+            # Извлечение имени файла из URL и удаление расширения
+            original_filename = os.path.basename(urlparse(img_url).path)
+            filename_without_extension, _ = os.path.splitext(original_filename)
+            
+            # Получение последних 5 символов имени файла (без расширения)
+            last_5_chars = filename_without_extension[-5:]
+            
+            # Загрузка исходного изображения
+            response = requests.get(img_url)
+            image = Image.open(BytesIO(response.content))
+            aspect_ratio = image.width / image.height
+            
+            # Создание изображений разных размеров
+            for size_name, target_width in sizes.items():
+                # Формирование имени файла
+                output_filename = f"{last_5_chars}_{size_name}_{index}.webp"
+                
+                # Создаем путь с учетом домена и friendly_url
+                output_dir = os.path.join(thumbs_dir, domain, friendly_url)
+                output_path = os.path.join(output_dir, output_filename)
+                relative_output_path = os.path.join(relative_thumbs_dir, domain, friendly_url, output_filename)
+                
+                # Создаем директорию, если она не существует
+                os.makedirs(output_dir, exist_ok=True)
+                
+                # Пропуск создания, если файл уже существует
+                if not os.path.exists(output_path) and not skip_thumbs:
+                    # Расчет новых размеров с сохранением пропорций
+                    new_width = target_width
+                    new_height = int(new_width / aspect_ratio)
+                    
+                    # Изменение размера изображения
+                    resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                    
+                    # Сохранение локально
+                    resized_image.save(output_path, "WEBP")
+                    print(f"Создано изображение {size_name}: {relative_output_path}")
+                    
+                    # Загрузка на FTP сервер, если указана конфигурация
+                    if ftp_config:
+                        try:
+                            ftp = ftplib.FTP(ftp_config['host'])
+                            ftp.login(ftp_config['user'], ftp_config['password'])
+                            
+                            # Создание директорий на FTP сервере
+                            ftp_path = os.path.join(ftp_config['path'], domain, friendly_url)
+                            for dir_part in ftp_path.split('/'):
+                                try:
+                                    ftp.mkd(dir_part)
+                                except ftplib.error_perm:
+                                    pass
+                                ftp.cwd(dir_part)
+                            
+                            # Загрузка файла
+                            with open(output_path, 'rb') as file:
+                                ftp.storbinary(f'STOR {output_filename}', file)
+                            
+                            ftp.quit()
+                            print(f"Загружено на FTP: {os.path.join(ftp_path, output_filename)}")
+                        except Exception as e:
+                            print(f"Ошибка при загрузке на FTP: {e}")
+                
+                # Добавление пути к изображению в соответствующий список
+                if ftp_config:
+                    ftp_url = f"{ftp_config['base_url']}/{domain}/{friendly_url}/{output_filename}"
+                    resized_images[size_name].append(ftp_url)
+                else:
+                    resized_images[size_name].append(f"/{relative_output_path}")
+                
+                # Добавление полного пути в список текущих превьюшек
+                current_thumbs.append(output_path)
+                
+        except Exception as e:
+            print(f"Ошибка при обработке изображения {img_url}: {e}")
+    
+    return resized_images
