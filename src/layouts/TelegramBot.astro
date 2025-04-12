@@ -2,12 +2,19 @@
 interface Props {
 	title?: string;
 	description?: string;
-	image?: string;
 	keywords?: string;
 	goal?: string;
 	redirectUrl?: string;
+	pageText?: string;
 }
-let {title, description, image, keywords, goal = 'telegram_redirect', redirectUrl = 'https://t.me/alexsab_ru'} = Astro.props;
+let {
+	title,
+	description,
+	keywords,
+	goal = 'telegram_redirect',
+	redirectUrl = 'https://t.me/alexsab_ru',
+	pageText = 'Вы будете перенаправлены<br/>через 3 секунды...'
+} = Astro.props;
 
 import scripts_json from '@/data/scripts.json';
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
@@ -18,9 +25,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-		<link rel="sitemap" href="/sitemap-index.xml" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
 		<!-- Canonical URL -->
 		<link rel="canonical" href={canonicalURL} />
@@ -88,6 +93,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 		</script>
 	</head>
 	<body class="h-full flex justify-center items-center">
-		<h2 class="font-bold md:text-3xl text-center p-3">Вы будете перенаправлены в Telegram<br/>через 3 секунды...</h2>
+		<h2 class="font-bold md:text-3xl text-center p-3">{pageText}</h2>
 	</body>
 </html>
