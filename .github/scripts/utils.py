@@ -484,6 +484,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, con
             
             # Создаем изображения разных размеров
             resized_images = create_resized_images(
+                vin,
                 images, 
                 friendly_url, 
                 current_thumbs, 
@@ -673,6 +674,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, config):
             
             # Создаем изображения разных размеров
             resized_images = create_resized_images(
+                vin,
                 images, 
                 friendly_url, 
                 current_thumbs, 
@@ -886,11 +888,12 @@ def load_file_config(config_path: str, source_type: str, default_config) -> Dict
         print(f"Ошибка при чтении {config_path}. Используются значения по умолчанию.")
         return default_config
 
-def create_resized_images(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False, ftp_config=None, config=None):
+def create_resized_images(vin, image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False, ftp_config=None, config=None):
     """
     Создает уменьшенные копии изображений с разными размерами и загружает их на FTP сервер.
     
     Args:
+        vin: VIN автомобиля
         image_urls: Список URL изображений
         friendly_url: Уникальный идентификатор автомобиля
         current_thumbs: Список для хранения путей к текущим превьюшкам
@@ -924,14 +927,15 @@ def create_resized_images(image_urls, friendly_url, current_thumbs, thumbs_dir, 
     domain = config.get('domain', 'localhost') if config else 'localhost'
 
     # Обработка первых 5 изображений
-    for index, img_url in enumerate(image_urls[:5]):
+    # for index, img_url in enumerate(image_urls[:5]):
+    for index, img_url in image_urls:
         try:
             # Извлечение имени файла из URL и удаление расширения
             original_filename = os.path.basename(urlparse(img_url).path)
             filename_without_extension, _ = os.path.splitext(original_filename)
             
             # Получение последних 5 символов имени файла (без расширения)
-            last_5_chars = filename_without_extension[-5:]
+            last_5_chars = vin[-5:]
             
             # Загрузка исходного изображения
             response = requests.get(img_url)
