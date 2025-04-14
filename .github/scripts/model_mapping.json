@@ -1291,6 +1291,18 @@
                 "Оранжевый": "terracotta-sapphire.webp"
             }
         },
+        "H7, I": {
+            "folder": "h7",
+            "cyrillic": "H7",
+            "color": {
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Серый": "smoky-pearls.webp",
+                "Дымчатый жемчуг": "smoky-pearls.webp",
+                "Белый": "noble-agate.webp",
+                "Оранжевый": "terracotta-sapphire.webp"
+            }
+        },
         "H5, II": {
             "folder": "h5",
             "cyrillic": "H5",
