@@ -334,6 +334,7 @@
                 "Красный": "red.webp",
                 "Синий": "blue.webp",
                 "Серебристый": "silver.webp",
+                "Серебряный": "silver.webp",
                 "Белый": "white.webp"
             }
         },
@@ -352,6 +353,7 @@
                 "Красный": "red.webp",
                 "Silver": "silver.webp",
                 "Серебристый": "silver.webp",
+                "Серебряный": "silver.webp",
                 "White": "white.webp",
                 "Белый": "white.webp"
             }
