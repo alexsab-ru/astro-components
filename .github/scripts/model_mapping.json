@@ -535,6 +535,13 @@
                 "Золотой": "gold.webp",
                 "Белый": "white.webp"
             }
+        },
+        "EMPOW": {
+            "folder": "empow",
+            "cyrillic": "Эмпоу",
+            "color": {
+                "Черный": "black.webp"
+            }
         }
     },
     "KNEWSTAR": {
