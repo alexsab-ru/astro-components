@@ -656,7 +656,8 @@
                 "Зеленый": "c6b.png",
                 "Зелёный": "c6b.png",
                 "Серебряный": "c7b.png",
-                "Светло-серый": "c7b.png"
+                "Светло-серый": "c7b.png",
+                "Бежевый": "beige.webp"
             }
         },
         "T2": {
@@ -679,7 +680,8 @@
                 "Grey": "c4b.png",
                 "Серый": "c4b.png",
                 "Blue": "blue.png",
-                "Синий": "blue.png"
+                "Синий": "blue.png",
+                "Белый": "white.webp"
             }
         },
         "X50": {
@@ -755,6 +757,28 @@
                 "Grey": "c2b.png",
                 "Silver": "c2b.png",
                 "Серебряный": "c2b.png",
+                "Серый": "c2b.png",
+                "Red": "c3b.png",
+                "Красный": "c3b.png",
+                "Gray": "c4b.png",
+                "Серый": "c4b.png",
+                "Blue": "c5b.png",
+                "Синий": "c5b.png",
+                "Darkblue": "c6b.png",
+                "Темно-синий": "c6b.png",
+                "Black": "c7b.png",
+                "Черный": "c7b.png"
+            }
+        },
+        "X70, I Рестайлинг 2": {
+            "folder": "x70plus",
+            "cyrillic": "Икс 70 Плюс",
+            "color": {
+                "White": "c1b.png",
+                "Белый": "c1b.png",
+                "Grey": "c2b.png",
+                "Silver": "c2b.png",
+                "Серебряный": "silver.webp",
                 "Серый": "c2b.png",
                 "Red": "c3b.png",
                 "Красный": "c3b.png",
