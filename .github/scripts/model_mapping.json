@@ -458,6 +458,16 @@
                 "Белый": "white.webp"
             }
         },
+        "GS4": {
+            "folder": "gs4",
+            "cyrillic": "ГС4",
+            "color": {
+                "Черный": "black.webp",
+                "Серый": "gray.webp",
+                "Серебристый": "silver.webp",
+                "Белый": "white.webp"
+            }
+        },
         "GS5": {
             "folder": "gs5",
             "cyrillic": "ГС5",
