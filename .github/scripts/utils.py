@@ -950,8 +950,7 @@ def create_resized_images(vin, image_urls, friendly_url, current_thumbs, thumbs_
     domain = config.get('domain', 'localhost') if config else 'localhost'
 
     # Обработка первых 5 изображений
-    # for index, img_url in enumerate(image_urls[:5]):
-    for index, img_url in image_urls:
+    for index, img_url in enumerate(image_urls):
         try:
             # Извлечение имени файла из URL и удаление расширения
             original_filename = os.path.basename(urlparse(img_url).path)
