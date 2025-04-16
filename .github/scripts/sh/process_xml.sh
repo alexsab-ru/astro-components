@@ -100,6 +100,12 @@ handle_getone() {
     local env_var=$1
     local output_file=$2
     
+    if [ -z "$env_var" ]; then
+        echo "Error: getone requires an environment variable name"
+        show_help
+        exit 1
+    fi
+    
     export XML_URL=$(get_xml_url "$env_var")
     
     if [ -n "$output_file" ]; then
@@ -260,9 +266,11 @@ done
 # Now process the command and its arguments
 command="${args[0]}"
 type="${args[1]}"
+output_file="${args[2]}"
 
 echo "Command: $command"
 echo "Type: $type"
+echo "Output file: $output_file"
 echo "Enable thumbs: $enable_thumbs"
 echo "Run dev: $run_dev"
 
@@ -273,7 +281,7 @@ case $command in
             show_help
             exit 1
         fi
-        handle_getone "$type" "${args[2]}"
+        handle_getone "$type" "$output_file"
         ;;
     "update")
         if [ -z "$type" ]; then
