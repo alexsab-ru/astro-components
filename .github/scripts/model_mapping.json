@@ -1519,6 +1519,8 @@
                 "Серебристо-черный": "silver-black.webp",
                 "Silver": "silver.webp",
                 "Серебряный": "silver.webp",
+                "Серебристый": "silver.webp",
+                "Серый": "silver.webp",
                 "White": "white.webp",
                 "Белый": "white.webp"
             }
@@ -1541,6 +1543,7 @@
                 "Серо-голубой": "gray-blue.webp",
                 "Gray": "gray.webp",
                 "Серый": "gray.webp",
+                "Серебряный": "gray.webp",
                 "White-black": "white-black.webp",
                 "Белый-черный": "white-black.webp",
                 "White": "white.webp",
