@@ -1552,5 +1552,189 @@
                 "Белый": "white.webp"
             }
         }
+    },
+    "Chery": {
+        "Tiggo 4": {
+            "folder": "tiggo4",
+            "cyrillic": "Тигго 4",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Стальной серый": "steel-gray.webp",
+                "Серебристый серый": "silver-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Огненный красный": "red.webp"
+            }
+        },
+        "Tiggo 4 Pro": {
+            "folder": "tiggo4pro",
+            "cyrillic": "Тигго 4 Про",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Глубокий черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Стальной серый": "steel-gray.webp",
+                "Серебристый серый": "silver-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Огненно-красный": "red.webp",
+                "Blue": "blue.webp",
+                "Голубой": "blue.webp",
+                "Небесно-голубой": "blue.webp"
+            }
+        },
+        "Tiggo 7 Pro Max": {
+            "folder": "newtiggo7promax",
+            "cyrillic": "Тигго 7 Про Макс",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Глубокий черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Стальной серый": "steel-gray.webp",
+                "Серебристый": "silver-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Искрящийся белый (черная крыша)": "white-black.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Огненно-красный": "red.webp",
+                "Огненно-красный (черная крыша)": "red-black.webp",
+                "Blue": "blue.webp",
+                "Голубой": "blue.webp",
+                "Небесно-голубой": "blue.webp"
+            }
+        },
+        "Tiggo 8 Pro Max": {
+            "folder": "newtiggo8promax",
+            "cyrillic": "Тигго 8 Про Макс",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Глубокий черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Стальной серый": "steel-gray.webp",
+                "Серебристый серый": "silver-gray.webp",
+                "Технологичный серый": "technological-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Blue": "blue.webp",
+                "Голубой": "blue.webp",
+                "Небесный синий": "blue.webp",
+                "Purple": "purple.webp",
+                "Пурпурный": "purple.webp",
+                "Королевский пурпурный": "purple.webp",
+                "Green": "green.webp",
+                "Зеленый": "green.webp",
+                "Изумрудный зеленый": "green.webp"
+            }
+        },
+        "Tiggo 9": {
+            "folder": "tiggo9",
+            "cyrillic": "Тигго 9",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Глубокий черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Матовый серый": "matte-gray.webp",
+                "Технологичный серый": "technological-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Blue": "blue.webp",
+                "Голубой": "blue.webp",
+                "Небесный синий": "blue.webp",
+                "Green": "green.webp",
+                "Зеленый": "green.webp",
+                "Изумрудный зеленый": "green.webp"
+            }
+        },
+        "Arrizo 8": {
+            "folder": "arrizo8",
+            "cyrillic": "Арризо 8",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Глубокий черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Серебристый серый": "silver-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Blue": "blue.webp",
+                "Голубой": "blue.webp",
+                "Небесный синий": "blue.webp",
+                "Green": "green.webp",
+                "Зеленый": "green.webp",
+                "Глубокий зеленый": "green.webp"
+            }
+        },
+        "Tiggo 7 Pro Plug-in Hybrid": {
+            "folder": "tiggo7pro-plug-in-hybrid",
+            "cyrillic": "Тигго 7 Про Плаг ин Гибрид",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Глубокий черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Стальной серый": "steel-gray.webp",
+                "Серебристый серый": "silver-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Огненный красный": "red.webp",
+                "Blue": "blue.webp",
+                "Голубой": "blue.webp",
+                "Небесный голубой": "blue.webp",
+                "Морской синий": "sea-blue.webp"
+            }
+        },
+        "Tiggo 8 Pro Plug-in Hybrid": {
+            "folder": "tiggo8pro-plug-in-hybrid",
+            "cyrillic": "Тигго 8 Про Плаг ин Гибрид",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Глубокий черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Стальной серый": "steel-gray.webp",
+                "Серебристый серый": "silver-gray.webp",
+                "Технологичный серый": "technological-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Blue": "blue.webp",
+                "Голубой": "blue.webp",
+                "Небесный синий": "blue.webp",
+                "Purple": "purple.webp",
+                "Пурпурный": "purple.webp",
+                "Королевский пурпурный": "purple.webp",
+                "Green": "green.webp",
+                "Зеленый": "green.webp",
+                "Изумрудный зеленый": "green.webp"
+            }
+        }
     }
 }
