@@ -1,0 +1,18 @@
+---
+interface Props {
+	links: any;
+}
+const { links } = Astro.props;
+
+import HeaderMenuList from './MenuList.astro';
+
+const path = Astro.url.pathname;
+const classBottom = path != '/' ? ' border-b' : '';
+---
+<div id="site_nav" class={'hidden lg:block border-t'+classBottom}>
+	<div class="container">
+		<div class="h-full">
+			<HeaderMenuList links={links} />
+		</div>
+	</div>
+</div>

@@ -1,0 +1,13 @@
+---
+interface Props {
+	link: any
+}
+const { link } = Astro.props;
+import MenuLink from './MenuLink.astro';
+import SubMenu from './SubMenu.astro';
+const relative = link?.children && Array.isArray(link.children) ? 'relative' : ''; 
+---
+<li class={`group ${relative}`}>
+	<MenuLink link={link} />
+	{link?.children && <SubMenu children={link.children} />}
+</li>

@@ -1,0 +1,27 @@
+---
+interface Props {
+	link: any;
+	sublink?: boolean
+}
+const { link = {}, sublink = false, ...rest } = Astro.props;
+const path = Astro.url.pathname;
+---
+<a
+	href={link.url === 'javascript:void(0)' || path === '/' ? link.url : '/'+link.url}
+	class:list={[
+		{
+			'scroll-link': link.url.includes('#'),
+			'header-link': !link.url.includes('#'),
+			'header-child-link': sublink,
+			'active': path.replace(/\//g, '') === link.url.replace(/\//g, '')
+		}
+	]}
+	{...rest}
+>
+{link.name}
+{link?.thumb && (
+	<div class="aspect-video hidden lg:block w-full relative">
+		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" />
+	</div>
+)}
+</a>
