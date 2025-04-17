@@ -1,7 +1,7 @@
 .scroll-link, .header-link, .header-child-link{
-	@apply block lg:inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-400 hover:text-white whitespace-nowrap;
+	@apply block lg:inline-block py-3 px-5 transition-colors duration-300 hover:bg-accent-500 hover:text-white whitespace-nowrap;
 	&.active{
-		@apply bg-accent-400 text-white;
+		@apply bg-accent-500 text-white;
 	}
 }
 .header-child-link{
