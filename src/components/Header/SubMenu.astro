@@ -28,7 +28,7 @@ classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes
 						</div>
 					) : '' }
 				</div>
-				<div class="lg:col-span-4 lg:grid lg:grid-cols-4 xl:grid-cols-5 lg:text-center pl-4 lg:pl-0" :class="{'hidden': !isOpenSubMenu }">
+				<div class={`${Object.keys(children).length > 1 ? 'lg:col-span-4' : 'lg:col-span-full'} ${Object.keys(children).length == 1 ? '!block lg:!grid' : 'lg:grid'} lg:grid-cols-4 xl:grid-cols-5 lg:text-center pl-4 lg:pl-0`} :class="{'hidden': !isOpenSubMenu }">
 					{ children[key].map(child => (<MenuLink link={child} sublink={true} />)) }
 				</div>
 			</div>
