@@ -949,7 +949,7 @@ def create_resized_images(vin, image_urls, friendly_url, current_thumbs, thumbs_
     # Получаем домен из конфигурации
     domain = config.get('domain', 'localhost') if config else 'localhost'
 
-    # Обработка первых 5 изображений
+    # Обработка изображений
     for index, img_url in enumerate(image_urls):
         try:
             # Извлечение имени файла из URL и удаление расширения
@@ -973,6 +973,20 @@ def create_resized_images(vin, image_urls, friendly_url, current_thumbs, thumbs_
                 output_dir = os.path.join(thumbs_dir, domain, friendly_url)
                 output_path = os.path.join(output_dir, output_filename)
                 relative_output_path = os.path.join(relative_thumbs_dir, domain, friendly_url, output_filename)
+                
+                # Проверяем существование файла на CDN
+                cdn_path = f"https://cdn.alexsab.ru/thumbs/{domain}/{friendly_url}/{output_filename}"
+                try:
+                    response = requests.head(cdn_path)
+                    if response.status_code == 200:
+                        print(f"Файл уже существует на CDN: {cdn_path}")
+                        if ftp_config:
+                            resized_images[size_name].append(cdn_path)
+                        else:
+                            resized_images[size_name].append(f"/{relative_output_path}")
+                        continue
+                except requests.RequestException:
+                    pass
                 
                 # Создаем директорию, если она не существует
                 os.makedirs(output_dir, exist_ok=True)
