@@ -100,8 +100,9 @@ def cleanup_unused_thumbs(current_thumbs, thumbs_dir):
     unused_thumbs = [thumb for thumb in all_thumbs if thumb not in current_thumbs]
 
     for thumb in unused_thumbs:
-        os.remove(thumb)
-        print(f"Удалено неиспользуемое превью: {thumb}")
+        if os.path.isfile(thumb) and os.path.exists(thumb):
+            os.remove(thumb)
+            print(f"Удалено неиспользуемое превью: {thumb}")
 
 
 def create_child_element(parent, new_element_name, text):
