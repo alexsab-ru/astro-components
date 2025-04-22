@@ -212,6 +212,7 @@ def main():
     config['move_vin_id_up'] = source_config['move_vin_id_up']
     config['new_address'] = source_config['new_address']
     config['new_phone'] = source_config['new_phone']
+    config['order'] = 0
     
     # Инициализация процессора для конкретного источника
     processor = CarProcessor(args.source_type)

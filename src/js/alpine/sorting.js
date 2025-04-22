@@ -9,6 +9,7 @@ export function sorting() {
 		carListWrapper: document.querySelector(".car-list"),
 		cars: [],
 		options: [
+			{ id: "actual", title: "По актуальности" },
 			{ id: "price_up", title: "По возрастанию цены" },
 			{ id: "price_down", title: "По убыванию цены" },
 			{ id: "discount_min", title: "По минимальной выгоде" },
@@ -17,7 +18,7 @@ export function sorting() {
 			{ id: "year_down", title: "По году: новее" },
 			{ id: "name", title: "По названию" },
 		],
-		current: "price_up",
+		current: "actual",
 		selectedBrands: [],
 		selectedModels: [],
 		selectedColors: [],
@@ -47,6 +48,8 @@ export function sorting() {
 				this.cars.sort((a, b) => {
 					const priceA = parseFloat(a.getAttribute("data-price"));
 					const priceB = parseFloat(b.getAttribute("data-price"));
+					const orderA = parseFloat(a.getAttribute("data-order"));
+					const orderB = parseFloat(b.getAttribute("data-order"));
 					const discountA = parseFloat(a.getAttribute("data-max-discount"));
 					const discountB = parseFloat(b.getAttribute("data-max-discount"));
 					const yearA = parseFloat(a.getAttribute("data-year"));
@@ -68,6 +71,8 @@ export function sorting() {
 							return yearB - yearA;
 						case "name":
 							return nameA.localeCompare(nameB);
+						case "actual":
+							return orderA - orderB;
 					}
 				});
 			} else {

@@ -463,6 +463,8 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, con
 
     # Forming the YAML frontmatter
     content = "---\n"
+    config['order'] += 1
+    content += f"order: {config['order']}\n"
     # content += "layout: car-page\n"
     total_element = car.find('total')
     if total_element is not None:
