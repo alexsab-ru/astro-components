@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import csv
 import requests
 import xml.etree.ElementTree as ET
