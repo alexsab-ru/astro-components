@@ -12,6 +12,7 @@
     "getAirStorage": "sh ./.github/scripts/sh/getAirStorage.sh",
     "getDealerPrice": "sh ./.github/scripts/sh/getDealerData.sh",
     "getDealerStorage": "sh ./.github/scripts/sh/getDealerStorage.sh",
+    "getSortStorage": "sh ./.github/scripts/sh/getSortStorage.sh",
     "cars": "sh ./.github/scripts/sh/process_xml.sh",
 
     "getOne_AVITO_XML_URL": "pnpm run cars getone AVITO_XML_URL",

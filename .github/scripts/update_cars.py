@@ -93,7 +93,7 @@ class CarProcessor:
                 return 0
 
     def process_car(self, car: ET.Element, existing_files: set, current_thumbs: List[str], 
-                   prices_data: Dict, config: Dict) -> None:
+                   prices_data: Dict, sort_storage_data: Dict, config: Dict) -> None:
         """Обработка отдельного автомобиля"""
         # Базовые расчёты цены и скидки
         price = int(car.find('price').text or 0)
@@ -132,10 +132,10 @@ class CarProcessor:
         update_car_prices(car, prices_data)
 
         if os.path.exists(file_path):
-            update_yaml(car, file_path, friendly_url, current_thumbs, config)
+            update_yaml(car, file_path, friendly_url, current_thumbs, sort_storage_data, config)
         else:
             create_file(car, file_path, friendly_url, current_thumbs,
-                       existing_files, config)
+                       existing_files, sort_storage_data, config)
 
     def rename_elements(self, car: ET.Element) -> None:
         """Переименование элементов согласно карте переименований"""
@@ -212,8 +212,18 @@ def main():
     config['move_vin_id_up'] = source_config['move_vin_id_up']
     config['new_address'] = source_config['new_address']
     config['new_phone'] = source_config['new_phone']
-    config['order'] = 0
-    
+
+    # Загружаем данные из JSON файла
+    sort_storage_data = {}
+    if os.path.exists('sort_storage.json'):
+        try:
+            with open('sort_storage.json', 'r', encoding='utf-8') as f:
+                sort_storage_data = json.load(f)
+        except json.JSONDecodeError:
+            print("Ошибка при чтении sort_storage.json")
+        except Exception as e:
+            print(f"Произошла ошибка при работе с файлом: {e}")
+
     # Инициализация процессора для конкретного источника
     processor = CarProcessor(args.source_type)
     
@@ -244,7 +254,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        processor.process_car(car, existing_files, current_thumbs, prices_data, config)
+        processor.process_car(car, existing_files, current_thumbs, prices_data, sort_storage_data, config)
     
     # Удаление ненужных машин
     for car in cars_to_remove:

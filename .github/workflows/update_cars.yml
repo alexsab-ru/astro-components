@@ -8,6 +8,7 @@ on:
       # - '.github/scripts/sh/getAirStorage.sh'
       # - '.github/scripts/sh/getDealerData.sh'
       # - '.github/scripts/sh/getDealerStorage.sh'
+      # - '.github/scripts/sh/getSortStorage.sh'
       # - '.github/scripts/CarFeedProcessorCSV.py'
       # - '.github/scripts/config_air_storage-friend.json'
       # - '.github/scripts/config_air_storage.json'
@@ -92,6 +93,13 @@ jobs:
         pnpm run getAirStorage
       env:
         CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
+
+    - name: Get sort storage
+      if: ${{ vars.SORT_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getSortStorage
+      env:
+        CSV_URL: ${{ vars.SORT_STORAGE_CSV_URL }}
 
     - name: Get Dealer JSON cars price
       if: ${{ vars.DEALER_PRICE_CSV_URL }}
