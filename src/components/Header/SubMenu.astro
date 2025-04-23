@@ -11,7 +11,7 @@ classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes
 {children && (
 	<div class={classes}>
 		{!Array.isArray(children) && Object.keys(children).length > 0 ? Object.keys(children).map( key => (
-			<div class="lg:grid lg:grid-cols-5 lg:border-b" x-data="{isOpenSubMenu: false}">
+			<div class={`lg:grid lg:grid-cols-5 ${Object.keys(children).length > 1 ? 'lg:border-b' : ''}`} x-data="{isOpenSubMenu: false}">
 				<div class="relative lg:flex lg:items-center">
 					{ Object.keys(children).length > 1 ? (
 						<div 
