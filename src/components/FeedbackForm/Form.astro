@@ -15,6 +15,13 @@ const {
 
 <form class="flex flex-col gap-4 max-w-[500px] mx-auto">
   <input type="hidden" name="form" value={dataFormName} />
+  <input
+    type="email"
+    tabindex="-1"
+    name="email"
+    class="h-0 opacity-0 absolute -z-[100]"
+    placeholder="mail@example.com"
+/>
   <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
   <Input
     type="tel"
