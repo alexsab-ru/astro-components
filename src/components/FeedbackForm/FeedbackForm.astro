@@ -1,91 +1,25 @@
 ---
-import { AGREE_LABEL } from '@/const';
-import Button from '@/components/Button/Button.astro';
-import Input from '@/components/Input.astro';
-import Checkbox from '@/components/Checkbox/Checkbox.astro';
-import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
+import Form from './Form.astro';
 
-import salonsData from '@/data/salons.json';
-import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
 const {
   title = 'Узнать подробнее',
   subtitle = '',
-  image = ''
+  imageUrl = '',
+  dataFormName = 'Форма обратной связи на странице',
 } = Astro.props;
 ---
-{image.length ? (
+{imageUrl.length ? (
   <div class="flex flex-col lg:flex-row lg:gap-10 lg:items-center lg:justify-center">
     <div class="lazy !hidden lg:!flex justify-center lg:w-1/2">
-      <img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={image} alt={title} class="w-full h-auto" loading="lazy" />
+      <img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={imageUrl} alt={title} class="w-full h-auto" loading="lazy" />
     </div>
     <div>
       <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
       {subtitle.length ? (<p class="text-center">{subtitle}</p>) : ('')}
-      <form class="flex flex-col gap-4 max-w-[500px] mx-auto">
-        <input type="hidden" name="form" value="Форма обратной связи" />
-        <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
-        <Input
-          type="tel"
-          name="phone"
-          classes="border-gray-100"
-          placeholder="+7 (999) 999-99-99*"
-          required
-          errorClasses="text-red-500" 
-        />
-
-        <ChoosingDealerSelect required={true} salons={salons} />
-
-        <Checkbox
-          name="agree"
-          label={AGREE_LABEL}
-          color="black"
-          required
-          errorClasses="text-red-500 w-full"
-          errorText="Чтобы продолжить, установите флажок"
-        />
-
-        <input
-          type="checkbox"
-          name="subscribe"
-          class="absolute w-0 h-0 opacity-0 invisible"
-        />
-
-        <Button view="form-button" classes="w-full" title="Отправить" />
-      </form>
+      <Form dataFormName={dataFormName} />
     </div>
   </div>
 ) : (
   <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
-  <form class="flex flex-col gap-4 max-w-[500px] mx-auto">
-    <input type="hidden" name="form" value="Форма обратной связи" />
-    <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
-    <Input
-      type="tel"
-      name="phone"
-      classes="border-gray-100"
-      placeholder="+7 (999) 999-99-99*"
-      required
-      errorClasses="text-red-500"
-    />
-
-    <ChoosingDealerSelect required={true} salons={salons} />
-
-    <Checkbox
-      name="agree"
-      label={AGREE_LABEL}
-      color="black"
-      required
-      errorClasses="text-red-500 w-full"
-      errorText="Чтобы продолжить, установите флажок"
-    />
-
-    <input
-      type="checkbox"
-      name="subscribe"
-      class="absolute w-0 h-0 opacity-0 invisible"
-    />
-
-    <Button view="form-button" classes="w-full" title="Отправить" />
-  </form>
+  <Form  dataFormName={dataFormName} />
 )}
