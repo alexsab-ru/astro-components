@@ -25,10 +25,10 @@ import './styles.scss';
 ---
 <div
 	x-data="header"
-	class="bg-transparent backdrop-blur-md fixed top-0 w-full transition-all duration-300 z-50"
+	class="bg-transparent fixed top-0 w-full transition-all duration-300 z-50"
 	:class="{'shadow-3xl': scrolling}"
 >
-	<header>
+	<header class="backdrop-blur-md">
 		{
 			header_top_line && <HeaderTopLine content={header_top_line} />
 		}
@@ -112,7 +112,7 @@ import './styles.scss';
 
 	<div
 		x-cloak
-		class="fixed top-0 bottom-0 right-0 z-40 bg-white py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
+		class="fixed top-0 bottom-0 right-0 z-40 bg-white py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full h-[100vh]"
 		:class="open ? 'translate-x-0' : 'translate-x-[110%]'"
 	>
 		<button class="w-10 h-10 absolute right-0 top-0 text-2xl font-mono transition-opacity opacity-60 hover:opacity-100" @click.prevent="open = false">&times;</button>
