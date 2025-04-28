@@ -4,6 +4,7 @@ import SliderNavigation from '@/components/SliderNav/Navigation.astro';
 import SliderPagination from '@/components/SliderNav/Pagination.astro';
 import PostItem from '@/components/Post/Item.astro';
 import Button from '@/components/Button/Button.astro';
+import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 interface Props {
 	collectionName: string;
 	id?: string;
@@ -30,13 +31,7 @@ let posts = [];
 let rawPosts = await getCollection(collectionName);
 let diffLimit: number;
 if (rawPosts && rawPosts.length) {
-	rawPosts = rawPosts
-	.filter(post => !post.data.draft) // Сначала фильтруем черновики
-	.sort((a, b) => {
-			const dateA = a.data?.pubDate ? new Date(a.data.pubDate).valueOf() : 0;
-			const dateB = b.data?.pubDate ? new Date(b.data.pubDate).valueOf() : 0;
-			return dateB - dateA; // Сортируем по дате в обратном порядке
-	});
+	rawPosts = sortingAndFilteringPosts(rawPosts);
 	diffLimit = Math.min(rawPosts.length, offset + limit); // Ограничиваем пределы
 	if (offset >= rawPosts.length) {
 		diffLimit = offset; // Если offset больше длины массива, ничего не берем
