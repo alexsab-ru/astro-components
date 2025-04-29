@@ -48,6 +48,8 @@ if (seo[currentPath]) {
 		image = pageSeo.image;
 	}
 }
+
+const bodyClasses = currentPath != '/' ? 'pt-[52px] sm:pt-[60px] md:pt-[80px] lg:pt-[128px]' : '';
 ---
 
 <!doctype html>
@@ -57,7 +59,7 @@ if (seo[currentPath]) {
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
-	<body class="min-h-screen flex flex-col" x-data="complectation">
+	<body class={'min-h-screen flex flex-col ' + bodyClasses} x-data="complectation">
 		<ScriptBodyBegin />
 		<Header />
 		<main class="flex-grow relative">
