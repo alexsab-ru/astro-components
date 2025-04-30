@@ -50,7 +50,7 @@ if (seo[currentPath]) {
 	}
 }
 
-const bodyClasses = currentPath != '/' && IS_HEADER_TRANSPARENT ? 'pt-[52px] sm:pt-[60px] md:pt-[80px] lg:pt-[128px]' : '';
+const bodyClasses = currentPath != '/' && !currentPath.match('^\/models\/[^\/]+') && IS_HEADER_TRANSPARENT ? 'pt-[52px] sm:pt-[60px] md:pt-[80px] lg:pt-[128px]' : '';
 ---
 
 <!doctype html>

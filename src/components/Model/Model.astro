@@ -11,6 +11,9 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import './model.scss';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
+import { IS_HEADER_TRANSPARENT } from '@/const';
+const modelSectionClasses = IS_HEADER_TRANSPARENT ? 'lg:!pt-[128px]' : '';
+const modelInfoClasses = IS_HEADER_TRANSPARENT ? '!pt-[52px] sm:!pt-[60px] md:!pt-[80px] lg:!pt-[128px]' : '';
 const photoSlides = !model.photos
 	? []
 	: [].concat(
@@ -25,12 +28,12 @@ import ColorLink from '@/components/ColorLink/ColorLink.astro'
 const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.colors[0].id}.png`;
 ---
 
-<section class="model model-section relative" id={model?.id} data-dir={model?.id}>
+<section class={"model model-section relative " + modelSectionClasses} id={model?.id} data-dir={model?.id}>
 	{model?.badge && (
 		<img src={model?.badge?.imgModelPage || model?.badge.img} alt={model?.badge.alt} class="absolute right-4 top-4 xs:h-10 h-16 sm:h-24 w-auto z-10" height="96" loading="lazy" />
 	)}
 	<div
-		class="model__info"
+		class={"model__info " + modelInfoClasses}
 		style={`background-image: url(${model?.homeImg})`}>
 		<div class="container h-full pt-8 sm:pt-[2.5%] xl:pb-10">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} color="white" />}
