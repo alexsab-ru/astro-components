@@ -3,13 +3,14 @@ interface Props {
 	links: any;
 }
 const { links } = Astro.props;
-
+import { IS_HEADER_TRANSPARENT } from '@/const';
 import HeaderMenuList from './MenuList.astro';
 
 const path = Astro.url.pathname;
-const classBottom = path != '/' ? ' border-b' : '';
+const classBottom = path != '/' ? '' : '';
+const siteNavClasses = IS_HEADER_TRANSPARENT ? 'after:content-[""] after:block after:backdrop-blur-md after:bg-accent-500/50 after:z-0 after:absolute after:top-0 after:w-full after:h-[48px] relative ' : 'border-t border-t-white/30 ';
 ---
-<div id="site_nav" class={'after:content-[""] after:block after:backdrop-blur-md after:bg-accent-500/50 after:z-0 after:absolute after:top-0 after:w-full after:h-[48px] hidden relative lg:block'+classBottom }>
+<div id="site_nav" class={'hidden lg:block ' + siteNavClasses + classBottom }>
 	<div class="container">
 		<div class="h-full">
 			<HeaderMenuList links={links} />
