@@ -13,7 +13,8 @@ module.exports = {
 					400: "#418fde",
 					500: "#1b365d",
 				},
-				'brand-color': "#3a3c4e"
+				'brand-color': "#3a3c4e",
+				'brand-light-color': "#f5f4f3"
 			},
 			fontFamily: {
 				'sans': ['Mulish', ...defaultTheme.fontFamily.sans],
