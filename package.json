@@ -10,7 +10,8 @@
     
     "CarFeedProcessorCSV": "CSV_URL=$(grep '^CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && curl $CSV_URL -o data.csv && python3 .github/scripts/CarFeedProcessorCSV.py",
     "getAirStorage": "sh ./.github/scripts/sh/getAirStorage.sh",
-    "getDealerPrice": "sh ./.github/scripts/sh/getDealerData.sh",
+    "getDealerCarsPrice": "sh ./.github/scripts/sh/getDealerData.sh",
+    "getDealerPrices": "sh ./.github/scripts/sh/getDealerPrices.sh",
     "getDealerStorage": "sh ./.github/scripts/sh/getDealerStorage.sh",
     "getSortStorage": "sh ./.github/scripts/sh/getSortStorage.sh",
     "cars": "sh ./.github/scripts/sh/process_xml.sh",
