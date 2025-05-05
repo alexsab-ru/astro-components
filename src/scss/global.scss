@@ -205,3 +205,34 @@ section:not(.model-section) {
 		width: auto;
 	}
 }
+
+// Custom classes for media object
+.media-object-center{
+	@apply object-center;
+}
+.media-object-top{
+	@apply object-top;
+}
+.media-object-bottom{
+	@apply object-bottom;
+}
+
+.md\:media-object-center{
+	@apply md:object-center;
+}
+.md\:media-object-top{
+	@apply md:object-top;
+}
+.md\:media-object-bottom{
+	@apply md:object-bottom;
+}
+
+.lg\:media-object-center{
+	@apply lg:object-center;
+}
+.lg\:media-object-top{
+	@apply lg:object-top;
+}
+.lg\:media-object-bottom{
+	@apply lg:object-bottom;
+}
