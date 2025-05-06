@@ -6,11 +6,8 @@ interface Props {
 
 const {salons = [], classes = ''} = Astro.props;
 
-import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN } from '@/const'
-
-import { phoneFormat } from '@/js/utils/numbers.format';
-
-import {Icon} from 'astro-icon/components';
+import settings from '@/data/settings.json';
+const { site_name } = settings;
 
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
@@ -19,11 +16,11 @@ const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
 <div class={`map-info relative lg:absolute lg:max-w-md s1024_1074:left-[45px] s1280_1330:left-[45px] s1536_1586:left-[45px] py-8 px-4 sm:px-8 z-10 bg-white/70 shadow-2xl w-fit mx-auto mb-10 lg:mb-0 flex flex-col ${classes}`}>
 	<div class="flex items-center flex-nowrap flex-col sm:flex-row gap-1 sm:gap-3 mb-3">
 		<div class="sm:pr-3 sm:border-r w-full max-w-[140px] flex-grow flex-shrink">
-			<img src="/img/logo/logo.svg" class="w-full" alt={SITE_NAME} loading="lazy" />
+			<img src="/img/logo/logo.svg" class="w-full" alt={site_name} loading="lazy" />
 		</div>
 		<div
 			class="text-xl sm:text-2xl leading-none uppercase tracking-wider sm:tracking-normal">
-			{SITE_NAME}
+			{site_name}
 		</div>
 	</div>
 

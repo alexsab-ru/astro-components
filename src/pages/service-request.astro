@@ -1,6 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { LEGAL_CITY_WHERE, AGREE_LABEL, BRAND } from '@/const';
+import { AGREE_LABEL } from '@/const';
+import settings from '@/data/settings.json';
+const { brand, legal_city_where } = settings;
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
@@ -17,10 +19,10 @@ const options = models.filter(m => {
 });
 ---
 
-<Layout title={`Запись на сервис ${BRAND}`} description={`Запись на сервис автомобилей ${BRAND} в ${LEGAL_CITY_WHERE}`}>
+<Layout title={`Запись на сервис ${brand}`} description={`Запись на сервис автомобилей ${brand} в ${legal_city_where}`}>
 	<div class="container py-10 space-y-10">
 		<div>
-			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на сервис {BRAND}</h1>
+			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на сервис {brand}</h1>
 			<p class="text-center mt-1 text-gray-500">Профессиональное обслуживание с сохранением гарантии</p>
 		</div>
 		<form class="flex flex-col gap-4 max-w-[500px] mx-auto">

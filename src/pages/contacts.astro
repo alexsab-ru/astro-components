@@ -5,7 +5,8 @@ import MapWidget from '@/components/Map/Widget.astro';
 import AutoShowModal from '@/components/AutoShowModal.astro';
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 import WorkerItem from '@/components/Contacts/WorkerItem.astro';
-import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LINK_WIDGET_ORGNIZATION} from '@/const';
+import settings from '@/data/settings.json';
+const { site_name, legal_entity, legal_inn, yandex_widget_orgnization } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
@@ -14,17 +15,17 @@ let workers = [];
 salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map(worker => workers.push({...worker, salonName: salon.name})));
 ---
 
-<Layout title={`Контакты автосалона ${SITE_NAME}`}>
+<Layout title={`Контакты автосалона ${site_name}`}>
 	<div class="h-full relative">
 		<div class="container">
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
 
 				<div class="md:w-2/5 py-10">
 					<h1 class="text-3xl sm:text-4xl font-bold">Контакты</h1>
-					{LEGAL_ENTITY ? (
+					{legal_entity ? (
 						<div class="flex flex-wrap gap-y-5 sm:gap-y-8 mt-10">
-							{LEGAL_ENTITY && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={LEGAL_ENTITY} iconName="mdi:bank" />)}
-							{LEGAL_INN && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={LEGAL_INN} iconName="mdi:list-box-outline" />)}
+							{legal_entity && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />)}
+							{legal_inn && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={legal_inn} iconName="mdi:list-box-outline" />)}
 							{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
 							{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
 							{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
@@ -47,7 +48,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 				</div>
 
 				<div class="h-[400px] md:h-auto w-full md:w-1/2 absolute md:top-0 right-0 bottom-0">
-					{LINK_WIDGET_ORGNIZATION ? (
+					{yandex_widget_orgnization ? (
 						<MapWidget class="h-full" />
 					) : (
 						<Map mapImg="https://cdn.alexsab.ru/maps/map-bg.webp" salons={salons} classes="h-full" />

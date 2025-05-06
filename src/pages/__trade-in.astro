@@ -1,11 +1,12 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
+import settings from '@/data/settings.json';
+const { legal_entity, legal_inn } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('trade_in'));
-const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
-[`${LEGAL_ENTITY}`] : 
+const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
+[`${legal_entity}`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
     .map(s => `${s?.legal_entity}`);

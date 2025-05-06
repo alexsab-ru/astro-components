@@ -1,9 +1,11 @@
 ---
-import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN, BRAND, FOOTER_INFO, LINKS_MENU as links } from '@/const';
+import settings from '@/data/settings.json';
+const { site_name, legal_entity, legal_inn, brand } = settings;
+import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
-const url = `https://alexsab.ru?utm_source=client&utm_medium=${BRAND}&utm_compaing=${SITE_NAME}`
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${site_name}`;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('footer'));
@@ -11,8 +13,8 @@ const path = Astro.url.pathname;
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
-const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
-[`<p class="text-sm">${LEGAL_ENTITY}&nbsp;- ИНН:&nbsp;${LEGAL_INN}</p>`] : 
+const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
+[`<p class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</p>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
     .map(s => `<p class="text-sm">${s?.legal_entity}&nbsp;- ИНН:&nbsp;${s?.legal_inn}</p>`);
@@ -23,9 +25,9 @@ salons
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-y-10 lg:gap-y-5">
 
             <div class="">
-                <a href="/" class="uppercase text-2xl inline-block mb-5 transition-opacity hover:opacity-70">{ SITE_NAME }</a>
+                <a href="/" class="uppercase text-2xl inline-block mb-5 transition-opacity hover:opacity-70">{site_name}</a>
                 <div class="flex flex-wrap items-center gap-5">
-                    <img src="/img/logo/logo.svg" class="h-8 w-auto filter brightness-0 invert opacity-70" loading="lazy" alt={SITE_NAME} />
+                    <img src="/img/logo/logo.svg" class="h-8 w-auto filter brightness-0 invert opacity-70" loading="lazy" alt={site_name} />
                 </div>
             </div>
             <div class="">

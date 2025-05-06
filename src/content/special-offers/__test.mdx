@@ -10,7 +10,8 @@ description: "Описание акции"
 ---
 import Button from '@/components/Button/Button.astro';
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
-import { SITE_NAME, PHONE } from '@/const';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common } = settings;
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 

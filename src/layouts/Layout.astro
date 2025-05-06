@@ -8,7 +8,8 @@ interface Props {
 }
 let {title, h1, description, image, keywords} = Astro.props;
 
-import {SITE_NAME, SITE_DESCR} from '@/const.js';
+import settings from '@/data/settings.json';
+const { site_name, site_description } = settings;
 
 import Head from '@/components/Head.astro';
 import ScriptHead from '@/components/Scripts/Head.astro';
@@ -42,7 +43,7 @@ if (seo[currentPath]) {
 <!doctype html>
 <html lang="ru">
 	<head>
-		<Head title={title || h1 || SITE_NAME} description={description ?? SITE_DESCR} image={image} keywords={keywords} />
+		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
 	<body class="min-h-screen flex flex-col" x-data="complectation">

@@ -12,7 +12,9 @@ import './map.sass';
 </div>
 
 <script>
-	import { LINK_WIDGET, LINK_WIDGET_ORGNIZATION } from '@/const';
+	import { LINK_WIDGET } from '@/const';
+	import settings from '@/data/settings.json';
+	const { yandex_widget_orgnization } = settings;
 	const widgetWrapper = document.getElementById('map-widget-wrapper');
 	const widget = document.getElementById('map-widget');
 	let onHover = false;
@@ -35,7 +37,7 @@ import './map.sass';
 				showError(widget);
 				widgetWrapper.classList.remove('is-active');
 			};
-			iframe.src = LINK_WIDGET+LINK_WIDGET_ORGNIZATION;
+			iframe.src = LINK_WIDGET+yandex_widget_orgnization;
 			widget.appendChild(iframe);
 			onHover = true;
 		}

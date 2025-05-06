@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import { useCarInfo } from '@/store/useCarInfo';
 import { scroll } from '@/js/modules/scroll';
-import { BRAND } from '@/const';
+import settings from '@/data/settings.json';
+const { brand } = settings;
+const BRAND = brand;
 import './styles.scss';
 
 function BrandsList() {

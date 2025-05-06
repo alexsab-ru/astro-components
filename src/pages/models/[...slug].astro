@@ -21,7 +21,8 @@ export async function getStaticPaths() {
 }
 
 
-import { LEGAL_CITY_WHERE, BRAND } from '@/const';
+import settings from '@/data/settings.json';
+const { brand, legal_city_where } = settings;
 import { getRandomInt } from '@/js/utils/numbers.format';
 import { breadcrumb } from './index.astro';
 const { model } = Astro.props;
@@ -46,17 +47,17 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
 
 ---
 <Layout 
-  title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${LEGAL_CITY_WHERE}`} 
-  description={`${model.mark_id} ${model.name} купить в ${LEGAL_CITY_WHERE}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
+  title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${legal_city_where}`} 
+  description={`${model.mark_id} ${model.name} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={model.image ?? model.thumb}
 >
-  <h1 class="sr-only">Автомобиль {BRAND} {model.name} в {LEGAL_CITY_WHERE}</h1>
+  <h1 class="sr-only">Автомобиль {brand} {model.name} в {legal_city_where}</h1>
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     sections.length > 0 && sections.map(s => ( <UniversalSection section={s} /> ))
   }
   {
-    (model?.complectations !== undefined && model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={BRAND} />
+    (model?.complectations !== undefined && model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={brand} />
   }
   <SeoText mdx={seoname} />
   <section>
@@ -73,7 +74,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   {cars.length > 0 && (
     <section class="odd:bg-gray-100">
       <div class="container">
-        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${LEGAL_CITY_WHERE}`} /></h2>
+        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${legal_city_where}`} /></h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
           {cars.map((car) => ( <CarItem car={car} /> ))}
         </div>
