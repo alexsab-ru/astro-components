@@ -130,14 +130,15 @@ jobs:
           touch .env
           echo PUBLIC_YANDEX_SITE_VERIFICATION=${{ vars.PUBLIC_YANDEX_SITE_VERIFICATION }} >> .env
           echo PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }} >> .env
+          echo JSON_PATH=${{ secrets.JSON_PATH }} >> .env
+          echo DOMAIN=${{ vars.DOMAIN }} >> .env
           cat .env
 
-      - name: Build Astro
+      - name: PNPM install
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
-          pnpm build --outDir ./_site
 
       - name: Download JSONs
         run: |
@@ -146,6 +147,10 @@ jobs:
       - name: Replace Placeholders in JSON
         run: |
           pnpm replacePlaceholdersInJson
+
+      - name: Astro Build
+        run: |
+          pnpm build --outDir ./_site
 
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
