@@ -1,21 +1,5 @@
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
-// Название сайта по умолчанию
-export const SITE_NAME = 'Название сайта';
-// Юр лицо
-export const LEGAL_ENTITY = 'ООО «Юридическое название»';
-// ИНН
-export const LEGAL_INN = '1234567890';
-// Город
-export const LEGAL_CITY = 'г. Город';
-// где? в Городе
-export const LEGAL_CITY_WHERE = 'Городе';
-// Описание сайта по умолчанию
-export const SITE_DESCR = 'Официальный дилерский центр';
-// Телефон по умолчанию
-export const PHONE = '+7 (999) 000-00-00';
-// Бренд
-export const BRAND = 'BRAND';
 // Конечное время для таймера
 //string 2025-12-31T23:59:59+04:00
 export const TIMER = { title: 'До конца акции осталось',subtitle: '', endtime: `${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00`, btnName: 'Зафиксировать цену', show: false };
@@ -56,13 +40,13 @@ export const COLLECTIONS = [
 	{name: 'special-offers', title: 'Спецпредложения'},
 	{name: 'news', title: 'Новости'},
 ];
-// Текстовая строка над хедером
-export const HEADER_TOP_LINE = '';
 // Текст согласия в формах
 export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';
 // Текст информации в футере
 import salonsData from '@/data/salons.json';
+import settings from '@/data/settings.json';
+const { phone_common } = settings;
 const salons = salonsData.filter(salon => !salon?.type || salon?.type.includes('footer_info'));
-const phones = PHONE ? [`<a class="whitespace-nowrap" href="tel:${phoneFormat(PHONE)}">${PHONE}</a>`] : salons.map((salon) => { return `<span>${salon.name}</span> <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a>` });
+const phones = phone_common ? [`<a class="whitespace-nowrap" href="tel:${phoneFormat(phone_common)}">${phone_common}</a>`] : salons.map((salon) => { return `<span>${salon.name}</span> <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a>` });
 
 export const FOOTER_INFO = '<sup>*</sup> Вся представленная на сайте информация, касающаяся автомобилей и сервисного обслуживания, носит информационный характер и не является публичной офертой, определяемой положениями ст. 437 ГК РФ. Все цены, указанные на данном сайте, носят информационный характер. Для получения подробной информации просьба обращаться к менеджерам отдела продаж по номеру телефона '+phones.join(', ')+'. Опубликованная на данном сайте информация может быть изменена в любое время без предварительного уведомления.';

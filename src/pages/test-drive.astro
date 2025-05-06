@@ -1,6 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { BRAND, LEGAL_CITY_WHERE, AGREE_LABEL } from '@/const';
+import { AGREE_LABEL } from '@/const';
+import settings from '@/data/settings.json';
+const { brand, legal_city_where } = settings;
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
@@ -29,7 +31,7 @@ const optionsJSON = JSON.stringify(options);
 
 ---
 
-<Layout title={`Тест-драйв автомобиля ${BRAND} – Онлайн запись в салон официального дилера ${BRAND} в ${LEGAL_CITY_WHERE}`} description={`Записаться на тест-драйв автомобиля ${BRAND} в ${LEGAL_CITY_WHERE} вы можете на официальном сайте дилера ${BRAND} в ${LEGAL_CITY_WHERE}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
+<Layout title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
 	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data=`{
 		models: null,
 		current: null,

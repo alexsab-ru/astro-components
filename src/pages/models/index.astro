@@ -1,5 +1,6 @@
 ---
-import { BRAND, LEGAL_CITY_WHERE } from '@/const'
+import settings from '@/data/settings.json';
+const { brand, legal_city_where } = settings;
 import Layout from '@/layouts/Layout.astro';
 import ModelList from '@/components/Model/ModelList.astro';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
@@ -7,13 +8,13 @@ export const breadcrumb = { name: `Модели`, href: "/models/" };
 import SeoText from '@/components/Seo/Index.astro';
 ---
 <Layout 
-	title={`Модельный ряд ${BRAND} – Официальный дилер ${BRAND} в ${LEGAL_CITY_WHERE}`} 
-	description={`Информация о моделях ${BRAND} 2024-2025 на сайте официального дилера в ${LEGAL_CITY_WHERE}: обзор, цены, комплектации, технические характеристики.`}
+	title={`Модельный ряд ${brand} – Официальный дилер ${brand} в ${legal_city_where}`} 
+	description={`Информация о моделях ${brand} 2024-2025 на сайте официального дилера в ${legal_city_where}: обзор, цены, комплектации, технические характеристики.`}
 >
 	<section class="content">
 		<div class="container">
 			<Breadcrumbs breadcrumb={[breadcrumb]} />
-			<h1><Fragment set:html={`Модели ${BRAND}`} /></h1>
+			<h1><Fragment set:html={`Модели ${brand}`} /></h1>
 		</div>
 	</section>
 	<SeoText mdx="models" />
