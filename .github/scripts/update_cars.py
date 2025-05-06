@@ -131,6 +131,24 @@ class CarProcessor:
 
         update_car_prices(car, prices_data)
 
+        # get info from ./src/data/settings.json
+        settings = {
+            'legal_city': 'Город',
+            'legal_city_where': 'Городе'
+        }
+
+        if os.path.exists('./src/data/settings.json'):
+            try:
+                with open('./src/data/settings.json', 'r', encoding='utf-8') as f:
+                    settings = json.load(f)
+            except json.JSONDecodeError:
+                print("Ошибка при чтении ./src/data/settings.json")
+            except Exception as e:
+                print(f"Произошла ошибка при работе с файлом: {e}")
+
+        config['legal_city'] = settings['legal_city']
+        config['legal_city_where'] = settings['legal_city_where']
+
         if os.path.exists(file_path):
             update_yaml(car, file_path, friendly_url, current_thumbs, sort_storage_data, config)
         else:
