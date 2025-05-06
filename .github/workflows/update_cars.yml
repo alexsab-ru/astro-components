@@ -66,6 +66,7 @@ jobs:
       run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
+          pnpm download_json -f settings.json
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -77,6 +78,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install requests lxml pyyaml Pillow
+
 
     - name: Download CSV and generate cars.xml from csv
       if: ${{ vars.CSV_URL }}
