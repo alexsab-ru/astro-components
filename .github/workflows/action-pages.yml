@@ -145,7 +145,7 @@ jobs:
 
       - name: Replace Placeholders in JSON
         run: |
-          node .github/scripts/replacePlaceholdersInJson.js
+          pnpm replacePlaceholdersInJson
 
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
