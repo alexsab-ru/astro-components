@@ -33,21 +33,29 @@ if (fs.existsSync(carsFilePath) && fs.existsSync(dealerPriceFilePath)) {
 console.log(carsData);
 console.log(dealerPriceData);
 
-const getId = (modelId) => {
+const getModel = (modelId) => {
   const regex = /-(.+)$/;
   const match = modelId.match(regex);
   return match ? match[1] : null;
 };
 
+const getBrand = (modelId) => {
+  const regex = /^(.*?)-/;
+  const match = modelId.match(regex);
+  return match ? match[1] : null;
+};
+
 allPrices = carsData.map(item => {
-  let itemId = getId(item.id);
+  let itemId = getModel(item.id);
   if (itemId) {
     let dealer = dealerPriceData.find(item => item.id === itemId);
     return {
-      id: itemId,
-      price: item.price, // преобразовать в число
+      id: item.id,
+      brand: getBrand(item.id),
+      model: item.model,
+      price: currencyFormat(item.price),
       dealerPrice: dealer.price,
-      benefit: item.benefit,
+      benefit: currencyFormat(item.benefit),
       dealerBenefit: dealer.benefit,
       minPrice: Math.min(item.price, dealer.price),
       maxBenefit: Math.max(item.benefit, dealer.benefit)
@@ -58,7 +66,24 @@ allPrices = carsData.map(item => {
   
 });
 
-console.log(allPrices);
+function currencyFormat(number) {
+  // Проверка на null, undefined, или пустую строку
+  if (number === null || number === undefined || number === '' || isNaN(number)) {
+    return "";
+  }
+
+  // Если number является строкой, пытаемся преобразовать её в число
+  if (typeof number === 'string') {
+    number = parseFloat(number);
+  }
+
+  // Если после преобразования значение не является числом (например, если оно было невалидной строкой)
+  if (isNaN(number)) {
+    return "";
+  }
+
+  return number;
+}
 
 // Функция для создания JSON файла
 function createAllPricesFile() {

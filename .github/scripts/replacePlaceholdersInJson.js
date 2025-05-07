@@ -54,6 +54,8 @@ if (carsData.length > 0) {
   });
 }
 
+console.log(carsPlaceholder);
+
 function currencyFormat(number, locale = 'ru-RU') {
   // Проверка на null, undefined, или пустую строку
   if (number === null || number === undefined || number === '' || isNaN(number)) {
