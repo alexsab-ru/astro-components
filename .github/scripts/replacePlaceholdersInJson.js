@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../src/js/utils/date';
+import { currencyFormat } from '../src/js/utils/numbers.format';
 
 // Указываем папку с JSON файлами
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
@@ -33,29 +34,6 @@ if (carsData.length > 0) {
       carsPlaceholder[`{{benefit-${car.id}}}`] = car.benefit;
       carsPlaceholder[`{{benefitb-${car.id}}}`] = currencyFormat(car.benefit);
     }
-  });
-}
-
-function currencyFormat(number, locale = 'ru-RU') {
-  // Проверка на null, undefined, или пустую строку
-  if (number === null || number === undefined || number === '' || isNaN(number)) {
-    return "";
-  }
-
-  // Если number является строкой, пытаемся преобразовать её в число
-  if (typeof number === 'string') {
-    number = parseFloat(number);
-  }
-
-  // Если после преобразования значение не является числом (например, если оно было невалидной строкой)
-  if (isNaN(number)) {
-    return "";
-  }
-
-  return number.toLocaleString(locale, { 
-    style: "currency", 
-    currency: "RUB", 
-    minimumFractionDigits: 0,
   });
 }
 
