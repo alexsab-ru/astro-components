@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../src/js/utils/date';
-import { currencyFormat } from '../src/js/utils/numbers.format';
+import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
+import { currencyFormat } from '../../src/js/utils/numbers.format.js';
 
 // Указываем папку с JSON файлами
 const dataDirectory = path.join(process.cwd(), 'src', 'data');

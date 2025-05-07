@@ -30,9 +30,6 @@ if (fs.existsSync(carsFilePath) && fs.existsSync(dealerPriceFilePath)) {
   }
 }
 
-console.log(carsData);
-console.log(dealerPriceData);
-
 const getModel = (modelId) => {
   const regex = /-(.+)$/;
   const match = modelId.match(regex);
@@ -67,22 +64,22 @@ allPrices = carsData.map(item => {
 });
 
 function currencyFormat(number) {
-  // Проверка на null, undefined, или пустую строку
-  if (number === null || number === undefined || number === '' || isNaN(number)) {
-    return "";
-  }
+	// Проверка на null, undefined, или пустую строку
+	if (number === null || number === undefined || number === '' || isNaN(number)) {
+		return "";
+	}
 
-  // Если number является строкой, пытаемся преобразовать её в число
-  if (typeof number === 'string') {
-    number = parseFloat(number);
-  }
+	// Если number является строкой, пытаемся преобразовать её в число
+	if (typeof number === 'string') {
+		number = parseFloat(number);
+	}
 
-  // Если после преобразования значение не является числом (например, если оно было невалидной строкой)
-  if (isNaN(number)) {
-    return "";
-  }
+	// Если после преобразования значение не является числом (например, если оно было невалидной строкой)
+	if (isNaN(number)) {
+		return "";
+	}
 
-  return number;
+	return number;
 }
 
 // Функция для создания JSON файла
@@ -106,3 +103,4 @@ if (allPrices.length) {
 } else {
   console.log('Не удалось создать файл allPrices.json');
 }
+

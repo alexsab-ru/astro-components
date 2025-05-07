@@ -1,4 +1,4 @@
-export function phoneFormat(phone) {
+function phoneFormat(phone) {
 	var cleanNumber = phone.replace(/\D/g, '');
 
 	// Удаляем первую цифру, если это 7 или 8
@@ -11,7 +11,7 @@ export function phoneFormat(phone) {
 	return "+7"+cleanNumber;
 }
 
-export function declOfNums(value, words = ['автомобиль', 'автомобиля', 'автомобилей']) {
+function declOfNums(value, words = ['автомобиль', 'автомобиля', 'автомобилей']) {
 	value = Math.abs(value) % 100;
 	var num = value % 10;
 	if (value > 10 && value < 20) return words[2];
@@ -20,13 +20,13 @@ export function declOfNums(value, words = ['автомобиль', 'автомо
 	return words[2];
 }
 
-export function getRandomInt(min, max) {
+function getRandomInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min) + min);
 }
 
-export function currencyFormat(number, locale = 'ru-RU') {
+function currencyFormat(number, locale = 'ru-RU') {
 	// Проверка на null, undefined, или пустую строку
 	if (number === null || number === undefined || number === '' || isNaN(number)) {
 		return;
@@ -47,5 +47,21 @@ export function currencyFormat(number, locale = 'ru-RU') {
 		currency: "RUB", 
 		minimumFractionDigits: 0,
 	});
+}
+
+// Универсальный экспорт для поддержки как ES6, так и CommonJS
+const utils = {
+    phoneFormat,
+    declOfNums,
+    getRandomInt,
+    currencyFormat
+};
+
+// Поддержка ES6 модулей
+export { phoneFormat, declOfNums, getRandomInt, currencyFormat };
+
+// Поддержка CommonJS
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = utils;
 }
 
