@@ -24,7 +24,7 @@ const months = {
 };
 
 // Проверяем наличие файла cars.json
-const carsFilePath = path.join(dataDirectory, 'cars.json');
+const carsFilePath = path.join(dataDirectory, 'allPrices.json');
 let carsData = [];
 
 if (fs.existsSync(carsFilePath)) {
@@ -35,7 +35,7 @@ if (fs.existsSync(carsFilePath)) {
       carsData = []; // Если данные не являются массивом, обнуляем их
     }
   } catch (error) {
-    console.error("Ошибка парсинга файла cars.json:", error);
+    console.error("Ошибка парсинга файла allPrices.json:", error);
   }
 }
 
@@ -53,8 +53,6 @@ if (carsData.length > 0) {
     }
   });
 }
-
-console.log(carsPlaceholder);
 
 function currencyFormat(number, locale = 'ru-RU') {
   // Проверка на null, undefined, или пустую строку
