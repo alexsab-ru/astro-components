@@ -88,7 +88,7 @@ fs.readdir(dataDirectory, (err, files) => {
     const filePath = path.join(dataDirectory, file);
 
     // Пропускаем cars.json, так как он уже обработан
-    if (filePath.includes('cars.json')) {
+    if (filePath.includes('cars.json') || filePath.includes('allPrices.json') || filePath.includes('dealer_price.json')) {
       return;
     }
 
