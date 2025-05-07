@@ -1,27 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../src/js/utils/date';
 
 // Указываем папку с JSON файлами
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
-
-// Текущая дата для подстановки
-const today = new Date();
-const month = today.getMonth() + 1;
-
-const months = {
-  1: { nominative: 'Январь', genitive: 'Января', prepositional: 'Январе' },
-  2: { nominative: 'Февраль', genitive: 'Февраля', prepositional: 'Феврале' },
-  3: { nominative: 'Март', genitive: 'Марта', prepositional: 'Марте' },
-  4: { nominative: 'Апрель', genitive: 'Апреля', prepositional: 'Апреле' },
-  5: { nominative: 'Май', genitive: 'Мая', prepositional: 'Мае' },
-  6: { nominative: 'Июнь', genitive: 'Июня', prepositional: 'Июне' },
-  7: { nominative: 'Июль', genitive: 'Июля', prepositional: 'Июле' },
-  8: { nominative: 'Август', genitive: 'Августа', prepositional: 'Августе' },
-  9: { nominative: 'Сентябрь', genitive: 'Сентября', prepositional: 'Сентябре' },
-  10: { nominative: 'Октябрь', genitive: 'Октября', prepositional: 'Октябре' },
-  11: { nominative: 'Ноябрь', genitive: 'Ноября', prepositional: 'Ноябре' },
-  12: { nominative: 'Декабрь', genitive: 'Декабря', prepositional: 'Декабре' }
-};
 
 // Проверяем наличие файла cars.json
 const carsFilePath = path.join(dataDirectory, 'allPrices.json');
@@ -80,12 +62,12 @@ function currencyFormat(number, locale = 'ru-RU') {
 // Функция для замены плейсхолдеров в содержимом файла
 function replacePlaceholders(content) {
   const placeholders = {
-    '{{lastDay}}': new Date(today.getFullYear(), month, 0).getDate(),
-    '{{month}}': String(today.getMonth() + 1).padStart(2, '0'),
-    '{{monthNominative}}': months[month].nominative,
-    '{{monthGenitive}}': months[month].genitive,
-    '{{monthPrepositional}}': months[month].prepositional,
-    '{{year}}': today.getFullYear(),
+    '{{lastDay}}': LAST_DAY,
+    '{{month}}': MONTH,
+    '{{monthNominative}}': MONTH_NOMINATIVE,
+    '{{monthGenitive}}': MONTH_GENITIVE,
+    '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
+    '{{year}}': YEAR,
     ...carsPlaceholder, // Добавляем к остальным плейсхолдерам плейсхолдеры из json тачек, если они есть
   };
 
