@@ -5,7 +5,9 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 
 const path = Astro.url.pathname;
 
-import { LINKS_MENU as links, HEADER_TOP_LINE } from '@/const.js';
+import { LINKS_MENU as links } from '@/const.js';
+import settings from '@/data/settings.json';
+const { header_top_line } = settings;
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
 import { Icon } from 'astro-icon/components';
@@ -28,7 +30,7 @@ import './styles.scss';
 >
 	<header>
 		{
-			HEADER_TOP_LINE && <HeaderTopLine content={HEADER_TOP_LINE} />
+			header_top_line && <HeaderTopLine content={header_top_line} />
 		}
 		<div class="container">
 			<div class="flex items-center justify-between xs:py-2 xs:h-auto h-[60px] md:h-[80px]">

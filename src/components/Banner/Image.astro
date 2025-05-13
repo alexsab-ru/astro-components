@@ -6,7 +6,8 @@ interface Props{
 	tabletImageUrl?: string;
 	imagePosition?: string;
 }
-import { SITE_NAME, SITE_DESCR, LEGAL_CITY_WHERE } from '@/const';
+import settings from '@/data/settings.json';
+const { site_name, site_description, legal_city_where } = settings;
 const {title, imageUrl, mobileImageUrl, tabletImageUrl, imagePosition} = Astro.props
 const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePosition === 'top' ? 'object-top' : 'object-center';
 ---
@@ -16,7 +17,7 @@ const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePositi
 	<img
 		src={mobileImageUrl || imageUrl}
 		class={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
-		{...title ? {alt: title.replace(/<[^>]*>/g, '')} : {alt: `${SITE_NAME} ${SITE_DESCR} в ${LEGAL_CITY_WHERE}`} }
+		{...title ? {alt: title.replace(/<[^>]*>/g, '')} : {alt: `${site_name} ${site_description} в ${legal_city_where}`} }
 		fetchpriority="high"
 		loading="lazy"
 	/>

@@ -1,7 +1,8 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import { getCollection } from "astro:content";
-import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
 import CarsList from '@/components/Cars/List.astro';
 const rawCars = await getCollection("cars");
 let cars: any, image: string;
@@ -16,8 +17,8 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 ---
 
 <PageLayout
-	h1={`Автомобили ${BRAND} в наличии в ${LEGAL_CITY_WHERE}`}
-	title={`Автомобили в наличии | ${SITE_NAME}`}
+	h1={`Автомобили ${brand} в наличии в ${legal_city_where}`}
+	title={`Автомобили в наличии | ${site_name}`}
 	breadcrumb={[breadcrumb]}
 	image={image ? image : ""}
 	backLink={true}
