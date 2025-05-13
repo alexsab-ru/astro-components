@@ -3,6 +3,6 @@ export type TBrandHistoryItem = {
     html: string | HTMLElement;
 }
 
-export interface IBrandHistory {
+export interface IBrandHistoryElements {
     items: Array<TBrandHistoryItem>;
 }

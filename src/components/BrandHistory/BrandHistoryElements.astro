@@ -1,10 +1,8 @@
 ---
-import type { TBrandHistoryItem } from './types';
+import type { IBrandHistoryElements } from './types';
 import BrandHistoryItem from './BrandHistoryItem.astro';
 
-interface Props {
-    items: TBrandHistoryItem[];
-}
+interface Props extends IBrandHistoryElements {}
 const { items } = Astro.props;
 ---
 {items.length > 0 && (
