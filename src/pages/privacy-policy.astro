@@ -1,11 +1,12 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
+import settings from '@/data/settings.json';
+const { site_name, legal_entity, legal_inn, legal_city } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('privacy_policy'));
-const LEGAL_SALONS_INFO = LEGAL_ENTITY && LEGAL_INN ? 
-[`<span>${LEGAL_ENTITY} (ИНН:&nbsp;${LEGAL_INN})</span>`] : 
+const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
+[`<span>${legal_entity} (ИНН:&nbsp;${legal_inn})</span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
     .map(s => `<span><b>${s?.legal_entity}</b> (ИНН:&nbsp;${s?.legal_inn})</span>`);
@@ -16,7 +17,7 @@ salons
     title="Политика конфиденциальности"
     breadcrumb={[{name:"Политика конфиденциальности",href:""}]}
 >
-    <p>Настоящим даю согласие на обработку моих вышеуказанных персональных данных {LEGAL_SALONS_INFO.length ? <Fragment set:html={LEGAL_SALONS_INFO.join(' и ')} /> : SITE_NAME} {LEGAL_CITY && (`(${LEGAL_CITY})`)} (далее – Оператор)</p>
+    <p>Настоящим даю согласие на обработку моих вышеуказанных персональных данных {LEGAL_SALONS_INFO.length ? <Fragment set:html={LEGAL_SALONS_INFO.join(' и ')} /> : site_name} {legal_city && (`(г. ${legal_city})`)} (далее – Оператор)</p>
         <p><strong>с целями:</strong></p>
         <ul>
             <li>◦ регистрации в качестве пользователя Сайта;</li>

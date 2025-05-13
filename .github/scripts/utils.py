@@ -490,7 +490,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, sor
 
     content += f"breadcrumb: {join_car_data(car, 'mark_id', 'folder_id', 'complectation_name')}\n"
 
-    content += f"title: 'Купить {join_car_data(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {dealer.get('where')}'\n"
+    content += f"title: 'Купить {join_car_data(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {config['legal_city_where']}'\n"
 
     description = (
         f'Купить автомобиль {join_car_data(car, "mark_id", "folder_id")}'
@@ -498,7 +498,7 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, sor
         f'{", комплектация " + car.find("complectation_name").text if car.find("complectation_name").text != None else ""}'
         f'{", цвет - " + car.find("color").text if car.find("color").text != None else ""}'
         f'{", двигатель - " + car.find("modification_id").text if car.find("modification_id").text != None else ""}'
-        f' у официального дилера в г. {dealer.get("city")}. Стоимость данного автомобиля {join_car_data(car, "mark_id", "folder_id")} – {car.find("priceWithDiscount").text}'
+        f' у официального дилера в г. {config["legal_city"]}. Стоимость данного автомобиля {join_car_data(car, "mark_id", "folder_id")} – {car.find("priceWithDiscount").text}'
     )
     content += f"description: '{description}'\n"
 
@@ -638,7 +638,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, 
                 f'{", комплектация " + car.find("complectation_name").text if car.find("complectation_name").text != None else ""}'
                 f'{", цвет - " + car.find("color").text if car.find("color").text != None else ""}'
                 f'{", двигатель - " + car.find("modification_id").text if car.find("modification_id").text != None else ""}'
-                f' у официального дилера в г. {dealer.get("city")}. Стоимость данного автомобиля {join_car_data(car, "mark_id", "folder_id")} – {car.find("priceWithDiscount").text}'
+                f' у официального дилера в г. {config["legal_city"]}. Стоимость данного автомобиля {join_car_data(car, "mark_id", "folder_id")} – {car.find("priceWithDiscount").text}'
             )
             data["description"] = description
         except ValueError:

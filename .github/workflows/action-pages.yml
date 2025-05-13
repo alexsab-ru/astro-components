@@ -130,44 +130,32 @@ jobs:
           touch .env
           echo PUBLIC_YANDEX_SITE_VERIFICATION=${{ vars.PUBLIC_YANDEX_SITE_VERIFICATION }} >> .env
           echo PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }} >> .env
+          echo JSON_PATH=${{ secrets.JSON_PATH }} >> .env
+          echo DOMAIN=${{ vars.DOMAIN }} >> .env
           cat .env
 
-      - name: Download JSONs
-        run: |
-          mkdir src/data
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/banners.json -o src/data/banners.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models.json -o src/data/models.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/salons.json -o src/data/salons.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/scripts.json -o src/data/scripts.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/seo.json -o src/data/seo.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/services.json -o src/data/services.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/socials.json -o src/data/socials.json
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/cars.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/cars.json -o src/data/cars.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/special-services.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/special-services.json -o src/data/special-services.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/faq.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/faq.json -o src/data/faq.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/reviews.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/reviews.json -o src/data/reviews.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models-sections.yml; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models-sections.yml -o src/data/models-sections.yml 
-          fi
-          ls -al src/data
-
-      - name: Replace Placeholders in JSON
-        run: |
-          node .github/scripts/replacePlaceholdersInJson.js
-
-      - name: Build Astro
+      - name: PNPM install
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
+
+      - name: Download JSONs
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          pnpm download_json
+        env:
+          JSON_PATH: ${{ secrets.JSON_PATH }}
+          DOMAIN: ${{ vars.DOMAIN }}
+
+      - name: Replace Placeholders in JSON
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          pnpm replacePlaceholdersInJson
+
+      - name: Astro Build
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
           pnpm build --outDir ./_site
 
       - name: Upload artifact

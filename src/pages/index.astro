@@ -1,5 +1,7 @@
 ---
-import {SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER, MARQUEE} from '@/const.js';
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import {TIMER, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
 import PageTitle from '@/components/PageTitle/Index.astro';
@@ -21,7 +23,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
 import SeoText from '@/components/Seo/Index.astro';
 ---
 
-<Layout title=`Купить ${BRAND} у официального дилера ${SITE_NAME}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${BRAND} в ${LEGAL_CITY_WHERE}! ☎️ ${salonsPhone}`>
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
 	<Banner />
 	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
 	<PageTitle />

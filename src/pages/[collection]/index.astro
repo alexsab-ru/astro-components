@@ -2,7 +2,9 @@
 import type { TDataCollection, TCollection } from '@/types/TCollection';
 import { getCollection } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
-import { SITE_NAME, COLLECTIONS } from '@/const';
+import { COLLECTIONS } from '@/const';
+import settings from '@/data/settings.json';
+const { site_name } = settings;
 import PostItem from '@/components/Post/Item.astro';
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 import { getRandomInt } from '@/js/utils/numbers.format';
@@ -34,7 +36,7 @@ const breadcrumb = { name: title, href: `/${collection}/` };
 
 <PageLayout
 	h1={title}
-	title={`${title} | ${SITE_NAME}`}
+	title={`${title} | ${site_name}`}
 	breadcrumb={[breadcrumb]}
 	image={image ? image : ''}
 	backLink={true}
@@ -46,7 +48,7 @@ const breadcrumb = { name: title, href: `/${collection}/` };
 				{ posts.map(post => ( <PostItem post={post} /> )) }
 			</div>
 		) : (
-			<p>Скоро здесь появятся {title.toLowerCase()} {SITE_NAME}.</p>
+			<p>Скоро здесь появятся {title.toLowerCase()} {site_name}.</p>
 		)
 	}
 </PageLayout>

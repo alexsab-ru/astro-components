@@ -1,5 +1,7 @@
 ---
-import { SITE_NAME, BRAND, LEGAL_CITY_WHERE, TIMER, MARQUEE } from '@/const.js';
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import { TIMER, MARQUEE } from '@/const.js';
 import { LAST_DAY, MONTH, MONTH_GENITIVE, YEAR } from '@/js/utils/date';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
@@ -38,7 +40,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 
 ---
 
-<Layout title=`Купить ${BRAND} у официального дилера ${SITE_NAME}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${BRAND} в ${LEGAL_CITY_WHERE}! ☎️ ${salonsPhone}`>
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
 
 	<Banner />
 
@@ -62,7 +64,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 	{cars.length > 0 && (
 		<section class="section bg-gray-100" id="cars">
 			<div class="container">
-				<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{`Автомобили ${BRAND} в наличии в ${LEGAL_CITY_WHERE}`}</h2>
+				<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{`Автомобили ${brand} в наличии в ${legal_city_where}`}</h2>
 				<CarsList />
 			</div>
 		</section>
@@ -70,7 +72,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 
 	<section class="!py-32 bg-[url('https://cdn.alexsab.ru/models/default-model-bg.webp')] bg-cover bg-center text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1]" id="special-credit">
 		<div class="container flex flex-col items-center">
-			<h2 class="text-xl sm:text-4xl font-normal mb-8 !p-0 before:!hidden">{`${BRAND} в кредит`}<sup>**</sup></h2>
+			<h2 class="text-xl sm:text-4xl font-normal mb-8 !p-0 before:!hidden">{`${brand} в кредит`}<sup>**</sup></h2>
 			<p class="text-2xl mb-10">Предложим дополнительную выгоду при покупке в кредит</p>
 			<a href="#common-modal" class="btn white popup-link" data-title="Рассчитать выгоду по кредиту" data-form_name="Рассчитать выгоду по кредиту">Рассчитать кредит</a>
 		</div>
@@ -79,7 +81,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 	<section class="!py-32 bg-[url('https://cdn.alexsab.ru/models/default-model-bg.webp')] bg-fixed bg-cover bg-center text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1]" id="trade-in">
 		<div class="container flex flex-col items-center">
 			<h2 class="text-xl sm:text-4xl font-normal mb-8 !p-0 before:!hidden uppercase">Trade-In</h2>
-			<p class="text-2xl mb-5">Дополнительные выгоды от {SITE_NAME} за Trade-In</p>
+			<p class="text-2xl mb-5">Дополнительные выгоды от {site_name} за Trade-In</p>
 			<p class="text-2xl mb-10">Оценка выше рынка</p>
 			<a href="#common-modal" class="btn white popup-link" data-title="Рассчитать выгоду по Trade-In" data-form_name="Рассчитать выгоду по Trade-In">Рассчитать выгоду</a>
 		</div>
