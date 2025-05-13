@@ -64,10 +64,13 @@ jobs:
 
     - name: Install dependencies
       run: |
-          npm install -g pnpm
-          pnpm install --no-frozen-lockfile
-          pnpm download_json -f settings.json
-
+        npm install -g pnpm
+        pnpm install --no-frozen-lockfile
+        pnpm download_json -f settings.json
+      env:
+        JSON_PATH: ${{ secrets.JSON_PATH }}
+        DOMAIN: ${{ vars.DOMAIN }}
+    
     - name: Set up Python
       uses: actions/setup-python@v5
       with:

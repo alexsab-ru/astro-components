@@ -72,9 +72,27 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Получаем пути из .env файла
-JSON_PATH=$(cat .env | grep JSON_PATH= | cut -d '=' -f 2)
-DOMAIN_NAME=$(cat .env | grep DOMAIN= | cut -d '=' -f 2)
+# Если JSON_PATH не установлен, пытаемся получить его из .env
+if [ -z "$JSON_PATH" ] && [ -f .env ]; then
+    export JSON_PATH=$(grep '^JSON_PATH=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
+fi
+
+# Проверяем, что JSON_PATH установлен
+if [ -z "$JSON_PATH" ]; then
+    echo "Error: JSON_PATH is not found"
+    exit 1
+fi
+
+# Если DOMAIN_NAME не установлен, пытаемся получить его из .env
+if [ -z "$DOMAIN_NAME" ] && [ -f .env ]; then
+    export DOMAIN_NAME=$(grep '^DOMAIN_NAME=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
+fi
+
+# Проверяем, что DOMAIN_NAME установлен
+if [ -z "$DOMAIN_NAME" ]; then
+    echo "Error: DOMAIN_NAME is not found"
+    exit 1
+fi
 
 echo "Using JSON_PATH: $JSON_PATH"
 echo "Using DOMAIN_NAME: $DOMAIN_NAME"

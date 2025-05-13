@@ -143,6 +143,9 @@ jobs:
       - name: Download JSONs
         run: |
           pnpm download_json
+        env:
+          JSON_PATH: ${{ secrets.JSON_PATH }}
+          DOMAIN: ${{ vars.DOMAIN }}
 
       - name: Replace Placeholders in JSON
         run: |
