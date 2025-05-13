@@ -103,13 +103,13 @@ mkdir -p src/data
 # Функция для скачивания файла
 download_file() {
     local file=$1
-    echo "Checking file: $file"
+    printf "\nChecking file: $file\n"
     if curl --output /dev/null --silent --fail -r 0-0 "$JSON_PATH/$DOMAIN/data/$file"; then
-        echo "Downloading $file..."
+        printf "Downloading $file...\n"
         curl "$JSON_PATH/$DOMAIN/data/$file" -o "src/data/$file"
-        echo "${BGGREEN}Successfully downloaded $file${Color_Off}"
+        printf "${BGGREEN}Successfully downloaded $file${Color_Off}\n"
     else
-        echo "\n${BGRED}File $file not found, skipping...${Color_Off}\n"
+        printf "\n${BGRED}File $file not found, skipping...${Color_Off}\n"
     fi
 }
 
@@ -119,7 +119,7 @@ if [ -n "$SPECIFIC_FILE" ]; then
     if [[ " ${FILES[@]} " =~ " ${SPECIFIC_FILE} " ]]; then
         download_file "$SPECIFIC_FILE"
     else
-        echo "${BGRED}Error: File '$SPECIFIC_FILE' is not in the list of available files${Color_Off}"
+        printf "${BGRED}Error: File '$SPECIFIC_FILE' is not in the list of available files${Color_Off}\n"
         show_help
         exit 1
     fi
@@ -131,5 +131,5 @@ else
 fi
 
 # Показываем результат
-echo "\n${BGGREEN}Downloaded files:${Color_Off}"
+printf "\n${BGGREEN}Downloaded files:${Color_Off}\n"
 ls -al src/data
