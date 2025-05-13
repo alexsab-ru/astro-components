@@ -7,8 +7,7 @@ export const TIMER = { title: 'До конца акции осталось',subt
 export const MARQUEE = { title: `Тотальная распродажа до ${LAST_DAY}.${MONTH}.${YEAR}`, count: 8, speed: 20, show: false };
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
-// Ссылка организации для виджета
-export const LINK_WIDGET_ORGNIZATION = '';
+
 // Ссылки под хедером
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import modelsData from '@/data/models.json';
@@ -17,7 +16,6 @@ const children = Object.keys(groupModelsByBrand).reduce((acc, key) => {
 	acc[key] = groupModelsByBrand[key].map(model => ( { url: `models/${model.id}/`, name: `${model.name.toUpperCase()}`, thumb: model.thumb } ) );
 	return acc;
 }, {});
-
 export const LINKS_MENU = [
 	{url: 'cars/', name: 'Авто в наличии'},
 	// {url: 'catalog/', name: 'Каталог'},
@@ -35,13 +33,16 @@ export const LINKS_MENU = [
 	{url: '#services', name: 'Услуги'},
 	{url: 'contacts/', name: 'Контакты'},
 ];
+
 // Коллекции
 export const COLLECTIONS = [
 	{name: 'special-offers', title: 'Спецпредложения'},
 	{name: 'news', title: 'Новости'},
 ];
+
 // Текст согласия в формах
 export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';
+
 // Текст информации в футере
 import salonsData from '@/data/salons.json';
 import settings from '@/data/settings.json';
