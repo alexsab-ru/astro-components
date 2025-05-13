@@ -83,19 +83,19 @@ if [ -z "$JSON_PATH" ]; then
     exit 1
 fi
 
-# Если DOMAIN_NAME не установлен, пытаемся получить его из .env
-if [ -z "$DOMAIN_NAME" ] && [ -f .env ]; then
-    export DOMAIN_NAME=$(grep '^DOMAIN_NAME=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
+# Если DOMAIN не установлен, пытаемся получить его из .env
+if [ -z "$DOMAIN" ] && [ -f .env ]; then
+    export DOMAIN=$(grep '^DOMAIN=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
 fi
 
-# Проверяем, что DOMAIN_NAME установлен
-if [ -z "$DOMAIN_NAME" ]; then
-    echo "Error: DOMAIN_NAME is not found"
+# Проверяем, что DOMAIN установлен
+if [ -z "$DOMAIN" ]; then
+    echo "Error: DOMAIN is not found"
     exit 1
 fi
 
 echo "Using JSON_PATH: $JSON_PATH"
-echo "Using DOMAIN_NAME: $DOMAIN_NAME"
+echo "Using DOMAIN: $DOMAIN"
 
 # Создаем директорию для данных
 mkdir -p src/data
@@ -104,9 +104,9 @@ mkdir -p src/data
 download_file() {
     local file=$1
     echo "Checking file: $file"
-    if curl --output /dev/null --silent --fail -r 0-0 "$JSON_PATH/$DOMAIN_NAME/data/$file"; then
+    if curl --output /dev/null --silent --fail -r 0-0 "$JSON_PATH/$DOMAIN/data/$file"; then
         echo "Downloading $file..."
-        curl "$JSON_PATH/$DOMAIN_NAME/data/$file" -o "src/data/$file"
+        curl "$JSON_PATH/$DOMAIN/data/$file" -o "src/data/$file"
         echo "${BGGREEN}Successfully downloaded $file${Color_Off}"
     else
         echo "\n${BGRED}File $file not found, skipping...${Color_Off}\n"
