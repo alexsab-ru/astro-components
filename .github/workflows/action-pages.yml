@@ -141,6 +141,7 @@ jobs:
           pnpm install --no-frozen-lockfile
 
       - name: Download JSONs
+        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm download_json
         env:
@@ -148,10 +149,12 @@ jobs:
           DOMAIN: ${{ vars.DOMAIN }}
 
       - name: Replace Placeholders in JSON
+        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm replacePlaceholdersInJson
 
       - name: Astro Build
+        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm build --outDir ./_site
 
