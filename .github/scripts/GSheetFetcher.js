@@ -89,9 +89,15 @@ class GSheetFetcher {
                 }
 
                 const result = {};
+                const keyMapping = JSON.parse(process.env.KEY_MAPPING || '{}'); // Получаем карту переименования
+
                 records.forEach(record => {
                     if (Object.values(record).some(value => value.trim() !== '')) {
                         const key = this.cleanString(record[this.config.keyColumn]);
+
+                        if(key == "") {
+                            return;
+                        }
 
                         if (this.config.outputFormat === 'simple') {
                             // Простой формат: ключ -> значение
@@ -108,9 +114,24 @@ class GSheetFetcher {
                             // Детальный формат: ключ -> объект с полями
                             const transformedRecord = {};
                             Object.keys(record).forEach(field => {
-                                if (field !== this.config.keyColumn) {
-                                    let value = record[field].trim();
-                                    transformedRecord[field] = this.convertToNumber(value);
+                                let value = record[field].trim();
+
+                                // Переименовываем ключи согласно карте
+                                const newKey = keyMapping[field] || field; // Если ключ не найден в карте, оставляем оригинальный
+                                if(newKey == "") {
+                                    return;
+                                }
+
+                                if (result[key] !== undefined) {
+                                    if (newKey === 'Конечная цена' || newKey === 'РРЦ') {
+                                        transformedRecord[newKey] = Math.min(result[key][newKey], value);
+                                    } else if (newKey === 'Скидка') {
+                                        transformedRecord[newKey] = Math.max(result[key][newKey], value);
+                                    } else {
+                                        transformedRecord[newKey] = this.convertToNumber(value);
+                                    }
+                                } else {
+                                    transformedRecord[newKey] = this.convertToNumber(value);
                                 }
                             });
                             result[key] = transformedRecord;

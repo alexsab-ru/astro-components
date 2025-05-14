@@ -18,19 +18,26 @@ fi
 
 # Проверяем, что QUERY_STRING установлен
 if [ -z "$QUERY_STRING" ]; then
-    echo "Error: DEALER_PRICE_CSV_COLUMN or USED_CARS_STORAGE_CSV_COLUMN is not found"
+    echo "Error: DEALER_PRICE_CSV_COLUMN is not found"
     exit 1
 fi
 
-# Кодируем QUERY_STRING для URL
-# export QUERY_STRING=$(echo "$QUERY_STRING" | sed 's/ /%20/g')
+# Если KEY_MAPPING не установлен, пытаемся получить его из .env
+if [ -z "$KEY_MAPPING" ] && [ -f .env ]; then
+    export KEY_MAPPING=$(grep '^DEALER_PRICE_KEY_MAPPING=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
+fi
+
+# Проверяем, что KEY_MAPPING установлен
+if [ -z "$KEY_MAPPING" ]; then
+    echo "Error: DEALER_PRICE_KEY_MAPPING is not found"
+    exit 1
+fi
 
 # Устанавливаем остальные переменные
-# export KEY_COLUMN="Модель"
+export KEY_COLUMN="Модель"
 export OUTPUT_PATHS="./src/data/dealer-models_price.json"
 # export OUTPUT_FORMAT="simple"
-# export OUTPUT_FORMAT="detailed"
-# export OUTPUT_FORMAT="array"
+export OUTPUT_FORMAT="detailed"
 
 # Запускаем скрипт
 node .github/scripts/GSheetFetcher.js

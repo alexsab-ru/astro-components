@@ -39,7 +39,7 @@ function parseNumber(value) {
 
 // Функция для преобразования дилерских данных
 function transformDealerData(dealerData) {
-  return dealerData.map(item => {
+  return Object.values(dealerData).map(item => {
     const brand = item['Бренд'];
     const modelName = item['Модель'];
     const modelId = getModelId(brand, modelName);
