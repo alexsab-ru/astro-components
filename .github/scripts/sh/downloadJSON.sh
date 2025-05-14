@@ -18,6 +18,7 @@ show_help() {
     echo "  banners.json"
     echo "  cars.json"
     echo "  faq.json"
+    echo "  federal-models_price.json"
     echo "  models-sections.yml"
     echo "  models.json"
     echo "  reviews.json"
@@ -30,7 +31,7 @@ show_help() {
     echo "  special-services.json"
     echo
     echo "Examples:"
-    echo "  $0                    # Download all files"
+    echo "  $0                   # Download all files"
     echo "  $0 -f cars.json      # Download only cars.json"
     echo "  $0 --file faq.json   # Download only faq.json"
 }
@@ -40,6 +41,7 @@ FILES=(
     "banners.json"
     "cars.json"
     "faq.json"
+    "federal-models_price.json"
     "models-sections.yml"
     "models.json"
     "reviews.json"
