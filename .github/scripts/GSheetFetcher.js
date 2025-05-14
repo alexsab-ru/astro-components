@@ -76,6 +76,11 @@ class GSheetFetcher {
                 }
 
                 if (!this.config.keyColumn) {
+                    records.map(record => {
+                        Object.keys(record).forEach(field => {
+                            record[field] = record[field].trim();
+                        });
+                    });
                     const filteredRecords = records.filter(row => {
                         return Object.values(row).some(value => value !== "" && value !== null && value !== undefined);
                     });
