@@ -31,7 +31,7 @@ document_id=$(echo "$DOWNLOAD_URL" | sed -n 's/.*\/d\/\([^\/]*\)\/edit.*/\1/p')
 gid=$(echo "$DOWNLOAD_URL" | sed -n 's/.*gid=\([0-9]*\).*/\1/p')
 
 export KEY_COLUMN="Модель"
-export OUTPUT_PATHS="./src/data/models-dealer_price.json"
+export OUTPUT_PATHS="./src/data/dealer-models_price.json"
 
 
 if [ -n "$document_id" ] && [ -n "$gid" ]; then

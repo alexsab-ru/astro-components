@@ -7,7 +7,7 @@ const carsFilePath = path.join(dataDirectory, 'cars.json');
 
 // Проверяем оба возможных имени файла
 const possibleDealerPriceFiles = [
-  path.join(dataDirectory, 'models-dealer_price.json'),
+  path.join(dataDirectory, 'dealer-models_price.json'),
   path.join(dataDirectory, 'dealer_price.json')
 ];
 
@@ -15,7 +15,7 @@ const possibleDealerPriceFiles = [
 const dealerPriceFilePath = possibleDealerPriceFiles.find(file => fs.existsSync(file));
 
 if (!dealerPriceFilePath) {
-  console.error('Не найден файл с ценами дилера (models-dealer_price.json или dealer_price.json)');
+  console.error('Не найден файл с ценами дилера (dealer-models_price.json или dealer_price.json)');
   process.exit(1);
 }
 
@@ -39,7 +39,7 @@ if (fs.existsSync(carsFilePath) && fs.existsSync(dealerPriceFilePath)) {
       dealerPriceData = [];
     }
   } catch (error) {
-    console.error("Ошибка парсинга файла cars.json или models-dealer_price.json:", error);
+    console.error("Ошибка парсинга файла cars.json или dealer-models_price.json:", error);
   }
 }
 
@@ -71,7 +71,7 @@ allPrices = carsData.map(item => {
       maxBenefit: Math.max(item.benefit, dealer.benefit)
     }
   } else {
-    console.log(`Не удалось найти модель ${item.id} в файле models-dealer_price.json`);
+    console.log(`Не удалось найти модель ${item.id} в файле dealer-models_price.json`);
   }
   
 });
