@@ -7,6 +7,7 @@ on:
     # paths:
       # - '.github/scripts/sh/getAirStorage.sh'
       # - '.github/scripts/sh/getDealerData.sh'
+      # - '.github/scripts/sh/getDealerPrices.sh'
       # - '.github/scripts/sh/getDealerStorage.sh'
       # - '.github/scripts/sh/getSortStorage.sh'
       # - '.github/scripts/CarFeedProcessorCSV.py'
@@ -15,6 +16,7 @@ on:
       # - '.github/scripts/config.py'
       # - '.github/scripts/getOneXML.py'
       # - '.github/scripts/GSheetFetcher.js'
+      # - '.github/scripts/mergeCarPrices.js'
       # - '.github/scripts/model_mapping.json'
       # - '.github/scripts/update_cars_air_storage.py'
       # - '.github/scripts/update_cars.py'

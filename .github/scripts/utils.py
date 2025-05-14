@@ -272,7 +272,7 @@ def avitoColor(color):
         return color  # Возвращаем оригинальный ключ, если он не найден
 
 
-def load_price_data(file_path: str = "./src/data/cars_dealer_price.json") -> Dict[str, Dict[str, int]]:
+def load_price_data(file_path: str = "./src/data/dealer-cars_price.json") -> Dict[str, Dict[str, int]]:
     """
     Загружает данные о ценах из JSON файла.
     
