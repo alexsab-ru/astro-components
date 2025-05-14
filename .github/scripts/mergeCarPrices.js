@@ -1,119 +1,105 @@
 import fs from 'fs';
 import path from 'path';
 
-// Указываем папку с JSON файлами
+// Пути к файлам
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
-const carsFilePath = path.join(dataDirectory, 'cars.json');
+const federalFilePath = path.join(dataDirectory, 'federal-models_price.json');
+const dealerFilePath = path.join(dataDirectory, 'dealer-models_price.json');
+const modelsFilePath = path.join(dataDirectory, 'models.json');
 
-// Проверяем оба возможных имени файла
-const possibleDealerPriceFiles = [
-  path.join(dataDirectory, 'dealer-models_price.json'),
-  path.join(dataDirectory, 'dealer_price.json')
-];
-
-// Находим первый существующий файл
-const dealerPriceFilePath = possibleDealerPriceFiles.find(file => fs.existsSync(file));
-
-if (!dealerPriceFilePath) {
-  console.error('Не найден файл с ценами дилера (dealer-models_price.json или dealer_price.json)');
+// Проверяем наличие федерального файла
+if (!fs.existsSync(federalFilePath)) {
+  console.error('Ошибка: Файл federal-models_price.json не найден');
   process.exit(1);
 }
 
-let carsData = [];
-let dealerPriceData = [];
-let allPrices = [];
+// Читаем федеральный файл
+const federalData = JSON.parse(fs.readFileSync(federalFilePath, 'utf-8'));
 
-if (fs.existsSync(carsFilePath) && fs.existsSync(dealerPriceFilePath)) {
-  const carsFileContent = fs.readFileSync(carsFilePath, 'utf-8');
-  const dealerPriceFileContent = fs.readFileSync(dealerPriceFilePath, 'utf-8');
-  try {
-    carsData = JSON.parse(carsFileContent);
-    let dealerPriceDataObj = JSON.parse(dealerPriceFileContent);
-    dealerPriceData = Object.keys(dealerPriceDataObj).map(key => ({
-      id: key,
-      price: dealerPriceDataObj[key]['Конечная цена'],
-      benefit: dealerPriceDataObj[key]['Скидка'],
-    }));
-    if (!Array.isArray(carsData) || !Array.isArray(dealerPriceData)) {
-      carsData = []; // Если данные не являются массивом, обнуляем их
-      dealerPriceData = [];
-    }
-  } catch (error) {
-    console.error("Ошибка парсинга файла cars.json или dealer-models_price.json:", error);
-  }
+// Читаем файл с моделями
+const modelsData = JSON.parse(fs.readFileSync(modelsFilePath, 'utf-8'));
+
+// Функция для получения ID модели из models.json
+function getModelId(brand, modelName) {
+  const model = modelsData.find(m => 
+    m.mark_id.toLowerCase() === brand.toLowerCase() && 
+    m.name.toLowerCase() === modelName.toLowerCase()
+  );
+  return model ? model.id : null;
 }
 
-const getModel = (modelId) => {
-  const regex = /-(.+)$/;
-  const match = modelId.match(regex);
-  return match ? match[1] : null;
-};
+// Функция для преобразования строки в число
+function parseNumber(value) {
+  if (value === null || value === undefined || value === '') {
+    return 0;
+  }
+  const num = Number(value);
+  return isNaN(num) ? 0 : num;
+}
 
-const getBrand = (modelId) => {
-  const regex = /^(.*?)-/;
-  const match = modelId.match(regex);
-  return match ? match[1] : null;
-};
-
-allPrices = carsData.map(item => {
-  let itemId = getModel(item.id);
-  if (itemId) {
-    let dealer = dealerPriceData.find(item => item.id === itemId);
+// Функция для преобразования дилерских данных
+function transformDealerData(dealerData) {
+  return dealerData.map(item => {
+    const brand = item['Бренд'];
+    const modelName = item['Модель'];
+    const modelId = getModelId(brand, modelName);
+    
     return {
-      id: item.id,
-      brand: getBrand(item.id),
-      model: item.model,
-      price: currencyFormat(item.price),
-      dealerPrice: dealer.price,
-      benefit: currencyFormat(item.benefit),
-      dealerBenefit: dealer.benefit,
-      minPrice: Math.min(item.price, dealer.price),
-      maxBenefit: Math.max(item.benefit, dealer.benefit)
-    }
-  } else {
-    console.log(`Не удалось найти модель ${item.id} в файле dealer-models_price.json`);
+      id: modelId ? `${brand.toLowerCase()}-${modelId}` : null,
+      brand: brand,
+      model: modelName,
+      priceDealer: parseNumber(item['Конечная цена']),
+      benefitDealer: parseNumber(item['Скидка']),
+      priceOfficial: parseNumber(item['РРЦ'])
+    };
+  }).filter(item => item.id !== null);
+}
+
+// Читаем и преобразуем дилерские данные
+let dealerData = [];
+if (fs.existsSync(dealerFilePath)) {
+  const dealerRawData = JSON.parse(fs.readFileSync(dealerFilePath, 'utf-8'));
+  dealerData = transformDealerData(dealerRawData);
+}
+
+// Объединяем данные
+const mergedData = federalData.map(federalItem => {
+  const dealerItem = dealerData.find(d => d.id === federalItem.id);
+  
+  if (dealerItem) {
+    const priceMin = Math.min(
+      parseNumber(federalItem.price),
+      dealerItem.priceDealer
+    );
+    
+    const benefitMax = Math.max(
+      parseNumber(federalItem.benefit || 0),
+      dealerItem.benefitDealer
+    );
+    
+    return {
+      ...federalItem,
+      price: parseNumber(federalItem.price),
+      benefit: parseNumber(federalItem.benefit || 0),
+      priceDealer: dealerItem.priceDealer,
+      benefitDealer: dealerItem.benefitDealer,
+      priceOfficial: dealerItem.priceOfficial,
+      priceMin,
+      benefitMax
+    };
   }
   
+  return {
+    ...federalItem,
+    price: parseNumber(federalItem.price),
+    benefit: parseNumber(federalItem.benefit || 0),
+    priceMin: parseNumber(federalItem.price),
+    benefitMax: parseNumber(federalItem.benefit || 0)
+  };
 });
 
-function currencyFormat(number) {
-	// Проверка на null, undefined, или пустую строку
-	if (number === null || number === undefined || number === '' || isNaN(number)) {
-		return "";
-	}
-
-	// Если number является строкой, пытаемся преобразовать её в число
-	if (typeof number === 'string') {
-		number = parseFloat(number);
-	}
-
-	// Если после преобразования значение не является числом (например, если оно было невалидной строкой)
-	if (isNaN(number)) {
-		return "";
-	}
-
-	return number;
-}
-
-// Функция для создания JSON файла
-function createAllPricesFile() {
-  const outputPath = path.join(dataDirectory, 'allPrices.json');
-  
-  try {
-    // Преобразуем массив в JSON строку с отступами для читаемости
-    const jsonData = JSON.stringify(allPrices, null, 2);
-    
-    // Записываем данные в файл
-    fs.writeFileSync(outputPath, jsonData, 'utf-8');
-    console.log('Файл allPrices.json успешно создан в папке src/data/');
-  } catch (error) {
-    console.error('Ошибка при создании файла:', error);
-  }
-};
-
-if (allPrices.length) {
-  createAllPricesFile();
-} else {
-  console.log('Не удалось создать файл allPrices.json');
-}
+// Сохраняем результат
+const outputPath = path.join(dataDirectory, 'allPrices.json');
+fs.writeFileSync(outputPath, JSON.stringify(mergedData, null, 2), 'utf-8');
+console.log('Файл allPrices.json успешно создан');
 
