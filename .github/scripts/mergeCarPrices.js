@@ -67,34 +67,43 @@ const mergedData = federalData.map(federalItem => {
   const dealerItem = dealerData.find(d => d.id === federalItem.id);
   
   if (dealerItem) {
-    const priceMin = Math.min(
-      parseNumber(federalItem.price),
-      dealerItem.priceDealer
+    const priceFederal = parseNumber(federalItem.price);
+    const benefitFederal = parseNumber(federalItem.benefit || 0);
+    
+    // Ищем минимальную цену среди всех возможных цен
+    const price = Math.min(
+      priceFederal,
+      dealerItem.priceDealer,
+      dealerItem.priceOfficial
     );
     
-    const benefitMax = Math.max(
-      parseNumber(federalItem.benefit || 0),
+    // Ищем максимальную выгоду
+    const benefit = Math.max(
+      benefitFederal,
       dealerItem.benefitDealer
     );
     
     return {
       ...federalItem,
-      price: parseNumber(federalItem.price),
-      benefit: parseNumber(federalItem.benefit || 0),
+      priceFederal,
+      benefitFederal,
       priceDealer: dealerItem.priceDealer,
       benefitDealer: dealerItem.benefitDealer,
       priceOfficial: dealerItem.priceOfficial,
-      priceMin,
-      benefitMax
+      price,
+      benefit
     };
   }
   
+  const priceFederal = parseNumber(federalItem.price);
+  const benefitFederal = parseNumber(federalItem.benefit || 0);
+  
   return {
     ...federalItem,
-    price: parseNumber(federalItem.price),
-    benefit: parseNumber(federalItem.benefit || 0),
-    priceMin: parseNumber(federalItem.price),
-    benefitMax: parseNumber(federalItem.benefit || 0)
+    priceFederal,
+    benefitFederal,
+    price: priceFederal,
+    benefit: benefitFederal
   };
 });
 

@@ -33,7 +33,7 @@ if (carsData.length > 0) {
   carsData.forEach(car => {
     if (car.id) {
       // Список ключей для создания плейсхолдеров
-      const numericKeys = ['price', 'priceDealer', 'benefitDealer', 'priceOfficial', 'priceMin', 'benefitMax'];
+      const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
       
       numericKeys.forEach(key => {
         if (car[key] !== undefined) {
