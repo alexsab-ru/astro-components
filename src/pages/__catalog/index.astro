@@ -14,7 +14,7 @@ import {Icon} from 'astro-icon/components';
 import rawModels from '@/data/models.json';
 let image = '';
 
-export async function getReadyCars() {
+export async function getReadyCars(legal_city_where) {
     const cars = [];
     rawModels.filter(m => m.show).forEach(model => {
         const id = model.id;
@@ -90,7 +90,7 @@ let colors = [];
 let complectations = [];
 let engines = [];
 let drives = [];
-let cars = await getReadyCars();
+let cars = await getReadyCars(legal_city_where);
 cars.map(car => {
 	if(!colors.includes(car.color)) colors.push(car.color);
 	if(!complectations.includes(car.data.complectation_name)) complectations.push(car.data.complectation_name);
