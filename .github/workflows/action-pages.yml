@@ -150,6 +150,20 @@ jobs:
           JSON_PATH: ${{ secrets.JSON_PATH }}
           DOMAIN: ${{ vars.DOMAIN }}
 
+      - name: Get dealer prices
+        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN }}
+        run: |
+          pnpm getDealerPrices
+        env:
+          CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
+          QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
+          KEY_MAPPING: ${{ vars.DEALER_PRICE_KEY_MAPPING }}
+
+      - name: Merge car prices
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          pnpm mergeCarPrices
+
       - name: Replace Placeholders in JSON
         if: steps.check_changes.outputs.changes == 'true'
         run: |
