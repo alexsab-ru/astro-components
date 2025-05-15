@@ -34,8 +34,16 @@ if (seo[currentPath]) {
 		description = pageSeo.description;
 	}
 
+	if (pageSeo.keywords && pageSeo.keywords.trim()) {
+		keywords = pageSeo.keywords;
+	}
+
 	if (pageSeo.h1 && pageSeo.h1.trim()) {
 		h1 = pageSeo.h1;
+	}
+
+	if (pageSeo.image && pageSeo.image.trim()) {
+		image = pageSeo.image;
 	}
 }
 ---
