@@ -8,7 +8,7 @@ fi
 # Проверяем, что CSV_URL установлен
 if [ -z "$CSV_URL" ]; then
     echo "Error: DEALER_PRICE_CSV_URL is not found"
-    exit 1
+    exit 0
 fi
 
 # Если QUERY_STRING не установлен, пытаемся получить его из .env
@@ -19,7 +19,7 @@ fi
 # Проверяем, что QUERY_STRING установлен
 if [ -z "$QUERY_STRING" ]; then
     echo "Error: DEALER_PRICE_CSV_COLUMN is not found"
-    exit 1
+    exit 0
 fi
 
 # Если KEY_MAPPING не установлен, пытаемся получить его из .env
