@@ -1,19 +1,19 @@
 ---
 import CarPageLayout from '@/layouts/CarPageLayout.astro';
-
-import { getReadyCars } from './index.astro';
+import { getReadyCars, breadcrumb } from './index.astro';
 
 export async function getStaticPaths() {
-	const readyCars = await getReadyCars();
+	const settings = await import('@/data/settings.json');
+	const legal_city_where = settings.legal_city_where;
+	const readyCars = await getReadyCars(legal_city_where);
 	return readyCars.map((car) => ({
 		params: { slug: car.slug },
 		props: { car },
-   }));
+	}));
 }
 
 const { car } = Astro.props;
 // const { Content } = car;
-import { breadcrumb } from './index.astro';
 ---
 
 <CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]} backLink={true} totalShow={false}>
