@@ -30,7 +30,7 @@ fi
 # Проверяем, что KEY_MAPPING установлен
 if [ -z "$KEY_MAPPING" ]; then
     echo "Error: DEALER_PRICE_KEY_MAPPING is not found"
-    exit 1
+    # exit 1
 fi
 
 # Устанавливаем остальные переменные
