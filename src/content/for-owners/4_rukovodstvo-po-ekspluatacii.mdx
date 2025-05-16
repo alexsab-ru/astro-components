@@ -1,0 +1,147 @@
+---
+h1: Руководство по эксплуатации
+title: Руководство по эксплуатации
+caption: Руководство по эксплуатации
+breadcrumb: Руководство по эксплуатации
+slug: "rukovodstvo-po-ekspluatacii"
+image: "https://cdn.alexsab.ru/for-owners/geely/rukovodstvo-po-ekspluatacii/thumb.webp"
+description: "Руководство по эксплуатации владельцем GEELY."
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import FormSelect from '@/components/FormSelect.astro';
+import models from '@/data/models.json';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+import { AGREE_LABEL } from '@/const';
+
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+<picture>
+	<source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/for-owners/geely/rukovodstvo-po-ekspluatacii/banner.webp" />
+	<source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/for-owners/geely/rukovodstvo-po-ekspluatacii/thumb.webp" />
+	<img src="https://cdn.alexsab.ru/for-owners/geely/rukovodstvo-po-ekspluatacii/banner.webp" class="w-full mb-12" alt="Ценности сервиса" />
+</picture>
+
+### Coolray
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-14">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Coolray_10753073278544201196.pdf">Руководство по эксплуатации Coolray</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Coolray_4956159201117826655.pdf">Руководство по мультимедийной системе Coolray</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Краткое руководство Coolray_4707678003222827637.pdf">Краткое руководство по эксплуатации Coolray</a>
+</div>
+
+### Новый Coolray
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-14">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации нового Geely Coolray_4951577529704929761.pdf">Руководство по эксплуатации Нового Coolray</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе нового Geely Coolray_4698646530728684342.pdf">Руководство по мультимедийной системе Нового Coolray</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Информационные сообщения комбинации приборов нового Geely Coolray_17066645704902569065.pdf">Информационные сообщения комбинации приборов Нового Coolray</a>
+</div>
+
+### Atlas
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Atlas_998475366923665942.pdf">Руководство по эксплуатации Atlas</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийным системам GKUI и Яндекс_2121709203996243600.pdf">Руководство по мультимедийным системам GKUI и Яндекс</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Краткое руководство Atlas_5419207660116329854.pdf">Краткое руководство Atlas</a>
+</div>
+
+### Новый Atlas
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство пользователя New Atlas_7165857293788864694.pdf">Руководство пользователя Новый Atlas</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийным системам New Atlas_17167258747788361825.pdf">Руководство по мультимедийным системам Новый Atlas</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Брошюра GeelyAtlas 4WD_14085579019240667596.pdf">Брошюра Новый Atlas</a>
+</div>
+
+### Atlas Pro
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Atlas Pro_11455859537441653433.pdf">Руководство по эксплуатации Atlas Pro</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Atlas Pro_12658233515953902251.pdf">Руководство по мультимедийной системе Atlas Pro</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Краткое руководство Atlas Pro_7201947307400012896.pdf">Краткое руководство по эксплуатации Atlas Pro</a>
+</div>
+
+### Tugella
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации_Tugella 2022MY_13.01_10122560857929584641.pdf">Руководство по эксплуатации Tugella 2022MY</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедиа Tugella 2022MY_7758832720369837223.pdf">Руководство по мультимедиа Tugella 2022MY</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Geely_Tugella_Brochure_11996440348279413041.pdf">Брошюра Geely Tugella</a>
+</div>
+
+### Monjaro
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Monjaro_13067049614630638443.pdf">Руководство по эксплуатации Monjaro</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Monjaro_5283830170798094342.pdf">Руководство по мультимедийной системе Monjaro</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Geely_Monjaro_Brochure_16576203389088138008.pdf">Брошюра Geely Monjaro</a>
+</div>
+
+### Belgee X50
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Belgee X50_11530495898635442824.pdf">Руководство по эксплуатации Belgee X50</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Belgee X50_4282978404259585070.pdf">Руководство по мультимедийной системе Belgee X50</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Краткое руководство Belgee X50_15132110144276758760.pdf">Краткое руководство Belgee X50</a>
+</div>
+
+### Новый Emgrand
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации нового Emgrand_15592777710587705395.pdf">Руководство по эксплуатации нового Emgrand</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе нового Geely Emgrand_9221881657149822343.pdf">Руководство по мультимедийной системе Нового Emgrand</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Geely_Emgrand_Brochure_6354246353362118175.pdf">Брошюра Geely Emgrand</a>
+</div>
+
+### Emgrand 7
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Emgrand 7_17929262311346613797.pdf">Руководство по эксплуатации Emgrand 7</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Emgrand 7_5567342066157035446.pdf">Руководство по мультимедийной системе Emgrand 7</a>
+</div>
+
+### Emgrand GT
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Emgrand GT_2525548507125093083.pdf">Руководство по эксплуатации Emgrand GT</a>
+</div>
+
+### Emgrand X7
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Emgrand X7_7621221200223648733.pdf">Руководство по эксплуатации Emgrand X7</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Emgrand X7_3968623811757435575.pdf">Руководство по мультимедийной системе Emgrand X7</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Краткое руководство Emgrand X7_12184030739094467769.pdf">Краткое руководство Emgrand X7</a>
+</div>
+
+### Emgrand GS
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Emgrand GS_3592591463935543049.pdf">Руководство по эксплуатации Emgrand GS</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Emgrand GS_10853904853876031395.pdf">Руководство по мультимедийной системе Emgrand GS</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Краткое руководство Emgrand GS_5459026954741455771.pdf">Краткое руководство Emgrand GS</a>
+</div>
+
+### Okavango
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Okavango_3202162260514598013.pdf">Руководство по эксплуатации Okavango</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Нового Okavango_16157525758095035921.pdf">Руководство по мультимедийной системе Нового Okavango</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации нового Okavango_4037310053224280096.pdf">Руководство по эксплуатации нового Okavango</a>
+</div>
+
+### Preface
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации PREFACE-1_2582961080989468733.pdf">Руководство по эксплуатации Preface</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе PREFACE-1_16557673470652358360.pdf">Руководство по мультимедийной системе Preface</a>
+</div>
+
+### Cityray
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Cityray_5563753521114726935.pdf">Руководство по эксплуатации Cityray</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Cityray_324538010061648974.pdf">Руководство по мультимедийной системе Cityray</a>
+</div>
+
+### EX5
+<div class="inline-flex flex-col flex-wrap gap-4 justify-center mb-10">
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по эксплуатации Geely EX5_1_10249405158372227113.pdf">Руководство по эксплуатации Geely EX5</a>
+	<a class="btn gray !px-4 !py-1 !text-white !no-underline !text-base !mb-0 w-fit" target="_blank" href="https://cdn.alexsab.ru/manuals/geely/Руководство по мультимедийной системе Geely EX5_1_14690111510357466143.pdf">Руководство по мультимедийной системе Geely EX5</a>
+</div>
+
+
+<SpecialSalonsInfo dataFormName="Узнать подробнее. Руководство по эксплуатации" />

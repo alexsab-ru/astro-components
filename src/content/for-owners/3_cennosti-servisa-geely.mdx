@@ -1,0 +1,87 @@
+---
+h1: Ценности официального сервиса Geely
+title: Ценности официального сервиса Geely
+caption: Ценности сервиса Geely
+breadcrumb: Ценности сервиса
+slug: "cennosti-servisa-geely"
+image: "https://cdn.alexsab.ru/for-owners/geely/cennosti-servisa-geely/thumb.webp"
+description: "Как только Вы стали владельцем GEELY, мы взяли на себя важное обязательство обеспечить Вас заботой и всем необходимым для качественного обслуживания."
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import FormSelect from '@/components/FormSelect.astro';
+import models from '@/data/models.json';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+import { AGREE_LABEL } from '@/const';
+
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+<picture>
+	<source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/for-owners/geely/cennosti-servisa-geely/banner.webp" />
+	<source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/for-owners/geely/cennosti-servisa-geely/thumb.webp" />
+	<img src="https://cdn.alexsab.ru/for-owners/geely/cennosti-servisa-geely/banner.webp" class="w-full mb-12" alt="Ценности сервиса" />
+</picture>
+
+Благодарим Вас за выбор автомобиля марки GEELY.
+
+Как только Вы стали владельцем GEELY, мы взяли на себя важное обязательство обеспечить Вас заботой и всем необходимым для качественного обслуживания.
+
+Мы сделаем все возможное для того, чтобы полностью оправдать и даже превзойти Ваши ожидания.
+
+<br/>
+## Владение без забот
+
+- — Гарантия 5 лет или 150 000 км
+
+- — Поддержка 24/7
+
+- — Программа помощи на дорогах
+
+- — Подменный автомобиль<sup>*</sup>
+
+<br/>
+## Преимущества сервиса
+
+### **1. Доверие:**
+
+- — Квалифицированный персонал
+
+- — Сертифицированный сервис
+
+- — Трехступенчатый контроль качества
+
+- — Прозрачное ценообразование
+<br/>
+### **2. Комфорт во всем:**
+
+- — Запись на сервис день в день
+
+- — Выделенная парковка и встреча
+
+- — Комфортное пребывание в дилерском центре
+
+- — Статус ремонта через мессенджеры
+<br/>
+### **3. Отношение с теплотой:**
+
+- — Советы по эксплуатации
+
+- — Приятные комплименты
+
+- — Теплая атмосфера
+
+- — Интересные события
+<br/>
+
+<SpecialSalonsInfo dataFormName="Узнать подробнее. Ценности сервиса Geely" />
+
+> <sup>*</sup>Подменный автомобиль может быть предоставлен дилером бесплатно при невозможности выполнить гарантийный ремонт в день приёмки.
+Дилер самостоятельно принимает решение о предоставлении подменного автомобиля в зависимости от его наличия в дилерском центре

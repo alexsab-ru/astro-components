@@ -25,6 +25,7 @@ export const LINKS_MENU = [
 		name: 'Модели',
 		children
 	},
+	{url: 'for-owners/', name: 'Владельцам'},
 	// {url: 'trade-in/', name: 'Оценка автомобиля'},
 	{url: 'special-offers/', name: 'Спецпредложения'},
 	// {url: 'news/', name: 'Новости'},

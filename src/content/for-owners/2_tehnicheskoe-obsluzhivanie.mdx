@@ -1,0 +1,75 @@
+---
+h1: Техническое обслуживание
+title: Техническое обслуживание
+caption: Техническое обслуживание
+breadcrumb: Техническое обслуживание
+slug: "tehnicheskoe-obsluzhivanie"
+image: "https://cdn.alexsab.ru/for-owners/geely/tehnicheskoe-obsluzhivanie/thumb.webp"
+description: "Запись на ТО автомобилей Geely в Оренбурге"
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import FormSelect from '@/components/FormSelect.astro';
+import models from '@/data/models.json';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+import { AGREE_LABEL } from '@/const';
+
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+<picture>
+	<source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/for-owners/geely/tehnicheskoe-obsluzhivanie/to-banner.webp" />
+	<source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/for-owners/geely/tehnicheskoe-obsluzhivanie/thumb.webp" />
+	<img src="https://cdn.alexsab.ru/for-owners/geely/tehnicheskoe-obsluzhivanie/to-banner.webp" class="w-full mb-12" alt="Техническое обслуживание" />
+</picture>
+
+## Регламент технического обслуживания
+
+### **Приглашаем вас в сеть официальных дилерских центров Geely для прохождения ТО-0.**
+
+Наша задача обеспечить вас и ваш автомобиль исключительным сервисом!
+
+Регулярное и своевременное техническое обслуживание автомобиля позволяет его владельцу не только быть уверенным в его долговременной, беспроблемной эксплуатации, отличных ходовых качествах, комфорте и безопасности, но и снизить эксплуатационные расходы, поскольку поломку всегда легче предотвратить, чем устранить.
+
+<br/>
+## Обкатка нового автомобиля
+
+- — В период обкатки (первые 3000 км) не рекомендуется поднимать обороты двигателя выше 4000 об/мин, резко трогаться и тормозить, а также двигаться с высокой скоростью.
+
+- — По завершении обкатки требуется заменить масло в двигателе. Это необходимо, чтобы удалить первое масло вместе с продуктами приработки пар трения цилиндропоршневой группы и других механизмов, что благотворно скажется на ресурсе двигателя.
+
+- — ТО-0 рекомендуем пройти в течение 3х месяцев после покупки автомобиля или 3 000 км пробега в зависимости от того, что наступит ранее. Для визита необходимо лишь заранее согласовать его дату и время с официальным дилерским центром Geely.
+
+<br/>
+## Комплекс работ ТО-0
+
+- — Осмотр автомобиля (осуществляется по регламенту производителя);
+
+- — Мойка автомобиля;
+
+- — Консультация мастера-приемщика (сотрудники имеют высокую квалификацию по обслуживанию и ремонту автомобилей);
+
+- — Рекомендации (по правильной эксплуатации автомобиля и надлежащем уходе);
+
+- — Замена масла и масляного фильтра (на возмездной основе для клиента);
+
+- — Планирование ТО-1 (для своевременного выявления неисправностей).
+<br/>
+
+<a href="https://geely-partner-penza.ru/%D0%A0%D0%B5%D0%B3%D0%BB%D0%B0%D0%BC%D0%B5%D0%BD%D1%82%20%D0%B8%20%D0%BD%D0%BE%D1%80%D0%BC%D0%B0%D1%82%D0%B8%D0%B2%D1%8B%20%D0%BF%D0%B5%D1%80%D0%B8%D0%BE%D0%B4%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%BE%D0%B1%D1%81%D0%BB%D1%83%D0%B6%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-3_701039106910503879.pdf" target="_blank">Скачать Регламент ТО</a>
+<br/>
+<br/>
+<br/>
+
+<SpecialSalonsInfo 
+	title = 'Записаться на ТО'
+	dataTitle = 'Запись на ТО'
+	dataFormName = 'Запись на ТО'
+/>
