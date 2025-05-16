@@ -54,6 +54,6 @@ export default defineConfig({
 			},
 		},
 	},
-	site: 'https://geely.alexsab.ru',
+	site: 'https://geely-partner-orenburg.ru',
 	base: "/"
 });
