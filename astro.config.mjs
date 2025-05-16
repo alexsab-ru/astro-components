@@ -12,7 +12,7 @@ import react from '@astrojs/react';
 export default defineConfig({
 	integrations: [
 		tailwind({
-			configFile: './tailwind.config.js'
+			configFile: './tailwind.geely.js'
 		}),
 		sitemap({
 			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/')
@@ -54,6 +54,6 @@ export default defineConfig({
 			},
 		},
 	},
-	site: 'https://site.com',
+	site: 'https://geely.alexsab.ru',
 	base: "/"
 });
