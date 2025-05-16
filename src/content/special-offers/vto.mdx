@@ -1,0 +1,128 @@
+---
+pubDate: 2023-12-12
+caption: «Выгодное Техническое Обслуживание» для вашего автомобиля Geely
+image: https://cdn.alexsab.ru/main-sliders/geely/vto/vto-942x461-v.webp
+title: «Выгодное Техническое Обслуживание» для вашего автомобиля Geely
+description: "Скидка за пакет из нескольких ТО"
+breadcrumb: Программа "Выгодное Техническое Обслуживание"
+h1: Программа "Выгодное Техническое Обслуживание"
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Timer from '@/components/Timer/Timer.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common, legal_city_where } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, FIRST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+<picture>
+    <source media="(min-width: 1200px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/vto/vto-1921x638.webp" />
+    <source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/vto/vto-942x461.webp" />
+    <source media="(min-width: 576px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/vto/vto-768x576.webp" />
+    <source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/vto/vto-1080x1920.webp" />
+<img src="https://cdn.alexsab.ru/main-sliders/geely/vto/vto-942x461.webp" alt="Выгодное Техническое Обслуживание" />
+</picture>
+<br/>
+
+«Выгодное Техническое Обслуживание» (ВТО) - это пакет из нескольких ТО.
+
+При этом оплачивается не вся сумма ТО входящих в пакет, а только часть.
+
+Предоплата составляет 1 000 рублей за каждое ТО, входящее в пакет.
+
+Размер скидки зависит от количества предоплаченных ТО.
+
+Одновременно с ТО скидка предоставляется на все сопутствующие работы и запчасти.
+
+<h2 class="mt-14 !mb-10 text-center">Условия программы выгодное техническое обслуживание</h2>
+
+### Внесите предоплату 1 000 рублей за каждое ТО - получите скидку до 30%
+
+<div class="overflow-auto min-w-full mb-14">
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Количество ТО</th>
+				<th>Предоплата</th>
+				<th colspan="2">Скидка</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th></th>
+				<th>на УСЛУГИ</th>
+				<th>на ЗАПЧАСТИ</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>2ТО</td>
+				<td>2000 руб</td>
+				<td>10%</td>
+				<td>10%</td>
+			</tr>
+			<tr>
+				<td>3ТО</td>
+				<td>3000 руб</td>
+				<td>15%</td>
+				<td>10%</td>
+			</tr>
+			<tr>
+				<td>4ТО и более</td>
+				<td>От 4000 руб</td>
+				<td>20%</td>
+				<td>10%</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+### Особые условия: если Вы приобрели пакет ТО, в котором присутствует ТО-50 и выше, то по таким ТО действуют специальные скидки:
+
+<div class="overflow-auto min-w-full mb-14">
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Количество ТО</th>
+				<th colspan="2">Скидка</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>на УСЛУГИ</th>
+				<th>на ЗАПЧАСТИ</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>ТО 50/60/70</td>
+				<td>20%</td>
+				<td>10%</td>
+			</tr>
+			<tr>
+				<td>ТО 80 и выше</td>
+				<td>30%</td>
+				<td>10%</td>
+			</tr>
+			<tr>
+				<td colspan="3">**Одновременно с ТО скидка предоставляется на все сопутствующие работы и запчасти**</td>
+			</tr>
+			<tr>
+				<td colspan="3">+</td>
+			</tr>
+			<tr>
+				<td colspan="3">**Обслуживание и ремонт между ТО - скидка 30% на работы**</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+Экономия на обслуживании Вашего автомобиля, так как стоимость ТО при приобретении пакета ниже стандартной стоимости отдельного ТО.
+
+Гарантия профессионального обслуживания с использованием сертифицированных запчастей и специализированного оборудования.
+
+<SpecialSalonsInfo dataFormName="Узнать подробнее. Выгодное Техническое Обслуживание" />

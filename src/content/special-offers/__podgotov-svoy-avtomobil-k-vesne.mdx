@@ -1,0 +1,55 @@
+---
+pubDate: 2024-03-27
+caption: Подготовь свой автомобиль к весне
+image: https://cdn.alexsab.ru/main-sliders/geely/podgotov-svoy-avtomobil-k-vesne/thumb.webp
+title: Подготовка автомобиля к весне в Geely Партнер Оренбург
+description: Geely Партнер Оренбург предлагает услуги по подготовке автомобиля к весне. В рамках данной услуги проводится осмотр ходовой, рулевой и тормозной системы, проверка фильтров, щеток, тех.жидкостей и АКБ. Подробности можно узнать по телефону +7(3532) 40-53-53.
+breadcrumb: Подготовка автомобиля к весне
+h1: Подготовьте свой автомобиль к&nbsp;весне с&nbsp;Geely Партнер Оренбург
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+<picture>
+	<source media="(min-width: 1200px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/podgotov-svoy-avtomobil-k-vesne/1920x1080.webp" />
+	<source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/podgotov-svoy-avtomobil-k-vesne/1280x625.webp" />
+	<source media="(min-width: 576px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/podgotov-svoy-avtomobil-k-vesne/768x575.webp" />
+	<source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/podgotov-svoy-avtomobil-k-vesne/640x640.webp" />
+	<img src="https://cdn.alexsab.ru/main-sliders/geely/podgotov-svoy-avtomobil-k-vesne/1280x625.webp" class="mb-10" alt="Подготовка автомобиля к весне" />
+</picture>
+
+Подготовка автомобиля после зимы является важным этапом содержания автомобиля в хорошем состоянии.
+
+Обратившись в **Geely Партнер Оренбург**, Вы можете быть уверены, что ваш автомобиль обеспечит вам безопасное и комфортное передвижение.
+
+Мы предлагаем Вам работы, направленные на улучшение безопасности и комфорта водителя и пассажиров :
+
++ • осмотр ходовой;
++ • осмотр рулевой и тормозной системы ;
++ • проверка фильтров;
++ • проверка щеток;
++ • проверка тех.жидкостей;
++ • проверка АКБ.
+
+Стоимость&nbsp;&mdash; 2&nbsp;000&nbsp;рублей.
+
+Подробности в отделе сервиса по телефону <a href={`tel:${phoneFormat(phone_common)}`}>{phone_common}</a>
+
+<div class="flex justify-center mt-10 mb-5">
+	<Button 
+		classes="popup-link block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
+		url="#common-modal" 
+		title="Подробнее"
+		dataTitle="Подготовка автомобиля к&nbsp;весне с&nbsp;Geely Партнер Оренбург"
+		dataFormName="Подробнее. Подготовка автомобиля к весне"
+	/>
+</div>

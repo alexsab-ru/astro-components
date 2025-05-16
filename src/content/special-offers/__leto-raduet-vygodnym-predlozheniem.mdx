@@ -1,0 +1,44 @@
+---
+pubDate: 2024-04-02
+caption: Выгодное предложение на Belgee X50
+image: https://cdn.alexsab.ru/main-sliders/geely/leto-raduet-vygodnym-predlozheniem/photo_2024-04-03 07.40.44.webp
+title: "Лето радует выгодным предложением: Belgee X50 от 1 980 990 ₽"
+description: "Купите новый Geely Belgee X50 в официальном дилерском центр Джили Партнер в Оренбурге. Подробности по тел. +7 (3532) 40-53-53"
+breadcrumb: Лето радует выгодным предложением
+h1: Лето радует выгодным предложением
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+Только в Geely Партнер Оренбург вы можете приобрести новый <b>Belgee X50</b> по цене <b>от 1 980 990 рублей</b>.<sup>*</sup><br/>
+<br/>
+
+<img src="https://cdn.alexsab.ru/main-sliders/geely/leto-raduet-vygodnym-predlozheniem/photo_2024-04-03 07.40.44.webp" alt="Лето радует выгодным предложением" class="w-full" />
+<br/>
+
+Geely Партнер Оренбург – ваш идеальный выбор!<br/>
+
+Ждем Вас по адресу: Загородное шоссе 13/1<br/>
+
+Подробности в отделе продаж по телефону: <a href={`tel:${phoneFormat(phone_common)}`}>{phone_common}</a>
+
+<div class="flex justify-center mt-10 mb-5">
+    <Button
+        classes="popup-link block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline"
+        url="#common-modal"
+        title="Подробнее"
+        dataTitle="Заказать обратный звонок"
+        dataFormName={`Belgee X50 от 1 980 990. Акция`}
+    />
+</div>
+
+> <sup>*</sup> Стоимость указана за автомобиль Belgee X50 в комплектации Style, 2023 года выпуска. Предложение ограничено, носит информационный характер, не является публичной офертой(ст.437 ГК РФ), действует до 30.06.2024. Товар сертифицирован. Для получения подробной информации обращайтесь в отдел продаж.

@@ -1,0 +1,82 @@
+---
+h1: "C Geely Service лето ярче: Всей семьёй к новым приключениям!"
+caption: "C Geely Service лето ярче"
+title: "C Geely Service лето ярче: Всей семьёй к новым приключениям!"
+breadcrumb: "C Geely Service лето ярче"
+pubDate: 2025-04-07
+toDate: 2025-06-01
+image: https://cdn.alexsab.ru/specials/geely/geely-service/thumb.webp
+description: "Весна – время обновлений, лето – время ярких впечатлений! Подарите своему автомобилю заботу с Geely Service и наслаждайтесь каждым километром пути без забот!"
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Timer from '@/components/Timer/Timer.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common, legal_city_where } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+
+export const dateFrom = '01.07.2024';
+export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+<picture>
+    <source media="(min-width: 1024px)" srcset="https://cdn.alexsab.ru/specials/geely/geely-service/desktop-1500x844.webp" />
+    <source media="(min-width: 640px)" srcset="https://cdn.alexsab.ru/specials/geely/geely-service/tablet-960x540.webp" />
+    <img src="https://cdn.alexsab.ru/specials/geely/geely-service/mobile-640x640.webp" width="1496" height="842" class="w-full mb-10" alt="C Geely Service лето ярче" />
+</picture>
+
+**Весна – время обновлений, лето – время ярких впечатлений! Подарите своему автомобилю заботу с Geely Service и наслаждайтесь каждым километром пути без забот!**
+
+С {dateFrom}г. по {dateTo}г. дилерский центр "{site_name}" в {legal_city_where} приглашает вас на специальную сервисную акцию:
+
+- Комплексная диагностика автомобиля всего за 999 рублей – уверенность в исправности вашего авто.
+- Скидка до 60% на щетки стеклоочистителей + бесплатная установка – четкий обзор в сложных погодных условиях.
+- Подарок – обработка стекол и зеркал составом «Антидождь» для хорошей видимости даже в сильный ливень.
+
+**Почему это важно?**
+
+Зима – серьезное испытание для автомобиля: реагенты, перепады температур и дорожная грязь влияют на кузов, подвеску, тормозную систему и диски. Весенняя диагностика – это не просто проверка, а забота о вашей безопасности и комфорте на дороге.
+
+**Что входит в диагностику?**
+
+- Проверка подвески и тормозной системы
+- Диагностика системы охлаждения
+- Оценка состояния лакокрасочного покрытия и щеток стеклоочистителей
+- Компьютерная диагностика
+
+**Приезжайте в Geely Service и начните лето с уверенностью в своем автомобиле!**
+
+Ваш комфорт и безопасность – наш приоритет!
+
+<Timer 
+    endtime="2025-06-01T23:59:59+04:00"
+    class="!py-10"
+/>
+
+<div class="mt-10 mb-20">
+    <h2 class="text-center">Спецпредложение сервиса</h2>
+    <p class="text-center">Оставьте свои данные и мы свяжемся с Вами в ближайшее время!</p>
+    <FeedbackForm 
+        title="" 
+        dataFormName="Форма обратной связи. C Geely Service лето ярче" 
+    />
+</div>
+
+> Запись к дилерскому центру "{site_name}" в {legal_city_where} для проведения работ по проверке и подготовке автомобиля в рамках акции осуществляется через сайт или по телефону <a href={`tel:${phoneFormat(phone_common)}`}>{phone_common}</a>.
+
+> Количество и ассортимент щеток стеклоочистителя ограничены. Точную цену и наличие щеток необходимо уточнять у дилерского центра "{site_name}" в {legal_city_where}, участвующих в Акции.
+
+> В акции принимают участие все автомобили Geely, на которые применимы акционные щетки стеклоочистителя.
+
+> Замена щеток cтеклоочистителя производится сотрудником дилерского центра "{site_name}" в {legal_city_where} по итогу проведенной технической проверки автомобиля Geely. Если клиент просит не менять щетки, то он может приобрести комплект новых щеток стеклоочистителя со скидкой без установки.
+
+> Средство «Антидождь» не выдается клиенту, обработка возможна только в дилерском центре "{site_name}" в {legal_city_where} по итогу проверки технического состояния автомобиля.
+
+> Проведение дополнительных работ отдельно согласуется с клиентом в соответствии с прейскурантом цен официального дилерского центра "{site_name}" в {legal_city_where}, является опционным и не является обязательным условием участия в акции.
+
+> Сроки проведения акции - с {dateFrom}г. по {dateTo}г.
+
+> Данная информация не является офертой.
