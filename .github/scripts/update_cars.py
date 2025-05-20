@@ -9,6 +9,18 @@ class CarProcessor:
     def __init__(self, source_type: str):
         self.source_type = source_type
         self.setup_source_config()
+        self.existing_files = set()
+        self.current_thumbs = []
+        self.prices_data = load_price_data()
+        self.sort_storage_data = {}
+        if os.path.exists('sort_storage.json'):
+            try:
+                with open('sort_storage.json', 'r', encoding='utf-8') as f:
+                    self.sort_storage_data = json.load(f)
+            except json.JSONDecodeError:
+                print("Ошибка при чтении sort_storage.json")
+            except Exception as e:
+                print(f"Произошла ошибка при работе с файлом: {e}")
 
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
@@ -92,8 +104,7 @@ class CarProcessor:
                 print("Элемент max_discount отсутствует или пустой")
                 return 0
 
-    def process_car(self, car: ET.Element, existing_files: set, current_thumbs: List[str], 
-                   prices_data: Dict, sort_storage_data: Dict, config: Dict) -> None:
+    def process_car(self, car: ET.Element, config: Dict) -> None:
         """Обработка отдельного автомобиля"""
         # Базовые расчёты цены и скидки
         price = int(car.find('price').text or 0)
@@ -129,7 +140,7 @@ class CarProcessor:
         file_name = f"{friendly_url}.mdx"
         file_path = os.path.join(config['cars_dir'], file_name)
 
-        update_car_prices(car, prices_data)
+        update_car_prices(car, self.prices_data)
 
         # get info from ./src/data/settings.json
         settings = {
@@ -150,10 +161,10 @@ class CarProcessor:
         config['legal_city_where'] = settings['legal_city_where']
 
         if os.path.exists(file_path):
-            update_yaml(car, file_path, friendly_url, current_thumbs, sort_storage_data, config)
+            update_yaml(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, config)
         else:
-            create_file(car, file_path, friendly_url, current_thumbs,
-                       existing_files, sort_storage_data, config)
+            create_file(car, file_path, friendly_url, self.current_thumbs,
+                       self.existing_files, self.sort_storage_data, config)
 
     def rename_elements(self, car: ET.Element) -> None:
         """Переименование элементов согласно карте переименований"""
@@ -231,39 +242,20 @@ def main():
     config['new_address'] = source_config['new_address']
     config['new_phone'] = source_config['new_phone']
 
-    # Загружаем данные из JSON файла
-    sort_storage_data = {}
-    if os.path.exists('sort_storage.json'):
-        try:
-            with open('sort_storage.json', 'r', encoding='utf-8') as f:
-                sort_storage_data = json.load(f)
-        except json.JSONDecodeError:
-            print("Ошибка при чтении sort_storage.json")
-        except Exception as e:
-            print(f"Произошла ошибка при работе с файлом: {e}")
-
     # Инициализация процессора для конкретного источника
     processor = CarProcessor(args.source_type)
     
-    prices_data = load_price_data()
-
     # Инициализация
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
     setup_directories(config['thumbs_dir'], args.cars_dir)
     
-    existing_files = set()
-    # Список для хранения путей к текущим превьюшкам
-    current_thumbs = []
-
     with open('output.txt', 'w') as file:
         file.write("")
 
-    cars_to_remove = [
-    ]
+    cars_to_remove = []
     
     # Обработка машин
-    # cars_element = root.find('cars')
     cars_element = processor.get_cars_element(root)
     for car in cars_element:
         processor.rename_elements(car)
@@ -272,7 +264,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        processor.process_car(car, existing_files, current_thumbs, prices_data, sort_storage_data, config)
+        processor.process_car(car, config)
     
     # Удаление ненужных машин
     for car in cars_to_remove:
@@ -282,11 +274,11 @@ def main():
     tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
     
     # Очистка
-    cleanup_unused_thumbs(current_thumbs, config['thumbs_dir'])
+    cleanup_unused_thumbs(processor.current_thumbs, config['thumbs_dir'])
     
     for existing_file in os.listdir(args.cars_dir):
         filepath = os.path.join(args.cars_dir, existing_file)
-        if filepath not in existing_files:
+        if filepath not in processor.existing_files:
             os.remove(filepath)
     
     if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
