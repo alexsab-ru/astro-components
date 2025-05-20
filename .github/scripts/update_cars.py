@@ -12,6 +12,7 @@ class CarProcessor:
         self.existing_files = set()
         self.current_thumbs = []
         self.prices_data = load_price_data()
+        
         self.sort_storage_data = {}
         if os.path.exists('sort_storage.json'):
             try:
@@ -19,6 +20,19 @@ class CarProcessor:
                     self.sort_storage_data = json.load(f)
             except json.JSONDecodeError:
                 print("Ошибка при чтении sort_storage.json")
+            except Exception as e:
+                print(f"Произошла ошибка при работе с файлом: {e}")
+        
+        self.dealer_photos_for_cars_avito = {}
+        if os.path.exists('dealer_photos_for_cars_avito.xml'):
+            try:
+                avito_root = get_xml_content('dealer_photos_for_cars_avito.xml', '')
+                for car in avito_root.findall('Ad'):
+                    self.dealer_photos_for_cars_avito[car.find('VIN').text] = []
+                    for image in car.find('Images').findall('Image'):
+                        self.dealer_photos_for_cars_avito[car.find('VIN').text].append(image.get('url'))
+            except json.JSONDecodeError:
+                print("Ошибка при чтении dealer_photos_for_cars_avito.xml")
             except Exception as e:
                 print(f"Произошла ошибка при работе с файлом: {e}")
 
@@ -161,10 +175,9 @@ class CarProcessor:
         config['legal_city_where'] = settings['legal_city_where']
 
         if os.path.exists(file_path):
-            update_yaml(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, config)
+            update_yaml(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config)
         else:
-            create_file(car, file_path, friendly_url, self.current_thumbs,
-                       self.existing_files, self.sort_storage_data, config)
+            create_file(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
 
     def rename_elements(self, car: ET.Element) -> None:
         """Переименование элементов согласно карте переименований"""

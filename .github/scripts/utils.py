@@ -432,7 +432,7 @@ def check_local_files(brand, model, color, vin):
         return "https://cdn.alexsab.ru/errors/404.webp"
 
 
-def create_file(car, filename, friendly_url, current_thumbs, existing_files, sort_storage_data, config):
+def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -517,6 +517,10 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, sor
             content += f"{child.tag}: '{child.text}'\n"
         elif child.tag == f'{config["image_tag"]}s':
             images = [img.text for img in child.findall(config['image_tag'])]
+            # Проверяем наличие дополнительных фотографий в dealer_photos_for_cars_avito
+            vin = car.find('vin').text
+            if vin in dealer_photos_for_cars_avito:
+                images.extend(dealer_photos_for_cars_avito[vin])
             thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
             content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
@@ -575,7 +579,7 @@ def format_value(value: str) -> str:
         return f"'{value}'"
     return value
 
-def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, config):
+def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config):
 
     print(f"Обновление файла: {filename}")
     with open(filename, "r", encoding="utf-8") as f:
@@ -702,6 +706,10 @@ def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, 
     images_container = car.find(f"{config['image_tag']}s")
     if images_container is not None:
         images = [img.text for img in images_container.findall(config['image_tag'])]
+        # Проверяем наличие дополнительных фотографий в dealer_photos_for_cars_avito
+        vin = car.find('vin').text
+        if vin in dealer_photos_for_cars_avito:
+            images.extend(dealer_photos_for_cars_avito[vin])
         if len(images) > 0:
             data.setdefault('images', []).extend(images)
             # Проверяем, нужно ли добавлять эскизы
