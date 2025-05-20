@@ -17,6 +17,7 @@
     "getSortStorage": "sh ./.github/scripts/sh/getSortStorage.sh",
     "cars": "sh ./.github/scripts/sh/process_xml.sh",
 
+    "getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL": "pnpm run cars getone DEALER_PHOTOS_FOR_CARS_AVITO_URL \"dealer_photos_for_cars_avito.xml\"",
     "getOne_AVITO_XML_URL": "pnpm run cars getone AVITO_XML_URL",
     "getOne_AVITO_XML_URL_DATA_CARS_CAR": "pnpm run cars getone AVITO_XML_URL_DATA_CARS_CAR",
     "getOne_AVITO_FRIEND_XML_URL": "pnpm run cars getone AVITO_FRIEND_XML_URL cars_friend.xml",
