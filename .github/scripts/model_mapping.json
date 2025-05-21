@@ -454,6 +454,7 @@
             "folder": "gs3",
             "cyrillic": "ГС3",
             "color": {
+                "Черный": "black.webp",
                 "Голубой": "blue.webp",
                 "Синий": "blue.webp",
                 "Серый": "gray.webp",
