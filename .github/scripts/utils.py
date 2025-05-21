@@ -14,6 +14,7 @@ import urllib.parse
 from pathlib import Path
 from typing import Dict, Any
 from config import *
+from bs4 import BeautifulSoup
 
 
 def process_friendly_url(friendly_url, replace = "-"):
@@ -53,7 +54,7 @@ def process_description(desc_text):
         return ""
         
     # Заменяем все <br> на <br/>
-    desc_text = desc_text.replace('<br>', '<br/>')
+    desc_text = desc_text.replace("<br>", "<br/>\n")
     
     lines = desc_text.split('\n')
     processed_lines = []
@@ -75,8 +76,12 @@ def process_description(desc_text):
         else:
             # Если это обычный текст, оборачиваем в <p>
             processed_lines.append(f"<p>{line}</p>")
+    
+    raw_html = '\n'.join(processed_lines)
+    soup = BeautifulSoup(raw_html, "html.parser")
+    pretty_html = soup.prettify()
             
-    return '\n'.join(processed_lines)
+    return pretty_html
 
 
 def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False):
