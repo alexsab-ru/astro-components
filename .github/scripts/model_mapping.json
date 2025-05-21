@@ -633,6 +633,7 @@
                 "Серый": "gray.webp",
                 "Темно-серый": "gray.webp",
                 "Светло-серый": "light-gray.webp",
+                "(lc)светло-серый": "light-gray.webp",
                 "Красный": "red.webp",
                 "Серебристый": "silver.webp",
                 "Белый": "white.webp"
