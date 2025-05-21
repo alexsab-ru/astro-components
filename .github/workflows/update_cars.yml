@@ -82,7 +82,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests lxml pyyaml Pillow
+        pip install requests lxml pyyaml Pillow beautifulsoup4
 
 
     - name: Download CSV and generate cars.xml from csv
