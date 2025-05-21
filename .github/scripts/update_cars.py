@@ -28,9 +28,22 @@ class CarProcessor:
             try:
                 avito_root = get_xml_content('dealer_photos_for_cars_avito.xml', '')
                 for car in avito_root.findall('Ad'):
-                    self.dealer_photos_for_cars_avito[car.find('VIN').text] = []
+                    vin = car.find('VIN').text
+                    self.dealer_photos_for_cars_avito[vin] = {
+                        'images': [],
+                        'description': ''
+                    }
+                    # Обработка изображений
                     for image in car.find('Images').findall('Image'):
-                        self.dealer_photos_for_cars_avito[car.find('VIN').text].append(image.get('url'))
+                        self.dealer_photos_for_cars_avito[vin]['images'].append(image.get('url'))
+                    # Обработка описания
+                    description_elem = car.find('Description')
+                    if description_elem is not None and description_elem.text:
+                        # Извлекаем текст из CDATA
+                        description_text = description_elem.text
+                        if description_text.startswith('<![CDATA[') and description_text.endswith(']]>'):
+                            description_text = description_text[9:-3]  # Удаляем CDATA обертку
+                        self.dealer_photos_for_cars_avito[vin]['description'] = description_text
             except json.JSONDecodeError:
                 print("Ошибка при чтении dealer_photos_for_cars_avito.xml")
             except Exception as e:
@@ -120,6 +133,13 @@ class CarProcessor:
 
     def process_car(self, car: ET.Element, config: Dict) -> None:
         """Обработка отдельного автомобиля"""
+        # Создание URL
+        friendly_url = process_friendly_url(
+            join_car_data(car, 'mark_id', 'folder_id', 'modification_id',
+                         'complectation_name', 'color', 'year')
+        )
+        print(f"\nУникальный идентификатор: {friendly_url}")
+        
         # Базовые расчёты цены и скидки
         price = int(car.find('price').text or 0)
         max_discount = self.calculate_max_discount(car)
@@ -133,17 +153,10 @@ class CarProcessor:
             sale_price = int(car.find('priceWithDiscount').text)
         create_child_element(car, 'priceWithDiscount', sale_price)
         create_child_element(car, 'sale_price', sale_price)
-
+        
         for elem_name in self.config['elements_to_localize']:
             elem = car.find(elem_name)
             localize_element_text(elem)
-        
-        # Создание URL
-        friendly_url = process_friendly_url(
-            join_car_data(car, 'mark_id', 'folder_id', 'modification_id',
-                         'complectation_name', 'color', 'year')
-        )
-        print(f"Уникальный идентификатор: {friendly_url}")
         
         url = f"https://{config['domain']}{config['path_car_page']}{friendly_url}/"
         create_child_element(car, 'url', url)
