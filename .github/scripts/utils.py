@@ -40,13 +40,42 @@ def process_permalink(vin):
 
 # Helper function to process description and add it to the body
 def process_description(desc_text):
+    """
+    Обрабатывает текст описания, добавляя HTML-разметку.
+    
+    Args:
+        desc_text (str): Исходный текст описания
+        
+    Returns:
+        str: Обработанный HTML-текст
+    """
+    if not desc_text:
+        return ""
+        
+    # Заменяем все <br> на <br/>
+    desc_text = desc_text.replace('<br>', '<br/>')
+    
     lines = desc_text.split('\n')
     processed_lines = []
+    
     for line in lines:
-        if line.strip() == '':
+        line = line.strip()
+        if not line:
             processed_lines.append("<p>&nbsp;</p>")
+            continue
+            
+        # Проверяем, является ли строка HTML-разметкой
+        if line.startswith('<') and line.endswith('>'):
+            # Если это одиночный тег (например, <br/>), оставляем как есть
+            if line.count('<') == 1 and line.count('>') == 1:
+                processed_lines.append(line)
+            # Если это HTML-блок, оборачиваем в <p>
+            else:
+                processed_lines.append(f"<p>{line}</p>")
         else:
+            # Если это обычный текст, оборачиваем в <p>
             processed_lines.append(f"<p>{line}</p>")
+            
     return '\n'.join(processed_lines)
 
 
@@ -432,7 +461,7 @@ def check_local_files(brand, model, color, vin):
         return "https://cdn.alexsab.ru/errors/404.webp"
 
 
-def create_file(car, filename, friendly_url, current_thumbs, existing_files, sort_storage_data, config):
+def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
     vin = car.find('vin').text
     vin_hidden = process_vin_hidden(vin)
     # Преобразование цвета
@@ -517,6 +546,11 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, sor
             content += f"{child.tag}: '{child.text}'\n"
         elif child.tag == f'{config["image_tag"]}s':
             images = [img.text for img in child.findall(config['image_tag'])]
+            # Проверяем наличие дополнительных фотографий в dealer_photos_for_cars_avito
+            if vin in dealer_photos_for_cars_avito:
+                # Добавляем только уникальные изображения
+                new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
+                images.extend(new_images)
             thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
             content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
@@ -550,6 +584,10 @@ def create_file(car, filename, friendly_url, current_thumbs, existing_files, sor
             if child.text:  # Only add if there's content
                 content += f"{child.tag}: {format_value(child.text)}\n"
 
+    # Если есть описание из dealer_photos_for_cars_avito, используем его
+    if vin in dealer_photos_for_cars_avito and dealer_photos_for_cars_avito[vin]['description'] and description == "":
+        description = dealer_photos_for_cars_avito[vin]['description']
+
     content += "---\n"
     content += process_description(description)
 
@@ -575,7 +613,7 @@ def format_value(value: str) -> str:
         return f"'{value}'"
     return value
 
-def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, config):
+def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config):
 
     print(f"Обновление файла: {filename}")
     with open(filename, "r", encoding="utf-8") as f:
@@ -702,8 +740,16 @@ def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, 
     images_container = car.find(f"{config['image_tag']}s")
     if images_container is not None:
         images = [img.text for img in images_container.findall(config['image_tag'])]
+        # Проверяем наличие дополнительных фотографий в dealer_photos_for_cars_avito
+        if vin in dealer_photos_for_cars_avito:
+            # Добавляем только уникальные изображения
+            new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
+            images.extend(new_images)
         if len(images) > 0:
-            data.setdefault('images', []).extend(images)
+            # Удаляем дубликаты из существующего списка
+            existing_images = data.get('images', [])
+            unique_images = list(dict.fromkeys(existing_images + images))
+            data['images'] = unique_images
             # Проверяем, нужно ли добавлять эскизы
             if 'thumbs' not in data or (len(data['thumbs']) < 5):
                 thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
