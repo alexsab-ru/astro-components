@@ -5,11 +5,14 @@ import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import CloseModalBtn from '@/components/CloseModalBtn.astro';
 import {AGREE_LABEL} from '@/const';
 
+import settings from '@/data/settings.json';
+const { manager_photo } = settings;
+
 const { 
 	modalShow = 20000,
 	title = '',
 	modalPosition = 'center',
-	img = 'https://cdn.alexsab.ru/people/user.webp',
+	img = manager_photo,
 	imgPosition = 'right',
 	formName = ''
 } = Astro.props;
