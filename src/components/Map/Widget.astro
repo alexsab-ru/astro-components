@@ -1,13 +1,13 @@
 ---
 import settings from '@/data/settings.json';
-const { yandex_widget_orgnization } = settings;
+const { yandex_widget_orgnization, map_background } = settings;
 
 interface Props{
 	widgetId?: string;
 	mapImg?: string;
 	class?: string;
 }
-const {mapImg = 'https://cdn.alexsab.ru/maps/map-bg.webp', class: className = '', widgetId = yandex_widget_orgnization, ...rest} = Astro.props
+const {mapImg = map_background, class: className = '', widgetId = yandex_widget_orgnization, ...rest} = Astro.props
 
 import './map.sass';
 ---
