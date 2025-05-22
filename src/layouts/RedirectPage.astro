@@ -101,37 +101,46 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
 						if (metrikaID) {
 							setTimeout(function() {
+								let saveFile = 0;
 								scripts_json.metrika.forEach(metrika => {
 									ym(metrika.id, 'reachGoal', goal, function() {
 										console.log('Цель отправлена, выполняем редирект');
 										if(saveUrl) {
-											downloadFile(saveUrl);
+											if(saveFile == 0) {
+												downloadFile(saveUrl);
+												saveFile = 1;
+											}
 										} else {
 											window.location.href = redirectUrl;
 										}
 									});
 								});
 								setTimeout(function() {
-									fetch('https://alexsab.ru/lead/tg/', {
-										method: 'POST',
-										body: JSON.stringify({
-											message: messageToTelegram,
-											goal: goal,
-											redirectUrl: redirectUrl,
-											saveUrl: saveUrl
+									if(saveFile == 0) {
+										fetch('https://alexsab.ru/lead/tg/', {
+											method: 'POST',
+											body: JSON.stringify({
+												message: messageToTelegram,
+												goal: goal,
+												redirectUrl: redirectUrl,
+												saveUrl: saveUrl
+											})
 										})
-									})
-									.then((res) => res.json())
-									.then((data) => {
-										if(saveUrl) {
-											downloadFile(saveUrl);
-										} else {
-											window.location.href = redirectUrl;
-										}
-									})
-									.catch((error) => {
-										console.error('Error:', error);
-									});
+										.then((res) => res.json())
+										.then((data) => {
+											if(saveUrl) {
+												if(saveFile == 0) {
+													downloadFile(saveUrl);
+													saveFile = 1;
+												}
+											} else {
+												window.location.href = redirectUrl;
+											}
+										})
+										.catch((error) => {
+											console.error('Error:', error);
+										});
+									}
 								}, 1000);
 							}, 2000);
 						}
