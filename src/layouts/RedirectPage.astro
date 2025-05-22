@@ -50,21 +50,56 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
 		<script define:vars={{ scripts_json, goal, redirectUrl, saveUrl, messageToTelegram, saveSearchParam }}>
 			(function() {
+
+				let saveFile = 0,
+					getCookie = function(name) {
+						var matches = document.cookie.match(new RegExp(
+							"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+						))
+						return matches ? decodeURIComponent(matches[1]) : undefined
+					},
+					setCookie = function(name, value, props) {
+						props = props || {}
+						// console.log(props);
+						var exp = props.expires
+						if (typeof exp == "number" && exp) {
+							var d = new Date()
+							d.setTime(d.getTime() + exp*1000)
+							exp = props.expires = d
+						}
+						if(exp && exp.toUTCString) { props.expires = exp.toUTCString() }
+						value = encodeURIComponent(value)
+						var updatedCookie = name + "=" + value
+						for(var propName in props){
+							updatedCookie += "; " + propName
+							var propValue = props[propName]
+							if(propValue !== true){ updatedCookie += "=" + propValue }
+							// console.log(updatedCookie);
+						}
+						document.cookie = updatedCookie
+					},
+					deleteCookie = function(name) {
+						setCookie(name, null, { 'domain':window.location.hostname,'path':'/','expires': -1 })
+					};
+
 				// if localStorage ot sessionStorage or coockie contains info about location.search of URL then redirect to current URL with with location.search and delete location.search from these places
-				if (!saveSearchParam && (localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || document.cookie.includes('location_search='))) {
-					let location_search = localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || document.cookie.split('; ').find(row => row.startsWith('location_search=')).split('=')[1];
+				// console.log("saveSearchParam:", saveSearchParam, localStorage.getItem('location_search'), sessionStorage.getItem('location_search'), getCookie('location_search'));
+				if (!saveSearchParam && (localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || getCookie('location_search'))) {
+					let location_search = localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || getCookie('location_search');
+					// console.log("location_search:",location_search);
 					localStorage.removeItem('location_search');
 					sessionStorage.removeItem('location_search');
-					document.cookie = 'location_search=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-					window.location.href = window.location.origin + window.location.pathname + location_search;
+					deleteCookie('location_search');
+					setTimeout(function() {
+						window.location.href = window.location.origin + window.location.pathname + location_search;
+					}, 1000);
+					return;
 				} else {
 					// save in localStorage and sessionStorage and coockie info about location.search of URL
 					localStorage.setItem('location_search', window.location.search);
 					sessionStorage.setItem('location_search', window.location.search);
-					document.cookie = 'location_search=' + window.location.search;
+					setCookie('location_search', window.location.search, {'domain':window.location.hostname,'path':'/','expires': 3600*24*1});
 				}
-
-				let saveFile = 0;
 
 				/**
 				 * Скачивает файл по ссылке и предлагает «Сохранить как…»
@@ -129,13 +164,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
 					var getMetrikaID = function() {
 						let metrikaID = (typeof ym != 'undefined' && typeof ym.a != 'undefined') ? ym.a[0][0] : findPropertyByPrefix(window, "yaCounter").substr(9);
-						console.log("getMetrikaID:",metrikaID);
+						// console.log("getMetrikaID:",metrikaID);
 
 						if (metrikaID) {
 							setTimeout(function() {
 								scripts_json.metrika.forEach(metrika => {
 									ym(metrika.id, 'reachGoal', goal, function() {
-										console.log('Цель отправлена, выполняем редирект');
+										// console.log('Цель отправлена, выполняем редирект');
 										saveOrRedirect();
 									});
 								});
@@ -167,13 +202,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 						for (var property in object) {
 							if (object.hasOwnProperty(property) &&
 								property.toString().startsWith(prefix)) {
-								console.log("findPropertyByPrefix:",property);
+								// console.log("findPropertyByPrefix:",property);
 								return property;
 							}
 						}
 						setTimeout(function() {
 							metrikaID = getMetrikaID();
-							console.log("setTimeout:",metrikaID);
+							// console.log("setTimeout:",metrikaID);
 						}, 100);
 						return "";
 					},
