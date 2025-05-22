@@ -1,6 +1,6 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, brand } = settings;
+const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer } = settings;
 import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
@@ -27,7 +27,7 @@ salons
             <div class="">
                 <a href="/" class="uppercase text-2xl inline-block mb-5 transition-opacity hover:opacity-70">{site_name}</a>
                 <div class="flex flex-wrap items-center gap-5">
-                    <img src="/img/logo/logo.svg" class="h-8 w-auto filter brightness-0 invert opacity-70" loading="lazy" alt={site_name} />
+                    <img src={logo_footer || logo_header} class="h-8 w-auto filter brightness-0 invert opacity-70" loading="lazy" alt={site_name} />
                 </div>
             </div>
             <div class="">
