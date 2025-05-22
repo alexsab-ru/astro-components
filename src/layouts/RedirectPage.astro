@@ -49,6 +49,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 		<script define:vars={{ scripts_json, goal, redirectUrl, messageToTelegram, saveUrl }}>
 			(function() {
 
+				let saveFile = 0;
+
 				/**
 				 * Скачивает файл по ссылке и предлагает «Сохранить как…»
 				 * @param {string} url       — абсолютная или относительная ссылка на файл
@@ -83,6 +85,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 					URL.revokeObjectURL(tempUrl);
 				}
 
+				function saveOrRedirect() {
+					if(saveUrl) {
+						if(saveFile == 0) {
+							downloadFile(saveUrl);
+							saveFile = 1;
+							document.querySelector("h2").innerHTML = '<p>Чтобы скачать файл нажмите на ссылку</p><p style="margin-top: 10px;color: -webkit-link;cursor: pointer;text-decoration: underline;"><a href="'+saveUrl+'">Скачать файл</a></p>';
+							setTimeout(function() {
+								window.location.href = saveUrl;
+							}, 1000);
+						}
+					} else {
+						window.location.href = redirectUrl;
+					}
+				}
+
 				// Яндекс Метрика
 				if (scripts_json.metrika && scripts_json.metrika.length > 0) {
 					(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -101,18 +118,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
 						if (metrikaID) {
 							setTimeout(function() {
-								let saveFile = 0;
 								scripts_json.metrika.forEach(metrika => {
 									ym(metrika.id, 'reachGoal', goal, function() {
 										console.log('Цель отправлена, выполняем редирект');
-										if(saveUrl) {
-											if(saveFile == 0) {
-												downloadFile(saveUrl);
-												saveFile = 1;
-											}
-										} else {
-											window.location.href = redirectUrl;
-										}
+										saveOrRedirect();
 									});
 								});
 								setTimeout(function() {
@@ -128,14 +137,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 										})
 										.then((res) => res.json())
 										.then((data) => {
-											if(saveUrl) {
-												if(saveFile == 0) {
-													downloadFile(saveUrl);
-													saveFile = 1;
-												}
-											} else {
-												window.location.href = redirectUrl;
-											}
+											saveOrRedirect();
 										})
 										.catch((error) => {
 											console.error('Error:', error);
