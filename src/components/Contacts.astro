@@ -6,8 +6,11 @@ interface Props {
 	yOffset?: number;
 }
 
+import settings from '@/data/settings.json';
+const { map_background } = settings;
+
 const {
-	mapImg = 'https://cdn.alexsab.ru/maps/map-bg.webp', 
+	mapImg = map_background, 
 	title = 'Наши контакты',
 	height = 500,
 	yOffset = 20,
