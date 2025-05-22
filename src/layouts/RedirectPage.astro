@@ -8,6 +8,7 @@ interface Props {
 	saveUrl?: string;
 	pageText?: string;
 	messageToTelegram?: string;
+	saveSearchParam?: boolean;
 }
 let {
 	title,
@@ -17,7 +18,8 @@ let {
 	redirectUrl = 'https://t.me/alexsab_ru',
 	saveUrl = '',
 	pageText = 'Вы будете перенаправлены<br/>через 3 секунды...',
-	messageToTelegram = 'metrika doesn\'t connect'
+	messageToTelegram = 'metrika doesn\'t connect',
+	saveSearchParam = true,
 } = Astro.props;
 
 import scripts_json from '@/data/scripts.json';
@@ -46,8 +48,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 
-		<script define:vars={{ scripts_json, goal, redirectUrl, messageToTelegram, saveUrl }}>
+		<script define:vars={{ scripts_json, goal, redirectUrl, saveUrl, messageToTelegram, saveSearchParam }}>
 			(function() {
+				// if localStorage ot sessionStorage or coockie contains info about location.search of URL then redirect to current URL with with location.search and delete location.search from these places
+				if (!saveSearchParam && (localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || document.cookie.includes('location_search='))) {
+					let location_search = localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || document.cookie.split('; ').find(row => row.startsWith('location_search=')).split('=')[1];
+					localStorage.removeItem('location_search');
+					sessionStorage.removeItem('location_search');
+					document.cookie = 'location_search=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+					window.location.href = window.location.origin + window.location.pathname + location_search;
+				} else {
+					// save in localStorage and sessionStorage and coockie info about location.search of URL
+					localStorage.setItem('location_search', window.location.search);
+					sessionStorage.setItem('location_search', window.location.search);
+					document.cookie = 'location_search=' + window.location.search;
+				}
 
 				let saveFile = 0;
 
