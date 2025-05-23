@@ -1373,6 +1373,17 @@
                 "Серый": "smoky-pearls.webp"
             }
         },
+        "F7x, II": {
+            "folder": "new-haval-f7x",
+            "cyrillic": "F7x",
+            "color": {
+                "Синий": "oceanic-lapis-lazuli.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Белый": "noble-agate.webp",
+                "Серый": "smoky-pearls.webp"
+            }
+        },
         "Jolion, I Рестайлинг": {
             "folder": "jolion",
             "cyrillic": "JOLION",
