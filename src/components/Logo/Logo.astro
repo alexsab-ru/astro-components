@@ -1,16 +1,25 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name } = settings;
+const { site_name, logo_header, logo_dealer_header } = settings;
 const path = Astro.url.pathname;
+const logoSize = "h-4 sm:h-5 xl:h-10"
 ---
 {path === '/' ? (
 <div class="flex xs:flex-col flex-nowrap items-center xs:gap-2 gap-3 xs:divide-x-0 divide-x divide-black/20 cursor-pointer" x-data="scrollTop" x-on:click="onClick">
-    <img src="/img/logo/logo.svg" class="h-4 sm:h-5 xl:h-10" alt={site_name} loading="lazy" />
-    <span class="xs:pl-0 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{site_name}</span>
+    <img src={logo_header} class={`${logoSize}`} alt={site_name} />
+    {logo_dealer_header ? (
+        <img src={logo_dealer_header} class={`${logoSize} xs:pl-0 pl-3`} alt={site_name} />
+    ) : (
+        <span class="xs:pl-0 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{site_name}</span>
+    ) }    
 </div>
 ) : (
 <a href="/" class="flex xs:flex-col flex-nowrap items-center xs:gap-2 gap-3 xs:divide-x-0 divide-x divide-black/20">
-    <img src="/img/logo/logo.svg" class="h-4 sm:h-5 xl:h-10" alt={site_name} loading="lazy" />
-    <span class="xs:pl-0 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{site_name}</span>
+    <img src={logo_header} class={`${logoSize}`} alt={site_name} />
+    {logo_dealer_header ? (
+        <img src={logo_dealer_header} class={`${logoSize} xs:pl-0 pl-3`} alt={site_name} />
+    ) : (
+        <span class="xs:pl-0 pl-3 xl:text-2xl uppercase font-medium !leading-none select-none">{site_name}</span>
+    ) } 
 </a>
 )}

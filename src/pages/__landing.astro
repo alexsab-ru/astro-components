@@ -59,7 +59,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 
 	{ false && models.length > 0 && models.filter(m => m.show).map(model => ( <Model model={model} /> ))}
 
-	<Callback bgUrl="https://cdn.alexsab.ru/models/default-model-bg.webp" title="Запишитесь на тест-драйв!" subtitle="Пройдите тест-драйв на интересном маршруте" formName="Секция. Запись на тест-драйв" id="test-drive" />
+	<Callback title="Запишитесь на тест-драйв!" subtitle="Пройдите тест-драйв на интересном маршруте" formName="Секция. Запись на тест-драйв" id="test-drive" />
 
 	{cars.length > 0 && (
 		<section class="section bg-gray-100" id="cars">

@@ -6,10 +6,12 @@ interface Props {
 	image?: string;
 	keywords?: string;
 }
+import settings from '@/data/settings.json';
+const { favicon, improve_offer_background } = settings;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
-const { title, description, image = '/img/konkurenty.webp', keywords } = Astro.props;
+const { title, description, image = improve_offer_background, keywords } = Astro.props;
 
 const yandexSiteVerification = import.meta.env.PUBLIC_YANDEX_SITE_VERIFICATION;
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
@@ -19,7 +21,7 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href={favicon} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- Font preloads -->
