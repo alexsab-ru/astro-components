@@ -39,7 +39,7 @@ const modelsFilePath = path.join(dataDirectory, 'models.json');
 // Основные данные
 const data = {
   models: [],
-  'test-drive': [],
+  testDrive: [],
   services: []
 };
 
@@ -57,8 +57,8 @@ try {
     m => m.mark_id && brands.includes(String(m.mark_id).toLowerCase())
   );
 
-  data['test-drive'] = testDriveModels.map(m =>
-    pickFields(m, ['mark_id', 'id', 'name', 'thumb', 'globalChars'])
+  data['testDrive'] = testDriveModels.map(m =>
+    pickFields(m, ['mark_id', 'id', 'show', 'name', 'thumb', 'globalChars'])
   );
 
   data['services'] = testDriveModels.map(m =>

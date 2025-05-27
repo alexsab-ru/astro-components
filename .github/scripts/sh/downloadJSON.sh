@@ -143,7 +143,7 @@ curl -s "$JSON_PATH/models.json" -o src/data/_all_models.json
 # Проверяем, что файл скачался и это не HTML-страница (например, 404)
 if [ ! -s src/data/_all_models.json ] || grep -q '<!DOCTYPE html' src/data/_all_models.json; then
     printf "${BGRED}Внимание: models.json не найден или получен некорректный файл! Будет создан пустой models.json.${Color_Off}\n"
-    echo '{ "models": [], "test-drive": [], "services": [] }' > src/data/models.json
+    echo '{ "models": [], "testDrive": [], "services": [] }' > src/data/models.json
 else
     node .github/scripts/filterModelsByBrand.js
 fi
