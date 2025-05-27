@@ -12,8 +12,12 @@ import type { ISalon } from '@/types/ISalon';
 import { map } from 'astro:schema';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
 const salon = salons.length > 0 ? salons[0] : null;
-let workers = [];
-salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map(worker => workers.push({...worker, salonName: salon.name})));
+const workers = salons.flatMap(salon => 
+    salon?.workers?.map(worker => ({
+        ...worker, 
+        salonName: salon.name
+    })) || []
+);
 ---
 
 <Layout title={`Контакты автосалона ${site_name}`}>
@@ -77,7 +81,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 	modalShow - Количество милесекунд до показа окна (по умолчанию 20000)
 	title - Заголовок
 	modalPosition - позиция окна left-top|right-top|right-bottom|left-bottom|center (по умолчанию center)
-	img - фото человека (по умолчанию https://cdn.alexsab.ru/people/user.webp)
+	img - фото человека (по умолчанию пусто)
 	imgPosition - позиция фото right|left (по умолчанию right)
 -->
 

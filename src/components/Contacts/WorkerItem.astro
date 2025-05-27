@@ -10,7 +10,7 @@ interface Props {
 	}
 }
 const {worker} = Astro.props;
-const workerPhoto = worker?.photo || 'https://cdn.alexsab.ru/people/user.webp';
+const workerPhoto = worker?.photo || '';
 
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { Icon } from 'astro-icon/components';
