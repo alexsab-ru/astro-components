@@ -1,5 +1,6 @@
 ---
 import scripts_json from '@/data/scripts.json';
+import { cleanScriptsData } from '@/components/Scripts/components/cleanScriptsData';
 import GTM from '@/components/Scripts/components/runGTM.astro';
 import METRIKA_DEV from '@/components/Scripts/components/runMETRIKA_DEV.astro';
 import METRIKA from '@/components/Scripts/components/runMETRIKA.astro';
@@ -13,8 +14,10 @@ import STREAMWOOD from '@/components/Scripts/components/runSTREAMWOOD.astro';
 import SMARTPOINT from '@/components/Scripts/components/runSMARTPOINT.astro';
 import WIDGETS from '@/components/Scripts/components/runWIDGETS.astro';
 import LoadAnalyticsScripts from '@/components/Scripts/components/loadAnalyticsScripts.astro';
+
+const cleanedScripts = cleanScriptsData(scripts_json);
 ---
-<script id="scripts_json" type="application/ld+json" set:html={JSON.stringify(scripts_json)}/>
+<script id="scripts_json" type="application/ld+json" set:html={JSON.stringify(cleanedScripts)}/>
 <GTM />
 <METRIKA_DEV />
 <METRIKA />
