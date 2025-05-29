@@ -1,0 +1,21 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import settings from '@/data/settings.json';
+const { site_name, legal_entity, legal_inn, legal_city } = settings;
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('privacy_policy'));
+const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
+[`<span>${legal_entity} (ИНН:&nbsp;${legal_inn})</span>`] : 
+salons
+    .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
+    .map(s => `<span><b>${s?.legal_entity}</b> (ИНН:&nbsp;${s?.legal_inn})</span>`);
+---
+
+<PageLayout
+    h1="Политика использования cookie"
+    title="Политика использования cookie"
+    breadcrumb={[{name:"Политика использования cookie",href:""}]}
+>
+    
+</PageLayout>
