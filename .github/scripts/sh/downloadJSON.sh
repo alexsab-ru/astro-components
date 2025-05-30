@@ -20,7 +20,7 @@ show_help() {
     echo "  faq.json"
     echo "  federal-models_price.json"
     echo "  models-sections.yml"
-    # echo "  models.json"
+    echo "  models.json"
     echo "  reviews.json"
     echo "  salons.json"
     echo "  scripts.json"
@@ -43,7 +43,7 @@ FILES=(
     "faq.json"
     "federal-models_price.json"
     "models-sections.yml"
-    # "models.json"
+    "models.json"
     "reviews.json"
     "salons.json"
     "scripts.json"
@@ -136,6 +136,25 @@ fi
 printf "\n${BGGREEN}Downloaded files:${Color_Off}\n"
 ls -al src/data
 
+# Проверяем содержимое models.json перед скачиванием общего файла
+if [ -f "src/data/models.json" ]; then
+    echo -e "\n${BGYELLOW}Проверяем содержимое models.json...${Color_Off}"
+    
+    # Проверяем первый символ файла после удаления пробелов
+    first_char=$(cat src/data/models.json | tr -d '[:space:]' | head -c 1)
+    
+    if [ "$first_char" = "{" ]; then
+        printf "${BGGREEN}models.json содержит объект - пропускаем скачивание общего файла${Color_Off}\n"
+        exit 0
+    elif [ "$first_char" = "[" ]; then
+        printf "${BGYELLOW}models.json содержит массив - продолжаем скачивание общего файла${Color_Off}\n"
+    else
+        printf "${BGRED}models.json имеет некорректный формат - продолжаем скачивание${Color_Off}\n"
+    fi
+else
+    printf "${BGYELLOW}models.json не найден - продолжаем скачивание общего файла${Color_Off}\n"
+fi
+
 # 1. Скачиваем общий models.json
 echo -e "\n${BGGREEN}Скачиваем общий models.json...${Color_Off}"
 curl -s "$JSON_PATH/models.json" -o src/data/_all_models.json
@@ -149,4 +168,4 @@ else
 fi
 
 # 3. Удаляем временный файл
-rm -f src/data/_all_models.json
+# rm -f src/data/_all_models.json
