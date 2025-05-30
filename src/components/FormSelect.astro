@@ -41,7 +41,7 @@ import { Icon } from 'astro-icon/components';
 			/>
 		</span>
 		<div 
-			class="absolute top-full left-0 w-full bg-white border-2 border-gray-100 border-t-0 shadow-xl z-10 max-h-[165px] overflow-y-auto transition-translate duration-200 custom-scroll"
+			class="absolute top-full left-0 w-full bg-white border-2 border-gray-100 border-t-0 shadow-xl z-10 max-h-[180px] overflow-y-auto transition-translate duration-200 custom-scroll"
 			:class="open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-2'"
 			x-cloak
 		>
@@ -51,7 +51,7 @@ import { Icon } from 'astro-icon/components';
 					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 !no-underline !text-black !mb-0"
 					:class="{'bg-gray-200': option.id === currentOption.id}"
 					@click.prevent="select(option.id)"
-					x-text="option.name"
+					x-text="option?.mark_id ? option.mark_id+' '+option.name : option.name"
 				></a>
 			</template>
 		</div>
