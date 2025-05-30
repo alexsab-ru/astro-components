@@ -51,7 +51,7 @@ import { Icon } from 'astro-icon/components';
 					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 !no-underline !text-black !mb-0"
 					:class="{'bg-gray-200': option.id === currentOption.id}"
 					@click.prevent="select(option.id)"
-					x-text="option?.mark_id ? option.mark_id+' '+option.name : option.name"
+					x-text="option.name"
 				></a>
 			</template>
 		</div>
