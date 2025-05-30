@@ -1,6 +1,6 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer } = settings;
+const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { YEAR } from '@/js/utils/date';
@@ -88,7 +88,11 @@ salons
                     <p class="text-sm mb-2">&copy; {YEAR}</p>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
                 </div>
-                <a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a>
+                <div>
+                    <a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a><br>
+                    <a href="/cookie-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Правила использования cookie</a>
+                </div>
+                <div>Телефон для обращений по вопросам<br>персональных данных и cookie: <a href={`tel:${phoneFormat(phone_common)}`}>{phone_common}</a></div>
             </div>
             <p class="made-by text-sm m-0 text-white/80 leading-none">Разработка <a href={url} class="hover:!text-white leading-none" target="_blank">alexsab.ru</a></p>
         </div>
