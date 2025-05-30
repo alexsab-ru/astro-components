@@ -25,6 +25,9 @@ on:
       TELEGRAM_TOKEN:
         description: 'Telegram token passed from the caller workflow'
         required: true
+      TELEGRAM_THREAD_ID:
+        description: 'Telegram thread ID passed from the caller workflow'
+        required: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
