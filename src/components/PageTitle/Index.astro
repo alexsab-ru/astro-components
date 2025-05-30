@@ -1,15 +1,13 @@
 ---
-import settings from '@/data/settings.json';
-const { brand, legal_city_where } = settings;
+import seo from '@/data/seo.json';
 interface Props {
+	classes?: string;
 	title?: string;
 }
-const { title } = Astro.props;
-const pageTitle = title ? title : `Автомобили ${brand} в&nbsp;наличии в&nbsp;${legal_city_where}`;
+
+const { title = '', classes = '' } = Astro.props;
+const currentPath = Astro.url.pathname;
+const seoTitle = seo[currentPath] ? seo[currentPath].h1 : title;
 ---
 
-<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
-	<div class="container">
-		<h1 class="text-center fz-[3] text-white font-medium leading-none"><Fragment set:html={ pageTitle } /></h1>
-	</div>
-</section>
+{seoTitle.length ? (<h1 class={classes}>{seoTitle}</h1>) : null}
