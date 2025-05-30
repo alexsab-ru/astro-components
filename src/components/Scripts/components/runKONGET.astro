@@ -1,0 +1,18 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.konget && scripts_json.konget != "" && (
+<script>
+// console.log("runKONGET load");
+function runKONGET(konget) {
+    // console.log("runKONGET", konget);
+    var script = document.createElement('script');
+    script.src = `//app.konget.ru/inject?token=${konget}`;
+    script.async = true;
+    document.head.appendChild(script);
+}
+window.runKONGET = runKONGET;
+</script>
+)}

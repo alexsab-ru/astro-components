@@ -1,0 +1,41 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.widgets && scripts_json.widgets.length > 0 && scripts_json.widgets[0] != "" && (
+<script>
+// console.log("runWIDGETS load");
+function runWIDGETS(widgets) {
+    // console.log("runWIDGETS", widgets);
+    widgets.forEach(widget => {
+        if (widget && widget.trim() !== "") {
+            // Создаем временный div для парсинга HTML
+            var div = document.createElement('div');
+            div.innerHTML = widget.trim();
+            
+            // Получаем элемент script из временного div
+            var scriptTag = div.querySelector('script');
+            
+            if (scriptTag) {
+                // Создаем новый script элемент
+                var script = document.createElement('script');
+                
+                // Копируем все атрибуты из исходного тега
+                Array.from(scriptTag.attributes).forEach(attr => {
+                    script.setAttribute(attr.name, attr.value);
+                });
+                
+                // Если есть внутренний текст скрипта, копируем его
+                if (scriptTag.innerHTML) {
+                    script.innerHTML = scriptTag.innerHTML;
+                }
+                
+                document.head.appendChild(script);
+            }
+        }
+    });
+}
+window.runWIDGETS = runWIDGETS;
+</script>
+)}
