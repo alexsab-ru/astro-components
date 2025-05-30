@@ -17,6 +17,9 @@ const parseList = (str) =>
     .map(s => s.trim().toLowerCase())
     .filter(Boolean);
 
+const normalizeArray = (arr) =>
+  Array.isArray(arr) ? arr.map(id => String(id).toLowerCase()) : [];
+
 const pickFields = (obj, keys) =>
   keys.reduce((res, key) => {
     if (obj.hasOwnProperty(key)) {
@@ -25,18 +28,18 @@ const pickFields = (obj, keys) =>
     return res;
   }, {});
 
-// Логирование с цветами
+// Логирование
 const logSuccess = (msg) => console.log('\x1b[30;42m%s\x1b[0m', msg);
 const logWarning = (msg) => console.log('\x1b[30;43m%s\x1b[0m', msg);
 const logError   = (msg) => console.log('\x1b[30;41m%s\x1b[0m', msg);
 
-// Пути к файлам
+// Пути
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
 const settingsFilePath = path.join(dataDirectory, 'settings.json');
 const allModelsFilePath = path.join(dataDirectory, '_all_models.json');
 const modelsFilePath = path.join(dataDirectory, 'models.json');
 
-// Основные данные
+// Структура вывода
 const data = {
   models: [],
   testDrive: [],
@@ -46,40 +49,45 @@ const data = {
 try {
   const settings = readJson(settingsFilePath);
   const allModels = readJson(allModelsFilePath);
-
   if (!settings || !allModels) throw new Error('Не удалось загрузить файлы settings.json или _all_models.json');
 
   const brands = parseList(settings.brand);
-  const modelIds = parseList(settings.model_ids);
+  const modelIDs = normalizeArray(settings.modelIDs);
+  const testDriveIDs = normalizeArray(settings.testDriveIDs);
+  const serviceIDs = normalizeArray(settings.serviceIDs);
 
-  // Модели для test-drive и services
-  const testDriveModels = allModels.filter(
-    m => m.mark_id && brands.includes(String(m.mark_id).toLowerCase())
-  );
-
-  data['testDrive'] = testDriveModels.map(m =>
-    pickFields(m, ['mark_id', 'id', 'show', 'name', 'thumb', 'globalChars'])
-  );
-
-  data['services'] = testDriveModels.map(m =>
-    pickFields(m, ['mark_id', 'id', 'name'])
-  );
-
-  // Модели по фильтру брендов и model_ids
-  data.models = allModels.filter(m => {
+  // Универсальная фильтрация по бренду и ID
+  const filterBy = (targetIDs) => (m) => {
     const markMatch = m.mark_id && brands.includes(String(m.mark_id).toLowerCase());
-    const idMatch = m.id && modelIds.includes(String(m.id).toLowerCase());
-    return markMatch && (modelIds.length === 0 || idMatch);
-  });
+    const idMatch = m.id && targetIDs.includes(String(m.id).toLowerCase());
+    return markMatch && (targetIDs.length === 0 || idMatch);
+  };
 
-  if (testDriveModels.length === 0) {
-    logWarning('Внимание: не найдено ни одной подходящей модели. models.json создан как пустой объект');
+  // models
+  data.models = allModels.filter(filterBy(modelIDs));
+
+  // test-drive
+  data.testDrive = allModels
+    .filter(filterBy(testDriveIDs))
+    .map(m => pickFields(m, ['mark_id', 'id', 'name', 'thumb', 'globalChars']));
+
+  // services
+  data.services = allModels
+    .filter(filterBy(serviceIDs))
+    .map(m => pickFields(m, ['mark_id', 'id', 'name']));
+
+  if (
+    data.models.length === 0 &&
+    data.testDrive.length === 0 &&
+    data.services.length === 0
+  ) {
+    logWarning('Ни одна модель не прошла фильтрацию. models.json будет пустым.');
   } else {
     logSuccess('models.json успешно обновлён по брендам и ID из settings.json');
   }
 } catch (err) {
-  logError('Ошибка при обработке моделей. models.json будет создан как пустой объект');
+  logError('Ошибка при обработке моделей. models.json будет создан как пустой объект.');
 }
 
-// Сохраняем файл
+// Сохраняем результат
 fs.writeFileSync(modelsFilePath, JSON.stringify(data, null, 2));
