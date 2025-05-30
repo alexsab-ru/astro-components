@@ -14,26 +14,37 @@ function isEmpty(value: any): boolean {
     return false;
 }
 
-export function cleanScriptsData(data: ScriptsData): ScriptsData {
-    const cleanedData: ScriptsData = {};
-
-    for (const [key, value] of Object.entries(data)) {
-        if (!isEmpty(value)) {
-            if (Array.isArray(value)) {
-                const cleanedArray = value.filter(item => !isEmpty(item));
-                if (cleanedArray.length > 0) {
-                    cleanedData[key] = cleanedArray;
-                }
-            } else if (typeof value === 'object') {
-                const cleanedObject = cleanScriptsData(value);
-                if (Object.keys(cleanedObject).length > 0) {
-                    cleanedData[key] = cleanedObject;
-                }
-            } else {
-                cleanedData[key] = value;
-            }
+export function cleanScriptsData(data: ScriptsData): string {
+    
+    function cleanValue(value: any): any {
+        if (isEmpty(value)) {
+            return null;
         }
+
+        if (Array.isArray(value)) {
+            const cleanedArray = value
+                .map(item => cleanValue(item))
+                .filter(item => item !== null);
+            return cleanedArray.length > 0 ? cleanedArray : null;
+        }
+
+        if (typeof value === 'object' && value !== null) {
+            const cleanedObject: ScriptsData = {};
+            
+            for (const [key, val] of Object.entries(value)) {
+                const cleanedVal = cleanValue(val);
+                if (cleanedVal !== null) {
+                    cleanedObject[key] = cleanedVal;
+                }
+            }
+            
+            return Object.keys(cleanedObject).length > 0 ? cleanedObject : null;
+        }
+
+        return value;
     }
 
-    return cleanedData;
-} 
+    const cleanedData = cleanValue(data);
+    const jsonString = JSON.stringify(cleanedData || {});
+    return jsonString.replace(/<\/script>/gi, '<\\/script>');
+}

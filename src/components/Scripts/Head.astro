@@ -17,7 +17,7 @@ import LoadAnalyticsScripts from '@/components/Scripts/components/loadAnalyticsS
 
 const cleanedScripts = cleanScriptsData(scripts_json);
 ---
-<script id="scripts_json" type="application/ld+json" set:html={JSON.stringify(cleanedScripts)}/>
+<script id="scripts_json" type="application/ld+json" set:html={cleanedScripts}/>
 <GTM />
 <METRIKA_DEV />
 <METRIKA />
