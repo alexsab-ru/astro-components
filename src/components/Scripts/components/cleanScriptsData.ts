@@ -2,6 +2,12 @@ interface ScriptsData {
     [key: string]: any;
 }
 
+interface ScriptConfig {
+    value: any;
+    fn: string;
+    prod: boolean;
+}
+
 function isEmpty(value: any): boolean {
     if (value === null || value === undefined || value === '') return true;
     if (Array.isArray(value)) {
@@ -44,7 +50,42 @@ export function cleanScriptsData(data: ScriptsData): string {
         return value;
     }
 
-    const cleanedData = cleanValue(data);
-    const jsonString = JSON.stringify(cleanedData || {});
+    function cleanScriptConfig(config: ScriptConfig): ScriptConfig | null {
+        const cleanedValue = cleanValue(config.value);
+        
+        // Если value пустое, удаляем весь блок
+        if (cleanedValue === null) {
+            return null;
+        }
+        
+        return {
+            value: cleanedValue,
+            fn: config.fn,
+            prod: config.prod
+        };
+    }
+
+    const cleanedData: ScriptsData = {};
+    
+    for (const [key, val] of Object.entries(data)) {
+        // Для служебных ключей используем обычную очистку
+        if (key === 'site') {
+            const cleanedVal = cleanValue(val);
+            if (cleanedVal !== null) {
+                cleanedData[key] = cleanedVal;
+            }
+            continue;
+        }
+        
+        // Для конфигураций скриптов используем специальную очистку
+        if (val && typeof val === 'object' && 'value' in val && 'fn' in val && 'prod' in val) {
+            const cleanedConfig = cleanScriptConfig(val as ScriptConfig);
+            if (cleanedConfig !== null) {
+                cleanedData[key] = cleanedConfig;
+            }
+        }
+    }
+
+    const jsonString = JSON.stringify(cleanedData);
     return jsonString.replace(/<\/script>/gi, '<\\/script>');
 }

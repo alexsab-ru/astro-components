@@ -10,75 +10,6 @@
     }
 
     var analyticsLoaded = false;
-    var startTime = Date.now();
-
-    // Функция для проверки значимого значения (строки или числа)
-    function isNonEmptyValue(value) {
-        if (value === undefined || value === null) return false;
-        if (typeof value === 'string') return value.trim() !== "";
-        if (typeof value === 'number') return value !== 0;
-        return Boolean(value);
-    }
-
-    // Функция для проверки и запуска скриптов аналитики
-    function runTrackingScript(config) {
-        const [
-            functionName,
-            jsonKey,
-            isProduction = true,
-            validator = null,
-            isArray = false
-        ] = config;
-        
-        // Проверка на production окружение, если требуется
-        if (isProduction && process.env.NODE_ENV !== "production") return;
-        
-        // Проверка существования функции
-        if (typeof window[functionName] !== 'function') return;
-        
-        // Получение данных из конфигурационного объекта
-        const scriptConfig = scripts_json[jsonKey];
-        
-        // Проверка на существование конфигурации
-        if (!scriptConfig) return;
-        
-        // Для массивов проверяем первый элемент
-        if (isArray) {
-            if (!Array.isArray(scriptConfig) || scriptConfig.length === 0) return;
-            
-            // Проверка на непустой ID в первом элементе массива
-            if (validator) {
-                if (!validator(scriptConfig)) return;
-            } else {
-                const id = scriptConfig[0].id;
-                if (!isNonEmptyValue(id)) return;
-            }
-        } else {
-            // Для строк проверяем на непустую строку
-            if (typeof scriptConfig === 'string' && !isNonEmptyValue(scriptConfig)) return;
-            
-            // Для объектов используем кастомный валидатор
-            if (validator && !validator(scriptConfig)) return;
-        }
-        
-        // Запускаем функцию с соответствующими параметрами
-        window[functionName](scriptConfig);
-    }
-
-    // Конфигурация для всех скриптов с короткими именами функций
-    const trackingConfigs = [
-        ['_gtm', 'gtm'],
-        ['_ym', 'metrika', false, null, true],
-        ['_ga', 'ga4', true, null, true],
-        ['_re', 're'],
-        ['_vk', 'vk-rtrg', true, null, true],
-        ['_tm', 'top.mail.ru', true, null, true],
-        ['_ct', 'calltouch', false, (config) => isNonEmptyValue(config.mod_id)],
-        ['_kg', 'konget'],
-        ['_sw', 'streamwood', true, (config) => isNonEmptyValue(config.swKey) && isNonEmptyValue(config.swDomainKey)],
-        ['_sp', 'smartpoint'],
-        ['_wd', 'widgets', true, (config) => config.length > 0 && isNonEmptyValue(config[0]), true]
-    ];
 
     function loadAnalyticsScripts() {
         if (!analyticsLoaded) {
@@ -86,12 +17,26 @@
             window.removeEventListener('scroll', loadAnalyticsScripts);
             document.removeEventListener('mousemove', loadAnalyticsScripts);
 
-            // Запускаем все скрипты с проверками
-            trackingConfigs.forEach(config => {
+            // Проходим по всем ключам в JSON
+            Object.keys(scripts_json).forEach(key => {
+                if (key === 'site') return; // Пропускаем служебные ключи
+                
+                const config = scripts_json[key];
+                
+                // Проверяем структуру конфигурации
+                if (!config || typeof config !== 'object' || !config.fn || !config.value) return;
+                
+                // Проверка на production окружение
+                if (config.prod && process.env.NODE_ENV !== "production") return;
+                
+                // Проверка существования функции
+                if (typeof window[config.fn] !== 'function') return;
+                
                 try {
-                    runTrackingScript(config);
+                    // Запускаем функцию с данными
+                    window[config.fn](config.value);
                 } catch (error) {
-                    console.error(`Ошибка при запуске скрипта:`, error);
+                    console.error(`Ошибка при запуске ${config.fn}:`, error);
                 }
             });
         }
