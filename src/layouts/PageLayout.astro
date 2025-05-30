@@ -1,6 +1,6 @@
 ---
 import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
-import PageTitle from '@/components/PageTitle/Index.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
 interface Props {
 	title?: string;
 	h1?: string;
@@ -20,7 +20,7 @@ import BackLink from '@/components/BackLink.astro';
 	<section class="content">
 		<div class="container">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
-			<PageTitle title={h1} />
+			<PageH1 title={h1} />
 			<slot />
 
 			{backLink && (
