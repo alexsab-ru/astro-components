@@ -21,7 +21,7 @@ const modelsData = JSON.parse(fs.readFileSync(modelsFilePath, 'utf-8'));
 
 // Функция для получения ID модели из models.json
 function getModelId(brand, modelName) {
-  const model = modelsData.find(m => 
+  const model = modelsData.models.find(m => 
     m.mark_id.toLowerCase() === brand.toLowerCase() && 
     m.name.toLowerCase() === modelName.toLowerCase()
   );
