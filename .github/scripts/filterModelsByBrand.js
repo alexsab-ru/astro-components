@@ -36,7 +36,7 @@ const logError   = (msg) => console.log('\x1b[30;41m%s\x1b[0m', msg);
 // Пути
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
 const settingsFilePath = path.join(dataDirectory, 'settings.json');
-const allModelsFilePath = path.join(dataDirectory, '_all_models.json');
+const allModelsFilePath = path.join(dataDirectory, 'all-models.json');
 const modelsFilePath = path.join(dataDirectory, 'models.json');
 
 // Структура вывода
@@ -49,7 +49,7 @@ const data = {
 try {
   const settings = readJson(settingsFilePath);
   const allModels = readJson(allModelsFilePath);
-  if (!settings || !allModels) throw new Error('Не удалось загрузить файлы settings.json или _all_models.json');
+  if (!settings || !allModels) throw new Error('Не удалось загрузить файлы settings.json или all-models.json');
 
   const brands = parseList(settings.brand);
   const modelIDs = normalizeArray(settings.modelIDs);

@@ -157,10 +157,10 @@ fi
 
 # 1. Скачиваем общий models.json
 echo -e "\n${BGGREEN}Скачиваем общий models.json...${Color_Off}"
-curl -s "$JSON_PATH/models.json" -o src/data/_all_models.json
+curl -s "$JSON_PATH/models.json" -o src/data/all-models.json
 
 # Проверяем, что файл скачался и это не HTML-страница (например, 404)
-if [ ! -s src/data/_all_models.json ] || grep -q '<!DOCTYPE html' src/data/_all_models.json; then
+if [ ! -s src/data/all-models.json ] || grep -q '<!DOCTYPE html' src/data/all-models.json; then
     printf "${BGRED}Внимание: models.json не найден или получен некорректный файл! Будет создан пустой models.json.${Color_Off}\n"
     echo '{ "models": [], "testDrive": [], "services": [] }' > src/data/models.json
 else
@@ -168,4 +168,4 @@ else
 fi
 
 # 3. Удаляем временный файл
-# rm -f src/data/_all_models.json
+# rm -f src/data/all-models.json
