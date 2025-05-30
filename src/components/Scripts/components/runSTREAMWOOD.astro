@@ -5,7 +5,6 @@ const isProd = import.meta.env.PROD;
 ---
 { isProd && scripts_json.streamwood && scripts_json.streamwood.swKey && scripts_json.streamwood.swKey != "" && scripts_json.streamwood.swDomainKey && scripts_json.streamwood.swDomainKey != "" && (
 <script>
-// console.log("runSTREAMWOOD load");
 function runSTREAMWOOD(streamwood) {
     // console.log("runSTREAMWOOD", streamwood);
     if (streamwood.swKey && streamwood.swDomainKey) {

@@ -5,7 +5,6 @@ const isProd = import.meta.env.PROD;
 ---
 { isProd && scripts_json.re && scripts_json.re !== "" && (
 <script>
-// console.log("runRE load");
 function runRE(scripts_json_re) {
     // console.log("runRE", scripts_json_re);
     var script = document.createElement('script');

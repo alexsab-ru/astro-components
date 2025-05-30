@@ -5,7 +5,6 @@ const isProd = import.meta.env.PROD;
 ---
 { isProd && scripts_json.metrika && scripts_json.metrika.length > 0 && scripts_json.metrika[0].id && String(scripts_json.metrika[0].id) !== "" && (
 <script>
-// console.log("runMETRIKA load");
 function runMETRIKA(scripts_json_metrika) {
     // console.log("runMETRIKA", scripts_json_metrika);
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};

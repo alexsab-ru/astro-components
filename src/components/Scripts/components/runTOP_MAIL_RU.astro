@@ -5,7 +5,6 @@ const isProd = import.meta.env.PROD;
 ---
 { isProd && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].length > 0 && scripts_json['top.mail.ru'][0].id != "" && (
 <script>
-// console.log("runTOP_MAIL_RU load");
 function runTOP_MAIL_RU(top_mail_ru) {
     // console.log("runTOP_MAIL_RU", top_mail_ru);
     top_mail_ru.forEach(mail => {
