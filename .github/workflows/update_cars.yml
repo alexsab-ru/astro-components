@@ -7,12 +7,16 @@ on:
     # paths:
       # - '.github/scripts/sh/getAirStorage.sh'
       # - '.github/scripts/sh/getDealerData.sh'
+      # - '.github/scripts/sh/getDealerPrices.sh'
+      # - '.github/scripts/sh/getDealerStorage.sh'
+      # - '.github/scripts/sh/getSortStorage.sh'
       # - '.github/scripts/CarFeedProcessorCSV.py'
       # - '.github/scripts/config_air_storage-friend.json'
       # - '.github/scripts/config_air_storage.json'
       # - '.github/scripts/config.py'
       # - '.github/scripts/getOneXML.py'
       # - '.github/scripts/GSheetFetcher.js'
+      # - '.github/scripts/mergeCarPrices.js'
       # - '.github/scripts/model_mapping.json'
       # - '.github/scripts/update_cars_air_storage.py'
       # - '.github/scripts/update_cars.py'
@@ -21,12 +25,35 @@ on:
   workflow_dispatch:
 
 jobs:
+  determine_env:
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.set_env.outputs.env_name }}
+    steps:
+      - id: set_env
+        run: |
+          PROD_BRANCHES=("main" "master" "brand" "dealer") # Bash array
+          CURRENT_BRANCH="${{ github.ref_name }}"
+          IS_PROD=false
+          for branch in "${PROD_BRANCHES[@]}"; do
+            if [[ "$CURRENT_BRANCH" == "$branch" ]]; then
+              IS_PROD=true
+              break
+            fi
+          done
+          if $IS_PROD; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          else
+            echo "env_name=development" >> $GITHUB_OUTPUT
+          fi
+
   build:
+    needs: determine_env
     runs-on: ubuntu-latest
 
     # Указываете окружение и его переменные
     environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+      name: ${{ needs.determine_env.outputs.env_name }}
 
     steps:
     - name: Checkout repo
@@ -39,9 +66,13 @@ jobs:
 
     - name: Install dependencies
       run: |
-          npm install -g pnpm
-          pnpm install --no-frozen-lockfile
-
+        npm install -g pnpm
+        pnpm install --no-frozen-lockfile
+        pnpm download_json -f settings.json
+      env:
+        JSON_PATH: ${{ secrets.JSON_PATH }}
+        DOMAIN: ${{ vars.DOMAIN }}
+    
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -51,7 +82,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests lxml pyyaml Pillow
+        pip install requests lxml pyyaml Pillow beautifulsoup4
+
 
     - name: Download CSV and generate cars.xml from csv
       if: ${{ vars.CSV_URL }}
@@ -59,7 +91,7 @@ jobs:
         curl '${{ vars.CSV_URL }}' -o data.csv
         python .github/scripts/CarFeedProcessorCSV.py
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.CSV_URL }}
 
     - name: Get air storage
@@ -68,15 +100,52 @@ jobs:
         pnpm run getAirStorage
       env:
         CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
-        
+
+    - name: Get sort storage
+      if: ${{ vars.SORT_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getSortStorage
+      env:
+        CSV_URL: ${{ vars.SORT_STORAGE_CSV_URL }}
 
     - name: Get Dealer JSON cars price
-      if: ${{ vars.DEALER_PRICE_CSV_URL }}
+      if: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
       run: |
-        pnpm run getDealerPrice
+        pnpm run getDealerCarsPrice
       continue-on-error: true
       env:
-        CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
+        CSV_URL: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
+
+    - name: Get XML from Avito to get dealer photos for cars
+      if: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
+      run: |
+        python .github/scripts/getOneXML.py --output_path="dealer_photos_for_cars_avito.xml"
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
+
+
+    - name: Get Dealer cars Storage
+      if: ${{ vars.DEALER_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getDealerStorage
+        python .github/scripts/update_cars.py --source_type data_cars_car
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
+        QUERY_STRING: ${{ vars.DEALER_STORAGE_CSV_COLUMN }}
+
+    - name: Get Dealer used_cars Storage
+      if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getDealerStorage
+        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+        QUERY_STRING: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
 
     - name: Get Used Cars data_cars_car XML and generate cars file
       if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
@@ -84,7 +153,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
 
     - name: Get cars data_cars_car XML and generate cars file
@@ -93,7 +162,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars.py --source_type data_cars_car
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
 
     - name: Get cars maxposter XML and generate cars file
@@ -102,7 +171,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars.py --source_type maxposter --image_tag="photo"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_MAXPOSTER }}
 
     - name: Get cars vehicles_vehicle XML and generate cars file
@@ -111,7 +180,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars.py --source_type vehicles_vehicle --image_tag="photo"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
 
     - name: Get cars carcopy XML and generate cars file
@@ -120,7 +189,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_CARCOPY }}
 
     - name: Get Dealer XML for auto.ru and generate auto.ru xml
@@ -129,7 +198,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars_air_storage.py --source_type autoru  --output_path "./public/autoru.xml"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_XML_URL }}
 
     - name: Get Dealer AutoRu xml if friend url exists
@@ -138,7 +207,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru_dc.xml"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_XML_URL }}
 
     - name: Get friends AutoRu xml
@@ -147,7 +216,7 @@ jobs:
         python .github/scripts/getOneXML.py --output="cars_friend.xml"
         python .github/scripts/update_cars_air_storage.py --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_FRIEND_XML_URL }}
 
     - name: Merge AutoRu xmls
@@ -155,7 +224,7 @@ jobs:
       run: |
         python .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: "./public/autoru_dc.xml ./public/autoru_friend.xml"
 
     - name: Get Dealer XML for avito and generate avito xml if friend url not exists
@@ -164,7 +233,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/avito.xml"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
 
     - name: Get Dealer XML for avito and generate avito xml if friend url not exists
@@ -173,7 +242,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito.xml"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
 
     - name: Get Dealer Avito xml if friend url exists
@@ -182,7 +251,7 @@ jobs:
         python .github/scripts/getOneXML.py
         python .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito_dc.xml"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
 
     - name: Get friends Avito xml
@@ -191,7 +260,7 @@ jobs:
         python .github/scripts/getOneXML.py --output="cars_friend.xml"
         python .github/scripts/update_cars_air_storage.py --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_FRIEND_XML_URL }}
 
     - name: Merge Avito xmls
@@ -199,7 +268,7 @@ jobs:
       run: |
         python .github/scripts/getOneXML.py --output_path="./public/avito.xml"
       env:
-        REPO_NAME: ${{ github.event.repository.name }}
+        DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: "./public/avito_dc.xml ./public/avito_friend.xml"
 
     - name: Set output

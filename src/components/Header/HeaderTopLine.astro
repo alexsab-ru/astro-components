@@ -1,12 +1,13 @@
 ---
 interface Props{
 	content: string;
+	classes?: string;
 }
-const {content} = Astro.props
+const {content, classes = 'bg-[#05141f] px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative'} = Astro.props
 ---
 <template x-if="showTopLine === 1">
 	<div 
-		class="bg-[#05141f] px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative"
+		class={classes}
 	>
 		<Fragment set:html={content}>
 		<button 

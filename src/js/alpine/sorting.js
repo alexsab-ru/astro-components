@@ -9,10 +9,16 @@ export function sorting() {
 		carListWrapper: document.querySelector(".car-list"),
 		cars: [],
 		options: [
+			{ id: "actual", title: "По актуальности" },
 			{ id: "price_up", title: "По возрастанию цены" },
 			{ id: "price_down", title: "По убыванию цены" },
+			{ id: "discount_min", title: "По минимальной выгоде" },
+			{ id: "discount_max", title: "По максимальной выгоде" },
+			{ id: "year_up", title: "По году: старше" },
+			{ id: "year_down", title: "По году: новее" },
+			{ id: "name", title: "По названию" },
 		],
-		current: "price_up",
+		current: "actual",
 		selectedBrands: [],
 		selectedModels: [],
 		selectedColors: [],
@@ -42,7 +48,32 @@ export function sorting() {
 				this.cars.sort((a, b) => {
 					const priceA = parseFloat(a.getAttribute("data-price"));
 					const priceB = parseFloat(b.getAttribute("data-price"));
-					return id === "price_up" ? priceA - priceB : priceB - priceA;
+					const orderA = parseFloat(a.getAttribute("data-order"));
+					const orderB = parseFloat(b.getAttribute("data-order"));
+					const discountA = parseFloat(a.getAttribute("data-max-discount"));
+					const discountB = parseFloat(b.getAttribute("data-max-discount"));
+					const yearA = parseFloat(a.getAttribute("data-year"));
+					const yearB = parseFloat(b.getAttribute("data-year"));
+					const nameA = `${a.getAttribute("data-brand")}${a.getAttribute("data-model")}${a.getAttribute("data-complectation")}`;
+					const nameB = `${b.getAttribute("data-brand")}${b.getAttribute("data-model")}${b.getAttribute("data-complectation")}`;
+					switch(id) {
+						case "price_up":
+							return priceA - priceB;
+						case "price_down":
+							return priceB - priceA
+						case "discount_min":
+							return discountA - discountB;
+						case "discount_max":
+							return discountB - discountA;
+						case "year_up":
+							return yearA - yearB;
+						case "year_down":
+							return yearB - yearA;
+						case "name":
+							return nameA.localeCompare(nameB);
+						case "actual":
+							return orderA - orderB;
+					}
 				});
 			} else {
 				this.cars = Array.from(this.carItems);

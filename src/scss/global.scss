@@ -16,6 +16,9 @@ section:not(.model-section) {
 	h2 {
 		@apply relative pb-3 text-3xl sm:text-5xl w-fit mx-auto font-extrabold before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:h-1 before:w-32 before:bg-accent-500;
 	}
+	h3 {
+		@apply text-2xl sm:text-3xl;
+	}
 }
 
 .dz-remove {
@@ -52,6 +55,12 @@ section:not(.model-section) {
 		a {
 			@apply text-xs;
 		}
+		ul {
+			@apply text-xs list-disc pl-5;
+		}
+		h3 {
+			@apply text-sm mb-2;
+		}
 	}
 	table {
 		@apply border-collapse w-full bg-white text-center text-xs sm:text-sm md:text-base;
@@ -67,17 +76,17 @@ section:not(.model-section) {
 			}
 		}
 	}
-	ul{
+	ul {
 		@apply list-disc pl-5;
 	}
 }
 
-.overflow-auto.min-w-full.my-14 {
+.table_wrapper {
 	margin-right: -1.25rem;
 	margin-left: -1.25rem;
 }
 
-.overflow-auto.min-w-full.my-14 table {
+.table_wrapper table {
 	padding-right: 1.25rem;
 	padding-left: 1.25rem;
 	display: inline-block;
@@ -85,55 +94,55 @@ section:not(.model-section) {
 }
 
 @media (min-width: 640px) {
-	.overflow-auto.min-w-full.my-14 {
+	.table_wrapper {
 		 margin-right: calc((640px - 100vw) / 2 - 1.25rem);
 		 margin-left: calc((640px - 100vw) / 2 - 1.25rem);
 	}
-	.overflow-auto.min-w-full.my-14 table {
+	.table_wrapper table {
 		 padding-right: calc((100vw - 640px) / 2 + 1.25rem);
 		 padding-left: calc((100vw - 640px) / 2 + 1.25rem);
 	}
 }
 
 @media (min-width: 768px) {
-	.overflow-auto.min-w-full.my-14 {
+	.table_wrapper {
 		 margin-right: calc((768px - 100vw) / 2 - 1.25rem);
 		 margin-left: calc((768px - 100vw) / 2 - 1.25rem);
 	}
-	.overflow-auto.min-w-full.my-14 table {
+	.table_wrapper table {
 		 padding-right: calc((100vw - 768px) / 2 + 1.25rem);
 		 padding-left: calc((100vw - 768px) / 2 + 1.25rem);
 	}
 }
 
 @media (min-width: 1024px) {
-	.overflow-auto.min-w-full.my-14 {
+	.table_wrapper {
 		 margin-right: calc((1024px - 100vw) / 2 - 1.25rem);
 		 margin-left: calc((1024px - 100vw) / 2 - 1.25rem);
 	}
-	.overflow-auto.min-w-full.my-14 table {
+	.table_wrapper table {
 		 padding-right: calc((100vw - 1024px) / 2 + 1.25rem);
 		 padding-left: calc((100vw - 1024px) / 2 + 1.25rem);
 	}
 }
 
 @media (min-width: 1280px) {
-	.overflow-auto.min-w-full.my-14 {
+	.table_wrapper {
 		 margin-right: calc((1280px - 100vw) / 2 - 1.25rem);
 		 margin-left: calc((1280px - 100vw) / 2 - 1.25rem);
 	}
-	.overflow-auto.min-w-full.my-14 table {
+	.table_wrapper table {
 		 padding-right: calc((100vw - 1280px) / 2 + 1.25rem);
 		 padding-left: calc((100vw - 1280px) / 2 + 1.25rem);
 	}
 }
 
 @media (min-width: 1536px) {
-	.overflow-auto.min-w-full.my-14 {
+	.table_wrapper {
 		 margin-right: calc((1536px - 100vw) / 2 - 1.25rem);
 		 margin-left: calc((1536px - 100vw) / 2 - 1.25rem);
 	}
-	.overflow-auto.min-w-full.my-14 table {
+	.table_wrapper table {
 		 padding-right: calc((100vw - 1536px) / 2 + 1.25rem);
 		 padding-left: calc((100vw - 1536px) / 2 + 1.25rem);
 	}
@@ -184,5 +193,15 @@ section:not(.model-section) {
 	}
 	ul{
 		@apply list-disc pl-4;
+	}
+}
+
+.lazy{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	img{
+		max-height: 70px;
+		width: auto;
 	}
 }

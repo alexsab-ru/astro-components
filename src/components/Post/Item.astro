@@ -19,7 +19,7 @@ post.data?.toDate && typeof post.data?.toDate === 'boolean'
 	class="!no-underline"
 >
 	<div class="bg-gray-50 group rounded-2xl relative aspect-video overflow-hidden lazy">
-		<img src="/img/loading-simple.gif" data-src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} loading="lazy">
+		<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} loading="lazy">
 	</div>
 	<div class="text-black mt-2 sm:mt-4 leading-none"><Fragment set:html={post.data.caption || post.data.title} /></div>
 	{date && (<FormattedDate date={date} toDate={post.data?.toDate ? true : false} />)}

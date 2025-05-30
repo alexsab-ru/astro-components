@@ -1,0 +1,25 @@
+---
+interface Props {
+  image?: {
+    desktop: string;
+    mobile: string;
+  },
+  direction?: string; 
+}
+const { image, direction = 'right' } = Astro.props as Props;
+const directionClass = direction === 'right' ? 'even:lg:flex-row-reverse odd:lg:flex-row' : 'odd:lg:flex-row-reverse even:lg:flex-row';
+---
+
+<div class={`flex flex-col-reverse my-14 ${directionClass}`}>
+	<div class="lg:w-1/2 pr-4 lg:pr-10 xl:pr-16 pl-4 lg:pl-16 lg:bg-gray-100 py-6 xl:py-10">
+		<slot />
+	</div>
+{image?.desktop && (
+    <div class="lg:w-1/2 flex-shrink-0">
+        <picture>
+            <source media="(min-width: 768px)" srcset={image.desktop} />
+            <img src={image?.mobile || image.desktop} class="w-full h-full object-cover" loading="lazy" />
+        </picture>
+    </div>
+)}
+</div>

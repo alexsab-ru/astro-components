@@ -1,0 +1,13 @@
+---
+import type { IBrandHistoryElements } from './types';
+import BrandHistoryItem from './BrandHistoryItem.astro';
+
+interface Props extends IBrandHistoryElements {}
+const { items } = Astro.props;
+---
+{items.length > 0 && (
+    <div class="relative sm:space-y-10 mb-20 *:text-center sm:*:text-left">
+        <div class="absolute h-[98%] w-0.5 bg-gray-300 top-[1%] left-1/2 hidden sm:block"></div>
+        {items.map(item => <BrandHistoryItem item={item} />)}
+    </div>
+)}

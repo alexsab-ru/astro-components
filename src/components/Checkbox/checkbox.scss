@@ -1,8 +1,12 @@
 span[class^='fake-checkbox'],
 span[class^='fake-radio'] {
-	@apply w-4 h-4 inline-block flex-shrink-0 border relative before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-2.5 before:h-2.5 before:transition-opacity before:opacity-0;
+	@apply w-5 h-5 inline-block flex-shrink-0 border relative before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-3.5 before:h-3.5 before:transition-opacity before:opacity-0;
 }
-.fake-checkbox-white {
+span[class^='fake-radio'] {
+	@apply rounded-full before:rounded-full;
+}
+.fake-checkbox-white,
+.fake-radio-white {
 	@apply border-white before:bg-white;
 }
 .fake-checkbox-black,

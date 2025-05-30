@@ -31,7 +31,7 @@ const { section } = Astro.props;
 							{item?.descr && (<p class="mt-2"><Fragment set:html={item?.descr} /></p>)}
 						 </div>
 						 <div class="lg:w-2/3">
-							{item?.img && (<img src={ item.img } class="w-full h-auto" alt={ item?.name || 'ALT' } />)}
+							{item?.img && (<img src={ item.img } class="w-full h-auto" alt={ item?.name || 'ALT' } loading="lazy" />)}
 						 </div>
 					</div>
 				))}

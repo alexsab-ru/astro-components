@@ -1,0 +1,38 @@
+---
+interface Props {
+	children: any
+}
+const { children } = Astro.props;
+import MenuLink from './MenuLink.astro';
+import { Icon } from 'astro-icon/components';
+let classes = 'left-0 lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible lg:-translate-y-1 transition-all bg-white group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 lg:shadow-2xl z-[1000] lg:border-t lg:max-h-[calc(100vh-129px)] lg:overflow-y-auto';
+classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes + ' ' : classes;
+---
+{children && (
+	<div class={classes}>
+		{!Array.isArray(children) && Object.keys(children).length > 0 ? Object.keys(children).map( key => (
+			<div class={`lg:grid lg:grid-cols-5 ${Object.keys(children).length > 1 ? 'lg:border-b' : ''}`} x-data="{isOpenSubMenu: false}">
+				<div class="relative lg:flex lg:items-center">
+					{ Object.keys(children).length > 1 ? (
+						<div 
+							class="relative flex items-center justify-between font-bold pr-5 lg:text-3xl py-2.5 pl-8 lg:pl-5"
+							@click="isOpenSubMenu = !isOpenSubMenu"
+						>
+							{key}
+							<div 
+								class="absolute right-0 top-0 h-full aspect-square flex items-center justify-center origin-center transition-transform lg:hidden"
+								:class="{'rotate-90': isOpenSubMenu}"
+							>
+								<Icon name="mdi:chevron-right" class="size-6" />
+							</div>
+						</div>
+					) : '' }
+				</div>
+				<div class={`${Object.keys(children).length > 1 ? 'lg:col-span-4' : 'lg:col-span-full'} ${Object.keys(children).length == 1 ? '!block lg:!grid' : 'lg:grid'} lg:grid-cols-4 xl:grid-cols-5 lg:text-center pl-4 lg:pl-0`} :class="{'hidden': !isOpenSubMenu }">
+					{ children[key].map(child => (<MenuLink link={child} sublink={true} />)) }
+				</div>
+			</div>
+		) ) : Array.isArray(children) && children.length > 0 ? children.map(child => (<MenuLink link={child} sublink={true} />)) : ('')
+		}
+	</div>
+)}

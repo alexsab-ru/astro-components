@@ -1,0 +1,12 @@
+---
+const {
+     imgPlacement = 'left',
+} = Astro.props;
+---
+
+<article class=`flex flex-col ${imgPlacement === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row'} bg-zinc-50 rounded-2xl overflow-hidden`>
+  <div><slot name="card-image" /></div>
+  <div class="flex flex-shrink-0 lg:w-1/2 flex-col justify-center gap-6 lg:gap-12 px-6 py-12 lg:px-12">
+    <slot name="card-content" />
+  </div>
+</article>

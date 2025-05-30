@@ -25,14 +25,14 @@ import '@/components/Banner/banner.scss';
 </div>
 <div class="swiper car-thumb-slider !hidden sm:!block h-[130px]">
 	<div class="swiper-wrapper">
-			{
-				data.images.map(img => (
-					<div class="swiper-slide select-none min-w-[73px] !w-fit">
-						<img src={img} class="select-none h-full w-auto" alt={data.folder_id} loading="lazy" />
-						<div class="swiper-lazy-preloader"></div>
-					</div>
-				))
-			}
+		{
+			data.images.map(img => (
+				<div class="lazy swiper-slide select-none min-w-[200px]">
+					<img src="https://cdn.alexsab.ru/loaders/simple-loading.svg" data-src={img} class="select-none h-full w-auto" alt={data.folder_id} loading="lazy" />
+					<div class="swiper-lazy-preloader"></div>
+				</div>
+			))
+		}
 	</div>
 </div>
 

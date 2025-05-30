@@ -1,5 +1,6 @@
 ---
-import { SITE_NAME, BRAND, LEGAL_CITY_WHERE } from "@/const";
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
@@ -13,7 +14,7 @@ import {Icon} from 'astro-icon/components';
 import rawModels from '@/data/models.json';
 let image = '';
 
-export async function getReadyCars() {
+export async function getReadyCars(legal_city_where) {
     const cars = [];
     rawModels.filter(m => m.show).forEach(model => {
         const id = model.id;
@@ -43,8 +44,8 @@ export async function getReadyCars() {
                         complectation_name: 'Н/Д',
                         breadcrumb: `${model.mark_id} ${model.name}`,
                         h1: `${model.mark_id} ${model.name}`,
-                        title: `Купить ${model.mark_id} ${model.name} у официального дилера в ${LEGAL_CITY_WHERE}`,
-                        description: `Купить автомобиль ${model.mark_id} ${model.name}, цвет - ${color.name} у официального дилера в ${LEGAL_CITY_WHERE}`,
+                        title: `Купить ${model.mark_id} ${model.name} у официального дилера в ${legal_city_where}`,
+                        description: `Купить автомобиль ${model.mark_id} ${model.name}, цвет - ${color.name} у официального дилера в ${legal_city_where}`,
                         total: 1
                     }
                 });
@@ -74,8 +75,8 @@ export async function getReadyCars() {
                             complectation_name: compl.name,
                             breadcrumb: `${model.mark_id} ${model.name} ${compl.name}`,
                             h1: `${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.)`,
-                            title: `Купить ${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}`,
-                            description: `Купить автомобиль ${model.mark_id} ${model.name}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${LEGAL_CITY_WHERE}. Стоимость данного автомобиля ${model.mark_id} ${model.name} – ${Number(compl.price)}`,
+                            title: `Купить ${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}`,
+                            description: `Купить автомобиль ${model.mark_id} ${model.name}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}. Стоимость данного автомобиля ${model.mark_id} ${model.name} – ${Number(compl.price)}`,
                             total: 1
                         }
                     });
@@ -89,7 +90,7 @@ let colors = [];
 let complectations = [];
 let engines = [];
 let drives = [];
-let cars = await getReadyCars();
+let cars = await getReadyCars(legal_city_where);
 cars.map(car => {
 	if(!colors.includes(car.color)) colors.push(car.color);
 	if(!complectations.includes(car.data.complectation_name)) complectations.push(car.data.complectation_name);
@@ -101,9 +102,9 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 ---
 
 <PageLayout
-	h1={`Модельный ряд автомобилей ${BRAND} в ${LEGAL_CITY_WHERE}`}
-	title={`Каталог новых автомобилей ${BRAND} от официального дилера «${SITE_NAME}» в ${LEGAL_CITY_WHERE}`}
-	description={`Каталог новых автомобилей ${BRAND} в ${LEGAL_CITY_WHERE} от официального дилера. Широкий модельный ряд, надёжные авто, проверенные временем, наличие запчастей, качественный сервис. Автомобили в наличии. Скидки, акции, подарки, льготные автокредиты.`}
+	h1={`Модельный ряд автомобилей ${brand} в ${legal_city_where}`}
+	title={`Каталог новых автомобилей ${brand} от официального дилера «${site_name}» в ${legal_city_where}`}
+	description={`Каталог новых автомобилей ${brand} в ${legal_city_where} от официального дилера. Широкий модельный ряд, надёжные авто, проверенные временем, наличие запчастей, качественный сервис. Автомобили в наличии. Скидки, акции, подарки, льготные автокредиты.`}
 	keywords=""
 	breadcrumb={[breadcrumb]}
 	image={image ? image : ""}

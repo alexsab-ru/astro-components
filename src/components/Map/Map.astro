@@ -2,13 +2,13 @@
 interface Props {
 	mapImg: string;
 	salons?: any[];
-	class?: string;
+	classes?: string;
 	[key: string]: any;
 }
-const {salons = [], mapImg, class: className, ...rest} = Astro.props;
+const {salons = [], mapImg, classes = '', ...rest} = Astro.props;
 ---
 
-<div style={`background-image: url(${mapImg})`} class={`map ${className}`} {...rest}>
+<div style={`background-image: url(${mapImg})`} class={`map ${classes}`} {...rest}>
 	<div class="loader loader-default"></div>
 	<div id="map"></div>
 </div>

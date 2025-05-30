@@ -2,14 +2,14 @@
 interface Props {
 	title?: string;
 	subtitle?: string;
-	endtime?: string;
+	endtime?: Date;
 	btnName?: string;
 	class?: string;
 }
 const { 
 	title, 
 	subtitle, 
-	endtime = '2025-12-31T23:59:59+04:00', 
+	endtime = '2025-12-31T23:59:59+04:00',
 	btnName, 
 	class: className,
 	...rest 

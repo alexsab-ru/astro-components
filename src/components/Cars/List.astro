@@ -3,9 +3,16 @@ import { getCollection } from "astro:content";
 import CarItem from "@/components/Cars/Item.astro";
 import SortSelect from "@/components/Cars/SortSelect.astro";
 import FilterItemBtn from '@/components/Filter/ItemBtn.astro'
-const rawCars = await getCollection("cars");
-let cars: any, models = {}, years = {}, groupCars = {};
 import { groupArrayByKey } from "@/js/utils/groupArrayByKey";
+
+interface Props {
+    cars?: any[];
+}
+
+const { cars: inputCars } = Astro.props;
+const rawCars = inputCars || await getCollection("cars");
+let cars: any, models = {}, years = {}, groupCars = {};
+
 if (rawCars && rawCars.length > 0) {
 	cars = rawCars;
 

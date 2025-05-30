@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import argparse
 from utils import *
@@ -8,6 +9,45 @@ class CarProcessor:
     def __init__(self, source_type: str):
         self.source_type = source_type
         self.setup_source_config()
+        self.existing_files = set()
+        self.current_thumbs = []
+        self.prices_data = load_price_data()
+        
+        self.sort_storage_data = {}
+        if os.path.exists('sort_storage.json'):
+            try:
+                with open('sort_storage.json', 'r', encoding='utf-8') as f:
+                    self.sort_storage_data = json.load(f)
+            except json.JSONDecodeError:
+                print("Ошибка при чтении sort_storage.json")
+            except Exception as e:
+                print(f"Произошла ошибка при работе с файлом: {e}")
+        
+        self.dealer_photos_for_cars_avito = {}
+        if os.path.exists('dealer_photos_for_cars_avito.xml'):
+            try:
+                avito_root = get_xml_content('dealer_photos_for_cars_avito.xml', '')
+                for car in avito_root.findall('Ad'):
+                    vin = car.find('VIN').text
+                    self.dealer_photos_for_cars_avito[vin] = {
+                        'images': [],
+                        'description': ''
+                    }
+                    # Обработка изображений
+                    for image in car.find('Images').findall('Image'):
+                        self.dealer_photos_for_cars_avito[vin]['images'].append(image.get('url'))
+                    # Обработка описания
+                    description_elem = car.find('Description')
+                    if description_elem is not None and description_elem.text:
+                        # Извлекаем текст из CDATA
+                        description_text = description_elem.text
+                        if description_text.startswith('<![CDATA[') and description_text.endswith(']]>'):
+                            description_text = description_text[9:-3]  # Удаляем CDATA обертку
+                        self.dealer_photos_for_cars_avito[vin]['description'] = description_text
+            except json.JSONDecodeError:
+                print("Ошибка при чтении dealer_photos_for_cars_avito.xml")
+            except Exception as e:
+                print(f"Произошла ошибка при работе с файлом: {e}")
 
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
@@ -91,9 +131,15 @@ class CarProcessor:
                 print("Элемент max_discount отсутствует или пустой")
                 return 0
 
-    def process_car(self, car: ET.Element, existing_files: set, current_thumbs: List[str], 
-                   prices_data: Dict, config: Dict) -> None:
+    def process_car(self, car: ET.Element, config: Dict) -> None:
         """Обработка отдельного автомобиля"""
+        # Создание URL
+        friendly_url = process_friendly_url(
+            join_car_data(car, 'mark_id', 'folder_id', 'modification_id',
+                         'complectation_name', 'color', 'year')
+        )
+        print(f"\nУникальный идентификатор: {friendly_url}")
+        
         # Базовые расчёты цены и скидки
         price = int(car.find('price').text or 0)
         max_discount = self.calculate_max_discount(car)
@@ -107,19 +153,12 @@ class CarProcessor:
             sale_price = int(car.find('priceWithDiscount').text)
         create_child_element(car, 'priceWithDiscount', sale_price)
         create_child_element(car, 'sale_price', sale_price)
-
+        
         for elem_name in self.config['elements_to_localize']:
             elem = car.find(elem_name)
             localize_element_text(elem)
         
-        # Создание URL
-        friendly_url = process_friendly_url(
-            join_car_data(car, 'mark_id', 'folder_id', 'modification_id',
-                         'complectation_name', 'color', 'year')
-        )
-        print(f"Уникальный идентификатор: {friendly_url}")
-        
-        url = f"https://{config['repo_name']}{config['path_car_page']}{friendly_url}/"
+        url = f"https://{config['domain']}{config['path_car_page']}{friendly_url}/"
         create_child_element(car, 'url', url)
         if self.source_type in ['carcopy', 'vehicles_vehicle']:
             update_element_text(car, 'url_link', url)
@@ -128,13 +167,30 @@ class CarProcessor:
         file_name = f"{friendly_url}.mdx"
         file_path = os.path.join(config['cars_dir'], file_name)
 
-        update_car_prices(car, prices_data)
+        update_car_prices(car, self.prices_data)
+
+        # get info from ./src/data/settings.json
+        settings = {
+            'legal_city': 'Город',
+            'legal_city_where': 'Городе'
+        }
+
+        if os.path.exists('./src/data/settings.json'):
+            try:
+                with open('./src/data/settings.json', 'r', encoding='utf-8') as f:
+                    settings = json.load(f)
+            except json.JSONDecodeError:
+                print("Ошибка при чтении ./src/data/settings.json")
+            except Exception as e:
+                print(f"Произошла ошибка при работе с файлом: {e}")
+
+        config['legal_city'] = settings['legal_city']
+        config['legal_city_where'] = settings['legal_city_where']
 
         if os.path.exists(file_path):
-            update_yaml(car, file_path, friendly_url, current_thumbs, config)
+            update_yaml(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config)
         else:
-            create_file(car, file_path, friendly_url, current_thumbs,
-                       existing_files, config)
+            create_file(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
 
     def rename_elements(self, car: ET.Element) -> None:
         """Переименование элементов согласно карте переименований"""
@@ -156,7 +212,7 @@ def main():
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
-    parser.add_argument('--repo_name', default=os.getenv('REPO_NAME', 'localhost'), help='Repository name')
+    parser.add_argument('--domain', default=os.getenv('DOMAIN', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
     parser.add_argument('--image_tag', default='image', help='Image tag name')
@@ -211,29 +267,21 @@ def main():
     config['move_vin_id_up'] = source_config['move_vin_id_up']
     config['new_address'] = source_config['new_address']
     config['new_phone'] = source_config['new_phone']
-    
+
     # Инициализация процессора для конкретного источника
     processor = CarProcessor(args.source_type)
     
-    prices_data = load_price_data()
-
     # Инициализация
     root = get_xml_content(args.input_file, args.xml_url)
     tree = ET.ElementTree(root)
     setup_directories(config['thumbs_dir'], args.cars_dir)
     
-    existing_files = set()
-    # Список для хранения путей к текущим превьюшкам
-    current_thumbs = []
-
     with open('output.txt', 'w') as file:
         file.write("")
 
-    cars_to_remove = [
-    ]
+    cars_to_remove = []
     
     # Обработка машин
-    # cars_element = root.find('cars')
     cars_element = processor.get_cars_element(root)
     for car in cars_element:
         processor.rename_elements(car)
@@ -242,7 +290,7 @@ def main():
             cars_to_remove.append(car)
             continue
         
-        processor.process_car(car, existing_files, current_thumbs, prices_data, config)
+        processor.process_car(car, config)
     
     # Удаление ненужных машин
     for car in cars_to_remove:
@@ -252,11 +300,11 @@ def main():
     tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
     
     # Очистка
-    cleanup_unused_thumbs(current_thumbs, config['thumbs_dir'])
+    cleanup_unused_thumbs(processor.current_thumbs, config['thumbs_dir'])
     
     for existing_file in os.listdir(args.cars_dir):
         filepath = os.path.join(args.cars_dir, existing_file)
-        if filepath not in existing_files:
+        if filepath not in processor.existing_files:
             os.remove(filepath)
     
     if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:

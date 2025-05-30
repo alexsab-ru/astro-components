@@ -1,0 +1,22 @@
+---
+const { item } = Astro.props;
+---
+
+<div class="swiper-slide">
+  {
+    item.image.length && (
+      <div class="mb-6"><img src={item.image} alt={item.title.length ? item.title : 'Alt'} loading="lazy" /></div>
+    )
+  }
+  {
+    item.title.length && (
+      <h3 class="font-bold text-center !mb-3">{item.title}</h3>
+    )
+  }
+  {
+    item.description.length && (
+      <p class="!mb-0 text-center !text-sm">{item.description}</p>
+    )
+  }
+  <div class="swiper-lazy-preloader" />
+</div>

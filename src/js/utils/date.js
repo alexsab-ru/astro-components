@@ -14,12 +14,31 @@ const months = {
     10: { nominative: 'Октябрь', genitive: 'Октября', prepositional: 'Октябре' },
     11: { nominative: 'Ноябрь', genitive: 'Ноября', prepositional: 'Ноябре' },
     12: { nominative: 'Декабрь', genitive: 'Декабря', prepositional: 'Декабре' }
-  };
+};
 const lastDay = new Date(date.getFullYear(), month, 0);
-export const FIRST_DAY = firstDay.getDate() < 10 ? '0'+firstDay.getDate() : firstDay.getDate();
-export const LAST_DAY = lastDay.getDate();
-export const MONTH = month < 10 ? `0${month}` : month;
-export const MONTH_NOMINATIVE = months[month].nominative;
-export const MONTH_GENITIVE = months[month].genitive;
-export const MONTH_PREPOSITIONAL = months[month].prepositional;
-export const YEAR = date.getFullYear();
+const FIRST_DAY = firstDay.getDate() < 10 ? '0'+firstDay.getDate() : firstDay.getDate();
+const LAST_DAY = lastDay.getDate();
+const MONTH = month < 10 ? `0${month}` : month;
+const MONTH_NOMINATIVE = months[month].nominative;
+const MONTH_GENITIVE = months[month].genitive;
+const MONTH_PREPOSITIONAL = months[month].prepositional;
+const YEAR = date.getFullYear();
+
+// Универсальный экспорт для поддержки как ES6, так и CommonJS
+const dateUtils = {
+    FIRST_DAY,
+    LAST_DAY,
+    MONTH,
+    MONTH_NOMINATIVE,
+    MONTH_GENITIVE,
+    MONTH_PREPOSITIONAL,
+    YEAR
+};
+
+// Поддержка ES6 модулей
+export { FIRST_DAY, LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR };
+
+// Поддержка CommonJS
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = dateUtils;
+}

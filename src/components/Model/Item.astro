@@ -18,7 +18,7 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 			{model.mark_id}&nbsp;{model.name}
 		</h2>
 		{
-			model?.benefit && !isNaN(model?.benefit) && (
+			model?.benefit && !isNaN(model?.benefit) && model?.benefit != 0 && model?.benefit != '' && (
 				<span class="block text-xs sm:text-lg text-black/80">
 					Выгода до {currencyFormat(model.benefit)}
 				</span>
@@ -39,23 +39,26 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 			)
 		}
 		<img
-			src="/img/loading-simple.gif"
+			src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg"
 			data-src={model.thumb}
 			class="scale-100 transition-transform duration-500 in-expo group-hover:scale-105 max-h-full"
 			alt={model.name}
 			loading="lazy"
 		/>
 	</div>
+	<div class="flex flex-col items-center xs:text-base text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5">
 	{
-		model?.price && !isNaN(model?.price) && (
-			<div class="flex flex-col items-center xs:text-base text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5">
-				<span>
-					<span class="text-sm text-gray-400">от</span>&nbsp;
-					{currencyFormat(model.price)}
-				</span>
-			</div>
+		model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ?  (
+			<span>
+				<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+			</span>
+		) : (
+			<span>
+				<span class="text-lg">по запросу</span>
+			</span>
 		)
 	}
+	</div>
 	<div class="flex flex-col sm:flex-row sm:mt-10 sm:divide-x">
 		{
 			Object.keys(model.chars).map((key) => (

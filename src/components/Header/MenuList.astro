@@ -1,0 +1,14 @@
+---
+interface Props {
+	links: any;
+}
+const { links } = Astro.props;
+import MenuListItem from './MenuListItem.astro';
+---
+<ul class="overflow-hidden flex flex-col lg:flex-row border-b lg:border-b-0">
+	{
+		links.map(link => (
+			<MenuListItem link={link} />
+		))
+	}
+</ul>

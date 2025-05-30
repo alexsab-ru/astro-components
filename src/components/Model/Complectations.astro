@@ -34,7 +34,7 @@ const { models = [], model, brand, title = "Подобрать комплект�
 		</template>
 		<div class="grid lg:grid-cols-2">
 			<div class="relative">
-				<img loading="lazy" :src="currentModel.colors[0].carImage" class="w-full col-span-1" :alt="currentModel.name">
+				<img :src="currentModel.colors[0].carImage" class="w-full col-span-1" :alt="currentModel.name" loading="lazy" />
 				<div class="absolute -top-5 sm:top-0 left-0">
 					<div class="text-xl sm:text-3xl font-bold uppercase !leading-none" x-html={`'${brand}&nbsp;' + currentModel.name`}></div>
 					<div class="sm:text-xl" x-text="currentModelComplectation.name"></div>

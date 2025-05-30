@@ -26,7 +26,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
 	{model?.badge && (
-		<img src={model?.badge?.imgModelPage || model?.badge.img} alt={model?.badge.alt} class="absolute right-4 top-4 xs:h-10 h-16 sm:h-24 w-auto z-10">
+		<img src={model?.badge?.imgModelPage || model?.badge.img} alt={model?.badge.alt} class="absolute right-4 top-4 xs:h-10 h-16 sm:h-24 w-auto z-10" loading="lazy" />
 	)}
 	<div
 		class="model__info"
@@ -51,10 +51,18 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						)
 					}
 					{
-						model?.price && (
-						<p class="uppercase text-3xl sm:text-4xl">
-							<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
-						</p>
+						model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ? (
+							<p class="uppercase text-3xl sm:text-4xl">
+								<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+							</p>
+						) : (
+							<Button
+								classes="popup-link btn !px-20 mt-5 flex-1 whitespace-nowrap"
+								url="#common-modal"
+								title="Узнать цену"
+								dataTitle={`Узнать цену ${model.mark_id} ${model.name}`}
+								dataFormName={`Узнать цену. ${model.mark_id} ${model.name}`}
+							/>
 						)
 					}
 				</div>
@@ -93,14 +101,18 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 	</div>
 
 	<div class={`w-full lg:w-3/4 2xl:w-3/5 relative z-10 top-0 lg:top-[150px] xl:top-[120px] lg:pb-[120px] xl:pb-[120px] ${model?.centered ? 'mx-auto' : 'ml-auto'}`}>
-		<div class="flex flex-col justify-center lazy">
-			<img
-				data-src={carImagePath}
-				class="w-full color-img-preview"
-				width="1142"
-				height="492"
-				alt={`${model.mark_id} ${model?.name}`}
-			/>
+		<div class="flex flex-col justify-center">
+			<div class="lazy aspect-[1143/493]">
+				<img
+					src="https://cdn.alexsab.ru/loaders/simple-loading.svg"
+					data-src={carImagePath}
+					class="w-full color-img-preview"
+					width="1143"
+					height="493"
+					alt={`${model.mark_id} ${model?.name}`}
+					fetchpriority="high"
+				/>
+			</div>
 			<div class="flex flex-wrap justify-center gap-4 sm:gap-5 color-links">
 				{
 					model.colors &&

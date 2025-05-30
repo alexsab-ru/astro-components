@@ -1,10 +1,17 @@
 ---
+type TService = {
+	title: string;
+	icon?: string;
+	url?: string;
+	target?: string;
+}
 interface Props {
 	title?: string;
+	services?: TService[]
 }
-const {title = 'Услуги дилерского центра'} = Astro.props;
-import services from '@/data/services.json'
 import {Icon} from 'astro-icon/components';
+import servicesData from '@/data/services.json';
+const {title = 'Услуги дилерского центра', services = servicesData} = Astro.props;
 ---
 
 {
@@ -14,27 +21,31 @@ import {Icon} from 'astro-icon/components';
 				<h2 class="text-xl sm:text-4xl font-medium mb-8 sm:mb-14">{title}</h2>
 
 				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-5">
-					{services.map((service: any) =>
+					{services.map((service: TService) =>
 						service.url ? (
 							<a
 								href={service.url}
 								{ ...service?.target ? {target: service.target} : {} }
 								class="rounded-lg bg-gray-100 p-1.5 sm:p-3 flex items-center flex-nowrap gap-1 sm:gap-2 shadow-lg transition-shadow hover:shadow-md"
 							>
-								<Icon
-									name={service.icon}
-									class="text-gray-800 flex-shrink-0 text-2xl sm:text-[44px]"
-								/>
+								{service?.icon && (
+									<Icon
+										name={service.icon}
+										class="text-gray-800 flex-shrink-0 text-2xl sm:text-[44px]"
+									/>
+								)}
 								<span class="block text-xs sm:text-lg 2xl:text-xl">
 									{service.title}
 								</span>
 							</a>
 						) : (
 							<div class="rounded-lg bg-gray-100 p-1.5 sm:p-3 flex items-center flex-nowrap gap-1 sm:gap-2 shadow-lg">
-								<Icon
-									name={service.icon}
-									class="text-gray-800 flex-shrink-0 text-2xl sm:text-[44px]"
-								/>
+								{service?.icon && (
+									<Icon
+										name={service.icon}
+										class="text-gray-800 flex-shrink-0 text-2xl sm:text-[44px]"
+									/>
+								)}
 								<span class="block text-xs sm:text-lg 2xl:text-xl">
 									{service.title}
 								</span>

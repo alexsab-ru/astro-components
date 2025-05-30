@@ -8,13 +8,14 @@ interface Props {
 }
 let {title, h1, description, image, keywords} = Astro.props;
 
-import {SITE_NAME, SITE_DESCR} from '@/const.js';
+import settings from '@/data/settings.json';
+const { site_name, site_description } = settings;
 
 import Head from '@/components/Head.astro';
 import ScriptHead from '@/components/Scripts/Head.astro';
 import ScriptBodyBegin from '@/components/Scripts/BodyBegin.astro';
 import ScriptBodyEnd from '@/components/Scripts/BodyEnd.astro';
-import Header from '@/components/Header.astro';
+import Header from '@/components/Header/Header.astro';
 import Footer from '@/components/ExtendedFooter.astro';
 import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
@@ -33,8 +34,16 @@ if (seo[currentPath]) {
 		description = pageSeo.description;
 	}
 
+	if (pageSeo.keywords && pageSeo.keywords.trim()) {
+		keywords = pageSeo.keywords;
+	}
+
 	if (pageSeo.h1 && pageSeo.h1.trim()) {
 		h1 = pageSeo.h1;
+	}
+
+	if (pageSeo.image && pageSeo.image.trim()) {
+		image = pageSeo.image;
 	}
 }
 ---
@@ -42,7 +51,7 @@ if (seo[currentPath]) {
 <!doctype html>
 <html lang="ru">
 	<head>
-		<Head title={title || h1 || SITE_NAME} description={description ?? SITE_DESCR} image={image} keywords={keywords} />
+		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
 	<body class="min-h-screen flex flex-col" x-data="complectation">
