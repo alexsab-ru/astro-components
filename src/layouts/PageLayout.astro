@@ -20,7 +20,7 @@ import BackLink from '@/components/BackLink.astro';
 	<section class="content">
 		<div class="container">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
-			<PageH1 title={h1} />
+			<PageH1 h1={h1} />
 			<slot />
 
 			{backLink && (

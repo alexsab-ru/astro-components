@@ -52,7 +52,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   description={`${model.mark_id} ${model.name} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={model.image ?? model.thumb}
 >
-  <PageH1 title={`Автомобиль ${brand} ${model.name} в ${legal_city_where}`} classes="sr-only" />
+  <PageH1 h1={`Автомобиль ${brand} ${model.name} в ${legal_city_where}`} classes="sr-only" />
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     sections.length > 0 && sections.map(s => ( <UniversalSection section={s} /> ))
