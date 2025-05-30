@@ -11,8 +11,8 @@ const pagesDirectory = path.join(process.cwd(), 'src', 'pages');
 // Массив для отслеживания измененных файлов
 const modifiedFiles = [];
 
-// Проверяем наличие файла allPrices.json
-const carsFilePath = path.join(dataDirectory, 'allPrices.json');
+// Проверяем наличие файла all-prices.json
+const carsFilePath = path.join(dataDirectory, 'all-prices.json');
 let carsData = [];
 
 if (fs.existsSync(carsFilePath)) {
@@ -23,7 +23,7 @@ if (fs.existsSync(carsFilePath)) {
       carsData = [];
     }
   } catch (error) {
-    console.error("Ошибка парсинга файла allPrices.json:", error);
+    console.error("Ошибка парсинга файла all-prices.json:", error);
   }
 }
 
@@ -101,7 +101,7 @@ function processDirectory(directory, fileExtensions) {
       processDirectory(filePath, fileExtensions);
     } else if (fileExtensions.includes(path.extname(filePath))) {
       // Пропускаем файлы с ценами
-      if (!filePath.includes('allPrices.json') && 
+      if (!filePath.includes('all-prices.json') && 
           !filePath.includes('cars_dealer_price.json') && 
           !filePath.includes('cars.json') && 
           !filePath.includes('dealer_price.json') && 

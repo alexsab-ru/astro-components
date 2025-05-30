@@ -108,7 +108,7 @@ const mergedData = federalData.map(federalItem => {
 });
 
 // Сохраняем результат
-const outputPath = path.join(dataDirectory, 'allPrices.json');
+const outputPath = path.join(dataDirectory, 'all-prices.json');
 fs.writeFileSync(outputPath, JSON.stringify(mergedData, null, 2), 'utf-8');
-console.log('Файл allPrices.json успешно создан');
+console.log('Файл all-prices.json успешно создан');
 
