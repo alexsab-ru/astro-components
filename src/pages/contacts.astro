@@ -6,6 +6,7 @@ import AutoShowModal from '@/components/AutoShowModal.astro';
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 import WorkerItem from '@/components/Contacts/WorkerItem.astro';
 import settings from '@/data/settings.json';
+import PageH1 from '@/components/PageH1/Index.astro';
 const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_background, manager_photo } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
@@ -26,7 +27,7 @@ const workers = salons.flatMap(salon =>
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
 
 				<div class="md:w-2/5 py-10">
-					<h1 class="text-3xl sm:text-4xl font-bold">Контакты</h1>
+					<PageH1 h1="Контакты" classes="text-3xl sm:text-4xl font-bold" />
 					{legal_entity ? (
 						<div class="flex flex-wrap gap-y-5 sm:gap-y-8 mt-10">
 							{legal_entity && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />)}

@@ -6,6 +6,7 @@ import CarItem from "@/components/Cars/Item.astro";
 import UniversalSection from '@/components/Model/sections/universal.astro';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import SeoText from '@/components/Seo/Index.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
 const { slug } = Astro.params;
 const seoname = 'models-'+slug;
 
@@ -51,7 +52,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   description={`${model.mark_id} ${model.name} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={model.image ?? model.thumb}
 >
-  <h1 class="sr-only">Автомобиль {brand} {model.name} в {legal_city_where}</h1>
+  <PageH1 h1={`Автомобиль ${brand} ${model.name} в ${legal_city_where}`} classes="sr-only" />
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     sections.length > 0 && sections.map(s => ( <UniversalSection section={s} /> ))
