@@ -22,13 +22,13 @@
 
     // Функция для проверки и запуска скриптов аналитики
     function runTrackingScript(config) {
-        const {
+        const [
             functionName,
             jsonKey,
             isProduction = true,
             validator = null,
             isArray = false
-        } = config;
+        ] = config;
         
         // Проверка на production окружение, если требуется
         if (isProduction && process.env.NODE_ENV !== "production") return;
@@ -65,67 +65,22 @@
         window[functionName](scriptConfig);
     }
 
-    // Конфигурация для всех скриптов
+    // Конфигурация для всех скриптов с короткими именами функций
     const trackingConfigs = [
-        {
-            functionName: 'runGTM',
-            jsonKey: 'gtm'
-        },
-        {
-            functionName: 'runMETRIKA',
-            jsonKey: 'metrika',
-            isProduction: false,
-            isArray: true
-        },
-        {
-            functionName: 'runGA4',
-            jsonKey: 'ga4',
-            isArray: true
-        },
-        {
-            functionName: 'runRE',
-            jsonKey: 're'
-        },
-        {
-            functionName: 'runVK_RTRG',
-            jsonKey: 'vk-rtrg',
-            isArray: true
-        },
-        {
-            functionName: 'runTOP_MAIL_RU',
-            jsonKey: 'top.mail.ru',
-            isArray: true
-        },
-        {
-            functionName: 'runCALLTOUCH',
-            jsonKey: 'calltouch',
-            isProduction: false,
-            validator: (config) => isNonEmptyValue(config.mod_id)
-        },
-        {
-            functionName: 'runKONGET',
-            jsonKey: 'konget'
-        },
-        {
-            functionName: 'runSTREAMWOOD',
-            jsonKey: 'streamwood',
-            validator: (config) => isNonEmptyValue(config.swKey) && isNonEmptyValue(config.swDomainKey)
-        },
-        {
-            functionName: 'runSMARTPOINT',
-            jsonKey: 'smartpoint'
-        },
-        {
-            functionName: 'runWIDGETS',
-            jsonKey: 'widgets',
-            isArray: true,
-            validator: (config) => config.length > 0 && isNonEmptyValue(config[0])
-        }
+        ['_gtm', 'gtm'],
+        ['_ym', 'metrika', false, null, true],
+        ['_ga', 'ga4', true, null, true],
+        ['_re', 're'],
+        ['_vk', 'vk-rtrg', true, null, true],
+        ['_tm', 'top.mail.ru', true, null, true],
+        ['_ct', 'calltouch', false, (config) => isNonEmptyValue(config.mod_id)],
+        ['_kg', 'konget'],
+        ['_sw', 'streamwood', true, (config) => isNonEmptyValue(config.swKey) && isNonEmptyValue(config.swDomainKey)],
+        ['_sp', 'smartpoint'],
+        ['_wd', 'widgets', true, (config) => config.length > 0 && isNonEmptyValue(config[0]), true]
     ];
 
     function loadAnalyticsScripts() {
-        // console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-        // console.log("loadAnalyticsScripts", (Date.now() - startTime), scripts_json);
         if (!analyticsLoaded) {
             analyticsLoaded = true;
             window.removeEventListener('scroll', loadAnalyticsScripts);
@@ -136,7 +91,7 @@
                 try {
                     runTrackingScript(config);
                 } catch (error) {
-                    console.error(`Ошибка при запуске ${config.functionName}:`, error);
+                    console.error(`Ошибка при запуске скрипта:`, error);
                 }
             });
         }
