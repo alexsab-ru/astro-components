@@ -13,7 +13,10 @@ import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('service'));
 
 import modelsData from '@/data/models.json';
-const options = modelsData.services.map(({ id, name, mark_id }) => ({ id, name: `${mark_id} ${name}` }));
+const options = modelsData.services.map(({ id, name, mark_id }) => ({ 
+	id: `${mark_id}-${id}`.toLowerCase(), 
+	name: `${mark_id} ${name}` 
+}));
 ---
 
 <Layout title={`Запись на сервис ${brand}`} description={`Запись на сервис автомобилей ${brand} в ${legal_city_where}`}>
