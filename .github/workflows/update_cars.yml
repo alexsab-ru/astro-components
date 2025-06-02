@@ -340,5 +340,5 @@ jobs:
       additional-text: |
         ${{ needs.build.outputs.script_output }}
     secrets:
-      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_ERROR }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
