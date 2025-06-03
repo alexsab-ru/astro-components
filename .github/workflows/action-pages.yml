@@ -228,7 +228,7 @@ jobs:
       additional-text: |
         $(echo -n '${{ needs.build.outputs.after_deploy }}' | base64)
     secrets:
-      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_AFTER_DEPLOY }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   notify_telegram_about_special:
