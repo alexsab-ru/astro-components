@@ -13,9 +13,16 @@ import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from
 startNoBounce();
 initPersistCampaignData();
 cookiecook();
-connectForms('https://alexsab.ru/lead/test/', {
-	confirmModalText: 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!',
-});
+
+// Wait for window._dp to be available before connecting forms
+const waitForDp = setInterval(() => {
+	if (window._dp && window._dp.connectforms_link) {
+		clearInterval(waitForDp);
+		connectForms(window._dp.connectforms_link, {
+			confirmModalText: 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!',
+		});
+	}
+}, 100); // Check every 100ms
 
 document.addEventListener('DOMContentLoaded', () => {
 	new ResponsiveMenu('#site_nav ul');
