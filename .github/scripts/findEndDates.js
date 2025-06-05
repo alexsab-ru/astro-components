@@ -1,9 +1,23 @@
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const folderNames = ['special-offers', 'specials', 'specials-offers'];
 const folderName = folderNames.find(folderName => fs.existsSync(`./src/content/${folderName}`));
-const outputPath = './.github/scripts/special-offers-dates.json';
+const outputPath = './.github/scripts/special-offers-dates.txt';
 
-let results = []
+let results = [];
+
+const convertToMarkdown = (results) => {
+  const domain = process.env.DOMAIN;
+  let str = '❗️ *ВНИМАНИЕ!*\n\nПриближаются даты окончания акций:\n\n';
+  results.forEach(result => {
+    const fileNameWithoutExt = result.fileName.replace(/\.[^/.]+$/, '');
+    str += `https://${domain}/special-offers/${fileNameWithoutExt},\n*Даты окончания:*\n${result.dates.join(', ')}\n-----------\n`;
+  })
+  return str;
+};
 
 const convertToDDMMYYYY = (dateStr) => {
   
@@ -43,7 +57,7 @@ const searchDates = (fileContent, fileName) => {
 
   if (filteredDates.length) {
     results.push({
-      fileName: `./src/content/${folderName}/${fileName}`,
+      fileName: fileName,
       dates: filteredDates
     });
   } else {
@@ -65,7 +79,7 @@ if (folderName) {
   
   // Сохраняем результаты в файл
   
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2), 'utf8');
+  fs.writeFileSync(outputPath, convertToMarkdown(results), 'utf8');
   console.log(`Результаты сохранены в файл: ${outputPath}`);
 } else {
   console.log('Folder not found.');

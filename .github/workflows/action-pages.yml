@@ -176,13 +176,13 @@ jobs:
 
       - name: Check Specials date
         run: |
-          node .github/scripts/check_specials.js
+          node .github/scripts/findEndDates.js
 
       - name: Set output
         id: check_specials
         run: |
-          if [ -s check_specials.txt ]; then
-            echo "<pre>$(cat check_specials.txt)</pre>" > output_wrapped.txt
+          if [ -s special-offers-dates.txt ]; then
+            echo "<pre>$(cat special-offers-dates.txt)</pre>" > output_wrapped.txt
             # Кодируем содержимое файла в base64
             encoded_output=$(base64 -w 0 output_wrapped.txt)
             # Передаем закодированное значение
