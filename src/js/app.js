@@ -30,50 +30,6 @@ const lightbox = GLightbox({
 	slideEffect: 'fade',
 });
 
-function executeRecaptcha() {
-grecaptcha.ready(function() {
-	grecaptcha.execute('6Lepfy4pAAAAAAGHFP655qNe6Bb_BcskklcxajC6', {action: 'open'}).then(function(token) {
-		let formData = new FormData();
-		formData.append('g-recaptcha-response', token);
-		const params = new URLSearchParams([...formData]);
-		fetch("https://alexsab.ru/lead/re/", {
-			method: "POST",
-			mode: "cors",
-			cache: "no-cache",
-			credentials: "same-origin",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-			},
-			body: params,
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				// console.log('Success:', data);
-				window.re = data.data.response.success;
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-	});
-});
-}
-
-// Проверяем, определена ли grecaptcha
-if (typeof grecaptcha === "undefined") {
-	// Если grecaptcha не определена, устанавливаем интервал для проверки
-	var checkRecaptchaAvailability = setInterval(function() {
-		if (typeof grecaptcha !== "undefined") {
-			// Как только grecaptcha становится доступной, очищаем интервал
-			clearInterval(checkRecaptchaAvailability);
-			// Выполняем код с grecaptcha
-			executeRecaptcha();
-		}
-	}, 1000); // Проверяем каждую секунду
-} else {
-	// Если grecaptcha уже доступна, просто выполняем код
-	executeRecaptcha();
-}
-
 // Редирект, если в конце URL больше одного слеша
 const path = window.location.pathname;
 const regex = /\/{2,}$/;
