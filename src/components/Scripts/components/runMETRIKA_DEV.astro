@@ -18,6 +18,10 @@ function runMETRIKA(scripts_json_metrika) {
         "trackLinks": true,
         "accurateTrackBounce": true
     });
+    ym(48905003, 'params', {
+        domain_region: window.dealer_params.domain_region,
+        region: window.dealer_params.region
+    });
 }
 window._ym = runMETRIKA;
 </script>

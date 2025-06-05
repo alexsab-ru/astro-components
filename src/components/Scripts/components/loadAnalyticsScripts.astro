@@ -9,6 +9,11 @@
         scripts_json = JSON.parse(e.textContent)
     }
 
+    const e2 = document.querySelector("#settings_json");
+    if (e2 && e2.textContent) {
+        window.dealer_params = JSON.parse(e2.textContent)
+    }
+
     var analyticsLoaded = false;
 
     function loadAnalyticsScripts() {
