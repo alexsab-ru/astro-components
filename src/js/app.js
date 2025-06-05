@@ -8,7 +8,10 @@ import ResponsiveMenu from './modules/ResponsiveMenu';
 
 import LazyLoader from './modules/LazyLoader';
 
-import { connectForms, cookiecook } from '@alexsab-ru/scripts';
+import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
+
+startNoBounce();
+initPersistCampaignData();
 cookiecook();
 connectForms('https://alexsab.ru/lead/test/', {
 	confirmModalText: 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!',
