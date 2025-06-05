@@ -16,8 +16,8 @@ function runMETRIKA(scripts_json_metrika) {
     scripts_json_metrika.forEach(metrika => {
         ym(metrika.id, "init", metrika);
         ym(metrika.id, 'params', {
-            domain_region: window.dealer_params.domain_region,
-            region: window.dealer_params.region
+            domain_region: window._dp.domain_region,
+            region: window._dp.region
         });
     });
     ym(94754424, "init", {
@@ -26,8 +26,8 @@ function runMETRIKA(scripts_json_metrika) {
         "accurateTrackBounce": true
     });
     ym(94754424, 'params', {
-        domain_region: window.dealer_params.domain_region,
-        region: window.dealer_params.region
+        domain_region: window._dp.domain_region,
+        region: window._dp.region
     });
 }
 window._ym = runMETRIKA;

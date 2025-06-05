@@ -11,7 +11,7 @@
 
     const e2 = document.querySelector("#settings_json");
     if (e2 && e2.textContent) {
-        window.dealer_params = JSON.parse(e2.textContent)
+        window._dp = JSON.parse(e2.textContent)
     }
 
     // Check if analytics were already loaded in this session

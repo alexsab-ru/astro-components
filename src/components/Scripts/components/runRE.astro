@@ -7,8 +7,8 @@ const isProd = import.meta.env.PROD;
 <script>
 function runRE(scripts_json_re) {
     // console.log("runRE", scripts_json_re);
-    window.grecaptcha_open = window.dealer_params.grecaptcha_open;
-    window.grecaptcha_action = window.dealer_params.grecaptcha_action;
+    window.grecaptcha_open = window._dp.grecaptcha_open;
+    window.grecaptcha_action = window._dp.grecaptcha_action;
     var script = document.createElement('script');
     script.src = `https://www.google.com/recaptcha/api.js?render=${scripts_json_re}`;
     script.async = true;
