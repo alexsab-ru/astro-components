@@ -15,7 +15,7 @@ const path = Astro.url.pathname;
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
-[`<p class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</p>`] : 
+[`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
     .map(s => `<p class="text-sm">${s?.legal_entity}&nbsp;- ИНН:&nbsp;${s?.legal_inn}</p>`);
@@ -84,15 +84,12 @@ salons
 
         <div class="flex justify-between items-start gap-5 flex-wrap">
             <div class="flex flex-grow gap-5 flex-wrap items-start">
-                <div class="text-sm">
-                    <p class="text-sm mb-2">&copy; {YEAR}</p>
+                <div>
+                    <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
                 </div>
-                <div>
-                    <a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a><br>
-                    <a href="/cookie-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Правила использования cookie</a>
-                </div>
-                <div>Телефон для обращений по вопросам<br>персональных данных и cookie: <a href={`tel:${phoneFormat(phone_common)}`}>{phone_common}</a></div>
+                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a></div>
+                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Правила использования cookie</a></div>
             </div>
             <p class="made-by text-sm m-0 text-white/80 leading-none">Разработка <a href={url} class="hover:!text-white leading-none" target="_blank">alexsab.ru</a></p>
         </div>
