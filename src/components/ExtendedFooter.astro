@@ -82,8 +82,8 @@ salons
 
         <hr class="mt-5 mb-8 opacity-20">
 
-        <div class="flex justify-between items-start gap-5 flex-wrap">
-            <div class="flex flex-grow gap-5 flex-wrap items-start">
+        <div class="flex justify-between items-center gap-5 flex-wrap">
+            <div class="flex flex-grow gap-5 flex-wrap">
                 <div>
                     <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
@@ -91,7 +91,7 @@ salons
                 <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a></div>
                 <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Правила использования cookie</a></div>
             </div>
-            <p class="made-by text-sm m-0 text-white/80 leading-none">Разработка <a href={url} class="hover:!text-white leading-none" target="_blank">alexsab.ru</a></p>
+            <div class="made-by text-sm m-0 text-white/80 leading-none">Разработка <a href={url} class="hover:!text-white leading-none" target="_blank">alexsab.ru</a></div>
         </div>
 
     </div>
