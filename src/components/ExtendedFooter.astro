@@ -18,7 +18,7 @@ const LEGAL_SALONS_INFO = legal_entity && legal_inn ?
 [`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
-    .map(s => `<p class="text-sm">${s?.legal_entity}&nbsp;- ИНН:&nbsp;${s?.legal_inn}</p>`);
+    .map(s => `<p class="text-sm">${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
 ---
 
 <footer class="bg-black/90 text-white py-14 relative">

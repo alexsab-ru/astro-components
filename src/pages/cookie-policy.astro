@@ -9,7 +9,7 @@ const LEGAL_SALONS_INFO = legal_entity && legal_inn ?
 [`<span>${legal_entity} (ИНН:&nbsp;${legal_inn})</span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
-    .map(s => `<span><b>${s?.legal_entity}</b> (ИНН:&nbsp;${s?.legal_inn})</span>`);
+    .map(s => `<span><b>${s?.legal_entity}</b>${s?.legal_inn ? ` (ИНН:&nbsp;${s?.legal_inn})` : ''}</span>`);
 ---
 
 <PageLayout
