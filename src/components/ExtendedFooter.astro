@@ -1,6 +1,6 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer } = settings;
+const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { YEAR } from '@/js/utils/date';
@@ -15,10 +15,10 @@ const path = Astro.url.pathname;
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
-[`<p class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</p>`] : 
+[`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
-    .map(s => `<p class="text-sm">${s?.legal_entity}&nbsp;- ИНН:&nbsp;${s?.legal_inn}</p>`);
+    .map(s => `<p class="text-sm">${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
 ---
 
 <footer class="bg-black/90 text-white py-14 relative">
@@ -82,15 +82,16 @@ salons
 
         <hr class="mt-5 mb-8 opacity-20">
 
-        <div class="flex justify-between items-start gap-5 flex-wrap">
-            <div class="flex flex-grow gap-5 flex-wrap items-start">
-                <div class="text-sm">
-                    <p class="text-sm mb-2">&copy; {YEAR}</p>
+        <div class="flex justify-between items-start gap-10 flex-wrap">
+            <div class="flex flex-grow gap-10 flex-wrap">
+                <div>
+                    <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
                 </div>
-                <a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a>
+                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light hover:!text-white">Политика конфиденциальности</a></div>
+                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light hover:!text-white">Правила использования cookie</a></div>
             </div>
-            <p class="made-by text-sm m-0 text-white/80 leading-none">Разработка <a href={url} class="hover:!text-white leading-none" target="_blank">alexsab.ru</a></p>
+            <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:!text-white" target="_blank">alexsab.ru</a></div>
         </div>
 
     </div>
