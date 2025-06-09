@@ -1,5 +1,14 @@
 ---
 import scripts_json from '@/data/scripts.json';
+import settings_json from '@/data/settings.json';
+const { site_name, legal_city, connectforms_link, grecaptcha_open, grecaptcha_action } = settings_json;
+const dealer_params = JSON.stringify({
+    domain_region: site_name,
+    region: legal_city,
+    ...(connectforms_link && { connectforms_link }),
+    ...(grecaptcha_open && { grecaptcha_open }),
+    ...(grecaptcha_action && { grecaptcha_action })
+});
 import { cleanScriptsData } from '@/components/Scripts/components/cleanScriptsData';
 import GTM from '@/components/Scripts/components/runGTM.astro';
 import METRIKA_DEV from '@/components/Scripts/components/runMETRIKA_DEV.astro';
@@ -18,6 +27,7 @@ import LoadAnalyticsScripts from '@/components/Scripts/components/loadAnalyticsS
 const cleanedScripts = cleanScriptsData(scripts_json);
 ---
 <script id="scripts_json" type="application/ld+json" set:html={cleanedScripts}/>
+<script id="settings_json" type="application/ld+json" set:html={dealer_params}/>
 <GTM />
 <METRIKA_DEV />
 <METRIKA />

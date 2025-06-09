@@ -9,11 +9,20 @@
         scripts_json = JSON.parse(e.textContent)
     }
 
-    var analyticsLoaded = false;
+    const e2 = document.querySelector("#settings_json");
+    if (e2 && e2.textContent) {
+        window._dp = JSON.parse(e2.textContent)
+    }
+
+    // Check if analytics were already loaded in this session
+    var analyticsLoaded = sessionStorage.getItem('analyticsLoaded') === 'true';
 
     function loadAnalyticsScripts() {
         if (!analyticsLoaded) {
             analyticsLoaded = true;
+            // Save the state to sessionStorage
+            sessionStorage.setItem('analyticsLoaded', 'true');
+            
             window.removeEventListener('scroll', loadAnalyticsScripts);
             document.removeEventListener('mousemove', loadAnalyticsScripts);
 
@@ -43,12 +52,19 @@
     }
 
     function initializeEventListeners() {
-        // console.log("initializeEventListeners", analyticsLoaded);
+        // If analytics are already loaded, just run the scripts directly
+        if (analyticsLoaded) {
+            analyticsLoaded = false;
+            loadAnalyticsScripts();
+            return;
+        }
+        
+        // Otherwise, set up event listeners
         window.addEventListener('scroll', loadAnalyticsScripts);
         document.addEventListener('mousemove', loadAnalyticsScripts);
     }
 
-    // console.log("document.readyState", document.readyState);
+    // Initialize based on document ready state
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeEventListeners);
     } else {
