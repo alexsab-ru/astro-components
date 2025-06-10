@@ -117,7 +117,7 @@ import './styles.scss';
 
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
-				{links.length > 0 && ( <HeaderMenuList links={links} /> )}
+				{links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
 				<div>
 				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
