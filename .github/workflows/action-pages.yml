@@ -187,6 +187,7 @@ jobs:
             # encoded_output=$(base64 -w 0 output_wrapped.txt)
             # Передаем закодированное значение
             # echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
+            echo "test check_specials"
           fi
           # echo "Some script" && echo "specials='some text'" >> $GITHUB_OUTPUT
 
