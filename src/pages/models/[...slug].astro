@@ -11,8 +11,9 @@ const { slug } = Astro.params;
 const seoname = 'models-'+slug;
 
 
-import models from '@/data/models.json';
+import modelsData from '@/data/models.json';
 export async function getStaticPaths() {
+  const { models } = modelsData;
   return models.filter(m => m.show).map((model) => {
     return {
       params: { slug: model.id },

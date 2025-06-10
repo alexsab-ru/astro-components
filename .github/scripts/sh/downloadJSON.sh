@@ -135,3 +135,37 @@ fi
 # Показываем результат
 printf "\n${BGGREEN}Downloaded files:${Color_Off}\n"
 ls -al src/data
+
+# Проверяем содержимое models.json перед скачиванием общего файла
+if [ -f "src/data/models.json" ]; then
+    echo -e "\n${BGYELLOW}Проверяем содержимое models.json...${Color_Off}"
+    
+    # Проверяем первый символ файла после удаления пробелов
+    first_char=$(cat src/data/models.json | tr -d '[:space:]' | head -c 1)
+    
+    if [ "$first_char" = "{" ]; then
+        printf "${BGGREEN}models.json содержит объект - пропускаем скачивание общего файла${Color_Off}\n"
+        exit 0
+    elif [ "$first_char" = "[" ]; then
+        printf "${BGYELLOW}models.json содержит массив - продолжаем скачивание общего файла${Color_Off}\n"
+    else
+        printf "${BGRED}models.json имеет некорректный формат - продолжаем скачивание${Color_Off}\n"
+    fi
+else
+    printf "${BGYELLOW}models.json не найден - продолжаем скачивание общего файла${Color_Off}\n"
+fi
+
+# 1. Скачиваем общий models.json
+echo -e "\n${BGGREEN}Скачиваем общий models.json...${Color_Off}"
+curl -s "$JSON_PATH/models.json" -o src/data/all-models.json
+
+# Проверяем, что файл скачался и это не HTML-страница (например, 404)
+if [ ! -s src/data/all-models.json ] || grep -q '<!DOCTYPE html' src/data/all-models.json; then
+    printf "${BGRED}Внимание: models.json не найден или получен некорректный файл! Будет создан пустой models.json.${Color_Off}\n"
+    echo '{ "models": [], "testDrive": [], "services": [] }' > src/data/models.json
+else
+    node .github/scripts/filterModelsByBrand.js
+fi
+
+# 3. Удаляем временный файл
+# rm -f src/data/all-models.json

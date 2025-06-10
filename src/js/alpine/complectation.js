@@ -1,6 +1,7 @@
 // complectation.js
 import Alpine from 'alpinejs';
-import models from '@/data/models.json';
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
 import { useTranslit } from '@/js/utils/translit';
 import { currencyFormat } from '@/js/utils/numbers.format';
 
