@@ -11,8 +11,12 @@ on:
       - synchronize
       - closed
       - reopened
-  create: {}
-  delete: {}
+  create:
+    branches:
+      - '**'
+  delete:
+    branches:
+      - '**'
   issues:
     types:
       - opened
@@ -24,6 +28,11 @@ on:
         description: 'Additional text passed from the caller workflow'
         required: false
         type: string
+      parse-mode:
+        description: 'Telegram message parse mode (HTML, Markdown, or MarkdownV2)'
+        required: false
+        type: string
+        default: 'HTML'
     secrets:
       TELEGRAM_TO:
         description: 'Telegram ID passed from the caller workflow'
@@ -84,7 +93,8 @@ jobs:
           send_telegram_messages \
             "${{ secrets.TELEGRAM_TOKEN }}" \
             "${{ secrets.TELEGRAM_TO }}" \
-            "${{ steps.prepare.outputs.total_parts }}"
+            "${{ steps.prepare.outputs.total_parts }}" \
+            "${{ inputs.parse-mode || 'HTML' }}"
 
   create:
     if: ${{ github.event.master_branch != null && github.event.commits == null }}
@@ -102,7 +112,8 @@ jobs:
             "${{ secrets.TELEGRAM_TO_CREATE }}" \
             "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
 
-            added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})"
+            added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})" \
+            "${{ inputs.parse-mode || 'MarkdownV2' }}"
 
   pull_request:
     if: ${{ github.event.pull_request != null }}
@@ -121,7 +132,8 @@ jobs:
             "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
 
             pull request from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
-            ${{ github.event.pull_request.body }}"
+            ${{ github.event.pull_request.body }}" \
+            "${{ inputs.parse-mode || 'MarkdownV2' }}"
 
   delete:
     if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null }}
@@ -139,7 +151,8 @@ jobs:
             "${{ secrets.TELEGRAM_TO_DELETE }}" \
             "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
 
-            branch '\`${{ github.event.ref }}\`' is deleted"
+            branch '\`${{ github.event.ref }}\`' is deleted" \
+            "${{ inputs.parse-mode || 'MarkdownV2' }}"
 
   issues:
     if: ${{ github.event.issue != null }}
@@ -157,7 +170,8 @@ jobs:
             "${{ secrets.TELEGRAM_TO_ISSUES }}" \
             "*[${{ github.event.repository.name }}]* by *${{ github.actor }}*:
 
-            issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}"
+            issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}" \
+            "${{ inputs.parse-mode || 'MarkdownV2' }}"
 
   get_last_commit:
     if: ${{ inputs.additional-text != null }}
@@ -202,9 +216,8 @@ jobs:
           send_telegram_messages \
             "${{ secrets.TELEGRAM_TOKEN }}" \
             "${{ secrets.TELEGRAM_TO }}" \
-            "${{ steps.prepare.outputs.total_parts }}"
-
-
+            "${{ steps.prepare.outputs.total_parts }}" \
+            "${{ inputs.parse-mode || 'HTML' }}"
 
   # log-github-event-goodies:
   #   name: "LOG Everything on GitHub Event"
