@@ -18,10 +18,11 @@ const {
   showModelSelect = false,
 } = Astro.props;
 
-import models from '@/data/models.json';
-const options = models
-  .filter(m => m.show)
-  .map(m => ({id: m.id, name: m.name}));
+import modelsData from '@/data/models.json';
+const options = modelsData.services.map(({ id, name, mark_id }) => ({ 
+	id: `${mark_id}-${id}`.toLowerCase(), 
+	name: `${mark_id} ${name}` 
+}));
 ---
 
 <form class="flex flex-col gap-4 max-w-[500px] mx-auto">
