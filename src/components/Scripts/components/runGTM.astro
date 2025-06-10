@@ -3,7 +3,7 @@ import scripts_json from '@/data/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json && scripts_json.gtm && typeof scripts_json.gtm === 'string' && scripts_json.gtm.trim() !== "" && (
+{ isProd && scripts_json && scripts_json.gtm && typeof scripts_json.gtm.value === 'string' && scripts_json.gtm.value.trim() !== "" && (
 <script>
 function runGTM(scripts_json_gtm) {
     // console.log("runGTM", scripts_json_gtm);

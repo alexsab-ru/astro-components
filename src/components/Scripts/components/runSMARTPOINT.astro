@@ -3,7 +3,7 @@ import scripts_json from '@/data/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json.smartpoint && scripts_json.smartpoint != "" && (
+{ isProd && scripts_json.smartpoint && scripts_json.smartpoint.value != "" && (
 <script>
 function runSMARTPOINT(smartpoint) {
     // console.log("runSMARTPOINT", smartpoint);

@@ -3,7 +3,7 @@ import scripts_json from '@/data/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json.re && scripts_json.re !== "" && (
+{ isProd && scripts_json.re && scripts_json.re.value !== "" && (
 <script>
 function runRE(scripts_json_re) {
     // console.log("runRE", scripts_json_re);
@@ -18,31 +18,31 @@ function runRE(scripts_json_re) {
 window._re = runRE;
 
 function executeRecaptcha() {
-grecaptcha.ready(function() {
-	grecaptcha.execute(window.grecaptcha_open, {action: window.grecaptcha_action}).then(function(token) {
-		let formData = new FormData();
-		formData.append('g-recaptcha-response', token);
-		const params = new URLSearchParams([...formData]);
-		fetch("https://alexsab.ru/lead/re/", {
-			method: "POST",
-			mode: "cors",
-			cache: "no-cache",
-			credentials: "same-origin",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-			},
-			body: params,
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				// console.log('Success:', data);
-				window.re = data.data.response.success;
+	grecaptcha.ready(function() {
+		grecaptcha.execute(window.grecaptcha_open, {action: window.grecaptcha_action}).then(function(token) {
+			let formData = new FormData();
+			formData.append('g-recaptcha-response', token);
+			const params = new URLSearchParams([...formData]);
+			fetch("https://alexsab.ru/lead/re/", {
+				method: "POST",
+				mode: "cors",
+				cache: "no-cache",
+				credentials: "same-origin",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: params,
 			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
+				.then((res) => res.json())
+				.then((data) => {
+					// console.log('Success:', data);
+					window.re = data.data.response.success;
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+		});
 	});
-});
 }
 
 // Проверяем, определена ли grecaptcha

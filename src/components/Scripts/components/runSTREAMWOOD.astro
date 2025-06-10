@@ -3,7 +3,7 @@ import scripts_json from '@/data/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json.streamwood && scripts_json.streamwood.swKey && scripts_json.streamwood.swKey != "" && scripts_json.streamwood.swDomainKey && scripts_json.streamwood.swDomainKey != "" && (
+{ isProd && scripts_json.streamwood && scripts_json.streamwood.value.swKey && scripts_json.streamwood.value.swKey != "" && scripts_json.streamwood.value.swDomainKey && scripts_json.streamwood.value.swDomainKey != "" && (
 <script>
 function runSTREAMWOOD(streamwood) {
     // console.log("runSTREAMWOOD", streamwood);

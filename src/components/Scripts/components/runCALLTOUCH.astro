@@ -3,7 +3,7 @@ import scripts_json from '@/data/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json.calltouch.mod_id && scripts_json.calltouch.mod_id != "" && (
+{ isProd && scripts_json.calltouch.value.mod_id && scripts_json.calltouch.value.mod_id != "" && (
 <script>
 import { reachGoal } from '@alexsab-ru/scripts';
 function runCALLTOUCH(calltouch) {

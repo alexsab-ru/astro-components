@@ -3,7 +3,7 @@ import scripts_json from '@/data/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json.ga4 && scripts_json.ga4.length > 0 && scripts_json.ga4[0].id && String(scripts_json.ga4[0].id) !== "" && (
+{ isProd && scripts_json.ga4 && scripts_json.ga4.value.length > 0 && scripts_json.ga4.value[0].id && String(scripts_json.ga4.value[0].id) !== "" && (
 <script>
 function runGA4(scripts_json_ga4) {
     // console.log("runGA4", scripts_json_ga4);
