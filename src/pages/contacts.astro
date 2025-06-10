@@ -6,13 +6,19 @@ import AutoShowModal from '@/components/AutoShowModal.astro';
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 import WorkerItem from '@/components/Contacts/WorkerItem.astro';
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, yandex_widget_orgnization } = settings;
+import PageH1 from '@/components/PageH1/Index.astro';
+const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_background, manager_photo } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
+import { map } from 'astro:schema';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
 const salon = salons.length > 0 ? salons[0] : null;
-let workers = [];
-salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map(worker => workers.push({...worker, salonName: salon.name})));
+const workers = salons.flatMap(salon => 
+    salon?.workers?.map(worker => ({
+        ...worker, 
+        salonName: salon.name
+    })) || []
+);
 ---
 
 <Layout title={`Контакты автосалона ${site_name}`}>
@@ -21,7 +27,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
 
 				<div class="md:w-2/5 py-10">
-					<h1 class="text-3xl sm:text-4xl font-bold">Контакты</h1>
+					<PageH1 h1="Контакты" classes="text-3xl sm:text-4xl font-bold" />
 					{legal_entity ? (
 						<div class="flex flex-wrap gap-y-5 sm:gap-y-8 mt-10">
 							{legal_entity && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />)}
@@ -51,7 +57,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 					{yandex_widget_orgnization ? (
 						<MapWidget class="h-full" />
 					) : (
-						<Map mapImg="https://cdn.alexsab.ru/maps/map-bg.webp" salons={salons} classes="h-full" />
+						<Map mapImg={map_background} salons={salons} classes="h-full" />
 					)}
 				</div>
 
@@ -76,7 +82,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 	modalShow - Количество милесекунд до показа окна (по умолчанию 20000)
 	title - Заголовок
 	modalPosition - позиция окна left-top|right-top|right-bottom|left-bottom|center (по умолчанию center)
-	img - фото человека (по умолчанию https://cdn.alexsab.ru/people/user.webp)
+	img - фото человека (по умолчанию пусто)
 	imgPosition - позиция фото right|left (по умолчанию right)
 -->
 
@@ -84,7 +90,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 	modalShow = 20000
 	title="Здравствуйте, оставьте телефон, я&nbsp;перезвоню и&nbsp;расскажу о&nbsp;преимуществах работы"
 	modalPosition="right-bottom"
-	img="https://cdn.alexsab.ru/people/user.webp"
+	img={manager_photo}
 	imgPosition="right"
 	formName="Форма со страницы - Контакты"
 />

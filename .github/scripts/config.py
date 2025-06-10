@@ -2,6 +2,7 @@
 import json
 import os
 
+
 # Загружаем model_mapping из JSON файла
 def load_model_mapping():
     """Загрузка маппинга моделей из JSON файла."""

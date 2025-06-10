@@ -1,6 +1,7 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, brand } = settings;
+const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common } = settings;
+const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
@@ -14,20 +15,26 @@ const path = Astro.url.pathname;
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
-[`<p class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</p>`] : 
+[`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
-    .map(s => `<p class="text-sm">${s?.legal_entity}&nbsp;- ИНН:&nbsp;${s?.legal_inn}</p>`);
+    .map(s => `<p class="text-sm">${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
 ---
 
 <footer class="bg-black/90 text-white py-14 relative">
     <div class="container">
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-y-10 lg:gap-y-5">
 
-            <div class="">
-                <a href="/" class="uppercase text-2xl inline-block mb-5 transition-opacity hover:opacity-70">{site_name}</a>
-                <div class="flex flex-wrap items-center gap-5">
-                    <img src="/img/logo/logo.svg" class="h-8 w-auto filter brightness-0 invert opacity-70" loading="lazy" alt={site_name} />
+            <div class="flex flex-col space-y-5 w-fit divide-y divide-white/5">
+                <div class="">
+                    <img src={logo_footer || logo_header} class="h-8 w-auto" loading="lazy" alt={site_name} />
+                </div>
+                <div>
+                    {logo_dealer ? (
+                        <img src={logo_dealer} class={`max-w-[200px] pt-4`} alt={site_name} loading="lazy" />
+                    ) : (
+                        <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70 pt-4">{site_name}</a>
+                    )}
                 </div>
             </div>
             <div class="">
@@ -75,15 +82,16 @@ salons
 
         <hr class="mt-5 mb-8 opacity-20">
 
-        <div class="flex justify-between items-start gap-5 flex-wrap">
-            <div class="flex flex-grow gap-5 flex-wrap items-start">
-                <div class="text-sm">
-                    <p class="text-sm mb-2">&copy; {YEAR}</p>
+        <div class="flex justify-between items-start gap-10 flex-wrap">
+            <div class="flex flex-grow gap-10 flex-wrap">
+                <div>
+                    <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
                 </div>
-                <a href="/privacy-policy/" class="text-white/80 text-sm font-light leading-none hover:!text-white">Политика конфиденциальности</a>
+                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light hover:!text-white">Политика конфиденциальности</a></div>
+                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light hover:!text-white">Правила использования cookie</a></div>
             </div>
-            <p class="made-by text-sm m-0 text-white/80 leading-none">Разработка <a href={url} class="hover:!text-white leading-none" target="_blank">alexsab.ru</a></p>
+            <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:!text-white" target="_blank">alexsab.ru</a></div>
         </div>
 
     </div>

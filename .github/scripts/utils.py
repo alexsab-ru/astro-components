@@ -39,6 +39,22 @@ def process_permalink(vin):
     return f"/cars/{vin[:5]}-{vin[-4:]}/"
 
 
+def format_html_for_mdx(raw_html):
+    soup = BeautifulSoup(raw_html, "html.parser")
+    
+    # Получаем HTML без форматирования (сохраняет &nbsp;)
+    html_output = str(soup)
+    
+    # Экранируем проблемные символы для MDX
+    html_output = html_output.replace('\\', '\\\\')  # Экранируем обратные слеши
+    html_output = html_output.replace('{', '\\{')        # Экранируем фигурные скобки
+    html_output = html_output.replace('}', '\\}')
+    
+    html_output = re.sub(r'(<[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
+    html_output = re.sub(r'(</[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
+    
+    return html_output
+
 # Helper function to process description and add it to the body
 def process_description(desc_text):
     """
@@ -78,8 +94,7 @@ def process_description(desc_text):
             processed_lines.append(f"<p>{line}</p>")
     
     raw_html = '\n'.join(processed_lines)
-    soup = BeautifulSoup(raw_html, "html.parser")
-    pretty_html = soup.prettify()
+    pretty_html = format_html_for_mdx(raw_html)
             
     return pretty_html
 

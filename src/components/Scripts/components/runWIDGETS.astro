@@ -1,0 +1,80 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.widgets && scripts_json.widgets.length > 0 && scripts_json.widgets[0] != "" && (
+<script>
+function runWIDGETS(widgets) {
+    // Нормализуем входные данные - приводим к массиву
+    let widgetArray;
+    
+    if (typeof widgets === 'string') {
+        // Если передана строка, оборачиваем в массив
+        widgetArray = [widgets];
+    } else if (Array.isArray(widgets)) {
+        // Если уже массив, используем как есть
+        widgetArray = widgets;
+    } else if (widgets && typeof widgets === 'object') {
+        // Если объект, берем значения
+        widgetArray = Object.values(widgets);
+    } else {
+        console.warn('runWIDGETS: неподдерживаемый тип данных');
+        return;
+    }
+
+    // console.log("runWIDGETS processing", widgetArray.length, "widgets");
+    
+    widgetArray.forEach((widget, index) => {
+        if (!widget || (typeof widget === 'string' && widget.trim() === "")) {
+            return; // Пропускаем пустые элементы
+        }
+        
+        try {
+            // Преобразуем в строку если это не строка
+            const widgetHTML = String(widget).trim();
+            
+            // Создаем временный div для парсинга HTML
+            const div = document.createElement('div');
+            div.innerHTML = widgetHTML;
+            
+            // Получаем все script элементы (может быть несколько)
+            const scriptTags = div.querySelectorAll('script');
+            
+            if (scriptTags.length === 0) {
+                console.warn(`runWIDGETS: не найден script тег в виджете ${index + 1}`);
+                return;
+            }
+            
+            scriptTags.forEach(scriptTag => {
+                // Создаем новый script элемент
+                const script = document.createElement('script');
+                
+                // Копируем все атрибуты из исходного тега
+                Array.from(scriptTag.attributes).forEach(attr => {
+                    script.setAttribute(attr.name, attr.value);
+                });
+                
+                // Копируем содержимое скрипта
+                if (scriptTag.textContent) {
+                    script.textContent = scriptTag.textContent;
+                }
+                
+                // Добавляем обработчики событий для отслеживания загрузки
+                if (script.src) {
+                    script.onload = () => console.log(`Widget script loaded: ${script.src}`);
+                    script.onerror = (error) => console.error(`Widget script failed to load: ${script.src}`, error);
+                }
+                
+                // Добавляем скрипт в head
+                document.head.appendChild(script);
+            });
+            
+        } catch (error) {
+            console.error(`runWIDGETS: ошибка при обработке виджета ${index + 1}:`, error);
+        }
+    });
+}
+window._wd = runWIDGETS;
+</script>
+)}

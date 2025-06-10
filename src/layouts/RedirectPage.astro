@@ -22,6 +22,9 @@ let {
 	saveSearchParam = true,
 } = Astro.props;
 
+import settings from '@/data/settings.json';
+const { favicon } = settings;
+
 import scripts_json from '@/data/scripts.json';
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 ---
@@ -31,7 +34,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href={favicon} />
 
 		<!-- Canonical URL -->
 		<link rel="canonical" href={canonicalURL} />

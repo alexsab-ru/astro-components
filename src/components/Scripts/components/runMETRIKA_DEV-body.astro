@@ -1,0 +1,8 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ !isProd && (
+<noscript><div><img src="https://mc.yandex.ru/watch/48905003" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+)}

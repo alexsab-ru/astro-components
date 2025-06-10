@@ -174,6 +174,23 @@ jobs:
         run: |
           pnpm build --outDir ./_site
 
+      - name: Check Specials date
+        run: |
+          node .github/scripts/findEndDates.js
+
+      - name: Set output
+        id: check_specials
+        run: |
+          if [ -s special-offers-dates.txt ]; then
+            echo "<pre>$(cat special-offers-dates.txt)</pre>" > output_wrapped.txt
+            # Кодируем содержимое файла в base64
+            encoded_output=$(base64 -w 0 output_wrapped.txt)
+            # Передаем закодированное значение
+            echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
+          fi
+          echo "Some script" && echo "specials='some text'" >> $GITHUB_OUTPUT
+
+
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
         # Automatically uploads an artifact from the './_site' directory by default
@@ -187,6 +204,7 @@ jobs:
 
     outputs:
       changes: ${{ steps.check_changes.outputs.changes }}
+      specials: ${{ steps.check_specials.outputs.specials }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
 
   # Deployment job
@@ -210,5 +228,16 @@ jobs:
       additional-text: |
         $(echo -n '${{ needs.build.outputs.after_deploy }}' | base64)
     secrets:
-      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_AFTER_DEPLOY }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  notify_telegram_about_special:
+    needs: [build]
+    if: needs.build.outputs.specials != ''
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      additional-text: |
+        $(echo -n '${{ needs.build.outputs.specials }}' | base64)
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}

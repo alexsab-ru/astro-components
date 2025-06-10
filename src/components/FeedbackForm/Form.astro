@@ -3,14 +3,25 @@ import { AGREE_LABEL } from '@/const';
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import FormSelect from '@/components/FormSelect.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
+interface Props{
+  dataFormName?: string;
+  showModelSelect?: boolean;
+}
 const {
   dataFormName = 'Форма обратной связи на странице',
+  showModelSelect = false,
 } = Astro.props;
+
+import models from '@/data/models.json';
+const options = models
+  .filter(m => m.show)
+  .map(m => ({id: m.id, name: m.name}));
 ---
 
 <form class="flex flex-col gap-4 max-w-[500px] mx-auto">
@@ -22,6 +33,9 @@ const {
     class="h-0 opacity-0 absolute -z-[100]"
     placeholder="mail@example.com"
 />
+  
+  {showModelSelect && <FormSelect name="model" placeholder="Выберите модель" options={options} />}  
+  
   <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
   <Input
     type="tel"

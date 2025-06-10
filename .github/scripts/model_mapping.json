@@ -547,7 +547,10 @@
             "folder": "empow",
             "cyrillic": "Эмпоу",
             "color": {
-                "Черный": "black.webp"
+                "Черный": "black.webp",
+                "Белый": "white.webp",
+                "Серый": "gray.webp",
+                "Серебристый": "silver.webp"
             }
         }
     },
@@ -1365,6 +1368,17 @@
         "F7, II": {
             "folder": "f7",
             "cyrillic": "F7",
+            "color": {
+                "Синий": "oceanic-lapis-lazuli.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Белый": "noble-agate.webp",
+                "Серый": "smoky-pearls.webp"
+            }
+        },
+        "F7x, II": {
+            "folder": "new-haval-f7x",
+            "cyrillic": "F7x",
             "color": {
                 "Синий": "oceanic-lapis-lazuli.webp",
                 "Черный": "galactic-black.webp",

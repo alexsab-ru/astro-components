@@ -1,0 +1,44 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import CookiePolicy from '@/content/cookie-policy.mdx';
+import settings from '@/data/settings.json';
+const { site_name, legal_entity, legal_inn, legal_city } = settings;
+import scripts from '@/data/scripts.json';
+const { site } = scripts;
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('cookie_policy'));
+const common_text = legal_entity && legal_inn ? 
+
+`Настоящая Политика обработки файлов cookie (далее — «Политика») определяет порядок использования файлов cookie на сайте ${legal_entity} (ИНН ${legal_inn}, г. ${legal_city}, сайт: ${site}) (далее — «Сайт»). Используя Сайт, вы соглашаетесь с условиями обработки файлов cookie, изложенными в настоящей Политике. Если вы не согласны с использованием файлов cookie, вы можете изменить настройки своего браузера или отказаться от использования Сайта.` : 
+
+`Настоящая Политика обработки файлов cookie (далее — «Политика») определяет порядок использования файлов cookie на сайте ${site} (далее — «Сайт»), принадлежащем следующим юридическим лицам:` +
+
+salons
+    .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
+    .map(s => `<br />- ${s?.legal_entity}${s?.legal_inn ? `, ИНН: ${s?.legal_inn}` : ''}${s?.legal_city ? `, г. ${s?.legal_city}` : ''}`) +
+
+`<br />(далее совместно именуемые — «Операторы» или «Мы»).` +
+`<br />Используя Сайт, вы соглашаетесь с условиями обработки файлов cookie, изложенными в настоящей Политике. Если вы не согласны с использованием файлов cookie, вы можете изменить настройки своего браузера или отказаться от использования Сайта.`
+
+const contact_text = legal_entity && legal_inn ? 
+`По всем вопросам, связанным с обработкой файлов cookie, вы можете обратиться к администрации ${legal_entity} (ИНН ${legal_inn}, г. ${legal_city}) через форму обратной связи на сайте ${site} или по контактным данным, указанным на Сайте.` : 
+`По всем вопросам, связанным с обработкой файлов cookie, вы можете обратиться к администрациям Операторов через форму обратной связи на сайте ${site} или по контактным данным, указанным на Сайте.`;
+---
+
+<PageLayout
+    h1="Политика обработки файлов cookie"
+    title="Политика обработки файлов cookie"
+    breadcrumb={[{name:"Политика обработки файлов cookie",href:""}]}
+>
+
+<p><strong>1. Общие положения</strong></p>
+
+<p set:html={common_text} />
+
+<CookiePolicy />
+
+<p set:html={contact_text} />
+
+
+</PageLayout>

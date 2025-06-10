@@ -1,0 +1,34 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'
+name: ci
+jobs:
+  check_links:
+    runs-on: ubuntu-latest
+    outputs:
+      has_broken_links: ${{ steps.check_links.outputs.has_broken_links }}
+      broken_links_output: ${{ steps.check_links.outputs.script_output }}
+    steps:
+      - name: Check links
+        id: check_links
+        run: |
+          node .github/scripts/checkLinks.js
+          if [ -s broken_links.txt ]; then
+            echo "<pre>$(cat broken_links.txt)</pre>" > output_wrapped.txt
+            encoded_output=$(base64 -w 0 output_wrapped.txt)
+            echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
+            echo "has_broken_links=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_broken_links=false" >> $GITHUB_OUTPUT
+          fi
+
+  notify_telegram:
+    needs: check_links
+    if: needs.check_links.outputs.has_broken_links == 'true'
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      additional-text: ${{ needs.check_links.outputs.broken_links_output }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_LINKS }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}

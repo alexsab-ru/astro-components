@@ -1,15 +1,10 @@
 ---
 const { data = {}, totalShow = true } = Astro.props;
 import { declOfNums } from '@/js/utils/numbers.format';
+import PageH1 from '@/components/PageH1/Index.astro';
 ---
 
-{
-	data.h1 && (
-		<h1 class="xs:text-lg text-2xl sm:text-4xl font-medium uppercase">
-			{data.h1}
-		</h1>
-	)
-}
+<PageH1 h1={data.h1} classes="xs:text-lg text-2xl sm:text-4xl font-medium uppercase" />
 
 {
 	data.complectation_name && data.complectation_name !== "" && (

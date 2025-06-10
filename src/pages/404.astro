@@ -2,8 +2,9 @@
 import Layout from '@/layouts/Layout.astro';
 import PostItem from '@/components/Post/Item.astro';
 import CarItem from '@/components/Cars/Item.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
 const title = 'Ошибка 404';
-const pageTitle = '404. Такая страница не найдена';
+const description = '404. Такая страница не найдена';
 import { getCollection } from 'astro:content';
 const cars = await getCollection('cars');
 const special = await getCollection('special-offers');
@@ -12,11 +13,11 @@ const special = await getCollection('special-offers');
 // }
 ---
 
-<Layout title={title} description={pageTitle}>
+<Layout title={title} description={description}>
 	<section class="relative pb-10 px-5">
 		<div class="flex flex-col items-center justify-center gap-5 sm:gap-10 px-2">
 			<div class="text-lg sm:text-3xl md:text-4xl lg:text-6xl text-center">
-				<h1 class="uppercase font-bold">{pageTitle}</h1>
+				<PageH1 h1={PageH1} classes="uppercase font-bold" />
 			</div>
 			<a href="/" class="btn inline-block mt-5 mb-10">Назад</a>
 		</div>
