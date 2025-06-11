@@ -460,23 +460,22 @@ def print_message(message):
 def check_local_files(brand, model, color, vin):
     """Проверяет наличие локальных файлов изображений."""
     folder = get_folder(brand, model)
-    color_image = get_color_filename(brand, model, color)
-    if folder and color_image:
-        thumb_path = os.path.join("img", "models", folder, "colors", color_image)
-        thumb_brand_path = os.path.join("img", "models", brand.lower(), folder, "colors", color_image)
+    if folder:
+        color_image = get_color_filename(brand, model, color)
+        if color_image:
+
+            thumb_path = os.path.join("img", "models", folder, "colors", color_image)
+            thumb_brand_path = os.path.join("img", "models", brand.lower(), folder, "colors", color_image)
         
-        # Выводим информацию о поиске файлов
-        print_message(f"Ищем файл по пути: public/{thumb_path}")
-        print_message(f"Ищем файл по пути: public/{thumb_brand_path}")
-        
-        # Проверяем, существует ли файл
-        if os.path.exists(f"public/{thumb_path}"):
-            return f"/{thumb_path}"
-        elif os.path.exists(f"public/{thumb_brand_path}"):
-            print_message(f"Не найден файл по пути: public/{thumb_path}")
-            return f"/{thumb_brand_path}"
+            # Проверяем, существует ли файл
+            if os.path.exists(f"public/{thumb_path}"):
+                return f"/{thumb_path}"
+            elif os.path.exists(f"public/{thumb_brand_path}"):
+                return f"/{thumb_brand_path}"
+            else:
+                print_message(f"Не найден файл {color_image} по пути public/{thumb_path} или public/{thumb_brand_path}")
+                return "https://cdn.alexsab.ru/errors/404.webp"
         else:
-            print_message(f"Не найден файл по пути: public/{thumb_brand_path}")
             return "https://cdn.alexsab.ru/errors/404.webp"
     else:
         return "https://cdn.alexsab.ru/errors/404.webp"
@@ -495,25 +494,23 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
     color_image = get_color_filename(brand, model, color)
 
     # Проверка через CDN сервис
-    if folder and color_image:
-        cdn_path = f"https://cdn.alexsab.ru/b/{brand.lower()}/img/models/{folder}/colors/{color_image}"
-        try:
-            response = requests.head(cdn_path)
-            if response.status_code == 200:
-                thumb = cdn_path
-            else:
-                # Если файл не найден в CDN, проверяем локальные файлы
-                errorText = f"Не удалось найти файл {cdn_path}. Статус {response.status_code}"
+    if folder:
+        if color_image:
+            cdn_path = f"https://cdn.alexsab.ru/b/{brand.lower()}/img/models/{folder}/colors/{color_image}"
+            try:
+                response = requests.head(cdn_path)
+                if response.status_code == 200:
+                    thumb = cdn_path
+                else:
+                    # Если файл не найден в CDN, проверяем локальные файлы
+                    errorText = f"Не удалось найти файл {color_image} по пути {cdn_path}. Статус {response.status_code}"
+                    print_message(errorText)
+                    thumb = check_local_files(brand, model, color, vin)
+            except requests.RequestException as e:
+                # В случае ошибки при проверке CDN, используем локальные файлы
+                errorText = f"Ошибка при проверке CDN: {str(e)}"
                 print_message(errorText)
                 thumb = check_local_files(brand, model, color, vin)
-        except requests.RequestException as e:
-            # В случае ошибки при проверке CDN, используем локальные файлы
-            errorText = f"Ошибка при проверке CDN: {str(e)}"
-            print_message(errorText)
-            thumb = check_local_files(brand, model, color, vin)
-    else:
-        # Если не удалось получить folder или color_image, проверяем локальные файлы
-        thumb = check_local_files(brand, model, color, vin)
 
     # Forming the YAML frontmatter
     content = "---\n"
