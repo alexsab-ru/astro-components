@@ -2,6 +2,12 @@
 import json
 import os
 
+def print_message(message):
+    print("")
+    print(message)
+    print("")
+    with open('output.txt', 'a') as file:
+        file.write(f"{message}\n")
 
 # Загружаем model_mapping из JSON файла
 def load_model_mapping():
@@ -42,6 +48,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not brand_key:
+        errorText = f"Не хватает бренда {brand} в model_mapping.json"
+        print_message(errorText)
         return None
     
     # Найдем модель независимо от регистра
@@ -51,6 +59,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not model_key:
+        errorText = f"Не хватает модели {model} бренда {brand} в model_mapping.json"
+        print_message(errorText)
         return None
     
     model_data = model_mapping[brand_key][model_key]
@@ -65,16 +75,22 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         
         if color_key:
             return model_data['color'][color_key]
-        return None
+        else:
+            errorText = f"Не хватает цвета {color} модели {model} бренда {brand} в model_mapping.json"
+            print_message(errorText)
+            return None
     
     # Если запрашивается конкретное свойство
     if property:
         normalized_property = property.lower()
         if normalized_property in ['folder', 'cyrillic']:
             return model_data[normalized_property]
-        if normalized_property == 'colors':
+        elif normalized_property == 'colors':
             return model_data['color']
-        return None
+        else:
+            errorText = f"Не хватает {property} модели {model} бренда {brand} в model_mapping.json"
+            print_message(errorText)
+            return None
     
     # Возвращаем все данные модели, если не указаны property и color
     return model_data

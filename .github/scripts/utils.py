@@ -454,7 +454,7 @@ def print_message(message):
     print("")
     print(message)
     print("")
-    with open('output.txt', 'a') as file:
+    with open('output.txt', 'a', encoding='utf-8') as file:
         file.write(f"{message}\n")
 
 def check_local_files(brand, model, color, vin):
@@ -464,19 +464,21 @@ def check_local_files(brand, model, color, vin):
     if folder and color_image:
         thumb_path = os.path.join("img", "models", folder, "colors", color_image)
         thumb_brand_path = os.path.join("img", "models", brand.lower(), folder, "colors", color_image)
+        
+        # Выводим информацию о поиске файлов
+        print_message(f"Ищем файл по пути: public/{thumb_path}")
+        print_message(f"Ищем файл по пути: public/{thumb_brand_path}")
+        
         # Проверяем, существует ли файл
         if os.path.exists(f"public/{thumb_path}"):
             return f"/{thumb_path}"
         elif os.path.exists(f"public/{thumb_brand_path}"):
+            print_message(f"Не найден файл по пути: public/{thumb_path}")
             return f"/{thumb_brand_path}"
         else:
-            errorText = f"VIN: {vin}. Не хватает файла цвета: {color}, {thumb_path} в папке public."
-            print_message(errorText)
+            print_message(f"Не найден файл по пути: public/{thumb_brand_path}")
             return "https://cdn.alexsab.ru/errors/404.webp"
     else:
-        errorText = f"VIN: {vin}. Не хватает бренд: {brand}, модели: {model}, цвета: {color} в model_mapping.json."
-        print_message(errorText)
-        # Если 'model' или 'color' не найдены, используем путь к изображению ошибки 404
         return "https://cdn.alexsab.ru/errors/404.webp"
 
 
