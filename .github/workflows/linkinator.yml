@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * *'
-name: ci
+name: Linkinator
 jobs:
   check_links:
     runs-on: ubuntu-latest
