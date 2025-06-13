@@ -2,6 +2,25 @@
 import json
 import os
 
+COLOROFF='\033[0m'
+BGYELLOW='\033[30;43m'
+BGGREEN='\033[30;42m'
+BGRED='\033[30;41m'
+TEXTRED='\033[30;31m'
+
+def print_message(message, type='info'):
+    print("")
+    if type == 'info':
+        print(message)
+    elif type == 'warning':
+        print(f"{BGYELLOW}{message}{COLOROFF}")
+    elif type == 'error':
+        print(f"{BGRED}{message}{COLOROFF}")
+    elif type == 'success':
+        print(f"{BGGREEN}{message}{COLOROFF}")
+    print("")
+    with open('output.txt', 'a') as file:
+        file.write(f"{message}\n")
 
 # Загружаем model_mapping из JSON файла
 def load_model_mapping():
@@ -42,6 +61,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not brand_key:
+        errorText = f"Не хватает бренда `{brand}` в model_mapping.json"
+        print_message(errorText, 'error')
         return None
     
     # Найдем модель независимо от регистра
@@ -51,6 +72,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not model_key:
+        errorText = f"Не хватает модели `{model}` бренда `{brand}` в model_mapping.json"
+        print_message(errorText, 'error')
         return None
     
     model_data = model_mapping[brand_key][model_key]
@@ -65,16 +88,22 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         
         if color_key:
             return model_data['color'][color_key]
-        return None
+        else:
+            errorText = f"Не хватает цвета `{color}` модели `{model}` бренда `{brand}` в model_mapping.json"
+            print_message(errorText, 'error')
+            return None
     
     # Если запрашивается конкретное свойство
     if property:
         normalized_property = property.lower()
         if normalized_property in ['folder', 'cyrillic']:
             return model_data[normalized_property]
-        if normalized_property == 'colors':
+        elif normalized_property == 'colors':
             return model_data['color']
-        return None
+        else:
+            errorText = f"Не хватает `{property}` модели `{model}` бренда `{brand}` в model_mapping.json"
+            print_message(errorText, 'error')
+            return None
     
     # Возвращаем все данные модели, если не указаны property и color
     return model_data

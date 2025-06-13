@@ -39,15 +39,13 @@ const optionsJSON = JSON.stringify(testDrive);
 			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.name">
 			<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white xl:text-black">
 				<template x-for="char in current?.globalChars">
-					<template x-if="model.show">
-						<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
-							<div class="text-xs" x-text="char.title+':'"></div>
-							<div>
-								<b class="text-base xl:text-lg font-bold" x-text="char.value"></b>{' '}
-								<span class="xs:text-[11px]" x-text="char?.measure"></span>
-							</div>
+					<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
+						<div class="text-xs" x-text="char.title+':'"></div>
+						<div>
+							<b class="text-base xl:text-lg font-bold" x-text="char.value"></b>{' '}
+							<span class="xs:text-[11px]" x-text="char?.measure"></span>
 						</div>
-					</template>
+					</div>
 				</template>
 			</div>
 		</div>
@@ -55,13 +53,20 @@ const optionsJSON = JSON.stringify(testDrive);
 		<div class="p-5 sm:p-10 space-y-10 w-full lg:w-2/5 2xl:w-1/2" x-cloak>
 			<PageH1 h1="Записаться на&nbsp;тест-драйв" classes="text-3xl sm:text-4xl font-bold text-center" />
 			<div class="flex justify-center gap-4 flex-wrap">
-				<template x-for="model in models">
-					<button
-						class="text-sm sm:text-base py-3 px-2 sm:px-4 rounded relative"
-						:class="model?.id === current?.id ? 'bg-accent-500 !text-white' : 'bg-gray-200'"
-						x-html="`${model?.name} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] !leading-none text-gray-500'>${model?.mark_id}</small>`"
-						@click="currentModel(model.id)"
-					></button>
+				<template x-for="(model, index) in models" :key="model.id">
+					<div class="contents">
+						<!-- Невидимый разделитель перед новым брендом -->
+						<div x-show="index > 0 && models[index - 1].mark_id !== model.mark_id" 
+							 class="basis-full h-0"></div>
+						
+						<!-- Ваша кнопка -->
+						<button
+							class="text-sm sm:text-base py-3 px-2 sm:px-4 rounded relative"
+							:class="model?.id === current?.id ? 'bg-accent-500 !text-white' : 'bg-gray-200'"
+							x-html="`${model?.name} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] !leading-none text-gray-500'>${model?.mark_id}</small>`"
+							@click="currentModel(model.id)"
+						></button>
+					</div>
 				</template>
 			</div>
 			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">

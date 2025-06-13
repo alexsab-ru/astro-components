@@ -167,29 +167,25 @@ jobs:
       - name: Replace Placeholders in JSON
         if: steps.check_changes.outputs.changes == 'true'
         run: |
-          pnpm replacePlaceholdersInJson
+          pnpm replacePlaceholdersAndSearchDates
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
 
       - name: Astro Build
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm build --outDir ./_site
 
-      - name: Check Specials date
-        run: |
-          node .github/scripts/findEndDates.js
-
       - name: Set output
         id: check_specials
         run: |
           if [ -s special-offers-dates.txt ]; then
-            # echo "<pre>$(cat special-offers-dates.txt)</pre>" > output_wrapped.txt
+            echo "$(cat special-offers-dates.txt)" > output_wrapped.txt
             # Кодируем содержимое файла в base64
-            # encoded_output=$(base64 -w 0 output_wrapped.txt)
+            encoded_output=$(base64 -w 0 output_wrapped.txt)
             # Передаем закодированное значение
-            # echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
-            echo "test check_specials"
+            echo "specials=$encoded_output" >> $GITHUB_OUTPUT
           fi
-          # echo "Some script" && echo "specials='some text'" >> $GITHUB_OUTPUT
 
 
       - name: Upload artifact

@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * *'
-name: ci
+name: Linkinator
 jobs:
   check_links:
     runs-on: ubuntu-latest
@@ -10,6 +10,19 @@ jobs:
       has_broken_links: ${{ steps.check_links.outputs.has_broken_links }}
       broken_links_output: ${{ steps.check_links.outputs.script_output }}
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install --no-frozen-lockfile
+
       - name: Check links
         id: check_links
         run: |
@@ -22,6 +35,8 @@ jobs:
           else
             echo "has_broken_links=false" >> $GITHUB_OUTPUT
           fi
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
 
   notify_telegram:
     needs: check_links
