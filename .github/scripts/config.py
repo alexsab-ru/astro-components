@@ -2,6 +2,12 @@
 import json
 import os
 
+COLOROFF='\033[0m'
+BGYELLOW='\033[30;43m'
+BGGREEN='\033[30;42m'
+BGRED='\033[30;41m'
+TEXTRED='\033[30;31m'
+
 def print_message(message):
     print("")
     print(message)
