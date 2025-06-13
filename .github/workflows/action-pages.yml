@@ -168,6 +168,8 @@ jobs:
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm replacePlaceholdersAndSearchDates
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
 
       - name: Astro Build
         if: steps.check_changes.outputs.changes == 'true'
