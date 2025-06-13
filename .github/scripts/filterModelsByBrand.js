@@ -60,7 +60,7 @@ try {
   const filterBy = (targetIDs) => (m) => {
     const markMatch = m.mark_id && brands.includes(String(m.mark_id).toLowerCase());
     const idMatch = m.id && targetIDs.includes(String(m.id).toLowerCase());
-    return markMatch && (targetIDs.length === 0 || idMatch);
+    return markMatch && (targetIDs.length === 0 || idMatch) &&  m.show;
   };
 
   // models
@@ -69,12 +69,12 @@ try {
   // test-drive
   data.testDrive = allModels
     .filter(filterBy(testDriveIDs))
-    .map(m => pickFields(m, ['mark_id', 'id', 'name', 'thumb', 'globalChars']));
+    .map(m => pickFields(m, ['mark_id', 'id', 'name', 'thumb', 'globalChars', 'show']));
 
   // services
   data.services = allModels
     .filter(filterBy(serviceIDs))
-    .map(m => pickFields(m, ['mark_id', 'id', 'name']));
+    .map(m => pickFields(m, ['mark_id', 'id', 'name', 'show']));
 
   if (
     data.models.length === 0 &&
