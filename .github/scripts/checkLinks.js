@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const domain = process.env.DOMAIN;
-const outputPath = './.github/scripts/broken_links.txt';
+const outputPath = './broken_links.txt';
 
 async function checkLinks() {
   console.log('🔍 Начинаю проверку ссылок...');
