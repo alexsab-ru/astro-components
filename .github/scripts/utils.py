@@ -450,13 +450,6 @@ def should_remove_car(car: ET.Element, mark_ids: list, folder_ids: list) -> bool
     # Если ни одно условие не выполнено, автомобиль оставляем
     return False
 
-def print_message(message):
-    print("")
-    print(message)
-    print("")
-    with open('output.txt', 'a', encoding='utf-8') as file:
-        file.write(f"{message}\n")
-
 def check_local_files(brand, model, color, vin):
     """Проверяет наличие локальных файлов изображений."""
     folder = get_folder(brand, model)
