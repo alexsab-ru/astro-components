@@ -25,4 +25,7 @@ def test_check_local_files():
     print(f"Результат: {result}")
 
 if __name__ == "__main__":
+    with open('output.txt', 'w') as file:
+        file.write("")
+
     test_check_local_files()

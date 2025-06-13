@@ -466,7 +466,7 @@ def check_local_files(brand, model, color, vin):
             elif os.path.exists(f"public/{thumb_brand_path}"):
                 return f"/{thumb_brand_path}"
             else:
-                print_message(f"Не найден файл {color_image} по пути public/{thumb_path} или public/{thumb_brand_path}")
+                print_message(f"Не найден файл `{color_image}` по пути `public/{thumb_path}` или `public/{thumb_brand_path}`", "error")
                 return "https://cdn.alexsab.ru/errors/404.webp"
         else:
             return "https://cdn.alexsab.ru/errors/404.webp"
