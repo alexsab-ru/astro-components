@@ -1,3 +1,0 @@
-Ищем файл по пути: public/img\models\Atlas Pro\colors\black-metallic.webp
-Ищем файл по пути: public/img\models\geely\Atlas Pro\colors\black-metallic.webp
-Не найден файл по пути: public/img\models\geely\Atlas Pro\colors\black-metallic.webp
