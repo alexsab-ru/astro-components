@@ -167,7 +167,7 @@ jobs:
       - name: Replace Placeholders in JSON
         if: steps.check_changes.outputs.changes == 'true'
         run: |
-          pnpm replacePlaceholdersInJson
+          pnpm replacePlaceholdersAndSearchDates
 
       - name: Astro Build
         if: steps.check_changes.outputs.changes == 'true'
