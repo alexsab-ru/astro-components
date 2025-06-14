@@ -140,9 +140,9 @@ jobs:
 
             [pull request #${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
 
-            ```
+            \`\`\`
             ${{ github.event.pull_request.body }}
-            ```" \
+            \`\`\`" \
             "${{ inputs.parse-mode || 'Markdown' }}"
 
   delete:
