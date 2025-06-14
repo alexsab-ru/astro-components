@@ -466,7 +466,8 @@ def check_local_files(brand, model, color, vin):
             elif os.path.exists(f"public/{thumb_brand_path}"):
                 return f"/{thumb_brand_path}"
             else:
-                print_message(f"Не найден файл `{color_image}` по пути `public/{thumb_path}` или `public/{thumb_brand_path}`", "error")
+                errorText = f"\n<b>Не найден локальный файл</b>\n<pre>{color_image}</pre>\n<code>public/{thumb_path}</code>\n<code>public/{thumb_brand_path}</code>"
+                print_message(errorText)
                 return "https://cdn.alexsab.ru/errors/404.webp"
         else:
             return "https://cdn.alexsab.ru/errors/404.webp"
@@ -496,13 +497,13 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
                     thumb = cdn_path
                 else:
                     # Если файл не найден в CDN, проверяем локальные файлы
-                    errorText = f"Не удалось найти файл {color_image} по пути {cdn_path}. Статус {response.status_code}"
-                    print_message(errorText)
+                    errorText = f"\n<b>Не удалось найти файл на CDN</b>. Статус <b>{response.status_code}</b>\n<pre>{color_image}</pre>\n<a href='{cdn_path}'>{cdn_path}</a>"
+                    print_message(errorText, 'error')
                     thumb = check_local_files(brand, model, color, vin)
             except requests.RequestException as e:
                 # В случае ошибки при проверке CDN, используем локальные файлы
-                errorText = f"Ошибка при проверке CDN: {str(e)}"
-                print_message(errorText)
+                errorText = f"\nОшибка при проверке CDN: {str(e)}"
+                print_message(errorText, 'error')
                 thumb = check_local_files(brand, model, color, vin)
 
     # Forming the YAML frontmatter

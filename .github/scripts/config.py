@@ -9,7 +9,6 @@ BGRED='\033[30;41m'
 TEXTRED='\033[30;31m'
 
 def print_message(message, type='info'):
-    print("")
     if type == 'info':
         print(message)
     elif type == 'warning':
@@ -18,7 +17,7 @@ def print_message(message, type='info'):
         print(f"{BGRED}{message}{COLOROFF}")
     elif type == 'success':
         print(f"{BGGREEN}{message}{COLOROFF}")
-    print("")
+
     with open('output.txt', 'a') as file:
         file.write(f"{message}\n")
 
@@ -61,7 +60,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not brand_key:
-        errorText = f"Не хватает бренда `{brand}` в model_mapping.json"
+        errorText = f"\n<b>Не хватает бренда</b> <code>{brand}</code> в model_mapping.json"
         print_message(errorText, 'error')
         return None
     
@@ -72,7 +71,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not model_key:
-        errorText = f"Не хватает модели `{model}` бренда `{brand}` в model_mapping.json"
+        errorText = f"\n<b>Не хватает модели</b> <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
         print_message(errorText, 'error')
         return None
     
@@ -89,7 +88,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         if color_key:
             return model_data['color'][color_key]
         else:
-            errorText = f"Не хватает цвета `{color}` модели `{model}` бренда `{brand}` в model_mapping.json"
+            errorText = f"\n<b>Не хватает цвета</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
             print_message(errorText, 'error')
             return None
     
@@ -101,7 +100,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         elif normalized_property == 'colors':
             return model_data['color']
         else:
-            errorText = f"Не хватает `{property}` модели `{model}` бренда `{brand}` в model_mapping.json"
+            errorText = f"\n<b>Не хватает свойства</b> <code>{property}</code> модели <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
             print_message(errorText, 'error')
             return None
     
