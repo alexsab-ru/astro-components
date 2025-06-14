@@ -72,8 +72,8 @@ prepare_commits_message() {
     
     # Подготовка заголовка
     if [ -z "$compare_hash" ]; then
-        # Формат для одиночного коммита
-        HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/commit/${commit_messages[0]}\">Last commit</a></b>"
+        # Формат для одиночного коммита или кастомного сообщения
+        HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/commit/$(git rev-parse HEAD)\">Last commit</a></b>"
     else
         # Формат для множества коммитов
         if [ "$TOTAL_COMMITS" -eq 1 ]; then
