@@ -282,7 +282,7 @@ jobs:
       id: set_output
       run: |
         if [ -s output.txt ]; then
-          echo "<pre>$(cat output.txt)</pre>" > output_wrapped.txt
+          echo "$(cat output.txt)" > output_wrapped.txt
           # Кодируем содержимое файла в base64
           encoded_output=$(base64 -w 0 output_wrapped.txt)
           # Передаем закодированное значение
