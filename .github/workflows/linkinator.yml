@@ -26,6 +26,9 @@ jobs:
       - name: Check links
         id: check_links
         run: |
+          touch .env
+          echo DOMAIN=${{ vars.DOMAIN }} >> .env
+          export DOMAIN=${{ vars.DOMAIN }}
           node .github/scripts/checkLinks.js
           if [ -s broken_links.txt ]; then
             echo "<pre>$(cat broken_links.txt)</pre>" > output_wrapped.txt
