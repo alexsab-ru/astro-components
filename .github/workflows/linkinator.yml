@@ -1,9 +1,11 @@
 name: Linkinator
 
 on:
+  workflow_run:
+    workflows: ["Deploy website to Pages"]
+    types:
+      - completed
   workflow_dispatch:
-  schedule:
-    - cron: '0 6 * * *'
 
 permissions:
   contents: read
@@ -67,10 +69,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules
+            .pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
         run: |
