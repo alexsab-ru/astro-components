@@ -50,10 +50,19 @@ jobs:
           fi
 
   check_links:
+    needs: [check-pages, determine_env]
+    if: needs.check-pages.outputs.pages_enabled == 'true'
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
+
+    # Указываете окружение и его переменные
+    environment:
+      name: ${{ needs.determine_env.outputs.env_name }}
+
     outputs:
       has_broken_links: ${{ steps.check_links.outputs.has_broken_links }}
       broken_links_output: ${{ steps.check_links.outputs.script_output }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
