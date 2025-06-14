@@ -24,6 +24,13 @@ on:
       # - '.github/workflows/update_cars.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   determine_env:
     runs-on: ubuntu-latest

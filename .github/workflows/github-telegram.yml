@@ -44,6 +44,13 @@ on:
         description: 'Telegram thread ID passed from the caller workflow'
         required: false
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a job called "build" adn "log-github-event-goodies"
