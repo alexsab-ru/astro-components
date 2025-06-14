@@ -44,6 +44,13 @@ on:
         description: 'Telegram thread ID passed from the caller workflow'
         required: false
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a job called "build" adn "log-github-event-goodies"
@@ -108,12 +115,12 @@ jobs:
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-            "${{ secrets.TELEGRAM_TOKEN }}" \
-            "${{ secrets.TELEGRAM_TO_CREATE }}" \
-            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
+          "${{ secrets.TELEGRAM_TOKEN }}" \
+          "${{ secrets.TELEGRAM_TO_CREATE }}" \
+          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
 
-            added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})" \
-            "${{ inputs.parse-mode || 'Markdown' }}"
+          added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})" \
+          "${{ inputs.parse-mode || 'Markdown' }}"
 
   pull_request:
     if: ${{ github.event.pull_request != null }}
@@ -127,13 +134,15 @@ jobs:
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-            "${{ secrets.TELEGRAM_TOKEN }}" \
-            "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
-            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
+          "${{ secrets.TELEGRAM_TOKEN }}" \
+          "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
+          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by **[${{ github.actor }}](https://github.com/${{ github.actor }})**:
 
-            pull request from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
-            ${{ github.event.pull_request.body }}" \
-            "${{ inputs.parse-mode || 'Markdown' }}"
+          [pull request #${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
+          \`\`\`
+          ${{ github.event.pull_request.body }}
+          \`\`\`" \
+          "${{ inputs.parse-mode || 'Markdown' }}"
 
   delete:
     if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null }}
@@ -147,12 +156,12 @@ jobs:
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-            "${{ secrets.TELEGRAM_TOKEN }}" \
-            "${{ secrets.TELEGRAM_TO_DELETE }}" \
-            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *${{ github.actor }}*:
+          "${{ secrets.TELEGRAM_TOKEN }}" \
+          "${{ secrets.TELEGRAM_TO_DELETE }}" \
+          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
 
-            branch '\`${{ github.event.ref }}\`' is deleted" \
-            "${{ inputs.parse-mode || 'Markdown' }}"
+          branch '\`${{ github.event.ref }}\`' is deleted" \
+          "${{ inputs.parse-mode || 'Markdown' }}"
 
   issues:
     if: ${{ github.event.issue != null }}
@@ -166,12 +175,12 @@ jobs:
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-            "${{ secrets.TELEGRAM_TOKEN }}" \
-            "${{ secrets.TELEGRAM_TO_ISSUES }}" \
-            "*[${{ github.event.repository.name }}]* by *${{ github.actor }}*:
+          "${{ secrets.TELEGRAM_TOKEN }}" \
+          "${{ secrets.TELEGRAM_TO_ISSUES }}" \
+          "*[${{ github.event.repository.name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
 
-            issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}" \
-            "${{ inputs.parse-mode || 'Markdown' }}"
+          issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}" \
+          "${{ inputs.parse-mode || 'Markdown' }}"
 
   get_last_commit:
     if: ${{ inputs.additional-text != null }}
@@ -182,16 +191,6 @@ jobs:
 
       - name: Update repository
         run: git pull
-
-      - name: Get last commit information
-        id: get_commits
-        run: |
-          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-          COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
-          COMMIT_HASH=$(git rev-parse HEAD)
-          echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
-          echo "author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
-          echo "hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
 
       - name: Prepare commit messages
         id: prepare
@@ -204,7 +203,7 @@ jobs:
             "${{ github.ref_name }}" \
             "${{ github.actor }}" \
             "${{ github.repository }}" \
-            "${COMPARE_HASH}" \
+            "" \
             "$additional_text")
           echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 

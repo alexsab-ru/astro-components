@@ -105,6 +105,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules
+            .pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Determine changes
         id: check_changes
         run: |
@@ -186,7 +202,6 @@ jobs:
             # Передаем закодированное значение
             echo "specials=$encoded_output" >> $GITHUB_OUTPUT
           fi
-
 
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'

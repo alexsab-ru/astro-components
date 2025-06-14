@@ -1,6 +1,12 @@
 #!/bin/bash
 # send_telegram.sh
 
+Color_Off='\033[0m'
+BGYELLOW='\033[30;43m'
+BGGREEN='\033[30;42m'
+BGRED='\033[30;41m'
+TEXTRED='\033[30;31m'
+
 send_telegram_messages() {
     # Очищаем входные параметры от кавычек
     local token=$(trim_quotes "$1")
@@ -37,7 +43,8 @@ send_telegram_messages() {
             fi
 
             MESSAGE=$(cat "./tmp_messages/part_${i}.txt")
-            echo "Sending part $i to Telegram chat $chat_id"
+            echo -e "${BGYELLOW}Sending part $i to Telegram chat $chat_id${Color_Off}"
+            echo "MESSAGE: $MESSAGE"
             
             # Формируем базовый URL запроса
             local request_url="https://api.telegram.org/bot${token}/sendMessage"
