@@ -27,7 +27,7 @@ async function checkLinks() {
 
   if (brokenLinks.length) {
     let message = `<b>На сайте ${domain} обнаружены битые ссылки. Всего: ${brokenLinks.length}</b>\n\n`;
-    message += brokenLinks.map(item => `<b>Ссылка</b>: ${item.url}\n<b>Родитель</b>: ${item.parent}`).join('\n');
+    message += brokenLinks.map(item => `<b>Ссылка</b>: ${item.url}\n<b>Родитель</b>: ${item.parent}`).join('\n\n');
     fs.writeFileSync(outputPath, message, 'utf8');
     console.log(`❌ Найдено ${brokenLinks.length} битых ссылок. Результаты сохранены в ${outputPath}`);
   } else {
