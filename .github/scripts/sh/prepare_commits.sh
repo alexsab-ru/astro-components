@@ -70,14 +70,19 @@ prepare_commits_message() {
 
     local TOTAL_COMMITS=${#commit_messages[@]}
     
-    if [ "$TOTAL_COMMITS" -eq 1 ]; then
-        COMMITS_TEXT="$TOTAL_COMMITS new commit"
-    else
-        COMMITS_TEXT="$TOTAL_COMMITS new commits"
-    fi
-
     # Подготовка заголовка
-    HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/compare/${compare_hash}\">$COMMITS_TEXT</a></b> by <b><a href=\"https://github.com/${actor}\">${actor}</a></b>"
+    if [ -z "$compare_hash" ]; then
+        # Формат для одиночного коммита
+        HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/commit/${commit_messages[0]}\">Last commit</a></b>"
+    else
+        # Формат для множества коммитов
+        if [ "$TOTAL_COMMITS" -eq 1 ]; then
+            COMMITS_TEXT="$TOTAL_COMMITS new commit"
+        else
+            COMMITS_TEXT="$TOTAL_COMMITS new commits"
+        fi
+        HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/compare/${compare_hash}\">$COMMITS_TEXT</a></b> by <b><a href=\"https://github.com/${actor}\">${actor}</a></b>"
+    fi
 
     # Создаем временную директорию для сообщений
     mkdir -p ./tmp_messages || { echo "Error: Failed to create tmp_messages directory" >&2; return 1; }

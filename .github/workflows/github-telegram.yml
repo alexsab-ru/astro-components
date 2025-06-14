@@ -190,16 +190,6 @@ jobs:
       - name: Update repository
         run: git pull
 
-      - name: Get last commit information
-        id: get_commits
-        run: |
-          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-          COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
-          COMMIT_HASH=$(git rev-parse HEAD)
-          echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
-          echo "author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
-          echo "hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
-
       - name: Prepare commit messages
         id: prepare
         run: |
@@ -211,7 +201,7 @@ jobs:
             "${{ github.ref_name }}" \
             "${{ github.actor }}" \
             "${{ github.repository }}" \
-            "${COMPARE_HASH}" \
+            "" \
             "$additional_text")
           echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 
