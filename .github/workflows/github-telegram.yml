@@ -117,7 +117,7 @@ jobs:
           send_telegram_message \
             "${{ secrets.TELEGRAM_TOKEN }}" \
             "${{ secrets.TELEGRAM_TO_CREATE }}" \
-            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *[${{ github.actor }}](https://github.com/${{ github.actor }})*:
+            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
 
             added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})" \
             "${{ inputs.parse-mode || 'Markdown' }}"
@@ -134,16 +134,15 @@ jobs:
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-            "${{ secrets.TELEGRAM_TOKEN }}" \
-            "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
-            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *[${{ github.actor }}](https://github.com/${{ github.actor }})*:
+          "${{ secrets.TELEGRAM_TOKEN }}" \
+          "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
+          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by **[${{ github.actor }}](https://github.com/${{ github.actor }})**:
 
-            [pull request #${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
-
-            \`\`\`
-            ${{ github.event.pull_request.body }}
-            \`\`\`" \
-            "${{ inputs.parse-mode || 'Markdown' }}"
+          [pull request #${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
+          ```
+          ${{ github.event.pull_request.body }}
+          ```" \
+          "${{ inputs.parse-mode || 'Markdown' }}"
 
   delete:
     if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null }}
@@ -159,7 +158,7 @@ jobs:
           send_telegram_message \
             "${{ secrets.TELEGRAM_TOKEN }}" \
             "${{ secrets.TELEGRAM_TO_DELETE }}" \
-            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by *[${{ github.actor }}](https://github.com/${{ github.actor }})*:
+            "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
 
             branch '\`${{ github.event.ref }}\`' is deleted" \
             "${{ inputs.parse-mode || 'Markdown' }}"
@@ -178,7 +177,7 @@ jobs:
           send_telegram_message \
             "${{ secrets.TELEGRAM_TOKEN }}" \
             "${{ secrets.TELEGRAM_TO_ISSUES }}" \
-            "*[${{ github.event.repository.name }}]* by *${{ github.actor }}*:
+            "*[${{ github.event.repository.name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
 
             issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}" \
             "${{ inputs.parse-mode || 'Markdown' }}"
