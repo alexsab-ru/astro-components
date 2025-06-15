@@ -103,12 +103,38 @@ prepare_commits_message() {
         # Проверяем длину коммита
         if [ $COMMIT_LENGTH -gt $MAX_COMMIT_LENGTH ]; then
             echo "Warning: Commit message is too long and will be truncated" >&2
+            
+            # Получаем все открытые и закрытые теги
+            local opened_tags=($(get_opened_tags "$COMMIT_WITH_NEWLINE"))
+            local closed_tags=($(get_closed_tags "$COMMIT_WITH_NEWLINE"))
+            
+            # Создаем массив для отслеживания открытых тегов
+            local tag_stack=()
+            
+            # Заполняем стек открытыми тегами
+            for tag in "${opened_tags[@]}"; do
+                tag_stack+=("$tag")
+            done
+            
+            # Удаляем закрытые теги из стека
+            for tag in "${closed_tags[@]}"; do
+                for i in "${!tag_stack[@]}"; do
+                    if [[ "${tag_stack[$i]}" == "$tag" ]]; then
+                        unset 'tag_stack[$i]'
+                        break
+                    fi
+                done
+            done
+            
             # Обрезаем коммит с учетом места под эллипсис
-            if [[ "$COMMIT_WITH_NEWLINE" == *"<pre>"* ]]; then
-                COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...</pre>\n"
-            else
-                COMMIT_WITH_NEWLINE="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ...\n"
-            fi
+            local truncated_commit="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ..."
+            
+            # Закрываем все открытые теги в обратном порядке
+            for ((i=${#tag_stack[@]}-1; i>=0; i--)); do
+                truncated_commit+="</${tag_stack[$i]}>"
+            done
+            
+            COMMIT_WITH_NEWLINE="${truncated_commit}\n"
             COMMIT_LENGTH=${#COMMIT_WITH_NEWLINE}
         fi
 
@@ -135,4 +161,45 @@ prepare_commits_message() {
     fi
 
     echo $PART_INDEX
+}
+
+########################################
+# Функция для получения всех открытых HTML тегов из строки
+# Принимает строку и возвращает массив открытых тегов
+########################################
+get_opened_tags() {
+    local input="$1"
+    local opened_tags=()
+    
+    # Ищем все открывающие теги
+    while [[ $input =~ \<([a-z]+)[\>] ]]; do
+        local tag="${BASH_REMATCH[1]}"
+        # Проверяем, что это не самозакрывающийся тег
+        if [[ ! $tag =~ ^(img|br|hr|input|meta|link)$ ]]; then
+            opened_tags+=("$tag")
+        fi
+        # Удаляем найденный тег из строки для следующей итерации
+        input="${input#*<}"
+    done
+    
+    echo "${opened_tags[@]}"
+}
+
+########################################
+# Функция для получения всех закрытых HTML тегов из строки
+# Принимает строку и возвращает массив закрытых тегов
+########################################
+get_closed_tags() {
+    local input="$1"
+    local closed_tags=()
+    
+    # Ищем все закрывающие теги
+    while [[ $input =~ \<\/([a-z]+)[\>] ]]; do
+        local tag="${BASH_REMATCH[1]}"
+        closed_tags+=("$tag")
+        # Удаляем найденный тег из строки для следующей итерации
+        input="${input#*</}"
+    done
+    
+    echo "${closed_tags[@]}"
 }
