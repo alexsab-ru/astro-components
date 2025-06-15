@@ -104,34 +104,15 @@ prepare_commits_message() {
         if [ $COMMIT_LENGTH -gt $MAX_COMMIT_LENGTH ]; then
             echo "Warning: Commit message is too long and will be truncated" >&2
             
-            # Получаем все открытые и закрытые теги
+            # Получаем все открытые теги с учетом вложенности
             local opened_tags=($(get_opened_tags "$COMMIT_WITH_NEWLINE"))
-            local closed_tags=($(get_closed_tags "$COMMIT_WITH_NEWLINE"))
-            
-            # Создаем массив для отслеживания открытых тегов
-            local tag_stack=()
-            
-            # Заполняем стек открытыми тегами
-            for tag in "${opened_tags[@]}"; do
-                tag_stack+=("$tag")
-            done
-            
-            # Удаляем закрытые теги из стека
-            for tag in "${closed_tags[@]}"; do
-                for i in "${!tag_stack[@]}"; do
-                    if [[ "${tag_stack[$i]}" == "$tag" ]]; then
-                        unset 'tag_stack[$i]'
-                        break
-                    fi
-                done
-            done
             
             # Обрезаем коммит с учетом места под эллипсис
             local truncated_commit="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ..."
             
             # Закрываем все открытые теги в обратном порядке
-            for ((i=${#tag_stack[@]}-1; i>=0; i--)); do
-                truncated_commit+="</${tag_stack[$i]}>"
+            for ((i=${#opened_tags[@]}-1; i>=0; i--)); do
+                truncated_commit+="</${opened_tags[$i]}>"
             done
             
             COMMIT_WITH_NEWLINE="${truncated_commit}\n"
@@ -169,20 +150,44 @@ prepare_commits_message() {
 ########################################
 get_opened_tags() {
     local input="$1"
-    local opened_tags=()
+    local tag_stack=()
     
-    # Ищем все открывающие теги
-    while [[ $input =~ \<([a-z]+)[\>] ]]; do
-        local tag="${BASH_REMATCH[1]}"
-        # Проверяем, что это не самозакрывающийся тег
+    # Ищем все теги (открывающие и закрывающие)
+    while [[ $input =~ \<(/?)([a-z]+)[\>] ]]; do
+        local is_closing="${BASH_REMATCH[1]}"
+        local tag="${BASH_REMATCH[2]}"
+        
+        # Пропускаем самозакрывающиеся теги
         if [[ ! $tag =~ ^(img|br|hr|input|meta|link)$ ]]; then
-            opened_tags+=("$tag")
+            if [ -z "$is_closing" ]; then
+                # Открывающий тег - добавляем в стек
+                tag_stack+=("$tag")
+            else
+                # Закрывающий тег - ищем соответствующий открывающий тег
+                # Ищем с конца массива, чтобы найти последний открытый тег такого типа
+                local found=0
+                for ((i=${#tag_stack[@]}-1; i>=0; i--)); do
+                    if [[ "${tag_stack[$i]}" == "$tag" ]]; then
+                        # Удаляем тег и все теги после него (они были открыты позже)
+                        tag_stack=("${tag_stack[@]:0:$i}")
+                        found=1
+                        break
+                    fi
+                done
+                
+                # Если не нашли закрывающий тег, значит это неправильная структура
+                # Но мы все равно добавляем его в стек, чтобы потом закрыть
+                if [ $found -eq 0 ]; then
+                    tag_stack+=("$tag")
+                fi
+            fi
         fi
         # Удаляем найденный тег из строки для следующей итерации
         input="${input#*<}"
     done
     
-    echo "${opened_tags[@]}"
+    # Возвращаем оставшиеся открытые теги
+    echo "${tag_stack[@]}"
 }
 
 ########################################
