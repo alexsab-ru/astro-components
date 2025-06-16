@@ -198,13 +198,14 @@ jobs:
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/prepare_commits.sh
           additional_text=$(echo "${{ inputs.additional-text || '' }}" | base64 -d)
+          split_text_to_array "$additional_text"
           total_parts=$(prepare_commits_message \
             "${{ github.event.repository.name }}" \
             "${{ github.ref_name }}" \
             "${{ github.actor }}" \
             "${{ github.repository }}" \
             "" \
-            "$additional_text")
+            "${TEXT_ARRAY[@]}")
           echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 
       - name: Send messages to Telegram

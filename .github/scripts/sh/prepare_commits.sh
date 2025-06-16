@@ -93,7 +93,7 @@ prepare_commits_message() {
     local CURRENT_LENGTH=${#CHUNK}
     
     # Максимальная длина для одного коммита (с учетом заголовка и отступов)
-    local MAX_COMMIT_LENGTH=$((MAX_LENGTH - ${#HEADER} - 2))
+    local MAX_COMMIT_LENGTH=$(($MAX_LENGTH - ${#HEADER} - 30))
 
     for COMMIT in "${commit_messages[@]}"; do
         # Добавляем перевод строки к коммиту
@@ -103,42 +103,69 @@ prepare_commits_message() {
         # Проверяем длину коммита
         if [ $COMMIT_LENGTH -gt $MAX_COMMIT_LENGTH ]; then
             echo "Warning: Commit message is too long and will be truncated" >&2
+                        
+            # Обрезаем коммит с учетом места под эллипсис
+            local truncated_commit="${COMMIT_WITH_NEWLINE:0:$(($MAX_COMMIT_LENGTH - $ELLIPSIS_LENGTH))} ..."
             
             # Получаем все открытые теги с учетом вложенности
-            local opened_tags=($(get_opened_tags "$COMMIT_WITH_NEWLINE"))
-            
-            # Обрезаем коммит с учетом места под эллипсис
-            local truncated_commit="${COMMIT_WITH_NEWLINE:0:$((MAX_COMMIT_LENGTH - ELLIPSIS_LENGTH))} ..."
-            
-            # Закрываем все открытые теги в обратном порядке
-            for ((i=${#opened_tags[@]}-1; i>=0; i--)); do
-                truncated_commit+="</${opened_tags[$i]}>"
-            done
+            local opened_tags_result=$(get_opened_tags "$truncated_commit")
+
+            # Закрываем все открытые теги в обратном порядке (LIFO)
+            if [ -n "$opened_tags_result" ]; then
+                echo "DEBUG: Found open tags: '$opened_tags_result'" >&2
+                
+                # Строим закрывающие теги в обратном порядке
+                local tags_to_close=""
+                local remaining_tags="$opened_tags_result"
+                
+                # Берем теги с конца строки
+                while [ -n "$remaining_tags" ]; do
+                    if [[ "$remaining_tags" == *" "* ]]; then
+                        # Есть еще теги - берем последний
+                        local last_tag="${remaining_tags##* }"
+                        remaining_tags="${remaining_tags% *}"
+                        echo "DEBUG: Processing tag: '$last_tag'" >&2
+                        tags_to_close="${tags_to_close}</$last_tag>"
+                    else
+                        # Последний тег
+                        echo "DEBUG: Processing last tag: '$remaining_tags'" >&2
+                        tags_to_close="${tags_to_close}</$remaining_tags>"
+                        break
+                    fi
+                done
+                
+                echo "DEBUG: Tags to close: '$tags_to_close'" >&2
+                truncated_commit="${truncated_commit}${tags_to_close}"
+            else
+                echo "DEBUG: No open tags found" >&2
+            fi
+
             
             COMMIT_WITH_NEWLINE="${truncated_commit}\n"
             COMMIT_LENGTH=${#COMMIT_WITH_NEWLINE}
         fi
 
-        # Проверяем, поместится ли следующий коммит
-        if ((CURRENT_LENGTH + COMMIT_LENGTH > MAX_LENGTH)); then
+        # Проверяем, поместится ли следующий коммит (заменили bash-специфичную конструкцию)
+        local total_length=$(($CURRENT_LENGTH + $COMMIT_LENGTH))
+        if [ $total_length -gt $MAX_LENGTH ]; then
             # Сохраняем текущий чанк
             printf "%b" "$CHUNK" > "./tmp_messages/part_${PART_INDEX}.txt" || { echo "Error: Failed to write to file" >&2; return 1; }
-            PART_INDEX=$((PART_INDEX + 1))
+            PART_INDEX=$(($PART_INDEX + 1))
             
             # Начинаем новый чанк с заголовка
             CHUNK="$HEADER\n\n$COMMIT_WITH_NEWLINE"
-            CURRENT_LENGTH=$((${#HEADER} + 2 + COMMIT_LENGTH))
+            CURRENT_LENGTH=$((${#HEADER} + 2 + $COMMIT_LENGTH))
         else
             # Добавляем коммит к текущему чанку
-            CHUNK+="$COMMIT_WITH_NEWLINE"
-            CURRENT_LENGTH=$((CURRENT_LENGTH + COMMIT_LENGTH))
+            CHUNK="${CHUNK}${COMMIT_WITH_NEWLINE}"
+            CURRENT_LENGTH=$(($CURRENT_LENGTH + $COMMIT_LENGTH))
         fi
     done
 
     # Сохраняем последний чанк, если он не пустой
     if [ "$CHUNK" != "$HEADER\n\n" ]; then
         printf "%b" "$CHUNK" > "./tmp_messages/part_${PART_INDEX}.txt" || { echo "Error: Failed to write to file" >&2; return 1; }
-        PART_INDEX=$((PART_INDEX + 1))
+        PART_INDEX=$(($PART_INDEX + 1))
     fi
 
     echo $PART_INDEX
@@ -146,65 +173,152 @@ prepare_commits_message() {
 
 ########################################
 # Функция для получения всех открытых HTML тегов из строки
-# Принимает строку и возвращает массив открытых тегов
+# Максимально простая версия без отладки
 ########################################
 get_opened_tags() {
     local input="$1"
-    local tag_stack=()
     
-    # Ищем все теги (открывающие и закрывающие)
-    while [[ $input =~ \<(/?)([a-z]+)[\>] ]]; do
-        local is_closing="${BASH_REMATCH[1]}"
-        local tag="${BASH_REMATCH[2]}"
+    # Создаем временный файл для работы
+    local temp_file=$(mktemp)
+    local result_file=$(mktemp)
+    
+    # Записываем входные данные во временный файл
+    printf '%s\n' "$input" > "$temp_file"
+    
+    # Обрабатываем в отдельном процессе
+    (
+        stack=""
         
-        # Пропускаем самозакрывающиеся теги
-        if [[ ! $tag =~ ^(img|br|hr|input|meta|link)$ ]]; then
-            if [ -z "$is_closing" ]; then
-                # Открывающий тег - добавляем в стек
-                tag_stack+=("$tag")
-            else
-                # Закрывающий тег - ищем соответствующий открывающий тег
-                # Ищем с конца массива, чтобы найти последний открытый тег такого типа
-                local found=0
-                for ((i=${#tag_stack[@]}-1; i>=0; i--)); do
-                    if [[ "${tag_stack[$i]}" == "$tag" ]]; then
-                        # Удаляем тег и все теги после него (они были открыты позже)
-                        tag_stack=("${tag_stack[@]:0:$i}")
-                        found=1
-                        break
-                    fi
-                done
+        while IFS= read -r line || [ -n "$line" ]; do
+            # Пропускаем пустые строки
+            [ -z "$line" ] && continue
+            
+            # Извлекаем все теги
+            tags=$(printf '%s\n' "$line" | grep -oE '<[^>]+>' 2>/dev/null || true)
+            [ -z "$tags" ] && continue
+            
+            printf '%s\n' "$tags" | while IFS= read -r tag_match; do
+                [ -z "$tag_match" ] && continue
                 
-                # Если не нашли закрывающий тег, значит это неправильная структура
-                # Но мы все равно добавляем его в стек, чтобы потом закрыть
-                if [ $found -eq 0 ]; then
-                    tag_stack+=("$tag")
+                # Определяем тип тега
+                if [[ $tag_match == "</"* ]]; then
+                    # Закрывающий тег
+                    tag_name=$(printf '%s' "$tag_match" | sed 's|^</||; s|>.*||; s| .*||')
+                    
+                    # Удаляем из стека (простая замена)
+                    if [[ "$stack" == *"|$tag_name|"* ]]; then
+                        stack=$(printf '%s' "$stack" | sed "s/|$tag_name|/|/")
+                    elif [[ "$stack" == "$tag_name|"* ]]; then
+                        stack=$(printf '%s' "$stack" | sed "s/^$tag_name|//")
+                    elif [[ "$stack" == *"|$tag_name" ]]; then
+                        stack=$(printf '%s' "$stack" | sed "s/|$tag_name$//")
+                    elif [[ "$stack" == "$tag_name" ]]; then
+                        stack=""
+                    fi
+                else
+                    # Открывающий тег
+                    tag_name=$(printf '%s' "$tag_match" | sed 's|^<||; s|>.*||; s| .*||')
+                    
+                    # Пропускаем самозакрывающиеся теги
+                    case "$tag_name" in
+                        img|br|hr|input|meta|link) continue ;;
+                    esac
+                    
+                    # Добавляем в стек
+                    if [ -z "$stack" ]; then
+                        stack="$tag_name"
+                    else
+                        stack="$stack|$tag_name"
+                    fi
                 fi
-            fi
+            done
+        done < "$temp_file"
+        
+        # Выводим результат
+        if [ -n "$stack" ]; then
+            printf '%s' "$stack" | tr '|' ' '
         fi
-        # Удаляем найденный тег из строки для следующей итерации
-        input="${input#*<}"
-    done
+    ) > "$result_file" 2>/dev/null
     
-    # Возвращаем оставшиеся открытые теги
-    echo "${tag_stack[@]}"
+    # Читаем результат
+    cat "$result_file" 2>/dev/null
+    
+    # Очищаем временные файлы
+    rm -f "$temp_file" "$result_file" 2>/dev/null
 }
 
 ########################################
-# Функция для получения всех закрытых HTML тегов из строки
-# Принимает строку и возвращает массив закрытых тегов
+# Функция для разделения текста на массив по двойным переносам строк
+# Принимает: текст
+# Результат: глобальная переменная TEXT_ARRAY
 ########################################
-get_closed_tags() {
-    local input="$1"
-    local closed_tags=()
+split_text_to_array() {
+    local input_text="$1"
     
-    # Ищем все закрывающие теги
-    while [[ $input =~ \<\/([a-z]+)[\>] ]]; do
-        local tag="${BASH_REMATCH[1]}"
-        closed_tags+=("$tag")
-        # Удаляем найденный тег из строки для следующей итерации
-        input="${input#*</}"
-    done
+    # Очищаем массив
+    TEXT_ARRAY=()
     
-    echo "${closed_tags[@]}"
+    # Если текст пустой, возвращаем пустой массив
+    if [ -z "$input_text" ]; then
+        return 0
+    fi
+    
+    # Создаем временный файл для работы
+    local temp_input=$(mktemp)
+    local temp_output=$(mktemp)
+    
+    # Записываем входной текст
+    printf '%s' "$input_text" > "$temp_input"
+    
+    # Используем Python для разделения по двойным переносам с сохранением одинарных
+    python3 -c "
+import sys
+import re
+
+# Читаем весь текст
+with open('$temp_input', 'r') as f:
+    text = f.read()
+
+# Разделяем по двойным переносам (двум или более подряд идущим \n)
+chunks = re.split(r'\n\s*\n', text)
+
+# Обрабатываем каждую часть
+for chunk in chunks:
+    chunk = chunk.strip()
+    if chunk:
+        print('|||CHUNK_START|||')
+        # Выводим chunk как есть, сохраняя одинарные переносы
+        print(f'\n{chunk}\n')
+        print('|||CHUNK_END|||')
+" > "$temp_output"
+
+    # Читаем результат с сохранением переносов строк
+    local current_chunk=""
+    local in_chunk=false
+    
+    while IFS= read -r line || [ -n "$line" ]; do
+        if [ "$line" = "|||CHUNK_START|||" ]; then
+            in_chunk=true
+            current_chunk=""
+        elif [ "$line" = "|||CHUNK_END|||" ]; then
+            if [ -n "$current_chunk" ]; then
+                TEXT_ARRAY+=("$current_chunk")
+            fi
+            in_chunk=false
+            current_chunk=""
+        elif [ "$in_chunk" = true ]; then
+            # Добавляем строку с переносом (совместимо с zsh)
+            if [ -z "$current_chunk" ]; then
+                current_chunk="$line"
+            else
+                current_chunk="${current_chunk}
+${line}"
+            fi
+        fi
+    done < "$temp_output"
+    
+    # Очищаем временные файлы
+    rm -f "$temp_input" "$temp_output" 2>/dev/null
+    
+    return 0
 }
