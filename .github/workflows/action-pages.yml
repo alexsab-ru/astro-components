@@ -253,3 +253,8 @@ jobs:
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  check_links:
+    needs: [build, deploy]
+    if: ${{ github.event_name == 'schedule' }}
+    uses: ./.github/workflows/linkinator.yml

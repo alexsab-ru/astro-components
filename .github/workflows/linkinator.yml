@@ -1,33 +1,14 @@
 name: Linkinator
 
 on:
-  workflow_run:
-    workflows: ["Deploy website to Pages"]
-    types:
-      - completed
+  workflow_call:
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  check-trigger:
-    runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - name: Check if triggered by schedule
-        id: check
-        run: |
-          if [ "${{ github.event.workflow_run.event }}" = "schedule" ]; then
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          else
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          fi
-
   check-pages:
-    needs: check-trigger
-    if: needs.check-trigger.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     outputs:
       pages_enabled: ${{ steps.check-pages.outputs.pages_enabled }}
@@ -45,8 +26,7 @@ jobs:
           fi
 
   determine_env:
-    needs: [check-trigger, check-pages]
-    if: needs.check-trigger.outputs.should_run == 'true'
+    needs: [check-pages]
     runs-on: ubuntu-latest
     outputs:
       env_name: ${{ steps.set_env.outputs.env_name }}
@@ -69,8 +49,8 @@ jobs:
           fi
 
   check_links:
-    needs: [check-trigger, check-pages, determine_env]
-    if: ${{ needs.check-trigger.outputs.should_run == 'true' && needs.check-pages.outputs.pages_enabled == 'true' }}
+    needs: [check-pages, determine_env]
+    if: ${{ needs.check-pages.outputs.pages_enabled == 'true' }}
     concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
 
