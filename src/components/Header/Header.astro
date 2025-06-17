@@ -64,7 +64,7 @@ import './styles.scss';
 					}
 					<div class="flex items-center xs:gap-2 gap-4 flex-shrink-0">
 						<Button
-							classes="popup-link hidden lg:block !px-4 xl:!px-4 !py-2 xl:!py-3"
+							classes="popup-link hidden lg:inline-block px-4 xl:px-4 py-2 xl:py-3"
 							url="#common-modal"
 							title="Заказать звонок"
 							dataTitle="Заказать звонок"
@@ -117,7 +117,7 @@ import './styles.scss';
 
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
-				{links.length > 0 && ( <HeaderMenuList links={links} /> )}
+				{links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
 				<div>
 				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">

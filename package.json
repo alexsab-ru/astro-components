@@ -5,10 +5,9 @@
   "scripts": {
     "start": "cp .env.example .env",
     "start_win": "copy .env.example .env",
-    "python": "python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt",
+    "python": "echo \"Copy and run:\" && echo \"\\033[30;43mpython3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt\\033[0m\n\"",
     "get_report": "git log --since='2024-04-01' --until='2024-10-31' --pretty=format:'%h\t%ad\t%an\t%s' --first-parent --date=format:'%Y-%m-%d %H:%M:%S' > commit_report.csv",
     "pull_without_merge": "COUNT=$(git rev-list --count origin/main..main) && git checkout -b new-branch-for-pull-without-merge && git checkout main && git reset --hard HEAD~$COUNT && git pull origin main && git checkout new-branch-for-pull-without-merge && git rebase main && git checkout main && git merge new-branch-for-pull-without-merge && git branch -D new-branch-for-pull-without-merge",
-    
     "CarFeedProcessorCSV": "CSV_URL=$(grep '^CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && curl $CSV_URL -o data.csv && python3 .github/scripts/CarFeedProcessorCSV.py",
     "getAirStorage": "sh ./.github/scripts/sh/getAirStorage.sh",
     "getDealerCarsPrice": "sh ./.github/scripts/sh/getDealerData.sh",
@@ -16,7 +15,7 @@
     "getDealerStorage": "sh ./.github/scripts/sh/getDealerStorage.sh",
     "getSortStorage": "sh ./.github/scripts/sh/getSortStorage.sh",
     "cars": "sh ./.github/scripts/sh/process_xml.sh",
-
+    "getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL": "pnpm run cars getone DEALER_PHOTOS_FOR_CARS_AVITO_URL \"dealer_photos_for_cars_avito.xml\"",
     "getOne_AVITO_XML_URL": "pnpm run cars getone AVITO_XML_URL",
     "getOne_AVITO_XML_URL_DATA_CARS_CAR": "pnpm run cars getone AVITO_XML_URL_DATA_CARS_CAR",
     "getOne_AVITO_FRIEND_XML_URL": "pnpm run cars getone AVITO_FRIEND_XML_URL cars_friend.xml",
@@ -27,7 +26,6 @@
     "getOne_XML_URL_CARCOPY": "pnpm run cars getone XML_URL_CARCOPY",
     "getOne_XML_URL_VEHICLES_VEHICLE": "pnpm run cars getone XML_URL_VEHICLES_VEHICLE",
     "getOne_USED_CARS_DATA_CARS_CAR": "pnpm run cars getone USED_CARS_DATA_CARS_CAR",
-
     "update_cars_air_storage_avito": "pnpm run cars update avito",
     "update_cars_air_storage_avito_data_cars_car": "pnpm run cars update avito_data_cars_car",
     "update_cars_air_storage_autoru": "pnpm run cars update autoru",
@@ -36,7 +34,6 @@
     "update_cars_carcopy": "pnpm run cars update carcopy",
     "update_cars_vehicles_vehicle": "pnpm run cars update vehicles",
     "update_cars_used_cars_data_cars_car": "pnpm run cars update used_cars_data_cars_car",
-
     "test_AVITO_XML_URL": "pnpm cars test avito",
     "test_AVITO_XML_URL_DATA_CARS_CAR": "pnpm cars test avito_data_cars_car",
     "test_AVITO_FRIEND_XML_URL": "pnpm cars test avito_friend",
@@ -47,10 +44,9 @@
     "test_XML_URL_CARCOPY": "pnpm cars test carcopy --dev",
     "test_XML_URL_VEHICLES_VEHICLE": "pnpm cars test vehicles_vehicle --dev",
     "test_USED_CARS_DATA_CARS_CAR": "pnpm cars test used_cars_data_cars_car --dev",
-
     "dev": "astro dev --open --host --config astro.local.config.mjs",
-    "dd": "pnpm download_json && pnpm getDealerPrices && pnpm mergeCarPrices && pnpm replacePlaceholdersInJson && pnpm dev",
-    "ddw": "powershell -Command \"pnpm download_json_win; pnpm getDealerPrices; pnpm mergeCarPrices; pnpm replacePlaceholdersInJson; pnpm dev\"",
+    "dd": "pnpm download_json && pnpm getDealerPrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
+    "ddw": "powershell -Command \"pnpm download_json_win; pnpm getDealerPrices; pnpm mergeCarPrices; pnpm replacePlaceholdersAndSearchDates; pnpm dev\"",
     "linkinator": "astro dev --port 4343 & sleep 5 && npx linkinator http://localhost:4343 --recurse --format CSV  > linkinator.csv",
     "lighthouse": "astro build && astro preview --port 4343 & sleep 5 && npx lighthouse http://localhost:4343 --output=json --output-path=./lighthouse-report-$(date +%Y-%m-%d-%H-%M-%S).json",
     "build_local": "astro build --config astro.local.config.mjs",
@@ -58,12 +54,13 @@
     "preview": "astro preview --open --host",
     "download_json": "bash ./.github/scripts/sh/downloadJSON.sh",
     "download_json_win": "powershell -Command \"$jsonPath = (Get-Content .env | Select-String 'JSON_PATH=').ToString().Split('=')[1]; $folderName = (Get-Content .env | Select-String 'DOMAIN=').ToString().Split('=')[1]; Write-Host \\\"Using JSON_PATH: $jsonPath\\\"; Write-Host \\\"Using folder_name: $folderName\\\"; $dir = 'src/data'; if (-Not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir }; $files = @('banners.json', 'cars.json', 'models.json', 'salons.json', 'scripts.json', 'seo.json', 'services.json', 'settings.json', 'socials.json', 'special-services.json', 'faq.json', 'federal-models_price.json', 'reviews.json', 'models-sections.yml'); foreach ($file in $files) { $url = \\\"$jsonPath/$folderName/data/$file\\\"; $output = \\\"src/data/$file\\\"; $response = Invoke-WebRequest -Uri $url -Method Head -ErrorAction SilentlyContinue; if ($response.StatusCode -eq 200) { Write-Host \\\"Downloading $url\\\"; Invoke-WebRequest -Uri $url -OutFile $output } else { Write-Host \\\"File $url does not exist on server. Skipping download.\\\" } }\"",
+    "filterModelsByBrand": "node .github/scripts/filterModelsByBrand.js",
     "mergeCarPrices": "node .github/scripts/mergeCarPrices.js",
-    "replacePlaceholdersInJson": "node .github/scripts/replacePlaceholdersInJson.js",
+    "replacePlaceholdersAndSearchDates": "node .github/scripts/replacePlaceholdersAndSearchDates.js",
     "astro": "astro"
   },
   "dependencies": {
-    "@alexsab-ru/scripts": "^0.12.0",
+    "@alexsab-ru/scripts": "^0.15.1",
     "@astrojs/alpinejs": "^0.4.1",
     "@astrojs/mdx": "^4.0.3",
     "@astrojs/react": "^4.1.2",
@@ -80,7 +77,9 @@
     "astro-robots": "^2.3.1",
     "axios": "^1.7.9",
     "csv-parse": "^5.6.0",
+    "dotenv": "^16.5.0",
     "glightbox": "^3.3.0",
+    "linkinator": "^6.1.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",

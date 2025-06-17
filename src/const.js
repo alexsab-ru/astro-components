@@ -11,7 +11,8 @@ export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 // Ссылки под хедером
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import modelsData from '@/data/models.json';
-const groupModelsByBrand = groupArrayByKey(modelsData.filter(model => model.show), 'mark_id');
+const { models } = modelsData;
+const groupModelsByBrand = groupArrayByKey(models.filter(model => model.show), 'mark_id');
 const children = Object.keys(groupModelsByBrand).reduce((acc, key) => {
 	acc[key] = groupModelsByBrand[key].map(model => ( { url: `models/${model.id}/`, name: `${model.name.toUpperCase()}`, thumb: model.thumb } ) );
 	return acc;
@@ -41,7 +42,7 @@ export const COLLECTIONS = [
 ];
 
 // Текст согласия в формах
-export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';
+export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a> и на использование cookie на условиях, указанных <a href="/cookie-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';
 
 // Текст информации в футере
 import salonsData from '@/data/salons.json';

@@ -1,5 +1,13 @@
 ---
 import RedirectPage from '@/layouts/RedirectPage.astro';
 ---
-<RedirectPage goal="telegram_redirect" redirectUrl="https://t.me/alexsab_ru">
+<RedirectPage
+    title="Выгодное предложение месяца"
+    description="Получите самое выгодное предложение месяца"
+    pageText = 'Вы будете перенаправлены<br/>через 3 секунды...',
+    goal="telegram_redirect"
+    redirectUrl="https://t.me/alexsab_ru"
+    saveUrl=""
+    messageToTelegram="Метрика не подключена"
+>
 </RedirectPage>

@@ -5,7 +5,10 @@ interface Props {
 	keywords?: string;
 	goal?: string;
 	redirectUrl?: string;
+	saveUrl?: string;
 	pageText?: string;
+	messageToTelegram?: string;
+	saveSearchParam?: boolean;
 }
 let {
 	title,
@@ -13,8 +16,14 @@ let {
 	keywords,
 	goal = 'telegram_redirect',
 	redirectUrl = 'https://t.me/alexsab_ru',
-	pageText = 'Вы будете перенаправлены<br/>через 3 секунды...'
+	saveUrl = '',
+	pageText = 'Вы будете перенаправлены<br/>через 3 секунды...',
+	messageToTelegram = 'metrika doesn\'t connect',
+	saveSearchParam = true,
 } = Astro.props;
+
+import settings from '@/data/settings.json';
+const { favicon } = settings;
 
 import scripts_json from '@/data/scripts.json';
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
@@ -25,7 +34,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href={favicon} />
 
 		<!-- Canonical URL -->
 		<link rel="canonical" href={canonicalURL} />
@@ -42,8 +51,107 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 
-		<script define:vars={{ scripts_json, goal, redirectUrl }}>
+		<script define:vars={{ scripts_json, goal, redirectUrl, saveUrl, messageToTelegram, saveSearchParam }}>
 			(function() {
+
+				let saveFile = 0,
+					getCookie = function(name) {
+						var matches = document.cookie.match(new RegExp(
+							"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+						))
+						return matches ? decodeURIComponent(matches[1]) : undefined
+					},
+					setCookie = function(name, value, props) {
+						props = props || {}
+						// console.log(props);
+						var exp = props.expires
+						if (typeof exp == "number" && exp) {
+							var d = new Date()
+							d.setTime(d.getTime() + exp*1000)
+							exp = props.expires = d
+						}
+						if(exp && exp.toUTCString) { props.expires = exp.toUTCString() }
+						value = encodeURIComponent(value)
+						var updatedCookie = name + "=" + value
+						for(var propName in props){
+							updatedCookie += "; " + propName
+							var propValue = props[propName]
+							if(propValue !== true){ updatedCookie += "=" + propValue }
+							// console.log(updatedCookie);
+						}
+						document.cookie = updatedCookie
+					},
+					deleteCookie = function(name) {
+						setCookie(name, null, { 'domain':window.location.hostname,'path':'/','expires': -1 })
+					};
+
+				// if localStorage ot sessionStorage or coockie contains info about location.search of URL then redirect to current URL with with location.search and delete location.search from these places
+				// console.log("saveSearchParam:", saveSearchParam, localStorage.getItem('location_search'), sessionStorage.getItem('location_search'), getCookie('location_search'));
+				if (!saveSearchParam && (localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || getCookie('location_search'))) {
+					let location_search = localStorage.getItem('location_search') || sessionStorage.getItem('location_search') || getCookie('location_search');
+					// console.log("location_search:",location_search);
+					localStorage.removeItem('location_search');
+					sessionStorage.removeItem('location_search');
+					deleteCookie('location_search');
+					setTimeout(function() {
+						window.location.href = window.location.origin + window.location.pathname + location_search;
+					}, 1000);
+					return;
+				} else {
+					// save in localStorage and sessionStorage and coockie info about location.search of URL
+					localStorage.setItem('location_search', window.location.search);
+					sessionStorage.setItem('location_search', window.location.search);
+					setCookie('location_search', window.location.search, {'domain':window.location.hostname,'path':'/','expires': 3600*24*1});
+				}
+
+				/**
+				 * Скачивает файл по ссылке и предлагает «Сохранить как…»
+				 * @param {string} url       — абсолютная или относительная ссылка на файл
+				 * @param {string} [filename]— имя, показываемое в диалоге (опционально)
+				 */
+				async function downloadFile(url, filename) {
+					// 1. Если имя не задано, извлекаем его из URL
+					if (!filename) {
+						// URL-парсер надёжно отделит путь от query/hash
+						const { pathname } = new URL(url, window.location.href);
+						// Берём последний сегмент пути
+						const lastSegment = pathname.split('/').pop() || 'download';
+						// Декодируем «%D0%A4%D0%B0%D0%B9%D0%BB.pdf» → «Файл.pdf»
+						filename = decodeURIComponent(lastSegment);
+					}
+
+					// 2. Скачиваем файл и превращаем в Blob
+					const response = await fetch(url);
+					if (!response.ok) throw new Error(`Не удалось скачать файл: ${response.status}`);
+					const blob = await response.blob();
+
+					// 3. Создаём временную ссылку и запускаем «скачивание»
+					const tempUrl = URL.createObjectURL(blob);
+					const a = Object.assign(document.createElement('a'), {
+						href: tempUrl,
+						download: filename,
+						style: 'display:none'
+					});
+					document.body.appendChild(a);
+					a.click();
+					a.remove();
+					URL.revokeObjectURL(tempUrl);
+				}
+
+				function saveOrRedirect() {
+					if(saveUrl) {
+						if(saveFile == 0) {
+							downloadFile(saveUrl);
+							saveFile = 1;
+							document.querySelector("h2").innerHTML = '<p>Чтобы скачать файл нажмите на ссылку</p><p style="margin-top: 10px;color: -webkit-link;cursor: pointer;text-decoration: underline;"><a href="'+saveUrl+'">Скачать файл</a></p>';
+							setTimeout(function() {
+								window.location.href = saveUrl;
+							}, 1000);
+						}
+					} else {
+						window.location.href = redirectUrl;
+					}
+				}
 
 				// Яндекс Метрика
 				if (scripts_json.metrika && scripts_json.metrika.length > 0) {
@@ -59,16 +167,36 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
 					var getMetrikaID = function() {
 						let metrikaID = (typeof ym != 'undefined' && typeof ym.a != 'undefined') ? ym.a[0][0] : findPropertyByPrefix(window, "yaCounter").substr(9);
-						console.log("getMetrikaID:",metrikaID);
+						// console.log("getMetrikaID:",metrikaID);
 
 						if (metrikaID) {
 							setTimeout(function() {
 								scripts_json.metrika.forEach(metrika => {
 									ym(metrika.id, 'reachGoal', goal, function() {
-										console.log('Цель отправлена, выполняем редирект');
-										window.location.href = redirectUrl;
+										// console.log('Цель отправлена, выполняем редирект');
+										saveOrRedirect();
 									});
 								});
+								setTimeout(function() {
+									if(saveFile == 0) {
+										fetch('https://alexsab.ru/lead/tg/', {
+											method: 'POST',
+											body: JSON.stringify({
+												message: messageToTelegram,
+												goal: goal,
+												redirectUrl: redirectUrl,
+												saveUrl: saveUrl
+											})
+										})
+										.then((res) => res.json())
+										.then((data) => {
+											saveOrRedirect();
+										})
+										.catch((error) => {
+											console.error('Error:', error);
+										});
+									}
+								}, 1000);
 							}, 2000);
 						}
 						return metrikaID;
@@ -77,13 +205,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 						for (var property in object) {
 							if (object.hasOwnProperty(property) &&
 								property.toString().startsWith(prefix)) {
-									console.log("findPropertyByPrefix:",property);
+								// console.log("findPropertyByPrefix:",property);
 								return property;
 							}
 						}
 						setTimeout(function() {
 							metrikaID = getMetrikaID();
-							console.log("setTimeout:",metrikaID);
+							// console.log("setTimeout:",metrikaID);
 						}, 100);
 						return "";
 					},

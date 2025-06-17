@@ -1,0 +1,8 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.metrika && scripts_json.metrika.value.length > 0 && scripts_json.metrika.value[0].id && String(scripts_json.metrika.value[0].id) !== "" && scripts_json.metrika.value.map(metrika => ( 
+    <noscript><div><img src={`https://mc.yandex.ru/watch/${metrika.id}`} style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+)) }

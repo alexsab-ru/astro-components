@@ -6,6 +6,7 @@ import ModelList from '@/components/Model/ModelList.astro';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 export const breadcrumb = { name: `Модели`, href: "/models/" };
 import SeoText from '@/components/Seo/Index.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
 ---
 <Layout 
 	title={`Модельный ряд ${brand} – Официальный дилер ${brand} в ${legal_city_where}`} 
@@ -14,7 +15,7 @@ import SeoText from '@/components/Seo/Index.astro';
 	<section class="content">
 		<div class="container">
 			<Breadcrumbs breadcrumb={[breadcrumb]} />
-			<h1><Fragment set:html={`Модели ${brand}`} /></h1>
+			<PageH1 h1={`Модели ${brand}`} />
 		</div>
 	</section>
 	<SeoText mdx="models" />

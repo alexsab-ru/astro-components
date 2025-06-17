@@ -105,6 +105,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules
+            .pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Determine changes
         id: check_changes
         run: |
@@ -167,12 +183,25 @@ jobs:
       - name: Replace Placeholders in JSON
         if: steps.check_changes.outputs.changes == 'true'
         run: |
-          pnpm replacePlaceholdersInJson
+          pnpm replacePlaceholdersAndSearchDates
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
 
       - name: Astro Build
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm build --outDir ./_site
+
+      - name: Set output
+        id: check_specials
+        run: |
+          if [ -s special-offers-dates.txt ]; then
+            echo "$(cat special-offers-dates.txt)" > output_wrapped.txt
+            # Кодируем содержимое файла в base64
+            encoded_output=$(base64 -w 0 output_wrapped.txt)
+            # Передаем закодированное значение
+            echo "specials=$encoded_output" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
@@ -187,6 +216,7 @@ jobs:
 
     outputs:
       changes: ${{ steps.check_changes.outputs.changes }}
+      specials: ${{ steps.check_specials.outputs.specials }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
 
   # Deployment job
@@ -210,5 +240,21 @@ jobs:
       additional-text: |
         $(echo -n '${{ needs.build.outputs.after_deploy }}' | base64)
     secrets:
-      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_AFTER_DEPLOY }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  notify_telegram_about_special:
+    needs: [build]
+    if: needs.build.outputs.specials != ''
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      additional-text: |
+        $(echo -n '${{ needs.build.outputs.specials }}' | base64)
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  check_links:
+    needs: [build, deploy]
+    if: ${{ github.event_name == 'schedule' }}
+    uses: ./.github/workflows/linkinator.yml
