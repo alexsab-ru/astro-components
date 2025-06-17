@@ -40,6 +40,7 @@ def process_permalink(vin):
 
 
 def format_html_for_mdx(raw_html):
+    # Проверяем корректность HTML с помощью BeautifulSoup
     soup = BeautifulSoup(raw_html, "html.parser")
     
     # Получаем HTML без форматирования (сохраняет &nbsp;)
@@ -47,11 +48,13 @@ def format_html_for_mdx(raw_html):
     
     # Экранируем проблемные символы для MDX
     html_output = html_output.replace('\\', '\\\\')  # Экранируем обратные слеши
-    html_output = html_output.replace('{', '\\{')        # Экранируем фигурные скобки
+    html_output = html_output.replace('{', '\\{')    # Экранируем фигурные скобки
     html_output = html_output.replace('}', '\\}')
     
-    html_output = re.sub(r'(<[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
-    html_output = re.sub(r'(</[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
+    # Добавляем переносы строк между тегами для лучшей читаемости
+    # Не разбиваем закрывающие теги br/></p>
+    html_output = re.sub(r'(<[^>]+>)(?!</[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
+    html_output = re.sub(r'(</[^>]+>)(?!</[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
     
     return html_output
 
@@ -59,6 +62,7 @@ def format_html_for_mdx(raw_html):
 def process_description(desc_text):
     """
     Обрабатывает текст описания, добавляя HTML-разметку.
+    Предотвращает вложенные p-теги и проверяет корректность HTML.
     
     Args:
         desc_text (str): Исходный текст описания
@@ -86,8 +90,10 @@ def process_description(desc_text):
             # Если это одиночный тег (например, <br/>), оставляем как есть
             if line.count('<') == 1 and line.count('>') == 1:
                 processed_lines.append(line)
-            # Если это HTML-блок, оборачиваем в <p>
+            # Если это HTML-блок, проверяем на вложенные p-теги
             else:
+                # Удаляем существующие p-теги если они есть
+                line = line.replace('<p>', '').replace('<br/></p>', '').replace('</p>', '')
                 processed_lines.append(f"<p>{line}</p>")
         else:
             # Если это обычный текст, оборачиваем в <p>
@@ -95,6 +101,7 @@ def process_description(desc_text):
     
     raw_html = '\n'.join(processed_lines)
     pretty_html = format_html_for_mdx(raw_html)
+    # pretty_html = raw_html
             
     return pretty_html
 
