@@ -64,7 +64,11 @@ if (fs.existsSync(dealerFilePath)) {
 
 // Объединяем данные
 const mergedData = federalData.map(federalItem => {
-  const dealerItem = dealerData.find(d => d.id === federalItem.id);
+  let dealerItem = dealerData.find(d => d.id === federalItem.id);
+  if (!dealerItem) {
+    console.log("dealerItem not found for federalItem:", federalItem.id);
+    dealerItem = dealerData.find(d => (d.brand.toLowerCase() === federalItem.brand.toLowerCase() && d.model.toLowerCase() === federalItem.model.toLowerCase()));
+  }
   
   if (dealerItem) {
     const priceFederal = parseNumber(federalItem.price);
