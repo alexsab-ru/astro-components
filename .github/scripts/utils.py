@@ -40,6 +40,17 @@ def process_permalink(vin):
 
 
 def format_html_for_mdx(raw_html):
+    """
+    Форматирует HTML для MDX, учитывая особенности MDX-парсера:
+    - Удаляет теги <p>, так как MDX сам их добавляет
+    - Заменяет <br/> на перенос строки
+    - Сохраняет форматирующие теги
+    - Добавляет пробелы после закрывающих тегов
+    - Добавляет пробелы перед открывающими тегами
+    - Добавляет пробелы между тегами
+    - Добавляет переносы между списками и жирным текстом
+    """
+    # Проверяем корректность HTML с помощью BeautifulSoup
     soup = BeautifulSoup(raw_html, "html.parser")
     
     # Получаем HTML без форматирования (сохраняет &nbsp;)
@@ -47,11 +58,39 @@ def format_html_for_mdx(raw_html):
     
     # Экранируем проблемные символы для MDX
     html_output = html_output.replace('\\', '\\\\')  # Экранируем обратные слеши
-    html_output = html_output.replace('{', '\\{')        # Экранируем фигурные скобки
+    html_output = html_output.replace('{', '\\{')    # Экранируем фигурные скобки
     html_output = html_output.replace('}', '\\}')
     
-    html_output = re.sub(r'(<[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
-    html_output = re.sub(r'(</[^>]+>)(<[^>]+>)', r'\1\n\2', html_output)
+    # Удаляем теги <p> и </p>, так как MDX сам их добавит
+    html_output = re.sub(r'</?p>', '', html_output)
+    
+    # Заменяем <br/> и <br> на перенос строки
+    html_output = re.sub(r'(<br/?>)', r'\1\n', html_output)
+    
+    # Добавляем <br/> между закрывающим списком и тегом жирности
+    html_output = re.sub(r'(</ul>)(<strong>)', r'\1<br/>\2', html_output)
+    
+    # Добавляем пробел после закрывающего тега, если после него идет буква
+    html_output = re.sub(r'(</[^>]+>)([а-яА-Яa-zA-Z])', r'\1 \2', html_output)
+    
+    # Добавляем пробел перед открывающим тегом, если перед ним буква
+    html_output = re.sub(r'([а-яА-Яa-zA-Z])(<[^/][^>]*>)', r'\1 \2', html_output)
+    
+    # Добавляем пробел между двумя тегами
+    html_output = re.sub(r'(>)(<)', r'\1 \2', html_output)
+    
+    # Добавляем переносы строк для лучшей читаемости
+    # 1. Разбиваем на строки по закрывающим тегам </ul>, </li>
+    html_output = re.sub(r'(</ul>|</li>)', r'\1\n', html_output)
+    
+    # 2. Разбиваем на строки по открывающим тегам <ul>, <li>
+    html_output = re.sub(r'(<ul>|<li>)', r'\n\1', html_output)
+    
+    # 3. Удаляем лишние пустые строки
+    html_output = re.sub(r'\n\s*\n', '\n', html_output)
+    
+    # 4. Удаляем пробелы в начале и конце каждой строки
+    html_output = '\n'.join(line.strip() for line in html_output.split('\n'))
     
     return html_output
 
@@ -59,6 +98,7 @@ def format_html_for_mdx(raw_html):
 def process_description(desc_text):
     """
     Обрабатывает текст описания, добавляя HTML-разметку.
+    Предотвращает вложенные p-теги и проверяет корректность HTML.
     
     Args:
         desc_text (str): Исходный текст описания
@@ -69,32 +109,7 @@ def process_description(desc_text):
     if not desc_text:
         return ""
         
-    # Заменяем все <br> на <br/>
-    desc_text = desc_text.replace("<br>", "<br/>\n")
-    
-    lines = desc_text.split('\n')
-    processed_lines = []
-    
-    for line in lines:
-        line = line.strip()
-        if not line:
-            processed_lines.append("<p>&nbsp;</p>")
-            continue
-            
-        # Проверяем, является ли строка HTML-разметкой
-        if line.startswith('<') and line.endswith('>'):
-            # Если это одиночный тег (например, <br/>), оставляем как есть
-            if line.count('<') == 1 and line.count('>') == 1:
-                processed_lines.append(line)
-            # Если это HTML-блок, оборачиваем в <p>
-            else:
-                processed_lines.append(f"<p>{line}</p>")
-        else:
-            # Если это обычный текст, оборачиваем в <p>
-            processed_lines.append(f"<p>{line}</p>")
-    
-    raw_html = '\n'.join(processed_lines)
-    pretty_html = format_html_for_mdx(raw_html)
+    pretty_html = format_html_for_mdx(desc_text)
             
     return pretty_html
 

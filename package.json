@@ -48,6 +48,7 @@
     "dd": "pnpm download_json && pnpm getDealerPrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
     "ddw": "powershell -Command \"pnpm download_json_win; pnpm getDealerPrices; pnpm mergeCarPrices; pnpm replacePlaceholdersAndSearchDates; pnpm dev\"",
     "linkinator": "astro dev --port 4343 & sleep 5 && npx linkinator http://localhost:4343 --recurse --format CSV  > linkinator.csv",
+    "broken_links": "astro dev --port 4343 & sleep 5 && export DOMAIN=localhost:4343 && node .github/scripts/checkLinks.js",
     "lighthouse": "astro build && astro preview --port 4343 & sleep 5 && npx lighthouse http://localhost:4343 --output=json --output-path=./lighthouse-report-$(date +%Y-%m-%d-%H-%M-%S).json",
     "build_local": "astro build --config astro.local.config.mjs",
     "build": "astro build",

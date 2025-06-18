@@ -56,10 +56,22 @@ class GSheetFetcher {
     }
 
     convertToNumber(value) {
-        if (typeof value === 'string' && value.trim() === '') {
-            return null; // Пустые строки приводятся к null
+        // Если значение уже число, возвращаем его как есть
+        if (typeof value === 'number') {
+            return value;
+        }
+
+        // Если значение не строка, преобразуем его в строку
+        if (typeof value !== 'string') {
+            value = String(value);
+        }
+
+        // Обработка пустых строк
+        if (value.trim() === '') {
+            return null;
         }
         
+        // Проверяем, является ли значение числом
         if (/^-?\d+(\s\d+)*(\.\d+)?$/.test(value)) {
             return Number(value.replace(/\s+/g, '').replace(',', '.'));
         }
@@ -115,6 +127,7 @@ class GSheetFetcher {
                             const transformedRecord = {};
                             Object.keys(record).forEach(field => {
                                 let value = record[field].trim();
+                                value = this.convertToNumber(value);
 
                                 // Переименовываем ключи согласно карте
                                 const newKey = keyMapping[field] || field; // Если ключ не найден в карте, оставляем оригинальный
