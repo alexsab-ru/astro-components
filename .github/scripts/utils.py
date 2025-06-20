@@ -502,6 +502,7 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
     folder = get_folder(brand, model)
     color_image = get_color_filename(brand, model, color)
 
+    thumb = "https://cdn.alexsab.ru/errors/404.webp"
     # Проверка через CDN сервис
     if folder:
         if color_image:
