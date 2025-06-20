@@ -74,18 +74,17 @@ const mergedData = federalData.map(federalItem => {
     const priceFederal = parseNumber(federalItem.price);
     const benefitFederal = parseNumber(federalItem.benefit || 0);
     
-    // Ищем минимальную цену среди всех возможных цен
-    const price = Math.min(
-      priceFederal,
-      dealerItem.priceDealer,
-      dealerItem.priceOfficial
-    );
+    // Ищем минимальную цену среди всех возможных цен (исключая нулевые значения)
+    const priceValues = [priceFederal, dealerItem.priceDealer, dealerItem.priceOfficial]
+      .filter(price => price > 0); // Исключаем нулевые и отрицательные значения
     
-    // Ищем максимальную выгоду
-    const benefit = Math.max(
-      benefitFederal,
-      dealerItem.benefitDealer
-    );
+    const price = priceValues.length > 0 ? Math.min(...priceValues) : priceFederal;
+    
+    // Ищем максимальную выгоду (исключая нулевые значения)
+    const benefitValues = [benefitFederal, dealerItem.benefitDealer]
+      .filter(benefit => benefit > 0); // Исключаем нулевые и отрицательные значения
+    
+    const benefit = benefitValues.length > 0 ? Math.max(...benefitValues) : benefitFederal;
     
     return {
       ...federalItem,
