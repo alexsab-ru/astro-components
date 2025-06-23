@@ -55,6 +55,8 @@ def format_html_for_mdx(raw_html):
     
     # Получаем HTML без форматирования (сохраняет &nbsp;)
     html_output = str(soup)
+
+    print(html_output)
     
     # Экранируем проблемные символы для MDX
     html_output = html_output.replace('\\', '\\\\')  # Экранируем обратные слеши
@@ -87,7 +89,7 @@ def format_html_for_mdx(raw_html):
     html_output = re.sub(r'(<ul>|<li>)', r'\n\1', html_output)
     
     # 3. Удаляем лишние пустые строки
-    html_output = re.sub(r'\n\s*\n', '\n', html_output)
+    # html_output = re.sub(r'\n\s*\n', '\n', html_output)
     
     # 4. Удаляем пробелы в начале и конце каждой строки
     html_output = '\n'.join(line.strip() for line in html_output.split('\n'))
@@ -108,10 +110,26 @@ def process_description(desc_text):
     """
     if not desc_text:
         return ""
-        
+    
     pretty_html = format_html_for_mdx(desc_text)
-            
-    return pretty_html
+    # Разбиваем результат на строки
+    lines = pretty_html.split('\n')
+    wrapped_lines = []
+    for line in lines:
+        # Если строка пустая или состоит только из пробелов, добавляем <p>&nbsp;</p>
+        if not line.strip():
+            wrapped_lines.append('<p>&nbsp;</p>')
+            continue
+        # Если строка начинается с <ul>, <li>, </ul>, </li>, не оборачиваем в <p>
+        if line.lstrip().startswith('<ul>') or line.lstrip().startswith('<li>') or \
+           line.lstrip().startswith('</ul>') or line.lstrip().startswith('</li>'):
+            wrapped_lines.append(line)
+        else:
+            # Оборачиваем в <p>...</p>
+            wrapped_lines.append(f'<p>{line}</p>')
+    # Склеиваем обратно в одну строку с переносами
+    result_html = '\n'.join(wrapped_lines)
+    return result_html
 
 
 def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False):
@@ -551,7 +569,8 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
 
     content += f"breadcrumb: {join_car_data(car, 'mark_id', 'folder_id', 'complectation_name')}\n"
 
-    content += f"title: 'Купить {join_car_data(car, 'mark_id', 'folder_id', 'modification_id')} у официального дилера в {config['legal_city_where']}'\n"
+    # Купить {{mark_id}} {{folder_id}} {{modification_id}} {{color}} у официального дилера в {{where}}
+    content += f"title: 'Купить {join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'color')} у официального дилера в {config['legal_city_where']}'\n"
 
     description = (
         f'Купить автомобиль {join_car_data(car, "mark_id", "folder_id")}'
