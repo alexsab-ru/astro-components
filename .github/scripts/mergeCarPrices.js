@@ -45,15 +45,21 @@ function transformDealerData(dealerData) {
     const modelId = getModelId(brand, modelName);
     console.log(brand, modelName, modelId);
     
-    // Проверяем, содержит ли modelId уже название бренда
-    const brandLower = brand.toLowerCase();
-    const modelIdLower = modelId ? modelId.toLowerCase() : '';
-    
-    // Если modelId уже содержит бренд, используем только modelId
-    // Иначе формируем ID как brand-modelId
-    const id = modelId ? 
-      (modelIdLower.includes(brandLower) ? modelId : `${brandLower}-${modelId}`) : 
-      null;
+    // --- Новая логика: если у item уже есть id или ids, используем их ---
+    let id = null;
+    if (item.id) {
+      // Если id уже есть, используем его
+      id = item.id;
+    } else if (item.ids && Array.isArray(item.ids) && item.ids.length > 0) {
+      // Если есть массив ids, используем первый элемент
+      id = item.ids[0];
+    } else if (modelId) {
+      // Стандартная логика формирования id
+      const brandLower = brand.toLowerCase();
+      const modelIdLower = modelId.toLowerCase();
+      id = modelIdLower.includes(brandLower) ? modelId : `${brandLower}-${modelId}`;
+    }
+    // ---------------------------------------------------------------
     
     return {
       id: id,
@@ -79,8 +85,10 @@ if (fs.existsSync(dealerFilePath)) {
 const mergedData = federalData.map(federalItem => {
   let dealerItem = dealerData.find(d => d.id === federalItem.id);
   if (!dealerItem) {
-    console.log("dealerItem not found for federalItem:", federalItem.id);
     dealerItem = dealerData.find(d => (d.brand.toLowerCase() === federalItem.brand.toLowerCase() && d.model.toLowerCase() === federalItem.model.toLowerCase()));
+    if (!dealerItem) {
+      console.log("dealerItem not found for federalItem:", federalItem.id);
+    }
   }
   
   if (dealerItem) {
