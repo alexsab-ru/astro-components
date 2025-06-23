@@ -193,10 +193,10 @@ if (typeof module !== 'undefined' && module.exports) {
 
 const config = {
     csvUrl: process.env.CSV_URL,
-    queryString: process.env.QUERY_STRING,
-    keyColumn: process.env.KEY_COLUMN,
+    queryString: process.env.QUERY_STRING || '',
+    keyColumn: process.env.KEY_COLUMN || '',
     outputPaths: process.env.OUTPUT_PATHS ? process.env.OUTPUT_PATHS.split(',') : ['./output.json'],
-    outputFormat: process.env.OUTPUT_FORMAT
+    outputFormat: process.env.OUTPUT_FORMAT || 'simple'
 };
 
 const fetcher = new GSheetFetcher(config);

@@ -40,12 +40,23 @@ function parseNumber(value) {
 // Функция для преобразования дилерских данных
 function transformDealerData(dealerData) {
   return Object.values(dealerData).map(item => {
-    const brand = item['Бренд'];
-    const modelName = item['Модель'];
+    const brand = item['Бренд'] || item['brand'];
+    const modelName = item['Модель'] || item['model'];
     const modelId = getModelId(brand, modelName);
+    console.log(brand, modelName, modelId);
+    
+    // Проверяем, содержит ли modelId уже название бренда
+    const brandLower = brand.toLowerCase();
+    const modelIdLower = modelId ? modelId.toLowerCase() : '';
+    
+    // Если modelId уже содержит бренд, используем только modelId
+    // Иначе формируем ID как brand-modelId
+    const id = modelId ? 
+      (modelIdLower.includes(brandLower) ? modelId : `${brandLower}-${modelId}`) : 
+      null;
     
     return {
-      id: modelId ? `${brand.toLowerCase()}-${modelId}` : null,
+      id: id,
       brand: brand,
       model: modelName,
       priceDealer: parseNumber(item['Конечная цена']),
@@ -59,7 +70,9 @@ function transformDealerData(dealerData) {
 let dealerData = [];
 if (fs.existsSync(dealerFilePath)) {
   const dealerRawData = JSON.parse(fs.readFileSync(dealerFilePath, 'utf-8'));
+  console.log(dealerRawData);
   dealerData = transformDealerData(dealerRawData);
+  console.log(dealerData);
 }
 
 // Объединяем данные
