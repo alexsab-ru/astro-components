@@ -204,7 +204,7 @@ const config = {
     csvUrl: process.env.CSV_URL,
     queryString: process.env.QUERY_STRING || '',
     keyColumn: process.env.KEY_COLUMN || '',
-    keyMapping: process.env.KEY_MAPPING || {},
+    keyMapping: process.env.KEY_MAPPING || '{}',
     outputPaths: process.env.OUTPUT_PATHS ? process.env.OUTPUT_PATHS.split(',') : ['./output.json'],
     outputFormat: process.env.OUTPUT_FORMAT || 'simple'
 };
