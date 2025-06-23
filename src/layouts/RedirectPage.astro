@@ -154,14 +154,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 				}
 
 				// Яндекс Метрика
-				if (scripts_json.metrika && scripts_json.metrika.length > 0) {
+				if (scripts_json.metrika.value && scripts_json.metrika.value.length > 0) {
 					(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
 					m[i].l=1*new Date();
 					for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
 					k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
 					(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 					
-					scripts_json.metrika.forEach(metrika => {
+					scripts_json.metrika.value.forEach(metrika => {
 						ym(metrika.id, "init", metrika);
 					});
 
@@ -171,7 +171,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
 						if (metrikaID) {
 							setTimeout(function() {
-								scripts_json.metrika.forEach(metrika => {
+								scripts_json.metrika.value.forEach(metrika => {
 									ym(metrika.id, 'reachGoal', goal, function() {
 										// console.log('Цель отправлена, выполняем редирект');
 										saveOrRedirect();

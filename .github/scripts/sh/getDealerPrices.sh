@@ -34,7 +34,7 @@ if [ -z "$KEY_MAPPING" ]; then
 fi
 
 # Устанавливаем остальные переменные
-export KEY_COLUMN="Модель"
+export KEY_COLUMN=""
 export OUTPUT_PATHS="./src/data/dealer-models_price.json"
 # export OUTPUT_FORMAT="simple"
 export OUTPUT_FORMAT="detailed"

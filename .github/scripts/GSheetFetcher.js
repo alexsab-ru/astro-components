@@ -13,6 +13,7 @@ class GSheetFetcher {
             csvUrl: process.env.CSV_URL || config.csvUrl,
             queryString: process.env.QUERY_STRING || config.queryString || '',
             keyColumn: process.env.KEY_COLUMN || config.keyColumn,
+            keyMapping: process.env.KEY_MAPPING || config.keyMapping,
             outputPaths: process.env.OUTPUT_PATHS ? 
                 process.env.OUTPUT_PATHS.split(',') : 
                 config.outputPaths || ['./output/prices.json'],
@@ -87,10 +88,21 @@ class GSheetFetcher {
                     return;
                 }
 
+                const result = {};
+                const keyMapping = JSON.parse(this.config.keyMapping); // Получаем карту переименования
+                console.log(keyMapping);
+                
                 if (!this.config.keyColumn) {
                     records.map(record => {
                         Object.keys(record).forEach(field => {
-                            record[field] = record[field].trim();
+                            let value = record[field].trim();
+                            value = this.convertToNumber(value);
+                            
+                            const newKey = keyMapping[field] || field; // Если ключ не найден в карте, оставляем оригинальный
+                            if(newKey == "") {
+                                return;
+                            }
+                            record[newKey] = value;
                         });
                     });
                     const filteredRecords = records.filter(row => {
@@ -99,9 +111,6 @@ class GSheetFetcher {
                     resolve(filteredRecords);
                     return;
                 }
-
-                const result = {};
-                const keyMapping = JSON.parse(process.env.KEY_MAPPING || '{}'); // Получаем карту переименования
 
                 records.forEach(record => {
                     if (Object.values(record).some(value => value.trim() !== '')) {
@@ -193,10 +202,11 @@ if (typeof module !== 'undefined' && module.exports) {
 
 const config = {
     csvUrl: process.env.CSV_URL,
-    queryString: process.env.QUERY_STRING,
-    keyColumn: process.env.KEY_COLUMN,
+    queryString: process.env.QUERY_STRING || '',
+    keyColumn: process.env.KEY_COLUMN || '',
+    keyMapping: process.env.KEY_MAPPING || '{}',
     outputPaths: process.env.OUTPUT_PATHS ? process.env.OUTPUT_PATHS.split(',') : ['./output.json'],
-    outputFormat: process.env.OUTPUT_FORMAT
+    outputFormat: process.env.OUTPUT_FORMAT || 'simple'
 };
 
 const fetcher = new GSheetFetcher(config);

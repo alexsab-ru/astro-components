@@ -24,13 +24,13 @@ const domain = getDomainWithProtocol(process.env.DOMAIN);
 const outputPath = './broken_links.txt';
 
 async function checkLinks() {
-  console.log('🔍 Начинаю проверку ссылок...');
+  console.log(`🔍 Начинаю проверку ссылок на ${domain}...`);
   const checker = new LinkChecker();
 
   const result = await checker.check({
     path: domain,
     recurse: true,
-    // linksToSkip: []
+    linksToSkip: [/javascript:void\(0\)/]
   });
 
   const brokenLinks = result.links.filter(x => x.state === 'BROKEN').map((item) => {
