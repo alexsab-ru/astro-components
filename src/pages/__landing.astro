@@ -5,7 +5,7 @@ import { TIMER, MARQUEE } from '@/const.js';
 import { LAST_DAY, MONTH, MONTH_GENITIVE, YEAR } from '@/js/utils/date';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
-import PageTitle from '@/components/PageTitle/Index.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
 import Timer from '@/components/Timer/Timer.astro';
 import ModelList from '@/components/Model/ModelList.astro';
 import LatestPosts from '@/components/LatestPosts/Index.astro';
@@ -15,7 +15,8 @@ import Callback from '@/components/Callback.astro';
 import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
 import Morquee from '@/components/Marquee/Index.astro';
-import models from '@/data/models.json';
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
 import salonsData from '@/data/salons.json';
 const salons = salonsData.filter(salon => !salon.type || salon.type.includes('index'));
 const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
@@ -59,7 +60,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 
 	{ false && models.length > 0 && models.filter(m => m.show).map(model => ( <Model model={model} /> ))}
 
-	<Callback bgUrl="https://cdn.alexsab.ru/models/default-model-bg.webp" title="Запишитесь на тест-драйв!" subtitle="Пройдите тест-драйв на интересном маршруте" formName="Секция. Запись на тест-драйв" id="test-drive" />
+	<Callback title="Запишитесь на тест-драйв!" subtitle="Пройдите тест-драйв на интересном маршруте" formName="Секция. Запись на тест-драйв" id="test-drive" />
 
 	{cars.length > 0 && (
 		<section class="section bg-gray-100" id="cars">

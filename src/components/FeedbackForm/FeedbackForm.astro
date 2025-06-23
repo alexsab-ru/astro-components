@@ -1,11 +1,20 @@
 ---
 import Form from './Form.astro';
 
+interface Props{
+  title?: string;
+  subtitle?: string;
+  imageUrl?: string;
+  dataFormName?: string;
+  showModelSelect?: boolean;
+}
+
 const {
   title = 'Узнать подробнее',
   subtitle = '',
   imageUrl = '',
   dataFormName = 'Форма обратной связи на странице',
+  showModelSelect = false,
 } = Astro.props;
 ---
 {imageUrl.length ? (
@@ -16,10 +25,10 @@ const {
     <div>
       <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
       {subtitle.length ? (<p class="text-center">{subtitle}</p>) : ('')}
-      <Form dataFormName={dataFormName} />
+      <Form dataFormName={dataFormName} showModelSelect={showModelSelect} />
     </div>
   </div>
 ) : (
   <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
-  <Form  dataFormName={dataFormName} />
+  <Form dataFormName={dataFormName} showModelSelect={showModelSelect} />
 )}

@@ -1,0 +1,66 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.calltouch.value.mod_id && scripts_json.calltouch.value.mod_id != "" && (
+<script>
+import { reachGoal } from '@alexsab-ru/scripts';
+function runCALLTOUCH(calltouch) {
+    // console.log("runCALLTOUCH", calltouch);
+    var script = document.createElement('script');
+    script.src = `https://mod.calltouch.ru/init.js?id=${calltouch.mod_id}`;
+    script.async = true;
+    
+    // Добавляем обработчик события загрузки скрипта
+    script.onload = function() {
+        console.log("Calltouch script loaded");
+        // Устанавливаем параметры после загрузки скрипта
+        window.calltouch_params = {
+            mod_id: calltouch.mod_id,
+            site_id: calltouch.site_id
+        };
+        
+        // Проверяем наличие функции ct и вызываем ее только после загрузки скрипта
+        if (typeof window.ct === 'function') {
+            window.ct('modules','widgets','subscribeToEvent',[
+                {
+                    object: 'form',
+                    action: 'show',
+                    callback: function(event){
+                        reachGoal("calltouch-form_open");
+                    }
+                },
+                {
+                    object: 'form',
+                    action: 'close',
+                    callback: function(event){
+                        reachGoal("calltouch-form_close");
+                    }
+                },
+                {
+                    object: 'request',
+                    action: 'create',
+                    callback: function(event){
+
+                        reachGoal("calltouch-form_success");
+                    }
+                },
+                {
+                    object: 'request',
+                    action: 'fail',
+                    callback: function(event){
+                        reachGoal("calltouch-form_error");
+                    }
+                }
+            ]);
+        } else {
+            console.error("Calltouch ct function not available");
+        }
+    };
+    
+    document.head.appendChild(script);
+}
+window._ct = runCALLTOUCH;
+</script>
+)}

@@ -5,10 +5,11 @@ interface Props {
 	classes?: string;
 }
 import ModelItem from './Item.astro';
-import modelsData from '@/data/models.json';
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 
-const {models = modelsData, title = 'Модельный ряд', classes, ...rest} = Astro.props;
+import modelsData from '@/data/models.json';
+const { models: modelsArr } = modelsData;
+const {models = modelsArr, title = 'Модельный ряд', classes, ...rest} = Astro.props;
 const filteredModels = models.filter(model => model.show);
 const groupModelsByBrand = groupArrayByKey(filteredModels, 'mark_id');
 ---

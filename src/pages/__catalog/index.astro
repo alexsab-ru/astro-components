@@ -11,12 +11,13 @@ import Checkbox from "@/components/Checkbox/Checkbox.astro";
 import SeoText from '@/components/Seo/Index.astro';
 import {Icon} from 'astro-icon/components';
 
-import rawModels from '@/data/models.json';
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
 let image = '';
 
-export async function getReadyCars(legal_city_where) {
+export async function getReadyCars(legal_city_where, models) {
     const cars = [];
-    rawModels.filter(m => m.show).forEach(model => {
+    models.filter(m => m.show).forEach(model => {
         const id = model.id;
         const benefit = Number(model?.benefit);
 
@@ -90,7 +91,7 @@ let colors = [];
 let complectations = [];
 let engines = [];
 let drives = [];
-let cars = await getReadyCars(legal_city_where);
+let cars = await getReadyCars(legal_city_where, models);
 cars.map(car => {
 	if(!colors.includes(car.color)) colors.push(car.color);
 	if(!complectations.includes(car.data.complectation_name)) complectations.push(car.data.complectation_name);
@@ -126,7 +127,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 					<div class="lg:sticky top-4 lg:top-[70px] lg:bg-gray-100 p-4 space-y-4 divide-y overflow-y-auto h-screen lg:h-[90vh] custom-scrollbar">
 						<div class="space-y-2">
 							<h3 class="!mb-2">Модель</h3>
-							{rawModels.map((model) => (
+							{models.map((model) => (
 								<Checkbox value={model.name.toLocaleLowerCase()} id={model.id} color="black" label={model.name} @change={`toggleFilter('Models', '${model.name.toLocaleLowerCase()}')`} />
 							))}
 						</div>

@@ -454,6 +454,7 @@
             "folder": "gs3",
             "cyrillic": "ГС3",
             "color": {
+                "Черный": "black.webp",
                 "Голубой": "blue.webp",
                 "Синий": "blue.webp",
                 "Серый": "gray.webp",
@@ -546,7 +547,10 @@
             "folder": "empow",
             "cyrillic": "Эмпоу",
             "color": {
-                "Черный": "black.webp"
+                "Черный": "black.webp",
+                "Белый": "white.webp",
+                "Серый": "gray.webp",
+                "Серебристый": "silver.webp"
             }
         }
     },
@@ -632,7 +636,8 @@
                 "Синий": "blue.webp",
                 "Серый": "gray.webp",
                 "Темно-серый": "gray.webp",
-                "Светло-серый": "silver.webp",
+                "Светло-серый": "light-gray.webp",
+                "(lc)светло-серый": "light-gray.webp",
                 "Красный": "red.webp",
                 "Серебристый": "silver.webp",
                 "Белый": "white.webp"
@@ -655,7 +660,7 @@
                 "Чёрный": "c2b.png",
                 "Красный": "c3b.png",
                 "Лазурный": "c4b.png",
-                "Cиний": "c4b.png",
+                "Синий": "c4b.png",
                 "Серый": "c5b.png",
                 "Зеленый": "c6b.png",
                 "Зелёный": "c6b.png",
@@ -691,15 +696,15 @@
             "folder": "x50",
             "cyrillic": "Икс 50",
             "color": {
-                "Black": "black.png",
-                "Черный": "black.png",
-                "Чёрный": "black.png",
-                "Gray": "gray.png",
-                "Серый": "gray.png",
-                "Lightgray": "light-gray.png",
-                "Светло-серый": "light-gray.png",
-                "White": "white.png",
-                "Белый": "white.png"
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Чёрный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Lightgray": "light-gray.webp",
+                "Светло-серый": "light-gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp"
             }
         },
         "X70 PLUS, I": {
@@ -986,7 +991,7 @@
             }
         },
         "CS35PLUS, I Рестайлинг": {
-            "folder": "cs35plus new",
+            "folder": "cs35plusnew",
             "color": {
                 "Crystal_white": "cs35plusnew_crystal_white.webp",
                 "Кристально белый": "cs35plusnew_crystal_white.webp",
@@ -1363,6 +1368,17 @@
         "F7, II": {
             "folder": "f7",
             "cyrillic": "F7",
+            "color": {
+                "Синий": "oceanic-lapis-lazuli.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Белый": "noble-agate.webp",
+                "Серый": "smoky-pearls.webp"
+            }
+        },
+        "F7x, II": {
+            "folder": "new-haval-f7x",
+            "cyrillic": "F7x",
             "color": {
                 "Синий": "oceanic-lapis-lazuli.webp",
                 "Черный": "galactic-black.webp",

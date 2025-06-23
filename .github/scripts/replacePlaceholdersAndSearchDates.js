@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
 import { currencyFormat } from '../../src/js/utils/numbers.format.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Указываем папки для обработки
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
@@ -10,9 +13,11 @@ const pagesDirectory = path.join(process.cwd(), 'src', 'pages');
 
 // Массив для отслеживания измененных файлов
 const modifiedFiles = [];
+// Массив для хранения файлов с приближающимися датами
+const filesWithUpcomingDates = [];
 
-// Проверяем наличие файла allPrices.json
-const carsFilePath = path.join(dataDirectory, 'allPrices.json');
+// Проверяем наличие файла all-prices.json
+const carsFilePath = path.join(dataDirectory, 'all-prices.json');
 let carsData = [];
 
 if (fs.existsSync(carsFilePath)) {
@@ -23,7 +28,7 @@ if (fs.existsSync(carsFilePath)) {
       carsData = [];
     }
   } catch (error) {
-    console.error("Ошибка парсинга файла allPrices.json:", error);
+    console.error("Ошибка парсинга файла all-prices.json:", error);
   }
 }
 
@@ -73,11 +78,54 @@ function replacePlaceholders(content) {
   return { content: updatedContent, hasChanges };
 }
 
+// Функция для конвертации даты в формат DD.MM.YYYY
+const convertToDDMMYYYY = (dateStr) => {
+  const parts = dateStr.split(/[^\d]/);
+  if (parts[0].length === 4) {
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+  }
+  return `${parts[0]}.${parts[1]}.${parts[2]}`;
+};
+
+// Функция для проверки, находится ли дата в пределах двух дней
+const isDateWithinTwoDays = (dateStr) => {
+  const [day, month, year] = dateStr.split('.').map(Number);
+  const date = new Date(year, month - 1, day);
+  const today = new Date();
+  
+  today.setHours(0, 0, 0, 0);
+  date.setHours(0, 0, 0, 0);
+  
+  const diffTime = Math.abs(today - date);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  return diffDays <= 2 || diffDays === 0;
+};
+
+// Функция для поиска дат в содержимом файла
+const searchDates = (content, filePath) => {
+  const format1 = content.match(/(\d{2}[^\d]\d{2}[^\d]\d{4})/g);
+  const format2 = content.match(/(\d{4}[^\d]\d{2}[^\d]\d{2})/g);
+  const allDates = [...(format1 || []), ...(format2 || [])];
+  const convertedDates = allDates.map(date => convertToDDMMYYYY(date));
+  const filteredDates = convertedDates.filter(isDateWithinTwoDays);
+
+  if (filteredDates.length) {
+    filesWithUpcomingDates.push({
+      filePath: filePath,
+      dates: filteredDates
+    });
+  }
+};
+
 // Функция для обработки файла
 function processFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const { content: updatedContent, hasChanges } = replacePlaceholders(content);
+
+    // Проверяем даты в файле
+    searchDates(content, filePath);
 
     if (hasChanges) {
       fs.writeFileSync(filePath, updatedContent, 'utf-8');
@@ -101,7 +149,7 @@ function processDirectory(directory, fileExtensions) {
       processDirectory(filePath, fileExtensions);
     } else if (fileExtensions.includes(path.extname(filePath))) {
       // Пропускаем файлы с ценами
-      if (!filePath.includes('allPrices.json') && 
+      if (!filePath.includes('all-prices.json') && 
           !filePath.includes('cars_dealer_price.json') && 
           !filePath.includes('cars.json') && 
           !filePath.includes('dealer_price.json') && 
@@ -132,4 +180,32 @@ if (modifiedFiles.length > 0) {
   modifiedFiles.forEach(file => console.log(`- ${file}`));
 } else {
   console.log('\nФайлы не были изменены.');
+}
+
+// Вывод информации о приближающихся датах
+if (filesWithUpcomingDates.length > 0) {
+  console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
+  const domain = process.env.DOMAIN;
+  let markdownOutput = '❗️ *ВНИМАНИЕ!* Приближаются даты окончания:\n\n';
+  
+  filesWithUpcomingDates.forEach(({ filePath, dates }) => {
+    const relativePath = path.relative(process.cwd(), filePath);
+    const fileNameWithoutExt = path.basename(filePath, path.extname(filePath));
+    
+    // Формируем текст для вывода
+    const outputText = `\nФайл: \`${relativePath}\`
+URL: https://${domain}/${fileNameWithoutExt}
+Даты окончания: ${dates.join(', ')}`;
+    
+    // Выводим в консоль
+    console.log(outputText);
+    
+    // Добавляем в markdown для файла
+    markdownOutput += `https://${domain}/${fileNameWithoutExt},\n*Даты окончания:*\n${dates.join(', ')}\n-----------\n`;
+  });
+  
+  // Сохраняем результаты в файл
+  const outputPath = './special-offers-dates.txt';
+  fs.writeFileSync(outputPath, markdownOutput, 'utf8');
+  console.log(`\nРезультаты сохранены в файл: ${outputPath}`);
 }

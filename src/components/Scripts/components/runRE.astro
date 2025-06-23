@@ -1,0 +1,64 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.re && scripts_json.re.value !== "" && (
+<script>
+function runRE(scripts_json_re) {
+    // console.log("runRE", scripts_json_re);
+    window.grecaptcha_open = window._dp.grecaptcha_open;
+    window.grecaptcha_action = window._dp.grecaptcha_action;
+    var script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${scripts_json_re}`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+}
+window._re = runRE;
+
+function executeRecaptcha() {
+	grecaptcha.ready(function() {
+		grecaptcha.execute(window.grecaptcha_open, {action: window.grecaptcha_action}).then(function(token) {
+			let formData = new FormData();
+			formData.append('g-recaptcha-response', token);
+			const params = new URLSearchParams([...formData]);
+			fetch("https://alexsab.ru/lead/re/", {
+				method: "POST",
+				mode: "cors",
+				cache: "no-cache",
+				credentials: "same-origin",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: params,
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					// console.log('Success:', data);
+					window.re = data.data.response.success;
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+		});
+	});
+}
+
+// Проверяем, определена ли grecaptcha
+if (typeof grecaptcha === "undefined") {
+	// Если grecaptcha не определена, устанавливаем интервал для проверки
+	var checkRecaptchaAvailability = setInterval(function() {
+		if (typeof grecaptcha !== "undefined") {
+			// Как только grecaptcha становится доступной, очищаем интервал
+			clearInterval(checkRecaptchaAvailability);
+			// Выполняем код с grecaptcha
+			executeRecaptcha();
+		}
+	}, 1000); // Проверяем каждую секунду
+} else {
+	// Если grecaptcha уже доступна, просто выполняем код
+	executeRecaptcha();
+}
+</script>
+)}

@@ -1,0 +1,116 @@
+name: Linkinator
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-pages:
+    runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.check-pages.outputs.pages_enabled }}
+    steps:
+      - name: Check GitHub Pages status
+        id: check-pages
+        run: |
+          PAGES_STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" \
+            -w '%{http_code}' -o /dev/null)
+          if [ "$PAGES_STATUS" = "200" ]; then
+            echo "pages_enabled=true" >> $GITHUB_OUTPUT
+          else
+            echo "pages_enabled=false" >> $GITHUB_OUTPUT
+          fi
+
+  determine_env:
+    needs: [check-pages]
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.set_env.outputs.env_name }}
+    steps:
+      - id: set_env
+        run: |
+          PROD_BRANCHES=("main" "master" "brand" "dealer") # Bash array
+          CURRENT_BRANCH="${{ github.ref_name }}"
+          IS_PROD=false
+          for branch in "${PROD_BRANCHES[@]}"; do
+            if [[ "$CURRENT_BRANCH" == "$branch" ]]; then
+              IS_PROD=true
+              break
+            fi
+          done
+          if $IS_PROD; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          else
+            echo "env_name=development" >> $GITHUB_OUTPUT
+          fi
+
+  check_links:
+    needs: [check-pages, determine_env]
+    if: ${{ needs.check-pages.outputs.pages_enabled == 'true' }}
+    concurrency: ci-${{ github.ref }}
+    runs-on: ubuntu-latest
+
+    # Указываете окружение и его переменные
+    environment:
+      name: ${{ needs.determine_env.outputs.env_name }}
+
+    outputs:
+      has_broken_links: ${{ steps.check_links.outputs.has_broken_links }}
+      broken_links_output: ${{ steps.check_links.outputs.script_output }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules
+            .pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install --no-frozen-lockfile
+
+      - name: Check links
+        id: check_links
+        run: |
+          touch .env
+          echo DOMAIN=${{ vars.DOMAIN }} >> .env
+          export DOMAIN=${{ vars.DOMAIN }}
+          node .github/scripts/checkLinks.js
+          if [ -s broken_links.txt ]; then
+            echo "$(cat broken_links.txt)" > output_wrapped.txt
+            encoded_output=$(base64 -w 0 output_wrapped.txt)
+            echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
+            echo "has_broken_links=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_broken_links=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
+
+  notify_telegram:
+    needs: check_links
+    if: needs.check_links.outputs.has_broken_links == 'true'
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      additional-text: ${{ needs.check_links.outputs.broken_links_output }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_LINKS }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
