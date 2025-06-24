@@ -104,8 +104,11 @@ const isDateWithinTwoDays = (dateStr) => {
 
 // Функция для поиска дат в содержимом файла
 const searchDates = (content, filePath) => {
-  const format1 = content.match(/(\d{2}[^\d]\d{2}[^\d]\d{4})/g);
-  const format2 = content.match(/(\d{4}[^\d]\d{2}[^\d]\d{2})/g);
+  // Ищем даты в формате DD.MM.YYYY или DD-MM-YYYY или DD/MM/YYYY
+  const format1 = content.match(/\b(\d{2}[.\-/]\d{2}[.\-/]\d{4})\b/g);
+  // Ищем даты в формате YYYY.MM.DD или YYYY-MM-DD или YYYY/MM/DD
+  const format2 = content.match(/\b(\d{4}[.\-/]\d{2}[.\-/]\d{2})\b/g);
+  console.log(filePath, format1, format2);
   const allDates = [...(format1 || []), ...(format2 || [])];
   const convertedDates = allDates.map(date => convertToDDMMYYYY(date));
   const filteredDates = convertedDates.filter(isDateWithinTwoDays);
@@ -117,6 +120,45 @@ const searchDates = (content, filePath) => {
     });
   }
 };
+
+// Функция для формирования URL в зависимости от расположения файла
+function generateUrl(filePath, domain) {
+  const relativePath = path.relative(process.cwd(), filePath);
+  
+  // Если файл находится в src/content/
+  if (relativePath.startsWith('src/content/')) {
+    const pathWithoutPrefix = relativePath.replace('src/content/', '');
+    const fileNameWithoutExt = path.basename(pathWithoutPrefix, path.extname(pathWithoutPrefix));
+    const directoryPath = path.dirname(pathWithoutPrefix);
+    
+    if (directoryPath === '.') {
+      return `https://${domain}/${fileNameWithoutExt}/`;
+    } else {
+      return `https://${domain}/${directoryPath}/${fileNameWithoutExt}/`;
+    }
+  }
+  
+  // Если файл находится в src/pages/
+  if (relativePath.startsWith('src/pages/')) {
+    const pathWithoutPrefix = relativePath.replace('src/pages/', '');
+    const fileNameWithoutExt = path.basename(pathWithoutPrefix, path.extname(pathWithoutPrefix));
+    const directoryPath = path.dirname(pathWithoutPrefix);
+    
+    if (directoryPath === '.') {
+      return `https://${domain}/${fileNameWithoutExt}/`;
+    } else {
+      return `https://${domain}/${directoryPath}/${fileNameWithoutExt}/`;
+    }
+  }
+  
+  // Если файл banners.json - ссылка на главную страницу
+  if (relativePath.includes('banners.json')) {
+    return `https://${domain}/`;
+  }
+  
+  // Для остальных файлов - просто домен
+  return `https://${domain}/`;
+}
 
 // Функция для обработки файла
 function processFile(filePath) {
@@ -186,26 +228,29 @@ if (modifiedFiles.length > 0) {
 if (filesWithUpcomingDates.length > 0) {
   console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
   const domain = process.env.DOMAIN;
-  let markdownOutput = '❗️ *ВНИМАНИЕ!* Приближаются даты окончания:\n\n';
+  let htmlOutput = '<h3>❗️ ВНИМАНИЕ! Приближаются даты окончания:</h3>\n\n';
   
   filesWithUpcomingDates.forEach(({ filePath, dates }) => {
     const relativePath = path.relative(process.cwd(), filePath);
-    const fileNameWithoutExt = path.basename(filePath, path.extname(filePath));
+    const url = generateUrl(filePath, domain);
     
-    // Формируем текст для вывода
+    // Формируем текст для вывода (одинаковый для консоли и HTML)
     const outputText = `\nФайл: \`${relativePath}\`
-URL: https://${domain}/${fileNameWithoutExt}
+URL: ${url}
 Даты окончания: ${dates.join(', ')}`;
     
     // Выводим в консоль
     console.log(outputText);
     
-    // Добавляем в markdown для файла
-    markdownOutput += `https://${domain}/${fileNameWithoutExt},\n*Даты окончания:*\n${dates.join(', ')}\n-----------\n`;
+    // Добавляем в HTML для файла
+    htmlOutput += `<p><strong>Файл:</strong> <code>${relativePath}</code><br>
+<strong>URL:</strong> <a href="${url}">${url}</a><br>
+<strong>Даты окончания:</strong> ${dates.join(', ')}</p>
+<hr>\n`;
   });
   
   // Сохраняем результаты в файл
   const outputPath = './special-offers-dates.txt';
-  fs.writeFileSync(outputPath, markdownOutput, 'utf8');
+  fs.writeFileSync(outputPath, htmlOutput, 'utf8');
   console.log(`\nРезультаты сохранены в файл: ${outputPath}`);
 }
