@@ -195,7 +195,6 @@ jobs:
       - name: Check specials
         id: check_specials
         run: |
-          cat special-offers-dates.txt
           if [ -s special-offers-dates.txt ]; then
             echo "$(cat special-offers-dates.txt)" > output_wrapped.txt
             # Кодируем содержимое файла в base64
