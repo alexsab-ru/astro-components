@@ -61,7 +61,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   {
     (model?.complectations !== undefined && model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={brand} />
   }
-  <SeoText mdx={seoname} />
+  <SeoText mdx={seoname} sectionPaddingBlock />
   <section>
     <div class="container">
       <FeedbackForm 
