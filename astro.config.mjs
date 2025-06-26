@@ -44,6 +44,12 @@ export default defineConfig({
 		icon(),
 		react(),
 	],
+	redirects: {
+		'/special-offers/vesna-raduet-vygodnym-predlozheniem/': {
+			status: 301,
+			destination:'/special-offers/leto-raduet-vygodnym-predlozheniem/'
+		}
+	},
 	vite: {
 		plugins: [yaml()],
 		css: {
