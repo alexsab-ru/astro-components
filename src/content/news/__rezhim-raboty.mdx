@@ -1,0 +1,33 @@
+---
+h1: "Режим работы нашего дилерского центра Джили Партнер-Авто Оренбург"
+title: "Режим работы нашего дилерского центра"
+breadcrumb: "Режим работы"
+pubDate: 2024-12-28
+image: "/img/banners/new_year_2025.webp"
+description: "Узнайте режим работы нашего дилерского центра Джили Партнер-Авто Оренбург!"
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common, brand } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+
+export const from = '01.07.2024';
+export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
+
+<img src="/img/banners/new_year_2025.webp" class="mb-10" alt="режим работы" />
+
+### **Уважаемы клиенты! Поздравляем вас с Новым 2025 годом и Рождеством!**
+
+Информируем о режиме работы дилерского центра Джили Партнер-Авто Оренбург.
+
+31 декабря, 1,2,3,7,8 января — выходной
+
+30 декабря с 09:00 до 16:00 
+
+4,5,6 января с 09:00 до 20:00
+
+5 января отдел сервиса — Выходной
+
+<SpecialSalonsInfo dataFormName="Узнать подробнее. Режим работы" />
