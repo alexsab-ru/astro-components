@@ -7,22 +7,21 @@ slug: "geely-assistance"
 image: "https://cdn.alexsab.ru/for-owners/geely/geely-assistance/thumb.webp"
 description: "GEELY ASSISTANCE — программа помощи на дорогах, гарантирует Вашу мобильность, независимо от неожиданностей в пути."
 ---
-import Button from '@/components/Button/Button.astro';
+import { AGREE_LABEL } from '@/const';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common, brand } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
 import models from '@/data/models.json';
-import settings from '@/data/settings.json';
-export const { site_name, phone_common } = settings;
-import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
-import { AGREE_LABEL } from '@/const';
 
-export const dateFrom = '01.07.2024';
-export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
-export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
-export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+export const from = '01.07.2024';
+export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
 
 <picture>
 	<source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/for-owners/geely/geely-assistance/banner.webp" />
