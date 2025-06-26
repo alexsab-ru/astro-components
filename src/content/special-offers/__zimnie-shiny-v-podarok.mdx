@@ -7,17 +7,12 @@ pubDate: 2024-12-10
 image: https://cdn.alexsab.ru/specials/geely/zimnie-shiny-v-podarok/geely-winter-tires-900x480.webp
 description: "При покупке нового автомобиля GEELY в Партнер Оренбург, комплект зимних шин (4 штуки) предоставляется покупателю в подарок, данное предложение действует на весь модельный ряд Geely"
 ---
-import Button from '@/components/Button/Button.astro';
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import settings from '@/data/settings.json';
-export const { site_name, phone_common } = settings;
-import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+export const { site_name, phone_common, brand } = settings;
 
-export const dateFrom = '01.07.2024';
-export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
-export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
-export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+export const from = '01.12.2024';
+export const to = '25 декабря 2024';
 
 <picture>
 	<source media="(min-width: 1200px)" srcset="https://cdn.alexsab.ru/specials/geely/zimnie-shiny-v-podarok/geely-winter-tires-1304x480.webp" />

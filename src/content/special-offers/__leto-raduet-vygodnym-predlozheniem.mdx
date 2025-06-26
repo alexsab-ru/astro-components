@@ -8,16 +8,11 @@ breadcrumb: Лето радует выгодным предложением
 h1: Лето радует выгодным предложением
 ---
 import Button from '@/components/Button/Button.astro';
-import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import settings from '@/data/settings.json';
-export const { site_name, phone_common } = settings;
-import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+export const { site_name, phone_common, brand } = settings;
 
-export const dateFrom = '01.07.2024';
-export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
-export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
-export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 
 Только в Geely Партнер Оренбург вы можете приобрести новый <b>Belgee X50</b> по цене <b>от 1 980 990 рублей</b>.<sup>*</sup><br/>
 <br/>

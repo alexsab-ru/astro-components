@@ -8,16 +8,10 @@ breadcrumb: Шиномонтаж и хранение шин
 h1: Шиномонтаж и&nbsp;шинный отель в&nbsp;Geely Партнер Оренбург
 ---
 import Button from '@/components/Button/Button.astro';
-import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import settings from '@/data/settings.json';
-export const { site_name, phone_common } = settings;
+export const { site_name, phone_common, brand } = settings;
 import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
-
-export const dateFrom = '01.07.2024';
-export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
-export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
-export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 
 <picture>
 	<source media="(min-width: 1200px)" srcset="https://cdn.alexsab.ru/main-sliders/geely/sezonnyy-shinomontazh/1920x1080.webp" />

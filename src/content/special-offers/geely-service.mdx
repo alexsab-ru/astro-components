@@ -8,19 +8,15 @@ toDate: 2025-06-01
 image: https://cdn.alexsab.ru/specials/geely/geely-service/thumb.webp
 description: "Весна – время обновлений, лето – время ярких впечатлений! Подарите своему автомобилю заботу с Geely Service и наслаждайтесь каждым километром пути без забот!"
 ---
-import Button from '@/components/Button/Button.astro';
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import Timer from '@/components/Timer/Timer.astro';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import settings from '@/data/settings.json';
 export const { site_name, phone_common, legal_city_where } = settings;
 import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
 
-export const dateFrom = '01.07.2024';
-export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
-export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
-export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+export const from = '07.04.2025';
+export const to = '01.06.2025';
 
 <picture>
     <source media="(min-width: 1024px)" srcset="https://cdn.alexsab.ru/specials/geely/geely-service/desktop-1500x844.webp" />
@@ -30,7 +26,7 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 
 **Весна – время обновлений, лето – время ярких впечатлений! Подарите своему автомобилю заботу с Geely Service и наслаждайтесь каждым километром пути без забот!**
 
-С {dateFrom}г. по {dateTo}г. дилерский центр "{site_name}" в {legal_city_where} приглашает вас на специальную сервисную акцию:
+С {from}г. по {to}г. дилерский центр "{site_name}" в {legal_city_where} приглашает вас на специальную сервисную акцию:
 
 - Комплексная диагностика автомобиля всего за 999 рублей – уверенность в исправности вашего авто.
 - Скидка до 60% на щетки стеклоочистителей + бесплатная установка – четкий обзор в сложных погодных условиях.
@@ -77,6 +73,6 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 
 > Проведение дополнительных работ отдельно согласуется с клиентом в соответствии с прейскурантом цен официального дилерского центра "{site_name}" в {legal_city_where}, является опционным и не является обязательным условием участия в акции.
 
-> Сроки проведения акции - с {dateFrom}г. по {dateTo}г.
+> Сроки проведения акции - с {from}г. по {to}г.
 
 > Данная информация не является офертой.

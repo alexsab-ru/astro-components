@@ -7,21 +7,20 @@ description: "Ознакомьтесь с кредитными предложе�
 breadcrumb: Кредитные предложения на автомобили Geely
 h1: Благодарим за интерес к приобретению автомобиля Geely!
 ---
-import Button from '@/components/Button/Button.astro';
-import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
-import settings from '@/data/settings.json';
-export const { site_name, phone_common } = settings;
-import { phoneFormat } from '@/js/utils/numbers.format';
-import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+export const DateFrom = "01.01.2024"
+export const DateTo = "31.01.2024"
 
-export const dateFrom = '01.07.2024';
-export const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
-export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
-export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+import Button from '@/components/Button/Button.astro';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common, brand } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 
 Здесь Вы можете ознакомиться с кредитными предложениями и отправить запрос официальному дилеру GEELY.
 
 <img src="https://cdn.alexsab.ru/main-sliders/geely/kreditnye-predlozheniya-na-avtomobili-geely/kreditnye-predlozheniya-na-avtomobili-geely-thumb.webp" alt="Car" />
+
+ 
 
 ### <b>Основные условия кредитования для покупки автомобилей Geely</b>
 <br />
