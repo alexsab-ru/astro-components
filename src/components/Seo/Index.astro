@@ -4,9 +4,10 @@ import { getEntry } from 'astro:content';
 interface Props {
   mdx: string;
   noPadding?: boolean;
+  sectionPaddingBlock?: boolean
 }
 
-const { mdx, noPadding = false } = Astro.props;
+const { mdx, noPadding = false, sectionPaddingBlock = false } = Astro.props;
 
 // Попробуем получить запись из коллекции 'seo' по слагу
 const content = await getEntry('seo', mdx);
@@ -21,7 +22,7 @@ if (content) {
 ---
 
 { showseo ? ( 
-<section class="!pt-0">
+<section class={`${!sectionPaddingBlock ? '!pt-0' : ''}`}>
 	<div class={`container ${noPadding ? '!px-0' : ''}`}>
 		<div class="seo-content">
 			<Content />
