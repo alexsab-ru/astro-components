@@ -184,6 +184,7 @@
                 "Черный": "black-metallic.webp",
                 "Черный/черный": "black-metallic.webp",
                 "Серебристый": "silver-metallic.webp",
+                "Серебряный": "silver-metallic.webp",
                 "Серый": "silver-metallic.webp",
                 "Синий": "starry-blue-metallic.webp",
                 "Серо-голубой": "starry-blue-metallic.webp",
@@ -261,6 +262,7 @@
                 "Серый": "gray-metallic.webp",
                 "Серый металлик": "gray-metallic.webp",
                 "Серебристый": "silver-metallic.webp",
+                "Серебряный": "silver-metallic.webp",
                 "Белый": "white-metallic.webp"
             }
         },
