@@ -39,6 +39,18 @@ const initSlider = () => {
 			el: ".banner-pagination",
 			clickable: true,
 		},
+		breakpoints: {
+			0: {
+				pagination: {
+					dynamicBullets: true,
+				},
+			},
+			700: {
+				pagination: {
+					dynamicBullets: false,
+				},
+			}
+		},
 		navigation: {
 			nextEl: ".banner-button-next",
 			prevEl: ".banner-button-prev",
