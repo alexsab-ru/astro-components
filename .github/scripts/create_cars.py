@@ -11,9 +11,27 @@ class CarDataExtractor:
     Не изменяет исходный фид, только извлекает данные для генерации MDX страниц.
     """
     
-    def __init__(self, source_type: str):
+    def __init__(self, source_type: str = None, input_file: str = None):
         self.source_type = source_type
-        self.setup_source_config()
+        self.input_file = input_file
+        
+        # Если тип источника не указан, пытаемся определить автоматически
+        if not self.source_type and self.input_file:
+            try:
+                root = get_xml_content(self.input_file, '')
+                detected_type = self.auto_detect_source_type(root)
+                if detected_type:
+                    self.source_type = detected_type
+                    print(f"Автоопределен тип фида: {self.source_type}")
+                else:
+                    print("Предупреждение: Не удалось определить тип фида автоматически. Укажите source_type явно.")
+            except Exception as e:
+                print(f"Ошибка при автоопределении типа фида: {e}")
+        
+        # Устанавливаем конфигурацию только если тип источника определен
+        if self.source_type:
+            self.setup_source_config()
+        
         self.existing_files = set()
         self.current_thumbs = []
         self.prices_data = load_price_data()
@@ -592,6 +610,11 @@ class CarDataExtractor:
         Args:
             config: Конфигурация обработки
         """
+        # Проверяем, что тип источника определен
+        if not self.source_type:
+            print("Ошибка: Тип источника не определен. Укажите --source_type явно или убедитесь, что файл поддерживается для автоопределения.")
+            return
+        
         # Получаем XML контент
         root = get_xml_content(config['input_file'], config.get('xml_url'))
         
@@ -622,14 +645,49 @@ class CarDataExtractor:
         tree.write(output_path, encoding='utf-8', xml_declaration=True)
         print(f"Обновленный XML сохранен: {output_path}")
 
+    def auto_detect_source_type(self, root: ET.Element) -> str:
+        """
+        Автоматически определяет тип источника на основе структуры XML.
+        
+        Args:
+            root: Корневой элемент XML
+            
+        Returns:
+            str: Определенный тип источника
+        """
+        # Проверяем корневой элемент
+        root_tag = root.tag
+        
+        # Проверяем наличие характерных элементов для каждого формата
+        if root_tag == 'Ads':
+            return 'Ads-Ad'
+        
+        if root_tag == 'data':
+            cars_elem = root.find('cars')
+            if cars_elem is not None:
+                return 'data-cars-car'
+        
+        if root_tag == 'vehicles':
+            return 'vehicles-vehicle'
+        
+        if root_tag == 'yml_catalog':
+            shop_elem = root.find('shop')
+            if shop_elem is not None:
+                offers_elem = shop_elem.find('offers')
+                if offers_elem is not None:
+                    return 'yml_catalog-shop-offers-offer'
+        
+        # Если не удалось определить, возвращаем None
+        return None
+
 def main():
     """
     Основная функция программы.
     """
     parser = argparse.ArgumentParser(description='Extract car data from XML feeds and generate MDX pages')
-    parser.add_argument('--source_type', required=True, 
+    parser.add_argument('--source_type', 
                        choices=['Ads-Ad', 'data-cars-car', 'vehicles-vehicle', 'yml_catalog-shop-offers-offer'], 
-                       help='Type of source data')
+                       help='Type of source data (auto-detected if not specified)')
     parser.add_argument('--path_car_page', default='/cars/', help='Default path to cars pages')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
@@ -653,7 +711,7 @@ def main():
     config = vars(args)
 
     # Инициализация экстрактора данных
-    extractor = CarDataExtractor(args.source_type)
+    extractor = CarDataExtractor(args.source_type, args.input_file)
     
     # Настройка директорий
     setup_directories(config['thumbs_dir'], args.cars_dir)
