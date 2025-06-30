@@ -227,7 +227,7 @@ class CarDataExtractor:
             if xml_field in ['image_tag', 'image_url_attr'] or xml_field is None:
                 continue
                 
-            if xml_field == 'images':
+            if internal_name == 'images':
                 # Особая обработка для изображений
                 images_container = car.find(xml_field)
                 if images_container is not None:
@@ -527,33 +527,100 @@ class CarDataExtractor:
 
     def create_mdx_file(self, car_data: Dict[str, any], file_path: str, friendly_url: str, config: Dict) -> None:
         """
-        Создает новый MDX файл для автомобиля.
-        
+        Создает новый MDX файл для автомобиля на основе словаря car_data.
         Args:
-            car_data: Данные автомобиля
+            car_data: Данные автомобиля (dict)
             file_path: Путь к файлу
             friendly_url: Дружественный URL
             config: Конфигурация
         """
-        # Здесь будет логика создания MDX файла
-        # Пока что просто выводим информацию
-        print(f"Создание файла: {file_path}")
-        # print(f"Данные автомобиля: {car_data}")
+        # Формируем YAML frontmatter
+        content = "---\n"
+        # Порядок (order)
+        order = self.sort_storage_data.get(car_data['vin'], self.sort_storage_data.get('order', 1))
+        content += f"order: {order}\n"
+        content += f"total: 1\n"
+        content += f"vin_list: {car_data['vin']}\n"
+        content += f"vin_hidden: {car_data['vin'][:5]}-{car_data['vin'][-4:]}\n"
+        h1 = self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id')
+        content += f"h1: {h1}\n"
+        content += f"breadcrumb: {self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'complectation_name')}\n"
+        content += f"title: 'Купить {self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id', 'color')} у официального дилера в {config['legal_city_where']}'\n"
+        description = (
+            f'Купить автомобиль {self.join_car_data_from_dict(car_data, "mark_id", "folder_id")}'
+            f'{" " + str(car_data["year"]) + " года выпуска" if car_data.get("year") else ""}'
+            f'{", комплектация " + str(car_data["complectation_name"]) if car_data.get("complectation_name") else ""}'
+            f'{", цвет - " + str(car_data["color"]) if car_data.get("color") else ""}'
+            f'{", двигатель - " + str(car_data["modification_id"]) if car_data.get("modification_id") else ""}'
+            f' у официального дилера в г. {config["legal_city"]}. Стоимость данного автомобиля {self.join_car_data_from_dict(car_data, "mark_id", "folder_id")} – {car_data.get("priceWithDiscount", car_data.get("price", ""))}'
+        )
+        content += f"description: '{description}'\n"
+        # Основные поля
+        for key, value in car_data.items():
+            if key in ['vin', 'vin_hidden', 'h1', 'breadcrumb', 'title', 'description', 'order', 'total', 'images', 'thumbs', 'url']:
+                continue
+            if isinstance(value, str):
+                # Экранируем кавычки
+                if "'" in value:
+                    value = f'"{value}"'
+                elif ":" in value:
+                    value = f"'{value}'"
+            content += f"{key}: {value}\n"
+        # Изображения
+        images = car_data.get('images', [])
+        if images:
+            content += f"images: {images}\n"
+            # Превью
+            thumbs_files = createThumbs(images, friendly_url, self.current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
+            content += f"thumbs: {thumbs_files}\n"
+        # Основное изображение
+        if car_data.get('color'):
+            content += f"image: {images[0] if images else ''}\n"
+        # URL страницы
+        if car_data.get('url'):
+            content += f"url: {car_data['url']}\n"
+        content += "---\n"
+        # Описание (если есть)
+        if car_data.get('description'):
+            content += process_description(car_data['description'])
+        # Сохраняем файл
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"Создан файл: {file_path}")
         self.existing_files.add(file_path)
 
     def update_mdx_file(self, car_data: Dict[str, any], file_path: str, friendly_url: str, config: Dict) -> None:
         """
-        Обновляет существующий MDX файл для автомобиля.
-        
+        Обновляет существующий MDX файл для автомобиля на основе словаря car_data.
         Args:
-            car_data: Данные автомобиля
+            car_data: Данные автомобиля (dict)
             file_path: Путь к файлу
             friendly_url: Дружественный URL
             config: Конфигурация
         """
-        # Здесь будет логика обновления MDX файла
-        print(f"Обновление файла: {file_path}")
-        print(f"Новые данные: {car_data}")
+        import yaml
+        # Читаем существующий файл
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        # Разделяем YAML frontmatter и тело
+        yaml_delimiter = "---\n"
+        parts = content.split(yaml_delimiter)
+        if len(parts) < 3:
+            print(f"Ошибка: не найден YAML frontmatter в {file_path}")
+            return
+        yaml_block = parts[1].strip()
+        data = yaml.safe_load(yaml_block)
+        # Обновляем поля из car_data
+        for key, value in car_data.items():
+            data[key] = value
+        # Пересобираем YAML
+        updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
+        updated_content = yaml_delimiter.join([parts[0], updated_yaml_block, yaml_delimiter.join(parts[2:])])
+        # Сохраняем файл
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(updated_content)
+        print(f"Обновлен файл: {file_path}")
+        self.existing_files.add(file_path)
 
     def get_cars_element(self, root: ET.Element) -> ET.Element:
         """
@@ -715,6 +782,11 @@ def main():
     
     # Настройка директорий
     setup_directories(config['thumbs_dir'], args.cars_dir)
+    
+    # Создаем директорию для результатов, если её нет
+    output_dir = os.path.dirname(config['output_path'])
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     
     # Очистка output.txt
     with open('output.txt', 'w') as file:
