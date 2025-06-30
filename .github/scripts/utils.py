@@ -1062,6 +1062,7 @@ def load_file_config(config_path: str, source_type: str, default_config) -> Dict
     except json.JSONDecodeError:
         print(f"Ошибка при чтении {config_path}. Используются значения по умолчанию.")
         return default_config
+
 def extract_image_urls(images_container, image_tag):
     """
     Универсальная функция для извлечения URL изображений.
