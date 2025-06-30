@@ -228,7 +228,7 @@ if (modifiedFiles.length > 0) {
 if (filesWithUpcomingDates.length > 0) {
   console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
   const domain = process.env.DOMAIN;
-  let htmlOutput = '<h3>❗️ ВНИМАНИЕ! Приближаются даты окончания:</h3>\n\n';
+  let htmlOutput = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
   
   filesWithUpcomingDates.forEach(({ filePath, dates }) => {
     const relativePath = path.relative(process.cwd(), filePath);
@@ -243,10 +243,10 @@ URL: ${url}
     console.log(outputText);
     
     // Добавляем в HTML для файла
-    htmlOutput += `<p><strong>Файл:</strong> <code>${relativePath}</code><br>
-<strong>URL:</strong> <a href="${url}">${url}</a><br>
-<strong>Даты окончания:</strong> ${dates.join(', ')}</p>
-<hr>\n`;
+    htmlOutput += `<strong>Файл:</strong> <code>${relativePath}</code>\n
+<strong>URL:</strong> <a href="${url}">${url}</a>\n
+<strong>Даты окончания:</strong> ${dates.join(', ')}\n
+\n`;
   });
   
   // Сохраняем результаты в файл
