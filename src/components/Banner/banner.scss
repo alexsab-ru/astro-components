@@ -7,9 +7,24 @@
 }
 
 .swiper-pagination-bullet {
-	@apply w-2.5 h-2.5 opacity-100 bg-white relative mx-1.5 transition-colors duration-300 before:content-[''] before:absolute before:w-5 before:h-5 before:-left-[5px] before:-top-[5px] before:border before:border-transparent before:rounded-full before:transition-colors before:duration-300 #{!important};
+	@apply w-4 h-4 opacity-100 bg-transparent relative mx-1.5 transition-all duration-300 rounded-full border border-transparent p-0 #{!important};
+	&::before{
+		content: '' !important;
+		width: 100% !important;
+		height: 100% !important;
+		position: absolute !important;
+		top: 2.5% !important;
+		left: 3.5% !important;
+		// transform: translate(-50%, -50%) !important;
+		background-color: #fff !important;
+		border-radius: 50% !important;
+		transform: scale(0.6) !important;
+	}
 	&.swiper-pagination-bullet-active {
-		@apply bg-accent-500 before:border-accent-500 #{!important};
+		@apply border-accent-500 #{!important};
+		&::before{
+			@apply bg-accent-500 !important;
+		}
 	}
 }
 
