@@ -97,11 +97,11 @@ Geely Atlas II оснащён современными технологиями,
 			<run>7</run>
 			<year>2024</year>
 			<price>3214190</price>
-			<credit_discount>0</credit_discount>
+			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>190000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>653000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3G43S90RX306934</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -168,7 +168,7 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>360000</max_discount>
+			<max_discount>653000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3G43S98RX309631</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -236,9 +236,9 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 			<price>3214190</price>
 			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>190000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>500000</max_discount>
+			<max_discount>0</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3G43S9XSX303190</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -386,11 +386,11 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Comf
 			<run>7</run>
 			<year>2024</year>
 			<price>3094190</price>
-			<credit_discount>0</credit_discount>
+			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>0</tradein_discount>
+			<tradein_discount>190000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>360000</max_discount>
+			<max_discount>740000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3G43S9XRX310120</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -462,9 +462,9 @@ B наличии HOBЫЙ Cityray, 2024 года, в кoмплeктации Luxur
 			<price>3109190</price>
 			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>260000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>380000</max_discount>
+			<max_discount>653190</max_discount>
 			<currency>RUR</currency>
 			<vin>LB37622Z5RX541088</vin>
 			<description>ПAРTНЕP АВТО - новый официальный дилер GЕELY в гоpодe Oрeнбургe.
@@ -547,9 +547,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<price>3109190</price>
 			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>260000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>380000</max_discount>
+			<max_discount>653190</max_discount>
 			<currency>RUR</currency>
 			<vin>LB37622Z6RX538930</vin>
 			<description>ПAРTНЕP АВТО - новый официальный дилер GЕELY в гоpодe Oрeнбургe.
@@ -628,11 +628,11 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>15</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>710000</max_discount>
+			<max_discount>760000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D6RS201865</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер GEELY в городе Оренбурге.
@@ -704,9 +704,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>7</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>760000</max_discount>
 			<currency>RUR</currency>
@@ -774,14 +774,14 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>5</run>
+			<run>6</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>710000</max_discount>
+			<max_discount>1186590</max_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D9RS207482</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер GEELY в городе Оренбурге.
@@ -835,11 +835,11 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>8</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>710000</max_discount>
+			<max_discount>760000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D8RS273070</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер GEELY в городе Оренбурге.
@@ -904,11 +904,11 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>8</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>710000</max_discount>
+			<max_discount>760000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D8RS273084</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер GEELY в городе Оренбурге.
@@ -973,11 +973,11 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>9</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>710000</max_discount>
+			<max_discount>1186390</max_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D7RS260214</vin>
 			<description>ПАРТНЕР АВТО - новый официальный дилер GEELY в городе Оренбурге.
@@ -1049,9 +1049,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>10</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<max_discount>1080000</max_discount>
 			<currency>RUR</currency>
@@ -1129,7 +1129,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>373000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>523000</max_discount>
+			<max_discount>758000</max_discount>
 			<currency>RUR</currency>
 			<vin>L6TVX1S63RY038055</vin>
 			<description>ПAPTHEP АВТО - новый официальный дилер GЕELY в гоpодe Opeнбурге.
@@ -1204,7 +1204,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>258000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>568000</max_discount>
+			<max_discount>1036200</max_discount>
 			<currency>RUR</currency>
 			<vin>L6TFS1S83RD117446</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -1287,7 +1287,7 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>363000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>863000</max_discount>
+			<max_discount>1183000</max_discount>
 			<currency>RUR</currency>
 			<vin>LHA022GD4RB005203</vin>
 			<description>ПАРТНЕР АВТО- официальный дилер бренда KNEWSTAR в городе Оренбурге.
@@ -1361,7 +1361,7 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>258000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>568000</max_discount>
+			<max_discount>1036200</max_discount>
 			<currency>RUR</currency>
 			<vin>L6TFS1S83RD117447</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -1444,7 +1444,7 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>258000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>568000</max_discount>
+			<max_discount>1036200</max_discount>
 			<currency>RUR</currency>
 			<vin>L6TFS1S83RD117448</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -1527,7 +1527,7 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>258000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>568000</max_discount>
+			<max_discount>1036200</max_discount>
 			<currency>RUR</currency>
 			<vin>L6TFS1S83RD117449</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -1610,7 +1610,7 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>258000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>568000</max_discount>
+			<max_discount>1036200</max_discount>
 			<currency>RUR</currency>
 			<vin>L6TFS1S83RD117450</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -1693,7 +1693,7 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>258000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>568000</max_discount>
+			<max_discount>1036200</max_discount>
 			<currency>RUR</currency>
 			<vin>L6TFS1S83RD117451</vin>
 			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.

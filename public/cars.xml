@@ -96,7 +96,7 @@ Geely Atlas II оснащён современными технологиями,
 			<run>7</run>
 			<year>2024</year>
 			<price>3214190</price>
-			<credit_discount>0</credit_discount>
+			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>190000</tradein_discount>
 			<optional_discount>0</optional_discount>
@@ -146,7 +146,7 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>500000</max_discount><priceWithDiscount>2714190</priceWithDiscount><sale_price>2714190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-белый-2024/</url></car>
+		<max_discount>653000</max_discount><priceWithDiscount>2561190</priceWithDiscount><sale_price>2561190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>5ed72c203b9f558c7c4dfc85c41d5a37</unique_id>
 			<mark_id>Geely</mark_id>
@@ -215,7 +215,7 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>360000</max_discount><priceWithDiscount>2854190</priceWithDiscount><sale_price>2854190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-серебряный-2024/</url></car>
+		<max_discount>653000</max_discount><priceWithDiscount>2561190</priceWithDiscount><sale_price>2561190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-серебряный-2024/</url></car>
 		<car>
 			<unique_id>743788934123a7199157e83c9e15652e</unique_id>
 			<mark_id>Geely</mark_id>
@@ -233,7 +233,7 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 			<price>3214190</price>
 			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>190000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB3G43S9XSX303190</vin>
@@ -291,7 +291,7 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>500000</max_discount><priceWithDiscount>2714190</priceWithDiscount><sale_price>2714190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-серый-2025/</url></car>
+		<max_discount>0</max_discount><priceWithDiscount>3214190</priceWithDiscount><sale_price>3214190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-серый-2025/</url></car>
 		<car>
 			<unique_id>f34b6d323a1e8c1332d9be59e2b3e230</unique_id>
 			<mark_id>Geely</mark_id>
@@ -381,9 +381,9 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Comf
 			<run>7</run>
 			<year>2024</year>
 			<price>3094190</price>
-			<credit_discount>0</credit_discount>
+			<credit_discount>200000</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>0</tradein_discount>
+			<tradein_discount>190000</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB3G43S9XRX310120</vin>
@@ -438,7 +438,7 @@ B наличии HOBЫЙ Cityray, 2024 года, в кoмплeктации Luxur
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>360000</max_discount><priceWithDiscount>2734190</priceWithDiscount><sale_price>2734190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-luxury-белый-2024/</url></car>
+		<max_discount>740000</max_discount><priceWithDiscount>2354190</priceWithDiscount><sale_price>2354190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-luxury-белый-2024/</url></car>
 		<car>
 			<unique_id>ab0486c9cb27f56270ef81a1e3490680</unique_id>
 			<mark_id>Geely</mark_id>
@@ -456,7 +456,7 @@ B наличии HOBЫЙ Cityray, 2024 года, в кoмплeктации Luxur
 			<price>3109190</price>
 			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>260000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37622Z5RX541088</vin>
@@ -522,7 +522,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>380000</max_discount><priceWithDiscount>2729190</priceWithDiscount><sale_price>2729190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-15-amt-150-лс-flagship-белый-2024/</url></car>
+		<max_discount>653190</max_discount><priceWithDiscount>2456000</priceWithDiscount><sale_price>2456000</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-15-amt-150-лс-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>ee40871ace75b95f6143920ef5d6307f</unique_id>
 			<mark_id>Geely</mark_id>
@@ -540,7 +540,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<price>3109190</price>
 			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>260000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37622Z6RX538930</vin>
@@ -604,7 +604,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>380000</max_discount><priceWithDiscount>2729190</priceWithDiscount><sale_price>2729190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-15-amt-150-лс-flagship-серый-2024/</url></car>
+		<max_discount>653190</max_discount><priceWithDiscount>2456000</priceWithDiscount><sale_price>2456000</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-15-amt-150-лс-flagship-серый-2024/</url></car>
 		<car>
 			<unique_id>4880dfe3c9c95f9a49c8a609102bae31</unique_id>
 			<mark_id>Geely</mark_id>
@@ -620,9 +620,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>15</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D6RS201865</vin>
@@ -679,7 +679,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>710000</max_discount><priceWithDiscount>4142190</priceWithDiscount><sale_price>4142190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
+		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>d09e470caba1f607d6e5dafb17433c9e</unique_id>
 			<mark_id>Geely</mark_id>
@@ -695,9 +695,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>7</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D7RS179763</vin>
@@ -764,12 +764,12 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>5</run>
+			<run>6</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D9RS207482</vin>
@@ -808,7 +808,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>710000</max_discount><priceWithDiscount>4142190</priceWithDiscount><sale_price>4142190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-черный-2024/</url></car>
+		<max_discount>1186590</max_discount><priceWithDiscount>3665600</priceWithDiscount><sale_price>3665600</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-черный-2024/</url></car>
 		<car>
 			<unique_id>8fc64fd38525e3f6990c0a7468aec881</unique_id>
 			<mark_id>Geely</mark_id>
@@ -824,9 +824,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>8</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D8RS273070</vin>
@@ -876,7 +876,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>710000</max_discount><priceWithDiscount>4142190</priceWithDiscount><sale_price>4142190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
+		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
 		<car>
 			<unique_id>99e1a95f96605b110c720a9ffb4d6eb2</unique_id>
 			<mark_id>Geely</mark_id>
@@ -892,9 +892,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>8</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D8RS273084</vin>
@@ -944,7 +944,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>710000</max_discount><priceWithDiscount>4142190</priceWithDiscount><sale_price>4142190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
+		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
 		<car>
 			<unique_id>9c22bbc2d571cd36c5a02214915ca7c8</unique_id>
 			<mark_id>Geely</mark_id>
@@ -960,9 +960,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>9</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D7RS260214</vin>
@@ -1019,7 +1019,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>710000</max_discount><priceWithDiscount>4142190</priceWithDiscount><sale_price>4142190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серебряный-2024/</url></car>
+		<max_discount>1186390</max_discount><priceWithDiscount>3665800</priceWithDiscount><sale_price>3665800</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серебряный-2024/</url></car>
 		<car>
 			<unique_id>8251de3866e82b5a5bb51af002fbdfff</unique_id>
 			<mark_id>Geely</mark_id>
@@ -1035,9 +1035,9 @@ Geely Coolray — это автомобиль, который подарит в�
 			<run>10</run>
 			<year>2024</year>
 			<price>4852190</price>
-			<credit_discount>200000</credit_discount>
+			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>250000</tradein_discount>
+			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB37852D7RS260276</vin>
@@ -1168,7 +1168,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>523000</max_discount><priceWithDiscount>3324190</priceWithDiscount><sale_price>3324190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-okavango-15-amt-177-лс-flagship-серый-2024/</url></car>
+		<max_discount>758000</max_discount><priceWithDiscount>3089190</priceWithDiscount><sale_price>3089190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-okavango-15-amt-177-лс-flagship-серый-2024/</url></car>
 		<car>
 			<unique_id>9be904c474d122acfd679cd38714e6dd</unique_id>
 			<mark_id>Geely</mark_id>
@@ -1250,7 +1250,7 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>568000</max_discount><priceWithDiscount>2999190</priceWithDiscount><sale_price>2999190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-preface-i-рестайлинг-2-20-amt-200-лс-flagship-белый-2024/</url></car>
+		<max_discount>1036200</max_discount><priceWithDiscount>2530990</priceWithDiscount><sale_price>2530990</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-preface-i-рестайлинг-2-20-amt-200-лс-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>bf6cc3d33f1cf9fe5ccb7bc44781d98c</unique_id>
 			<mark_id>KNEWSTAR</mark_id>
@@ -1323,6 +1323,6 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>863000</max_discount><priceWithDiscount>3630190</priceWithDiscount><sale_price>3630190</sale_price><url>https://geely-partner-orenburg.ru/cars/knewstar-001-20-at-238-лс-4wd-flagship-sport-белый-2024/</url></car>
+		<max_discount>1183000</max_discount><priceWithDiscount>3310190</priceWithDiscount><sale_price>3310190</sale_price><url>https://geely-partner-orenburg.ru/cars/knewstar-001-20-at-238-лс-4wd-flagship-sport-белый-2024/</url></car>
 	</cars>
 </data>
