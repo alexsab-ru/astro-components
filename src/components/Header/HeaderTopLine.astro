@@ -5,7 +5,7 @@ interface Props{
 	closeBtn?: boolean;
 }
 import { Icon } from 'astro-icon/components';
-const {content, classes = 'bg-[#05141f] px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative', closeBtn = true} = Astro.props
+const {content, classes = 'bg-accent-500 px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative', closeBtn = true} = Astro.props
 ---
 <div x-show="showTopLine === 1" x-cloak>
 	<div class={classes}>
