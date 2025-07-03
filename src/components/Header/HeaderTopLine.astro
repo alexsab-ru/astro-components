@@ -7,10 +7,8 @@ interface Props{
 import { Icon } from 'astro-icon/components';
 const {content, classes = 'bg-[#05141f] px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative', closeBtn = true} = Astro.props
 ---
-<template x-if="showTopLine === 1">
-	<div 
-		class={classes}
-	>
+<div x-show="showTopLine === 1" x-cloak>
+	<div class={classes}>
 		<Fragment set:html={content}>
 		{closeBtn && (
 			<button 
@@ -21,4 +19,4 @@ const {content, classes = 'bg-[#05141f] px-8 py-2 xs:text-xs text-sm md:text-bas
 			</button>
 		)}
 	</div>
-</template>
+</div>
