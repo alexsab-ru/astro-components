@@ -14,6 +14,7 @@ on:
       # - '.github/scripts/config_air_storage-friend.json'
       # - '.github/scripts/config_air_storage.json'
       # - '.github/scripts/config.py'
+      # - '.github/scripts/create_cars.py'
       # - '.github/scripts/getOneXML.py'
       # - '.github/scripts/GSheetFetcher.js'
       # - '.github/scripts/mergeCarPrices.js'
@@ -153,7 +154,7 @@ jobs:
       if: ${{ vars.DEALER_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage
-        python .github/scripts/update_cars.py --source_type data_cars_car
+        python .github/scripts/create_cars.py --source_type data_cars_car
       continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
@@ -164,7 +165,7 @@ jobs:
       if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage
-        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+        python .github/scripts/create_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
       continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
@@ -175,7 +176,7 @@ jobs:
       if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+        python .github/scripts/create_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
@@ -184,7 +185,7 @@ jobs:
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type data_cars_car
+        python .github/scripts/create_cars.py --source_type data_cars_car
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
@@ -193,7 +194,7 @@ jobs:
       if: ${{ vars.XML_URL_MAXPOSTER }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type maxposter --image_tag="photo"
+        python .github/scripts/create_cars.py --source_type maxposter --image_tag="photo"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_MAXPOSTER }}
@@ -202,7 +203,7 @@ jobs:
       if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type vehicles_vehicle --image_tag="photo"
+        python .github/scripts/create_cars.py --source_type vehicles_vehicle --image_tag="photo"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
@@ -211,7 +212,7 @@ jobs:
       if: ${{ vars.XML_URL_CARCOPY }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment"
+        python .github/scripts/create_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_CARCOPY }}
