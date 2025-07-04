@@ -223,6 +223,7 @@ class CarDataExtractor:
         
         # Извлекаем основные поля
         for internal_name, xml_field in field_mapping.items():
+            # print(f"🔍 Извлекаем поле: {internal_name} -> {xml_field}")
             # Пропускаем служебные поля, которые не являются XML тегами
             if xml_field in ['image_tag', 'image_url_attr'] or xml_field is None:
                 continue
@@ -270,17 +271,25 @@ class CarDataExtractor:
         image_tag = self.config['field_mapping'].get('image_tag', 'image')
         image_url_attr = self.config['field_mapping'].get('image_url_attr')
         
+        # print(f"🔍 Отладка извлечения изображений:")
+        # print(f"   Контейнер: {images_container.tag}")
+        # print(f"   Тег изображения: {image_tag}")
+        # print(f"   Атрибут URL: {image_url_attr}")
+        
         for img in images_container.findall(image_tag):
             if image_url_attr:
                 # URL в атрибуте
                 url = img.get(image_url_attr)
                 if url:
                     images.append(url)
+                    # print(f"   ✅ Найдено изображение (атрибут): {url}")
             else:
                 # URL в тексте элемента
                 if img.text and img.text.strip():
                     images.append(img.text.strip())
+                    # print(f"   ✅ Найдено изображение (текст): {img.text.strip()}")
         
+        # print(f"   📊 Всего изображений: {len(images)}")
         return images
 
     def extract_yml_params(self, car: ET.Element) -> Dict[str, str]:
@@ -391,7 +400,7 @@ class CarDataExtractor:
             self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id',
                                    'complectation_name', 'color', 'year')
         )
-        print(f"\nУникальный идентификатор: {friendly_url}")
+        print(f"\n🆔 Уникальный идентификатор: {friendly_url}")
         
         # Базовые расчёты цены и скидки
         price = int(car_data.get('price', 0) or 0)

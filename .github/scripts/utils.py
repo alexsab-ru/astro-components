@@ -56,7 +56,7 @@ def format_html_for_mdx(raw_html):
     # Получаем HTML без форматирования (сохраняет &nbsp;)
     html_output = str(soup)
 
-    print(html_output)
+    # print(html_output)
     
     # Экранируем проблемные символы для MDX
     html_output = html_output.replace('\\', '\\\\')  # Экранируем обратные слеши
@@ -133,6 +133,10 @@ def process_description(desc_text):
 
 
 def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False):
+    # print(f"🔍 Отладка создания превью:")
+    # print(f"   Количество изображений: {len(image_urls)}")
+    # print(f"   Пропуск превью: {skip_thumbs}")
+    # print(f"   Директория превью: {thumbs_dir}")
 
     # Определение относительного пути для возврата
     relative_thumbs_dir = thumbs_dir.replace("public", "")
@@ -143,6 +147,8 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thum
     # Обработка первых 5 изображений
     for index, img_url in enumerate(image_urls[:5]):
         try:
+            # print(f"   🔄 Обрабатываю изображение {index + 1}: {img_url}")
+            
             # Извлечение имени файла из URL и удаление расширения
             original_filename = os.path.basename(urllib.parse.urlparse(img_url).path)
             filename_without_extension, _ = os.path.splitext(original_filename)
@@ -155,8 +161,11 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thum
             output_path = os.path.join(thumbs_dir, output_filename)
             relative_output_path = os.path.join(relative_thumbs_dir, output_filename)
 
+            # print(f"   📁 Путь к превью: {output_path}")
+
             # Проверка существования файла
             if not os.path.exists(output_path) and not skip_thumbs:
+                # print(f"   ⬇️ Загружаю изображение...")
                 # Загрузка и обработка изображения, если файла нет
                 response = requests.get(img_url)
                 image = Image.open(BytesIO(response.content))
@@ -165,15 +174,15 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thum
                 new_height = int(new_width / aspect_ratio)
                 resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
                 resized_image.save(output_path, "WEBP")
-                print(f"Создано превью: {relative_output_path}")
-            else:
-                print(f"Файл уже существует: {relative_output_path} или пропущен флагом skip_thumbs: {skip_thumbs}")
+                # print(f"   ✅ Создано превью: {relative_output_path}")
+            # else:
+                # print(f"   ⚠️ Файл уже существует: {relative_output_path} или пропущен флагом skip_thumbs: {skip_thumbs}")
 
             # Добавление относительного пути файла в списки
             new_or_existing_files.append(relative_output_path)
             current_thumbs.append(output_path)  # Здесь сохраняем полный путь для дальнейшего использования
         except Exception as e:
-            print(f"Ошибка при обработке изображения {img_url}: {e}")
+            print(f"   ❌ Ошибка при обработке изображения {img_url}: {e}")
 
     return new_or_existing_files
 
