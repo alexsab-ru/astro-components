@@ -126,7 +126,7 @@ def process_description(desc_text):
             wrapped_lines.append(line)
         else:
             # Оборачиваем в <p>...</p>
-            wrapped_lines.append(f'<p>{line}</p>')
+            wrapped_lines.append(f'<p> {line} </p>')
     # Склеиваем обратно в одну строку с переносами
     result_html = '\n'.join(wrapped_lines)
     return result_html
