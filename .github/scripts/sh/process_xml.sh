@@ -176,19 +176,19 @@ handle_update() {
             python3 .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
             ;;
         "data_cars_car")
-            python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/create_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"
             ;;
         "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+            python3 .github/scripts/create_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
             ;;
         "maxposter")
-            python3 .github/scripts/update_cars.py --source_type maxposter --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/create_cars.py --source_type maxposter --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
             ;;
         "carcopy")
-            python3 .github/scripts/update_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/create_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment" --skip_thumbs --domain="$DOMAIN"
             ;;
         "vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/create_cars.py --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
             ;;
         *)
             echo "Error: Unknown update type: $type"
