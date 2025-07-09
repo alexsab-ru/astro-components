@@ -1559,5 +1559,62 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<max_discount>1183000</max_discount><priceWithDiscount>3310190</priceWithDiscount><sale_price>3310190</sale_price><url>https://geely-partner-orenburg.ru/cars/knewstar-001-20-at-238-лс-4wd-flagship-sport-белый-2024/</url></car>
+		<car>
+			<unique_id>657a2c4591dde4fbec410329fb35d98b</unique_id>
+			<mark_id>KNEWSTAR</mark_id>
+			<folder_id>001</folder_id>
+			<modification_id>2.0 AT (200 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>5</run>
+			<year>2024</year>
+			<price>4393190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>363000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LHA022GD8RB007004</vin>
+			<description>ПАРТНЕР АВТО- официальный дилер бренда KNEWSTAR в городе Оренбурге.
+
+В наличии новый KNEWSTAR 001, в комплектации Flagship.
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый KNEWSTAR, то в KNEWSTAR Партнер Оренбург на Загородном шоссе 13/1.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля Knewstar.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>653000</max_discount><priceWithDiscount>3740190</priceWithDiscount><sale_price>3740190</sale_price><url>https://geely-partner-orenburg.ru/cars/knewstar-001-20-at-200-лс-4wd-flagship-серый-2024/</url></car>
 	</cars>
 </data>
