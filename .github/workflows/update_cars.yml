@@ -1,28 +1,28 @@
 name: Generate Astro Files from XML
 
 on:
-  # schedule:
-    # - cron: '0 3-17 * * *'  # Запускается каждый час с 3 до 17 (UTC)
-  # push:
-    # paths:
-      # - '.github/scripts/sh/getAirStorage.sh'
-      # - '.github/scripts/sh/getDealerData.sh'
-      # - '.github/scripts/sh/getDealerPrices.sh'
-      # - '.github/scripts/sh/getDealerStorage.sh'
-      # - '.github/scripts/sh/getSortStorage.sh'
-      # - '.github/scripts/CarFeedProcessorCSV.py'
-      # - '.github/scripts/config_air_storage-friend.json'
-      # - '.github/scripts/config_air_storage.json'
-      # - '.github/scripts/config.py'
-      # - '.github/scripts/create_cars.py'
-      # - '.github/scripts/getOneXML.py'
-      # - '.github/scripts/GSheetFetcher.js'
-      # - '.github/scripts/mergeCarPrices.js'
-      # - '.github/scripts/model_mapping.json'
-      # - '.github/scripts/update_cars_air_storage.py'
-      # - '.github/scripts/update_cars.py'
-      # - '.github/scripts/utils.py'
-      # - '.github/workflows/update_cars.yml'
+  schedule:
+    - cron: '0 3-17 * * *'  # Запускается каждый час с 3 до 17 (UTC)
+  push:
+    paths:
+      - '.github/scripts/sh/getAirStorage.sh'
+      - '.github/scripts/sh/getDealerData.sh'
+      - '.github/scripts/sh/getDealerPrices.sh'
+      - '.github/scripts/sh/getDealerStorage.sh'
+      - '.github/scripts/sh/getSortStorage.sh'
+      - '.github/scripts/CarFeedProcessorCSV.py'
+      - '.github/scripts/config_air_storage-friend.json'
+      - '.github/scripts/config_air_storage.json'
+      - '.github/scripts/config.py'
+      - '.github/scripts/create_cars.py'
+      - '.github/scripts/getOneXML.py'
+      - '.github/scripts/GSheetFetcher.js'
+      - '.github/scripts/mergeCarPrices.js'
+      - '.github/scripts/model_mapping.json'
+      - '.github/scripts/update_cars_air_storage.py'
+      - '.github/scripts/update_cars.py'
+      - '.github/scripts/utils.py'
+      - '.github/workflows/update_cars.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,6 +34,9 @@ concurrency:
 
 jobs:
   determine_env:
+
+    if: ${{ vars.UPDATE_CARS && vars.UPDATE_CARS == 'true' }}
+
     runs-on: ubuntu-latest
     outputs:
       env_name: ${{ steps.set_env.outputs.env_name }}
