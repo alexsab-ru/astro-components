@@ -147,5 +147,14 @@ else
     node .github/scripts/filterModelsByBrand.js
 fi
 
-# 3. Удаляем временный файл
-# rm -f src/data/all-models.json
+# Скачиваем общий cars.json
+echo -e "\n${BGGREEN}Скачиваем общий cars.json...${Color_Off}"
+curl -s "$JSON_PATH/cars.json" -o src/data/all-cars.json
+
+# Проверяем, что файл скачался и это не HTML-страница (например, 404)
+if [ ! -s src/data/all-cars.json ] || grep -q '<!DOCTYPE html' src/data/all-cars.json; then
+    printf "${BGRED}Внимание: общий файл cars.json не найден или получен некорректный файл!${Color_Off}\n"
+else
+    printf "${BGGREEN}Общий файл cars.json успешно скачан${Color_Off}\n"
+fi
+
