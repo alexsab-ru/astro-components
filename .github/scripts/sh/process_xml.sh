@@ -15,6 +15,7 @@ show_help() {
     echo "  AVITO_FRIEND_XML_URL"
     echo "  AUTORU_XML_URL"
     echo "  AUTORU_FRIEND_XML_URL"
+    echo "  XML_URL"
     echo "  XML_URL_DATA_CARS_CAR"
     echo "  XML_URL_MAXPOSTER"
     echo "  XML_URL_CARCOPY"
@@ -27,6 +28,7 @@ show_help() {
     echo "  avito_friend         - Update from Avito with Friend source"
     echo "  autoru               - Update from AutoRu source"
     echo "  autoru_friend        - Update from AutoRu with Friend source"
+    echo "  xml_url              - Update from XML_URL source"
     echo "  data_cars_car        - Update from Data Cars Car source"
     echo "  maxposter            - Update from Maxposter source"
     echo "  carcopy              - Update from Carcopy source"
@@ -39,6 +41,7 @@ show_help() {
     echo "  avito_friend         - Test from Avito with Friend source"
     echo "  autoru               - Test from AutoRu source"
     echo "  autoru_friend        - Test from AutoRu with Friend source"
+    echo "  xml_url              - Test from XML_URL source"
     echo "  data_cars_car        - Test from Data Cars Car source"
     echo "  maxposter            - Test from Maxposter source"
     echo "  carcopy              - Test from Carcopy source"
@@ -116,6 +119,10 @@ handle_test() {
             handle_getone "AUTORU_FRIEND_XML_URL" "cars_friend.xml"
             handle_update "autoru_friend"
             ;;
+        "xml_url")
+            handle_getone "XML_URL"
+            handle_update "xml_url"
+            ;;
         "data_cars_car")
             handle_getone "XML_URL_DATA_CARS_CAR"
             handle_update "data_cars_car"
@@ -174,6 +181,9 @@ handle_update() {
             python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --domain=$DOMAIN
             export XML_URL="./public/autoru_dc.xml ./public/autoru_friend.xml" 
             python3 .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
+            ;;
+        "xml_url")
+            python3 .github/scripts/create_cars.py --skip_thumbs --domain="$DOMAIN"
             ;;
         "data_cars_car")
             python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"

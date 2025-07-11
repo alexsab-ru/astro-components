@@ -181,6 +181,15 @@ jobs:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
 
+    - name: Get cars from XML_URL and generate cars file (new method)
+      if: ${{ vars.XML_URL }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/create_cars.py
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL }}
+
     - name: Get cars data_cars_car XML and generate cars file
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
       run: |
