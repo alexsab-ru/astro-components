@@ -2188,6 +2188,24 @@
                 "Silver": "silver.webp",
                 "Серебристый": "silver.webp"
             }
+        },
+        "DFSK iX5": {
+            "folder": "dfsk-ix5-fengon",
+            "cyrillic": "Дэ-эф-эс-ка ай-икс 5",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Blue": "blue.webp",
+                "Синий": "blue.webp",
+                "Silver": "silver.webp",
+                "Серебристый": "silver.webp"
+            }
         }
     }
 }
