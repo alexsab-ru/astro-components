@@ -217,6 +217,15 @@ jobs:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
 
+    - name: Get cars ads_ad XML and generate cars file
+      if: ${{ vars.XML_URL_ADS_AD }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars.py --source_type ads_ad --image_tag="photo"
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_ADS_AD }}
+
     - name: Get cars carcopy XML and generate cars file
       if: ${{ vars.XML_URL_CARCOPY }}
       run: |

@@ -20,6 +20,7 @@ show_help() {
     echo "  XML_URL_MAXPOSTER"
     echo "  XML_URL_CARCOPY"
     echo "  XML_URL_VEHICLES_VEHICLE"
+    echo "  XML_URL_ADS_AD"
     echo "  USED_CARS_DATA_CARS_CAR"
     echo
     echo "Update Types for 'update':"
@@ -33,6 +34,7 @@ show_help() {
     echo "  maxposter            - Update from Maxposter source"
     echo "  carcopy              - Update from Carcopy source"
     echo "  vehicles_vehicle     - Update from Vehicles Vehicle source"
+    echo "  ads_ad               - Update from Ads Ad source"
     echo "  used_cars_data_cars_car  - Update Used Cars from Data Cars Car source"
     echo
     echo "Test Types for 'test':"
@@ -46,6 +48,7 @@ show_help() {
     echo "  maxposter            - Test from Maxposter source"
     echo "  carcopy              - Test from Carcopy source"
     echo "  vehicles_vehicle     - Test from Vehicles Vehicle source"
+    echo "  ads_ad               - Test from Ads Ad source"
     echo "  used_cars_data_cars_car  - Test Used Cars from Data Cars Car source"
     echo
     echo "Examples:"
@@ -143,6 +146,10 @@ handle_test() {
             handle_getone "XML_URL_VEHICLES_VEHICLE"
             handle_update "vehicles_vehicle"
             ;;
+        "ads_ad")
+            handle_getone "XML_URL_ADS_AD"
+            handle_update "ads_ad"
+            ;;
         *)
             echo "Error: Unknown test type: $type"
             show_help
@@ -199,6 +206,9 @@ handle_update() {
             ;;
         "vehicles_vehicle")
             python3 .github/scripts/update_cars.py --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            ;;
+        "ads_ad")
+            python3 .github/scripts/update_cars.py --source_type ads_ad --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
             ;;
         *)
             echo "Error: Unknown update type: $type"

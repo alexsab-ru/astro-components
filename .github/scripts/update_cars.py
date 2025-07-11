@@ -57,6 +57,34 @@ class CarProcessor:
                 'rename_map': {},
                 'elements_to_localize': []
             },
+            'ads_ad': {
+                'root_element': None,
+                'rename_map': {
+                    'VIN': 'vin',
+                    'Make': 'mark_id',
+                    'Model': 'folder_id',
+                    'Modification': 'modification_id',
+                    'Complectation': 'complectation_name',
+                    'BodyType': 'body_type',
+                    'DriveType': 'drive_type',
+                    'Transmission': 'gearboxType',
+                    'WheelType': 'wheel',
+                    'FuelType': 'engineType',
+                    'Color': 'color',
+                    'Price': 'price',
+                    'MaxDiscount': 'max_discount',
+                    'TradeinDiscount': 'tradeinDiscount',
+                    'Year': 'year',
+                    'Availability': 'availability',
+                    'Description': 'description',
+                    'Images': 'images',
+                    'Image': 'image_tag',
+                    'url': 'image_url_attr'
+                },
+                'elements_to_localize': [
+                    'engineType', 'drive_type', 'gearboxType', 'color', 'body_type', 'wheel'
+                ]
+            },
             'maxposter': {
                 'root_element': None,  # корневой элемент
                 'rename_map': {
@@ -228,7 +256,7 @@ def main():
     Основная функция программы.
     """
     parser = argparse.ArgumentParser(description='Process cars from different sources')
-    parser.add_argument('--source_type', required=True, choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle'], help='Type of source data')
+    parser.add_argument('--source_type', required=True, choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle', 'ads_ad'], help='Type of source data')
     parser.add_argument('--path_car_page', default='/cars/', help='Default path to cars pages')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
