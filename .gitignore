@@ -24,3 +24,5 @@ src/data/**/*.json
 src/data/**/*.yml
 src/data/**/*.yaml
 /.github/scripts/__pycache__
+/.github/scripts/example
+/.github/scripts/test_results
