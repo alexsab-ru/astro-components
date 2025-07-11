@@ -22,16 +22,22 @@ def print_message(message, type='info'):
         file.write(f"{message}\n")
 
 # Загружаем model_mapping из JSON файла
-def load_model_mapping():
-    """Загрузка маппинга моделей из JSON файла."""
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    json_path = os.path.join(current_dir, 'model_mapping.json')
+def load_model_mapping(json_path: str = "./src/data/model_mapping.json"):
+    """Загрузка маппинга моделей из JSON файла.
+    
+    Args:
+        json_path (str): Путь к JSON файлу
+
+    Returns:
+        dict: Словарь с маппингом моделей
+
+    """
     
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
-        print(f"Ошибка при загрузке model_mapping.json: {e}")
+        print(f"Ошибка при загрузке {json_path}: {e}")
         return {}
 
 model_mapping = load_model_mapping()

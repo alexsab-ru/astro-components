@@ -30,13 +30,14 @@ on:
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
       - '.github/scripts/mergeCarPrices.js'
-      - '.github/scripts/model_mapping.json'
       - '.github/scripts/update_cars_air_storage.py'
       - '.github/scripts/update_cars.py'
       - '.github/scripts/utils.py'
       - '.github/workflows/update_cars.yml'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  # Allows this workflow to be called by other workflows
+  workflow_call:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
