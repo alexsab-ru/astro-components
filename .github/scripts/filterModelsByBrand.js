@@ -51,7 +51,12 @@ try {
   const allModels = readJson(allModelsFilePath);
   if (!settings || !allModels) throw new Error('Не удалось загрузить файлы settings.json или all-models.json');
 
-  const brands = parseList(settings.brand);
+  if (settings.brand == 'BRAND') {
+    // random brand from unique brands
+    settings.brand = [...new Set(allModels.map(m => m.mark_id))].sort(() => Math.random() - 0.5)[0];
+    logWarning('Ни одна модель не прошла фильтрацию. models.json будет заполнен случайным брендом: ' + settings.brand);
+  }
+  let brands = parseList(settings.brand);
   const modelIDs = normalizeArray(settings.modelIDs);
   const testDriveIDs = normalizeArray(settings.testDriveIDs);
   const serviceIDs = normalizeArray(settings.serviceIDs);
