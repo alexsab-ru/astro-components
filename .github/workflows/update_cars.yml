@@ -223,7 +223,7 @@ jobs:
       if: ${{ vars.XML_URL_ADS_AD }}
       run: |
         python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type ads_ad --image_tag="photo"
+        python .github/scripts/update_cars.py --source_type ads_ad --image_tag="Image"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_ADS_AD }}

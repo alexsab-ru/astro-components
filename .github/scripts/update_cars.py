@@ -77,8 +77,6 @@ class CarProcessor:
                     'Year': 'year',
                     'Availability': 'availability',
                     'Description': 'description',
-                    'Images': 'images',
-                    'Image': 'image_tag',
                     'url': 'image_url_attr'
                 },
                 'elements_to_localize': [
