@@ -2107,6 +2107,27 @@
         }
     },
     "Venucia": {
+        "V-Online": {
+            "folder": "v-online",
+            "cyrillic": "Вэ-Онлайн",
+            "color": {
+                "Black": "black.webp",
+                "Черный": "black.webp",
+                "Черный бриллиант": "black.webp",
+                "Gray": "gray.webp",
+                "Серый": "gray.webp",
+                "Серый Бернина": "gray.webp",
+                "White": "white.webp",
+                "Белый": "white.webp",
+                "Искрящийся белый": "white.webp",
+                "Red": "red.webp",
+                "Красный": "red.webp",
+                "Blue": "blue.webp",
+                "Синий": "blue.webp",
+                "Silver": "silver.webp",
+                "Серебристый": "silver.webp"
+            }
+        },
         "V-Online, I": {
             "folder": "v-online",
             "cyrillic": "Вэ-Онлайн",
