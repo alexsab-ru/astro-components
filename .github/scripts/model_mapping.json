@@ -1382,6 +1382,18 @@
                 "Оранжевый": "terracotta-sapphire.webp"
             }
         },
+        "H3, I": {
+            "folder": "h3",
+            "cyrillic": "H3",
+            "color": {
+                "Голубой": "neon-tourmaline.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Серый": "ashy-anthracite.webp",
+                "Белый": "noble-agate.webp",
+                "Оранжевый": "terracotta-sapphire.webp"
+            }
+        },
         "H7, I": {
             "folder": "h7",
             "cyrillic": "H7",
