@@ -21,6 +21,7 @@ import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
 import seo from '@/data/seo.json';
+import StripEmptyQuery from '../components/StripEmptyQuery.astro';
 
 const currentPath = Astro.url.pathname;
 if (seo[currentPath]) {
@@ -51,6 +52,7 @@ if (seo[currentPath]) {
 <!doctype html>
 <html lang="ru">
 	<head>
+		<StripEmptyQuery />
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
