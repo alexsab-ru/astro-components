@@ -19,7 +19,7 @@
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>263000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>693000</max_discount>
+			<max_discount>710000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3FX1S12RB163225</vin>
 			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -120,7 +120,7 @@ Geely Atlas II — это идеальный выбор для тех, кто и
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>263000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>693000</max_discount>
+			<max_discount>710000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3FX1S14RB169091</vin>
 			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -226,7 +226,7 @@ Geely Atlas II — это идеальный выбор для тех, кто и
 			<insurance_discount>0</insurance_discount>
 			<tradein_discount>263000</tradein_discount>
 			<optional_discount>0</optional_discount>
-			<max_discount>693000</max_discount>
+			<max_discount>710000</max_discount>
 			<currency>RUR</currency>
 			<vin>LB3FX1S17RB120080</vin>
 			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -498,7 +498,7 @@ Geely Atlas II оснащён современными технологиями,
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>7</run>
+			<run>8</run>
 			<year>2024</year>
 			<price>3214190</price>
 			<credit_discount>200000</credit_discount>
