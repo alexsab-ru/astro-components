@@ -481,7 +481,23 @@ Geely Atlas II оснащён современными технологиями,
 Элегантный дизайн и стильные детали, такие как светодиодные фары, 20-дюймовые диски и панорамная крыша, придают Geely Atlas II особый шарм.
 
 Не упустите возможность стать обладателем этого замечательного автомобиля!</description>
-			<images />
+			<images>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/d3decc9e964012b6b7a910f16fc4435f.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/6c5d65eac8602674cc59f4ee8536804d.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/7b67296f499bd8f81de447dff78dce43.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/58ac6d421346147fea3050c9058a2a25.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/f2856a5da047c182990327890b48ca37.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/b090c57e489328a20dbf4f60fc8e98bf.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/224c2d7f4611082b975516f19afdd97c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/85322ae79637e1a12416e66bc59a673e.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/7f8162c405639c775bd59db4947eb0c9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/0ba48f970f3443aef621ce79e956c541.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/a9c3733e930271ddd8b8b6575aebb077.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/08668918d320b931a5e5da1b52f9826c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/f4c43d63d989224be4a84390de33f9ae.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/d8209542c0d31421426a19ff3ed6228f.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S17RB162278/870a066984a497c76da09d952c06272f.jpeg</image>
+			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
@@ -612,22 +628,19 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
 			<images>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/1881d1b076e116d2f7fe09b230b3351b.jpg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/fe39414650442e48339218bc671386a6.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/dfcb898b7ac24fd7368667e2e9077844.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/c24cfc17506418980318ca587472200a.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/4291646dd3ff7cc277b649379c67d110.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/1b85759415f01d9cea2f4838c9c168ce.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/e4d274e600d2af61e6e81c2f76448d5c.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/cb321551549c1528a82fce8681ac2494.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/c5af05d3c9adf0bfe76066dc33b322ec.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/917578fa066e9f9be1451e0c4fb66ff2.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/fc077a6b686891b659417b0dbcc30082.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/f25f74d51da1a3b889f92007699af717.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/d5d484f25a9d129ae7b7c0274a8e22b6.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/389358d8e87ec48ccc25da75557a2185.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/97d4e086e66cc40f3823d35aa308b156.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/5d5f00787c966cf31b592037c728cb67.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/0240c247d6ec2bbb3adcb5789111352b.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/37949b0790a0dd0b5208dafafe2c215a.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/a98f7a6976b532c47a8a3a570b92eae9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/b858e32e69360679205f688f41ba1c2c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/40a3e23dcfe04ed57ce1ef1963f15a66.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/b3f94e208ab663d67cac9a5d92e3201e.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/e36ac049ebb696caea1d56df844b6789.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/00b68e55e3c309c26279de6bd9ac02b9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/6d97ca09807782781507aed0fc358923.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/3fc6d25ea873ee276c7e349a923e80a3.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/6e20feaf78f3101779dae04e66951a28.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/83e2eaf61da1253d4409feec39674a4f.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3G43S9XSX303190/95513bc2ea4121806868e7e4f9a1a30e.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
@@ -1004,7 +1017,18 @@ Geely Coolray — это автомобиль, который подарит в�
 Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images />
+			<images>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/2e0605489a6d24f07a1753c9b2f5c5fd.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/44ad35b5f8874c761a78135baaaed686.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/d6eeb9ad3c4728c995837736e0e21e56.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/b10502105dc2f83444d88c9a8f46cb68.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/bfd114773694cfd340ec56534c0a1f52.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/48ff951bdadeb50f923314abf6af8f25.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/50d28a3e90b46f051ff9b3ccebeebe32.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/ca4bb165987c2f299222b3529091111f.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/624f9a7fc763224e1f378177b711799b.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3F31038RG035347/a23f23a6230bffbeaa9cd1c4f58801e1.jpeg</image>
+			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
@@ -1242,7 +1266,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>8</run>
+			<run>9</run>
 			<year>2024</year>
 			<price>4852190</price>
 			<credit_discount>0</credit_discount>
