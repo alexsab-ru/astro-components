@@ -5,6 +5,7 @@ import path from 'path';
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
 const federalFilePath = path.join(dataDirectory, 'federal-models_price.json');
 const dealerFilePath = path.join(dataDirectory, 'dealer-models_price.json');
+const dealerCarsFilePath = path.join(dataDirectory, 'dealer-models_cars_price.json');
 const modelsFilePath = path.join(dataDirectory, 'models.json');
 
 // Проверяем наличие федерального файла
@@ -65,8 +66,8 @@ function transformDealerData(dealerData) {
       id: id,
       brand: brand,
       model: modelName,
-      priceDealer: parseNumber(item['Конечная цена']),
-      benefitDealer: parseNumber(item['Скидка']),
+      priceDealer: parseNumber(item['Конечная цена']) || parseNumber(item['salePrice']),
+      benefitDealer: parseNumber(item['Скидка']) || parseNumber(item['maxDiscount']),
       priceOfficial: parseNumber(item['РРЦ'])
     };
   }).filter(item => item.id !== null);
@@ -76,58 +77,74 @@ function transformDealerData(dealerData) {
 let dealerData = [];
 if (fs.existsSync(dealerFilePath)) {
   const dealerRawData = JSON.parse(fs.readFileSync(dealerFilePath, 'utf-8'));
-  console.log(dealerRawData);
   dealerData = transformDealerData(dealerRawData);
-  console.log(dealerData);
+}
+
+// Читаем и преобразуем данные по отдельным автомобилям дилеров (АВН)
+let dealerCarsData = [];
+if (fs.existsSync(dealerCarsFilePath)) {
+  const dealerCarsRawData = JSON.parse(fs.readFileSync(dealerCarsFilePath, 'utf-8'));
+  dealerCarsData = transformDealerData(dealerCarsRawData);
 }
 
 // Объединяем данные
 const mergedData = federalData.map(federalItem => {
-  let dealerItem = dealerData.find(d => d.id === federalItem.id);
-  if (!dealerItem) {
-    dealerItem = dealerData.find(d => (d.brand.toLowerCase() === federalItem.brand.toLowerCase() && d.model.toLowerCase() === federalItem.model.toLowerCase()));
+  const priceFederal = parseNumber(federalItem.price);
+  const benefitFederal = parseNumber(federalItem.benefit || 0);
+  const prices = [priceFederal];
+  const benefits = [benefitFederal];
+  let dealerItem = null;
+  let dealerCarItem = null;
+  
+  if (dealerData.length) {
+    dealerItem = dealerData.find(d => d.id === federalItem.id);
     if (!dealerItem) {
-      console.log("dealerItem not found for federalItem:", federalItem.id);
+      dealerItem = dealerData.find(d => (d.brand.toLowerCase() === federalItem.brand.toLowerCase() && d.model.toLowerCase() === federalItem.model.toLowerCase()));
+      if (!dealerItem) {
+        console.log("dealerItem not found for federalItem:", federalItem.id);
+      }
+    }
+  }
+
+  if (dealerCarsData.length) {
+    dealerCarItem = dealerCarsData.find(d => d.id === federalItem.id);
+
+    if (!dealerCarItem) {
+      dealerCarItem = dealerCarsData.find(d => (d.brand.toLowerCase() === federalItem.brand.toLowerCase() && d.model.toLowerCase() === federalItem.model.toLowerCase()));
     }
   }
   
   if (dealerItem) {
-    const priceFederal = parseNumber(federalItem.price);
-    const benefitFederal = parseNumber(federalItem.benefit || 0);
-    
-    // Ищем минимальную цену среди всех возможных цен (исключая нулевые значения)
-    const priceValues = [priceFederal, dealerItem.priceDealer, dealerItem.priceOfficial]
-      .filter(price => price > 0); // Исключаем нулевые и отрицательные значения
-    
-    const price = priceValues.length > 0 ? Math.min(...priceValues) : priceFederal;
-    
-    // Ищем максимальную выгоду (исключая нулевые значения)
-    const benefitValues = [benefitFederal, dealerItem.benefitDealer]
-      .filter(benefit => benefit > 0); // Исключаем нулевые и отрицательные значения
-    
-    const benefit = benefitValues.length > 0 ? Math.max(...benefitValues) : benefitFederal;
-    
-    return {
-      ...federalItem,
-      priceFederal,
-      benefitFederal,
-      priceDealer: dealerItem.priceDealer,
-      benefitDealer: dealerItem.benefitDealer,
-      priceOfficial: dealerItem.priceOfficial,
-      price,
-      benefit
-    };
+    prices.push(dealerItem?.priceDealer, dealerItem?.priceOfficial);
+    benefits.push(dealerItem?.benefitDealer);
   }
-  
-  const priceFederal = parseNumber(federalItem.price);
-  const benefitFederal = parseNumber(federalItem.benefit || 0);
+
+  if (dealerCarItem) {
+    prices.push(dealerCarItem?.priceDealer);
+    benefits.push(dealerCarItem?.benefitDealer);
+  }
+
+  // Ищем минимальную цену среди всех возможных цен (исключая нулевые значения)
+  const priceValues = prices.filter(price => price > 0); // Исключаем нулевые и отрицательные значения
+
+  const price = priceValues.length > 0 ? Math.min(...priceValues) : priceFederal;
+
+  // Ищем максимальную выгоду (исключая нулевые значения)
+  const benefitValues = benefits.filter(benefit => benefit > 0); // Исключаем нулевые и отрицательные значения
+
+  const benefit = benefitValues.length > 0 ? Math.max(...benefitValues) : benefitFederal;
   
   return {
     ...federalItem,
     priceFederal,
     benefitFederal,
-    price: priceFederal,
-    benefit: benefitFederal
+    priceDealer: dealerItem ? dealerItem?.priceDealer : null,
+    benefitDealer: dealerItem ? dealerItem?.benefitDealer : null,
+    priceOfficial: dealerItem ? dealerItem?.priceOfficial : null,
+    priceDealerAVN: dealerCarItem ? dealerCarItem?.priceDealer : null,
+    benefitDealerAVN: dealerCarItem ? dealerCarItem?.benefitDealer : null,
+    price,
+    benefit,
   };
 });
 

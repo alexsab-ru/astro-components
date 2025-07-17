@@ -4,6 +4,7 @@ import argparse
 from utils import *
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional
+from collections import defaultdict
 
 class CarProcessor:
     def __init__(self, source_type: str):
@@ -217,6 +218,17 @@ class CarProcessor:
 
         update_car_prices(car, self.prices_data)
 
+        # --- Формирование массива цен и скидок для JSON ---
+        if not hasattr(self, 'cars_price_list'):
+            self.cars_price_list = []
+        self.cars_price_list.append({
+            'brand': join_car_data(car, 'mark_id'),
+            'model': join_car_data(car, 'folder_id'),
+            'salePrice': sale_price,
+            'maxDiscount': max_discount
+        })
+        # --- конец блока ---
+
         # get info from ./src/data/settings.json
         settings = {
             'legal_city': 'Город',
@@ -357,6 +369,29 @@ def main():
     
     if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
         print("error 404 found")
+
+    # --- Сохранение массива цен и скидок в JSON ---
+    if hasattr(processor, 'cars_price_list'):
+        grouped = defaultdict(list)
+        for item in processor.cars_price_list:
+            key = (item['brand'], item['model'])
+            grouped[key].append(item)
+        cars_price_list_deduped = []
+        for (brand, model), items in grouped.items():
+            min_sale_price = min(item['salePrice'] for item in items)
+            max_discount = max(item['maxDiscount'] for item in items)
+            cars_price_list_deduped.append({
+                'brand': brand,
+                'model': model,
+                'salePrice': min_sale_price,
+                'maxDiscount': max_discount
+            })
+
+        import json
+        os.makedirs('data', exist_ok=True)
+        with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
+            json.dump(cars_price_list_deduped, f, ensure_ascii=False, indent=2)
+    # --- конец блока ---
 
 if __name__ == "__main__":
     main()
