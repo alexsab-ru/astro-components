@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import json
 import argparse
 from utils import *
 import xml.etree.ElementTree as ET
@@ -12,6 +13,10 @@ class CarProcessor:
         self.existing_files = set()
         self.current_thumbs = []
         self.prices_data = load_price_data()
+        
+        # Прямое хранение агрегированных данных в готовом формате
+        # Ключ: (brand, model), Значение: полный объект для JSON
+        self.cars_price_data = {}
         
         self.sort_storage_data = {}
         if os.path.exists('sort_storage.json'):
@@ -217,6 +222,26 @@ class CarProcessor:
 
         update_car_prices(car, self.prices_data)
 
+        # --- Формирование данных для JSON с ценами и скидками из фида ---
+        # Группировка и агрегация данных сразу в готовом формате
+        brand = join_car_data(car, 'mark_id')
+        model = join_car_data(car, 'folder_id')
+        key = (brand, model)
+        
+        if key in self.cars_price_data:
+            # Обновляем минимальную цену и максимальную скидку
+            self.cars_price_data[key]['salePrice'] = min(self.cars_price_data[key]['salePrice'], sale_price)
+            self.cars_price_data[key]['maxDiscount'] = max(self.cars_price_data[key]['maxDiscount'], max_discount)
+        else:
+            # Создаем новый объект в готовом для JSON формате
+            self.cars_price_data[key] = {
+                'brand': brand,
+                'model': model,
+                'salePrice': sale_price,
+                'maxDiscount': max_discount
+            }
+        # --- конец блока ---
+
         # get info from ./src/data/settings.json
         settings = {
             'legal_city': 'Город',
@@ -357,6 +382,13 @@ def main():
     
     if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
         print("error 404 found")
+
+    # --- Сохранение данных в JSON с ценами и скидками из фида ---
+    # Данные уже в нужном формате, просто берем values() из словаря
+    os.makedirs('data', exist_ok=True)
+    with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
+        json.dump(list(processor.cars_price_data.values()), f, ensure_ascii=False, indent=2)
+    # --- конец блока ---
 
 if __name__ == "__main__":
     main()
