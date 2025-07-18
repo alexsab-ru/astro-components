@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
 import { currencyFormat } from '../../src/js/utils/numbers.format.js';
+import { quoteEscaper } from '../../src/js/utils/helpers.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -46,6 +47,11 @@ if (carsData.length > 0) {
           carsPlaceholder[`{{${key}-${car.id}}}`] = car[key];
           // Плейсхолдер с форматированием
           carsPlaceholder[`{{${key}b-${car.id}}}`] = currencyFormat(car[key]);
+
+          if (car[key+'Disclaimer'] && car[key+'Disclaimer'] !== '' && car[key+'Disclaimer'] !== null) {
+            carsPlaceholder[`{{${key}b-${car.id}}}`] += quoteEscaper(`<span class="ui-disclaimer-icon" data-text="${car[key+'Disclaimer']}">i</span>`);
+          }
+
         }
       });
     }
