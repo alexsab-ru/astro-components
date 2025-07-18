@@ -42,7 +42,7 @@ def load_model_mapping(json_path: str = "./src/data/model_mapping.json"):
 
 model_mapping = load_model_mapping()
 
-def get_model_info(brand: str, model: str, property: str = None, color: str = None) -> str | dict | None:
+def get_model_info(brand: str, model: str, property: str = None, color: str = None, vin: str = None) -> str | dict | None:
     """
     Получение информации о модели автомобиля.
     
@@ -51,10 +51,13 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         model: Название модели
         property: Запрашиваемое свойство ('folder', 'cyrillic' или 'colors')
         color: Цвет автомобиля
-        
+        vin: VIN автомобиля
     Returns:
         Запрошенная информация о модели или None, если информация не найдена
     """
+    if vin:
+        vin = vin.upper()
+
     # Нормализуем входные данные
     normalized_brand = brand.lower()
     normalized_model = model.lower()
@@ -66,7 +69,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not brand_key:
-        errorText = f"\n<b>Не хватает бренда</b> <code>{brand}</code> в model_mapping.json"
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не хватает бренда</b> <code>{brand}</code> в model_mapping.json"
         print_message(errorText, 'error')
         return None
     
@@ -77,7 +80,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not model_key:
-        errorText = f"\n<b>Не хватает модели</b> <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не хватает модели</b> <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
         print_message(errorText, 'error')
         return None
     
@@ -94,7 +97,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         if color_key:
             return model_data['color'][color_key]
         else:
-            errorText = f"\n<b>Не хватает цвета</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
+            errorText = f"\nvin: <code>{vin}</code>\n<b>Не хватает цвета</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
             print_message(errorText, 'error')
             return None
     
@@ -106,7 +109,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         elif normalized_property == 'colors':
             return model_data['color']
         else:
-            errorText = f"\n<b>Не хватает свойства</b> <code>{property}</code> модели <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
+            errorText = f"\nvin: <code>{vin}</code>\n<b>Не хватает свойства</b> <code>{property}</code> модели <code>{model}</code> бренда <code>{brand}</code> в model_mapping.json"
             print_message(errorText, 'error')
             return None
     
@@ -114,24 +117,24 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     return model_data
 
 
-def get_folder(brand: str, model: str) -> str | None:
+def get_folder(brand: str, model: str, vin: str = None) -> str | None:
     """Получение названия папки для модели."""
-    return get_model_info(brand, model, 'folder')
+    return get_model_info(brand, model, 'folder', vin=vin)
 
 
-def get_cyrillic(brand: str, model: str) -> str | None:
+def get_cyrillic(brand: str, model: str, vin: str = None) -> str | None:
     """Получение кириллического названия модели."""
-    return get_model_info(brand, model, 'cyrillic')
+    return get_model_info(brand, model, 'cyrillic', vin=vin)
 
 
-def get_color_filename(brand: str, model: str, color: str) -> str | None:
+def get_color_filename(brand: str, model: str, color: str, vin: str = None) -> str | None:
     """Получение имени файла для указанного цвета модели."""
-    return get_model_info(brand, model, color=color)
+    return get_model_info(brand, model, color=color, vin=vin)
 
 
-def get_available_colors(brand: str, model: str) -> dict | None:
+def get_available_colors(brand: str, model: str, vin: str = None) -> dict | None:
     """Получение словаря доступных цветов для модели."""
-    return get_model_info(brand, model, 'colors')
+    return get_model_info(brand, model, 'colors', vin=vin)
 
 
 # Примеры использования:

@@ -132,7 +132,15 @@ def process_description(desc_text):
     return result_html
 
 
-def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False):
+def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False, count_thumbs=5):
+    # Ensure count_thumbs is an integer
+    # Convert string or other types to integer, with fallback to default value
+    try:
+        count_thumbs = int(count_thumbs)
+    except (ValueError, TypeError):
+        count_thumbs = 5  # Default fallback value
+        print(f"⚠️ Warning: count_thumbs could not be converted to integer, using default value 5")
+
     # print(f"🔍 Отладка создания превью:")
     # print(f"   Количество изображений: {len(image_urls)}")
     # print(f"   Пропуск превью: {skip_thumbs}")
@@ -144,8 +152,8 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thum
     # Список для хранения путей к новым или существующим файлам
     new_or_existing_files = []
 
-    # Обработка первых 5 изображений
-    for index, img_url in enumerate(image_urls[:5]):
+    # Обработка первых count_thumbs изображений
+    for index, img_url in enumerate(image_urls[:count_thumbs]):
         try:
             # print(f"   🔄 Обрабатываю изображение {index + 1}: {img_url}")
             
@@ -182,7 +190,8 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thum
             new_or_existing_files.append(relative_output_path)
             current_thumbs.append(output_path)  # Здесь сохраняем полный путь для дальнейшего использования
         except Exception as e:
-            print(f"   ❌ Ошибка при обработке изображения {img_url}: {e}")
+            error_message = f"❌ Ошибка при обработке изображения {img_url}: {e}"
+            print_message(error_message, "error")
 
     return new_or_existing_files
 
@@ -534,9 +543,9 @@ def should_remove_car(car: ET.Element, mark_ids: list, folder_ids: list) -> bool
 
 def check_local_files(brand, model, color, vin):
     """Проверяет наличие локальных файлов изображений."""
-    folder = get_folder(brand, model)
+    folder = get_folder(brand, model, vin)
     if folder:
-        color_image = get_color_filename(brand, model, color)
+        color_image = get_color_filename(brand, model, color, vin)
         if color_image:
 
             thumb_path = os.path.join("img", "models", folder, "colors", color_image)
@@ -548,7 +557,7 @@ def check_local_files(brand, model, color, vin):
             elif os.path.exists(f"public/{thumb_brand_path}"):
                 return f"/{thumb_brand_path}"
             else:
-                errorText = f"\n<b>Не найден локальный файл</b>\n<pre>{color_image}</pre>\n<code>public/{thumb_path}</code>\n<code>public/{thumb_brand_path}</code>"
+                errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден локальный файл</b>\n<pre>{color_image}</pre>\n<code>public/{thumb_path}</code>\n<code>public/{thumb_brand_path}</code>"
                 print_message(errorText)
                 return "https://cdn.alexsab.ru/errors/404.webp"
         else:
@@ -584,8 +593,8 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
     brand = mark_id_elem.text.strip()
 
     # Получаем folder и color_image для CDN
-    folder = get_folder(brand, model)
-    color_image = get_color_filename(brand, model, color)
+    folder = get_folder(brand, model, vin)
+    color_image = get_color_filename(brand, model, color, vin)
 
     thumb = "https://cdn.alexsab.ru/errors/404.webp"
     # Проверка через CDN сервис
@@ -670,7 +679,7 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
                 # Добавляем только уникальные изображения
                 new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
                 images.extend(new_images)
-            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
+            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
             content += f"images: {images}\n"
             content += f"thumbs: {thumbs_files}\n"
         elif child.tag == 'color':
@@ -871,7 +880,7 @@ def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, 
             data['images'] = unique_images
             # Проверяем, нужно ли добавлять эскизы
             if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'])
+                thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
                 data.setdefault('thumbs', []).extend(thumbs_files)
 
     # Convert the data back to a YAML string

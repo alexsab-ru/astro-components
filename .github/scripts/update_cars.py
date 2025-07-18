@@ -263,6 +263,7 @@ def main():
     parser.add_argument('--domain', default=os.getenv('DOMAIN', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
+    parser.add_argument('--count_thumbs', default=5, help='Count thumbs for create')
     parser.add_argument('--image_tag', default='image', help='Image tag name')
     parser.add_argument('--description_tag', default='description', help='Description tag name')
     parser.add_argument('--config_source', 
