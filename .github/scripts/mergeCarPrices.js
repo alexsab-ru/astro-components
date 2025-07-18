@@ -66,21 +66,24 @@ if (!fs.existsSync(federalFilePath)) {
   const dealerCarsData = checkFiles(dealerCarsFilePath);
 
   federalData.forEach((federalItem) => {
+    let priceFederal = parseNumber(federalItem.price);
+    let benefitFederal = parseNumber(federalItem.benefit);
+    let priceOfficial = parseNumber(getValue(dealerData, federalItem.model, 'priceOfficial'));
     let priceDealer = parseNumber(getValue(dealerData, federalItem.model, 'price'));
     let priceDealerAVN = parseNumber(getValue(dealerCarsData, federalItem.model, 'price'));
     let benefitDealer = parseNumber(getValue(dealerData, federalItem.model, 'benefit'));
     let benefitDealerAVN = parseNumber(getValue(dealerCarsData, federalItem.model, 'benefit'));
-    let prices = [federalItem.price, priceDealer, priceDealerAVN];
-    let benefits = [federalItem.benefit, benefitDealer, benefitDealerAVN];
+    let prices = [priceFederal, priceDealer, priceDealerAVN].filter(item => item > 0);
+    let benefits = [benefitFederal, benefitDealer, benefitDealerAVN];
     results.push({
       id: federalItem.id,
       brand: federalItem.brand,
       model: federalItem.model,
-      price: Math.min(...prices),
+      price: prices.length ? Math.min(...prices) : 0,
       benefit: Math.max(...benefits),
-      priceOfficial: getValue(dealerData, federalItem.model, 'priceOfficial'),
-      priceFederal: parseNumber(federalItem.price),
-      benefitFederal: parseNumber(federalItem.benefit),
+      priceOfficial,
+      priceFederal,
+      benefitFederal,
       priceDealer,
       benefitDealer,
       priceDealerAVN,
