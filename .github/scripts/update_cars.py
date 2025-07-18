@@ -230,15 +230,15 @@ class CarProcessor:
         
         if key in self.cars_price_data:
             # Обновляем минимальную цену и максимальную скидку
-            self.cars_price_data[key]['salePrice'] = min(self.cars_price_data[key]['salePrice'], sale_price)
-            self.cars_price_data[key]['maxDiscount'] = max(self.cars_price_data[key]['maxDiscount'], max_discount)
+            self.cars_price_data[key]['price'] = min(self.cars_price_data[key]['price'], sale_price)
+            self.cars_price_data[key]['benefit'] = max(self.cars_price_data[key]['benefit'], max_discount)
         else:
             # Создаем новый объект в готовом для JSON формате
             self.cars_price_data[key] = {
                 'brand': brand,
                 'model': model,
-                'salePrice': sale_price,
-                'maxDiscount': max_discount
+                'price': sale_price,
+                'benefit': max_discount
             }
         # --- конец блока ---
 
