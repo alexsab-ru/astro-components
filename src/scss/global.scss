@@ -205,3 +205,89 @@ section:not(.model-section) {
 		width: auto;
 	}
 }
+
+// DISCLAIMER
+.ui-disclaimer {
+	position: fixed;
+	left: 10px;
+	top: 10px;
+	z-index: 100;
+	backdrop-filter: blur(5px);
+	background-color: rgba(#fff, .7);
+	color: #000;
+	// border-radius: 12px;
+	opacity: 0;
+	visibility: hidden;
+	padding: 10px;
+	font-size: 14px !important;
+	line-height: normal !important;
+	transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
+	display: none;
+	@apply sm:max-w-[600px] shadow-2xl z-50 max-h-[250px] overflow-y-auto sm:overflow-y-visible sm:h-auto;
+	&.active{
+		opacity: 1;
+		visibility: visible;
+		&.mobile{
+			top: 0 !important;
+			left: 0 !important;
+			right: 0 !important;
+			bottom: 0 !important;
+			max-height: 100% !important;
+			padding: 30px 20px;
+			max-width: 100%;
+		}
+	}
+	&:hover{
+		.ui-disclaimer-text {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+	&-icon{
+		cursor: pointer;
+		position: relative;
+		height: 24px;
+		width: 24px;
+		top: 0;
+		left: 5px;
+		border: 1px solid currentColor;
+		border-radius: 50%;
+		line-height: 1 !important;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		vertical-align: top;
+		font-weight: 700;
+		@apply text-xs sm:text-sm;	
+	}
+	&-text{
+		backdrop-filter: blur(5px);
+		background-color: rgba(#fff, .7);
+		color: #000;
+		// border-radius: 12px;
+		opacity: 0;
+		visibility: hidden;
+		padding: 10px;
+		position: absolute;
+		text-align: left;
+		top: calc(100% + 10px);
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 14px !important;
+		line-height: normal !important;
+		transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
+		@apply min-w-[300px] w-full sm:min-w-[500px] md:w-[600px] shadow-2xl z-50 h-[250px] overflow-y-auto sm:overflow-y-visible sm:h-auto;
+		// &:after {
+		// 	--size: 10px;
+		// 	content: '';
+		// 	position: absolute;
+		// 	display: block;
+		// 	width: var(--size);
+		// 	height: var(--size);
+		// 	background-color: #fff;
+		// 	left: calc(50% - var(--size) / 2);
+		// 	transform: rotate(45deg);
+		// 	top: calc(var(--size) / -2);
+		// }
+	}
+}
