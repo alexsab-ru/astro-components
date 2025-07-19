@@ -49,7 +49,7 @@ if (carsData.length > 0) {
           carsPlaceholder[`{{${key}b-${car.id}}}`] = currencyFormat(car[key]);
 
           if (car[key+'Disclaimer'] && car[key+'Disclaimer'] !== '' && car[key+'Disclaimer'] !== null) {
-            carsPlaceholder[`{{${key}b-${car.id}}}`] += quoteEscaper(`<span class="ui-disclaimer-icon" data-text="${car[key+'Disclaimer']}">i</span>`);
+            carsPlaceholder[`{{${key}b-${car.id}}}`] += quoteEscaper(`<span>&nbsp;</span><span class="tooltip-icon" data-text="${car[key+'Disclaimer']}">i</span>`);
           }
 
         }
