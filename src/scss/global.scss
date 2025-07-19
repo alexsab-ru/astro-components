@@ -207,7 +207,7 @@ section:not(.model-section) {
 }
 
 // DISCLAIMER
-.ui-disclaimer {
+.tooltip {
 	position: fixed;
 	left: 10px;
 	top: 10px;
@@ -235,59 +235,41 @@ section:not(.model-section) {
 			max-height: 100% !important;
 			padding: 30px 20px;
 			max-width: 100%;
+			.tooltip-close{
+				display: flex;
+			}
 		}
 	}
-	&:hover{
-		.ui-disclaimer-text {
-			opacity: 1;
-			visibility: visible;
-		}
-	}
-	&-icon{
-		cursor: pointer;
-		position: relative;
-		height: 24px;
-		width: 24px;
-		top: 0;
-		left: 5px;
-		border: 1px solid currentColor;
-		border-radius: 50%;
-		line-height: 1 !important;
-		display: inline-flex;
+	&-close{
+		position: absolute;
+		width: 30px;
+		height: 30px;
 		align-items: center;
 		justify-content: center;
-		vertical-align: top;
-		font-weight: 700;
-		@apply text-xs sm:text-sm;	
+		top: 0;
+		right: 0;
+		cursor: pointer;
+		font-size: 30px;
+		color: currentColor;
+		opacity: 0.7;
+		display: none;
 	}
-	&-text{
-		backdrop-filter: blur(5px);
-		background-color: rgba(#fff, .7);
-		color: #000;
-		// border-radius: 12px;
-		opacity: 0;
-		visibility: hidden;
-		padding: 10px;
-		position: absolute;
-		text-align: left;
-		top: calc(100% + 10px);
-		left: 50%;
-		transform: translateX(-50%);
-		font-size: 14px !important;
-		line-height: normal !important;
-		transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
-		@apply min-w-[300px] w-full sm:min-w-[500px] md:w-[600px] shadow-2xl z-50 h-[250px] overflow-y-auto sm:overflow-y-visible sm:h-auto;
-		// &:after {
-		// 	--size: 10px;
-		// 	content: '';
-		// 	position: absolute;
-		// 	display: block;
-		// 	width: var(--size);
-		// 	height: var(--size);
-		// 	background-color: #fff;
-		// 	left: calc(50% - var(--size) / 2);
-		// 	transform: rotate(45deg);
-		// 	top: calc(var(--size) / -2);
-		// }
+	&-icon{
+		--size: 30px;
+		font-size: calc(var(--size) / 2.5);
+		line-height: calc(var(--size) / 1.7);
+		height: calc(var(--size) / 1.7);
+		width: calc(var(--size) / 1.7);
+		color: currentColor;
+		cursor: pointer;
+		position: relative;
+		top: 0;
+		left: 0;
+		border: 1px solid currentColor;
+		border-radius: 50%;
+		display: inline-block;
+		text-align: center;
+		vertical-align: top;
+		font-weight: normal !important;
 	}
 }
