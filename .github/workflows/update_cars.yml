@@ -14,10 +14,10 @@ on:
       - '.github/scripts/config_air_storage-friend.json'
       - '.github/scripts/config_air_storage.json'
       - '.github/scripts/config.py'
+      - '.github/scripts/create_cars.py'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
       - '.github/scripts/mergeCarPrices.js'
-      - '.github/scripts/model_mapping.json'
       - '.github/scripts/update_cars_air_storage.py'
       - '.github/scripts/update_cars.py'
       - '.github/scripts/utils.py'
@@ -33,6 +33,9 @@ concurrency:
 
 jobs:
   determine_env:
+
+    if: ${{ vars.UPDATE_CARS && vars.UPDATE_CARS == 'true' }}
+
     runs-on: ubuntu-latest
     outputs:
       env_name: ${{ steps.set_env.outputs.env_name }}
@@ -180,6 +183,15 @@ jobs:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
 
+    - name: Get cars from XML_URL and generate cars file (new method)
+      if: ${{ vars.XML_URL }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/create_cars.py
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL }}
+
     - name: Get cars data_cars_car XML and generate cars file
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
       run: |
@@ -206,6 +218,15 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+
+    - name: Get cars ads_ad XML and generate cars file
+      if: ${{ vars.XML_URL_ADS_AD }}
+      run: |
+        python .github/scripts/getOneXML.py
+        python .github/scripts/update_cars.py --source_type ads_ad --image_tag="Image"
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_ADS_AD }}
 
     - name: Get cars carcopy XML and generate cars file
       if: ${{ vars.XML_URL_CARCOPY }}

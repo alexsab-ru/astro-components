@@ -632,7 +632,8 @@
                 "Серый": "gray.webp",
                 "Черный": "black.webp",
                 "Красный": "red.webp",
-                "Синий": "blue.webp"
+                "Синий": "blue.webp",
+                "Серебристый": "silver.webp"
             }},
         "T9": {
             "folder": "t9",
@@ -1382,6 +1383,17 @@
                 "Серый": "smoky-pearls.webp"
             }
         },
+        "F7x, I": {
+            "folder": "new-haval-f7x",
+            "cyrillic": "F7x",
+            "color": {
+                "Синий": "oceanic-lapis-lazuli.webp",
+                "Черный": "galactic-black.webp",
+                "Чёрный": "galactic-black.webp",
+                "Белый": "noble-agate.webp",
+                "Серый": "smoky-pearls.webp"
+            }
+        },
         "F7x, II": {
             "folder": "new-haval-f7x",
             "cyrillic": "F7x",
@@ -2108,6 +2120,7 @@
             "color": {
                 "Black": "black.webp",
                 "Черный": "black.webp",
+                "Чёрный": "black.webp",
                 "Gray": "gray.webp",
                 "Серый": "gray.webp",
                 "White": "white.webp",

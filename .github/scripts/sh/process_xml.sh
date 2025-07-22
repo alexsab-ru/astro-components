@@ -15,10 +15,12 @@ show_help() {
     echo "  AVITO_FRIEND_XML_URL"
     echo "  AUTORU_XML_URL"
     echo "  AUTORU_FRIEND_XML_URL"
+    echo "  XML_URL"
     echo "  XML_URL_DATA_CARS_CAR"
     echo "  XML_URL_MAXPOSTER"
     echo "  XML_URL_CARCOPY"
     echo "  XML_URL_VEHICLES_VEHICLE"
+    echo "  XML_URL_ADS_AD"
     echo "  USED_CARS_DATA_CARS_CAR"
     echo
     echo "Update Types for 'update':"
@@ -27,10 +29,12 @@ show_help() {
     echo "  avito_friend         - Update from Avito with Friend source"
     echo "  autoru               - Update from AutoRu source"
     echo "  autoru_friend        - Update from AutoRu with Friend source"
+    echo "  xml_url              - Update from XML_URL source"
     echo "  data_cars_car        - Update from Data Cars Car source"
     echo "  maxposter            - Update from Maxposter source"
     echo "  carcopy              - Update from Carcopy source"
     echo "  vehicles_vehicle     - Update from Vehicles Vehicle source"
+    echo "  ads_ad               - Update from Ads Ad source"
     echo "  used_cars_data_cars_car  - Update Used Cars from Data Cars Car source"
     echo
     echo "Test Types for 'test':"
@@ -39,10 +43,12 @@ show_help() {
     echo "  avito_friend         - Test from Avito with Friend source"
     echo "  autoru               - Test from AutoRu source"
     echo "  autoru_friend        - Test from AutoRu with Friend source"
+    echo "  xml_url              - Test from XML_URL source"
     echo "  data_cars_car        - Test from Data Cars Car source"
     echo "  maxposter            - Test from Maxposter source"
     echo "  carcopy              - Test from Carcopy source"
     echo "  vehicles_vehicle     - Test from Vehicles Vehicle source"
+    echo "  ads_ad               - Test from Ads Ad source"
     echo "  used_cars_data_cars_car  - Test Used Cars from Data Cars Car source"
     echo
     echo "Examples:"
@@ -116,6 +122,10 @@ handle_test() {
             handle_getone "AUTORU_FRIEND_XML_URL" "cars_friend.xml"
             handle_update "autoru_friend"
             ;;
+        "xml_url")
+            handle_getone "XML_URL"
+            handle_update "xml_url"
+            ;;
         "data_cars_car")
             handle_getone "XML_URL_DATA_CARS_CAR"
             handle_update "data_cars_car"
@@ -135,6 +145,10 @@ handle_test() {
         "vehicles")
             handle_getone "XML_URL_VEHICLES_VEHICLE"
             handle_update "vehicles_vehicle"
+            ;;
+        "ads_ad")
+            handle_getone "XML_URL_ADS_AD"
+            handle_update "ads_ad"
             ;;
         *)
             echo "Error: Unknown test type: $type"
@@ -175,6 +189,9 @@ handle_update() {
             export XML_URL="./public/autoru_dc.xml ./public/autoru_friend.xml" 
             python3 .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
             ;;
+        "xml_url")
+            python3 .github/scripts/create_cars.py --skip_thumbs --domain="$DOMAIN"
+            ;;
         "data_cars_car")
             python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"
             ;;
@@ -189,6 +206,9 @@ handle_update() {
             ;;
         "vehicles_vehicle")
             python3 .github/scripts/update_cars.py --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            ;;
+        "ads_ad")
+            python3 .github/scripts/update_cars.py --source_type ads_ad --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
             ;;
         *)
             echo "Error: Unknown update type: $type"
