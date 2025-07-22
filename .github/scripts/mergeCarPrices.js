@@ -1,138 +1,98 @@
 import fs from 'fs';
 import path from 'path';
 
-// Пути к файлам
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
+const outputFileName = 'all-prices.json'
+const outputPath = path.join(dataDirectory, outputFileName);
 const federalFilePath = path.join(dataDirectory, 'federal-models_price.json');
 const dealerFilePath = path.join(dataDirectory, 'dealer-models_price.json');
-const modelsFilePath = path.join(dataDirectory, 'models.json');
+const dealerCarsFilePath = path.join(dataDirectory, 'dealer-models_cars_price.json');
 
-// Проверяем наличие федерального файла
-if (!fs.existsSync(federalFilePath)) {
-  console.error('Ошибка: Файл federal-models_price.json не найден');
-  process.exit(1);
-}
+const Message = {
+  SUCCESS: 'Файл all-prices.json успешно создан',
+  ERROR: 'Ошибка: Файл federal-models_price.json не найден'
+};
 
-// Читаем федеральный файл
-const federalData = JSON.parse(fs.readFileSync(federalFilePath, 'utf-8'));
+const Key = {
+  PRICE: 'Конечная цена',
+  BENEFIT: 'Скидка',
+  PRICE_OFFICIAL: 'РРЦ'
+};
 
-// Читаем файл с моделями
-const modelsData = JSON.parse(fs.readFileSync(modelsFilePath, 'utf-8'));
+const results = [];
 
-// Функция для получения ID модели из models.json
-function getModelId(brand, modelName) {
-  const model = modelsData.models.find(m => 
-    m.mark_id.toLowerCase() === brand.toLowerCase() && 
-    m.name.toLowerCase() === modelName.toLowerCase()
-  );
-  return model ? model.id : null;
-}
+const normalizeData = (data) => {
+  return Object.keys(data).map((item) => {
+    return {
+      model: item,
+      price: data[item][Key.PRICE],
+      benefit: data[item][Key.BENEFIT],
+      priceOfficial: data[item][Key.PRICE_OFFICIAL]
+    }
+  });
+};
 
-// Функция для преобразования строки в число
-function parseNumber(value) {
-  if (value === null || value === undefined || value === '') {
-    return 0;
+const checkFiles = (path) => {
+  if (fs.existsSync(path)) {
+    let data = JSON.parse(fs.readFileSync(path, 'utf-8'));
+    if (!Array.isArray(data)) {
+      return normalizeData(data);
+    } else {
+      return data.length ? data : [];
+    }
   }
+  return [];
+};
+
+const getValue = (data, model, key) => {
+  if (data.length) {
+    const item = data.find(d => d.model.toLowerCase().replace(/\s/g, '') === model.toLowerCase().replace(/\s/g, ''));
+    return item ? item[key] : 0;
+  }
+  return 0;
+};
+
+const parseNumber = (value) => {
   const num = Number(value);
   return isNaN(num) ? 0 : num;
-}
+};
 
-// Функция для преобразования дилерских данных
-function transformDealerData(dealerData) {
-  return Object.values(dealerData).map(item => {
-    const brand = item['Бренд'] || item['brand'] || '';
-    const modelName = item['Модель'] || item['model'] || '';
-    const modelId = getModelId(brand, modelName);
-    console.log(brand, modelName, modelId);
-    
-    // --- Новая логика: если у item уже есть id или ids, используем их ---
-    let id = null;
-    if (item.id) {
-      // Если id уже есть, используем его
-      id = item.id;
-    } else if (item.ids && Array.isArray(item.ids) && item.ids.length > 0) {
-      // Если есть массив ids, используем первый элемент
-      id = item.ids[0];
-    } else if (modelId) {
-      // Стандартная логика формирования id
-      const brandLower = brand.toLowerCase();
-      const modelIdLower = modelId.toLowerCase();
-      id = modelIdLower.includes(brandLower) ? modelId : `${brandLower}-${modelId}`;
-    }
-    // ---------------------------------------------------------------
-    
-    return {
-      id: id,
-      brand: brand,
-      model: modelName,
-      priceDealer: parseNumber(item['Конечная цена']),
-      benefitDealer: parseNumber(item['Скидка']),
-      priceOfficial: parseNumber(item['РРЦ'])
-    };
-  }).filter(item => item.id !== null);
-}
+if (!fs.existsSync(federalFilePath)) {
+  console.error(Message.ERROR);
+  process.exit(1);
+} else {
+  const federalData = JSON.parse(fs.readFileSync(federalFilePath, 'utf-8'));
+  const dealerData = checkFiles(dealerFilePath);
+  const dealerCarsData = checkFiles(dealerCarsFilePath);
 
-// Читаем и преобразуем дилерские данные
-let dealerData = [];
-if (fs.existsSync(dealerFilePath)) {
-  const dealerRawData = JSON.parse(fs.readFileSync(dealerFilePath, 'utf-8'));
-  console.log(dealerRawData);
-  dealerData = transformDealerData(dealerRawData);
-  console.log(dealerData);
-}
-
-// Объединяем данные
-const mergedData = federalData.map(federalItem => {
-  let dealerItem = dealerData.find(d => d.id === federalItem.id);
-  if (!dealerItem) {
-    dealerItem = dealerData.find(d => (d.brand.toLowerCase() === federalItem.brand.toLowerCase() && d.model.toLowerCase() === federalItem.model.toLowerCase()));
-    if (!dealerItem) {
-      console.log("dealerItem not found for federalItem:", federalItem.id);
-    }
-  }
-  
-  if (dealerItem) {
-    const priceFederal = parseNumber(federalItem.price);
-    const benefitFederal = parseNumber(federalItem.benefit || 0);
-    
-    // Ищем минимальную цену среди всех возможных цен (исключая нулевые значения)
-    const priceValues = [priceFederal, dealerItem.priceDealer, dealerItem.priceOfficial]
-      .filter(price => price > 0); // Исключаем нулевые и отрицательные значения
-    
-    const price = priceValues.length > 0 ? Math.min(...priceValues) : priceFederal;
-    
-    // Ищем максимальную выгоду (исключая нулевые значения)
-    const benefitValues = [benefitFederal, dealerItem.benefitDealer]
-      .filter(benefit => benefit > 0); // Исключаем нулевые и отрицательные значения
-    
-    const benefit = benefitValues.length > 0 ? Math.max(...benefitValues) : benefitFederal;
-    
-    return {
-      ...federalItem,
+  federalData.forEach((federalItem) => {
+    let priceFederal = parseNumber(federalItem.price);
+    let benefitFederal = parseNumber(federalItem.benefit);
+    let priceOfficial = parseNumber(getValue(dealerData, federalItem.model, 'priceOfficial'));
+    let priceDealer = parseNumber(getValue(dealerData, federalItem.model, 'price'));
+    let priceDealerAVN = parseNumber(getValue(dealerCarsData, federalItem.model, 'price'));
+    let benefitDealer = parseNumber(getValue(dealerData, federalItem.model, 'benefit'));
+    let benefitDealerAVN = parseNumber(getValue(dealerCarsData, federalItem.model, 'benefit'));
+    let prices = [priceFederal, priceDealer, priceDealerAVN].filter(item => item > 0);
+    let benefits = [benefitFederal, benefitDealer, benefitDealerAVN];
+    results.push({
+      id: federalItem.id,
+      brand: federalItem.brand,
+      model: federalItem.model,
+      price: prices.length ? Math.min(...prices) : 0,
+      benefit: Math.max(...benefits),
+      priceOfficial,
       priceFederal,
       benefitFederal,
-      priceDealer: dealerItem.priceDealer,
-      benefitDealer: dealerItem.benefitDealer,
-      priceOfficial: dealerItem.priceOfficial,
-      price,
-      benefit
-    };
-  }
+      priceDealer,
+      benefitDealer,
+      priceDealerAVN,
+      benefitDealerAVN
+    });
+  })
   
-  const priceFederal = parseNumber(federalItem.price);
-  const benefitFederal = parseNumber(federalItem.benefit || 0);
-  
-  return {
-    ...federalItem,
-    priceFederal,
-    benefitFederal,
-    price: priceFederal,
-    benefit: benefitFederal
-  };
-});
+}
 
-// Сохраняем результат
-const outputPath = path.join(dataDirectory, 'all-prices.json');
-fs.writeFileSync(outputPath, JSON.stringify(mergedData, null, 2), 'utf-8');
-console.log('Файл all-prices.json успешно создан');
+fs.writeFileSync(outputPath, JSON.stringify(results, null, 2), 'utf-8');
+console.log(Message.SUCCESS);
 

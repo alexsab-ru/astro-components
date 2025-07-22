@@ -50,7 +50,8 @@ python .github/scripts/create_cars.py \
     --output_path ".github/scripts/test_results/$input_file" \
     --domain "localhost:4321" \
     --cars_dir "src/content/cars" \
-    --thumbs_dir "public/img/thumbs"
+    --thumbs_dir "public/img/thumbs" \
+    --count_thumbs 1
 
 if [ $? -eq 0 ]; then
     echo ""
