@@ -22,6 +22,10 @@ show_help() {
     echo "  XML_URL_VEHICLES_VEHICLE"
     echo "  XML_URL_ADS_AD"
     echo "  USED_CARS_DATA_CARS_CAR"
+    echo "  USED_CARS_MAXPOSTER"
+    echo "  USED_CARS_CARCOPY"
+    echo "  USED_CARS_VEHICLES_VEHICLE"
+    echo "  USED_CARS_ADS_AD"
     echo
     echo "Update Types for 'update':"
     echo "  avito                - Update from Avito source"
@@ -36,6 +40,10 @@ show_help() {
     echo "  vehicles_vehicle     - Update from Vehicles Vehicle source"
     echo "  ads_ad               - Update from Ads Ad source"
     echo "  used_cars_data_cars_car  - Update Used Cars from Data Cars Car source"
+    echo "  used_cars_maxposter     - Update Used Cars from Maxposter source"
+    echo "  used_cars_carcopy       - Update Used Cars from Carcopy source"
+    echo "  used_cars_vehicles_vehicle - Update Used Cars from Vehicles Vehicle source"
+    echo "  used_cars_ads_ad        - Update Used Cars from Ads Ad source"
     echo
     echo "Test Types for 'test':"
     echo "  avito                - Test from Avito source"
@@ -50,6 +58,10 @@ show_help() {
     echo "  vehicles_vehicle     - Test from Vehicles Vehicle source"
     echo "  ads_ad               - Test from Ads Ad source"
     echo "  used_cars_data_cars_car  - Test Used Cars from Data Cars Car source"
+    echo "  used_cars_maxposter     - Test Used Cars from Maxposter source"
+    echo "  used_cars_carcopy       - Test Used Cars from Carcopy source"
+    echo "  used_cars_vehicles_vehicle - Test Used Cars from Vehicles Vehicle source"
+    echo "  used_cars_ads_ad        - Test Used Cars from Ads Ad source"
     echo
     echo "Examples:"
     echo "  $0 getone AVITO_XML_URL"
@@ -59,25 +71,49 @@ show_help() {
     echo "  $0 test maxposter --dev"
 }
 
+Color_Off='\033[0m'
+BGYELLOW='\033[30;43m'
+BGGREEN='\033[30;42m'
+BGRED='\033[30;41m'
+TEXTRED='\033[30;31m'
+
+
 # Get domain from .env
 get_domain() {
     DOMAIN=$(grep '^DOMAIN=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
     if [ -z "$DOMAIN" ]; then
-        echo "Error: DOMAIN not found in .env file"
-        exit 1
+        echo -e "${BGRED}Error: DOMAIN not found in .env file${Color_Off}"
+        return 1
     fi
     echo $DOMAIN
+    return 0
 }
 
 # Get XML URL from .env by variable name
 get_xml_url() {
     local var_name=$1
-    XML_URL=$(grep "^${var_name}=" .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
-    if [ -z "$XML_URL" ]; then
-        echo "Error: ${var_name} not found in .env file"
-        exit 1
+    
+    if [ ! -f ".env" ]; then
+        echo -e "${BGRED}Error: .env file not found${Color_Off}" >&2
+        return 1
     fi
-    echo $XML_URL
+    
+    local line=$(grep "^${var_name}=" .env | head -n1)
+    
+    if [ -z "$line" ]; then
+        echo -e "${BGRED}Error: ${var_name} not found in .env file${Color_Off}" >&2
+        return 1
+    fi
+    
+    local xml_url=$(echo "$line" | cut -d'=' -f2- | sed 's/^"//; s/"$//; s/^'\''//; s/'\''$//')
+    
+    if [ -z "$xml_url" ]; then
+        echo -e "${BGRED}Error: ${var_name} found in .env but has empty value${Color_Off}" >&2
+        return 1
+    fi
+    
+    echo "$xml_url"
+    return 0
 }
 
 # Handle getone command
@@ -85,7 +121,16 @@ handle_getone() {
     local env_var=$1
     local output_file=$2
     
-    export XML_URL=$(get_xml_url "$env_var")
+    # Получаем URL и проверяем успешность выполнения
+    XML_URL=$(get_xml_url "$env_var")
+    local exit_code=$?
+    
+    if [ $exit_code -ne 0 ]; then
+        # Если функция вернула ошибку, завершаем основной скрипт
+        exit 0
+    fi
+    
+    export XML_URL
     
     if [ -n "$output_file" ]; then
         python3 .github/scripts/getOneXML.py --output="$output_file"
@@ -130,10 +175,6 @@ handle_test() {
             handle_getone "XML_URL_DATA_CARS_CAR"
             handle_update "data_cars_car"
             ;;
-        "used_cars_data_cars_car")
-            handle_getone "USED_CARS_DATA_CARS_CAR"
-            handle_update "used_cars_data_cars_car"
-            ;;
         "maxposter")
             handle_getone "XML_URL_MAXPOSTER"
             handle_update "maxposter"
@@ -150,8 +191,28 @@ handle_test() {
             handle_getone "XML_URL_ADS_AD"
             handle_update "ads_ad"
             ;;
+        "used_cars_data_cars_car")
+            handle_getone "USED_CARS_DATA_CARS_CAR"
+            handle_update "used_cars_data_cars_car"
+            ;;
+        "used_cars_maxposter")
+            handle_getone "USED_CARS_MAXPOSTER"
+            handle_update "used_cars_maxposter"
+            ;;
+        "used_cars_carcopy")
+            handle_getone "USED_CARS_CARCOPY"
+            handle_update "used_cars_carcopy"
+            ;;
+        "used_cars_vehicles_vehicle")
+            handle_getone "USED_CARS_VEHICLES_VEHICLE"
+            handle_update "used_cars_vehicles_vehicle"
+            ;;
+        "used_cars_ads_ad")
+            handle_getone "USED_CARS_ADS_AD"
+            handle_update "used_cars_ads_ad"
+            ;;
         *)
-            echo "Error: Unknown test type: $type"
+            echo -e "${BGRED}Error: Unknown test type: $type${Color_Off}"
             show_help
             exit 1
             ;;
@@ -165,7 +226,16 @@ handle_test() {
 # Handle update command
 handle_update() {
     local type=$1
-    export DOMAIN=$(get_domain)
+    
+    DOMAIN=$(get_domain)
+    local exit_code=$?
+    
+    if [ $exit_code -ne 0 ]; then
+        # Если функция вернула ошибку, завершаем основной скрипт
+        exit 0
+    fi
+    
+    export DOMAIN
     
     case $type in
         "avito")
@@ -193,25 +263,37 @@ handle_update() {
             python3 .github/scripts/create_cars.py --skip_thumbs --domain="$DOMAIN"
             ;;
         "data_cars_car")
-            python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"
-            ;;
-        "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --source_type data_cars_car --skip_thumbs --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/data-cars-car/cars.xml" --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"
             ;;
         "maxposter")
-            python3 .github/scripts/update_cars.py --source_type maxposter --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/maxposter/cars.xml" --source_type maxposter --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
             ;;
         "carcopy")
-            python3 .github/scripts/update_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy/cars.xml" --source_type carcopy --image_tag="photo" --description_tag="comment" --skip_thumbs --domain="$DOMAIN"
             ;;
         "vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
             ;;
         "ads_ad")
-            python3 .github/scripts/update_cars.py --source_type ads_ad --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads-ad/cars.xml" --source_type ads_ad --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            ;;
+        "used_cars_data_cars_car")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data-cars-car/used_cars_cars.xml" --source_type data_cars_car --skip_thumbs --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+            ;;
+        "used_cars_maxposter")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/maxposter/cars.xml" --source_type maxposter --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            ;;
+        "used_cars_carcopy")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy/cars.xml" --source_type carcopy --image_tag="photo" --description_tag="comment" --skip_thumbs --domain="$DOMAIN"
+            ;;
+        "used_cars_vehicles_vehicle")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            ;;
+        "used_cars_ads_ad")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads-ad/cars.xml" --source_type ads_ad --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
             ;;
         *)
-            echo "Error: Unknown update type: $type"
+            echo -e "${BGRED}Error: Unknown update type: $type${Color_Off}"
             show_help
             exit 1
             ;;
@@ -230,7 +312,7 @@ shift
 case $command in
     "getone")
         if [ "$#" -lt 1 ]; then
-            echo "Error: getone requires an environment variable name"
+            echo -e "${BGRED}Error: getone requires an environment variable name${Color_Off}"
             show_help
             exit 1
         fi
@@ -238,7 +320,7 @@ case $command in
         ;;
     "update")
         if [ "$#" -lt 1 ]; then
-            echo "Error: update requires a type"
+            echo -e "${BGRED}Error: update requires a type${Color_Off}"
             show_help
             exit 1
         fi
@@ -246,14 +328,14 @@ case $command in
         ;;
     "test")
         if [ "$#" -lt 1 ]; then
-            echo "Error: test requires a type"
+            echo -e "${BGRED}Error: test requires a type${Color_Off}"
             show_help
             exit 1
         fi
         handle_test "$@"
         ;;
     *)
-        echo "Error: Unknown command: $command"
+        echo -e "${BGRED}Error: Unknown command: $command${Color_Off}"
         show_help
         exit 1
         ;;

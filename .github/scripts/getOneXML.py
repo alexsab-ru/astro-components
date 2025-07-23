@@ -171,6 +171,10 @@ def main():
     deduplicated_root = remove_duplicates(merged_root, xpath)
 
     merged_tree = etree.ElementTree(deduplicated_root)
+    # Создаём директории для output_path, если их нет
+    output_dir = os.path.dirname(args.output_path)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
     merged_tree.write(args.output_path, encoding="UTF-8", xml_declaration=True, pretty_print=True)
 
     print(f"XML files successfully downloaded and merged into {args.output_path}")
