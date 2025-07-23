@@ -1,0 +1,205 @@
+---
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+const label = '<span>Я согласен на</span><a href="/privacy-policy" class="underline transition-all hover:no-underline" target="_blank">обработку персональных данных</a>';
+const models = ['TIGGO 4 PRO', 'TIGGO 7 PRO', 'TIGGO 7 PRO MAX', 'TIGGO 7 PRO MAX AWD', 'Новый TIGGO 8', 'TIGGO 8 PRO', 'TIGGO 8 PRO MAX', 'Новый TIGGO 8 PRO MAX', 'ARRIZO 8'];
+const transmission = ['Механическая', 'Автоматическая', 'Любая'];
+const colors = ['черный', 'белый', 'синий', 'красный', 'еще не определился'];
+---
+
+<section class="py-0 relative">
+    <div class="spinner absolute inset-0 bg-gray-50 z-10 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" class="text-accent-500"><circle cx="4" cy="12" r="3" fill="currentColor"><animate id="svgSpinners3DotsBounce0" attributeName="cy" begin="0;svgSpinners3DotsBounce1.end+0.25s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"/></circle><circle cx="12" cy="12" r="3" fill="currentColor"><animate attributeName="cy" begin="svgSpinners3DotsBounce0.begin+0.1s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"/></circle><circle cx="20" cy="12" r="3" fill="currentColor"><animate id="svgSpinners3DotsBounce1" attributeName="cy" begin="svgSpinners3DotsBounce0.begin+0.2s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"/></circle></svg>
+    </div>
+    <form class="quiz-slider swiper">
+        <input type="hidden" name="form" value="КВИЗ">
+        <input type="email" tabindex="-1" name="email" class="h-0 opacity-0 absolute -z-[100]" placeholder="mail@example.com">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide quiz-slide">
+                <div class="quiz-slide-wrapper">
+                    <div class="container">
+                        <div class="left">
+                            <h3 class="mobile-title-size sm:text-4xl">Подберите <b>АВТО</b> с&nbsp;максимальной выгодой от&nbsp;официального дилера в&nbsp;<b>ГОРОДЕ!</b></h3>
+                            
+                            <ul>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Подарки при покупке</li>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Авторассрочка 0.01%</li>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Выгодный Trade-In</li>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Авто в наличии</li>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Официальный дилер</li>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Пишем здесь все, что угодно</li>
+                            </ul>
+
+                            <button type="button" class="start-quiz btn w-fit">Начать подбор авто</button>
+    
+                        </div>
+                    </div>
+                    <div class="right" style="background-image: url('/img/quiz/1.jpg');"></div>
+                </div>
+            </div>
+            <div class="swiper-slide quiz-slide">
+                <div class="quiz-slide-wrapper">
+                    <div class="container">
+                        <div class="left">
+                            <div class="quiz-step"></div>
+                            <h3 class="mobile-title-size sm:text-4xl">Выберите модель:</h3>
+                            <div class="fields">
+                            {
+                                models.map(model => (
+                                <Checkbox 
+                                    name="model[]" 
+                                    type="checkbox" 
+                                    label={model} 
+                                    value={model} 
+                                    color="black" 
+                                    classes="text-lg font-bold mb-1 hover:opacity-80"
+                                />
+                                ))
+                            }
+                            </div>
+                            <div class="flex gap-5">
+                                <button type="button" class="btn slide-next" disabled="true">Далее</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right" style="background-image: url('/img/banners/1.jpg');"></div>
+                </div>
+            </div>
+            <div class="swiper-slide quiz-slide">
+                <div class="quiz-slide-wrapper">
+                    <div class="container">
+                        <div class="left">
+                            <div class="quiz-step"></div>
+                            <h3 class="mobile-title-size sm:text-4xl">Выберите коробку передач:</h3>
+                            <div class="fields">
+                            {
+                                transmission.map(tr => (
+                                <Checkbox 
+                                    name="transmission" 
+                                    type="radio" 
+                                    label={tr}
+                                    value={tr} 
+                                    color="black" 
+                                    classes="text-lg font-bold mb-1 hover:opacity-80"
+                                />
+                                ))
+                            }
+                            </div>
+                            <div class="flex gap-5">
+                                <button type="button" class="btn slide-prev">Назад</button>
+                                <button type="button" class="btn slide-next" disabled="true">Далее</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="right" style="background-image: url('/img/banners/1.jpg');"></div>
+                </div>
+            </div>
+            <div class="swiper-slide quiz-slide">
+                <div class="quiz-slide-wrapper">
+                    <div class="container">
+                        <div class="left">
+                            <div class="quiz-step"></div>
+                            <h3 class="mobile-title-size sm:text-4xl">Выберите цвет авто:</h3>
+                            <div class="fields">
+                            {
+                                colors.map(color => (
+                                <Checkbox 
+                                    name="color" 
+                                    type="radio" 
+                                    label={color}
+                                    value={color} 
+                                    color="black" 
+                                    classes="text-lg font-bold mb-1 hover:opacity-80"
+                                />
+                                ))
+                            }
+                            </div>
+                            <div class="flex gap-5">
+                                <button type="button" class="btn slide-prev">Назад</button>
+                                <button type="button" class="btn slide-next" disabled="true">Далее</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="right" style="background-image: url('/img/banners/1.jpg');"></div>
+                </div>
+            </div>
+            <div class="swiper-slide quiz-slide">
+                <div class="quiz-slide-wrapper">
+                    <div class="container">
+                        <div class="left">
+                            <div class="quiz-step"></div>
+                            <h3 class="mobile-title-size sm:text-4xl">Планируете ли сдавать свой авто в Трейд-ин (обмен старого авто на новый)</h3>
+                            <div class="fields">
+                            <Checkbox name="tradein" type="radio" label="Да" value="Да" color="black" classes="text-lg font-bold mb-1 hover:opacity-80" />
+                            <Checkbox name="tradein" type="radio" label="Нет" value="Нет" color="black" classes="text-lg font-bold mb-1 hover:opacity-80" />
+                            <Checkbox name="tradein" type="radio" label="Еще не определился" value="Еще не определился" color="black" classes="text-lg font-bold mb-1 hover:opacity-80" />
+                            </div>
+                            <div class="flex gap-5">
+                                <button type="button" class="btn slide-prev">Назад</button>
+                                <button type="button" class="btn slide-next" disabled="true">Далее</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="right" style="background-image: url('/img/banners/1.jpg');"></div>
+                </div>
+            </div>
+            <div class="swiper-slide quiz-slide">
+                <div class="quiz-slide-wrapper">
+                    <div class="container">
+                        <div class="left">
+                            <div class="quiz-step"></div>
+                            <h3 class="mobile-title-size sm:text-4xl">Выберите способ покупки:</h3>
+                            <div class="fields">
+                            <Checkbox name="purchase-method" type="radio" label="Внесу сразу всю сумму" value="Внесу сразу всю сумму" color="black" classes="text-lg font-bold mb-1 hover:opacity-80" />
+                            <Checkbox name="purchase-method" type="radio" label="Кредит" value="Кредит" color="black" classes="text-lg font-bold mb-1 hover:opacity-80" />
+                            <Checkbox name="purchase-method" type="radio" label="Лизинг" value="Лизинг" color="black" classes="text-lg font-bold mb-1 hover:opacity-80" />
+                            <Checkbox name="purchase-method" type="radio" label="Рассмотрю все варианты" value="Рассмотрю все варианты" color="black" classes="text-lg font-bold mb-1 hover:opacity-80" />
+                            </div>
+                            <div class="flex gap-5">
+                                <button type="button" class="btn slide-prev">Назад</button>
+                                <button type="button" class="btn slide-next" disabled="true">Далее</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="right" style="background-image: url('/img/banners/1.jpg');"></div>
+                </div>
+            </div>
+            <div class="swiper-slide quiz-slide">
+                <div class="quiz-slide-wrapper">
+                    <div class="container">
+                        <div class="left">
+                            <h3 class="mobile-title-size sm:text-4xl">По заданным параметрам найдено 3 автомобиля. <br>Оставьте номер вашего телефона, чтобы получить подробную консультацию</h3>
+                            
+                            <ul>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Честная авторассрочка</li>
+                                <li><span class="text-red-500 text-lg">✓</span>&nbsp;Переплата 0%</li>
+                            </ul>
+
+                            <input type="hidden" name="form" value="Подбор авто">
+                            <input type="email" tabindex="-1" name="email" class="h-0 opacity-0 absolute -z-[100]" placeholder="mail@example.com">
+                            <Input name="name" classes='border-gray-100 max-w-md' placeholder="Ваше имя" />
+                            <Input type="tel" name="phone" classes='border-gray-100 max-w-md' placeholder="+7 (999) 999-99-99*" required errorClasses='text-red-500' />
+
+                            <Checkbox name='agree' label={label} color='black' required errorClasses='text-red-500 w-full' />
+
+                            <input type="checkbox" name="subscribe" class="absolute w-0 h-0 opacity-0 invisible">
+
+                            <Button view="form-button" classes="max-w-md w-full" title="Отправить" />
+    
+                        </div>
+                    </div>
+                    <div class="right" style="background-image: url('/img/quiz/1.jpg');"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+<script>
+	import './quiz'
+</script>

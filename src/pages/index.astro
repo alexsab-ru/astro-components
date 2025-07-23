@@ -4,6 +4,7 @@ const { site_name, brand, legal_city_where } = settings;
 import {TIMER, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
+import QuizSlider from '@/components/QuizSlider/QuizSlider.astro';
 import PageH1 from '@/components/PageH1/Index.astro';
 import Timer from '@/components/Timer/Timer.astro';
 import ModelList from '@/components/Model/ModelList.astro';
@@ -27,7 +28,7 @@ import SeoText from '@/components/Seo/Index.astro';
 ---
 
 <Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
-	<Banner />
+	<QuizSlider />
 	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
 	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
 		<div class="container">
