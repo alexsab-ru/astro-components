@@ -59,11 +59,15 @@ class CarProcessor:
         configs = {
             'data_cars_car': {
                 'root_element': 'cars',
+                'image_tag': 'image',
+                'description_tag': 'description',
                 'rename_map': {},
                 'elements_to_localize': []
             },
             'ads_ad': {
                 'root_element': None,
+                'image_tag': 'photo',
+                'description_tag': 'description',
                 'rename_map': {
                     'VIN': 'vin',
                     'Make': 'mark_id',
@@ -90,6 +94,8 @@ class CarProcessor:
             },
             'maxposter': {
                 'root_element': None,  # корневой элемент
+                'image_tag': 'photo',
+                'description_tag': 'description',
                 'rename_map': {
                     'brand': 'mark_id',
                     'model': 'folder_id',
@@ -123,6 +129,8 @@ class CarProcessor:
             },
             'carcopy': {
                 'root_element': 'offers',
+                'image_tag': 'photo',
+                'description_tag': 'comment',
                 'rename_map': {
                     'make': 'mark_id',
                     'model': 'folder_id',
@@ -139,6 +147,8 @@ class CarProcessor:
             },
             'vehicles_vehicle': {
                 'root_element': 'vehicles',
+                'image_tag': 'photo',
+                'description_tag': 'description',
                 'rename_map': {
                     'mark': 'mark_id',
                     'model': 'folder_id',
@@ -261,9 +271,9 @@ class CarProcessor:
         config['legal_city_where'] = settings['legal_city_where']
 
         if os.path.exists(file_path):
-            update_yaml(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config)
+            update_yaml(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, self.config, config)
         else:
-            create_file(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
+            create_file(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, self.config, config, self.existing_files)
 
     def rename_elements(self, car: ET.Element) -> None:
         """Переименование элементов согласно карте переименований"""

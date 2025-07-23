@@ -566,7 +566,7 @@ def check_local_files(brand, model, color, vin):
         return "https://cdn.alexsab.ru/errors/404.webp"
 
 
-def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
+def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, self_config, config, existing_files):
     # Проверяем существование элемента vin
     vin_elem = car.find('vin')
     if vin_elem is None or vin_elem.text is None:
@@ -665,15 +665,15 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
 
     for child in car:
         # Skip nodes with child nodes (except image_tag) and attributes
-        if list(child) and child.tag != f'{config["image_tag"]}s':
+        if list(child) and child.tag != f'{self_config["image_tag"]}s':
             continue
         if child.tag == 'total':
             continue
         if child.tag == 'folder_id':
             content += f"{child.tag}: '{child.text}'\n"
-        elif child.tag == f'{config["image_tag"]}s':
+        elif child.tag == f'{self_config["image_tag"]}s':
             # Извлекаем URL из атрибута 'url' вместо текста элемента
-            images = extract_image_urls(child, config['image_tag'])
+            images = extract_image_urls(child, self_config['image_tag'])
             # Проверяем наличие дополнительных фотографий в dealer_photos_for_cars_avito
             if vin in dealer_photos_for_cars_avito:
                 # Добавляем только уникальные изображения
@@ -691,7 +691,7 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
             content += f"{child.tag}: |\n"
             for line in flat_extras.split("\n"):
                 content += f"  {line}\n"
-        elif child.tag == config['description_tag'] and child.text:
+        elif child.tag == self_config['description_tag'] and child.text:
             description = f"{child.text}"
             # description = description.replace(':', '').replace('📞', '')
             # Сам тег description добавляется ранее, но мы собираем его содержимое для использования в контенте страницы
@@ -741,7 +741,7 @@ def format_value(value: str) -> str:
         return f"'{value}'"
     return value
 
-def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config):
+def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, self_config, config):
 
     print(f"Обновление файла: {filename}")
     with open(filename, "r", encoding="utf-8") as f:
@@ -865,9 +865,9 @@ def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, 
 
         data['order'] = order
 
-    images_container = car.find(f"{config['image_tag']}s")
+    images_container = car.find(f"{self_config['image_tag']}s")
     if images_container is not None:
-        images = extract_image_urls(images_container, config['image_tag'])
+        images = extract_image_urls(images_container, self_config['image_tag'])
         # Проверяем наличие дополнительных фотографий в dealer_photos_for_cars_avito
         if vin in dealer_photos_for_cars_avito:
             # Добавляем только уникальные изображения

@@ -280,31 +280,31 @@ handle_update() {
             python3 .github/scripts/update_cars.py --input_file "./tmp/new/data-cars-car/cars.xml" --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"
             ;;
         "maxposter")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/maxposter/cars.xml" --source_type maxposter --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/maxposter/cars.xml" --source_type maxposter --skip_thumbs --domain="$DOMAIN"
             ;;
         "carcopy")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy/cars.xml" --source_type carcopy --image_tag="photo" --description_tag="comment" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy/cars.xml" --source_type carcopy --skip_thumbs --domain="$DOMAIN"
             ;;
         "vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --skip_thumbs --domain="$DOMAIN"
             ;;
         "ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads-ad/cars.xml" --source_type ads_ad --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads-ad/cars.xml" --source_type ads_ad --skip_thumbs --domain="$DOMAIN"
             ;;
         "used_cars_data_cars_car")
             python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data-cars-car/used_cars_cars.xml" --source_type data_cars_car --skip_thumbs --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
             ;;
         "used_cars_maxposter")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/maxposter/cars.xml" --source_type maxposter --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/maxposter/cars.xml" --source_type maxposter --skip_thumbs --domain="$DOMAIN"
             ;;
         "used_cars_carcopy")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy/cars.xml" --source_type carcopy --image_tag="photo" --description_tag="comment" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy/cars.xml" --source_type carcopy --skip_thumbs --domain="$DOMAIN"
             ;;
         "used_cars_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --skip_thumbs --domain="$DOMAIN"
             ;;
         "used_cars_ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads-ad/cars.xml" --source_type ads_ad --image_tag="photo" --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads-ad/cars.xml" --source_type ads_ad --skip_thumbs --domain="$DOMAIN"
             ;;
         *)
             echo -e "${BGRED}Error: Unknown update type: $type${Color_Off}"
