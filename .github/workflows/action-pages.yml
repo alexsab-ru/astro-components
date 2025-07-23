@@ -177,6 +177,10 @@ jobs:
           QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
           KEY_MAPPING: ${{ vars.DEALER_PRICE_KEY_MAPPING }}
 
+      - name: ls files
+        run: |
+          if [[ -d src/data ]]; then ls -al src/data; fi
+
       - name: Merge car prices
         if: steps.check_changes.outputs.changes == 'true'
         run: |

@@ -334,6 +334,7 @@ jobs:
         if [[ -d src/content/special-offers ]]; then ls -al src/content/special-offers; fi
         if [[ -d src/content/news ]]; then ls -al src/content/news; fi
         if [[ -d src/content/seo ]]; then ls -al src/content/seo; fi
+        if [[ -d src/data ]]; then ls -al src/data; fi
 
     - name: Check for changes
       id: check_changes
