@@ -38,12 +38,12 @@ class CarDataExtractor:
         
         # Загружаем данные сортировки
         self.sort_storage_data = {}
-        if os.path.exists('sort_storage.json'):
+        if os.path.exists('./src/data/sort_storage.json'):
             try:
-                with open('sort_storage.json', 'r', encoding='utf-8') as f:
+                with open('./src/data/sort_storage.json', 'r', encoding='utf-8') as f:
                     self.sort_storage_data = json.load(f)
             except json.JSONDecodeError:
-                print("Ошибка при чтении sort_storage.json")
+                print("Ошибка при чтении ./src/data/sort_storage.json")
             except Exception as e:
                 print(f"Произошла ошибка при работе с файлом: {e}")
         
