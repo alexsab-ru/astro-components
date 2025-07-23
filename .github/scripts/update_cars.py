@@ -225,7 +225,8 @@ class CarProcessor:
         # --- Формирование данных для JSON с ценами и скидками из фида ---
         # Группировка и агрегация данных сразу в готовом формате
         brand = join_car_data(car, 'mark_id')
-        model = join_car_data(car, 'folder_id')
+        model_full = join_car_data(car, 'folder_id')
+        model = get_model_info(brand, model_full, 'short')
         key = (brand, model)
         
         if key in self.cars_price_data:
