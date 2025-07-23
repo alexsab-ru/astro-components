@@ -181,7 +181,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dealer-models_cars_price
-          path: src/data/dealer-models_cars_price.json
+          path: src/data/
+          run-id: ${{ github.event.workflow_run.id }}
         continue-on-error: true
 
       - name: ls files
