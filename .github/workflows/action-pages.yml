@@ -177,14 +177,6 @@ jobs:
           QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
           KEY_MAPPING: ${{ vars.DEALER_PRICE_KEY_MAPPING }}
 
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dealer-models_cars_price
-          path: src/data/
-          run-id: ${{ github.event.workflow_run.id }}
-        continue-on-error: true
-
       - name: ls files
         run: |
           if [[ -d src/data ]]; then ls -al src/data; fi

@@ -327,16 +327,6 @@ jobs:
           echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
         fi
 
-    - name: Upload dealer-models_cars_price.json file as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: dealer-models_cars_price
-        path: src/data/dealer-models_cars_price.json
-        if-no-files-found: ignore  # Не падать, если файлы не созданы
-        retention-days: 1  # Недолго хранить
-        overwrite: true
-        include-hidden-files: true
-
     - name: ls files
       run: |
         if [[ -d src/content/cars ]]; then ls -al src/content/cars; fi
