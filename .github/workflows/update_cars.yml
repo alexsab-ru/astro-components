@@ -113,6 +113,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests lxml pyyaml Pillow beautifulsoup4
 
+
+    - name: Get All XML in tmp folder
+      run: |
+        pnpm run getDealerStorage
+        pnpm run getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL
+        pnpm run getAllNewCars
+        pnpm run getAllUsedCars
+
+
     - name: Download CSV and generate cars.xml from csv
       if: ${{ vars.CSV_URL }}
       run: |
