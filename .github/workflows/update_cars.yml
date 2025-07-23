@@ -363,6 +363,9 @@ jobs:
         if [[ -d public/img/thumbs_used && $(find public/img/thumbs_used -type f -name "*.webp") ]]; then git add public/img/thumbs_used/*.webp; fi
         if [[ -d src/content/cars && $(find src/content/cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
         if [[ -d src/content/used_cars && $(find src/content/used_cars -type f -name "*.mdx") ]]; then git add src/content/used_cars/*.mdx; fi
+        if [[ "$GITHUB_REF_NAME" != "master" ]]; then
+          if [[ -f src/data/dealer-models_cars_price.json ]]; then git add src/data/dealer-models_cars_price.json --force; fi
+        fi
         if [[ -f public/cars.xml ]]; then git add public/cars.xml; fi
         if [[ -f public/used_cars.xml ]]; then git add public/used_cars.xml; fi
         if [[ -f public/autoru.xml ]]; then git add public/autoru.xml; fi
