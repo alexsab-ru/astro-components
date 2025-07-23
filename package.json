@@ -38,6 +38,7 @@
     "getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL": "pnpm run cars getone DEALER_PHOTOS_FOR_CARS_AVITO_URL \"./tmp/photos/dealer_photos_for_cars_avito.xml\"",    
     "getAllNewCars": "pnpm run getOne_XML_URL_DATA_CARS_CAR && pnpm run getOne_XML_URL_MAXPOSTER && pnpm run getOne_XML_URL_CARCOPY && pnpm run getOne_XML_URL_VEHICLES_VEHICLE && pnpm run getOne_XML_URL_ADS_AD",
     "getAllUsedCars": "pnpm run getOne_USED_CARS_DATA_CARS_CAR && pnpm run getOne_USED_CARS_MAXPOSTER && pnpm run getOne_USED_CARS_CARCOPY && pnpm run getOne_USED_CARS_VEHICLES_VEHICLE && pnpm run getOne_USED_CARS_ADS_AD",
+    "getAll": "pnpm run getDealerStorage && pnpm run getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL && pnpm run getAllNewCars && pnpm run getAllUsedCars && pnpm run getAirStorage && pnpm run getSortStorage && pnpm run getDealerCarsPrice",
     "\n# Update from XML commands:": "",
     "update_cars_air_storage_avito": "pnpm run cars update avito",
     "update_cars_air_storage_avito_data_cars_car": "pnpm run cars update avito_data_cars_car",

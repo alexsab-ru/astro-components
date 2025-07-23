@@ -6,9 +6,9 @@ if [ -z "$CSV_URL" ] && [ -f .env ]; then
 fi
 
 # Проверяем, что CSV_URL установлен
-if [ -z "$CSV_URL" ]; then
-    echo "Error: DEALER_CARS_PRICE_CSV_URL is not found"
-    exit 1
+if [[ ! "$CSV_URL" =~ ^https?:// ]]; then
+    echo "Error: DEALER_CARS_PRICE_CSV_URL is not found or empty"
+    exit 0
 fi
 
 # Устанавливаем остальные переменные
