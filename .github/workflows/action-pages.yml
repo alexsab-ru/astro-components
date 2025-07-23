@@ -18,7 +18,7 @@ on:
     branches: ["main","brand","dealer"]
     paths-ignore:
       - '.github/scripts/sh/getAirStorage.sh'
-      - '.github/scripts/sh/getDealerData.sh'
+      - '.github/scripts/sh/getDealerCarsPrice.sh'
       - '.github/scripts/sh/getDealerPrices.sh'
       - '.github/scripts/sh/getDealerStorage.sh'
       - '.github/scripts/sh/getSortStorage.sh'
