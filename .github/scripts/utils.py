@@ -391,33 +391,24 @@ def load_price_data(file_path: str = "./src/data/dealer-cars_price.json") -> Dic
         return {}
 
 
-def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
+def update_car_prices(car_data: dict, prices_data: Dict[str, Dict[str, int]]) -> None:
     """
-    Обновляет цены в XML элементе автомобиля.
+    Обновляет цены в словаре данных автомобиля (car_data).
     
     Args:
-        car: XML элемент автомобиля
-        prices_data: Данные о ценах из JSON
+        car_data: Словарь с данными автомобиля (ключи: vin, priceWithDiscount, sale_price, max_discount, price)
+        prices_data: Данные о ценах из JSON (ключи: VIN, значения: словарь с ценами)
     """
-
-    # Проверяем существование элемента vin
-    vin_elem = car.find('vin')
-    if vin_elem is None or vin_elem.text is None:
-        print("Элемент 'vin' отсутствует или пустой")
+    # Получаем VIN из словаря
+    vin = car_data.get('vin')
+    if not vin:
+        print("Ключ 'vin' отсутствует или пустой в car_data")
         return
-    
-    vin = vin_elem.text
     print(f"🔑 Обрабатываю автомобиль с VIN: {vin}")
-    vin_hidden = process_vin_hidden(vin)
-    
-    # Проверяем существование элемента priceWithDiscount
-    price_with_discount_elem = car.find('priceWithDiscount')
-    if price_with_discount_elem is None or price_with_discount_elem.text is None:
-        print(f"Элемент 'priceWithDiscount' отсутствует или пустой для VIN: {vin}")
-        return
-    
+
+    # Получаем текущую цену со скидкой
     try:
-        current_sale_price = int(price_with_discount_elem.text)
+        current_sale_price = int(car_data.get('priceWithDiscount', 0) or 0)
     except ValueError:
         print(f"Не удалось преобразовать 'priceWithDiscount' в число для VIN: {vin}")
         return
@@ -425,34 +416,23 @@ def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
     # Проверяем наличие VIN в данных о ценах
     if vin not in prices_data:
         return
-    
     car_prices = prices_data[vin]
-    
+
     # Проверяем наличие необходимых ключей в данных о ценах
     required_keys = ["Конечная цена", "Скидка", "РРЦ"]
     if not all(key in car_prices for key in required_keys):
         print(f"Отсутствуют необходимые ключи в данных о ценах для VIN: {vin}")
         return
-    
+
     final_price = car_prices["Конечная цена"]
     if final_price <= current_sale_price:
         discount = car_prices["Скидка"]
         rrp = car_prices["РРЦ"]
-        
-        # Безопасно обновляем элементы
-        price_with_discount_elem.text = str(final_price)
-        
-        sale_price_elem = car.find('sale_price')
-        if sale_price_elem is not None:
-            sale_price_elem.text = str(final_price)
-        
-        max_discount_elem = car.find('max_discount')
-        if max_discount_elem is not None:
-            max_discount_elem.text = str(discount)
-        
-        price_elem = car.find('price')
-        if price_elem is not None:
-            price_elem.text = str(rrp)
+        # Обновляем значения в словаре car_data
+        car_data['priceWithDiscount'] = final_price
+        car_data['sale_price'] = final_price
+        car_data['max_discount'] = discount
+        car_data['price'] = rrp
 
 
 def get_xml_content(filename: str, xml_url: str) -> ET.Element:

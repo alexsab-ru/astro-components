@@ -587,7 +587,8 @@ class CarProcessor:
         file_name = f"{friendly_url}.mdx"
         file_path = os.path.join(config['cars_dir'], file_name)
 
-        update_car_prices(car, self.prices_data)
+        # Обновляем цены и скидки на основе car_data
+        update_car_prices(car_data, self.prices_data)
 
         # --- Формирование данных для JSON с ценами и скидками из фида ---
         # Группировка и агрегация данных сразу в готовом формате
