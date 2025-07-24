@@ -177,7 +177,7 @@ def main():
         os.makedirs(output_dir, exist_ok=True)
     merged_tree.write(args.output_path, encoding="UTF-8", xml_declaration=True, pretty_print=True)
 
-    print(f"XML files successfully downloaded and merged into {args.output_path}")
+    print(f"\033[30;42mXML files successfully downloaded and merged into {args.output_path}\033[0m")
 
 if __name__ == "__main__":
     main()

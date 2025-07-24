@@ -39,6 +39,16 @@ if [ -n "$document_id" ] && [ -n "$gid" ]; then
     # Раскомментируйте для скачивания и обработки
     curl "$DOWNLOAD_URL" -o data.csv
     python3 .github/scripts/CarFeedProcessorCSV.py
+
+    # save local file cars.xml and check if value "./cars.xml" already exists in .env in XML_URL_DATA_CARS_CAR
+    if [ -f ./cars.xml ]; then
+        if ! grep -q "^XML_URL_DATA_CARS_CAR=./cars.xml" .env; then
+            echo "XML_URL_DATA_CARS_CAR=./cars.xml" >> .env
+            echo "file cars.xml added to .env"
+        else
+            echo "file cars.xml already exists in .env"
+        fi
+    fi
 else
     echo "Ошибка: URL не соответствует ожидаемому формату." >&2
     exit 1

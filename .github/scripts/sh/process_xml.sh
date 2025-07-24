@@ -98,21 +98,35 @@ get_xml_url() {
         return 1
     fi
     
-    local line=$(grep "^${var_name}=" .env | head -n1)
+    # Получаем все строки с данной переменной
+    local lines=$(grep "^${var_name}=" .env)
     
-    if [ -z "$line" ]; then
+    if [ -z "$lines" ]; then
         echo -e "${BGRED}Error: ${var_name} not found in .env file${Color_Off}" >&2
         return 1
     fi
     
-    local xml_url=$(echo "$line" | cut -d'=' -f2- | sed 's/^"//; s/"$//; s/^'\''//; s/'\''$//')
+    local all_values=""
     
-    if [ -z "$xml_url" ]; then
-        echo -e "${BGRED}Error: ${var_name} found in .env but has empty value${Color_Off}" >&2
+    # Обрабатываем каждую строку
+    while IFS= read -r line; do
+        local value=$(echo "$line" | cut -d'=' -f2- | sed 's/^"//; s/"$//; s/^'\''//; s/'\''$//')
+        
+        if [ -n "$value" ]; then
+            if [ -z "$all_values" ]; then
+                all_values="$value"
+            else
+                all_values="$all_values $value"
+            fi
+        fi
+    done <<< "$lines"
+    
+    if [ -z "$all_values" ]; then
+        echo -e "${BGRED}Error: ${var_name} found in .env but all values are empty${Color_Off}" >&2
         return 1
     fi
     
-    echo "$xml_url"
+    echo "$all_values"
     return 0
 }
 
