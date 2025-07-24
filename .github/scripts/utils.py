@@ -503,9 +503,9 @@ def setup_directories(thumbs_dir: str, cars_dir: str) -> None:
     if not os.path.exists(thumbs_dir):
         os.makedirs(thumbs_dir)
     
-    if os.path.exists(cars_dir):
-        shutil.rmtree(cars_dir)
-    os.makedirs(cars_dir)
+    if not os.path.exists(cars_dir):
+        os.makedirs(cars_dir)
+        # shutil.rmtree(cars_dir)
 
 
 def should_remove_car(car: ET.Element, mark_ids: list, folder_ids: list) -> bool:
