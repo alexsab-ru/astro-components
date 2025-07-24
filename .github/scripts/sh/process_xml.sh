@@ -407,19 +407,19 @@ handle_update() {
             python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data_cars_car/used_cars_cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_catalog_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_carcopy_offers_offer")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         *)
             echo -e "${BGRED}Error: Unknown update type: $type${Color_Off}"
