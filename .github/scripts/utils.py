@@ -598,7 +598,7 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
 
     thumb = "https://cdn.alexsab.ru/errors/404.webp"
     # Проверка через CDN сервис
-    if folder:
+    if folder and not config['skip_check_thumb']:
         if color_image:
             cdn_path = f"https://cdn.alexsab.ru/b/{brand.lower()}/img/models/{folder}/colors/{color_image}"
             try:

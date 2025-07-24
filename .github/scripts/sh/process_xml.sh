@@ -7,6 +7,7 @@ show_help() {
     echo "Commands:"
     echo "  getone ENV_VAR [OUTPUT_FILE]     - Get one XML file using specified environment variable"
     echo "  update TYPE                      - Update cars with specific type"
+    echo "  auto                             - Automatically process all XML files in ./tmp/new and ./tmp/used_cars"
     echo "  test TYPE [--dev]                - Run getone and update commands in sequence"
     echo
     echo "Environment Variable Options for 'getone':"
@@ -45,6 +46,10 @@ show_help() {
     echo "  used_cars_vehicles_vehicle - Update Used Cars from Vehicles Vehicle source"
     echo "  used_cars_ads_ad        - Update Used Cars from Ads Ad source"
     echo
+    echo "Auto Command:"
+    echo "  auto [--dev]                     - Automatically scan and process all XML files"
+    echo "                                     in ./tmp/new and ./tmp/used_cars directories"
+    echo
     echo "Test Types for 'test':"
     echo "  avito                - Test from Avito source"
     echo "  avito_data_cars_car  - Test from Avito with Data Cars Car source"
@@ -68,6 +73,8 @@ show_help() {
     echo "  $0 getone AVITO_FRIEND_XML_URL cars_friend.xml"
     echo "  $0 update avito"
     echo "  $0 update maxposter"
+    echo "  $0 auto"
+    echo "  $0 auto --dev"
     echo "  $0 test maxposter --dev"
 }
 
@@ -150,6 +157,48 @@ handle_getone() {
         python3 .github/scripts/getOneXML.py --output="$output_file"
     else
         python3 .github/scripts/getOneXML.py
+    fi
+}
+
+# Handle auto command
+handle_auto() {
+    local run_dev=$1
+    
+    echo -e "${BGYELLOW}🔄 Запуск автоматической обработки всех XML файлов...${Color_Off}"
+    
+    DOMAIN=$(get_domain)
+    local exit_code=$?
+    
+    if [ $exit_code -ne 0 ]; then
+        # Если функция вернула ошибку, завершаем основной скрипт
+        exit 0
+    fi
+    
+    export DOMAIN
+    
+    # Проверяем наличие директорий
+    if [ ! -d "./tmp/new" ] && [ ! -d "./tmp/used_cars" ]; then
+        echo -e "${BGRED}❌ Директории ./tmp/new и ./tmp/used_cars не найдены${Color_Off}"
+        echo -e "${BGYELLOW}💡 Убедитесь, что XML файлы размещены в правильных директориях:${Color_Off}"
+        echo "   - Новые автомобили: ./tmp/new/{тип_фида}/cars.xml"
+        echo "   - Б/у автомобили: ./tmp/used_cars/{тип_фида}/cars.xml"
+        echo "   - Поддерживаемые типы: data-cars-car, maxposter, carcopy, vehicles-vehicle, ads-ad"
+        return 1
+    fi
+    
+    # Запускаем автоматическую обработку
+    python3 .github/scripts/update_cars.py --auto_scan --skip_check_thumb --skip_thumbs --domain="$DOMAIN"
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${BGGREEN}✅ Автоматическая обработка завершена успешно${Color_Off}"
+    else
+        echo -e "${BGRED}❌ Ошибка при автоматической обработке${Color_Off}"
+        return 1
+    fi
+    
+    if [ "$run_dev" = "--dev" ]; then
+        echo -e "${BGYELLOW}🚀 Запуск dev сервера...${Color_Off}"
+        pnpm dev
     fi
 }
 
@@ -315,7 +364,7 @@ handle_update() {
 }
 
 # Main script
-if [ "$#" -lt 2 ]; then
+if [ "$#" -lt 1 ]; then
     show_help
     exit 1
 fi
@@ -339,6 +388,9 @@ case $command in
             exit 1
         fi
         handle_update "$@"
+        ;;
+    "auto")
+        handle_auto "$@"
         ;;
     "test")
         if [ "$#" -lt 1 ]; then
