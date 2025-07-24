@@ -61,69 +61,92 @@ class CarProcessor:
         configs = {
             'data_cars_car': {
                 'root_element': 'cars',
-                'image_tag': 'image',
-                'description_tag': 'description',
-                'rename_map': {},
-                'elements_to_localize': []
+                'car_element': 'car',
+                'field_mapping': {
+                    'vin': 'vin',
+                    'mark_id': 'mark_id',
+                    'folder_id': 'folder_id',
+                    'modification_id': 'modification_id',
+                    'complectation_name': 'complectation_name',
+                    'year': 'year',
+                    'color': 'color',
+                    'price': 'price',
+                    'max_discount': 'max_discount',
+                    'tradein_discount': 'tradein_discount',
+                    'credit_discount': 'credit_discount',
+                    'insurance_discount': 'insurance_discount',
+                    'description': 'description',
+                    'body_type': 'body_type',
+                    'drive_type': 'drive',
+                    'gearboxType': 'gearbox',
+                    'wheel': 'wheel',
+                    'engineType': 'engine_type',
+                    'run': 'run',
+                    'availability': 'availability',
+                    'images': 'images',
+                    'image_tag': 'image',
+                    'image_url_attr': None
+                },
+                'elements_to_localize': [
+                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
             },
             'ads_ad': {
                 'root_element': None,
-                'image_tag': 'photo',
-                'description_tag': 'description',
-                'rename_map': {
-                    'VIN': 'vin',
-                    'Make': 'mark_id',
-                    'Model': 'folder_id',
-                    'Modification': 'modification_id',
-                    'Complectation': 'complectation_name',
-                    'BodyType': 'body_type',
-                    'DriveType': 'drive_type',
-                    'Transmission': 'gearboxType',
-                    'WheelType': 'wheel',
-                    'FuelType': 'engineType',
-                    'Color': 'color',
-                    'Price': 'price',
-                    'MaxDiscount': 'max_discount',
-                    'TradeinDiscount': 'tradeinDiscount',
-                    'Year': 'year',
-                    'Availability': 'availability',
-                    'Description': 'description',
-                    'url': 'image_url_attr'
+                'car_element': 'Ad',
+                'field_mapping': {
+                    'vin': 'VIN',
+                    'mark_id': 'Make',
+                    'folder_id': 'Model',
+                    'modification_id': 'Modification',
+                    'complectation_name': 'Complectation',
+                    'body_type': 'BodyType',
+                    'drive_type': 'DriveType',
+                    'gearboxType': 'Transmission',
+                    'wheel': 'WheelType',
+                    'engineType': 'FuelType',
+                    'color': 'Color',
+                    'price': 'Price',
+                    'max_discount': 'MaxDiscount',
+                    'tradeinDiscount': 'TradeinDiscount',
+                    'year': 'Year',
+                    'availability': 'Availability',
+                    'description': 'Description',
+                    'images': 'Images',
+                    'image_tag': 'Image',
+                    'image_url_attr': 'url'
                 },
                 'elements_to_localize': [
                     'engineType', 'drive_type', 'gearboxType', 'color', 'body_type', 'wheel'
                 ]
             },
             'maxposter': {
-                'root_element': None,  # корневой элемент
-                'image_tag': 'photo',
-                'description_tag': 'description',
-                'rename_map': {
-                    'brand': 'mark_id',
-                    'model': 'folder_id',
-                    'Model': 'folder_id',
-                    'Make': 'mark_id',
-                    'Year': 'year',
-                    'modification': 'modification_id',
-                    'Modification': 'modification_id',
-                    'complectation': 'complectation_name',
-                    'Complectation': 'complectation_name',
-                    'bodyColor': 'color',
-                    'mileage': 'run',
-                    'bodyType': 'body_type',
-                    'BodyType': 'body_type',
-                    'steeringWheel': 'wheel',
-                    'WheelType': 'wheel',
-                    'DriveType': 'drive_type',
-                    'Transmission': 'gearboxType',
-                    'Price': 'price',
-                    'Description': 'description',
-                    'MaxDiscount': 'max_discount',
-                    'TradeinDiscount': 'tradeinDiscount',
-                    'CreditDiscount': 'creditDiscount',
-                    'InsuranceDiscount': 'insuranceDiscount',
-                    'VIN': 'vin',
-                    'Color': 'color'
+                'root_element': None,
+                'car_element': 'offer',
+                'field_mapping': {
+                    'vin': 'VIN',
+                    'mark_id': 'brand',
+                    'folder_id': 'model',
+                    'modification_id': 'modification',
+                    'complectation_name': 'complectation',
+                    'year': 'Year',
+                    'color': 'bodyColor',
+                    'price': 'Price',
+                    'max_discount': 'MaxDiscount',
+                    'tradein_discount': 'TradeinDiscount',
+                    'credit_discount': 'CreditDiscount',
+                    'insurance_discount': 'InsuranceDiscount',
+                    'description': 'Description',
+                    'body_type': 'bodyType',
+                    'drive_type': 'DriveType',
+                    'gearboxType': 'Transmission',
+                    'wheel': 'steeringWheel',
+                    'engineType': 'engineType',
+                    'run': 'mileage',
+                    'availability': 'availability',
+                    'images': 'photos',
+                    'image_tag': 'photo',
+                    'image_url_attr': None
                 },
                 'elements_to_localize': [
                     'engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
@@ -131,17 +154,31 @@ class CarProcessor:
             },
             'carcopy': {
                 'root_element': 'offers',
-                'image_tag': 'photo',
-                'description_tag': 'comment',
-                'rename_map': {
-                    'make': 'mark_id',
-                    'model': 'folder_id',
-                    'version': 'modification_id',
-                    'complectation': 'complectation_name',
-                    'body-type': 'body_type',
-                    'drive-type': 'drive_type',
-                    'steering-wheel': 'wheel',
-                    'max-discount': 'max_discount'
+                'car_element': 'offer',
+                'field_mapping': {
+                    'vin': 'vin',
+                    'mark_id': 'make',
+                    'folder_id': 'model',
+                    'modification_id': 'version',
+                    'complectation_name': 'complectation',
+                    'year': 'year',
+                    'color': 'color',
+                    'price': 'price',
+                    'max_discount': 'max-discount',
+                    'tradein_discount': 'tradein-discount',
+                    'credit_discount': 'credit-discount',
+                    'insurance_discount': 'insurance-discount',
+                    'description': 'comment',
+                    'body_type': 'body-type',
+                    'drive_type': 'drive-type',
+                    'gearboxType': 'gearbox',
+                    'wheel': 'steering-wheel',
+                    'engineType': 'engine',
+                    'run': 'run',
+                    'availability': 'availability',
+                    'images': 'photos',
+                    'image_tag': 'photo',
+                    'image_url_attr': None
                 },
                 'elements_to_localize': [
                     'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
@@ -149,25 +186,67 @@ class CarProcessor:
             },
             'vehicles_vehicle': {
                 'root_element': None,
-                'image_tag': 'photo',
-                'description_tag': 'description',
-                'rename_map': {
-                    'mark': 'mark_id',
-                    'model': 'folder_id',
-                    'modification': 'modification_id',
-                    'сomplectation-name': 'complectation_name',
-                    'complectation-code': 'complectation_code',
-                    'engine-type': 'engineType',
-                    'body-type': 'body_type',
-                    'drive-type': 'drive_type',
-                    'steering-wheel': 'wheel',
-                    'max-discount': 'max_discount',
-                    'tradein-discount': 'tradeinDiscount',
-                    'credit-discount': 'creditDiscount',
-                    'insurance-discount': 'insuranceDiscount'
+                'car_element': 'vehicle',
+                'field_mapping': {
+                    'vin': 'vin',
+                    'mark_id': 'mark',
+                    'folder_id': 'model',
+                    'modification_id': 'modification',
+                    'complectation_name': 'сomplectation-name',
+                    'complectation_code': 'complectation-code',
+                    'year': 'year',
+                    'color': 'color',
+                    'price': 'price',
+                    'max_discount': 'max-discount',
+                    'tradein_discount': 'tradein-discount',
+                    'credit_discount': 'credit-discount',
+                    'insurance_discount': 'insurance-discount',
+                    'description': 'description',
+                    'body_type': 'body-type',
+                    'drive_type': 'drive-type',
+                    'gearboxType': 'gearbox',
+                    'wheel': 'steering-wheel',
+                    'engineType': 'engine-type',
+                    'run': 'run',
+                    'availability': 'availability',
+                    'images': 'photos',
+                    'image_tag': 'photo',
+                    'image_url_attr': None
                 },
                 'elements_to_localize': [
                     'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
+            },
+            'yml_catalog': {
+                'root_element': 'yml_catalog',
+                'car_element': 'offer',
+                'field_mapping': {
+                    'vin': None,  # В YML нет VIN, будем генерировать из других полей
+                    'mark_id': 'vendor',
+                    'folder_id': 'model',  # Будем извлекать название модели из параметра "Модель"
+                    'modification_id': 'model',  # Будем извлекать модификацию из model
+                    'complectation_name': None,  # В YML нет комплектации
+                    'year': None,  # Будем извлекать из параметра "Год выпуска"
+                    'color': None,  # Будем извлекать из параметра "Цвет"
+                    'price': 'price',
+                    'max_discount': None,  # Будем рассчитывать из sales_notes
+                    'tradein_discount': None,
+                    'credit_discount': None,
+                    'insurance_discount': None,
+                    'description': 'description',
+                    'body_type': None,  # Будем извлекать из параметра "Кузов"
+                    'drive_type': None,  # Будем извлекать из параметра "Привод"
+                    'gearboxType': None,  # Будем извлекать из параметра "КПП"
+                    'wheel': None,  # Будем извлекать из параметра "Руль"
+                    'engineType': None,  # Будем извлекать из параметра "Двигатель"
+                    'run': '0',  # Новые автомобили
+                    'availability': 'available',
+                    'images': 'picture',
+                    'image_tag': 'picture',
+                    'image_url_attr': None
+                },
+                'elements_to_localize': [
+                    'engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
                 ]
             }
         }
@@ -207,6 +286,13 @@ class CarProcessor:
                 if offers_elem is not None:
                     return 'carcopy'
             
+            if root_tag == 'yml_catalog':
+                shop_elem = root.find('shop')
+                if shop_elem is not None:
+                    offers_elem = shop_elem.find('offers')
+                    if offers_elem is not None:
+                        return 'yml_catalog'
+            
             # Проверяем структуру Ads-Ad
             if len(root) > 0:
                 first_child = root[0]
@@ -220,57 +306,279 @@ class CarProcessor:
             print(f"Ошибка при автоопределении типа для {xml_file_path}: {e}")
             return None
 
-    def calculate_max_discount(self, car: ET.Element) -> int:
-        """Расчёт максимальной скидки в зависимости от типа источника"""
-        if self.source_type in ['maxposter', 'vehicles_vehicle']:
-            credit_discount_elem = car.find('creditDiscount')
-            tradein_discount_elem = car.find('tradeinDiscount')
+    def extract_car_data(self, car: ET.Element) -> Dict[str, any]:
+        """
+        Извлекает данные автомобиля из XML элемента согласно конфигурации.
+        
+        Args:
+            car: XML элемент автомобиля
             
-            credit_discount = int(credit_discount_elem.text or 0) if credit_discount_elem is not None and credit_discount_elem.text else 0
-            tradein_discount = int(tradein_discount_elem.text or 0) if tradein_discount_elem is not None and tradein_discount_elem.text else 0
+        Returns:
+            Dict: Словарь с данными автомобиля
+        """
+        car_data = {}
+        field_mapping = self.config['field_mapping']
+        
+        # Извлекаем основные поля
+        for internal_name, xml_field in field_mapping.items():
+            # Пропускаем служебные поля, которые не являются XML тегами
+            if xml_field in ['image_tag', 'image_url_attr'] or xml_field is None:
+                continue
+                
+            if internal_name == 'images':
+                # Особая обработка для изображений
+                images_container = car.find(xml_field)
+                if images_container is not None:
+                    car_data['images'] = self.extract_images(images_container)
+                else:
+                    car_data['images'] = []
+                continue
+                
+            # Ищем элемент в XML
+            element = car.find(xml_field)
+            if element is not None and element.text:
+                car_data[internal_name] = element.text.strip()
+        
+        # Обработка специальных случаев для разных форматов
+        if self.source_type == 'yml_catalog':
+            # В YML некоторые данные могут быть в параметрах
+            yml_params = self.extract_yml_params(car)
+            car_data.update(yml_params)
+            
+            # Извлекаем название модели из параметра "Модель"
+            if 'model_name' in car_data:
+                car_data['folder_id'] = car_data['model_name']
+            
+            # Извлекаем модификацию из поля model
+            model_elem = car.find('model')
+            if model_elem is not None and model_elem.text:
+                car_data['modification_id'] = model_elem.text.strip()
+        
+        return car_data
 
+    def extract_images(self, images_container: ET.Element) -> List[str]:
+        """
+        Извлекает URL изображений из контейнера.
+        
+        Args:
+            images_container: Контейнер с изображениями
+            
+        Returns:
+            List[str]: Список URL изображений
+        """
+        images = []
+        image_tag = self.config['field_mapping'].get('image_tag', 'image')
+        image_url_attr = self.config['field_mapping'].get('image_url_attr')
+        
+        for img in images_container.findall(image_tag):
+            if image_url_attr:
+                # URL в атрибуте
+                url = img.get(image_url_attr)
+                if url:
+                    images.append(url)
+            else:
+                # URL в тексте элемента
+                if img.text and img.text.strip():
+                    images.append(img.text.strip())
+        
+        return images
+
+    def extract_yml_params(self, car: ET.Element) -> Dict[str, str]:
+        """
+        Извлекает параметры из YML формата.
+        
+        Args:
+            car: XML элемент автомобиля
+            
+        Returns:
+            Dict: Дополнительные параметры
+        """
+        params = {}
+        for param in car.findall('param'):
+            name = param.get('name')
+            if name and param.text:
+                # Маппинг названий параметров на внутренние имена
+                param_mapping = {
+                    'Год выпуска': 'year',
+                    'Кузов': 'body_type',
+                    'Руль': 'wheel',
+                    'Цвет': 'color',
+                    'ПТС': 'pts_type',
+                    'Двигатель': 'engine_info',
+                    'Привод': 'drive_type',
+                    'КПП': 'gearbox_type',
+                    'Поколение': 'generation',
+                    'Модель': 'model_name'
+                }
+                if name in param_mapping:
+                    params[param_mapping[name]] = param.text.strip()
+        
+        # Генерируем VIN из доступных данных
+        vendor = car.find('vendor')
+        model_name = params.get('model_name', '')
+        year = params.get('year', '')
+        if vendor is not None and vendor.text and model_name and year:
+            # Создаем псевдо-VIN из марки, модели и года
+            vin_base = f"{vendor.text}{model_name}{year}".replace(' ', '').upper()
+            # Добавляем случайные символы для уникальности
+            import random
+            import string
+            random_chars = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            params['vin'] = f"{vin_base}{random_chars}"
+        
+        # Извлекаем скидки из sales_notes
+        sales_notes = car.find('sales_notes')
+        if sales_notes is not None and sales_notes.text:
+            notes_text = sales_notes.text
+            # Парсим скидки из текста
+            import re
+            
+            # Ищем максимальную скидку
+            max_discount_match = re.search(r'Максимальная скидка: (\d+)', notes_text)
+            if max_discount_match:
+                params['max_discount'] = max_discount_match.group(1)
+            
+            # Ищем скидки по программам
+            tradein_match = re.search(r'trade-in до (\d+)', notes_text)
+            if tradein_match:
+                params['tradein_discount'] = tradein_match.group(1)
+            
+            credit_match = re.search(r'в кредит до (\d+)', notes_text)
+            if credit_match:
+                params['credit_discount'] = credit_match.group(1)
+            
+            insurance_match = re.search(r'страховки до (\d+)', notes_text)
+            if insurance_match:
+                params['insurance_discount'] = insurance_match.group(1)
+        
+        return params
+
+    def calculate_max_discount(self, car_data: Dict[str, any]) -> int:
+        """Расчёт максимальной скидки в зависимости от типа источника"""
+        if self.source_type in ['maxposter', 'vehicles_vehicle', 'data_cars_car']:
+            credit_discount = int(car_data.get('credit_discount', 0) or 0)
+            tradein_discount = int(car_data.get('tradein_discount', 0) or 0)
             return credit_discount + tradein_discount
         else:
-            max_discount_elem = car.find('max_discount')
-            if max_discount_elem is not None and max_discount_elem.text:
-                print("max_discount: " + max_discount_elem.text)
-                return int(max_discount_elem.text)
-            else:
-                print("Элемент max_discount отсутствует или пустой")
-                return 0
+            return int(car_data.get('max_discount', 0) or 0)
 
-    def process_car(self, car: ET.Element, config: Dict) -> None:
+    def create_car_element(self, car_data: Dict[str, any]) -> ET.Element:
+        """
+        Создает XML элемент автомобиля в формате data-cars-car.
+        
+        Args:
+            car_data: Данные автомобиля
+            
+        Returns:
+            ET.Element: XML элемент автомобиля
+        """
+        car_elem = ET.Element('car')
+        
+        # Создаем основные элементы
+        for field_name, value in car_data.items():
+            if field_name == 'images':
+                # Особая обработка для изображений
+                if value:
+                    images_elem = ET.SubElement(car_elem, 'images')
+                    for img_url in value:
+                        img_elem = ET.SubElement(images_elem, 'image')
+                        img_elem.text = img_url
+            else:
+                if value is not None and value != '':
+                    elem = ET.SubElement(car_elem, field_name)
+                    elem.text = str(value)
+        
+        return car_elem
+
+    def localize_value(self, value: str) -> str:
+        """
+        Локализует значение согласно словарю переводов.
+        
+        Args:
+            value: Исходное значение
+            
+        Returns:
+            str: Локализованное значение
+        """
+        translations = {
+            # engineType
+            "hybrid": "Гибрид",
+            "petrol": "Бензин",
+            "diesel": "Дизель",
+            "petrol_and_gas": "Бензин и газ",
+            "electric": "Электро",
+            # driveType
+            "full_4wd": "Постоянный полный",
+            "optional_4wd": "Подключаемый полный",
+            "front": "Передний",
+            "rear": "Задний",
+            # gearboxType
+            "robotized": "Робот",
+            "variator": "Вариатор",
+            "manual": "Механика",
+            "automatic": "Автомат",
+            # bodyType
+            "suv": "SUV",
+        }
+        
+        return translations.get(value, value)
+
+    def join_car_data_from_dict(self, car_data: Dict[str, any], *fields: str) -> str:
+        """
+        Объединяет данные автомобиля из словаря в строку.
+        
+        Args:
+            car_data: Данные автомобиля
+            *fields: Поля для объединения
+            
+        Returns:
+            str: Объединенная строка
+        """
+        parts = []
+        for field in fields:
+            if field in car_data and car_data[field]:
+                parts.append(str(car_data[field]).strip())
+        return " ".join(parts)
+
+    def process_car(self, car: ET.Element, config: Dict) -> ET.Element:
         """Обработка отдельного автомобиля"""
+        # Извлекаем данные автомобиля
+        car_data = self.extract_car_data(car)
+        
+        # Проверяем наличие обязательных полей
+        if not car_data.get('vin') or not car_data.get('mark_id') or not car_data.get('folder_id'):
+            print(f"Пропущен автомобиль: отсутствуют обязательные поля VIN, mark_id или folder_id")
+            return None
+        
         # Создание URL
         friendly_url = process_friendly_url(
-            join_car_data(car, 'mark_id', 'folder_id', 'modification_id',
-                         'complectation_name', 'color', 'year')
+            self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id',
+                                 'complectation_name', 'color', 'year')
         )
         print(f"\nУникальный идентификатор: {friendly_url}")
         
         # Базовые расчёты цены и скидки
-        price = int(car.find('price').text or 0)
-        max_discount = self.calculate_max_discount(car)
+        price = int(car_data.get('price', 0) or 0)
+        max_discount = self.calculate_max_discount(car_data)
         
-        # Создание/обновление элементов
-        create_child_element(car, 'max_discount', max_discount)
+        # Обновляем данные
+        car_data['max_discount'] = max_discount
         sale_price = price - max_discount
         
         # Обработка priceWithDiscount в зависимости от источника
-        price_with_discount_elem = car.find('priceWithDiscount')
-        if self.source_type == 'maxposter' and price_with_discount_elem is not None and price_with_discount_elem.text is not None:
-            sale_price = int(price_with_discount_elem.text)
-        create_child_element(car, 'priceWithDiscount', sale_price)
-        create_child_element(car, 'sale_price', sale_price)
+        if self.source_type == 'maxposter' and 'priceWithDiscount' in car_data and car_data['priceWithDiscount']:
+            sale_price = int(car_data['priceWithDiscount'])
         
+        car_data['priceWithDiscount'] = sale_price
+        car_data['sale_price'] = sale_price
+        
+        # Локализация элементов
         for elem_name in self.config['elements_to_localize']:
-            elem = car.find(elem_name)
-            localize_element_text(elem)
+            if elem_name in car_data and car_data[elem_name]:
+                car_data[elem_name] = self.localize_value(car_data[elem_name])
         
         url = f"https://{config['domain']}{config['path_car_page']}{friendly_url}/"
-        create_child_element(car, 'url', url)
-        if self.source_type in ['carcopy', 'vehicles_vehicle']:
-            update_element_text(car, 'url_link', url)
+        car_data['url'] = url
         
         # Обработка файла
         file_name = f"{friendly_url}.mdx"
@@ -280,8 +588,8 @@ class CarProcessor:
 
         # --- Формирование данных для JSON с ценами и скидками из фида ---
         # Группировка и агрегация данных сразу в готовом формате
-        brand = join_car_data(car, 'mark_id')
-        model = join_car_data(car, 'folder_id')
+        brand = car_data.get('mark_id', '')
+        model = car_data.get('folder_id', '')
         key = (brand, model)
         
         if key in self.cars_price_data:
@@ -316,19 +624,38 @@ class CarProcessor:
         config['legal_city'] = settings['legal_city']
         config['legal_city_where'] = settings['legal_city_where']
 
-        if os.path.exists(file_path):
-            update_yaml(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, self.config, config)
-        else:
-            create_file(car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, self.config, config, self.existing_files)
+        # Создаем временный XML элемент для совместимости с существующими функциями
+        temp_car = ET.Element('car')
+        for key, value in car_data.items():
+            if key != 'images':
+                elem = ET.SubElement(temp_car, key)
+                elem.text = str(value) if value is not None else ''
 
-    def rename_elements(self, car: ET.Element) -> None:
-        """Переименование элементов согласно карте переименований"""
-        for old_name, new_name in self.config['rename_map'].items():
-            rename_child_element(car, old_name, new_name)
+        if os.path.exists(file_path):
+            update_yaml(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config)
+        else:
+            create_file(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
+
+        # Возвращаем новый XML элемент в формате data-cars-car
+        return self.create_car_element(car_data)
 
     def get_cars_element(self, root: ET.Element) -> ET.Element:
         """Получение элемента, содержащего список машин"""
-        return root if self.config['root_element'] is None else root.find(self.config['root_element'])
+        if self.source_type == 'data_cars_car':
+            return root.find('cars')
+        elif self.source_type == 'ads_ad':
+            return root  # Корневой элемент уже содержит Ad
+        elif self.source_type == 'vehicles_vehicle':
+            return root  # Корневой элемент уже содержит vehicle
+        elif self.source_type == 'maxposter':
+            return root  # Корневой элемент уже содержит offer
+        elif self.source_type == 'carcopy':
+            return root.find('offers')
+        elif self.source_type == 'yml_catalog':
+            shop = root.find('shop')
+            if shop is not None:
+                return shop.find('offers')
+        return root
 
     def update_source_type(self, new_source_type: str) -> None:
         """Обновляет тип источника и перенастраивает конфигурацию"""
@@ -408,7 +735,8 @@ def normalize_source_type(folder_name: str) -> str:
         'vehicles-vehicle': 'vehicles_vehicle',
         'ads-ad': 'ads_ad',
         'maxposter': 'maxposter',
-        'carcopy': 'carcopy'
+        'carcopy': 'carcopy',
+        'yml-catalog': 'yml_catalog'
     }
     
     return folder_mapping.get(folder_name.lower(), folder_name.lower())
@@ -418,7 +746,7 @@ def main():
     Основная функция программы.
     """
     parser = argparse.ArgumentParser(description='Process cars from different sources')
-    parser.add_argument('--source_type', choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle', 'ads_ad'], help='Type of source data (auto-detected if not specified)')
+    parser.add_argument('--source_type', choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle', 'ads_ad', 'yml_catalog'], help='Type of source data (auto-detected if not specified)')
     parser.add_argument('--path_car_page', default='/cars/', help='Default path to cars pages')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
@@ -484,9 +812,8 @@ def main():
             processor.update_source_type(detected_type)
             print(f"✅ Автоопределен тип для первого файла: {detected_type}")
         
-        # Группируем файлы по типам для пакетной обработки XML
-        files_by_category = {'new': [], 'used': []}
-        trees_by_category = {'new': [], 'used': []}
+        # Группируем обработанные автомобили по категориям
+        processed_cars_by_category = {'new': [], 'used': []}
         
         with open('output.txt', 'w') as file:
             file.write("")
@@ -543,33 +870,22 @@ def main():
             
             # Инициализация XML
             root = get_xml_content(xml_file_path, args.xml_url)
-            tree = ET.ElementTree(root)
-            
-            cars_to_remove = []
             
             # Обработка машин
             cars_element = processor.get_cars_element(root)
             if cars_element is not None:
                 for car in cars_element:
-                    processor.rename_elements(car)
-
                     if should_remove_car(car, remove_mark_ids, remove_folder_ids):
-                        cars_to_remove.append(car)
                         continue
                     
-                    processor.process_car(car, current_config)
-            
-            # Удаление ненужных машин
-            for car in cars_to_remove:
-                cars_element.remove(car)
-            
-            # Сохраняем дерево для последующего объединения
-            files_by_category[category_type].append(xml_file_path)
-            trees_by_category[category_type].append(tree)
+                    # Обрабатываем автомобиль и получаем новый элемент в формате data-cars-car
+                    processed_car = processor.process_car(car, current_config)
+                    if processed_car is not None:
+                        processed_cars_by_category[category_type].append(processed_car)
         
-        # Записываем объединенные XML файлы по категориям
+        # Создаем объединенные XML файлы по категориям в формате data-cars-car
         for category_type in ['new', 'used']:
-            if trees_by_category[category_type]:
+            if processed_cars_by_category[category_type]:
                 # Определяем путь вывода для категории
                 if category_type == 'used':
                     output_path = './public/used_cars.xml'
@@ -578,27 +894,17 @@ def main():
                     output_path = './public/cars.xml'
                     thumbs_dir = config['thumbs_dir']
                 
-                # Если есть только одно дерево, просто сохраняем его
-                if len(trees_by_category[category_type]) == 1:
-                    tree = trees_by_category[category_type][0]
-                    root = tree.getroot()
-                else:
-                    # Объединяем несколько деревьев
-                    # Создаем корневой элемент для объединения
-                    merged_root = ET.Element('data')
-                    cars_container = ET.SubElement(merged_root, 'cars')
-                    
-                    for tree in trees_by_category[category_type]:
-                        root = tree.getroot()
-                        # Ищем все элементы car во всех возможных местах
-                        cars = root.findall('.//car') or root.findall('.//vehicle') or root.findall('.//Ad') or root.findall('.//offer')
-                        for car in cars:
-                            cars_container.append(car)
-                    
-                    root = merged_root
+                # Создаем корневую структуру data-cars-car
+                data_root = ET.Element('data')
+                cars_container = ET.SubElement(data_root, 'cars')
                 
-                convert_to_string(root)
-                tree = ET.ElementTree(root)
+                # Добавляем все обработанные автомобили
+                for car_elem in processed_cars_by_category[category_type]:
+                    cars_container.append(car_elem)
+                
+                # Сохраняем XML
+                convert_to_string(data_root)
+                tree = ET.ElementTree(data_root)
                 tree.write(output_path, encoding='utf-8', xml_declaration=True)
                 print(f"✅ Сохранен объединенный XML для категории {category_type}: {output_path}")
                 
@@ -623,7 +929,6 @@ def main():
             print("❌ Найдены ошибки 404")
 
         # --- Сохранение данных в JSON с ценами и скидками из фида ---
-        # Данные уже в нужном формате, просто берем values() из словаря
         os.makedirs('src/data', exist_ok=True)
         with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
             json.dump(list(processor.cars_price_data.values()), f, ensure_ascii=False, indent=2)
@@ -631,7 +936,7 @@ def main():
         # --- конец блока ---
         
     else:
-        # Режим обработки одного файла (оригинальная логика)
+        # Режим обработки одного файла (оригинальная логика, но с новой обработкой)
         print(f"📄 Режим обработки одного файла: {args.input_file}")
         
         # Загружаем конфигурацию в зависимости от источника
@@ -668,30 +973,34 @@ def main():
         
         # Инициализация
         root = get_xml_content(args.input_file, args.xml_url)
-        tree = ET.ElementTree(root)
         setup_directories(config['thumbs_dir'], args.cars_dir)
         
         with open('output.txt', 'w') as file:
             file.write("")
 
-        cars_to_remove = []
+        processed_cars = []
         
         # Обработка машин
         cars_element = processor.get_cars_element(root)
         for car in cars_element:
-            processor.rename_elements(car)
-
             if should_remove_car(car, remove_mark_ids, remove_folder_ids):
-                cars_to_remove.append(car)
                 continue
             
-            processor.process_car(car, config)
+            # Обрабатываем автомобиль и получаем новый элемент в формате data-cars-car
+            processed_car = processor.process_car(car, config)
+            if processed_car is not None:
+                processed_cars.append(processed_car)
         
-        # Удаление ненужных машин
-        for car in cars_to_remove:
-            cars_element.remove(car)
+        # Создаем новую структуру в формате data-cars-car
+        data_root = ET.Element('data')
+        cars_container = ET.SubElement(data_root, 'cars')
         
-        convert_to_string(root)
+        # Добавляем все обработанные автомобили
+        for car_elem in processed_cars:
+            cars_container.append(car_elem)
+        
+        convert_to_string(data_root)
+        tree = ET.ElementTree(data_root)
         tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
         
         # Очистка
@@ -706,7 +1015,6 @@ def main():
             print("❌ Найдены ошибки 404")
 
         # --- Сохранение данных в JSON с ценами и скидками из фида ---
-        # Данные уже в нужном формате, просто берем values() из словаря
         os.makedirs('src/data', exist_ok=True)
         with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
             json.dump(list(processor.cars_price_data.values()), f, ensure_ascii=False, indent=2)
