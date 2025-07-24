@@ -120,26 +120,26 @@ class CarProcessor:
                     'engineType', 'drive_type', 'gearboxType', 'color', 'body_type', 'wheel'
                 ]
             },
-            'maxposter': {
+            'vehicles_vehicle': {
                 'root_element': None,
                 'car_element': 'offer',
                 'field_mapping': {
-                    'vin': 'VIN',
+                    'vin': 'vin',
                     'mark_id': 'brand',
                     'folder_id': 'model',
                     'modification_id': 'modification',
                     'complectation_name': 'complectation',
-                    'year': 'Year',
+                    'year': 'year',
                     'color': 'bodyColor',
-                    'price': 'Price',
-                    'max_discount': 'MaxDiscount',
-                    'tradein_discount': 'TradeinDiscount',
-                    'credit_discount': 'CreditDiscount',
-                    'insurance_discount': 'InsuranceDiscount',
-                    'description': 'Description',
+                    'price': 'price',
+                    # 'max_discount': 'MaxDiscount',
+                    'tradein_discount': 'tradeinDiscount',
+                    'credit_discount': 'creditDiscount',
+                    'insurance_discount': 'insuranceDiscount',
+                    'description': 'description',
                     'body_type': 'bodyType',
-                    'drive_type': 'DriveType',
-                    'gearboxType': 'Transmission',
+                    'drive_type': 'driveType',
+                    'gearboxType': 'gearboxType',
                     'wheel': 'steeringWheel',
                     'engineType': 'engineType',
                     'run': 'mileage',
@@ -152,7 +152,7 @@ class CarProcessor:
                     'engineType', 'driveType', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
                 ]
             },
-            'carcopy': {
+            'carcopy_offers_offer': {
                 'root_element': 'offers',
                 'car_element': 'offer',
                 'field_mapping': {
@@ -170,41 +170,8 @@ class CarProcessor:
                     'insurance_discount': 'insurance-discount',
                     'description': 'comment',
                     'body_type': 'body-type',
-                    'drive_type': 'drive-type',
-                    'gearboxType': 'gearbox',
-                    'wheel': 'steering-wheel',
-                    'engineType': 'engine',
-                    'run': 'run',
-                    'availability': 'availability',
-                    'images': 'photos',
-                    'image_tag': 'photo',
-                    'image_url_attr': None
-                },
-                'elements_to_localize': [
-                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
-                ]
-            },
-            'vehicles_vehicle': {
-                'root_element': None,
-                'car_element': 'vehicle',
-                'field_mapping': {
-                    'vin': 'vin',
-                    'mark_id': 'mark',
-                    'folder_id': 'model',
-                    'modification_id': 'modification',
-                    'complectation_name': 'сomplectation-name',
-                    'complectation_code': 'complectation-code',
-                    'year': 'year',
-                    'color': 'color',
-                    'price': 'price',
-                    'max_discount': 'max-discount',
-                    'tradein_discount': 'tradein-discount',
-                    'credit_discount': 'credit-discount',
-                    'insurance_discount': 'insurance-discount',
-                    'description': 'description',
-                    'body_type': 'body-type',
-                    'drive_type': 'drive-type',
-                    'gearboxType': 'gearbox',
+                    'drive_type': 'drive',
+                    'gearboxType': 'transmission',
                     'wheel': 'steering-wheel',
                     'engineType': 'engine-type',
                     'run': 'run',
@@ -217,7 +184,40 @@ class CarProcessor:
                     'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
                 ]
             },
-            'yml_catalog': {
+            'catalog_vehicles_vehicle': {
+                'root_element': None,
+                'car_element': 'vehicle',
+                'field_mapping': {
+                    'vin': 'vin',
+                    'mark_id': 'mark',
+                    'folder_id': 'model',
+                    'modification_id': 'modification',
+                    'complectation_name': 'сomplectation-name',
+                    'complectation_code': 'complectation-code',
+                    'year': 'year',
+                    'color': 'color',
+                    'price': 'price',
+                    'max_discount': 'max_discount',
+                    'tradein_discount': 'tradein_discount',
+                    'credit_discount': 'credit_discount',
+                    'insurance_discount': 'insurance_discount',
+                    'description': 'description',
+                    'body_type': 'body_type',
+                    'drive_type': 'drive_type',
+                    'gearboxType': 'gearbox_type',
+                    'wheel': 'wheel',
+                    'engineType': 'engine_type',
+                    'run': 'run',
+                    'availability': 'availability',
+                    'images': 'images',
+                    'image_tag': 'image',
+                    'image_url_attr': None
+                },
+                'elements_to_localize': [
+                    'engineType', 'drive_type', 'gearboxType', 'ptsType', 'color', 'body_type', 'wheel'
+                ]
+            },
+            'yml_catalog_shop_offers_offer': {
                 'root_element': 'yml_catalog',
                 'car_element': 'offer',
                 'field_mapping': {
@@ -278,22 +278,24 @@ class CarProcessor:
             if root_tag == 'vehicles':
                 return 'vehicles_vehicle'
             
-            if root_tag in ['maxposter', 'Maxposter']:
-                return 'maxposter'
+            if root_tag == 'catalog':
+                offers_elem = root.find('vehicles')
+                if offers_elem is not None:
+                    return 'catalog_vehicles_vehicle'
                 
             if root_tag == 'carcopy':
                 offers_elem = root.find('offers')
                 if offers_elem is not None:
-                    return 'carcopy'
+                    return 'carcopy_offers_offer'
             
             if root_tag == 'yml_catalog':
                 shop_elem = root.find('shop')
                 if shop_elem is not None:
                     offers_elem = shop_elem.find('offers')
                     if offers_elem is not None:
-                        return 'yml_catalog'
+                        return 'yml_catalog_shop_offers_offer'
             
-            # Проверяем структуру Ads-Ad
+            # Проверяем структуру ads_ad
             if len(root) > 0:
                 first_child = root[0]
                 if first_child.tag == 'Ad':
@@ -455,7 +457,7 @@ class CarProcessor:
 
     def calculate_max_discount(self, car_data: Dict[str, any]) -> int:
         """Расчёт максимальной скидки в зависимости от типа источника"""
-        if self.source_type in ['maxposter', 'vehicles_vehicle', 'data_cars_car']:
+        if self.source_type in ['catalog_vehicles_vehicle', 'vehicles_vehicle', 'data_cars_car']:
             credit_discount = int(car_data.get('credit_discount', 0) or 0)
             tradein_discount = int(car_data.get('tradein_discount', 0) or 0)
             return credit_discount + tradein_discount
@@ -464,7 +466,7 @@ class CarProcessor:
 
     def create_car_element(self, car_data: Dict[str, any]) -> ET.Element:
         """
-        Создает XML элемент автомобиля в формате data-cars-car.
+        Создает XML элемент автомобиля в формате data_cars_car.
         
         Args:
             car_data: Данные автомобиля
@@ -547,6 +549,7 @@ class CarProcessor:
         
         # Проверяем наличие обязательных полей
         if not car_data.get('vin') or not car_data.get('mark_id') or not car_data.get('folder_id'):
+            print(car_data)
             print(f"Пропущен автомобиль: отсутствуют обязательные поля VIN, mark_id или folder_id")
             return None
         
@@ -566,7 +569,7 @@ class CarProcessor:
         sale_price = price - max_discount
         
         # Обработка priceWithDiscount в зависимости от источника
-        if self.source_type == 'maxposter' and 'priceWithDiscount' in car_data and car_data['priceWithDiscount']:
+        if self.source_type == 'vehicles_vehicle' and 'priceWithDiscount' in car_data and car_data['priceWithDiscount']:
             sale_price = int(car_data['priceWithDiscount'])
         
         car_data['priceWithDiscount'] = sale_price
@@ -636,7 +639,7 @@ class CarProcessor:
         else:
             create_file(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
 
-        # Возвращаем новый XML элемент в формате data-cars-car
+        # Возвращаем новый XML элемент в формате data_cars_car
         return self.create_car_element(car_data)
 
     def get_cars_element(self, root: ET.Element) -> ET.Element:
@@ -645,13 +648,13 @@ class CarProcessor:
             return root.find('cars')
         elif self.source_type == 'ads_ad':
             return root  # Корневой элемент уже содержит Ad
+        elif self.source_type == 'catalog_vehicles_vehicle':
+            return root.find('vehicles')
         elif self.source_type == 'vehicles_vehicle':
-            return root  # Корневой элемент уже содержит vehicle
-        elif self.source_type == 'maxposter':
-            return root  # Корневой элемент уже содержит offer
-        elif self.source_type == 'carcopy':
+            return root
+        elif self.source_type == 'carcopy_offers_offer':
             return root.find('offers')
-        elif self.source_type == 'yml_catalog':
+        elif self.source_type == 'yml_catalog_shop_offers_offer':
             shop = root.find('shop')
             if shop is not None:
                 return shop.find('offers')
@@ -731,12 +734,12 @@ def normalize_source_type(folder_name: str) -> str:
     """
     # Маппинг имен папок к типам источников
     folder_mapping = {
-        'data-cars-car': 'data_cars_car',
-        'vehicles-vehicle': 'vehicles_vehicle',
-        'ads-ad': 'ads_ad',
-        'maxposter': 'maxposter',
-        'carcopy': 'carcopy',
-        'yml-catalog': 'yml_catalog'
+        'data_cars_car': 'data_cars_car',
+        'vehicles_vehicle': 'vehicles_vehicle',
+        'ads_ad': 'ads_ad',
+        'catalog_vehicles_vehicle': 'catalog_vehicles_vehicle',
+        'carcopy_offers_offer': 'carcopy_offers_offer',
+        'yml_catalog_shop_offers_offer': 'yml_catalog_shop_offers_offer'
     }
     
     return folder_mapping.get(folder_name.lower(), folder_name.lower())
@@ -746,7 +749,7 @@ def main():
     Основная функция программы.
     """
     parser = argparse.ArgumentParser(description='Process cars from different sources')
-    parser.add_argument('--source_type', choices=['data_cars_car', 'maxposter', 'carcopy', 'vehicles_vehicle', 'ads_ad', 'yml_catalog'], help='Type of source data (auto-detected if not specified)')
+    parser.add_argument('--source_type', choices=['data_cars_car', 'vehicles_vehicle', 'carcopy_offers_offer', 'catalog_vehicles_vehicle', 'ads_ad', 'yml_catalog_shop_offers_offer'], help='Type of source data (auto-detected if not specified)')
     parser.add_argument('--path_car_page', default='/cars/', help='Default path to cars pages')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
@@ -878,12 +881,12 @@ def main():
                     if should_remove_car(car, remove_mark_ids, remove_folder_ids):
                         continue
                     
-                    # Обрабатываем автомобиль и получаем новый элемент в формате data-cars-car
+                    # Обрабатываем автомобиль и получаем новый элемент в формате data_cars_car
                     processed_car = processor.process_car(car, current_config)
                     if processed_car is not None:
                         processed_cars_by_category[category_type].append(processed_car)
         
-        # Создаем объединенные XML файлы по категориям в формате data-cars-car
+        # Создаем объединенные XML файлы по категориям в формате data_cars_car
         for category_type in ['new', 'used']:
             if processed_cars_by_category[category_type]:
                 # Определяем путь вывода для категории
@@ -894,7 +897,7 @@ def main():
                     output_path = './public/cars.xml'
                     thumbs_dir = config['thumbs_dir']
                 
-                # Создаем корневую структуру data-cars-car
+                # Создаем корневую структуру data_cars_car
                 data_root = ET.Element('data')
                 cars_container = ET.SubElement(data_root, 'cars')
                 
@@ -986,12 +989,12 @@ def main():
             if should_remove_car(car, remove_mark_ids, remove_folder_ids):
                 continue
             
-            # Обрабатываем автомобиль и получаем новый элемент в формате data-cars-car
+            # Обрабатываем автомобиль и получаем новый элемент в формате data_cars_car
             processed_car = processor.process_car(car, config)
             if processed_car is not None:
                 processed_cars.append(processed_car)
         
-        # Создаем новую структуру в формате data-cars-car
+        # Создаем новую структуру в формате data_cars_car
         data_root = ET.Element('data')
         cars_container = ET.SubElement(data_root, 'cars')
         

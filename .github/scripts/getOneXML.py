@@ -29,9 +29,11 @@ def detect_xpath(xml_content):
     # Список известных XPath шаблонов
     xpath_patterns = [
         "//data/cars/car",
+        "//catalog/vehicles/vehicle",
         "//vehicles/vehicle",
         "//Ads/Ad",
-        "//carcopy/offers/offer"
+        "//carcopy/offers/offer",
+        "//yml_catalog/shop/offers/offer"
     ]
     
     try:

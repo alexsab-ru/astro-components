@@ -24,65 +24,71 @@ show_help() {
     echo "  AUTORU_FRIEND_XML_URL"
     echo "  XML_URL"
     echo "  XML_URL_DATA_CARS_CAR"
-    echo "  XML_URL_MAXPOSTER"
-    echo "  XML_URL_CARCOPY"
+    echo "  XML_URL_CATALOG_VEHICLES_VEHICLE"
     echo "  XML_URL_VEHICLES_VEHICLE"
     echo "  XML_URL_ADS_AD"
+    echo "  XML_URL_CARCOPY_OFFERS_OFFER"
+    echo "  XML_URL_YML_CATALOG_SHOP_OFFERS_OFFER"
     echo "  USED_CARS_DATA_CARS_CAR"
-    echo "  USED_CARS_MAXPOSTER"
-    echo "  USED_CARS_CARCOPY"
+    echo "  USED_CARS_CATALOG_VEHICLES_VEHICLE"
     echo "  USED_CARS_VEHICLES_VEHICLE"
     echo "  USED_CARS_ADS_AD"
-    echo
-    echo "Update Types for 'update':"
-    echo "  avito                - Update from Avito source"
-    echo "  avito_data_cars_car  - Update from Avito with Data Cars Car source"
-    echo "  avito_friend         - Update from Avito with Friend source"
-    echo "  autoru               - Update from AutoRu source"
-    echo "  autoru_friend        - Update from AutoRu with Friend source"
-    echo "  xml_url              - Update from XML_URL source"
-    echo "  data_cars_car        - Update from Data Cars Car source"
-    echo "  maxposter            - Update from Maxposter source"
-    echo "  carcopy              - Update from Carcopy source"
-    echo "  vehicles_vehicle     - Update from Vehicles Vehicle source"
-    echo "  ads_ad               - Update from Ads Ad source"
-    echo "  used_cars_data_cars_car  - Update Used Cars from Data Cars Car source"
-    echo "  used_cars_maxposter     - Update Used Cars from Maxposter source"
-    echo "  used_cars_carcopy       - Update Used Cars from Carcopy source"
-    echo "  used_cars_vehicles_vehicle - Update Used Cars from Vehicles Vehicle source"
-    echo "  used_cars_ads_ad        - Update Used Cars from Ads Ad source"
+    echo "  USED_CARS_CARCOPY_OFFERS_OFFER"
+    echo "  USED_CARS_YML_CATALOG_SHOP_OFFERS_OFFER"
     echo
     echo "Auto Command:"
     echo "  auto [--dev]                     - Automatically scan and process all XML files"
     echo "                                     in ./tmp/new and ./tmp/used_cars directories"
     echo
+    echo "Update Types for 'update':"
+    echo "  avito                                   - Update from Avito source"
+    echo "  avito_data_cars_car                     - Update from Avito with Data Cars Car source"
+    echo "  avito_friend                            - Update from Avito with Friend source"
+    echo "  autoru                                  - Update from AutoRu source"
+    echo "  autoru_friend                           - Update from AutoRu with Friend source"
+    echo "  xml_url                                 - Update from XML_URL source"
+    echo "  data_cars_car                           - Update from Data Cars Car source"
+    echo "  catalog_vehicles_vehicle                - Update from Catalog Vehicles Vehicle source"
+    echo "  vehicles_vehicle                        - Update from Vehicles Vehicle source"
+    echo "  ads_ad                                  - Update from Ads Ad source"
+    echo "  carcopy_offers_offer                    - Update from Carcopy source"
+    echo "  yml_catalog_shop_offers_offer           - Update from yml_catalog source"
+    echo "  used_cars_data_cars_car                 - Update Used Cars from Data Cars Car source"
+    echo "  used_cars_catalog_vehicles_vehicle      - Update Used Cars from Vehicles Vehicle source"
+    echo "  used_cars_vehicles_vehicle              - Update Used Cars from Vehicles Vehicle source"
+    echo "  used_cars_ads_ad                        - Update Used Cars from Ads Ad source"
+    echo "  used_cars_carcopy_offers_offer          - Update Used Cars from Carcopy source"
+    echo "  used_cars_yml_catalog_shop_offers_offer - Update Used Cars from yml_catalog source"
+    echo
     echo "Test Types for 'test':"
-    echo "  avito                - Test from Avito source"
-    echo "  avito_data_cars_car  - Test from Avito with Data Cars Car source"
-    echo "  avito_friend         - Test from Avito with Friend source"
-    echo "  autoru               - Test from AutoRu source"
-    echo "  autoru_friend        - Test from AutoRu with Friend source"
-    echo "  xml_url              - Test from XML_URL source"
-    echo "  data_cars_car        - Test from Data Cars Car source"
-    echo "  maxposter            - Test from Maxposter source"
-    echo "  carcopy              - Test from Carcopy source"
-    echo "  vehicles_vehicle     - Test from Vehicles Vehicle source"
-    echo "  ads_ad               - Test from Ads Ad source"
-    echo "  used_cars_data_cars_car  - Test Used Cars from Data Cars Car source"
-    echo "  used_cars_maxposter     - Test Used Cars from Maxposter source"
-    echo "  used_cars_carcopy       - Test Used Cars from Carcopy source"
-    echo "  used_cars_vehicles_vehicle - Test Used Cars from Vehicles Vehicle source"
-    echo "  used_cars_ads_ad        - Test Used Cars from Ads Ad source"
+    echo "  avito                                   - Test from Avito source"
+    echo "  avito_data_cars_car                     - Test from Avito with Data Cars Car source"
+    echo "  avito_friend                            - Test from Avito with Friend source"
+    echo "  autoru                                  - Test from AutoRu source"
+    echo "  autoru_friend                           - Test from AutoRu with Friend source"
+    echo "  xml_url                                 - Test from XML_URL source"
+    echo "  data_cars_car                           - Test from Data Cars Car source"
+    echo "  catalog_vehicles_vehicle                - Test from Catalog Vehicles Vehicle source"
+    echo "  vehicles_vehicle                        - Test from Vehicles Vehicle source"
+    echo "  ads_ad                                  - Test from Ads Ad source"
+    echo "  carcopy_offers_offer                    - Test from Carcopy source"
+    echo "  yml_catalog_shop_offers_offer           - Test from yml_catalog source"
+    echo "  used_cars_data_cars_car                 - Test Used Cars from Data Cars Car source"
+    echo "  used_cars_catalog_vehicles_vehicle      - Test Used Cars from Catalog Vehicles Vehicle source"
+    echo "  used_cars_vehicles_vehicle              - Test Used Cars from Vehicles Vehicle source"
+    echo "  used_cars_ads_ad                        - Test Used Cars from Ads Ad source"
+    echo "  used_cars_carcopy_offers_offer          - Test Used Cars from Carcopy source"
+    echo "  used_cars_yml_catalog_shop_offers_offer - Test Used Cars from yml_catalog source"
     echo
     echo "Examples:"
     echo "  $0 getone AVITO_XML_URL"
     echo "  $0 getone AVITO_FRIEND_XML_URL cars_friend.xml"
     echo "  $0 update avito"
-    echo "  $0 update maxposter --skip_thumbs"
+    echo "  $0 update vehicles_vehicle --skip_thumbs"
     echo "  $0 auto"
     echo "  $0 auto --skip_thumbs --dev"
-    echo "  $0 test maxposter --count_thumbs 10 --dev"
-    echo "  $0 update data_cars_car --skip_thumbs --skip_check_thumb"
+    echo "  $0 test data_cars_car --count_thumbs 10 --dev"
+    echo "  $0 update ads_ad --skip_thumbs --skip_check_thumb"
 }
 
 Color_Off='\033[0m'
@@ -242,7 +248,7 @@ handle_auto() {
         echo -e "${BGYELLOW}💡 Убедитесь, что XML файлы размещены в правильных директориях:${Color_Off}"
         echo "   - Новые автомобили: ./tmp/new/{тип_фида}/cars.xml"
         echo "   - Б/у автомобили: ./tmp/used_cars/{тип_фида}/cars.xml"
-        echo "   - Поддерживаемые типы: data-cars-car, maxposter, carcopy, vehicles-vehicle, ads-ad"
+        echo "   - Поддерживаемые типы: data_cars_car, catalog_vehicles_vehicle, vehicles_vehicle, ads_ad, carcopy_offers_offer, yml_catalog_shop_offers_offer"
         return 1
     fi
     
@@ -298,15 +304,11 @@ handle_test() {
             handle_getone "XML_URL_DATA_CARS_CAR"
             handle_update "data_cars_car"
             ;;
-        "maxposter")
-            handle_getone "XML_URL_MAXPOSTER"
-            handle_update "maxposter"
+        "catalog_vehicles_vehicle")
+            handle_getone "XML_URL_CATALOG_VEHICLES_VEHICLE"
+            handle_update "catalog_vehicles_vehicle"
             ;;
-        "carcopy")
-            handle_getone "XML_URL_CARCOPY"
-            handle_update "carcopy"
-            ;;
-        "vehicles")
+        "vehicles_vehicle")
             handle_getone "XML_URL_VEHICLES_VEHICLE"
             handle_update "vehicles_vehicle"
             ;;
@@ -314,17 +316,17 @@ handle_test() {
             handle_getone "XML_URL_ADS_AD"
             handle_update "ads_ad"
             ;;
+        "carcopy_offers_offer")
+            handle_getone "XML_URL_CARCOPY_OFFERS_OFFER"
+            handle_update "carcopy_offers_offer"
+            ;;
         "used_cars_data_cars_car")
             handle_getone "USED_CARS_DATA_CARS_CAR"
             handle_update "used_cars_data_cars_car"
             ;;
-        "used_cars_maxposter")
-            handle_getone "USED_CARS_MAXPOSTER"
-            handle_update "used_cars_maxposter"
-            ;;
-        "used_cars_carcopy")
-            handle_getone "USED_CARS_CARCOPY"
-            handle_update "used_cars_carcopy"
+        "used_cars_catalog_vehicles_vehicle")
+            handle_getone "USED_CARS_CATALOG_VEHICLES_VEHICLE"
+            handle_update "used_cars_catalog_vehicles_vehicle"
             ;;
         "used_cars_vehicles_vehicle")
             handle_getone "USED_CARS_VEHICLES_VEHICLE"
@@ -333,6 +335,10 @@ handle_test() {
         "used_cars_ads_ad")
             handle_getone "USED_CARS_ADS_AD"
             handle_update "used_cars_ads_ad"
+            ;;
+        "used_cars_carcopy_offers_offer")
+            handle_getone "USED_CARS_CARCOPY_OFFERS_OFFER"
+            handle_update "used_cars_carcopy_offers_offer"
             ;;
         *)
             echo -e "${BGRED}Error: Unknown test type: $type${Color_Off}"
@@ -386,34 +392,34 @@ handle_update() {
             python3 .github/scripts/create_cars.py --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/data-cars-car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
             ;;
-        "maxposter")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/maxposter/cars.xml" --source_type maxposter --domain="$DOMAIN" $THUMB_ARGS
-            ;;
-        "carcopy")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy/cars.xml" --source_type carcopy --domain="$DOMAIN" $THUMB_ARGS
+        "catalog_vehicles_vehicle")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads-ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
+            ;;
+        "carcopy_offers_offer")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data-cars-car/used_cars_cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data_cars_car/used_cars_cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
-        "used_cars_maxposter")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/maxposter/cars.xml" --source_type maxposter --domain="$DOMAIN" $THUMB_ARGS
-            ;;
-        "used_cars_carcopy")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy/cars.xml" --source_type carcopy --domain="$DOMAIN" $THUMB_ARGS
+        "used_cars_catalog_vehicles_vehicle")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads-ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
+            ;;
+        "used_cars_carcopy_offers_offer")
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
             ;;
         *)
             echo -e "${BGRED}Error: Unknown update type: $type${Color_Off}"
