@@ -2,13 +2,19 @@
 
 # Help function
 show_help() {
-    echo "Usage: $0 [OPTIONS] COMMAND"
+    echo "Usage: $0 COMMAND [OPTIONS]"
     echo
     echo "Commands:"
     echo "  getone ENV_VAR [OUTPUT_FILE]     - Get one XML file using specified environment variable"
-    echo "  update TYPE                      - Update cars with specific type"
-    echo "  auto                             - Automatically process all XML files in ./tmp/new and ./tmp/used_cars"
-    echo "  test TYPE [--dev]                - Run getone and update commands in sequence"
+    echo "  update TYPE [OPTIONS]            - Update cars with specific type"
+    echo "  auto [OPTIONS]                   - Automatically process all XML files in ./tmp/new and ./tmp/used_cars"
+    echo "  test TYPE [OPTIONS]              - Run getone and update commands in sequence"
+    echo
+    echo "Options (can be used with update, auto, test commands):"
+    echo "  --skip_thumbs                    - Skip thumbnail generation"
+    echo "  --count_thumbs N                 - Number of thumbnails to generate (default: 5)"
+    echo "  --skip_check_thumb               - Skip thumbnail existence check"
+    echo "  --dev                            - Start dev server after processing (for auto and test)"
     echo
     echo "Environment Variable Options for 'getone':"
     echo "  AVITO_XML_URL"
@@ -72,10 +78,11 @@ show_help() {
     echo "  $0 getone AVITO_XML_URL"
     echo "  $0 getone AVITO_FRIEND_XML_URL cars_friend.xml"
     echo "  $0 update avito"
-    echo "  $0 update maxposter"
+    echo "  $0 update maxposter --skip_thumbs"
     echo "  $0 auto"
-    echo "  $0 auto --dev"
-    echo "  $0 test maxposter --dev"
+    echo "  $0 auto --skip_thumbs --dev"
+    echo "  $0 test maxposter --count_thumbs 10 --dev"
+    echo "  $0 update data_cars_car --skip_thumbs --skip_check_thumb"
 }
 
 Color_Off='\033[0m'
@@ -83,6 +90,61 @@ BGYELLOW='\033[30;43m'
 BGGREEN='\033[30;42m'
 BGRED='\033[30;41m'
 TEXTRED='\033[30;31m'
+
+# Parse thumbnail and dev options from arguments
+parse_options() {
+    local thumb_args=""
+    local dev_mode=""
+    local remaining_args=()
+    
+    # Debug: показываем входящие аргументы
+    # echo "🔧 parse_options получила аргументы: $*" >&2
+    
+    while [ $# -gt 0 ]; do
+        # echo "🔧 Обрабатываем аргумент: '$1'" >&2
+        case "$1" in
+            --skip_thumbs)
+                thumb_args="$thumb_args --skip_thumbs"
+                # echo "🔧 Добавили --skip_thumbs, thumb_args='$thumb_args'" >&2
+                shift
+                ;;
+            --count_thumbs)
+                if [ -n "$2" ] && [[ "$2" =~ ^[0-9]+$ ]]; then
+                    thumb_args="$thumb_args --count_thumbs $2"
+                    # echo "🔧 Добавили --count_thumbs $2, thumb_args='$thumb_args'" >&2
+                    shift 2
+                else
+                    echo -e "${BGRED}Error: --count_thumbs requires a numeric value${Color_Off}"
+                    exit 1
+                fi
+                ;;
+            --skip_check_thumb)
+                thumb_args="$thumb_args --skip_check_thumb"
+                # echo "🔧 Добавили --skip_check_thumb, thumb_args='$thumb_args'" >&2
+                shift
+                ;;
+            --dev)
+                dev_mode="--dev"
+                # echo "🔧 Добавили --dev, dev_mode='$dev_mode'" >&2
+                shift
+                ;;
+            *)
+                remaining_args+=("$1")
+                # echo "🔧 Добавили в remaining_args: '$1'" >&2
+                shift
+                ;;
+        esac
+    done
+    
+    # echo "🔧 Итоговые thumb_args='$thumb_args'" >&2
+    # echo "🔧 Итоговый dev_mode='$dev_mode'" >&2
+    # echo "🔧 Итоговые remaining_args: ${remaining_args[*]}" >&2
+    
+    # Возвращаем результат в специальном формате: THUMB_ARGS|DEV_MODE|remaining_args...
+    echo "THUMB_ARGS:$thumb_args"
+    echo "DEV_MODE:$dev_mode"
+    printf 'ARG:%s\n' "${remaining_args[@]}"
+}
 
 
 # Get domain from .env
@@ -162,8 +224,6 @@ handle_getone() {
 
 # Handle auto command
 handle_auto() {
-    local run_dev=$1
-    
     echo -e "${BGYELLOW}🔄 Запуск автоматической обработки всех XML файлов...${Color_Off}"
     
     DOMAIN=$(get_domain)
@@ -187,7 +247,8 @@ handle_auto() {
     fi
     
     # Запускаем автоматическую обработку
-    python3 .github/scripts/update_cars.py --auto_scan --skip_check_thumb --skip_thumbs --domain="$DOMAIN"
+    echo -e "${BGYELLOW}🎯 Команда: python3 .github/scripts/update_cars.py --auto_scan $THUMB_ARGS --domain=\"$DOMAIN\"${Color_Off}"
+    python3 .github/scripts/update_cars.py --auto_scan $THUMB_ARGS --domain="$DOMAIN"
     
     if [ $? -eq 0 ]; then
         echo -e "${BGGREEN}✅ Автоматическая обработка завершена успешно${Color_Off}"
@@ -196,7 +257,7 @@ handle_auto() {
         return 1
     fi
     
-    if [ "$run_dev" = "--dev" ]; then
+    if [ -n "$DEV_MODE" ]; then
         echo -e "${BGYELLOW}🚀 Запуск dev сервера...${Color_Off}"
         pnpm dev
     fi
@@ -205,7 +266,6 @@ handle_auto() {
 # Handle test command
 handle_test() {
     local type=$1
-    local run_dev=$2
     
     case $type in
         "avito")
@@ -281,7 +341,7 @@ handle_test() {
             ;;
     esac
     
-    if [ "$run_dev" = "--dev" ]; then
+    if [ -n "$DEV_MODE" ]; then
         pnpm dev
     fi
 }
@@ -302,58 +362,58 @@ handle_update() {
     
     case $type in
         "avito")
-            python3 .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito.xml" --domain="$DOMAIN"
+            python3 .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito.xml" --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "avito_data_cars_car")
-            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/avito.xml" --domain="$DOMAIN"
+            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/avito.xml" --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "avito_friend")
-            python3 .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito_dc.xml" --domain=$DOMAIN
-            python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --domain=$DOMAIN
+            python3 .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito_dc.xml" --domain=$DOMAIN $THUMB_ARGS
+            python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --domain=$DOMAIN $THUMB_ARGS
             export XML_URL="./public/avito_dc.xml ./public/avito_friend.xml" 
             python3 .github/scripts/getOneXML.py --output_path="./public/avito.xml"
             ;;
         "autoru")
-            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru.xml" --domain="$DOMAIN"
+            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru.xml" --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "autoru_friend")
-            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru_dc.xml" --domain=$DOMAIN
-            python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --domain=$DOMAIN
+            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru_dc.xml" --domain=$DOMAIN $THUMB_ARGS
+            python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --domain=$DOMAIN $THUMB_ARGS
             export XML_URL="./public/autoru_dc.xml ./public/autoru_friend.xml" 
             python3 .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
             ;;
         "xml_url")
-            python3 .github/scripts/create_cars.py --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/create_cars.py --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/data-cars-car/cars.xml" --source_type data_cars_car --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/data-cars-car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "maxposter")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/maxposter/cars.xml" --source_type maxposter --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/maxposter/cars.xml" --source_type maxposter --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "carcopy")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy/cars.xml" --source_type carcopy --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy/cars.xml" --source_type carcopy --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads-ad/cars.xml" --source_type ads_ad --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads-ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data-cars-car/used_cars_cars.xml" --source_type data_cars_car --skip_thumbs --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data-cars-car/used_cars_cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_maxposter")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/maxposter/cars.xml" --source_type maxposter --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/maxposter/cars.xml" --source_type maxposter --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_carcopy")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy/cars.xml" --source_type carcopy --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy/cars.xml" --source_type carcopy --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles-vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads-ad/cars.xml" --source_type ads_ad --skip_thumbs --domain="$DOMAIN"
+            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads-ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
             ;;
         *)
             echo -e "${BGRED}Error: Unknown update type: $type${Color_Off}"
@@ -369,36 +429,66 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
-command=$1
-shift
+# Parse arguments and extract options
+parse_result=$(parse_options "$@")
+
+# Initialize variables
+THUMB_ARGS=""
+DEV_MODE=""
+remaining_args=()
+
+# Parse the result from parse_options
+while IFS= read -r line; do
+    if [[ $line == THUMB_ARGS:* ]]; then
+        THUMB_ARGS="${line#THUMB_ARGS:}"
+    elif [[ $line == DEV_MODE:* ]]; then
+        DEV_MODE="${line#DEV_MODE:}"
+    elif [[ $line == ARG:* ]]; then
+        remaining_args+=("${line#ARG:}")
+    fi
+done <<< "$parse_result"
+
+if [ ${#remaining_args[@]} -lt 1 ]; then
+    show_help
+    exit 1
+fi
+
+command="${remaining_args[0]}"
+command_args=("${remaining_args[@]:1}")  # All arguments except the first one
+
+# Debug output (можно убрать после тестирования)
+# echo -e "${BGYELLOW}🔧 Debug: THUMB_ARGS='$THUMB_ARGS'${Color_Off}"
+# echo -e "${BGYELLOW}🔧 Debug: DEV_MODE='$DEV_MODE'${Color_Off}"
+# echo -e "${BGYELLOW}🔧 Debug: command='$command'${Color_Off}"
+# echo -e "${BGYELLOW}🔧 Debug: command_args=(${command_args[*]})${Color_Off}"
 
 case $command in
     "getone")
-        if [ "$#" -lt 1 ]; then
+        if [ ${#command_args[@]} -lt 1 ]; then
             echo -e "${BGRED}Error: getone requires an environment variable name${Color_Off}"
             show_help
             exit 1
         fi
-        handle_getone "$@"
+        handle_getone "${command_args[@]}"
         ;;
     "update")
-        if [ "$#" -lt 1 ]; then
+        if [ ${#command_args[@]} -lt 1 ]; then
             echo -e "${BGRED}Error: update requires a type${Color_Off}"
             show_help
             exit 1
         fi
-        handle_update "$@"
+        handle_update "${command_args[0]}"
         ;;
     "auto")
-        handle_auto "$@"
+        handle_auto
         ;;
     "test")
-        if [ "$#" -lt 1 ]; then
+        if [ ${#command_args[@]} -lt 1 ]; then
             echo -e "${BGRED}Error: test requires a type${Color_Off}"
             show_help
             exit 1
         fi
-        handle_test "$@"
+        handle_test "${command_args[0]}"
         ;;
     *)
         echo -e "${BGRED}Error: Unknown command: $command${Color_Off}"
