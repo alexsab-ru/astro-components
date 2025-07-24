@@ -635,7 +635,7 @@ class CarProcessor:
                 elem.text = str(value) if value is not None else ''
 
         if os.path.exists(file_path):
-            update_yaml(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config)
+            update_yaml(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
         else:
             create_file(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
 
@@ -784,7 +784,12 @@ def main():
         "elements_to_localize": [],
         "remove_cars_after_duplicate": [],
         "remove_mark_ids": [],
-        "remove_folder_ids": []
+        "remove_folder_ids": [],
+        # Шаблоны для генерации frontmatter:
+        "h1_template": "",
+        "breadcrumb_template": "",
+        "title_template": "",
+        "description_template": ""
     }
 
     # Определяем режим работы
