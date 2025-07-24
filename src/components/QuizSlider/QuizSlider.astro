@@ -19,7 +19,7 @@ const { quizSteps = quizData } = Astro.props;
         <form class="quiz-slider swiper">
             <input type="hidden" name="form" value="КВИЗ">
             <input type="email" tabindex="-1" name="email" class="h-0 opacity-0 absolute -z-[100]" placeholder="mail@example.com">
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper !items-stretch">
                 { quizSteps.map((step, index, arr) => <QuizSlide step={step}, index={index}, stepsCount={arr.length - 1} />) }
             </div>
         </form>
