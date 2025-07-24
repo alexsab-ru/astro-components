@@ -1,0 +1,21 @@
+.quiz-slide {
+  @apply max-h-[600px];
+  .quiz-slide-wrapper{
+      @apply bg-white/90 md:bg-white;
+  }
+  .left{
+      @apply min-h-screen md:min-h-[800px] h-auto md:h-screen py-20 md:w-3/5 flex flex-col justify-center gap-7;
+  }
+  .right{
+      @apply absolute right-0 top-0 h-full w-0 transition-all duration-[1.8s] bg-cover bg-center md:bg-right;
+  }
+  &.swiper-slide-active{
+      .right{
+          @apply w-1/3 md:w-1/3 bg-center;
+      }
+  }
+}
+
+.quiz-step{
+  @apply sm:text-5xl text-gray-400;
+}
