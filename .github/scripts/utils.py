@@ -204,7 +204,7 @@ def cleanup_unused_thumbs(current_thumbs, thumbs_dir):
         os.remove(thumb)
         print(f"Удалено неиспользуемое превью: {thumb}")
 
-
+# используется в air
 def create_child_element(parent, new_element_name, text):
     # Поиск существующего элемента
     old_element = parent.find(new_element_name)
@@ -218,7 +218,7 @@ def create_child_element(parent, new_element_name, text):
     # Добавление нового элемента в конец списка дочерних элементов родителя
     parent.append(new_element)
 
-
+# не используется
 def rename_child_element(parent, old_element_name, new_element_name):
     old_element = parent.find(old_element_name)
     if old_element is not None:
@@ -230,7 +230,7 @@ def rename_child_element(parent, old_element_name, new_element_name):
         parent.insert(list(parent).index(old_element), new_element)
         parent.remove(old_element)
 
-
+# используется в air
 def update_element_text(parent, element_name, new_text):
     element = parent.find(element_name)
     if element is not None:
@@ -239,7 +239,7 @@ def update_element_text(parent, element_name, new_text):
         # Ваш код для обработки случая, когда элемент не найден
         print(f"Элемент '{element_name}' не найден.")
 
-
+# не используется
 def localize_element_text(element):
     translations = {
         # engineType
@@ -556,36 +556,22 @@ def check_local_files(brand, model, color, vin):
         return "https://cdn.alexsab.ru/errors/404.webp"
 
 
-def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
+def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
     """
-    Создает файл с frontmatter в формате YAML и контентом, собирая все данные в словарь,
-    обрабатывая их аналогично update_yaml, затем сериализуя в YAML и добавляя описание.
+    Создает файл с frontmatter в формате YAML и контентом, используя car_data (dict).
+    Args:
+        car_data: dict с данными автомобиля
+        filename: путь к файлу
+        ... остальные параметры без изменений ...
     """
-    # Проверяем существование элемента vin
-    vin_elem = car.find('vin')
-    if vin_elem is None or vin_elem.text is None:
+    # Получаем основные значения из словаря
+    vin = car_data.get('vin')
+    if not vin:
         return
-    
-    vin = vin_elem.text
     vin_hidden = process_vin_hidden(vin)
-    
-    # Проверяем существование других необходимых элементов
-    color_elem = car.find('color')
-    if color_elem is None or color_elem.text is None:
-        return
-    
-    folder_id_elem = car.find('folder_id')
-    if folder_id_elem is None or folder_id_elem.text is None:
-        return
-    
-    mark_id_elem = car.find('mark_id')
-    if mark_id_elem is None or mark_id_elem.text is None:
-        return
-
-    # Преобразование цвета
-    color = color_elem.text.strip().capitalize()
-    model = folder_id_elem.text.strip()
-    brand = mark_id_elem.text.strip()
+    color = str(car_data.get('color', '')).capitalize()
+    model = car_data.get('folder_id', '')
+    brand = car_data.get('mark_id', '')
 
     # Получаем folder и color_image для CDN
     folder = get_folder(brand, model, vin)
@@ -611,9 +597,7 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
                 print_message(errorText, 'error')
                 thumb = check_local_files(brand, model, color, vin)
 
-    # 1. Сбор всех данных в словарь data
-    data = {}
-
+    data = dict(car_data)  # Копируем все поля из car_data
     # Определяем порядок (order)
     if vin in sort_storage_data:
         order = sort_storage_data[vin]
@@ -621,75 +605,41 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
         sort_storage_data['order'] = sort_storage_data.get('order', 0) + 1
         order = sort_storage_data['order']
     data['order'] = order
-
-    # total
-    total_element = car.find('total')
-    if total_element is not None:
-        try:
-            data['total'] = int(total_element.text)
-        except Exception:
-            data['total'] = 1
-    else:
-        data['total'] = 1
-
     data['vin_list'] = vin
     data['vin_hidden'] = vin_hidden
-
-    # Используем шаблоны для h1, breadcrumb, title, description
-    data['h1'] = get_h1(car, config)
-    data['breadcrumb'] = get_breadcrumb(car, config)
-    data['title'] = get_title(car, config)
-    data['description'] = get_description(car, config)
-
-    # Для дальнейшего использования в контенте страницы
-    description_for_content = ""
-
-    # color
     data['color'] = color
     data['image'] = thumb
 
-    # Сбор остальных полей
-    encountered_tags = set()
-    for child in car:
-        if list(child) and child.tag != 'images':
-            continue
-        if child.tag == 'total':
-            continue
-        if child.tag == 'folder_id':
-            data[child.tag] = child.text
-        elif child.tag == 'images':
-            images = extract_image_urls(child, 'image')
-            if vin in dealer_photos_for_cars_avito:
-                new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
-                images.extend(new_images)
-            data['images'] = images
-            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
-            data['thumbs'] = thumbs_files
-        elif child.tag == 'color':
-            # Уже добавлено выше
-            pass
-        elif child.tag == 'extras' and child.text:
-            extras = child.text.replace('\n', '<br>\n')
-            data['extras'] = extras
-        elif child.tag == 'description' and child.text:
-            description_for_content = f"{child.text}"
-        elif child.tag == 'equipment' and child.text:
-            equipment = child.text.replace('\n', '<br>\n').replace(':', '').replace('📞', '')
-            data['equipment'] = equipment
-        else:
-            if child.tag in encountered_tags:
-                continue
-            encountered_tags.add(child.tag)
-            if child.text:
-                data[child.tag] = format_value(child.text)
+    # Корректно формируем total
+    data['total'] = int(car_data.get('total', 1))
 
-    # Если есть описание из dealer_photos_for_cars_avito, используем его
+    # Обработка extras
+    if 'extras' in car_data and car_data['extras']:
+        data['extras'] = str(car_data['extras']).replace('\n', '<br>\n')
+    # Обработка equipment
+    if 'equipment' in car_data and car_data['equipment']:
+        equipment = str(car_data['equipment']).replace('\n', '<br>\n').replace(':', '').replace('📞', '')
+        data['equipment'] = equipment
+
+    # Используем шаблоны для h1, breadcrumb, title, description
+    data['h1'] = get_h1(car_data, config)
+    data['breadcrumb'] = get_breadcrumb(car_data, config)
+    data['title'] = get_title(car_data, config)
+    data['description'] = get_description(car_data, config)
+
+    # Описание для контента
+    description_for_content = car_data.get('description', '')
     if vin in dealer_photos_for_cars_avito and dealer_photos_for_cars_avito[vin]['description'] and not description_for_content:
         description_for_content = dealer_photos_for_cars_avito[vin]['description']
 
-    # 2. Обработка данных аналогично update_yaml (пример: total, run, priceWithDiscount, max_discount и т.д.)
-    # Здесь можно добавить дополнительные проверки/обработку, если нужно
-    # Например, если захотите добавить min/max/merge-логику как в update_yaml
+    # Обработка изображений
+    images = car_data.get('images', [])
+    if vin in dealer_photos_for_cars_avito:
+        new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
+        images.extend(new_images)
+    data['images'] = images
+    thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
+    data['thumbs'] = thumbs_files
 
     # Приводим определённые числовые поля к int, если они есть
     for key in ["max_discount", "price", "priceWithDiscount", "run", "sale_price", "year"]:
@@ -699,19 +649,17 @@ def create_file(car, filename, friendly_url, current_thumbs, sort_storage_data, 
             except Exception:
                 pass  # Если не удалось привести к числу, оставляем как есть
 
-
-    # 3. Сериализация в YAML
+    # Сериализация в YAML
     content = "---\n"
     content += yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
     content += "---\n"
 
-    # 4. Добавление description и остального контента
+    # Добавление description и остального контента
     content += process_description(description_for_content)
 
-    # 5. Запись в файл
+    # Запись в файл
     with open(filename, 'w') as f:
         f.write(content)
-
     print(f"Создан файл: {filename}")
     existing_files.add(filename)
 
@@ -731,8 +679,10 @@ def format_value(value: str) -> str:
         return f"'{value}'"
     return value
 
-def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
-
+def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
+    """
+    Обновляет YAML-файл, используя car_data (dict) вместо XML-элемента.
+    """
     print(f"Обновление файла: {filename}")
     with open(filename, "r", encoding="utf-8") as f:
         content = f.read()
@@ -748,139 +698,86 @@ def update_yaml(car, filename, friendly_url, current_thumbs, sort_storage_data, 
     # Parse the YAML block
     yaml_block = parts[1].strip()
     data = yaml.safe_load(yaml_block)
-
-    vin = car.find('vin').text
-    # Проверка: если vin уже есть в vin_list, не обновляем данные
-    if vin is not None and 'vin_list' in data and vin in data['vin_list']:
-        # VIN уже присутствует, не обновляем файл повторно
+    vin = car_data.get('vin')
+    # Проверка: если vin уже есть в vin_list, не обновляем файл (логика на dict)
+    if vin and 'vin_list' in data and vin in [v.strip() for v in data['vin_list'].split(',')]:
         existing_files.add(filename)
+        print(f"Такой VIN {vin} уже есть в файле")
         return filename
-
-    if vin is not None:
-        # Создаём или добавляем строку в список
+    if vin:
         data['vin_list'] += ", " + vin
 
     vin_hidden = process_vin_hidden(vin)
-    if vin_hidden is not None:
-        # Создаём или добавляем строку в список
+    if vin_hidden:
         data['vin_hidden'] += ", " + vin_hidden
+    if 'unique_id' in car_data:
+        if not isinstance(data.get('unique_id', ''), str):
+            data['unique_id'] = str(data.get('unique_id', ''))
+        data['unique_id'] += ", " + str(car_data['unique_id'])
+    elif 'id' in car_data:
+        if not isinstance(data.get('id', ''), str):
+            data['id'] = str(data.get('id', ''))
+        data['id'] += ", " + str(car_data['id'])
 
-    unique_id = car.find('unique_id')
-    if unique_id is not None:
-        if not isinstance(data['unique_id'], str):
-            data['unique_id'] = str(data['unique_id'])
-
-        data['unique_id'] += ", " + str(unique_id.text)
-    else:
-        unique_id = car.find('id')
-        if unique_id is not None:
-            if not isinstance(data['id'], str):
-                data['id'] = str(data['id'])
-
-            data['id'] += ", " + str(unique_id.text)
-
-
-    total_element = car.find('total')
-    if 'total' in data and total_element is not None:
+    if 'total' in data and 'total' in car_data:
         try:
-            car_total_value = int(total_element.text)
+            car_total_value = int(car_data['total'])
             data_total_value = int(data['total'])
             data['total'] = data_total_value + car_total_value
         except ValueError:
-            # В случае, если не удается преобразовать значения в int,
-            # можно оставить текущее значение data['total'] или установить его в 0,
-            # либо выполнить другое действие по вашему выбору
-            pass
+            pass  # Если не удается преобразовать значения в int, оставляем текущее значение
     else:
-        # Если элемент 'total' отсутствует в одном из источников,
-        # можно установить значение по умолчанию для 'total' в data или обработать этот случай иначе
-        data['total'] += 1
+        data['total'] = data.get('total', 1) + 1
 
-    run_element = car.find('run')
-    if 'run' in data and run_element is not None:
+    if 'run' in data and 'run' in car_data:
         try:
-            car_run_value = int(run_element.text)
+            car_run_value = int(car_data['run'])
             data_run_value = int(data['run'])
             data['run'] = min(data_run_value, car_run_value)
         except ValueError:
-            # В случае, если не удается преобразовать значения в int,
-            # можно оставить текущее значение data['run'] или установить его в 0,
-            # либо выполнить другое действие по вашему выбору
             pass
     else:
-        # Если элемент 'run' отсутствует в одном из источников,
-        # можно установить значение по умолчанию для 'run' в data или обработать этот случай иначе
         data.setdefault('run', 0)
 
-    priceWithDiscount_element = car.find('priceWithDiscount')
-    if 'priceWithDiscount' in data and priceWithDiscount_element is not None:
+    if 'priceWithDiscount' in data and 'priceWithDiscount' in car_data:
         try:
-            car_priceWithDiscount_value = int(priceWithDiscount_element.text)
+            car_priceWithDiscount_value = int(car_data['priceWithDiscount'])
             data_priceWithDiscount_value = int(data['priceWithDiscount'])
             data['priceWithDiscount'] = min(data_priceWithDiscount_value, car_priceWithDiscount_value)
             data['sale_price'] = min(data_priceWithDiscount_value, car_priceWithDiscount_value)
-            description = (
-                f'Купить автомобиль {join_car_data(car, "mark_id", "folder_id")}'
-                f'{" " + car.find("year").text + " года выпуска" if car.find("year").text else ""}'
-                f'{", комплектация " + car.find("complectation_name").text if car.find("complectation_name") is not None and car.find("complectation_name").text else ""}'
-                f'{", цвет - " + car.find("color").text if car.find("color") is not None and car.find("color").text else ""}'
-                f'{", двигатель - " + car.find("modification_id").text if car.find("modification_id") is not None and car.find("modification_id").text else ""}'
-                f' у официального дилера в г. {config["legal_city"]}. Стоимость данного автомобиля {join_car_data(car, "mark_id", "folder_id")} – {car.find("priceWithDiscount").text if car.find("priceWithDiscount") is not None and car.find("priceWithDiscount").text else ""}'
-            )
-            data["description"] = description
+            # Используем get_description для генерации description
+            data["description"] = get_description(car_data, config)
         except ValueError:
-            # В случае, если не удается преобразовать значения в int,
-            # можно оставить текущее значение data['priceWithDiscount'] или установить его в 0,
-            # либо выполнить другое действие по вашему выбору
             pass
-    # else:
-        # Если элемент 'priceWithDiscount' отсутствует в одном из источников,
-        # можно установить значение по умолчанию для 'priceWithDiscount' в data или обработать этот случай иначе
-        # data.setdefault('priceWithDiscount', 0)
 
-    max_discount_element = car.find('max_discount')
-    if 'max_discount' in data and max_discount_element is not None:
+    if 'max_discount' in data and 'max_discount' in car_data:
         try:
-            car_max_discount_value = int(max_discount_element.text)
+            car_max_discount_value = int(car_data['max_discount'])
             data_max_discount_value = int(data['max_discount'])
             data['max_discount'] = max(data_max_discount_value, car_max_discount_value)
         except ValueError:
-            # В случае, если не удается преобразовать значения в int,
-            # можно оставить текущее значение data['max_discount'] или установить его в 0,
-            # либо выполнить другое действие по вашему выбору
             pass
-
 
     if 'order' not in data:
         if vin in sort_storage_data:
-            # If VIN exists, use its order value
             order = sort_storage_data[vin]
         else:
             # If VIN doesn't exist, increment the current order and use it
             sort_storage_data['order'] = sort_storage_data.get('order', 0) + 1
             order = sort_storage_data['order']
-
         data['order'] = order
 
-    images_container = car.find("images")
-    if images_container is not None:
-        images = extract_image_urls(images_container, 'image')
-        # Проверяем наличие дополнительных фотографий в dealer_photos_for_cars_avito
-        if vin in dealer_photos_for_cars_avito:
-            # Добавляем только уникальные изображения
-            new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
-            images.extend(new_images)
-        if len(images) > 0:
-            # Удаляем дубликаты из существующего списка
-            existing_images = data.get('images', [])
-            unique_images = list(dict.fromkeys(existing_images + images))
-            data['images'] = unique_images
-            # Проверяем, нужно ли добавлять эскизы
-            if 'thumbs' not in data or (len(data['thumbs']) < 5):
-                thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
-                data.setdefault('thumbs', []).extend(thumbs_files)
-
-    # Convert the data back to a YAML string
+    images = car_data.get('images', [])
+    if vin in dealer_photos_for_cars_avito:
+        new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
+        images.extend(new_images)
+    if images:
+        existing_images = data.get('images', [])
+        unique_images = list(dict.fromkeys(existing_images + images))
+        data['images'] = unique_images
+        if 'thumbs' not in data or (len(data['thumbs']) < 5):
+            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
+            data.setdefault('thumbs', []).extend(thumbs_files)
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
 
     # Reassemble the content with the updated YAML block
@@ -1108,13 +1005,13 @@ def extract_image_urls(images_container, image_tag):
 
 def render_template_string(template: str, car, config):
     """
-    Заменяет плейсхолдеры вида {{car.field}} и {{config.field}} на значения из car и config соответственно.
-    Поддерживает вложенные поля car (XML) и config (dict).
+    Заменяет плейсхолдеры вида {{car.field}} и {{config.field}} на значения из car (dict) и config соответственно.
+    Теперь поддерживает только dict для car.
     Пример: '{{car.mark_id}} {{car.folder_id}} у {{config.legal_city_where}}'
     """
     def get_car_value(field):
-        el = car.find(field)
-        return el.text if el is not None and el.text is not None else ''
+        # Теперь car - это dict, а не XML
+        return str(car.get(field, ''))
     def get_config_value(field):
         return config.get(field, '')
 
@@ -1131,22 +1028,22 @@ def render_template_string(template: str, car, config):
     return re.sub(r'\{\{\s*([^}]+)\s*\}\}', replacer, template)
 
 def get_h1(car, config):
-    """Генерирует h1 для автомобиля по шаблону."""
+    """Генерирует h1 для автомобиля по шаблону (car - dict)."""
     template = config.get('h1_template') or '{{car.mark_id}} {{car.folder_id}} {{car.modification_id}}'
-    return render_template_string(template, car, config)
+    return render_template_string(template, car, config).strip()
 
 def get_breadcrumb(car, config):
-    """Генерирует breadcrumb для автомобиля по шаблону."""
+    """Генерирует breadcrumb для автомобиля по шаблону (car - dict)."""
     template = config.get('breadcrumb_template') or '{{car.mark_id}} {{car.folder_id}} {{car.complectation_name}}'
-    return render_template_string(template, car, config)
+    return render_template_string(template, car, config).strip()
 
 def get_title(car, config):
-    """Генерирует title для автомобиля по шаблону."""
+    """Генерирует title для автомобиля по шаблону (car - dict)."""
     template = config.get('title_template') or 'Купить {{car.mark_id}} {{car.folder_id}} {{car.modification_id}} {{car.color}} у официального дилера в {{config.legal_city_where}}'
-    return render_template_string(template, car, config)
+    return render_template_string(template, car, config).strip()
 
 def get_description(car, config):
-    """Генерирует description для автомобиля по шаблону."""
+    """Генерирует description для автомобиля по шаблону (car - dict)."""
     template = config.get('description_template') or (
         'Купить автомобиль {{car.mark_id}} {{car.folder_id}}'
         '{% if car.year %} {{car.year}} года выпуска{% endif %}'
@@ -1155,4 +1052,16 @@ def get_description(car, config):
         '{% if car.modification_id %}, двигатель - {{car.modification_id}}{% endif %}'
         ' у официального дилера в г. {{config.legal_city}}. Стоимость данного автомобиля {{car.mark_id}} {{car.folder_id}} – {{car.priceWithDiscount}}'
     )
-    return render_template_string(template, car, config)
+    # Удаляем все конструкции {% if ... %} ... {% endif %}, если поля пустые
+    def if_replacer(match):
+        expr = match.group(1).strip()
+        # Пример: car.year
+        if expr.startswith('car.'):
+            field = expr[4:]
+            if car.get(field):
+                return match.group(2)
+            else:
+                return ''
+        return ''
+    template = re.sub(r'\{% if ([^%]+)%\}([\s\S]*?)\{% endif %\}', if_replacer, template)
+    return render_template_string(template, car, config).strip()

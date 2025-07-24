@@ -628,17 +628,11 @@ class CarProcessor:
         config['legal_city'] = settings['legal_city']
         config['legal_city_where'] = settings['legal_city_where']
 
-        # Создаем временный XML элемент для совместимости с существующими функциями
-        temp_car = ET.Element('car')
-        for key, value in car_data.items():
-            if key != 'images':
-                elem = ET.SubElement(temp_car, key)
-                elem.text = str(value) if value is not None else ''
-
+        # Сохраняем или обновляем файл, теперь передаём car_data (dict), а не temp_car (XML)
         if os.path.exists(file_path):
-            update_yaml(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
+            update_yaml(car_data, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
         else:
-            create_file(temp_car, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
+            create_file(car_data, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
 
         # Возвращаем новый XML элемент в формате data_cars_car
         return self.create_car_element(car_data)
