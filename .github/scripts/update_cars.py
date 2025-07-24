@@ -867,13 +867,16 @@ def main():
             current_config['move_vin_id_up'] = source_config['move_vin_id_up']
             current_config['new_address'] = source_config['new_address']
             current_config['new_phone'] = source_config['new_phone']
-            
-            # Настройка директорий для текущей категории
-            setup_directories(current_config['thumbs_dir'], current_config['cars_dir'])
-            
+                        
             # Инициализация XML
             root = get_xml_content(xml_file_path, args.xml_url)
-            
+            if root is None:
+                print(f"[update_cars.py] Не удалось получить XML для файла {xml_file_path}. Пропускаю этот файл.")
+                continue  # Пропускаем обработку этого файла
+
+            # Настройка директорий для текущей категории
+            setup_directories(current_config['thumbs_dir'], current_config['cars_dir'])
+
             # Обработка машин
             cars_element = processor.get_cars_element(root)
             if cars_element is not None:
@@ -976,6 +979,9 @@ def main():
         
         # Инициализация
         root = get_xml_content(args.input_file, args.xml_url)
+        if root is None:
+            print(f"[update_cars.py] Не удалось получить XML для файла {args.input_file}. Завершаю выполнение.")
+            return  # Завершаем выполнение функции
         setup_directories(config['thumbs_dir'], args.cars_dir)
         
         with open('output.txt', 'w') as file:

@@ -458,28 +458,38 @@ def update_car_prices(car, prices_data: Dict[str, Dict[str, int]]) -> None:
 def get_xml_content(filename: str, xml_url: str) -> ET.Element:
     """
     Получает XML контент либо из локального файла, либо по URL.
+    Если файл и ссылка недоступны — возвращает None и печатает предупреждение.
     
     Args:
         filename: Путь к локальному XML файлу
         xml_url: URL для загрузки XML если локальный файл отсутствует
     
     Returns:
-        ET.Element: Корневой элемент XML
+        ET.Element: Корневой элемент XML или None, если не удалось получить
     """
     if os.path.exists(filename):
         tree = ET.parse(filename)
         return tree.getroot()
     
-    response = requests.get(xml_url)
-    response.raise_for_status()
-    content = response.content
+    # Проверяем, что xml_url задан и не пустой
+    if not xml_url:
+        print(f"[get_xml_content] Не найден локальный файл '{filename}' и не указана ссылка xml_url. Возвращаю None.")
+        return None
+    try:
+        import requests
+        response = requests.get(xml_url, timeout=10)
+        response.raise_for_status()
+        content = response.content
 
-    # Убрать BOM, если он присутствует
-    if content.startswith(b'\xef\xbb\xbf'):
-        content = content[3:]
+        # Убрать BOM, если он присутствует
+        if content.startswith(b'\xef\xbb\xbf'):
+            content = content[3:]
 
-    xml_content = content.decode('utf-8')
-    return ET.fromstring(xml_content)
+        xml_content = content.decode('utf-8')
+        return ET.fromstring(xml_content)
+    except Exception as e:
+        print(f"[get_xml_content] Не удалось получить XML по ссылке '{xml_url}': {e}. Возвращаю None.")
+        return None
 
 
 def setup_directories(thumbs_dir: str, cars_dir: str) -> None:
