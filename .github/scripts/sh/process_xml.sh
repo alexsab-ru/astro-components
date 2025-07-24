@@ -249,7 +249,7 @@ handle_auto() {
         echo "   - Новые автомобили: ./tmp/new/{тип_фида}/cars.xml"
         echo "   - Б/у автомобили: ./tmp/used_cars/{тип_фида}/cars.xml"
         echo "   - Поддерживаемые типы: data_cars_car, catalog_vehicles_vehicle, vehicles_vehicle, ads_ad, carcopy_offers_offer, yml_catalog_shop_offers_offer"
-        return 1
+        return 0
     fi
     
     # Запускаем автоматическую обработку
@@ -260,7 +260,7 @@ handle_auto() {
         echo -e "${BGGREEN}✅ Автоматическая обработка завершена успешно${Color_Off}"
     else
         echo -e "${BGRED}❌ Ошибка при автоматической обработке${Color_Off}"
-        return 1
+        return 0
     fi
     
     if [ -n "$DEV_MODE" ]; then
