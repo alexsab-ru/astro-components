@@ -78,7 +78,7 @@
     "test_USED_CARS_carcopy_offers_offer": "pnpm cars test used_cars_carcopy_offers_offer --dev",
     "\n# Dev and Build commands:": "",
     "dev": "astro dev --open --host --config astro.local.config.mjs",
-    "dd": "pnpm downloadJSON && pnpm getDealerPrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
+    "dd": "export IGNORE_ERRORS=1 && pnpm downloadJSON && pnpm getDealerPrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
     "ddw": "powershell -Command \"pnpm downloadJSON_win; pnpm getDealerPrices; pnpm mergeCarPrices; pnpm replacePlaceholdersAndSearchDates; pnpm dev\"",
     "linkinator": "astro dev --port 4343 & sleep 5 && npx linkinator http://localhost:4343 --recurse --format CSV  > linkinator.csv",
     "broken_links": "astro dev --port 4343 & sleep 5 && export DOMAIN=localhost:4343 && node .github/scripts/checkLinks.js",

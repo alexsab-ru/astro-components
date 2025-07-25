@@ -172,6 +172,7 @@ jobs:
         if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN }}
         run: |
           pnpm getDealerPrices
+        continue-on-error: true
         env:
           CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
           QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
