@@ -44,7 +44,7 @@ class CarFeedProcessorCSV:
                 def safe_set(tag, key, default=None):
                     value = row.get(key)
                     if value or default is not None:
-                        ET.SubElement(car, tag).text = value if value else default
+                        ET.SubElement(car, tag).text = value.strip() if value else default
 
                 safe_set('mark_id', 'Марка')
                 safe_set('folder_id', 'Модель')
