@@ -31,9 +31,9 @@ class CarProcessor:
                 print(f"Произошла ошибка при работе с файлом: {e}")
         
         self.dealer_photos_for_cars_avito = {}
-        if os.path.exists('dealer_photos_for_cars_avito.xml'):
+        if os.path.exists('./tmp/feeds/photos/dealer_photos_for_cars_avito.xml'):
             try:
-                avito_root = get_xml_content('dealer_photos_for_cars_avito.xml', '')
+                avito_root = get_xml_content('./tmp/feeds/photos/dealer_photos_for_cars_avito.xml', '')
                 for car in avito_root.findall('Ad'):
                     vin = car.find('VIN').text
                     self.dealer_photos_for_cars_avito[vin] = {
