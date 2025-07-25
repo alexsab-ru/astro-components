@@ -560,21 +560,27 @@ class CarProcessor:
         )
         print(f"\nУникальный идентификатор: {friendly_url}")
         
-        # Базовые расчёты цены и скидки
+        # Получаем цену из car_data, если она есть, иначе используем 0
         price = int(car_data.get('price', 0) or 0)
-        max_discount = self.calculate_max_discount(car_data)
-        
-        # Обновляем данные
-        car_data['max_discount'] = max_discount
-        sale_price = price - max_discount
-        
-        # Обработка priceWithDiscount в зависимости от источника
-        if self.source_type == 'vehicles_vehicle' and 'priceWithDiscount' in car_data and car_data['priceWithDiscount']:
-            sale_price = int(car_data['priceWithDiscount'])
-        
-        car_data['priceWithDiscount'] = sale_price
-        car_data['sale_price'] = sale_price
-        
+
+        # Если max_discount уже есть в car_data, не пересчитываем, иначе считаем
+        if 'max_discount' not in car_data:
+            max_discount = self.calculate_max_discount(car_data)
+            car_data['max_discount'] = max_discount
+        else:
+            max_discount = int(car_data['max_discount'] or 0)
+
+        # Если priceWithDiscount уже есть, не пересчитываем, иначе считаем
+        if 'priceWithDiscount' not in car_data:
+            sale_price = price - max_discount
+            car_data['priceWithDiscount'] = sale_price
+        else:
+            sale_price = int(car_data['priceWithDiscount'] or 0)
+
+        # Если sale_price уже есть, не пересчитываем, иначе присваиваем sale_price
+        if 'sale_price' not in car_data:
+            car_data['sale_price'] = sale_price
+
         # Локализация элементов
         for elem_name in self.config['elements_to_localize']:
             if elem_name in car_data and car_data[elem_name]:
