@@ -9,9 +9,7 @@ import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Tuple
 
 class CarProcessor:
-    def __init__(self, source_type: str):
-        self.source_type = source_type
-        self.setup_source_config()
+    def __init__(self):
         self.existing_files = set()
         self.current_thumbs = []
         self.prices_data = load_price_data()
@@ -874,16 +872,8 @@ def main():
         
         print(f"📁 Найдено {len(all_xml_files)} XML файлов для обработки")
         
-        # Создаем единый процессор (начинаем с первого найденного типа)
-        first_file_path, first_folder, first_category = all_xml_files[0]
-        first_source_type = normalize_source_type(first_folder)
-        
         # Пробуем автоопределить тип для первого файла
-        processor = CarProcessor(first_source_type)
-        detected_type = processor.auto_detect_source_type(first_file_path)
-        if detected_type:
-            processor.update_source_type(detected_type)
-            print(f"✅ Автоопределен тип для первого файла: {detected_type}")
+        processor = CarProcessor()
         
         # Группируем обработанные автомобили по категориям
         processed_cars_by_category = {'new': [], 'used': []}
@@ -1046,7 +1036,14 @@ def main():
         config['new_phone'] = source_config['new_phone']
 
         # Инициализация процессора для конкретного источника
-        processor = CarProcessor(args.source_type)
+        processor = CarProcessor()
+        detected_type = processor.auto_detect_source_type(args.input_file)
+        if detected_type:
+            processor.update_source_type(detected_type)
+            print(f"✅ Автоопределен тип для файла: {detected_type}")
+        else:
+            print(f"❌ Не удалось определить тип для файла: {args.input_file}. Использую тип из аргументов: {args.source_type}")
+            processor.update_source_type(args.source_type)
         
         # Инициализация
         root = get_xml_content(args.input_file, args.xml_url)
