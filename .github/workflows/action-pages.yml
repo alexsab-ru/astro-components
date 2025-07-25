@@ -163,7 +163,7 @@ jobs:
       - name: Download JSONs
         if: steps.check_changes.outputs.changes == 'true'
         run: |
-          pnpm download_json
+          pnpm downloadJSON
         env:
           JSON_PATH: ${{ secrets.JSON_PATH }}
           DOMAIN: ${{ vars.DOMAIN }}
