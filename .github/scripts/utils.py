@@ -701,6 +701,9 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
     vin = car_data.get('vin')
     # Проверка: если vin уже есть в vin_list, не обновляем файл (логика на dict)
     if vin and 'vin_list' in data and vin in [v.strip() for v in data['vin_list'].split(',')]:
+        for thumb in data.get('thumbs', []):
+            if thumb not in current_thumbs:
+                current_thumbs.append(f"public{thumb}")
         existing_files.add(filename)
         print(f"Такой VIN {vin} уже есть в файле")
         return filename
