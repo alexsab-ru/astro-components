@@ -167,7 +167,15 @@ get_domain() {
 # Get XML URL from .env by variable name
 get_xml_url() {
     local var_name=$1
+
+    # 1. Пробуем получить из окружения
+    local value="${!var_name}"
+    if [ -n "$value" ]; then
+        echo "$value"
+        return 0
+    fi
     
+    # 2. Если не найдено — ищем в .env с нужными преобразованиями
     if [ ! -f ".env" ]; then
         echo -e "${BGRED}Error: .env file not found${Color_Off}" >&2
         return 1
@@ -177,7 +185,7 @@ get_xml_url() {
     local lines=$(grep "^${var_name}=" .env)
     
     if [ -z "$lines" ]; then
-        echo -e "${BGRED}Error: ${var_name} not found in .env file${Color_Off}" >&2
+        echo -e "${BGRED}Error: ${var_name} not found in environment or .env file${Color_Off}" >&2
         return 1
     fi
     
