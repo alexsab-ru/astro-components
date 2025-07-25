@@ -254,7 +254,7 @@ handle_getone() {
     export XML_URL
     
     if [ -n "$output_file" ]; then
-        python3 .github/scripts/getOneXML.py --output="$output_file"
+        python3 .github/scripts/getOneXML.py --output_path="$output_file"
     else
         python3 .github/scripts/getOneXML.py
     fi

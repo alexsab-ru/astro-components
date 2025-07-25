@@ -293,7 +293,7 @@ jobs:
     - name: Get friends AutoRu xml
       if: ${{ vars.AUTORU_FRIEND_XML_URL }}
       run: |
-        python .github/scripts/getOneXML.py --output="cars_friend.xml"
+        python .github/scripts/getOneXML.py --output_path="cars_friend.xml"
         python .github/scripts/update_cars_air_storage.py --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
@@ -337,7 +337,7 @@ jobs:
     - name: Get friends Avito xml
       if: ${{ vars.AVITO_FRIEND_XML_URL }}
       run: |
-        python .github/scripts/getOneXML.py --output="cars_friend.xml"
+        python .github/scripts/getOneXML.py --output_path="cars_friend.xml"
         python .github/scripts/update_cars_air_storage.py --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
