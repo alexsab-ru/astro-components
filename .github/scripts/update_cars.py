@@ -225,7 +225,8 @@ class CarProcessor:
         # --- Формирование данных для JSON с ценами и скидками из фида ---
         # Группировка и агрегация данных сразу в готовом формате
         brand = join_car_data(car, 'mark_id')
-        model = join_car_data(car, 'folder_id')
+        model_full = join_car_data(car, 'folder_id')
+        model = get_model_info(brand, model_full, 'short')
         key = (brand, model)
         
         if key in self.cars_price_data:
@@ -387,8 +388,10 @@ def main():
     # --- Сохранение данных в JSON с ценами и скидками из фида ---
     # Данные уже в нужном формате, просто берем values() из словаря
     os.makedirs('data', exist_ok=True)
+    # sort processor.cars_price_data by brand and model
+    sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
     with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
-        json.dump(list(processor.cars_price_data.values()), f, ensure_ascii=False, indent=2)
+        json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
     # --- конец блока ---
 
 if __name__ == "__main__":

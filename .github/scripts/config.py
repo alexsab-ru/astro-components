@@ -104,7 +104,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     # Если запрашивается конкретное свойство
     if property:
         normalized_property = property.lower()
-        if normalized_property in ['folder', 'cyrillic']:
+        if normalized_property in ['folder', 'cyrillic', 'short']:
             return model_data[normalized_property]
         elif normalized_property == 'colors':
             return model_data['color']
