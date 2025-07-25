@@ -642,7 +642,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
     data['thumbs'] = thumbs_files
 
     # Приводим определённые числовые поля к int, если они есть
-    for key in ["max_discount", "price", "priceWithDiscount", "run", "sale_price", "year"]:
+    for key in ["max_discount", "price", "priceWithDiscount", "run", "sale_price", "year", "credit_discount", "optional_discount", "insurance_discount", "tradein_discount"]:
         if key in data and data[key] is not None:
             try:
                 data[key] = int(str(data[key]).replace(" ", "").replace("\u00a0", ""))
