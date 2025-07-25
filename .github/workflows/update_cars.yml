@@ -151,6 +151,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
+        XML_URL_DATA_CARS_CAR: ${{ vars.XML_URL_DATA_CARS_CAR }}
 
     - name: Get cars catalog_vehicles_vehicle XML
       if: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
@@ -160,6 +161,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
+        XML_URL_CATALOG_VEHICLES_VEHICLE: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
 
     - name: Get cars vehicles_vehicle XML
       if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
@@ -169,6 +171,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+        XML_URL_VEHICLES_VEHICLE: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
 
     - name: Get cars ads_ad XML
       if: ${{ vars.XML_URL_ADS_AD }}
@@ -178,6 +181,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_ADS_AD }}
+        XML_URL_ADS_AD: ${{ vars.XML_URL_ADS_AD }}
 
     - name: Get cars carcopy_offers_offer XML
       if: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
@@ -187,6 +191,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
+        XML_URL_CARCOPY_OFFERS_OFFER: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
 
     - name: Get used_cars data_cars_car XML
       if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
@@ -196,6 +201,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+        USED_CARS_DATA_CARS_CAR: ${{ vars.USED_CARS_DATA_CARS_CAR }}
 
     - name: Get used_cars catalog_vehicles_vehicle XML
       if: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
@@ -205,6 +211,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
+        USED_CARS_CATALOG_VEHICLES_VEHICLE: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
 
     - name: Get used_cars vehicles_vehicle XML
       if: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
@@ -214,6 +221,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
+        USED_CARS_VEHICLES_VEHICLE: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
 
     - name: Get used_cars ads_ad XML
       if: ${{ vars.USED_CARS_ADS_AD }}
@@ -223,6 +231,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_ADS_AD }}
+        USED_CARS_ADS_AD: ${{ vars.USED_CARS_ADS_AD }}
 
     - name: Get used_cars carcopy_offers_offer XML
       if: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
@@ -232,6 +241,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
+        USED_CARS_CARCOPY_OFFERS_OFFER: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
 
     - name: Get air storage
       if: ${{ vars.AIR_STORAGE_CSV_URL }}
