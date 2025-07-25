@@ -42,7 +42,7 @@ export const COLLECTIONS = [
 ];
 
 // Текст согласия в формах
-export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a> и на использование cookie на условиях, указанных <a href="/cookie-policy" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';
+export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy/" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a> и на использование cookie на условиях, указанных <a href="/cookie-policy/" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';
 
 // Текст информации в футере
 import salonsData from '@/data/salons.json';
