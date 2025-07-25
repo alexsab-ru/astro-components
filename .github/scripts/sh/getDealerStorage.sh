@@ -1,13 +1,42 @@
 #!/bin/sh
 
-# Если CSV_URL не установлен, пытаемся получить его из .env
-if [ -z "$CSV_URL" ] && [ -f .env ]; then
-    CSV_URL=$(grep '^DEALER_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')
+# =====================
+# Выбор режима работы: new_cars или used_cars
+# =====================
+# MODE можно передать через ENV или как аргумент (по умолчанию new_cars)
+MODE=${MODE:-new_cars}
+
+# Можно также передать как первый аргумент
+if [ -n "$1" ]; then
+    MODE="$1"
 fi
 
+# В зависимости от режима выбираем переменные
+if [ "$MODE" = "new_cars" ]; then
+    # Для новых машин
+    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/new/csv/data.csv}
+    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/new/csv/cars.xml}
+    XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-XML_URL_DATA_CARS_CAR}
+    CSV_URL=${CSV_URL:-$(grep '^DEALER_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+    QUERY_STRING=${QUERY_STRING:-$(grep '^DEALER_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+elif [ "$MODE" = "used_cars" ]; then
+    # Для машин с пробегом
+    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/used_cars/csv/data.csv}
+    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/used_cars/csv/cars.xml}
+    XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-USED_CARS_DATA_CARS_CAR}
+    CSV_URL=${CSV_URL:-$(grep '^USED_CARS_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+    QUERY_STRING=${QUERY_STRING:-$(grep '^USED_CARS_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+else
+    echo "Error: Неизвестный режим MODE='$MODE'. Используйте 'new_cars' или 'used_cars'" >&2
+    exit 1
+fi
+
+# =====================
+# Проверяем обязательные переменные
+# =====================
 # Проверяем, что CSV_URL установлен
 if [[ ! "$CSV_URL" =~ ^https?:// ]]; then
-    echo "Error: DEALER_STORAGE_CSV_URL or USED_CARS_STORAGE_CSV_URL is not found or empty"
+    echo "Error: URL для CSV не найден или пустой (режим: $MODE)"
     # Если IGNORE_ERRORS=1, не считаем это ошибкой
     if [ "$IGNORE_ERRORS" = "1" ]; then
         echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
@@ -17,14 +46,9 @@ if [[ ! "$CSV_URL" =~ ^https?:// ]]; then
     fi
 fi
 
-# Если QUERY_STRING не установлен, пытаемся получить его из .env
-if [ -z "$QUERY_STRING" ] && [ -f .env ]; then
-    QUERY_STRING=$(grep '^DEALER_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')
-fi
-
 # Проверяем, что QUERY_STRING установлен
 if [ -z "$QUERY_STRING" ]; then
-    echo "Error: DEALER_STORAGE_CSV_COLUMN or USED_CARS_STORAGE_CSV_COLUMN is not found"
+    echo "Error: COLUMN для запроса не найден (режим: $MODE)"
     # Если IGNORE_ERRORS=1, не считаем это ошибкой
     if [ "$IGNORE_ERRORS" = "1" ]; then
         echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
@@ -37,6 +61,9 @@ fi
 # Кодируем QUERY_STRING для URL
 QUERY_STRING=$(echo "$QUERY_STRING" | sed 's/ /%20/g')
 
+# =====================
+# Дальнейший код использует уже выбранные переменные
+# =====================
 # Извлечение document_id с помощью sed
 document_id=$(echo "$CSV_URL" | sed -n 's/.*\/d\/\([^\/]*\)\/edit.*/\1/p')
 # Извлечение gid с помощью sed
@@ -49,11 +76,6 @@ if [ -n "$document_id" ] && [ -n "$gid" ]; then
     echo "Преобразованный URL: $DOWNLOAD_URL"
 
     # Путь к сохраняемому CSV-файлу (можно переопределить через ENV)
-    CSV_FILE_PATH=${CSV_FILE_PATH:-data.csv}
-    # Путь к выходному XML-файлу (можно переопределить через ENV)
-    XML_FILE_PATH=${XML_FILE_PATH:-cars.xml}
-
-    # Проверяем и создаём директории для файлов, если их нет
     CSV_DIR=$(dirname "$CSV_FILE_PATH")
     XML_DIR=$(dirname "$XML_FILE_PATH")
     [ ! -d "$CSV_DIR" ] && mkdir -p "$CSV_DIR"
