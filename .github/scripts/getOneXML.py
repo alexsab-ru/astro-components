@@ -13,17 +13,20 @@ def download_or_read_file(path, retries=3, delay=5):
         with open(path, 'rb') as file:
             return file.read()
 
-    for attempt in range(retries):
-        try:
-            response = requests.get(path, timeout=10)  # Установим тайм-аут
-            response.raise_for_status()
-            return response.content
-        except (ConnectionError, Timeout) as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            if attempt < retries - 1:
-                time.sleep(delay)  # Ждем перед повторной попыткой
-            else:
-                raise
+    if path.startswith('http://') or path.startswith('https://'):
+        for attempt in range(retries):
+            try:
+                response = requests.get(path, timeout=10)  # Установим тайм-аут
+                response.raise_for_status()
+                return response.content
+            except (ConnectionError, Timeout) as e:
+                print(f"Attempt {attempt + 1} failed: {e}")
+                if attempt < retries - 1:
+                    time.sleep(delay)  # Ждем перед повторной попыткой
+                else:
+                    raise
+    
+    return None
 
 def detect_xpath(xml_content):
     # Список известных XPath шаблонов
