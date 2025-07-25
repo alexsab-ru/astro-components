@@ -46,7 +46,7 @@ const checkFiles = (path) => {
 
 const getValue = (data, model, key) => {
   if (data.length) {
-    const item = data.find(d => d.model.toLowerCase().replace(/\s/g, '') === model.toLowerCase().replace(/\s/g, ''));
+    const item = data.find(d => d?.model?.toLowerCase().replace(/\s/g, '') === model.toLowerCase().replace(/\s/g, ''));
     return item ? item[key] : 0;
   }
   return 0;

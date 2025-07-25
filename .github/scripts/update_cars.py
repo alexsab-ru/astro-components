@@ -593,7 +593,8 @@ class CarProcessor:
         # --- Формирование данных для JSON с ценами и скидками из фида ---
         # Группировка и агрегация данных сразу в готовом формате
         brand = car_data.get('mark_id', '')
-        model = car_data.get('folder_id', '')
+        model_full = car_data.get('folder_id', '')
+        model = get_model_info(brand, model_full, 'short')
         key = (brand, model)
         
         if key in self.cars_price_data:
@@ -936,8 +937,9 @@ def main():
 
         # --- Сохранение данных в JSON с ценами и скидками из фида ---
         os.makedirs('src/data', exist_ok=True)
+        sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
         with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
-            json.dump(list(processor.cars_price_data.values()), f, ensure_ascii=False, indent=2)
+            json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
         print("✅ Сохранены данные о ценах в src/data/dealer-models_cars_price.json")
         # --- конец блока ---
         
@@ -1025,8 +1027,9 @@ def main():
 
         # --- Сохранение данных в JSON с ценами и скидками из фида ---
         os.makedirs('src/data', exist_ok=True)
+        sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
         with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
-            json.dump(list(processor.cars_price_data.values()), f, ensure_ascii=False, indent=2)
+            json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
         # --- конец блока ---
 
 if __name__ == "__main__":
