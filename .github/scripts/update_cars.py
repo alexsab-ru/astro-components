@@ -373,6 +373,14 @@ class CarProcessor:
             Dict: Словарь с данными автомобиля
         """
         car_data = {}
+
+        # # 1. Сохраняем все поля из XML как есть
+        # for child in car:
+        #     if child.tag not in ['images', 'image', 'param']:  # обработаем их отдельно
+        #         if child.text:
+        #             car_data[child.tag] = child.text.strip()
+
+        # 2. Применяем field_mapping (перезаписываем нужные поля)
         field_mapping = self.config['field_mapping']
         
         # Извлекаем основные поля
