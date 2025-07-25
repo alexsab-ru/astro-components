@@ -370,8 +370,8 @@ jobs:
         if [[ -d src/content/news ]]; then ls -al src/content/news; fi
         if [[ -d src/content/seo ]]; then ls -al src/content/seo; fi
         if [[ -d src/data ]]; then ls -al src/data; fi
-        if [[ -d tmp/new ]]; then ls -al tmp/new; fi
-        if [[ -d tmp/used_cars ]]; then ls -al tmp/used_cars; fi
+        if [[ -d tmp/feeds/new ]]; then ls -al tmp/feeds/new; fi
+        if [[ -d tmp/feeds/used_cars ]]; then ls -al tmp/feeds/used_cars; fi
 
     - name: Check for changes
       id: check_changes

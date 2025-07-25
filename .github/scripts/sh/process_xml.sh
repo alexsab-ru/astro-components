@@ -7,7 +7,7 @@ show_help() {
     echo "Commands:"
     echo "  getone ENV_VAR [OUTPUT_FILE]     - Get one XML file using specified environment variable"
     echo "  update TYPE [OPTIONS]            - Update cars with specific type"
-    echo "  auto [OPTIONS]                   - Automatically process all XML files in ./tmp/new and ./tmp/used_cars"
+    echo "  auto [OPTIONS]                   - Automatically process all XML files in ./tmp/feeds/new and ./tmp/feeds/used_cars"
     echo "  test TYPE [OPTIONS]              - Run getone and update commands in sequence"
     echo
     echo "Options (can be used with update, auto, test commands):"
@@ -38,7 +38,7 @@ show_help() {
     echo
     echo "Auto Command:"
     echo "  auto [--dev]                     - Automatically scan and process all XML files"
-    echo "                                     in ./tmp/new and ./tmp/used_cars directories"
+    echo "                                     in ./tmp/feeds/new and ./tmp/feeds/used_cars directories"
     echo
     echo "Update Types for 'update':"
     echo "  avito                                   - Update from Avito source"
@@ -275,11 +275,11 @@ handle_auto() {
     export DOMAIN
     
     # Проверяем наличие директорий
-    if [ ! -d "./tmp/new" ] && [ ! -d "./tmp/used_cars" ]; then
-        echo -e "${BGRED}❌ Директории ./tmp/new и ./tmp/used_cars не найдены${Color_Off}"
+    if [ ! -d "./tmp/feeds/new" ] && [ ! -d "./tmp/feeds/used_cars" ]; then
+        echo -e "${BGRED}❌ Директории ./tmp/feeds/new и ./tmp/feeds/used_cars не найдены${Color_Off}"
         echo -e "${BGYELLOW}💡 Убедитесь, что XML файлы размещены в правильных директориях:${Color_Off}"
-        echo "   - Новые автомобили: ./tmp/new/{тип_фида}/cars.xml"
-        echo "   - Б/у автомобили: ./tmp/used_cars/{тип_фида}/cars.xml"
+        echo "   - Новые автомобили: ./tmp/feeds/new/{тип_фида}/cars.xml"
+        echo "   - Б/у автомобили: ./tmp/feeds/used_cars/{тип_фида}/cars.xml"
         echo "   - Поддерживаемые типы: data_cars_car, catalog_vehicles_vehicle, vehicles_vehicle, ads_ad, carcopy_offers_offer, yml_catalog_shop_offers_offer"
         return 1
     fi
@@ -424,34 +424,34 @@ handle_update() {
             python3 .github/scripts/create_cars.py --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "catalog_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "carcopy_offers_offer")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/new/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_catalog_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_carcopy_offers_offer")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/used_cars/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         *)
             echo -e "${BGRED}Error: Unknown update type: $type${Color_Off}"

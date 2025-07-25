@@ -14,15 +14,15 @@ fi
 # В зависимости от режима выбираем переменные
 if [ "$MODE" = "new_cars" ]; then
     # Для новых машин
-    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/new/csv/data.csv}
-    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/new/csv/cars.xml}
+    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/feeds/new/csv/data.csv}
+    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/feeds/new/csv/cars.xml}
     XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-XML_URL_DATA_CARS_CAR}
     CSV_URL=${CSV_URL:-$(grep '^DEALER_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
     QUERY_STRING=${QUERY_STRING:-$(grep '^DEALER_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
 elif [ "$MODE" = "used_cars" ]; then
     # Для машин с пробегом
-    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/used_cars/csv/data.csv}
-    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/used_cars/csv/cars.xml}
+    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/feeds/used_cars/csv/data.csv}
+    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/feeds/used_cars/csv/cars.xml}
     XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-USED_CARS_DATA_CARS_CAR}
     CSV_URL=${CSV_URL:-$(grep '^USED_CARS_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
     QUERY_STRING=${QUERY_STRING:-$(grep '^USED_CARS_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}

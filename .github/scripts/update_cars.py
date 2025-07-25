@@ -835,8 +835,8 @@ def main():
     parser.add_argument('--github_repo', help='GitHub repository in format owner/repo')
     parser.add_argument('--github_path', default='config', help='Path to config directory in GitHub repository')
     parser.add_argument('--gist_id', help='GitHub Gist ID with configuration')
-    parser.add_argument('--auto_scan', action="store_true", help='Automatically scan ./tmp/new and ./tmp/used_cars directories')
-    parser.add_argument('--base_dirs', nargs='*', default=['./tmp/new', './tmp/used_cars'], help='Base directories to scan for XML files')
+    parser.add_argument('--auto_scan', action="store_true", help='Automatically scan ./tmp/feeds/new and ./tmp/feeds/used_cars directories')
+    parser.add_argument('--base_dirs', nargs='*', default=['./tmp/feeds/new', './tmp/feeds/used_cars'], help='Base directories to scan for XML files')
     
     args = parser.parse_args()
     config = vars(args)
