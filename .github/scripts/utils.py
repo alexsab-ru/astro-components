@@ -182,9 +182,9 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thum
                 new_height = int(new_width / aspect_ratio)
                 resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
                 resized_image.save(output_path, "WEBP")
-                # print(f"   ✅ Создано превью: {relative_output_path}")
-            # else:
-                # print(f"   ⚠️ Файл уже существует: {relative_output_path} или пропущен флагом skip_thumbs: {skip_thumbs}")
+                print(f"   ✅ Создано превью: {relative_output_path}")
+            else:
+                print(f"   ⚠️ Файл уже существует: {relative_output_path} или пропущен флагом skip_thumbs: {skip_thumbs}")
 
             # Добавление относительного пути файла в списки
             new_or_existing_files.append(relative_output_path)
