@@ -595,20 +595,21 @@ class CarProcessor:
         brand = car_data.get('mark_id', '')
         model_full = car_data.get('folder_id', '')
         model = get_model_info(brand, model_full, 'short')
-        key = (brand, model)
-        
-        if key in self.cars_price_data:
-            # Обновляем минимальную цену и максимальную скидку
-            self.cars_price_data[key]['price'] = min(self.cars_price_data[key]['price'], sale_price)
-            self.cars_price_data[key]['benefit'] = max(self.cars_price_data[key]['benefit'], max_discount)
-        else:
-            # Создаем новый объект в готовом для JSON формате
-            self.cars_price_data[key] = {
-                'brand': brand,
-                'model': model,
-                'price': sale_price,
-                'benefit': max_discount
-            }
+        if not model is None:
+            key = (brand, model)
+            
+            if key in self.cars_price_data:
+                # Обновляем минимальную цену и максимальную скидку
+                self.cars_price_data[key]['price'] = min(self.cars_price_data[key]['price'], sale_price)
+                self.cars_price_data[key]['benefit'] = max(self.cars_price_data[key]['benefit'], max_discount)
+            else:
+                # Создаем новый объект в готовом для JSON формате
+                self.cars_price_data[key] = {
+                    'brand': brand,
+                    'model': model,
+                    'price': sale_price,
+                    'benefit': max_discount
+                }
         # --- конец блока ---
 
         # get info from ./src/data/settings.json
