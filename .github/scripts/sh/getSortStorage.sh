@@ -8,7 +8,13 @@ fi
 # Проверяем, что CSV_URL установлен
 if [[ ! "$CSV_URL" =~ ^https?:// ]]; then
     echo "Error: SORT_STORAGE_CSV_URL is not found or empty"
-    exit 0
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
 fi
 
 # Устанавливаем остальные переменные

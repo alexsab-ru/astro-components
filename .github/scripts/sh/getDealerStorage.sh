@@ -8,7 +8,13 @@ fi
 # Проверяем, что CSV_URL установлен
 if [[ ! "$CSV_URL" =~ ^https?:// ]]; then
     echo "Error: DEALER_STORAGE_CSV_URL or USED_CARS_STORAGE_CSV_URL is not found or empty"
-    exit 0
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
 fi
 
 # Если QUERY_STRING не установлен, пытаемся получить его из .env
@@ -19,7 +25,13 @@ fi
 # Проверяем, что QUERY_STRING установлен
 if [ -z "$QUERY_STRING" ]; then
     echo "Error: DEALER_STORAGE_CSV_COLUMN or USED_CARS_STORAGE_CSV_COLUMN is not found"
-    exit 0
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
 fi
 
 # Кодируем QUERY_STRING для URL
@@ -65,5 +77,11 @@ if [ -n "$document_id" ] && [ -n "$gid" ]; then
     fi
 else
     echo "Ошибка: URL не соответствует ожидаемому формату." >&2
-    exit 1
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
 fi
