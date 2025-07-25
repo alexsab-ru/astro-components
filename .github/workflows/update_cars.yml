@@ -143,10 +143,85 @@ jobs:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
 
-    - name: Get All XML in tmp folder
+    - name: Get cars data_cars_car XML
+      if: ${{ vars.XML_URL_DATA_CARS_CAR }}
       run: |
-        pnpm run getAllNewCars
-        pnpm run getAllUsedCars
+        pnpm getOne_XML_URL_DATA_CARS_CAR
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
+
+    - name: Get cars catalog_vehicles_vehicle XML
+      if: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_XML_URL_CATALOG_VEHICLES_VEHICLE
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
+
+    - name: Get cars vehicles_vehicle XML
+      if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_XML_URL_VEHICLES_VEHICLE
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+
+    - name: Get cars ads_ad XML
+      if: ${{ vars.XML_URL_ADS_AD }}
+      run: |
+        pnpm getOne_XML_URL_ADS_AD
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_ADS_AD }}
+
+    - name: Get cars carcopy_offers_offer XML
+      if: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
+      run: |
+        pnpm getOne_XML_URL_CARCOPY_OFFERS_OFFER
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
+
+    - name: Get used_cars data_cars_car XML
+      if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+      run: |
+        pnpm getOne_USED_CARS_DATA_CARS_CAR
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+
+    - name: Get used_cars catalog_vehicles_vehicle XML
+      if: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_USED_CARS_CATALOG_VEHICLES_VEHICLE
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
+
+    - name: Get used_cars vehicles_vehicle XML
+      if: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_USED_CARS_VEHICLES_VEHICLE
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
+
+    - name: Get used_cars ads_ad XML
+      if: ${{ vars.USED_CARS_ADS_AD }}
+      run: |
+        pnpm getOne_USED_CARS_ADS_AD
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_ADS_AD }}
+
+    - name: Get used_cars carcopy_offers_offer XML
+      if: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
+      run: |
+        pnpm getOne_USED_CARS_CARCOPY_OFFERS_OFFER
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
 
     - name: Get air storage
       if: ${{ vars.AIR_STORAGE_CSV_URL }}
