@@ -152,9 +152,33 @@ parse_options() {
     printf 'ARG:%s\n' "${remaining_args[@]}"
 }
 
+# Get variable from .env by name
+get_var_from_env() {
+    local var_name=$1
+    local value="${!var_name}"
+    if [ -n "$value" ]; then
+        echo "$value"
+        return 0
+    fi
+}
+
 
 # Get domain from .env
 get_domain() {
+
+    # 1. Пробуем получить из окружения
+    local value=$(get_var_from_env "DOMAIN")
+    if [ -n "$value" ]; then
+        echo "$value"
+        return 0
+    fi
+
+    # 2. Если не найдено — ищем в .env с нужными преобразованиями
+    if [ ! -f ".env" ]; then
+        echo -e "${BGRED}Error: .env file not found${Color_Off}" >&2
+        return 1
+    fi
+
     DOMAIN=$(grep '^DOMAIN=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^"//; s/"$//')
     if [ -z "$DOMAIN" ]; then
         echo -e "${BGRED}Error: DOMAIN not found in .env file${Color_Off}"
@@ -169,7 +193,7 @@ get_xml_url() {
     local var_name=$1
 
     # 1. Пробуем получить из окружения
-    local value="${!var_name}"
+    local value=$(get_var_from_env "$var_name")
     if [ -n "$value" ]; then
         echo "$value"
         return 0
