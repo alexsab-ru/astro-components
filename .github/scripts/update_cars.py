@@ -996,17 +996,6 @@ def main():
                         os.remove(filepath)
                         print(f"🗑️ Удален неиспользуемый файл: {filepath}")
         
-        if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
-            print("❌ Найдены ошибки 404")
-
-        # --- Сохранение данных в JSON с ценами и скидками из фида ---
-        os.makedirs('src/data', exist_ok=True)
-        sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
-        with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
-            json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
-        print("✅ Сохранены данные о ценах в src/data/dealer-models_cars_price.json")
-        # --- конец блока ---
-        
     else:
         # Режим обработки одного файла (оригинальная логика, но с новой обработкой)
         print(f"📄 Режим обработки одного файла: {args.input_file}")
@@ -1103,16 +1092,16 @@ def main():
             filepath = os.path.join(args.cars_dir, existing_file)
             if filepath not in processor.existing_files:
                 os.remove(filepath)
-        
-        if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
-            print("❌ Найдены ошибки 404")
+    
+    if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
+        print("❌ Найдены ошибки 404")
 
-        # --- Сохранение данных в JSON с ценами и скидками из фида ---
-        os.makedirs('src/data', exist_ok=True)
-        sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
-        with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
-            json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
-        # --- конец блока ---
+    # --- Сохранение данных в JSON с ценами и скидками из фида ---
+    os.makedirs('src/data', exist_ok=True)
+    sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
+    with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
+        json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
+    # --- конец блока ---
 
 if __name__ == "__main__":
     main()
