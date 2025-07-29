@@ -5,12 +5,13 @@ caption: Записаться в сервисный центр
 breadcrumb: Онлайн-запись на сервис
 slug: "onlayn-zapis-na-servis"
 image: "https://cdn.alexsab.ru/for-owners/geely/onlayn-zapis-na-servis/thumb.webp"
-description: "Запись на сервис автомобилей Geely в Саратове"
+description: "Запись на сервис автомобилей Geely в Городе"
 ---
 import { AGREE_LABEL } from '@/const';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common, brand } = settings;
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
-import settings from '@/data/settings.json';
 
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
 import Button from '@/components/Button/Button.astro';
@@ -18,9 +19,7 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
 import modelsData from '@/data/models.json';
-export const { models } = modelsData;
-
-export const { site_name, phone_common, brand } = settings;
+export const {models} = modelsData;
 
 export const from = '01.07.2024';
 export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
