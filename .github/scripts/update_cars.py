@@ -985,16 +985,32 @@ def main():
                 # Очистка превью для категории
                 cleanup_unused_thumbs(processor.current_thumbs, thumbs_dir)
         
-        # Очистка неиспользуемых файлов для каждой категории
+        # Перенос содержимого из временных папок в основные папки для каждой категории
+        print("📁 Перенос файлов из временных папок в основные...")
         for category_type in ['new', 'used']:
-            cars_dir = category_configs[category_type]['cars_dir']
+            category_config = category_configs[category_type]
+            temp_cars_dir = category_config['temp_cars_dir']
+            cars_dir = category_config['cars_dir']
             
-            if os.path.exists(cars_dir):
-                for existing_file in os.listdir(cars_dir):
-                    filepath = os.path.join(cars_dir, existing_file)
-                    if filepath not in processor.existing_files:
-                        os.remove(filepath)
-                        print(f"🗑️ Удален неиспользуемый файл: {filepath}")
+            if os.path.exists(temp_cars_dir) and os.listdir(temp_cars_dir):
+                # Удаляем старое содержимое папки cars_dir
+                if os.path.exists(cars_dir):
+                    shutil.rmtree(cars_dir)
+                    print(f"   Удалено старое содержимое: {cars_dir}")
+                
+                # Создаем папку cars_dir заново
+                os.makedirs(cars_dir, exist_ok=True)
+                
+                # Копируем все файлы из temp_cars_dir в cars_dir
+                for file_name in os.listdir(temp_cars_dir):
+                    src_file = os.path.join(temp_cars_dir, file_name)
+                    dst_file = os.path.join(cars_dir, file_name)
+                    shutil.copy2(src_file, dst_file)
+                    print(f"   Скопирован файл: {file_name}")
+                
+                print(f"✅ Перенесено {len(os.listdir(temp_cars_dir))} файлов для категории {category_type}")
+            else:
+                print(f"⚠️ Временная папка {temp_cars_dir} пуста или не существует для категории {category_type}")
         
     else:
         # Режим обработки одного файла (оригинальная логика, но с новой обработкой)
@@ -1085,13 +1101,33 @@ def main():
         tree = ET.ElementTree(data_root)
         tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
         
-        # Очистка
+        # Очистка превью
         cleanup_unused_thumbs(processor.current_thumbs, config['thumbs_dir'])
         
-        for existing_file in os.listdir(args.cars_dir):
-            filepath = os.path.join(args.cars_dir, existing_file)
-            if filepath not in processor.existing_files:
-                os.remove(filepath)
+        # Перенос содержимого из временной папки в основную папку
+        print("📁 Перенос файлов из временной папки в основную...")
+        temp_cars_dir = config['temp_cars_dir']
+        cars_dir = config['cars_dir']
+        
+        if os.path.exists(temp_cars_dir) and os.listdir(temp_cars_dir):
+            # Удаляем старое содержимое папки cars_dir
+            if os.path.exists(cars_dir):
+                shutil.rmtree(cars_dir)
+                print(f"   Удалено старое содержимое: {cars_dir}")
+            
+            # Создаем папку cars_dir заново
+            os.makedirs(cars_dir, exist_ok=True)
+            
+            # Копируем все файлы из temp_cars_dir в cars_dir
+            for file_name in os.listdir(temp_cars_dir):
+                src_file = os.path.join(temp_cars_dir, file_name)
+                dst_file = os.path.join(cars_dir, file_name)
+                shutil.copy2(src_file, dst_file)
+                print(f"   Скопирован файл: {file_name}")
+            
+            print(f"✅ Перенесено {len(os.listdir(temp_cars_dir))} файлов")
+        else:
+            print(f"⚠️ Временная папка {temp_cars_dir} пуста или не существует")
     
     if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
         print("❌ Найдены ошибки 404")
