@@ -1,6 +1,182 @@
 <?xml version='1.0' encoding='utf-8'?>
 <data>
   <cars><car>
+			<unique_id>37fef68fd6cf531cde61d17f9f306dc8</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Atlas, II</folder_id>
+			<modification_id>2.0 AMT (200 л.с.)</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>14</run>
+			<year>2024</year>
+			<price>3717190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>263000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB3FX1S68RB107396</vin>
+			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
+
+B наличии HOBЫЙ ATLАS , 2024 года, в кoмплeктации Flаgshiр
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Цена указана с учётом максимальной выгоды.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
+
+Geely Atlas II, 2024 год
+
+Geely Atlas II — это воплощение комфорта и безопасности на дороге. Этот автомобиль оснащён всем необходимым для комфортных поездок по городу и за его пределами.
+
+Комфорт и удобство
+
+Благодаря просторному салону и удобным сиденьям с электрорегулировкой, вы сможете наслаждаться каждой поездкой. Двухзонный климат-контроль обеспечит идеальный микроклимат в салоне, а подогрев всех сидений сделает даже самые холодные дни приятными.
+
+Безопасность
+
+Система курсовой стабилизации, антиблокировочная система тормозов и подушки безопасности обеспечивают высокий уровень безопасности. А система контроля за полосой движения и система предотвращения столкновения помогут избежать опасных ситуаций на дороге.
+
+Технологии
+
+Geely Atlas II оснащён современными технологиями, которые делают вождение более приятным и безопасным. Адаптивный круиз-контроль, камера 360, система доступа без ключа и другие функции сделают вашу поездку максимально комфортной.
+
+Дизайн
+
+Элегантный дизайн и стильные детали, такие как светодиодные фары, 20-дюймовые диски и панорамная крыша, придают Geely Atlas II особый шарм.
+
+Не упустите возможность стать обладателем этого замечательного автомобиля!</description>
+			<images>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/13500a3c5bc5b8c994296d932386cd40.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/5ace1ddc2407efb970a3546509a86d5d.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0670622cc488bfc5067444169db04737.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0417857bf1f636e587bb10ff209990dd.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/930d55eceaa2d9f5c752b91caf3db433.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/77f28aedf2b94a07d049becbdc8b3c8a.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/2a1a0ca9951a9384e46fbb41e670fc9e.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0c62e9062e1f65b13a99d094b955d6a9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/cd474a160229ec3997cc09bb98106449.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0e2d7bd2ea9ffa678addaba172e3c4b9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/f40b89f24b6d072c124cfef674f9691c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/00dcf7c8ad88d9dde7d7ef032645c061.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/60d7530f2b18b2a99d4f74ad526b2bae.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>513000</max_discount><priceWithDiscount>3204190</priceWithDiscount><sale_price>3204190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-amt-200-лс-flagship-белый-2024/</url></car>
+		<car>
+			<unique_id>26d10b69768a7a71367ddde82867c706</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Atlas, II</folder_id>
+			<modification_id>2.0 AMT (200 л.с.)</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серебряный</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>5</run>
+			<year>2024</year>
+			<price>3717190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>263000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB3FX1S65RB150142</vin>
+			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
+
+B наличии HOBЫЙ ATLАS , 2024 года, в кoмплeктации Flаgshiр
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Цена указана с учётом максимальной выгоды.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
+
+Geely Atlas II, 2024 год
+
+Geely Atlas II — это воплощение комфорта и безопасности на дороге. Этот автомобиль оснащён всем необходимым для комфортных поездок по городу и за его пределами.
+
+Комфорт и удобство
+
+Благодаря просторному салону и удобным сиденьям с электрорегулировкой, вы сможете наслаждаться каждой поездкой. Двухзонный климат-контроль обеспечит идеальный микроклимат в салоне, а подогрев всех сидений сделает даже самые холодные дни приятными.
+
+Безопасность
+
+Система курсовой стабилизации, антиблокировочная система тормозов и подушки безопасности обеспечивают высокий уровень безопасности. А система контроля за полосой движения и система предотвращения столкновения помогут избежать опасных ситуаций на дороге.
+
+Технологии
+
+Geely Atlas II оснащён современными технологиями, которые делают вождение более приятным и безопасным. Адаптивный круиз-контроль, камера 360, система доступа без ключа и другие функции сделают вашу поездку максимально комфортной.
+
+Дизайн
+
+Элегантный дизайн и стильные детали, такие как светодиодные фары, 20-дюймовые диски и панорамная крыша, придают Geely Atlas II особый шарм.
+
+Не упустите возможность стать обладателем этого замечательного автомобиля!</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>513000</max_discount><priceWithDiscount>3204190</priceWithDiscount><sale_price>3204190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-amt-200-лс-flagship-серебряный-2024/</url></car>
+		<car>
 			<unique_id>49cbe2d30d083059641d6c2cd998e59b</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Atlas, II</folder_id>
@@ -12,7 +188,7 @@
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>2</run>
+			<run>3</run>
 			<year>2024</year>
 			<price>3917190</price>
 			<credit_discount>0</credit_discount>
@@ -101,111 +277,6 @@ Geely Atlas II — это идеальный выбор для тех, кто и
 			</multiposting>
 		<max_discount>710000</max_discount><priceWithDiscount>3207190</priceWithDiscount><sale_price>3207190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-at-200-лс-4wd-flagship-белый-2024/</url></car>
 		<car>
-			<unique_id>12dbffbf29e68a7bca613e3a151b688c</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Atlas, II</folder_id>
-			<modification_id>2.0 AT (200 л.с.) 4WD</modification_id>
-			<complectation_name>Flagship</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>СЕРЕБРИСТЫЙ</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>2</run>
-			<year>2024</year>
-			<price>3917190</price>
-			<credit_discount>0</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>263000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<currency>RUR</currency>
-			<vin>LB3FX1S14RB169091</vin>
-			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
-
-B наличии HOBЫЙ ATLАS , 2024 года, в кoмплeктации Flаgshiр
-
-До 31.07.2025 действуют следующие предложения:
-
-✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
-
-✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
-
-✅ ШИННЫЙ ОТЕЛЬ*
-
-✅ PACCPОЧКA от 0,01%
-
-✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
-
-✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
-
-✅ ГAРАHTИЯ 5 ЛEТ
-
-* Подробности в отделе продаж.
-
-Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
-
-Цена указана с учётом максимальной выгоды.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
-
-Geely Atlas II, 2024 год
-
-Geely Atlas II — это сочетание стиля, комфорта и передовых технологий. Этот автомобиль создан для тех, кто ценит качество и удобство в каждой поездке.
-
-Дизайн и комфорт
-
-Элегантный дизайн Geely Atlas II подчёркивает его статус и привлекает внимание на дороге. Просторный салон с отделкой из искусственной кожи обеспечивает комфорт как водителю, так и пассажирам.
-
-Технологии
-
-Geely Atlas II оснащён передовыми технологиями, которые делают вождение более приятным и безопасным. Двухзонный климат-контроль, адаптивный круиз-контроль, система старт-стоп и другие функции обеспечивают комфорт и безопасность на дороге.
-
-Комфорт и удобство
-
-Электрорегулировка сидений, обогрев всех сидений, подогрев рулевого колеса и другие опции делают каждую поездку максимально комфортной. А панорамная крыша и люк позволяют наслаждаться видами и свежим воздухом.
-
-Безопасность
-
-Система курсовой стабилизации, антиблокировочная система тормозов, подушки безопасности и другие функции обеспечивают высокий уровень безопасности как для водителя, так и для пассажиров.
-
-Дополнительные опции
-
-Центральный замок, иммобилайзер, сигнализация и другие дополнительные опции обеспечивают безопасность автомобиля.
-
-Geely Atlas II — это идеальный выбор для тех, кто ищет комфорт, безопасность и передовые технологии в одном автомобиле.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/d7111072d33679304c4296bb83a5238d.jpg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/e81ed5296e7a68b8631dfa372cc4dd5b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/52665fb97f7027e14b9ffc7bca22aed2.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/831949e6bf5d7b0292dab83fe10d48f8.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/b399c8fc9f27d6ae66f515627903858b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/5b2be24fea05edf1d1927c33c6344a83.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/2ddda5ed5271b8ce304d74f98fb040d7.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/cacceef6f51ecc97f25faafc4bf00b64.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/1b6329c7473fb6aba4efdfd7160bc33a.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/1eec1967045b000494e534da9a54ea2c.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/99245fbf28b4f72a68d3e5b0a6333cfb.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/34cf7ff69ca0cb2e1d27c3377463c7cf.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/7415c16ffe8c010de226d743707b389f.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/46ff1bf6b4ca3031b5cf43f71aa7458b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/01bcaa880aa6e65e177e14c5273e44ad.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/8a9631e238f7791f6ff0a38b73f1e977.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/4bd7f9b4119f0ab217233d1157ae1236.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/103d07f97eca5d9ccf69716cb10bd66b.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S14RB169091/31cea82e4153a20c864c1537789dfe27.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<max_discount>710000</max_discount><priceWithDiscount>3207190</priceWithDiscount><sale_price>3207190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-at-200-лс-4wd-flagship-серебристый-2024/</url></car>
-		<car>
 			<unique_id>e1fd104d5d830f62c2a357b3fe86fde8</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Atlas, II</folder_id>
@@ -217,7 +288,7 @@ Geely Atlas II — это идеальный выбор для тех, кто и
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>2</run>
+			<run>3</run>
 			<year>2024</year>
 			<price>3917190</price>
 			<credit_discount>0</credit_discount>
@@ -305,102 +376,6 @@ Geely Atlas II — это идеальный выбор для тех, кто и
 			</multiposting>
 		<max_discount>710000</max_discount><priceWithDiscount>3207190</priceWithDiscount><sale_price>3207190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-at-200-лс-4wd-flagship-черный-2024/</url></car>
 		<car>
-			<unique_id>49482c783828b1bedb52299a437710f8</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Atlas, II</folder_id>
-			<modification_id>2.0 AT (200 л.с.) 4WD</modification_id>
-			<complectation_name>Flagship Sport</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>6</run>
-			<year>2024</year>
-			<price>4017190</price>
-			<credit_discount>0</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>263000</tradein_discount>
-			<optional_discount>230000</optional_discount>
-			<currency>RUR</currency>
-			<vin>LB3FX1S12RB133805</vin>
-			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
-
-B наличии HOBЫЙ ATLАS, в кoмплeктации Flаgshiр Sport.
-
-До 31.07.2025 действуют следующие предложения:
-
-✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
-
-✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
-
-✅ ШИННЫЙ ОТЕЛЬ*
-
-✅ PACCPОЧКA от 0,01%
-
-✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
-
-✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
-
-✅ ГAРАHTИЯ 5 ЛEТ
-
-* Подробности в отделе продаж.
-
-Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
-
-Цена указана с учётом максимальной выгоды.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
-
-Geely Atlas II, 2024 год
-
-Geely Atlas II — это воплощение комфорта и безопасности на дороге. Этот автомобиль оснащён всем необходимым для комфортных поездок по городу и за его пределами.
-
-Комфорт и удобство
-
-Благодаря просторному салону и удобным сиденьям с электрорегулировкой, вы сможете наслаждаться каждой поездкой. Двухзонный климат-контроль обеспечит идеальный микроклимат в салоне, а подогрев всех сидений сделает даже самые холодные дни приятными.
-
-Безопасность
-
-Система курсовой стабилизации, антиблокировочная система тормозов и подушки безопасности обеспечивают высокий уровень безопасности. А система контроля за полосой движения и система предотвращения столкновения помогут избежать опасных ситуаций на дороге.
-
-Технологии
-
-Geely Atlas II оснащён современными технологиями, которые делают вождение более приятным и безопасным. Адаптивный круиз-контроль, камера 360, система доступа без ключа и другие функции сделают вашу поездку максимально комфортной.
-
-Дизайн
-
-Элегантный дизайн и стильные детали, такие как светодиодные фары, 20-дюймовые диски и панорамная крыша, придают Geely Atlas II особый шарм.
-
-Не упустите возможность стать обладателем этого замечательного автомобиля!</description>
-			<images>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/cb847dc7681e253d848867f4ac947c74.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/f49f84173ff29809d7182798a32a5d65.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/7bb7a1db442409a30bed4da8b4858054.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/4870e76cec042f539e633138c39e2ad4.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/4c0cd8055cf1309782275d8c13811167.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/3b237c6f2d9d8323af93a4e6587a74e2.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/a5becd0466a7904e61c8fa7bb5783aa9.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/ca919ddb1a6e4ba2a5524bd53ae55382.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/514ea85edf70e0f3a87c3726938f3f15.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/bfa408206942639b10268cc8542c0318.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/436d390aa9c0c9666b73c73f6d00c53f.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/a020cda56d6b34c3596ef66c71925f0a.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/33580b56e31f067a81ebafeec0aba467.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/446af5f7eee0144dc12bfffa44dce6ee.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<max_discount>723000</max_discount><priceWithDiscount>3294190</priceWithDiscount><sale_price>3294190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-at-200-лс-4wd-flagship-sport-белый-2024/</url></car>
-		<car>
 			<unique_id>77b74cd5eadfc44c3310c3f6322ae99e</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Atlas, II</folder_id>
@@ -417,8 +392,8 @@ Geely Atlas II оснащён современными технологиями,
 			<price>4017190</price>
 			<credit_discount>0</credit_discount>
 			<insurance_discount>0</insurance_discount>
-			<tradein_discount>263000</tradein_discount>
-			<optional_discount>230000</optional_discount>
+			<tradein_discount>0</tradein_discount>
+			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
 			<vin>LB3FX1S17RB162278</vin>
 			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
@@ -496,7 +471,221 @@ Geely Atlas II оснащён современными технологиями,
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>723000</max_discount><priceWithDiscount>3294190</priceWithDiscount><sale_price>3294190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-at-200-лс-4wd-flagship-sport-серебряный-2024/</url></car>
+		<max_discount>0</max_discount><priceWithDiscount>4017190</priceWithDiscount><sale_price>4017190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-at-200-лс-4wd-flagship-sport-серебряный-2024/</url></car>
+		<car>
+			<unique_id>49482c783828b1bedb52299a437710f8</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Atlas, II</folder_id>
+			<modification_id>2.0 AT (200 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship Sport</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>7</run>
+			<year>2024</year>
+			<price>4017190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>150000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB3FX1S12RB133805</vin>
+			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
+
+B наличии HOBЫЙ ATLАS, в кoмплeктации Flаgshiр Sport.
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Цена указана с учётом максимальной выгоды.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
+
+Geely Atlas II, 2024 год
+
+Geely Atlas II — это воплощение комфорта и безопасности на дороге. Этот автомобиль оснащён всем необходимым для комфортных поездок по городу и за его пределами.
+
+Комфорт и удобство
+
+Благодаря просторному салону и удобным сиденьям с электрорегулировкой, вы сможете наслаждаться каждой поездкой. Двухзонный климат-контроль обеспечит идеальный микроклимат в салоне, а подогрев всех сидений сделает даже самые холодные дни приятными.
+
+Безопасность
+
+Система курсовой стабилизации, антиблокировочная система тормозов и подушки безопасности обеспечивают высокий уровень безопасности. А система контроля за полосой движения и система предотвращения столкновения помогут избежать опасных ситуаций на дороге.
+
+Технологии
+
+Geely Atlas II оснащён современными технологиями, которые делают вождение более приятным и безопасным. Адаптивный круиз-контроль, камера 360, система доступа без ключа и другие функции сделают вашу поездку максимально комфортной.
+
+Дизайн
+
+Элегантный дизайн и стильные детали, такие как светодиодные фары, 20-дюймовые диски и панорамная крыша, придают Geely Atlas II особый шарм.
+
+Не упустите возможность стать обладателем этого замечательного автомобиля!</description>
+			<images>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/cb847dc7681e253d848867f4ac947c74.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/f49f84173ff29809d7182798a32a5d65.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/7bb7a1db442409a30bed4da8b4858054.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/4870e76cec042f539e633138c39e2ad4.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/4c0cd8055cf1309782275d8c13811167.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/3b237c6f2d9d8323af93a4e6587a74e2.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/a5becd0466a7904e61c8fa7bb5783aa9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/ca919ddb1a6e4ba2a5524bd53ae55382.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/514ea85edf70e0f3a87c3726938f3f15.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/bfa408206942639b10268cc8542c0318.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/436d390aa9c0c9666b73c73f6d00c53f.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/a020cda56d6b34c3596ef66c71925f0a.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/33580b56e31f067a81ebafeec0aba467.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S12RB133805/446af5f7eee0144dc12bfffa44dce6ee.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>150000</max_discount><priceWithDiscount>3867190</priceWithDiscount><sale_price>3867190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-at-200-лс-4wd-flagship-sport-белый-2024/</url></car>
+		<car>
+			<unique_id>5d6a73ad025da1e36d23e0a053d1fca4</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Cityray</folder_id>
+			<modification_id>1.5 AMT (147 л.с.)</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>6</run>
+			<year>2024</year>
+			<price>3214190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>190000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB3G43S95RX306850</vin>
+			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
+
+B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flаgshiр.
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Цена указана с учётом максимальной выгоды.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>653000</max_discount><priceWithDiscount>2561190</priceWithDiscount><sale_price>2561190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-белый-2024/</url></car>
+		<car>
+			<unique_id>5ed96faa8cf6edbc4a85fafc1c00c0eb</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Cityray</folder_id>
+			<modification_id>1.5 AMT (147 л.с.)</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>5</run>
+			<year>2024</year>
+			<price>3214190</price>
+			<credit_discount>200000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>190000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB3G43S93RX307723</vin>
+			<description>ПAРTHEP АВТО - oфициальный дилер GЕELY в гоpодe Opенбуpге.
+
+B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flаgshiр.
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Цена указана с учётом максимальной выгоды.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>653000</max_discount><priceWithDiscount>2561190</priceWithDiscount><sale_price>2561190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>5ed72c203b9f558c7c4dfc85c41d5a37</unique_id>
 			<mark_id>Geely</mark_id>
@@ -651,7 +840,7 @@ B наличии HOBЫЙ Cityray , 2024 года, в кoмплeктации Flа
 			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>10</run>
+			<run>11</run>
 			<year>2024</year>
 			<price>2849990</price>
 			<credit_discount>0</credit_discount>
@@ -787,6 +976,157 @@ B наличии HOBЫЙ Cityray, в кoмплeктации Luxury.
 			</multiposting>
 		<max_discount>503000</max_discount><priceWithDiscount>2591190</priceWithDiscount><sale_price>2591190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-cityray-15-amt-147-лс-luxury-белый-2024/</url></car>
 		<car>
+			<unique_id>b589e2965794c911691da1e142669ee2</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Coolray, I Рестайлинг</folder_id>
+			<modification_id>1.5 AMT (147 л.с.)</modification_id>
+			<complectation_name>Exclusive</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>6</run>
+			<year>2024</year>
+			<price>3139190</price>
+			<credit_discount>100000</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>200000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB37622Z4RX543849</vin>
+			<description>ПAРTНЕP - новый официальный дилер GЕELY в гоpодe Oрeнбургe.
+
+В наличии нoвый Обновленный Geely COOLRAY, 2024 гoдa, в комплектации EXCLUSIVE.
+
+✅ ГАPAHТИЯ 5 ЛET
+
+✅ КPEДИT БЕЗ ПEРВOHAЧАЛЬHOГО BЗНОСА
+
+✅ PАССPOЧКA
+
+✅ BЫГОДНЫЙ ОБМЕH ВАШEГО АВTОМOБИЛЯ HА НОВЫЙ
+
+Стoимoсть автoмoбиля 2 995 990 рублей (без учета установленного дополнительного оборудования)
+
+Цена указана с учётом максимальной выгоды.
+
+Если новый GЕELY , то в GЕELY ПАPTHEP.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
+
+Geely Coolray I Рестайлинг, 2024
+
+Geely Coolray — идеальный выбор для тех, кто ищет стильный и функциональный автомобиль. Эта модель сочетает в себе современный дизайн, передовые технологии и отличную динамику.
+
+Преимущества:
+
+Двигатель: бензиновый, объёмом 1,5 литра и мощностью 147 лошадиных сил, обеспечивает отличную динамику и экономичность.
+
+Коробка передач: роботизированная, обеспечивает плавное и точное переключение передач.
+
+Комфорт: климат-контроль, регулировка руля по высоте и вылету, подогрев всех сидений, электростеклоподъёмники, светодиодные фары и диски R18 создают комфортные условия для водителя и пассажиров.
+
+Безопасность: антиблокировочная система тормозов (ABS), система курсовой стабилизации (ESP / ESC / DSC / VSA), подушки безопасности, система контроля слепых зон и другие системы обеспечивают высокий уровень безопасности.
+
+Технологии: адаптивный круиз-контроль, датчик давления в шинах, дистанционный запуск двигателя, запуск двигателя с кнопки, камера 360°, парктроники передний и задний, система автоматической парковки, система доступа без ключа, система старт-стоп и другие технологии делают вождение более удобным и приятным.
+
+Geely Coolray — это автомобиль, который подарит вам удовольствие от вождения и станет надёжным помощником в любых поездках.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>300000</max_discount><priceWithDiscount>2839190</priceWithDiscount><sale_price>2839190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-рестайлинг-15-amt-147-лс-exclusive-серый-2024/</url></car>
+		<car>
+			<unique_id>ee40871ace75b95f6143920ef5d6307f</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Coolray, I</folder_id>
+			<modification_id>1.5 AMT (150 л.с.)</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>9</run>
+			<year>2024</year>
+			<price>3109190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>0</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB37622Z6RX538930</vin>
+			<description>ПAРTНЕP АВТО - официальный дилер GЕELY в гоpодe Oрeнбургe.
+
+В наличии нoвый Обновленный Geely COOLRAY, в комплектации Flagship.
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Цена указана с учётом максимальной выгоды.
+Если новый GЕELY , то в GЕELY ПАPTHEP.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
+
+Geely Coolray I Рестайлинг, 2024
+
+Geely Coolray — идеальный выбор для тех, кто ищет стильный и функциональный автомобиль. Эта модель сочетает в себе современный дизайн, передовые технологии и отличную динамику.
+
+Преимущества:
+
+Двигатель: бензиновый, объёмом 1,5 литра и мощностью 147 лошадиных сил, обеспечивает отличную динамику и экономичность.
+Коробка передач: роботизированная, обеспечивает плавное и точное переключение передач.
+Комфорт: климат-контроль, регулировка руля по высоте и вылету, подогрев всех сидений, электростеклоподъёмники, светодиодные фары и диски R18 создают комфортные условия для водителя и пассажиров.
+Безопасность: антиблокировочная система тормозов (ABS), система курсовой стабилизации (ESP / ESC / DSC / VSA), подушки безопасности, система контроля слепых зон и другие системы обеспечивают высокий уровень безопасности.
+Технологии: адаптивный круиз-контроль, датчик давления в шинах, дистанционный запуск двигателя, запуск двигателя с кнопки, камера 360°, парктроники передний и задний, система автоматической парковки, система доступа без ключа, система старт-стоп и другие технологии делают вождение более удобным и приятным.
+Geely Coolray — это автомобиль, который подарит вам удовольствие от вождения и станет надёжным помощником в любых поездках.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/ffe810f5ca3c537a8b52076617c44faa.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/0ed2700d89338b865d773183f0f3a915.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/de80fa4eb33aaa9d510d09e8305853aa.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/984bd8fee7e70bedae354157c4e2a020.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/93e46d20fc1bef2337b7f451e68251f1.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/d5708001168ed8b0fbe4437d333394e3.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/66238559a8a57c0a2251143c99e751b2.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/a436f8e0991f2efed15d9dc9fa388204.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/be388aeb5d289f5b0f7223b72ee6455f.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/8938ab85188f18ed6de97815716627f3.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>653190</max_discount><priceWithDiscount>2456000</priceWithDiscount><sale_price>2456000</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-15-amt-150-лс-flagship-серый-2024/</url></car>
+		<car>
 			<unique_id>fae369d9d5284a7bfd1a9d061d2e9257</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Coolray, I</folder_id>
@@ -872,88 +1212,6 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<max_discount>653190</max_discount><priceWithDiscount>2456000</priceWithDiscount><sale_price>2456000</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-15-amt-150-лс-flagship-белый-2024/</url></car>
 		<car>
-			<unique_id>ee40871ace75b95f6143920ef5d6307f</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Coolray, I</folder_id>
-			<modification_id>1.5 AMT (150 л.с.)</modification_id>
-			<complectation_name>Flagship</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>8</run>
-			<year>2024</year>
-			<price>3109190</price>
-			<credit_discount>0</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>0</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<currency>RUR</currency>
-			<vin>LB37622Z6RX538930</vin>
-			<description>ПAРTНЕP АВТО - официальный дилер GЕELY в гоpодe Oрeнбургe.
-
-В наличии нoвый Обновленный Geely COOLRAY, в комплектации Flagship.
-
-До 31.07.2025 действуют следующие предложения:
-
-✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
-
-✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
-
-✅ ШИННЫЙ ОТЕЛЬ*
-
-✅ PACCPОЧКA от 0,01%
-
-✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
-
-✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
-
-✅ ГAРАHTИЯ 5 ЛEТ
-
-* Подробности в отделе продаж.
-
-Цена указана с учётом максимальной выгоды.
-Если новый GЕELY , то в GЕELY ПАPTHEP.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
-
-Geely Coolray I Рестайлинг, 2024
-
-Geely Coolray — идеальный выбор для тех, кто ищет стильный и функциональный автомобиль. Эта модель сочетает в себе современный дизайн, передовые технологии и отличную динамику.
-
-Преимущества:
-
-Двигатель: бензиновый, объёмом 1,5 литра и мощностью 147 лошадиных сил, обеспечивает отличную динамику и экономичность.
-Коробка передач: роботизированная, обеспечивает плавное и точное переключение передач.
-Комфорт: климат-контроль, регулировка руля по высоте и вылету, подогрев всех сидений, электростеклоподъёмники, светодиодные фары и диски R18 создают комфортные условия для водителя и пассажиров.
-Безопасность: антиблокировочная система тормозов (ABS), система курсовой стабилизации (ESP / ESC / DSC / VSA), подушки безопасности, система контроля слепых зон и другие системы обеспечивают высокий уровень безопасности.
-Технологии: адаптивный круиз-контроль, датчик давления в шинах, дистанционный запуск двигателя, запуск двигателя с кнопки, камера 360°, парктроники передний и задний, система автоматической парковки, система доступа без ключа, система старт-стоп и другие технологии делают вождение более удобным и приятным.
-Geely Coolray — это автомобиль, который подарит вам удовольствие от вождения и станет надёжным помощником в любых поездках.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/ffe810f5ca3c537a8b52076617c44faa.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/0ed2700d89338b865d773183f0f3a915.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/de80fa4eb33aaa9d510d09e8305853aa.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/984bd8fee7e70bedae354157c4e2a020.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/93e46d20fc1bef2337b7f451e68251f1.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/d5708001168ed8b0fbe4437d333394e3.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/66238559a8a57c0a2251143c99e751b2.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/a436f8e0991f2efed15d9dc9fa388204.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/be388aeb5d289f5b0f7223b72ee6455f.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37622Z6RX538930/8938ab85188f18ed6de97815716627f3.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<max_discount>653190</max_discount><priceWithDiscount>2456000</priceWithDiscount><sale_price>2456000</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-coolray-i-15-amt-150-лс-flagship-серый-2024/</url></car>
-		<car>
 			<unique_id>29b3e570f8d27f4919a20fd37ab13f31</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Emgrand, II</folder_id>
@@ -1021,6 +1279,63 @@ Geely Coolray — это автомобиль, который подарит в�
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<max_discount>560000</max_discount><priceWithDiscount>2103990</priceWithDiscount><sale_price>2103990</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-серый-2024/</url></car>
+		<car>
+			<unique_id>3fa9294085d937e7ec38328aadebbd48</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Monjaro</folder_id>
+			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>нет</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>6</run>
+			<year>2024</year>
+			<price>4852190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>0</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB37852D9RS190828</vin>
+			<description>ПАРТНЕР АВТО - официальный дилер GEELY в городе Оренбурге.
+
+В наличии новый Geely MONJARO, в комплектации Flagship.
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images />
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>4880dfe3c9c95f9a49c8a609102bae31</unique_id>
 			<mark_id>Geely</mark_id>
@@ -1097,18 +1412,18 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
 		<car>
-			<unique_id>99e1a95f96605b110c720a9ffb4d6eb2</unique_id>
+			<unique_id>2b4ba9434b8b015237ea9b61d9c79035</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
 			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
 			<complectation_name>Flagship</complectation_name>
 			<body_type>Внедорожник 5 дв.</body_type>
 			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
+			<color>Белый</color>
+			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>8</run>
+			<run>6</run>
 			<year>2024</year>
 			<price>4852190</price>
 			<credit_discount>0</credit_discount>
@@ -1116,7 +1431,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<tradein_discount>0</tradein_discount>
 			<optional_discount>0</optional_discount>
 			<currency>RUR</currency>
-			<vin>LB37852D8RS273084</vin>
+			<vin>LB37852D9RS201696</vin>
 			<description>ПАРТНЕР АВТО - официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely MONJARO, в комплектации Flagship.
@@ -1148,22 +1463,11 @@ Geely Coolray — это автомобиль, который подарит в�
 Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
 
 Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/255920dc8dee403f2cbd6c2815413c8c.jpg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/80359b899cbd51e96df3bcdb3a483cd4.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/15c2c9bae24c9c1603d8156ccf0e71ee.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/b8ca540a1979103c93a22f194d5ac698.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/e0ac7ba16a4d254ea73e75f4e0d8fa2c.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/86319bac83cb9a12b4d9eb110f964c22.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/3b7782073329bf2b11143efb0d72bc82.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/6b99341f8ee23691fd7111b2c062c0a3.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/e6967804ebd9d80ddc4d69a3e375be4a.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB37852D8RS273084/de078bae2acd74d462660f586d174aa5.jpeg</image>
-			</images>
+			<images />
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
+		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>3db3f5fe1a8ce5662aa8c0bdb1d52b02</unique_id>
 			<mark_id>Geely</mark_id>
@@ -1227,6 +1531,74 @@ Geely Coolray — это автомобиль, который подарит в�
 				<image>https://photo.toyotasever.ru/LB37852D9RS202220/3d30132bd3d7ef7ea42ee479f44cfd9e.jpeg</image>
 				<image>https://photo.toyotasever.ru/LB37852D9RS202220/c5d7badce9e2f1f2014f39d4402ee886.jpeg</image>
 				<image>https://photo.toyotasever.ru/LB37852D9RS202220/371eecbc699adf20410810133229e932.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<max_discount>760000</max_discount><priceWithDiscount>4092190</priceWithDiscount><sale_price>4092190</sale_price><url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
+		<car>
+			<unique_id>99e1a95f96605b110c720a9ffb4d6eb2</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Monjaro</folder_id>
+			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Серый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>8</run>
+			<year>2024</year>
+			<price>4852190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>0</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<currency>RUR</currency>
+			<vin>LB37852D8RS273084</vin>
+			<description>ПАРТНЕР АВТО - официальный дилер GEELY в городе Оренбурге.
+
+В наличии новый Geely MONJARO, в комплектации Flagship.
+
+До 31.07.2025 действуют следующие предложения:
+
+✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
+
+✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
+
+✅ ШИННЫЙ ОТЕЛЬ*
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
+			<images>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/255920dc8dee403f2cbd6c2815413c8c.jpg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/80359b899cbd51e96df3bcdb3a483cd4.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/15c2c9bae24c9c1603d8156ccf0e71ee.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/b8ca540a1979103c93a22f194d5ac698.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/e0ac7ba16a4d254ea73e75f4e0d8fa2c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/86319bac83cb9a12b4d9eb110f964c22.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/3b7782073329bf2b11143efb0d72bc82.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/6b99341f8ee23691fd7111b2c062c0a3.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/e6967804ebd9d80ddc4d69a3e375be4a.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB37852D8RS273084/de078bae2acd74d462660f586d174aa5.jpeg</image>
 			</images>
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
@@ -1393,7 +1765,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>11</run>
+			<run>12</run>
 			<year>2024</year>
 			<price>3567190</price>
 			<credit_discount>0</credit_discount>
@@ -1536,78 +1908,5 @@ Geely Preface I Рестайлинг 2 — выбор тех, кто ищет с
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<max_discount>1183000</max_discount><priceWithDiscount>3310190</priceWithDiscount><sale_price>3310190</sale_price><url>https://geely-partner-orenburg.ru/cars/knewstar-001-20-at-200-лс-4wd-flagship-белый-2024/</url></car>
-		<car>
-			<unique_id>657a2c4591dde4fbec410329fb35d98b</unique_id>
-			<mark_id>KNEWSTAR</mark_id>
-			<folder_id>001</folder_id>
-			<modification_id>2.0 AT (200 л.с.) 4WD</modification_id>
-			<complectation_name>Flagship</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>6</run>
-			<year>2024</year>
-			<price>4393190</price>
-			<credit_discount>0</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>363000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<currency>RUR</currency>
-			<vin>LHA022GD8RB007004</vin>
-			<description>ПАРТНЕР АВТО- официальный дилер бренда KNEWSTAR в городе Оренбурге.
-
-В наличии новый KNEWSTAR 001, в комплектации Flagship.
-
-До 31.07.2025 действуют следующие предложения:
-
-✅ 5 ЛЕТ БЕЗ СЕРВИСНЫХ ЗАБОТ*
-
-✅ ДОПОЛНИТЕЛЬНОЕ ОБОРУДОВАНИЕ*
-
-✅ ШИННЫЙ ОТЕЛЬ*
-
-✅ PACCPОЧКA от 0,01%
-
-✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
-
-✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
-
-✅ ГAРАHTИЯ 5 ЛEТ
-
-* Подробности в отделе продаж.
-
-Если новый KNEWSTAR, то в KNEWSTAR Партнер Оренбург на Загородном шоссе 13/1.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля Knewstar.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.</description>
-			<images>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/ffae8c2a616444d9685b001b40cdba95.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/25e88dab0a104001e63484c9dd45a78e.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/9e1d8e961b8d01f34207979b61dde2b9.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/0402391068882b39392624d3836ce9dd.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/4427071125ec2f1c04e46c0f4e81e7bd.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/9a48359ece5d6e38b3603d79a7ac60a6.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/10fa44bc0c1aefcc332e182c8141a962.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/b6be820c831e7b26dc63c6c9ee845dde.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/1a1c5c57c2c371e717ef6bf3f9867052.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/ae1804084c50ac4ba486c89dfaa76dc3.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/3b4f685526858b069e46600243fd89dd.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/14fe9382f1530de5d8e79232625a7560.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/8e091b875eb9852a3ff679e9092a5947.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/afb7748595eaf710173d2f4b2d71c4fa.jpeg</image>
-				<image>https://photo.toyotasever.ru/LHA022GD8RB007004/059ddcb337a0ccc59ae32dd52336ab9f.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<max_discount>863000</max_discount><priceWithDiscount>3530190</priceWithDiscount><sale_price>3530190</sale_price><url>https://geely-partner-orenburg.ru/cars/knewstar-001-20-at-200-лс-4wd-flagship-серый-2024/</url></car>
 	</cars>
 </data>
