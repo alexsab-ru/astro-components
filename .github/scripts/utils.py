@@ -132,7 +132,7 @@ def process_description(desc_text):
     return result_html
 
 
-def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thumbs=False, count_thumbs=5):
+def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, temp_thumbs_dir, skip_thumbs=False, count_thumbs=5):
     # Ensure count_thumbs is an integer
     # Convert string or other types to integer, with fallback to default value
     try:
@@ -167,6 +167,7 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, skip_thum
             # Формирование имени файла с учетом последних 5 символов
             output_filename = f"thumb_{friendly_url}_{last_5_chars}_{index}.webp"
             output_path = os.path.join(thumbs_dir, output_filename)
+            temp_output_path = os.path.join(temp_thumbs_dir, output_filename)
             relative_output_path = os.path.join(relative_thumbs_dir, output_filename)
 
             # print(f"   📁 Путь к превью: {output_path}")
@@ -638,7 +639,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
         new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
         images.extend(new_images)
     data['images'] = images
-    thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
+    thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['temp_thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
     data['thumbs'] = thumbs_files
 
     # Приводим определённые числовые поля к int, если они есть
@@ -779,7 +780,7 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
         unique_images = list(dict.fromkeys(existing_images + images))
         data['images'] = unique_images
         if 'thumbs' not in data or (len(data['thumbs']) < 5):
-            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
+            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['temp_thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
             data.setdefault('thumbs', []).extend(thumbs_files)
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
 

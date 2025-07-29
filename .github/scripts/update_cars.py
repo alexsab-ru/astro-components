@@ -791,6 +791,7 @@ def main():
     parser.add_argument('--source_type', choices=['data_cars_car', 'vehicles_vehicle', 'carcopy_offers_offer', 'catalog_vehicles_vehicle', 'ads_ad', 'yml_catalog_shop_offers_offer'], help='Type of source data (auto-detected if not specified)')
     parser.add_argument('--path_car_page', default='/cars/', help='Default path to cars pages')
     parser.add_argument('--thumbs_dir', default='public/img/thumbs/', help='Default output directory for thumbnails')
+    parser.add_argument('--temp_thumbs_dir', default='tmp/img/thumbs/', help='Default temp output directory for thumbnails')
     parser.add_argument('--cars_dir', default='src/content/cars', help='Default cars directory')
     parser.add_argument('--temp_cars_dir', default='tmp/content/cars', help='Default temp cars directory')
     parser.add_argument('--input_file', default='cars.xml', help='Input file')
@@ -858,6 +859,7 @@ def main():
                 'cars_dir': 'src/content/used_cars',
                 'temp_cars_dir': 'tmp/content/used_cars',
                 'thumbs_dir': 'public/img/thumbs_used/',
+                'temp_thumbs_dir': 'tmp/img/thumbs_used/',
                 'path_car_page': '/used_cars/',
                 'output_path': './public/used_cars.xml'
             },
@@ -865,6 +867,7 @@ def main():
                 'cars_dir': 'src/content/cars',
                 'temp_cars_dir': 'tmp/content/cars',
                 'thumbs_dir': 'public/img/thumbs/',
+                'temp_thumbs_dir': 'tmp/img/thumbs/',
                 'path_car_page': '/cars/',
                 'output_path': './public/cars.xml'
             }
@@ -873,12 +876,19 @@ def main():
         # Очищаем временные папки до начала обработки
         print("🧹 Очистка временных папок...")
         for category_type, category_config in category_configs.items():
-            temp_dir = category_config['temp_cars_dir']
-            if os.path.exists(temp_dir):
-                shutil.rmtree(temp_dir)
-                print(f"   Удалена временная папка: {temp_dir}")
-            os.makedirs(temp_dir, exist_ok=True)
-            print(f"   Создана временная папка: {temp_dir}")
+            temp_cars_dir = category_config['temp_cars_dir']
+            if os.path.exists(temp_cars_dir):
+                shutil.rmtree(temp_cars_dir)
+                print(f"   Удалена временная папка: {temp_cars_dir}")
+            os.makedirs(temp_cars_dir, exist_ok=True)
+            print(f"   Создана временная папка: {temp_cars_dir}")
+
+            temp_thumbs_dir = category_config['temp_thumbs_dir']
+            if os.path.exists(temp_thumbs_dir):
+                shutil.rmtree(temp_thumbs_dir)
+                print(f"   Удалена временная папка превью: {temp_thumbs_dir}")
+            os.makedirs(temp_thumbs_dir, exist_ok=True)
+            print(f"   Создана временная папка превью: {temp_thumbs_dir}")
         
         # Группируем обработанные автомобили по категориям
         processed_cars_by_category = {'new': [], 'used': []}
