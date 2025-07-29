@@ -1,0 +1,73 @@
+---
+h1: Запись в сервисный центр
+title: Записаться в сервисный центр
+caption: Записаться в сервисный центр
+breadcrumb: Онлайн-запись на сервис
+slug: "onlayn-zapis-na-servis"
+image: "https://cdn.alexsab.ru/for-owners/geely/onlayn-zapis-na-servis/thumb.webp"
+description: "Запись на сервис автомобилей Geely в Саратове"
+---
+import { AGREE_LABEL } from '@/const';
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import settings from '@/data/settings.json';
+
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import FormSelect from '@/components/FormSelect.astro';
+import modelsData from '@/data/models.json';
+export const { models } = modelsData;
+
+export const { site_name, phone_common, brand } = settings;
+
+export const from = '01.07.2024';
+export const to = `${LAST_DAY}.${MONTH}.${YEAR}`;
+
+<picture>
+	<source media="(min-width: 942px)" srcset="https://cdn.alexsab.ru/for-owners/geely/onlayn-zapis-na-servis/banner.webp" />
+	<source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/for-owners/geely/onlayn-zapis-na-servis/thumb.webp" />
+	<img src="https://cdn.alexsab.ru/for-owners/geely/onlayn-zapis-na-servis/banner.webp" class="w-full mb-12" alt="Онлайн-запись на сервис" />
+</picture>
+
+
+<form class="flex flex-col gap-4 max-w-[500px] mx-auto mb-10">
+	<input type="hidden" name="form" value="Запись на сервис" />
+	<input
+		type="email"
+		tabindex="-1"
+		name="email"
+		class="h-0 opacity-0 absolute -z-[100]"
+		placeholder="mail@example.com"
+	/>
+	<FormSelect name="model" placeholder="Выберите модель" options={ models.filter(m => { if(m.show){return {id: m.id, name: m.name}}}) } />
+	<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+	<Input
+		type="tel"
+		name="phone"
+		classes="border-gray-100"
+		placeholder="+7 (999) 999-99-99*"
+		required
+		errorClasses="text-red-500"
+	/>
+
+	<Checkbox
+		name="agree"
+		label={AGREE_LABEL}
+		color="black"
+		required
+		errorClasses="text-red-500 w-full"
+		errorText="Чтобы продолжить, установите флажок"
+	/>
+
+	<input
+		type="checkbox"
+		name="subscribe"
+		class="absolute w-0 h-0 opacity-0 invisible"
+	/>
+
+	<Button view="form-button" classes="w-full" title="Отправить" />
+</form>
+
+<SpecialSalonsInfo dataFormName="Узнать подробнее. Онлайн-запись на сервис" />
