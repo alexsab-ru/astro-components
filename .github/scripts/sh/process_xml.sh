@@ -281,7 +281,7 @@ handle_auto() {
         echo "   - Новые автомобили: ./tmp/feeds/new/{тип_фида}/cars.xml"
         echo "   - Б/у автомобили: ./tmp/feeds/used_cars/{тип_фида}/cars.xml"
         echo "   - Поддерживаемые типы: data_cars_car, catalog_vehicles_vehicle, vehicles_vehicle, ads_ad, carcopy_offers_offer, yml_catalog_shop_offers_offer"
-        return 1
+        return 0
     fi
     
     # Запускаем автоматическую обработку
