@@ -56,13 +56,13 @@ sh .github/scripts/sh/test/test_with_type.sh "avtoxml-Offers-Offer" "avtoxml-Off
 
 ```bash
 # С автоопределением типа
-python .github/scripts/create_cars.py \
+python .github/scripts/update_cars.py \
     --input_file .github/scripts/example/Ads-Ad.xml \
     --output_path .github/scripts/test_results/Ads-Ad.xml \
     --domain localhost:4321
 
 # С явным указанием типа
-python .github/scripts/create_cars.py \
+python .github/scripts/update_cars.py \
     --source_type Ads-Ad \
     --input_file .github/scripts/example/Ads-Ad.xml \
     --output_path .github/scripts/test_results/Ads-Ad.xml \

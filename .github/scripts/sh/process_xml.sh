@@ -421,7 +421,7 @@ handle_update() {
             python3 .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
             ;;
         "xml_url")
-            python3 .github/scripts/create_cars.py --domain="$DOMAIN" $THUMB_ARGS
+            python3 .github/scripts/update_cars.py --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "data_cars_car")
             python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
