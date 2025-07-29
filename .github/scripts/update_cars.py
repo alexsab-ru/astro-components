@@ -619,7 +619,7 @@ class CarProcessor:
             self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id',
                                  'complectation_name', 'color', 'year')
         )
-        print(f"\nУникальный идентификатор: {friendly_url}")
+        print(f"\n\n🆔 Уникальный идентификатор: {friendly_url}")
         
         # Получаем цену из car_data, если она есть, иначе используем 0
         price = int(car_data.get('price', 0) or 0)
@@ -898,7 +898,7 @@ def main():
 
         # Обрабатываем каждый файл
         for xml_file_path, folder_name, category_type in all_xml_files:
-            print(f"\n🚗 Обработка файла: {xml_file_path}")
+            print(f"\n\n🚗 Обработка файла: {xml_file_path}")
             print(f"📂 Папка: {folder_name}, Категория: {category_type}")
             
             # Определяем тип источника
@@ -996,7 +996,7 @@ def main():
                 cleanup_unused_thumbs(processor.current_thumbs, thumbs_dir)
         
         # Перенос содержимого из временных папок в основные папки для каждой категории
-        print("📁 Перенос файлов из временных папок в основные...")
+        print("\n\n📁 Перенос файлов из временных папок в основные...")
         for category_type in ['new', 'used']:
             category_config = category_configs[category_type]
             temp_cars_dir = category_config['temp_cars_dir']

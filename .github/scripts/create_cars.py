@@ -400,7 +400,7 @@ class CarDataExtractor:
             self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id',
                                    'complectation_name', 'color', 'year')
         )
-        print(f"\n🆔 Уникальный идентификатор: {friendly_url}")
+        print(f"\n\n🆔 Уникальный идентификатор: {friendly_url}")
         
         # Базовые расчёты цены и скидки
         price = int(car_data.get('price', 0) or 0)
