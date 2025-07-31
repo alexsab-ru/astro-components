@@ -26,3 +26,4 @@ src/data/**/*.yaml
 /.github/scripts/__pycache__
 /.github/scripts/example
 /.github/scripts/test_results
+/tmp

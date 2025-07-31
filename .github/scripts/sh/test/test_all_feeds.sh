@@ -22,7 +22,7 @@ test_feed() {
     echo "----------------------------------------"
     
     # Запускаем обработчик с автоопределением типа
-    python .github/scripts/create_cars.py \
+    python .github/scripts/update_cars.py \
         --input_file "$input_file" \
         --output_path "$output_file" \
         --domain "localhost:4321" \

@@ -60,7 +60,7 @@ echo "🧹 Очищены предыдущие результаты"
 
 # Запускаем обработчик
 echo "🔄 Обрабатываем фид..."
-python .github/scripts/create_cars.py \
+python .github/scripts/update_cars.py \
     --input_file ".github/scripts/example/$input_file" \
     --output_path ".github/scripts/test_results/$input_file" \
     --domain "localhost:4321" \
