@@ -18,7 +18,7 @@ on:
     branches: ["main","brand","dealer"]
     paths-ignore:
       - '.github/scripts/sh/getAirStorage.sh'
-      - '.github/scripts/sh/getDealerData.sh'
+      - '.github/scripts/sh/getDealerCarsPrice.sh'
       - '.github/scripts/sh/getDealerPrices.sh'
       - '.github/scripts/sh/getDealerStorage.sh'
       - '.github/scripts/sh/getSortStorage.sh'
@@ -26,7 +26,6 @@ on:
       - '.github/scripts/config_air_storage-friend.json'
       - '.github/scripts/config_air_storage.json'
       - '.github/scripts/config.py'
-      - '.github/scripts/create_cars.py'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
       - '.github/scripts/mergeCarPrices.js'
@@ -163,7 +162,7 @@ jobs:
       - name: Download JSONs
         if: steps.check_changes.outputs.changes == 'true'
         run: |
-          pnpm download_json
+          pnpm downloadJSON
         env:
           JSON_PATH: ${{ secrets.JSON_PATH }}
           DOMAIN: ${{ vars.DOMAIN }}
@@ -172,6 +171,7 @@ jobs:
         if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN }}
         run: |
           pnpm getDealerPrices
+        continue-on-error: true
         env:
           CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
           QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}

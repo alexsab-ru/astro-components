@@ -11,7 +11,7 @@ pnpm getOneXML_Ads_Ad
 # pnpm update_cars_avito
 python3 .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito_dc.xml"
 # скачиваем и объединяем чужие XML
-# python3 .github/scripts/getOneXML.py --output="cars_friend.xml"
+# python3 .github/scripts/getOneXML.py --output_path="cars_friend.xml"
 pnpm getOneXML_Ads_Ad_friend
 # удаляем из них все Тойоты
 python3 .github/scripts/update_cars_air_storage.py --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"

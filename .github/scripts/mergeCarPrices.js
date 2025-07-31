@@ -4,7 +4,7 @@ import path from 'path';
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
 const outputFileName = 'all-prices.json'
 const outputPath = path.join(dataDirectory, outputFileName);
-const federalFilePath = path.join(dataDirectory, 'federal-models_price.json');
+const federalFilePath = path.join(dataDirectory, 'all-cars.json');
 const dealerFilePath = path.join(dataDirectory, 'dealer-models_price.json');
 const dealerCarsFilePath = path.join(dataDirectory, 'dealer-models_cars_price.json');
 
