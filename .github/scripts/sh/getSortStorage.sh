@@ -6,15 +6,21 @@ if [ -z "$CSV_URL" ] && [ -f .env ]; then
 fi
 
 # Проверяем, что CSV_URL установлен
-if [ -z "$CSV_URL" ]; then
-    echo "Error: SORT_STORAGE_CSV_URL is not found"
-    exit 1
+if [[ ! "$CSV_URL" =~ ^https?:// ]]; then
+    echo "Error: SORT_STORAGE_CSV_URL is not found or empty"
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
 fi
 
 # Устанавливаем остальные переменные
 export QUERY_STRING="SELECT A, B"
 export KEY_COLUMN="VIN"
-export OUTPUT_PATHS="./sort_storage.json"
+export OUTPUT_PATHS="./src/data/sort_storage.json"
 export OUTPUT_FORMAT="simple"
 
 # Запускаем скрипт

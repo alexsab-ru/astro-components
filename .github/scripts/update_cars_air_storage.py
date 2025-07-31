@@ -159,12 +159,12 @@ def main():
 
     # Загружаем данные из JSON файла
     air_storage_data = {}
-    if os.path.exists('air_storage.json'):
+    if os.path.exists('./src/data/air_storage.json'):
         try:
-            with open('air_storage.json', 'r', encoding='utf-8') as f:
+            with open('./src/data/air_storage.json', 'r', encoding='utf-8') as f:
                 air_storage_data = json.load(f)
         except json.JSONDecodeError:
-            print("Ошибка при чтении air_storage.json")
+            print("Ошибка при чтении ./src/data/air_storage.json")
         except Exception as e:
             print(f"Произошла ошибка при работе с файлом: {e}")
 
