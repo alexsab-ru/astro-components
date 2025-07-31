@@ -6,9 +6,15 @@ if [ -z "$CSV_URL" ] && [ -f .env ]; then
 fi
 
 # Проверяем, что CSV_URL установлен
-if [ -z "$CSV_URL" ]; then
-    echo "Error: DEALER_PRICE_CSV_URL is not found"
-    exit 0
+if [[ ! "$CSV_URL" =~ ^https?:// ]]; then
+    echo "Error: DEALER_PRICE_CSV_URL is not found or empty"
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
 fi
 
 # Если QUERY_STRING не установлен, пытаемся получить его из .env
@@ -19,7 +25,13 @@ fi
 # Проверяем, что QUERY_STRING установлен
 if [ -z "$QUERY_STRING" ]; then
     echo "Error: DEALER_PRICE_CSV_COLUMN is not found"
-    exit 0
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
 fi
 
 # Если KEY_MAPPING не установлен, пытаемся получить его из .env
@@ -30,7 +42,12 @@ fi
 # Проверяем, что KEY_MAPPING установлен
 if [ -z "$KEY_MAPPING" ]; then
     echo "Error: DEALER_PRICE_KEY_MAPPING is not found"
-    # exit 1
+    # Если IGNORE_ERRORS=1, не считаем это ошибкой
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+        exit 0
+    # else exit 1 закомментирован, чтобы не прерывать выполнение, как было в оригинале
+    fi
 fi
 
 # Устанавливаем остальные переменные

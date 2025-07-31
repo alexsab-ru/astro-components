@@ -6,7 +6,7 @@ on:
   push:
     paths:
       - '.github/scripts/sh/getAirStorage.sh'
-      - '.github/scripts/sh/getDealerData.sh'
+      - '.github/scripts/sh/getDealerCarsPrice.sh'
       - '.github/scripts/sh/getDealerPrices.sh'
       - '.github/scripts/sh/getDealerStorage.sh'
       - '.github/scripts/sh/getSortStorage.sh'
@@ -14,7 +14,6 @@ on:
       - '.github/scripts/config_air_storage-friend.json'
       - '.github/scripts/config_air_storage.json'
       - '.github/scripts/config.py'
-      - '.github/scripts/create_cars.py'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
       - '.github/scripts/mergeCarPrices.js'
@@ -89,7 +88,7 @@ jobs:
       run: |
         npm install -g pnpm
         pnpm install --no-frozen-lockfile
-        pnpm download_json -f settings.json
+        pnpm downloadJSON -f settings.json
       env:
         JSON_PATH: ${{ secrets.JSON_PATH }}
         DOMAIN: ${{ vars.DOMAIN }}
@@ -113,14 +112,135 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests lxml pyyaml Pillow beautifulsoup4
 
-    - name: Download CSV and generate cars.xml from csv
-      if: ${{ vars.CSV_URL }}
+
+    - name: Get Dealer cars Storage
+      if: ${{ vars.DEALER_STORAGE_CSV_URL }}
       run: |
-        curl '${{ vars.CSV_URL }}' -o data.csv
-        python .github/scripts/CarFeedProcessorCSV.py
+        pnpm run getDealerStorage_new_cars_xml
+      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
-        CSV_URL: ${{ vars.CSV_URL }}
+        CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
+        QUERY_STRING: ${{ vars.DEALER_STORAGE_CSV_COLUMN }}
+
+    - name: Get Dealer used_cars Storage
+      if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getDealerStorage_used_cars_xml
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+        QUERY_STRING: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
+
+
+    - name: Get XML from Avito to get dealer photos for cars
+      if: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
+      run: |
+        pnpm run getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
+
+    - name: Get cars data_cars_car XML
+      if: ${{ vars.XML_URL_DATA_CARS_CAR }}
+      run: |
+        pnpm getOne_XML_URL_DATA_CARS_CAR
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
+        XML_URL_DATA_CARS_CAR: ${{ vars.XML_URL_DATA_CARS_CAR }}
+
+    - name: Get cars catalog_vehicles_vehicle XML
+      if: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_XML_URL_CATALOG_VEHICLES_VEHICLE
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
+        XML_URL_CATALOG_VEHICLES_VEHICLE: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
+
+    - name: Get cars vehicles_vehicle XML
+      if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_XML_URL_VEHICLES_VEHICLE
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+        XML_URL_VEHICLES_VEHICLE: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
+
+    - name: Get cars ads_ad XML
+      if: ${{ vars.XML_URL_ADS_AD }}
+      run: |
+        pnpm getOne_XML_URL_ADS_AD
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_ADS_AD }}
+        XML_URL_ADS_AD: ${{ vars.XML_URL_ADS_AD }}
+
+    - name: Get cars carcopy_offers_offer XML
+      if: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
+      run: |
+        pnpm getOne_XML_URL_CARCOPY_OFFERS_OFFER
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
+        XML_URL_CARCOPY_OFFERS_OFFER: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
+
+    - name: Get used_cars data_cars_car XML
+      if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+      run: |
+        pnpm getOne_USED_CARS_DATA_CARS_CAR
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+        USED_CARS_DATA_CARS_CAR: ${{ vars.USED_CARS_DATA_CARS_CAR }}
+
+    - name: Get used_cars catalog_vehicles_vehicle XML
+      if: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_USED_CARS_CATALOG_VEHICLES_VEHICLE
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
+        USED_CARS_CATALOG_VEHICLES_VEHICLE: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
+
+    - name: Get used_cars vehicles_vehicle XML
+      if: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
+      run: |
+        pnpm getOne_USED_CARS_VEHICLES_VEHICLE
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
+        USED_CARS_VEHICLES_VEHICLE: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
+
+    - name: Get used_cars ads_ad XML
+      if: ${{ vars.USED_CARS_ADS_AD }}
+      run: |
+        pnpm getOne_USED_CARS_ADS_AD
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_ADS_AD }}
+        USED_CARS_ADS_AD: ${{ vars.USED_CARS_ADS_AD }}
+
+    - name: Get used_cars carcopy_offers_offer XML
+      if: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
+      run: |
+        pnpm getOne_USED_CARS_CARCOPY_OFFERS_OFFER
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
+        USED_CARS_CARCOPY_OFFERS_OFFER: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
 
     - name: Get air storage
       if: ${{ vars.AIR_STORAGE_CSV_URL }}
@@ -144,98 +264,12 @@ jobs:
       env:
         CSV_URL: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
 
-    - name: Get XML from Avito to get dealer photos for cars
-      if: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
-      run: |
-        python .github/scripts/getOneXML.py --output_path="dealer_photos_for_cars_avito.xml"
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
 
-    - name: Get Dealer cars Storage
-      if: ${{ vars.DEALER_STORAGE_CSV_URL }}
+    - name: Generate src/content/cars/ and src/content/used_cars/
       run: |
-        pnpm run getDealerStorage
-        python .github/scripts/update_cars.py --source_type data_cars_car
-      continue-on-error: true
+        pnpm cars auto
       env:
         DOMAIN: ${{ vars.DOMAIN }}
-        CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
-        QUERY_STRING: ${{ vars.DEALER_STORAGE_CSV_COLUMN }}
-
-    - name: Get Dealer used_cars Storage
-      if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
-      run: |
-        pnpm run getDealerStorage
-        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
-      continue-on-error: true
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
-        QUERY_STRING: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
-
-    - name: Get Used Cars data_cars_car XML and generate cars file
-      if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
-      run: |
-        python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type data_cars_car --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/"
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
-
-    - name: Get cars from XML_URL and generate cars file (new method)
-      if: ${{ vars.XML_URL }}
-      run: |
-        python .github/scripts/getOneXML.py
-        python .github/scripts/create_cars.py
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.XML_URL }}
-
-    - name: Get cars data_cars_car XML and generate cars file
-      if: ${{ vars.XML_URL_DATA_CARS_CAR }}
-      run: |
-        python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type data_cars_car
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
-
-    - name: Get cars maxposter XML and generate cars file
-      if: ${{ vars.XML_URL_MAXPOSTER }}
-      run: |
-        python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type maxposter --image_tag="photo"
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.XML_URL_MAXPOSTER }}
-
-    - name: Get cars vehicles_vehicle XML and generate cars file
-      if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
-      run: |
-        python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type vehicles_vehicle --image_tag="photo"
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
-
-    - name: Get cars ads_ad XML and generate cars file
-      if: ${{ vars.XML_URL_ADS_AD }}
-      run: |
-        python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type ads_ad --image_tag="Image"
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.XML_URL_ADS_AD }}
-
-    - name: Get cars carcopy XML and generate cars file
-      if: ${{ vars.XML_URL_CARCOPY }}
-      run: |
-        python .github/scripts/getOneXML.py
-        python .github/scripts/update_cars.py --source_type carcopy --image_tag="photo" --description_tag="comment"
-      env:
-        DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.XML_URL_CARCOPY }}
 
     - name: Get Dealer XML for auto.ru and generate auto.ru xml
       if: ${{ vars.AUTORU_XML_URL && !vars.AUTORU_FRIEND_XML_URL }}
@@ -258,7 +292,7 @@ jobs:
     - name: Get friends AutoRu xml
       if: ${{ vars.AUTORU_FRIEND_XML_URL }}
       run: |
-        python .github/scripts/getOneXML.py --output="cars_friend.xml"
+        python .github/scripts/getOneXML.py --output_path="cars_friend.xml"
         python .github/scripts/update_cars_air_storage.py --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
@@ -302,7 +336,7 @@ jobs:
     - name: Get friends Avito xml
       if: ${{ vars.AVITO_FRIEND_XML_URL }}
       run: |
-        python .github/scripts/getOneXML.py --output="cars_friend.xml"
+        python .github/scripts/getOneXML.py --output_path="cars_friend.xml"
         python .github/scripts/update_cars_air_storage.py --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --config_path="./.github/scripts/config_air_storage-friend.json"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
@@ -335,6 +369,8 @@ jobs:
         if [[ -d src/content/news ]]; then ls -al src/content/news; fi
         if [[ -d src/content/seo ]]; then ls -al src/content/seo; fi
         if [[ -d src/data ]]; then ls -al src/data; fi
+        if [[ -d tmp/feeds/new ]]; then ls -al tmp/feeds/new; fi
+        if [[ -d tmp/feeds/used_cars ]]; then ls -al tmp/feeds/used_cars; fi
 
     - name: Check for changes
       id: check_changes
