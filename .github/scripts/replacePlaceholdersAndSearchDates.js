@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
+import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, FIRST_DAY, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
 import { currencyFormat } from '../../src/js/utils/numbers.format.js';
 import dotenv from 'dotenv';
 
@@ -55,6 +55,7 @@ if (carsData.length > 0) {
 // Функция для замены плейсхолдеров в содержимом файла
 function replacePlaceholders(content) {
   const placeholders = {
+    '{{firstDay}}': FIRST_DAY,
     '{{lastDay}}': LAST_DAY,
     '{{month}}': MONTH,
     '{{monthNominative}}': MONTH_NOMINATIVE,
