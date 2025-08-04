@@ -7,7 +7,7 @@ const { link = {}, sublink = false, ...rest } = Astro.props;
 const path = Astro.url.pathname;
 ---
 <a
-	href={link.url === 'javascript:void(0)' || path === '/' ? link.url : '/'+link.url}
+	href={link.url}
 	class:list={[
 		{
 			'scroll-link': link.url.includes('#'),
