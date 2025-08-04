@@ -52,6 +52,31 @@ if (carsData.length > 0) {
   });
 }
 
+// Проверяем наличие файла settings.json
+const settingsFilePath = path.join(dataDirectory, 'settings.json');
+let settingsData = {};
+let settingsPlaceholder = {};
+
+if (fs.existsSync(settingsFilePath)) {
+  try {
+    const settingsFileContent = fs.readFileSync(settingsFilePath, 'utf-8');
+    settingsData = JSON.parse(settingsFileContent) || {};
+  } catch (error) {
+    console.error("Ошибка парсинга файла settings.json:", error);
+  }
+}
+
+if(Object.keys(settingsData).length > 0) {
+  // Список ключей для создания плейсхолдеров
+  const settingsKeys = ['brand', 'site_name', 'site_description', 'legal_city', 'legal_city_where', 'phone_common'];
+
+  Object.keys(settingsData).forEach(sKey => {
+    if (settingsKeys.includes(sKey)) {
+      settingsPlaceholder[`{{${sKey}}}`] = settingsData[sKey];
+    }
+  });
+}
+
 // Функция для замены плейсхолдеров в содержимом файла
 function replacePlaceholders(content) {
   const placeholders = {
@@ -62,6 +87,7 @@ function replacePlaceholders(content) {
     '{{monthGenitive}}': MONTH_GENITIVE,
     '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
     '{{year}}': YEAR,
+    ...settingsPlaceholder,
     ...carsPlaceholder,
   };
 
