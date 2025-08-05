@@ -14,25 +14,25 @@ import modelsData from '@/data/models.json';
 const { models } = modelsData;
 const groupModelsByBrand = groupArrayByKey(models.filter(model => model.show), 'mark_id');
 const children = Object.keys(groupModelsByBrand).reduce((acc, key) => {
-	acc[key] = groupModelsByBrand[key].map(model => ( { url: `models/${model.id}/`, name: `${model.name.toUpperCase()}`, thumb: model.thumb } ) );
+	acc[key] = groupModelsByBrand[key].map(model => ( { url: `/models/${model.id}/`, name: `${model.name.toUpperCase()}`, thumb: model.thumb } ) );
 	return acc;
 }, {});
 export const LINKS_MENU = [
-	{url: 'cars/', name: 'Авто в наличии'},
+	{url: '/cars/', name: 'Авто в наличии'},
 	// {url: 'catalog/', name: 'Каталог'},
 	// {url: 'used_cars/', name: 'Авто с пробегом'},
 	{ 
-		url: 'models/', 
+		url: '/models/', 
 		name: 'Модели',
 		children
 	},
 	// {url: 'trade-in/', name: 'Оценка автомобиля'},
-	{url: 'special-offers/', name: 'Спецпредложения'},
-	{url: 'news/', name: 'Новости'},
-	{url: 'test-drive/', name: 'Запись на тест-драйв'},
-	{url: 'service-request/', name: 'Запись на сервис'},
-	{url: '#services', name: 'Услуги'},
-	{url: 'contacts/', name: 'Контакты'},
+	{url: '/special-offers/', name: 'Спецпредложения'},
+	{url: '/news/', name: 'Новости'},
+	{url: '/test-drive/', name: 'Запись на тест-драйв'},
+	{url: '/service-request/', name: 'Запись на сервис'},
+	{url: '/#services', name: 'Услуги'},
+	{url: '/contacts/', name: 'Контакты'},
 ];
 
 // Коллекции
