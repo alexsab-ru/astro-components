@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
+import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, FIRST_DAY, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
 import { currencyFormat } from '../../src/js/utils/numbers.format.js';
 import dotenv from 'dotenv';
 
@@ -52,15 +52,42 @@ if (carsData.length > 0) {
   });
 }
 
+// Проверяем наличие файла settings.json
+const settingsFilePath = path.join(dataDirectory, 'settings.json');
+let settingsData = {};
+let settingsPlaceholder = {};
+
+if (fs.existsSync(settingsFilePath)) {
+  try {
+    const settingsFileContent = fs.readFileSync(settingsFilePath, 'utf-8');
+    settingsData = JSON.parse(settingsFileContent) || {};
+  } catch (error) {
+    console.error("Ошибка парсинга файла settings.json:", error);
+  }
+}
+
+if(Object.keys(settingsData).length > 0) {
+  // Список ключей для создания плейсхолдеров
+  const settingsKeys = ['brand', 'site_name', 'site_description', 'legal_city', 'legal_city_where', 'phone_common'];
+
+  Object.keys(settingsData).forEach(sKey => {
+    if (settingsKeys.includes(sKey)) {
+      settingsPlaceholder[`{{${sKey}}}`] = settingsData[sKey];
+    }
+  });
+}
+
 // Функция для замены плейсхолдеров в содержимом файла
 function replacePlaceholders(content) {
   const placeholders = {
+    '{{firstDay}}': FIRST_DAY,
     '{{lastDay}}': LAST_DAY,
     '{{month}}': MONTH,
     '{{monthNominative}}': MONTH_NOMINATIVE,
     '{{monthGenitive}}': MONTH_GENITIVE,
     '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
     '{{year}}': YEAR,
+    ...settingsPlaceholder,
     ...carsPlaceholder,
   };
 
