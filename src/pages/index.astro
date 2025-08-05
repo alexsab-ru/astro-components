@@ -1,0 +1,25 @@
+---
+import settings from '@/data/settings.json';
+import Site from '@/components/PageTypes/Site.astro';
+import Landing from '@/components/PageTypes/Landing.astro';
+
+const SiteType = {
+	LANDING: 'landing',
+	SITE: 'site'
+};
+const { siteType } = settings;
+let Content: typeof Site | typeof Landing;
+
+switch(siteType) {
+	case SiteType.LANDING:
+		Content = Landing;
+		break;
+	case SiteType.SITE:
+		Content = Site;
+		break;
+	default:
+		Content = Site;
+}
+---
+
+<Content />
