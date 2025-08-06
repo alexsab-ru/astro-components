@@ -4,10 +4,12 @@ import Site from '@/components/PageTypes/Site.astro';
 import SiteAlphaCenter from '@/components/PageTypes/SiteAlphaCenter.astro';
 import Landing from '@/components/PageTypes/Landing.astro';
 import LandingGAC from '@/components/PageTypes/LandingGAC.astro';
+import LandingHAVAL from '@/components/PageTypes/LandingHAVAL.astro';
 
 const SiteType = {
 	LANDING: 'landing',
 	LANDING_GAC: 'landing-gac',
+	LANDING_HAVAL: 'landing-haval',
 	SITE: 'site',
 	SITE_ALPHA_CENTER: 'site-alpha-center'
 };
@@ -20,6 +22,9 @@ switch(siteType) {
 		break;
 	case SiteType.LANDING_GAC:
 		Content = LandingGAC;
+		break;
+	case SiteType.LANDING_HAVAL:
+		Content = LandingHAVAL;
 		break;
 	case SiteType.SITE:
 		Content = Site;
