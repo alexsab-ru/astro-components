@@ -3,9 +3,11 @@ import settings from '@/data/settings.json';
 import Site from '@/components/PageTypes/Site.astro';
 import SiteAlphaCenter from '@/components/PageTypes/SiteAlphaCenter.astro';
 import Landing from '@/components/PageTypes/Landing.astro';
+import LandingGAC from '@/components/PageTypes/LandingGAC.astro';
 
 const SiteType = {
 	LANDING: 'landing',
+	LANDING_GAC: 'landing-gac',
 	SITE: 'site',
 	SITE_ALPHA_CENTER: 'site-alpha-center'
 };
@@ -15,6 +17,9 @@ let Content: typeof Site | typeof Landing;
 switch(siteType) {
 	case SiteType.LANDING:
 		Content = Landing;
+		break;
+	case SiteType.LANDING_GAC:
+		Content = LandingGAC;
 		break;
 	case SiteType.SITE:
 		Content = Site;
