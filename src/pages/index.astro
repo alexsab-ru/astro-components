@@ -1,11 +1,13 @@
 ---
 import settings from '@/data/settings.json';
 import Site from '@/components/PageTypes/Site.astro';
+import SiteAlphaCenter from '@/components/PageTypes/SiteAlphaCenter.astro';
 import Landing from '@/components/PageTypes/Landing.astro';
 
 const SiteType = {
 	LANDING: 'landing',
-	SITE: 'site'
+	SITE: 'site',
+	SITE_ALPHA_CENTER: 'site-alpha-center'
 };
 const { siteType } = settings;
 let Content: typeof Site | typeof Landing;
@@ -16,6 +18,9 @@ switch(siteType) {
 		break;
 	case SiteType.SITE:
 		Content = Site;
+		break;
+	case SiteType.SITE_ALPHA_CENTER:
+		Content = SiteAlphaCenter;
 		break;
 	default:
 		Content = Site;
