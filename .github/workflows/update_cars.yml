@@ -121,7 +121,9 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
+        DEALER_STORAGE_CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
         QUERY_STRING: ${{ vars.DEALER_STORAGE_CSV_COLUMN }}
+        DEALER_STORAGE_CSV_COLUMN: ${{ vars.DEALER_STORAGE_CSV_COLUMN }}
 
     - name: Get Dealer used_cars Storage
       if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
@@ -131,7 +133,9 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
+        USED_CARS_STORAGE_CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
         QUERY_STRING: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
+        USED_CARS_STORAGE_CSV_COLUMN: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
 
 
     - name: Get XML from Avito to get dealer photos for cars
@@ -141,6 +145,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
+        DEALER_PHOTOS_FOR_CARS_AVITO_URL: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
 
     - name: Get cars data_cars_car XML
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
@@ -248,6 +253,7 @@ jobs:
         pnpm run getAirStorage
       env:
         CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
+        AIR_STORAGE_CSV_URL: ${{ vars.AIR_STORAGE_CSV_URL }}
 
     - name: Get sort storage
       if: ${{ vars.SORT_STORAGE_CSV_URL }}
@@ -255,6 +261,7 @@ jobs:
         pnpm run getSortStorage
       env:
         CSV_URL: ${{ vars.SORT_STORAGE_CSV_URL }}
+        SORT_STORAGE_CSV_URL: ${{ vars.SORT_STORAGE_CSV_URL }}
 
     - name: Get Dealer JSON cars price
       if: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
@@ -263,6 +270,7 @@ jobs:
       continue-on-error: true
       env:
         CSV_URL: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
+        DEALER_CARS_PRICE_CSV_URL: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
 
 
     - name: Generate src/content/cars/ and src/content/used_cars/
@@ -279,6 +287,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_XML_URL }}
+        AUTORU_XML_URL: ${{ vars.AUTORU_XML_URL }}
 
     - name: Get Dealer AutoRu xml if friend url exists
       if: ${{ vars.AUTORU_XML_URL && vars.AUTORU_FRIEND_XML_URL }}
@@ -288,6 +297,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_XML_URL }}
+        AUTORU_XML_URL: ${{ vars.AUTORU_XML_URL }}
 
     - name: Get friends AutoRu xml
       if: ${{ vars.AUTORU_FRIEND_XML_URL }}
@@ -297,6 +307,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AUTORU_FRIEND_XML_URL }}
+        AUTORU_FRIEND_XML_URL: ${{ vars.AUTORU_FRIEND_XML_URL }}
 
     - name: Merge AutoRu xmls
       if: ${{ vars.AUTORU_FRIEND_XML_URL }}
@@ -314,6 +325,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
+        AVITO_XML_URL_DATA_CARS_CAR: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
 
     - name: Get Dealer XML for avito and generate avito xml if friend url not exists
       if: ${{ vars.AVITO_XML_URL && !vars.AVITO_FRIEND_XML_URL }}
@@ -323,6 +335,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
+        AVITO_XML_URL: ${{ vars.AVITO_XML_URL }}
 
     - name: Get Dealer Avito xml if friend url exists
       if: ${{ vars.AVITO_XML_URL && vars.AVITO_FRIEND_XML_URL }}
@@ -332,6 +345,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_XML_URL }}
+        AVITO_XML_URL: ${{ vars.AVITO_XML_URL }}
 
     - name: Get friends Avito xml
       if: ${{ vars.AVITO_FRIEND_XML_URL }}
@@ -341,6 +355,7 @@ jobs:
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.AVITO_FRIEND_XML_URL }}
+        AVITO_FRIEND_XML_URL: ${{ vars.AVITO_FRIEND_XML_URL }}
 
     - name: Merge Avito xmls
       if: ${{ vars.AVITO_FRIEND_XML_URL }}
