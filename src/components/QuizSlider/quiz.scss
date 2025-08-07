@@ -1,4 +1,7 @@
 .quiz-slide {
+  &[data-step="1"] .slide-prev {
+    @apply hidden;
+  }
   .quiz-slide-wrapper{
       @apply bg-white/90 h-full md:bg-white;
   }
