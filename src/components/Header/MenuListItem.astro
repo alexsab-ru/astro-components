@@ -5,9 +5,14 @@ interface Props {
 const { link } = Astro.props;
 import MenuLink from './MenuLink.astro';
 import SubMenu from './SubMenu.astro';
-const relative = link?.children && Array.isArray(link.children) ? 'relative' : ''; 
+const relative = link?.children && Array.isArray(link.children) ? 'relative' : '';
+const hasSubMenu =
+	Array.isArray(link?.children)
+		? link.children.length > 0
+		: link?.children !== null && typeof link.children === 'object' && Object.keys(link.children).length > 0;
+
 ---
 <li class={`group ${relative}`}>
 	<MenuLink link={link} />
-	{link?.children && <SubMenu children={link.children} />}
+	{hasSubMenu && <SubMenu children={link.children} />}
 </li>
