@@ -1,0 +1,6 @@
+---
+const { startButtonText } = Astro.props;
+const defaultStartButtonText = 'Начать';
+---
+
+<button type="button" class="start-quiz btn w-fit">{ startButtonText ? startButtonText : defaultStartButtonText }</button>

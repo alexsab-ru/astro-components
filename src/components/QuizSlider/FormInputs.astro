@@ -1,0 +1,31 @@
+---
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import { AGREE_LABEL } from '@/const';
+---
+<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+<Input
+    type="tel"
+    name="phone"
+    classes="border-gray-100"
+    placeholder="+7 (999) 999-99-99*"
+    required
+    errorClasses="text-red-500"
+  />
+  <Checkbox
+  name="agree"
+  label={AGREE_LABEL}
+  color="black"
+  required
+  errorClasses="text-red-500 w-full"
+  errorText="Чтобы продолжить, установите флажок"
+/>
+
+<input
+  type="checkbox"
+  name="subscribe"
+  class="absolute w-0 h-0 opacity-0 invisible"
+/>
+
+<Button view="form-button" classes="w-full" title="Отправить" />
