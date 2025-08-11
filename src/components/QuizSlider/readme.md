@@ -78,7 +78,7 @@
     "backgroundImageUrl": "https://cdn.alexsab.ru/b/jetour/img/models/t2/sections/1.webp"
   },
   {
-    "title": "По заданным параметрам найдено 3 автомобиля. <br>Оставьте номер вашего телефона, чтобы получить подробную консультацию",
+    "title": "Спасибо! Оставьте номер вашего телефона, чтобы получить подробную консультацию по выбранному автомобилю.",
     "description": "<ul><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Честная авторассрочка</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Переплата 0%</li></ul>",
     "backgroundImageUrl": "https://cdn.alexsab.ru/b/jetour/img/models/t2/sections/1.webp"
   }
