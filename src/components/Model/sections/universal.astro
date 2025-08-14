@@ -80,7 +80,7 @@ import {Icon} from 'astro-icon/components';
 			<>
 			{section.images[0]?.title && <div class="font-bold text-lg">{section.images[0]?.title}</div>}
 			{section.images[0]?.description && <div class="mt-1 mx-auto text-xs sm:text-sm"><Fragment set:html={section.images[0]?.description} /></div>}
-			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-10 sm:mt-14 max-w-full mx-auto" loading="lazy" width="1496" height="842" />
+			<img src={section?.images[0].url} alt={section?.title || 'ALT'} class="mt-10 sm:mt-14 max-w-full mx-auto" loading="lazy" height="842" />
 			</>
 		) : ('')}
 		

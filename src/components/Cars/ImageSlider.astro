@@ -13,7 +13,7 @@ import '@/components/Banner/banner.scss';
 							class="inline-block sm:block cursor-zoom-in h-full w-auto sm:w-full select-none glightbox"
 							data-gallery={data.vin_hidden}
 						>
-							<img src={img} class="w-auto sm:mx-auto h-full object-cover select-none" alt={data.folder_id} loading="lazy" />
+							<img src={img} class="w-auto sm:mx-auto h-full object-cover select-none" alt={data.folder_id} height="405" loading="lazy" />
 							<div class="swiper-lazy-preloader"></div>
 						</a>
 					</div>
@@ -28,7 +28,7 @@ import '@/components/Banner/banner.scss';
 		{
 			data.images.map(img => (
 				<div class="lazy swiper-slide select-none min-w-[200px]">
-					<img src="https://cdn.alexsab.ru/loaders/simple-loading.svg" data-src={img} class="select-none h-full w-auto" alt={data.folder_id} loading="lazy" />
+					<img src="https://cdn.alexsab.ru/loaders/simple-loading.svg" data-src={img} class="select-none h-full w-auto" alt={data.folder_id} height="130" loading="lazy" />
 					<div class="swiper-lazy-preloader"></div>
 				</div>
 			))
