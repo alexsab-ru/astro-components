@@ -12,7 +12,6 @@
         backdrop-filter: blur(5px);
         background-color: rgba(#fff, .7);
         color: #000;
-        // border-radius: 12px;
         opacity: 0;
         visibility: hidden;
         padding: 10px;
@@ -20,7 +19,7 @@
         line-height: normal !important;
         transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
         display: none;
-        @apply sm:max-w-[600px] shadow-2xl z-50 max-h-[250px] overflow-y-auto sm:overflow-y-visible sm:h-auto;
+        @apply sm:max-w-[600px] shadow-2xl z-50 max-h-[250px] overflow-y-auto sm:overflow-y-visible sm:h-auto rounded-btn;
         &.active{
             opacity: 1;
             visibility: visible;
@@ -53,21 +52,18 @@
         }
         &-icon{
             --size: 30px;
-            font-size: calc(var(--size) / 2.5);
-            line-height: calc(var(--size) / 1.7);
-            height: calc(var(--size) / 1.7);
-            width: calc(var(--size) / 1.7);
             color: currentColor;
             cursor: pointer;
             position: relative;
             top: 0;
             left: 0;
-            border: 1px solid currentColor;
-            border-radius: 50%;
             display: inline-block;
             text-align: center;
             vertical-align: top;
-            font-weight: normal !important;
+            svg{
+                height: calc(var(--size) / 1.2);
+                width: calc(var(--size) / 1.2);
+            }
         }
     }
 </style>
