@@ -43,7 +43,7 @@ class Tooltip {
 	setupTooltipSize(tooltip) {
 		const style = window.getComputedStyle(tooltip.parentElement);
 		const fontSize = parseInt(style.fontSize, 10) || 16;
-		const tooltipHeight = fontSize < 20 ? 22 : fontSize;
+		const tooltipHeight = fontSize < 20 ? 22 : fontSize > 30 ? 30 : fontSize;
 		tooltip.style.setProperty('--size', `${tooltipHeight}px`);
 	}
 
@@ -190,14 +190,13 @@ class Tooltip {
 			if (!this.disclaimer.classList.contains('active')) {
 				this.disclaimer.style.display = 'none';
 			}
-		}, 300);
+		}, 100);
 	}
 
 	// Очистка HTML
 	sanitizeHTML(html) {
 		const div = document.createElement('div');
-		div.textContent = html;
-		return div.innerHTML;
+		return div.innerHTML = html;
 	}
 
 	// Debounce
