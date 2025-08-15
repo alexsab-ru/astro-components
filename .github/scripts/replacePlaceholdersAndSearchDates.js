@@ -17,21 +17,9 @@ const modifiedFiles = [];
 // Массив для хранения файлов с приближающимися датами
 const filesWithUpcomingDates = [];
 
-// Проверяем наличие файла all-prices.json
-const carsFilePath = path.join(dataDirectory, 'all-prices.json');
-let carsData = [];
-
-if (fs.existsSync(carsFilePath)) {
-  const carsFileContent = fs.readFileSync(carsFilePath, 'utf-8');
-  try {
-    carsData = JSON.parse(carsFileContent);
-    if (!Array.isArray(carsData)) {
-      carsData = [];
-    }
-  } catch (error) {
-    console.error("Ошибка парсинга файла all-prices.json:", error);
-  }
-}
+// Получаем данные с валидацией типов
+const carsData = readAndValidateJSON('all-prices.json', 'array', []);
+const disclaimerData = readAndValidateJSON('federal-disclaimer.json', 'object', {});
 
 // Создаем объект для хранения плейсхолдеров
 const carsPlaceholder = {};
@@ -56,6 +44,31 @@ if (carsData.length > 0) {
       });
     }
   });
+}
+
+// Общая функция для чтения и валидации JSON-файла
+function readAndValidateJSON(fileName, expectedType, defaultValue) {
+  const filePath = path.join(dataDirectory, fileName);
+  if (!fs.existsSync(filePath)) return defaultValue;
+  
+  try {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    let data = JSON.parse(content);
+    
+    // Проверка соответствия ожидаемому типу
+    if (expectedType === 'array' && !Array.isArray(data)) {
+      return defaultValue;
+    }
+    
+    if (expectedType === 'object' && Array.isArray(data)) {
+      return defaultValue;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error(`Ошибка парсинга файла ${fileName}:`, error);
+    return defaultValue;
+  }
 }
 
 // Функция для замены плейсхолдеров в содержимом файла
