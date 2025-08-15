@@ -59,5 +59,5 @@ export const getPair = (openURL = '') => {
 }
 
 export function quoteEscaper(str) {
-	return str.replace(/"/g, '\\"').replace(/\n/g, '\\n');
+	return str.replace(/"/g, '\\"').replace(/\n/g, '<br/>');
 }
