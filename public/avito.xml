@@ -1,94 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <data>
   <cars><car>
-			<unique_id>37fef68fd6cf531cde61d17f9f306dc8</unique_id>
-			<mark_id>Geely</mark_id>
-			<folder_id>Atlas, II</folder_id>
-			<modification_id>2.0 AMT (200 л.с.)</modification_id>
-			<complectation_name>Flagship</complectation_name>
-			<body_type>Внедорожник 5 дв.</body_type>
-			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>да</metallic>
-			<availability>в наличии</availability>
-			<custom>растаможен</custom>
-			<run>14</run>
-			<year>2024</year>
-			<price>3717190</price>
-			<credit_discount>0</credit_discount>
-			<insurance_discount>0</insurance_discount>
-			<tradein_discount>263000</tradein_discount>
-			<optional_discount>0</optional_discount>
-			<max_discount>513000</max_discount>
-			<currency>RUR</currency>
-			<vin>LB3FX1S68RB107396</vin>
-			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
-
-B наличии HOBЫЙ ATLАS , 2024 года, в кoмплeктации Flаgshiр
-
-✅ PACCPОЧКA от 0,01%
-
-✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
-
-✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
-
-✅ ГAРАHTИЯ 5 ЛEТ
-
-* Подробности в отделе продаж.
-
-Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
-
-Цена указана с учётом максимальной выгоды.
-
-Так же доступны автомобили в других комплектациях и цветах.
-
-В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
-
-Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
-
-Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
-
-Geely Atlas II, 2024 год
-
-Geely Atlas II — это воплощение комфорта и безопасности на дороге. Этот автомобиль оснащён всем необходимым для комфортных поездок по городу и за его пределами.
-
-Комфорт и удобство
-
-Благодаря просторному салону и удобным сиденьям с электрорегулировкой, вы сможете наслаждаться каждой поездкой. Двухзонный климат-контроль обеспечит идеальный микроклимат в салоне, а подогрев всех сидений сделает даже самые холодные дни приятными.
-
-Безопасность
-
-Система курсовой стабилизации, антиблокировочная система тормозов и подушки безопасности обеспечивают высокий уровень безопасности. А система контроля за полосой движения и система предотвращения столкновения помогут избежать опасных ситуаций на дороге.
-
-Технологии
-
-Geely Atlas II оснащён современными технологиями, которые делают вождение более приятным и безопасным. Адаптивный круиз-контроль, камера 360, система доступа без ключа и другие функции сделают вашу поездку максимально комфортной.
-
-Дизайн
-
-Элегантный дизайн и стильные детали, такие как светодиодные фары, 20-дюймовые диски и панорамная крыша, придают Geely Atlas II особый шарм.
-
-Не упустите возможность стать обладателем этого замечательного автомобиля!</description>
-			<images>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/13500a3c5bc5b8c994296d932386cd40.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/5ace1ddc2407efb970a3546509a86d5d.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0670622cc488bfc5067444169db04737.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0417857bf1f636e587bb10ff209990dd.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/930d55eceaa2d9f5c752b91caf3db433.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/77f28aedf2b94a07d049becbdc8b3c8a.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/2a1a0ca9951a9384e46fbb41e670fc9e.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0c62e9062e1f65b13a99d094b955d6a9.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/cd474a160229ec3997cc09bb98106449.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0e2d7bd2ea9ffa678addaba172e3c4b9.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/f40b89f24b6d072c124cfef674f9691c.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/00dcf7c8ad88d9dde7d7ef032645c061.jpeg</image>
-				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/60d7530f2b18b2a99d4f74ad526b2bae.jpeg</image>
-			</images>
-			<multiposting>
-				<classifieds>autoru,avito</classifieds>
-			</multiposting>
-		<url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-amt-200-лс-flagship-белый-2024/</url></car>
-		<car>
 			<unique_id>26d10b69768a7a71367ddde82867c706</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Atlas, II</folder_id>
@@ -178,6 +90,94 @@ Geely Atlas II оснащён современными технологиями,
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
 		<url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-amt-200-лс-flagship-серебряный-2024/</url></car>
+		<car>
+			<unique_id>37fef68fd6cf531cde61d17f9f306dc8</unique_id>
+			<mark_id>Geely</mark_id>
+			<folder_id>Atlas, II</folder_id>
+			<modification_id>2.0 AMT (200 л.с.)</modification_id>
+			<complectation_name>Flagship</complectation_name>
+			<body_type>Внедорожник 5 дв.</body_type>
+			<wheel>левый</wheel>
+			<color>Белый</color>
+			<metallic>да</metallic>
+			<availability>в наличии</availability>
+			<custom>растаможен</custom>
+			<run>14</run>
+			<year>2024</year>
+			<price>3717190</price>
+			<credit_discount>0</credit_discount>
+			<insurance_discount>0</insurance_discount>
+			<tradein_discount>263000</tradein_discount>
+			<optional_discount>0</optional_discount>
+			<max_discount>513000</max_discount>
+			<currency>RUR</currency>
+			<vin>LB3FX1S68RB107396</vin>
+			<description>ПAРTHEP АВТО - новый oфициальный дилер GЕELY в гоpодe Opенбуpге.
+
+B наличии HOBЫЙ ATLАS , 2024 года, в кoмплeктации Flаgshiр
+
+✅ PACCPОЧКA от 0,01%
+
+✅ ОЦЕНКА ПО TRADE-IN ВЫШЕ РЫНКА
+
+✅ ЛИЗИНГ БЕЗ ПЕРВОНАЧАЛЬНОГО ВЗНОСА
+
+✅ ГAРАHTИЯ 5 ЛEТ
+
+* Подробности в отделе продаж.
+
+Если новый Джили, то в Джили Партнер Оренбург на Загородном шоссе 13/1.
+
+Цена указана с учётом максимальной выгоды.
+
+Так же доступны автомобили в других комплектациях и цветах.
+
+В нашем автосалоне вы всегда сможете пройти тест-драйв на интересующем вас автомобиле и рассчитать кредит на самых выгодных условиях.
+
+Мы ждем Вашего звонка, чтобы предложить лучшие условия на покупку нового автомобиля GЕЕLY.
+
+Мы гарантируем полную прозрачность сделки и юридическую чистоту автомобиля.
+
+Geely Atlas II, 2024 год
+
+Geely Atlas II — это воплощение комфорта и безопасности на дороге. Этот автомобиль оснащён всем необходимым для комфортных поездок по городу и за его пределами.
+
+Комфорт и удобство
+
+Благодаря просторному салону и удобным сиденьям с электрорегулировкой, вы сможете наслаждаться каждой поездкой. Двухзонный климат-контроль обеспечит идеальный микроклимат в салоне, а подогрев всех сидений сделает даже самые холодные дни приятными.
+
+Безопасность
+
+Система курсовой стабилизации, антиблокировочная система тормозов и подушки безопасности обеспечивают высокий уровень безопасности. А система контроля за полосой движения и система предотвращения столкновения помогут избежать опасных ситуаций на дороге.
+
+Технологии
+
+Geely Atlas II оснащён современными технологиями, которые делают вождение более приятным и безопасным. Адаптивный круиз-контроль, камера 360, система доступа без ключа и другие функции сделают вашу поездку максимально комфортной.
+
+Дизайн
+
+Элегантный дизайн и стильные детали, такие как светодиодные фары, 20-дюймовые диски и панорамная крыша, придают Geely Atlas II особый шарм.
+
+Не упустите возможность стать обладателем этого замечательного автомобиля!</description>
+			<images>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/13500a3c5bc5b8c994296d932386cd40.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/5ace1ddc2407efb970a3546509a86d5d.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0670622cc488bfc5067444169db04737.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0417857bf1f636e587bb10ff209990dd.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/930d55eceaa2d9f5c752b91caf3db433.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/77f28aedf2b94a07d049becbdc8b3c8a.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/2a1a0ca9951a9384e46fbb41e670fc9e.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0c62e9062e1f65b13a99d094b955d6a9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/cd474a160229ec3997cc09bb98106449.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/0e2d7bd2ea9ffa678addaba172e3c4b9.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/f40b89f24b6d072c124cfef674f9691c.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/00dcf7c8ad88d9dde7d7ef032645c061.jpeg</image>
+				<image>https://photo.toyotasever.ru/LB3FX1S68RB107396/60d7530f2b18b2a99d4f74ad526b2bae.jpeg</image>
+			</images>
+			<multiposting>
+				<classifieds>autoru,avito</classifieds>
+			</multiposting>
+		<url>https://geely-partner-orenburg.ru/cars/geely-atlas-ii-20-amt-200-лс-flagship-белый-2024/</url></car>
 		<car>
 			<unique_id>49cbe2d30d083059641d6c2cd998e59b</unique_id>
 			<mark_id>Geely</mark_id>
