@@ -5,5 +5,6 @@ export type TStep = {
   type?: string,
   answerOptions?: string[],
   backgroundImageUrl?: string,
+  backgroundPosition?: string,
   startButtonText?: string
 }

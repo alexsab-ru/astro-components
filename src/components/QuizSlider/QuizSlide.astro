@@ -12,10 +12,15 @@ interface Props {
 }
 
 const { step, index, stepsCount } = Astro.props;
-const { id, title, description, type, answerOptions, backgroundImageUrl, startButtonText } = step;
+const { id, title, description, type, answerOptions, backgroundImageUrl, backgroundPosition, startButtonText } = step;
 const isQuestion = index !== 0 && index !== stepsCount;
 const isFirstStep = index === 0;
 const isLastStep = index === stepsCount;
+
+// Формируем стили для фонового изображения с учетом позиции
+const backgroundStyles = backgroundImageUrl 
+	? `background-image: url(${backgroundImageUrl});${backgroundPosition ? ` background-position: ${backgroundPosition};` : ''}`
+	: '';
 ---
 
 <div class="swiper-slide quiz-slide" data-step={index}>
@@ -30,6 +35,6 @@ const isLastStep = index === stepsCount;
 				{ isFirstStep &&  <StartButton startButtonText={startButtonText} /> }
 			</div>
 		</div>
-		{ backgroundImageUrl && <div class="right" style={`background-image: url(${backgroundImageUrl});`}></div> }
+		{ backgroundImageUrl && <div class="right" style={backgroundStyles}></div> }
 	</div>
 </div>
