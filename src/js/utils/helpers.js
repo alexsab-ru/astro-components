@@ -57,3 +57,7 @@ export const getPair = (openURL = '') => {
 	});
 	return result;
 }
+
+export function quoteEscaper(str) {
+	return str.replace(/"/g, '\\"').replace(/\n/g, '<br/>');
+}

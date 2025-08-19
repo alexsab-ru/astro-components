@@ -5,6 +5,7 @@ interface Props {
 const { model } = Astro.props;
 import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format';
+import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 ---
 
 <a
@@ -21,6 +22,8 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 			model?.benefit && !isNaN(model?.benefit) && model?.benefit != 0 && model?.benefit != '' && (
 				<span class="block text-xs sm:text-lg text-black/80">
 					Выгода до {currencyFormat(model.benefit)}
+					{/* Добавляем значок с дисклеймером для выгоды, если он существует */}
+					{model?.benefitDisclaimer && <Fragment set:html={createDisclaimerIcon(model.benefitDisclaimer)} />}
 				</span>
 			)
 		}
@@ -51,6 +54,8 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 		model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ?  (
 			<span>
 				<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+				{/* Добавляем значок с дисклеймером для цены, если он существует */}
+				{model?.priceDisclaimer && <Fragment set:html={createDisclaimerIcon(model.priceDisclaimer)} />}
 			</span>
 		) : (
 			<span>
