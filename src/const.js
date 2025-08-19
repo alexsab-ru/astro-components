@@ -14,12 +14,31 @@ import modelsData from '@/data/models.json';
 const { models } = modelsData;
 const groupModelsByBrand = groupArrayByKey(models.filter(model => model.show), 'mark_id');
 
-const childrenGroup = {
-	models: Object.keys(groupModelsByBrand).reduce((acc, key) => {
-		acc[key] = groupModelsByBrand[key].map(model => ( { url: `/models/${model.id}/`, name: `${model.name.toUpperCase()}`, thumb: model.thumb } ) );
-		return acc;
-	}, {}),
+// Конфигурация для динамических меню
+const dynamicMenuConfig = {
+	models: {
+		baseUrl: '/models/',
+		dataSource: groupModelsByBrand,
+		transform: (model) => ({
+			url: `/models/${model.id}/`,
+			name: model.name.toUpperCase(),
+			thumb: model.thumb
+		})
+	}
+	// В будущем можно добавить другие типы:
+	// services: { baseUrl: '/services/', dataSource: servicesData, transform: ... }
+	// news: { baseUrl: '/news/', dataSource: newsData, transform: ... }
 };
+
+// Формируем childrenGroup на основе конфигурации
+const childrenGroup = Object.keys(dynamicMenuConfig).reduce((acc, type) => {
+	const config = dynamicMenuConfig[type];
+	acc[type] = Object.keys(config.dataSource).reduce((brandAcc, brandKey) => {
+		brandAcc[brandKey] = config.dataSource[brandKey].map(config.transform);
+		return brandAcc;
+	}, {});
+	return acc;
+}, {});
 
 let menu = [];
 
@@ -31,14 +50,15 @@ try {
 	menu = []; // или какой-то fallback
 }
 
+// Обрабатываем динамические children только для известных типов
 menu.length > 0 && menu.map(item => {
 	if(typeof item?.children === 'string'){
 		const key = item.children;		
-		if (childrenGroup[key]) {			
+		// Проверяем, что это именно известный тип из конфигурации
+		if (childrenGroup[key] && dynamicMenuConfig[key]) {			
 			item.children = childrenGroup[key];
 		}
 	}
-	
 });
 
 export const LINKS_MENU = menu;
