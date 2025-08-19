@@ -6,7 +6,7 @@
       @apply bg-white/90 h-full md:bg-white;
   }
   .left{
-      @apply py-10 md:py-20 md:w-3/5 flex flex-col justify-center gap-7;
+      @apply py-10 md:py-20 md:w-1/2 flex flex-col justify-center gap-7;
   }
   .right{
       @apply absolute right-0 top-0 h-full w-0 transition-all duration-[1.8s] bg-cover bg-center md:bg-right -z-[1] md:z-[1];
