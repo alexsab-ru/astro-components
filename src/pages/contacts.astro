@@ -19,9 +19,12 @@ const workers = salons.flatMap(salon =>
         salonName: salon.name
     })) || []
 );
+const description = `Контакты автосалона ${site_name} - ${salons
+    .filter(salon => salon?.address && salon?.address !== '')
+    .map(s => `${s?.address}`).join(', ')}`;
 ---
 
-<Layout title={`Контакты автосалона ${site_name}`}>
+<Layout title={`Контакты автосалона ${site_name}`} description={`${description}`}>
 	<div class="h-full relative">
 		<div class="container">
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">

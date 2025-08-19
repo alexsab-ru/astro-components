@@ -1,0 +1,23 @@
+.quiz-slide {
+  &[data-step="1"] .slide-prev {
+    @apply hidden;
+  }
+  .quiz-slide-wrapper{
+      @apply bg-white/90 h-full md:bg-white;
+  }
+  .left{
+      @apply py-10 md:py-20 md:w-1/2 flex flex-col justify-center gap-7;
+  }
+  .right{
+      @apply absolute right-0 top-0 h-full w-0 transition-all duration-[1.8s] bg-cover bg-center md:bg-right -z-[1] md:z-[1];
+  }
+  &.swiper-slide-active{
+      .right{
+          @apply w-full md:w-2/5 bg-center;
+      }
+  }
+}
+
+.quiz-step{
+  @apply sm:text-5xl text-gray-400;
+}

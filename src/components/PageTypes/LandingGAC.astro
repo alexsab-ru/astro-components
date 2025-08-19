@@ -1,0 +1,101 @@
+---
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import { TIMER, MARQUEE } from '@/const.js';
+import { LAST_DAY, MONTH, MONTH_GENITIVE, YEAR } from '@/js/utils/date';
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
+import Timer from '@/components/Timer/Timer.astro';
+import ModelList from '@/components/Model/ModelList.astro';
+import LatestPosts from '@/components/LatestPosts/Index.astro';
+import Model from '@/components/Model/Model.astro';
+import ModelComplectations from '@/components/Model/Complectations.astro';
+import Callback from '@/components/Callback.astro';
+import Services from '@/components/Services.astro';
+import Contacts from '@/components/Contacts.astro';
+import Morquee from '@/components/Marquee/Index.astro';
+import SectionWithBg from '@/components/SectionWithBg/SectionWithBg.astro';
+import modelsData from '@/data/models.json'
+const { models } = modelsData;
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
+const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
+import SeoText from '@/components/Seo/Index.astro';
+
+import InfoItem from '@/components/Info/Item.astro';
+const infoItemClasses = "popup-link flex flex-col-reverse items-center justify-end gap-5 transition-all shadow-xl hover:shadow-lg font-medium xl:text-lg text-center p-4";
+const infoItems = [
+	{title: "Гарантия 5 лет!", icon: "mdi:car-clock", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "Кредит от 0,01%<sup>**</sup>", icon: "mdi:sale", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "Подарки от дилера", icon: "mdi:gift", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "Выгода 10% корпоративным клиентам", icon: "mdi:ticket", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+];
+
+import CarsList from '@/components/Cars/List.astro';
+import { getCollection } from "astro:content";
+const cars = await getCollection("cars");
+
+import reviews from '@/data/reviews.json';
+import Reviews from '@/components/Reviews/Index.astro';
+
+---
+
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
+
+	<Banner />
+
+	<section>
+		<div class="container">
+			<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+				{infoItems.map(item => ( <InfoItem item={item} classes={infoItemClasses} data-title="Получить спецпредложение" data-form_name={`Получить спецпредложение. ${item.title.replace(/<[^>]*>/g, '')}`} /> ))}
+			</div>
+		</div>
+	</section>
+
+	<Timer endtime=`${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00` title={`Утвердите спецусловия только <span class="text-nowrap">до ${LAST_DAY} ${MONTH_GENITIVE}</span>!`} subtitle={TIMER.subtitle} btnName="Получить выгоду" class="bg-[url('https://cdn.alexsab.ru/b/gac/img/main-sliders/gs8-desk.webp')] bg-cover bg-center bg-fixed text-white" />
+	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="section bg-gray-100" />
+
+	{ true && ( <ModelList id="models" /> )}
+
+	{ false && models.length > 0 && models.filter(m => m.show).map(model => ( <Model model={model} /> ))}
+
+	<Callback bgUrl="https://cdn.alexsab.ru/b/gac/img/main-sliders/avn4.webp" title="Запишитесь на тест-драйв!" subtitle="Пройдите тест-драйв на интересном маршруте" formName="Секция. Запись на тест-драйв" id="test-drive" />
+
+	{cars.length > 0 && (
+		<section class="section bg-gray-100" id="cars">
+			<div class="container">
+				<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{`Автомобили ${brand} в наличии в ${legal_city_where}`}</h2>
+
+				<CarsList />
+
+			</div>
+		</section>
+	)}
+
+	<SectionWithBg image={{desktop: 'https://cdn.alexsab.ru/b/gac/img/main-sliders/service-main.webp', mobile: 'https://cdn.alexsab.ru/b/gac/img/main-sliders/service-mob.webp'}} classes="!py-32" id="special-credit">
+		<div class="container flex flex-col items-center">
+			<h2 class="text-xl sm:text-4xl font-normal mb-8 !p-0 before:!hidden">{`${brand} в кредит`}<sup>**</sup></h2>
+			<p class="text-2xl mb-10">Предложим дополнительную выгоду при покупке в кредит</p>
+			<a href="#common-modal" class="btn white popup-link" data-title="Рассчитать выгоду по кредиту" data-form_name="Рассчитать выгоду по кредиту">Рассчитать кредит</a>
+		</div>
+	</SectionWithBg>
+
+	<SectionWithBg image={{desktop: 'https://cdn.alexsab.ru/b/gac/img/main-sliders/gac-models.webp', mobile: 'https://cdn.alexsab.ru/b/gac/img/main-sliders/gac-models-mobile.webp'}} imagePosition={{desktop: 'bottom', mobile: 'bottom'}} fixed classes="!py-32" id="trade-in">
+		<div class="container flex flex-col items-center">
+			<h2 class="text-xl sm:text-4xl font-normal mb-8 !p-0 before:!hidden uppercase">Trade-In</h2>
+			<p class="text-2xl mb-5">Дополнительные выгоды от {site_name} за Trade-In</p>
+			<p class="text-2xl mb-10">Оценка выше рынка</p>
+			<a href="#common-modal" class="btn white popup-link" data-title="Рассчитать выгоду по Trade-In" data-form_name="Рассчитать выгоду по Trade-In">Рассчитать выгоду</a>
+		</div>
+	</SectionWithBg>
+
+	<Reviews items={reviews} title="Отзывы наших клиентов" />
+
+	<SeoText mdx="index" />
+
+	<Contacts mapImg="https://cdn.alexsab.ru/maps/map-bg.webp" title="Наши контакты" />
+
+</Layout>

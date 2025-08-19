@@ -3,6 +3,8 @@ import csv
 import requests
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import sys
+import argparse
 
 class CarFeedProcessorCSV:
     def __init__(self, url=None, file_path=None):
@@ -42,7 +44,7 @@ class CarFeedProcessorCSV:
                 def safe_set(tag, key, default=None):
                     value = row.get(key)
                     if value or default is not None:
-                        ET.SubElement(car, tag).text = value if value else default
+                        ET.SubElement(car, tag).text = value.strip() if value else default
 
                 safe_set('mark_id', 'Марка')
                 safe_set('folder_id', 'Модель')
@@ -99,14 +101,18 @@ class CarFeedProcessorCSV:
             raise ValueError("XML tree is not generated. Call process_data() first.")
 
 
-# Пример использования:
-# processor = CarFeedProcessorCSV(url='https://docs.google.com/spreadsheets/d/__________/gviz/tq?gid=_______&tqx=out:CSV')
-# processor.download_csv()
-# processor.process_data()
-# processor.save_xml('cars.xml')
+def main():
+    parser = argparse.ArgumentParser(description='Process car CSV and convert to XML.')
+    parser.add_argument('--csv', dest='csv_path', default='data.csv', help='Path to input CSV file')
+    parser.add_argument('--xml', dest='xml_path', default='cars.xml', help='Path to output XML file')
+    args = parser.parse_args()
 
-# Или если у вас уже есть файл:
-processor = CarFeedProcessorCSV(file_path='data.csv')
-processor.read_csv()
-processor.process_data()
-processor.save_xml('cars.xml')
+    # Создаем процессор с путем к CSV
+    processor = CarFeedProcessorCSV(file_path=args.csv_path)
+    processor.read_csv()
+    processor.process_data()
+    # Сохраняем XML по указанному пути
+    processor.save_xml(args.xml_path)
+
+if __name__ == '__main__':
+    main()

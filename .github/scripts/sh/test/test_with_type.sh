@@ -44,13 +44,14 @@ echo "🧹 Очищены предыдущие результаты"
 
 # Запускаем обработчик с явным указанием типа
 echo "🔄 Обрабатываем фид..."
-python .github/scripts/create_cars.py \
+python .github/scripts/update_cars.py \
     --source_type "$source_type" \
     --input_file ".github/scripts/example/$input_file" \
     --output_path ".github/scripts/test_results/$input_file" \
     --domain "localhost:4321" \
     --cars_dir "src/content/cars" \
-    --thumbs_dir "public/img/thumbs"
+    --thumbs_dir "public/img/thumbs" \
+    --count_thumbs 1
 
 if [ $? -eq 0 ]; then
     echo ""
