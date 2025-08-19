@@ -48,8 +48,9 @@ const data = {
 
 try {
   const settings = readJson(settingsFilePath);
+  if (!settings) throw new Error('Не удалось загрузить файл settings.json');
   const allModels = readJson(allModelsFilePath);
-  if (!settings || !allModels) throw new Error('Не удалось загрузить файлы settings.json или all-models.json');
+  if (!allModels) throw new Error('Не удалось загрузить файл all-models.json');
 
   if (settings.brand == 'BRAND') {
     // random brand from unique brands
