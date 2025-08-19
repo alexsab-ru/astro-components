@@ -1,0 +1,40 @@
+---
+import type { TStep } from './types';
+import Answers from './Answers.astro';
+import FormInputs from './FormInputs.astro';
+import Title from './Title.astro';
+import StartButton from './StartButton.astro';
+
+interface Props {
+	step: TStep;
+	index: number,
+	stepsCount: number
+}
+
+const { step, index, stepsCount } = Astro.props;
+const { id, title, description, type, answerOptions, backgroundImageUrl, backgroundPosition, startButtonText } = step;
+const isQuestion = index !== 0 && index !== stepsCount;
+const isFirstStep = index === 0;
+const isLastStep = index === stepsCount;
+
+// Формируем стили для фонового изображения с учетом позиции
+const backgroundStyles = backgroundImageUrl 
+	? `background-image: url(${backgroundImageUrl});${backgroundPosition ? ` background-position: ${backgroundPosition};` : ''}`
+	: '';
+---
+
+<div class="swiper-slide quiz-slide" data-step={index}>
+	<div class="quiz-slide-wrapper">
+		<div class="container">
+			<div class="left">
+				{ isQuestion && <div class="quiz-step"></div> }
+				{ title && <Title title={title} /> }
+				{ description && <Fragment set:html={description} /> }
+				{ isQuestion && <Answers id={id} type={type} answerOptions={answerOptions} /> }
+				{ isLastStep && <FormInputs /> }
+				{ isFirstStep &&  <StartButton startButtonText={startButtonText} /> }
+			</div>
+		</div>
+		{ backgroundImageUrl && <div class="right" style={backgroundStyles}></div> }
+	</div>
+</div>
