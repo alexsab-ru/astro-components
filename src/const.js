@@ -8,6 +8,10 @@ export const MARQUEE = { title: `Тотальная распродажа до ${
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city, phone_common } = settings;
+
+
 // Ссылки под хедером
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import modelsData from '@/data/models.json';
@@ -65,8 +69,8 @@ export const LINKS_MENU = menu;
 
 // Коллекции
 export const COLLECTIONS = [
-	{name: 'special-offers', title: 'Спецпредложения'},
-	{name: 'news', title: 'Новости'},
+	{name: 'special-offers', title: 'Спецпредложения', description: `Спецпредложения официального дилерского центра ${site_name} ${brand} ${legal_city}`},
+	{name: 'news', title: 'Новости', description: `Новости и акции дилерского центра ${site_name} ${brand} ${legal_city}`},
 ];
 
 // Текст согласия в формах
@@ -74,8 +78,6 @@ export const AGREE_LABEL = '<span>Даю согласие на обработк�
 
 // Текст информации в футере
 import salonsData from '@/data/salons.json';
-import settings from '@/data/settings.json';
-const { phone_common } = settings;
 const salons = salonsData.filter(salon => !salon?.type || salon?.type.includes('footer_info'));
 const phones = phone_common ? [`<a class="whitespace-nowrap" href="tel:${phoneFormat(phone_common)}">${phone_common}</a>`] : salons.map((salon) => { return `<span>${salon.name}</span> <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a>` });
 

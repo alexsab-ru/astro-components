@@ -37,7 +37,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
 import SeoText from '@/components/Seo/Index.astro';
 ---
 
-<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
 	<Banner />
 	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
 	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">

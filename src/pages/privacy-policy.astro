@@ -2,7 +2,7 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import PrivacyPolicy from '@/content/privacy-policy.mdx';
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, legal_city, phone_common, email_common } = settings;
+const { site_name, brand, legal_entity, legal_inn, legal_city, phone_common, email_common } = settings;
 import scripts from '@/data/scripts.json';
 const { site } = scripts;
 import salonsData from '@/data/salons.json';
@@ -28,6 +28,7 @@ const contact_text = legal_entity && legal_inn ?
 <PageLayout
     h1="Политика конфиденциальности"
     title="Политика конфиденциальности"
+    description={`Политика конфиденциальности ${brand} ${legal_city}: цели и правовые основания обработки персональных данных по 152-ФЗ, перечень данных, права пользователя и контакты оператора.`}
     breadcrumb={[{name:"Политика конфиденциальности",href:""}]}
 >
 
