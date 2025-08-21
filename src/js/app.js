@@ -8,6 +8,8 @@ import ResponsiveMenu from './modules/ResponsiveMenu';
 
 import LazyLoader from './modules/LazyLoader';
 
+import Tooltip from './modules/Tooltip';
+
 import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
 
 startNoBounce();
@@ -24,9 +26,12 @@ const waitForDp = setInterval(() => {
 	}
 }, 100); // Check every 100ms
 
+
 document.addEventListener('DOMContentLoaded', () => {
 	new ResponsiveMenu('#site_nav ul');
 	new LazyLoader();
+	new Tooltip();
+
 });
 
 import GLightbox from 'glightbox';

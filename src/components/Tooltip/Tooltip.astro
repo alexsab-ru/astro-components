@@ -1,0 +1,70 @@
+<div class="tooltip">
+    <div class="tooltip-close">&times;</div>
+    <div class="tooltip-content"></div>
+</div>
+
+<style lang="scss" is:global>
+    .tooltip {
+        position: fixed;
+        left: 10px;
+        top: 10px;
+        z-index: 100;
+        backdrop-filter: blur(5px);
+        background-color: rgba(#fff, .7);
+        box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+        color: #000;
+        opacity: 0;
+        visibility: hidden;
+        padding: 10px;
+        font-size: 14px !important;
+        line-height: normal !important;
+        transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
+        display: none;
+        @apply sm:max-w-[600px] z-50 max-h-[250px] overflow-y-auto sm:overflow-y-visible sm:h-auto rounded-btn;
+        &.active{
+            opacity: 1;
+            visibility: visible;
+            &.mobile{
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                max-height: 100% !important;
+                padding: 30px 20px;
+                max-width: 100%;
+                .tooltip-close{
+                    display: flex;
+                }
+            }
+        }
+        &-close{
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            font-size: 30px;
+            color: currentColor;
+            opacity: 0.7;
+            display: none;
+        }
+        &-icon{
+            --size: 30px;
+            color: currentColor;
+            cursor: pointer;
+            position: relative;
+            top: 0;
+            left: 0;
+            display: inline-block;
+            text-align: center;
+            vertical-align: top;
+            svg{
+                height: calc(var(--size) / 1.2);
+                width: calc(var(--size) / 1.2);
+            }
+        }
+    }
+</style>

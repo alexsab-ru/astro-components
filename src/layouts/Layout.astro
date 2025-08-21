@@ -22,6 +22,7 @@ import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
 import seo from '@/data/seo.json';
 import StripEmptyQuery from '../components/StripEmptyQuery.astro';
+import Tooltip from '@/components/Tooltip/Tooltip.astro';
 
 const currentPath = Astro.url.pathname;
 if (seo[currentPath]) {
@@ -67,6 +68,7 @@ if (seo[currentPath]) {
 		<UpBtn />
 		<Cookie />
 		<ScriptBodyEnd />
+		<Tooltip />
 	</body>
 </html>
 <style is:global lang="scss">
