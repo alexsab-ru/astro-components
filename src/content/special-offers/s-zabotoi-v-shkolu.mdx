@@ -1,0 +1,156 @@
+---
+h1: "Geely Service. С заботой в школу!"
+title: "Geely Service. С заботой в школу!"
+caption: "Geely Service. С заботой в школу!"
+breadcrumb: "С заботой в школу"
+pubDate: "2025-08-18"
+toDate: "2025-10-15"
+image: "https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/thumb.webp"
+description: "Начало учебного года — время заботы о безопасности вашего автомобиля. С «18» августа 2025 года по «15» октября 2025 года Geely Service подготовили для Вас специальное предложение:"
+---
+import Button from '@/components/Button/Button.astro';
+import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import Timer from '@/components/Timer/Timer.astro';
+import InfoSectionWithImage from '@/components/InfoSectionWithImage/InfoSectionWithImage.astro';
+import Form from '@/components/FeedbackForm/Form.astro';
+import settings from '@/data/settings.json';
+export const { site_name, phone_common, legal_city_where, legal_entity } = settings;
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { LAST_DAY, MONTH, MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, YEAR } from '@/js/utils/date';
+
+export const dateFrom = '18.08.2025';
+export const dateTo = `15.10.2025`;
+export const dateToGenitive = `${LAST_DAY} ${MONTH_GENITIVE} ${YEAR}`;
+export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
+
+**Начало учебного года — время заботы о безопасности вашего автомобиля. С {dateFrom} года по {dateTo} года Geely Service подготовили для Вас специальное предложение!**
+
+<picture>
+	<source media="(min-width: 768px)" srcset="https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/banner_1920w.webp" />
+	<source media="(min-width: 320px)" srcset="https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/banner_1024w.webp" />
+	<img src="https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/banner_1024w.webp" class="w-full mb-10" width="1496" alt="С заботой в школу" />
+</picture>
+
+<Timer 
+    title='Готовьтесь к учебному году с безопасными поездками'
+	class='!pt-0'
+    endtime='2025-10-15T23:59:59+04:00'
+/>
+
+<div class="flex justify-center pb-20">
+	<Button view="scroll-link" classes="!btn !text-white !no-underline" url="#service-request" title="Записаться на сервис" />
+</div>
+
+<div class="mt-10">
+	<h2>Комплексная диагностика всего за&nbsp;999&nbsp;₽ <sup>*</sup></h2>
+	<InfoSectionWithImage image={{
+		desktop: 'https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/1.webp',
+	}}>
+			<h3 class="font-bold">ПРОВЕРКА КЛЮЧЕВЫХ СИСТЕМ АВТОМОБИЛЯ</h3>
+			<div class="web_block_media-accordion__accordion-text text-color-secondary text-content">
+                <p>Проверим все ключевые системы вашего автомобиля, чтобы дорога в школу и обратно была как можно более комфортной и безопасной:</p>
+				<ul>
+					<li>Техническая проверка:&nbsp;уровни жидкостей, подвеска, тормоза, кондиционер.</li>
+					<li>Безопасность:&nbsp;шины, освещение, ремни.</li>
+					<li>Экономия:&nbsp;выгодная цена за полный осмотр!</li>
+				</ul>
+			</div>
+	</InfoSectionWithImage>
+	<InfoSectionWithImage image={{
+		desktop: 'https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/2.webp',
+	}}>
+			<h3 class="font-bold">УЧАСТВУЙТЕ В АКЦИИ И ВЫИГРЫВАЙТЕ ПРИЗЫ!</h3>
+			<div class="web_block_media-accordion__accordion-text text-color-secondary text-content">
+                  <p><strong>#GeelyСЗаботойВШколу</strong>&nbsp;— это семейная акция, где мы дарим подарки за ваши тёплые и безопасные моменты! Сроки конкурса:&nbsp;{dateFrom} года года – {dateTo} года.
+				Что можно выиграть**:</p>
+				<ul>
+					<li>Ноутбук</li>
+					<li>Планшет</li>
+					<li>Смартфон</li>
+					<li>10 стильных брендированных наборов: рюкзак + мешок для обуви + бутылка для воды.</li>
+				</ul>
+            </div>
+	</InfoSectionWithImage>
+</div>
+
+<div class="">
+	<h2>Как принять участие?</h2>
+	<InfoSectionWithImage image={{
+		desktop: 'https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/3.webp',
+	}}>
+			<h3 class="font-bold">Пройдите акционную диагностику</h3>
+			<div class="web_block_media-accordion__accordion-text text-color-secondary text-content">
+                <p>В любом сервисном центре Geely до {dateTo} года</p>
+			</div>
+	</InfoSectionWithImage>
+	<InfoSectionWithImage image={{
+		desktop: 'https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/4.webp',
+	}}>
+			<h3 class="font-bold">Создайте креативный пост в соцсетях (фото или видео), где</h3>
+			<div class="web_block_media-accordion__accordion-text text-color-secondary text-content">
+				<ul>
+					<li>Есть ваш&nbsp;Geely&nbsp;и семья (дети, родители — все, кто готовится к школе!).</li>
+					<li>Видны&nbsp;элементы безопасности&nbsp;(детское кресло, пристёгнутые ремни).</li>
+					<li>Переданы&nbsp;живые эмоции&nbsp;и атмосфера семейных поездок.</li>
+				</ul>
+            </div>
+	</InfoSectionWithImage>
+	<InfoSectionWithImage image={{
+		desktop: 'https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/5.webp',
+	}}>
+			<h3 class="font-bold">Опубликуйте свой пост</h3>
+			<div class="web_block_media-accordion__accordion-text text-color-secondary text-content">
+				<strong>С хэштегом&nbsp;#GeelyСЗаботойВШколу,</strong> отметкой&nbsp;@GeelyRussia&nbsp;и отправьте ссылку в&nbsp;<a href="https://t.me/geelyofficial" target="_blank">Telegram</a>
+			</div>
+	</InfoSectionWithImage>
+</div>
+
+<div class="">
+	<InfoSectionWithImage image={{
+		desktop: 'https://cdn.alexsab.ru/specials/geely/s-zabotoi-v-shkolu/6.webp',
+	}}>
+			<h3 class="font-bold">С&nbsp;Geely Service каждая поездка&nbsp;&mdash; с&nbsp;повышенной заботой и&nbsp;безопасностью!</h3>
+			<div class="web_block_media-text__text text-content text-color-secondary">
+				<ul>
+					<li><strong>Позаботьтесь о машине</strong>&nbsp;— получите выгодную*** диагностику!</li>
+					<li><strong>Поделитесь моментом</strong>&nbsp;— выиграйте крутые призы!</li>
+					<li>Пусть новый учебный год&nbsp;начинается с надёжных дорог!</li>
+				</ul>
+				<p><strong>Приезжайте в сервис, участвуйте и побеждайте!</strong>&nbsp;</p>
+			</div>
+	</InfoSectionWithImage>
+</div>
+
+<div class="flex justify-center">
+	<Button view="link" classes="!btn btn-o !no-underline" url="https://www.geely-motors.com/%D0%9F%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D0%B0%20%D0%9C%D0%B5%D1%80%D0%BE%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D1%8F_Geely%20Service_%D0%A1%20%D0%B7%D0%B0%D0%B1%D0%BE%D1%82%D0%BE%D0%B9%20%D0%B2%20%D1%88%D0%BA%D0%BE%D0%BB%D1%83_15957886627072464342.pdf" title="Правила конкурса" target="_blank" />
+</div>
+
+<div class="py-20" id="service-request">
+	<h2>Записаться на сервис</h2>
+	<Form dataFormName="Запись на сервис" showModelSelect={true} />
+</div>
+
+> Реклама. Рекламодатель: ООО «ДЖИЛИ-МОТОРС», https://www.geely-motors.com. Не оферта (ст. 437 ГК РФ). Проведение любых дополнительных работ отдельно согласуется с клиентом в соответствии с прейскурантом цен официального Дилера ООО «ДЖИЛИ-МОТОРС», является опциональным и не является обязательным условием предоставления услуги.
+
+> Подробности уточняйте у дилеров ООО «ДЖИЛИ-МОТОРС», на официальном сайте ООО «ДЖИЛИ-МОТОРС» https://www.geely-motors.com или по телефону <a href="{phoneFormat(phone_common)}">{phone_common}</a>. ООО «ДЖИЛИ-МОТОРС» оставляет за собой право на изменение условий предложения в одностороннем порядке.
+
+> О возможности проведения данной услуги на вашем автомобиле просьба уточнять у официального Дилера Geely {legal_entity} в {legal_city_where}.
+
+> Список услуг в рамках предложения ограничен, актуальный список уточняйте у официального Дилера Geely {legal_entity} в {legal_city_where}.
+
+> Сроки проведения акции - с {dateFrom} г. по {dateTo} г.
+
+> <sup>*</sup> Комплекс услуг включает:
+
+> - проверку уровней рабочих жидкостей;
+> - контроль целостности деталей подвески;
+> - проверку исправности стояночного тормоза;
+> - диагностику системы кондиционирования и охлаждения;
+> - проверку работы стеклоочистителей и стеклоомывателей;
+> - сканирование кодов ошибок, диагностику климат-контроля и контрольных ламп;
+> - проверку состояния шин (протектор, давление);
+> - тестирование внешнего и внутреннего освещения.
+
+> <sup>**</sup> Марка Huawei (Хуавэй), модель по выбору Организатора.
+
+> <sup>***</sup> По сравнению с ценами за период с «01» января 2025 по «31» март 2025 г.
