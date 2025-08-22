@@ -268,9 +268,25 @@ jobs:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
-  notify_telegram_about_special_marketing:
+  check_marketing_secret:
     needs: [build]
-    if: ${{ needs.build.outputs.specials_marketing != '' && secrets.TELEGRAM_TO_SPECIAL_MARKETING != '' }}
+    if: needs.build.outputs.specials_marketing != ''
+    runs-on: ubuntu-latest
+    outputs:
+      secret_exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Check if marketing telegram secret exists
+        id: check
+        run: |
+          if [ -n "${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  notify_telegram_about_special_marketing:
+    needs: [build, check_marketing_secret]
+    if: needs.check_marketing_secret.outputs.secret_exists == 'true'
     uses: ./.github/workflows/github-telegram.yml
     with:
       include-header: false
