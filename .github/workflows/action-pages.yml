@@ -273,6 +273,7 @@ jobs:
     if: ${{ needs.build.outputs.specials_marketing != '' && secrets.TELEGRAM_TO_SPECIAL_MARKETING != '' }}
     uses: ./.github/workflows/github-telegram.yml
     with:
+      include-header: false
       additional-text: |
         ${{ needs.build.outputs.specials_marketing }}
     secrets:
