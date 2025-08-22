@@ -171,8 +171,6 @@ const searchDates = (content, filePath) => {
       if (format2) allDates.push(...format2);
      }
   }
-  
-  console.log(filePath, allDates);
 
   if (allDates.length) {
     const convertedDates = allDates.map(date => convertToDDMMYYYY(date));
@@ -296,6 +294,7 @@ if (filesWithUpcomingDates.length > 0) {
   console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
   const domain = process.env.DOMAIN;
   let htmlOutput = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
+  let htmlOutputMarketing = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
   
   filesWithUpcomingDates.forEach(({ filePath, dates }) => {
     const relativePath = path.relative(process.cwd(), filePath);
@@ -314,10 +313,14 @@ URL: ${url}
 <strong>URL:</strong> <a href="${url}">${url}</a>\n
 <strong>Даты окончания:</strong> ${dates.join(', ')}\n
 \n`;
+
+    htmlOutputMarketing += `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${dates.join(', ')}\n\n`;
   });
   
   // Сохраняем результаты в файл
   const outputPath = './special-offers-dates.txt';
   fs.writeFileSync(outputPath, htmlOutput, 'utf8');
-  console.log(`\nРезультаты сохранены в файл: ${outputPath}`);
+  const outputPathMarketing = './special-offers-dates-marketing.txt';
+  fs.writeFileSync(outputPathMarketing, htmlOutputMarketing, 'utf8');
+  console.log(`\nРезультаты сохранены в файл: ${outputPath}, ${outputPathMarketing}`);
 }
