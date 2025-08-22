@@ -18,7 +18,8 @@ import Morquee from '@/components/Marquee/Index.astro';
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
 import salonsData from '@/data/salons.json';
-const salons = salonsData.filter(salon => !salon.type || salon.type.includes('index'));
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import SeoText from '@/components/Seo/Index.astro';
@@ -41,7 +42,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 
 ---
 
-<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
 
 	<Banner />
 
@@ -66,7 +67,9 @@ import Reviews from '@/components/Reviews/Index.astro';
 		<section class="section bg-gray-100" id="cars">
 			<div class="container">
 				<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{`Автомобили ${brand} в наличии в ${legal_city_where}`}</h2>
+
 				<CarsList />
+
 			</div>
 		</section>
 	)}

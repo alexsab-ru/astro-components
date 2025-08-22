@@ -724,6 +724,41 @@ class CarProcessor:
                 return shop.find('offers')
         return root
 
+    def sort_cars_by_vin(self, cars_element: ET.Element) -> List[ET.Element]:
+        """
+        Сортирует элементы автомобилей по VIN.
+        
+        Args:
+            cars_element: Элемент, содержащий список автомобилей
+            
+        Returns:
+            List[ET.Element]: Отсортированный список элементов автомобилей
+        """
+        if cars_element is None:
+            return []
+        
+        # Получаем все дочерние элементы (автомобили)
+        cars = list(cars_element)
+        
+        # Функция для извлечения VIN из элемента автомобиля
+        def get_vin(car_elem):
+            # Пытаемся найти VIN в зависимости от типа источника
+            vin_field = self.config['field_mapping'].get('vin')
+            if vin_field:
+                vin_elem = car_elem.find(vin_field)
+                if vin_elem is not None and vin_elem.text:
+                    return vin_elem.text.strip()
+            
+            # Если VIN не найден, возвращаем пустую строку для сортировки в конец
+            return ""
+        
+        # Сортируем по VIN
+        sorted_cars = sorted(cars, key=get_vin)
+        
+        print(f"📋 Отсортировано {len(sorted_cars)} автомобилей по VIN")
+        
+        return sorted_cars
+
     def update_source_type(self, new_source_type: str) -> None:
         """Обновляет тип источника и перенастраивает конфигурацию"""
         self.source_type = new_source_type
@@ -961,7 +996,9 @@ def main():
             # Обработка машин
             cars_element = processor.get_cars_element(root)
             if cars_element is not None:
-                for car in cars_element:
+                # Сортируем автомобили по VIN для стабильной обработки
+                sorted_cars = processor.sort_cars_by_vin(cars_element)
+                for car in sorted_cars:
                     if should_remove_car(car, remove_mark_ids, remove_folder_ids):
                         continue
                     
@@ -1090,7 +1127,9 @@ def main():
         
         # Обработка машин
         cars_element = processor.get_cars_element(root)
-        for car in cars_element:
+        # Сортируем автомобили по VIN для стабильной обработки
+        sorted_cars = processor.sort_cars_by_vin(cars_element)
+        for car in sorted_cars:
             if should_remove_car(car, remove_mark_ids, remove_folder_ids):
                 continue
             

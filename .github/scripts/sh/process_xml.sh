@@ -175,7 +175,7 @@ get_domain() {
 
     # 2. Если не найдено — ищем в .env с нужными преобразованиями
     if [ ! -f ".env" ]; then
-        echo -e "${BGRED}Error: .env file not found${Color_Off}" >&2
+        echo -e "${BGRED}Error get domain: .env file not found${Color_Off}" >&2
         return 1
     fi
 
@@ -201,7 +201,7 @@ get_xml_url() {
     
     # 2. Если не найдено — ищем в .env с нужными преобразованиями
     if [ ! -f ".env" ]; then
-        echo -e "${BGRED}Error: .env file not found${Color_Off}" >&2
+        echo -e "${BGRED}Error get xml from ${var_name}: .env file not found${Color_Off}" >&2
         return 1
     fi
     

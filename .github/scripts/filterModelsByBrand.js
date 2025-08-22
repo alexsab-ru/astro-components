@@ -37,6 +37,7 @@ const logError   = (msg) => console.log('\x1b[30;41m%s\x1b[0m', msg);
 const dataDirectory = path.join(process.cwd(), 'src', 'data');
 const settingsFilePath = path.join(dataDirectory, 'settings.json');
 const allModelsFilePath = path.join(dataDirectory, 'all-models.json');
+const federalDisclaimerFilePath = path.join(dataDirectory, 'federal-disclaimer.json');
 const modelsFilePath = path.join(dataDirectory, 'models.json');
 
 // Структура вывода
@@ -48,8 +49,10 @@ const data = {
 
 try {
   const settings = readJson(settingsFilePath);
+  if (!settings) throw new Error('Не удалось загрузить файл settings.json');
   const allModels = readJson(allModelsFilePath);
-  if (!settings || !allModels) throw new Error('Не удалось загрузить файлы settings.json или all-models.json');
+  if (!allModels) throw new Error('Не удалось загрузить файл all-models.json');
+  const federalDisclaimer = readJson(federalDisclaimerFilePath);
 
   if (settings.brand == 'BRAND') {
     // random brand from unique brands
@@ -68,18 +71,64 @@ try {
     return markMatch && (targetIDs.length === 0 || idMatch) &&  m.show;
   };
 
-  // models
-  data.models = allModels.filter(filterBy(modelIDs));
+  /**
+   * Функция для добавления дисклеймеров к модели
+   * Проверяет соответствие модели ключам из federal-disclaimer.json
+   * Ключ формируется как mark_id-id в lowercase (например: "solaris-krs")
+   * @param {Object} model - объект модели из all-models.json
+   * @returns {Object} модель с добавленными дисклеймерами или без изменений
+   */
+  const addDisclaimersToModel = (model) => {
+    // Если файл с дисклеймерами не загружен, возвращаем модель без изменений
+    if (!federalDisclaimer) return model;
+    
+    // Создаем ключ для поиска в формате mark_id-id (в lowercase)
+    // Например: "Solaris" + "krs" = "solaris-krs"
+    const disclaimerKey = `${String(model.mark_id).toLowerCase()}-${String(model.id).toLowerCase()}`;
+    
+    // Ищем соответствующий дисклеймер в федеральном файле
+    const disclaimer = federalDisclaimer[disclaimerKey];
+    
+    if (disclaimer) {
+      // Логируем успешное добавление дисклеймера
+      logSuccess(`Добавлен дисклеймер для модели ${model.mark_id} ${model.id}`);
+      
+      // Добавляем дисклеймеры к модели
+      // priceDisclaimer - дисклеймер для цены
+      // benefitDisclaimer - дисклеймер для выгод/акций
+      return {
+        ...model,
+        priceDisclaimer: disclaimer.price || '',
+        benefitDisclaimer: disclaimer.benefit || ''
+      };
+    }
+    
+    // Если дисклеймер не найден, возвращаем модель без изменений
+    return model;
+  };
 
-  // test-drive
+  // Обработка основных моделей - фильтруем по бренду/ID и добавляем дисклеймеры
+  data.models = allModels
+    .filter(filterBy(modelIDs))
+    .map(addDisclaimersToModel);
+
+  // Обработка моделей для тест-драйва - фильтруем и добавляем дисклеймеры
+  // Выбираем только нужные поля + дисклеймеры
   data.testDrive = allModels
     .filter(filterBy(testDriveIDs))
-    .map(m => pickFields(m, ['mark_id', 'id', 'name', 'thumb', 'globalChars', 'show']));
+    .map(m => {
+      const modelWithDisclaimers = addDisclaimersToModel(m);
+      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'thumb', 'globalChars', 'show', 'priceDisclaimer', 'benefitDisclaimer']);
+    });
 
-  // services
+  // Обработка моделей для сервисов - фильтруем и добавляем дисклеймеры
+  // Выбираем только нужные поля + дисклеймеры
   data.services = allModels
     .filter(filterBy(serviceIDs))
-    .map(m => pickFields(m, ['mark_id', 'id', 'name', 'show']));
+    .map(m => {
+      const modelWithDisclaimers = addDisclaimersToModel(m);
+      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'show', 'priceDisclaimer', 'benefitDisclaimer']);
+    });
 
   if (
     data.models.length === 0 &&
@@ -89,6 +138,17 @@ try {
     logWarning('Ни одна модель не прошла фильтрацию. models.json будет пустым.');
   } else {
     logSuccess('models.json успешно обновлён по брендам и ID из settings.json');
+    
+    // Подсчитываем количество моделей с дисклеймерами
+    const modelsWithDisclaimers = data.models.filter(m => m.priceDisclaimer || m.benefitDisclaimer).length;
+    const testDriveWithDisclaimers = data.testDrive.filter(m => m.priceDisclaimer || m.benefitDisclaimer).length;
+    const servicesWithDisclaimers = data.services.filter(m => m.priceDisclaimer || m.benefitDisclaimer).length;
+    
+    if (modelsWithDisclaimers > 0 || testDriveWithDisclaimers > 0 || servicesWithDisclaimers > 0) {
+      logSuccess(`Добавлены дисклеймеры: ${modelsWithDisclaimers} моделей, ${testDriveWithDisclaimers} тест-драйвов, ${servicesWithDisclaimers} сервисов`);
+    } else {
+      logWarning('Дисклеймеры не найдены для отфильтрованных моделей');
+    }
   }
 } catch (err) {
   logError('Ошибка при обработке моделей. models.json будет создан как пустой объект.');

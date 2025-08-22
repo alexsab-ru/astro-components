@@ -2,7 +2,7 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import CookiePolicy from '@/content/cookie-policy.mdx';
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, legal_city } = settings;
+const { site_name, brand, legal_entity, legal_inn, legal_city } = settings;
 import scripts from '@/data/scripts.json';
 const { site } = scripts;
 import salonsData from '@/data/salons.json';
@@ -29,6 +29,7 @@ const contact_text = legal_entity && legal_inn ?
 <PageLayout
     h1="Политика обработки файлов cookie"
     title="Политика обработки файлов cookie"
+    description={`Политика cookie ${brand} ${legal_city}: какие файлы используются, для каких целей, какие сторонние сервисы задействованы (Яндекс.Метрика, колтрекинг) и как управлять cookie.`}
     breadcrumb={[{name:"Политика обработки файлов cookie",href:""}]}
 >
 

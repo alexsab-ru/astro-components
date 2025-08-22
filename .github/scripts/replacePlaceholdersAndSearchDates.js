@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, FIRST_DAY, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
 import { currencyFormat } from '../../src/js/utils/numbers.format.js';
+import { quoteEscaper } from '../../src/js/utils/helpers.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,26 +12,17 @@ const dataDirectory = path.join(process.cwd(), 'src', 'data');
 const contentDirectory = path.join(process.cwd(), 'src', 'content');
 const pagesDirectory = path.join(process.cwd(), 'src', 'pages');
 
+// Иконка для дисклеймера
+const infoIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>';
+
 // Массив для отслеживания измененных файлов
 const modifiedFiles = [];
 // Массив для хранения файлов с приближающимися датами
 const filesWithUpcomingDates = [];
 
-// Проверяем наличие файла all-prices.json
-const carsFilePath = path.join(dataDirectory, 'all-prices.json');
-let carsData = [];
-
-if (fs.existsSync(carsFilePath)) {
-  const carsFileContent = fs.readFileSync(carsFilePath, 'utf-8');
-  try {
-    carsData = JSON.parse(carsFileContent);
-    if (!Array.isArray(carsData)) {
-      carsData = [];
-    }
-  } catch (error) {
-    console.error("Ошибка парсинга файла all-prices.json:", error);
-  }
-}
+// Получаем данные с валидацией типов
+const carsData = readAndValidateJSON('all-prices.json', 'array', []);
+const disclaimerData = readAndValidateJSON('federal-disclaimer.json', 'object', {});
 
 // Создаем объект для хранения плейсхолдеров
 const carsPlaceholder = {};
@@ -46,10 +38,41 @@ if (carsData.length > 0) {
           carsPlaceholder[`{{${key}-${car.id}}}`] = car[key];
           // Плейсхолдер с форматированием
           carsPlaceholder[`{{${key}b-${car.id}}}`] = currencyFormat(car[key]);
+
+          // если объект не пустой и есть ключ для текущего car.id и одно из значений не пустое, то добавляем в плейсхолдер дисклеймер
+          if( Object.keys(disclaimerData).length && (disclaimerData?.[car.id] && disclaimerData?.[car.id]?.[key] !== '') ) {
+            carsPlaceholder[`{{${key}b-${car.id}}}`] += quoteEscaper(`<span>&nbsp;</span><span class="tooltip-icon" data-text="${disclaimerData[car.id][key]}">${infoIcon}</span>`);
+          }
+
         }
       });
     }
   });
+}
+
+// Общая функция для чтения и валидации JSON-файла
+function readAndValidateJSON(fileName, expectedType, defaultValue) {
+  const filePath = path.join(dataDirectory, fileName);
+  if (!fs.existsSync(filePath)) return defaultValue;
+  
+  try {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    let data = JSON.parse(content);
+    
+    // Проверка соответствия ожидаемому типу
+    if (expectedType === 'array' && !Array.isArray(data)) {
+      return defaultValue;
+    }
+    
+    if (expectedType === 'object' && Array.isArray(data)) {
+      return defaultValue;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error(`Ошибка парсинга файла ${fileName}:`, error);
+    return defaultValue;
+  }
 }
 
 // Проверяем наличие файла settings.json

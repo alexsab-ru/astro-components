@@ -7,19 +7,20 @@ const isProd = import.meta.env.PROD;
 <script>
 function runMETRIKA(scripts_json_metrika) {
     // console.log("runMETRIKA", scripts_json_metrika);
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    let ymFunc = function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
     m[i].l=1*new Date();
     for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}
 
     scripts_json_metrika.forEach(metrika => {
+        ymFunc(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id='+metrika.id, 'ym');
         ym(metrika.id, "init", metrika);
         ym(metrika.id, 'params', {
             domain_region: window._dp.domain_region,
             region: window._dp.region
         });
     });
+    ymFunc(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=94754424', 'ym');
     ym(94754424, "init", {
         "clickmap": true,
         "trackLinks": true,

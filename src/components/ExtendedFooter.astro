@@ -41,8 +41,10 @@ salons
                 <div class="text-xl mb-3 md:mb-5">Разделы сайта</div>
                 <ul class="space-y-2">
                 {
-                    links.map(link => (
-                    <li><a href={path === '/' ? link.url : '/'+link.url} class={`transition hover:underline ${path === link.url ? 'font-extrabold' : ''}`}>{link.name}</a></li>
+                    links
+                        .filter(link => link.url !== 'javascript:void(0)')
+                        .map(link => (
+                            <li><a href={link.url} class={`transition hover:underline ${path === link.url ? 'font-extrabold' : ''}`}>{link.name}</a></li>
                     ))
                 }
                 </ul>

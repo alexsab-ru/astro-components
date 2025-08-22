@@ -3,7 +3,7 @@
 }
 
 .banner-description {
-	@apply text-sm sm:text-xl md:text-3xl;
+	@apply text-sm sm:text-xl md:text-3xl relative z-10;
 }
 
 .swiper-pagination-bullet {
