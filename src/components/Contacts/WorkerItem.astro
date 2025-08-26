@@ -10,7 +10,7 @@ interface Props {
 	}
 }
 const {worker} = Astro.props;
-const workerPhoto = worker?.photo || 'https://cdn.alexsab.ru/people/user.webp';
+const workerPhoto = worker?.photo || '';
 
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { Icon } from 'astro-icon/components';
@@ -32,7 +32,7 @@ import { Icon } from 'astro-icon/components';
 			{worker?.email && (
 				<div class="flex items-center gap-1.5">
 					<Icon name="mdi:email-outline" class="text-xl flex-shrink-0 text-gray-600" />
-					<a href={`mailto:${worker.email}`} class="font-bold transition-colors hover:text-accent-500 inline-block">{worker.email}</a>
+					<a href={`mailto:${worker.email}`} class="font-bold transition-colors hover:text-accent-500 inline-block !m-0">{worker.email}</a>
 				</div>
 			)}
 		</div>

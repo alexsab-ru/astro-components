@@ -1,0 +1,18 @@
+---
+import seo from '@/data/seo.json';
+interface Props {
+	h1?: string;
+	classes?: string;
+}
+let { h1 = '', classes = '' } = Astro.props;
+const currentPath = Astro.url.pathname;
+if (seo[currentPath]) {
+	const pageSeo = seo[currentPath];
+
+	if (pageSeo.h1 && pageSeo.h1.trim()) {
+		h1 = pageSeo.h1;
+	}
+}
+---
+
+{h1.length ? (<h1 class={classes}>{h1}</h1>) : null}

@@ -1,6 +1,8 @@
 ---
-import { FOOTER_INFO, LEGAL_ENTITY, BRAND, SITE_NAME } from '@/const'
-const url = `https://alexsab.ru?utm_source=client&utm_medium=${BRAND}&utm_compaing=${SITE_NAME}`
+import settings from '@/data/settings.json';
+const { site_name, legal_entity, brand } = settings;
+import { FOOTER_INFO } from '@/const'
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${site_name}`;
 ---
 
 <footer class="bg-black text-white py-8" x-data="footer">
@@ -24,7 +26,7 @@ const url = `https://alexsab.ru?utm_source=client&utm_medium=${BRAND}&utm_compai
 			</noindex>
 		</div>
 		<div class="relative flex flex-col sm:flex-row justify-between pt-10">
-		<p class="mb-4">© 2024 {LEGAL_ENTITY}</p>
+		<p class="mb-4">© 2024 {legal_entity}</p>
 		<p class="relative bottom-0 right-0 text-sm opacity-70">Разработка <a href={url} target="_blank">alexsab.ru</a></p>
 		</div>
 	</div>

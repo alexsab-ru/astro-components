@@ -1,64 +1,17 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { LEGAL_CITY_WHERE, AGREE_LABEL, BRAND } from '@/const';
-import Button from '@/components/Button/Button.astro';
-import Input from '@/components/Input.astro';
-import Checkbox from '@/components/Checkbox/Checkbox.astro';
-import FormSelect from '@/components/FormSelect.astro';
-import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
-import salonsData from '@/data/salons.json';
-import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('service'));
-import models from '@/data/models.json';
-const options = models.filter(m => {
-	if(m.show){
-		return {id: m.id, name: m.name}
-	}
-});
+import Form from '@/components/FeedbackForm/Form.astro';
+import settings from '@/data/settings.json';
+import PageH1 from '@/components/PageH1/Index.astro';
+const { brand, legal_city_where } = settings;
 ---
 
-<Layout title={`Запись на сервис ${BRAND}`} description={`Запись на сервис автомобилей ${BRAND} в ${LEGAL_CITY_WHERE}`}>
+<Layout title={`Запись на сервис ${brand}`} description={`Запись на сервис автомобилей ${brand} в ${legal_city_where}`}>
 	<div class="container py-10 space-y-10">
 		<div>
-			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на сервис {BRAND}</h1>
+			<PageH1 h1={`Записаться на сервис ${brand}`} classes="text-3xl sm:text-4xl font-bold text-center" />
 			<p class="text-center mt-1 text-gray-500">Профессиональное обслуживание с сохранением гарантии</p>
 		</div>
-		<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
-			<input type="hidden" name="form" value="Запись на сервис" />
-			<input
-				type="email"
-				tabindex="-1"
-				name="email"
-				class="h-0 opacity-0 absolute -z-[100]"
-				placeholder="mail@example.com"
-			/>
-			<FormSelect name="model" placeholder="Выберите модель" options={options} />
-			<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
-			<Input
-				type="tel"
-				name="phone"
-				classes="border-gray-100"
-				placeholder="+7 (999) 999-99-99*"
-				required
-				errorClasses="text-red-500"
-			/>
-			<ChoosingDealerSelect required={true} salons={salons} />
-			<Checkbox
-				name="agree"
-				label={AGREE_LABEL}
-				color="black"
-				required
-				errorClasses="text-red-500 w-full"
-				errorText="Чтобы продолжить, установите флажок"
-			/>
-
-			<input
-				type="checkbox"
-				name="subscribe"
-				class="absolute w-0 h-0 opacity-0 invisible"
-			/>
-
-			<Button view="form-button" classes="w-full" title="Отправить" />
-		</form>
+		<Form dataFormName="Запись на сервис" showModelSelect={true} />
 	</div>
 </Layout>

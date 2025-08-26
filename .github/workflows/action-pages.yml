@@ -18,7 +18,8 @@ on:
     branches: ["main","brand","dealer"]
     paths-ignore:
       - '.github/scripts/sh/getAirStorage.sh'
-      - '.github/scripts/sh/getDealerData.sh'
+      - '.github/scripts/sh/getDealerCarsPrice.sh'
+      - '.github/scripts/sh/getDealerPrices.sh'
       - '.github/scripts/sh/getDealerStorage.sh'
       - '.github/scripts/sh/getSortStorage.sh'
       - '.github/scripts/CarFeedProcessorCSV.py'
@@ -27,13 +28,15 @@ on:
       - '.github/scripts/config.py'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
-      - '.github/scripts/model_mapping.json'
+      - '.github/scripts/mergeCarPrices.js'
       - '.github/scripts/update_cars_air_storage.py'
       - '.github/scripts/update_cars.py'
       - '.github/scripts/utils.py'
       - '.github/workflows/update_cars.yml'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  # Allows this workflow to be called by other workflows
+  workflow_call:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -103,6 +106,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules
+            .pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Determine changes
         id: check_changes
         run: |
@@ -130,45 +149,72 @@ jobs:
           touch .env
           echo PUBLIC_YANDEX_SITE_VERIFICATION=${{ vars.PUBLIC_YANDEX_SITE_VERIFICATION }} >> .env
           echo PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }} >> .env
+          echo JSON_PATH=${{ secrets.JSON_PATH }} >> .env
+          echo DOMAIN=${{ vars.DOMAIN }} >> .env
           cat .env
 
-      - name: Download JSONs
-        run: |
-          mkdir src/data
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/banners.json -o src/data/banners.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models.json -o src/data/models.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/salons.json -o src/data/salons.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/scripts.json -o src/data/scripts.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/seo.json -o src/data/seo.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/services.json -o src/data/services.json
-          curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/socials.json -o src/data/socials.json
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/cars.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/cars.json -o src/data/cars.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/special-services.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/special-services.json -o src/data/special-services.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/faq.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/faq.json -o src/data/faq.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/reviews.json; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/reviews.json -o src/data/reviews.json 
-          fi
-          if curl --output /dev/null --silent --fail -r 0-0 ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models-sections.yml; then
-            curl ${{ secrets.JSON_PATH }}/${{ vars.DOMAIN }}/data/models-sections.yml -o src/data/models-sections.yml 
-          fi
-          ls -al src/data
-
-      - name: Replace Placeholders in JSON
-        run: |
-          node .github/scripts/replacePlaceholdersInJson.js
-
-      - name: Build Astro
+      - name: PNPM install
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
+
+      - name: Download JSONs
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          pnpm downloadJSON
+        env:
+          JSON_PATH: ${{ secrets.JSON_PATH }}
+          DOMAIN: ${{ vars.DOMAIN }}
+
+      - name: Get dealer prices
+        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN }}
+        run: |
+          pnpm getDealerPrices
+        continue-on-error: true
+        env:
+          CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
+          QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
+          KEY_MAPPING: ${{ vars.DEALER_PRICE_KEY_MAPPING }}
+
+      - name: ls files
+        run: |
+          if [[ -d src/data ]]; then ls -al src/data; fi
+
+      - name: Merge car prices
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          pnpm mergeCarPrices
+
+      - name: Replace Placeholders in JSON
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          pnpm replacePlaceholdersAndSearchDates
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
+
+      - name: Astro Build
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
           pnpm build --outDir ./_site
+
+      - name: Check specials
+        id: check_specials
+        run: |
+          if [ -s special-offers-dates.txt ]; then
+            echo "$(cat special-offers-dates.txt)" > output_wrapped.txt
+            # Кодируем содержимое файла в base64
+            encoded_output=$(base64 -w 0 output_wrapped.txt)
+            # Передаем закодированное значение
+            echo "specials=$encoded_output" >> $GITHUB_OUTPUT
+          fi
+          if [ -s special-offers-dates-marketing.txt ]; then
+            echo "$(cat special-offers-dates-marketing.txt)" > output_wrapped_marketing.txt
+            # Кодируем содержимое файла в base64
+            encoded_output_marketing=$(base64 -w 0 output_wrapped_marketing.txt)
+            # Передаем закодированное значение
+            echo "specials_marketing=$encoded_output_marketing" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
@@ -183,6 +229,8 @@ jobs:
 
     outputs:
       changes: ${{ steps.check_changes.outputs.changes }}
+      specials: ${{ steps.check_specials.outputs.specials }}
+      specials_marketing: ${{ steps.check_specials.outputs.specials_marketing }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
 
   # Deployment job
@@ -206,5 +254,49 @@ jobs:
       additional-text: |
         $(echo -n '${{ needs.build.outputs.after_deploy }}' | base64)
     secrets:
-      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_AFTER_DEPLOY }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  notify_telegram_about_special:
+    needs: [build]
+    if: needs.build.outputs.specials != ''
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      additional-text: |
+        ${{ needs.build.outputs.specials }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  check_marketing_secret:
+    needs: [build]
+    if: needs.build.outputs.specials_marketing != ''
+    runs-on: ubuntu-latest
+    outputs:
+      secret_exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Check if marketing telegram secret exists
+        id: check
+        run: |
+          if [ -n "${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  notify_telegram_about_special_marketing:
+    needs: [build, check_marketing_secret]
+    if: needs.check_marketing_secret.outputs.secret_exists == 'true'
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      include-header: false
+      additional-text: |
+        ${{ needs.build.outputs.specials_marketing }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  check_links:
+    needs: [build, deploy]
+    if: ${{ github.event_name == 'schedule' }}
+    uses: ./.github/workflows/linkinator.yml

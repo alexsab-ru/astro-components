@@ -6,24 +6,25 @@ interface Props {
 
 const {salons = [], classes = ''} = Astro.props;
 
-import { SITE_NAME, LEGAL_ENTITY, LEGAL_INN } from '@/const'
-
-import { phoneFormat } from '@/js/utils/numbers.format';
-
-import {Icon} from 'astro-icon/components';
+import settings from '@/data/settings.json';
+const { site_name, logo_map_info, logo_header, logo_dealer_header, logo_dealer_map_info } = settings;
+const logo_dealer = logo_dealer_map_info || logo_dealer_header || '';
 
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
 ---
 
 <div class={`map-info relative lg:absolute lg:max-w-md s1024_1074:left-[45px] s1280_1330:left-[45px] s1536_1586:left-[45px] py-8 px-4 sm:px-8 z-10 bg-white/70 shadow-2xl w-fit mx-auto mb-10 lg:mb-0 flex flex-col ${classes}`}>
-	<div class="flex items-center flex-nowrap flex-col sm:flex-row gap-1 sm:gap-3 mb-3">
-		<div class="sm:pr-3 sm:border-r w-full max-w-[140px] flex-grow flex-shrink">
-			<img src="/img/logo/logo.svg" class="w-full" alt={SITE_NAME} loading="lazy" />
+	<div class="flex items-center flex-nowrap flex-col sm:flex-row mb-3 divide-y sm:divide-y-0 sm:divide-x">
+		<div class="pb-3 sm:pb-0 sm:pr-3 w-full max-w-[140px] flex-grow flex-shrink">
+			<img src={logo_map_info || logo_header} class="w-full" alt={site_name} loading="lazy" />
 		</div>
-		<div
-			class="text-xl sm:text-2xl leading-none uppercase tracking-wider sm:tracking-normal">
-			{SITE_NAME}
+		<div class="pt-3 sm:pt-0 sm:pl-3">
+			{logo_dealer ? (
+				<img src={logo_dealer} class={`max-w-[200px]`} alt={site_name} loading="lazy" />
+			) : (
+				<span class="text-xl sm:text-2xl leading-none uppercase tracking-wider sm:tracking-normal">{site_name}</span>
+			)}
 		</div>
 	</div>
 

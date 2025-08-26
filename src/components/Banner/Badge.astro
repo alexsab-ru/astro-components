@@ -5,11 +5,18 @@ const {autoname, title, descr, image, position = 'center', colorText = 'white', 
 const classPosition = position === 'right' ? 'mx-auto md:mx-0 md:ml-auto pr-0' : position === 'left' ? 'mx-auto md:mx-0 pl-0' : 'mx-auto';
 const textColor = colorText === 'black' ? 'text-black' : 'text-white';
 const background = bg ? 'bg-white/30' : '';
+const images = image ? image.split(',') : [];
 ---
 
 <div class={`px-5 py-3 w-fit inline-flex flex-col items-center justify-center ${classPosition} ${textColor} ${background}`}>
     { autoname && (<div class="text-xl md:text-2xl xl:text-3xl font-bold uppercase"><Fragment set:html={autoname}></div>) }
-    { image && (<div class="flex-grow"></div><img src={image} class="w-full max-w-sm xl:max-w-md max-h-28 sm:max-h-36 md:max-h-[300px] object-contain h-auto" alt={title || 'Бейдж'} loading="lazy" /></div> ) }
+    { !!images && (
+        <div class="flex items-center gap-5 flex-grow">
+            {images.map(image => (
+                <img src={image} class="w-full max-w-sm xl:max-w-[280px] max-h-28 sm:max-h-36 md:max-h-[300px] object-contain h-full" loading="lazy" />
+            ))}
+        </div>
+    )}
     { title && (<p class="xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4"><Fragment set:html={title}></p>) }
     { descr && (<p class="xs:text-xs sm:text-lg font-medium text-center uppercase"><Fragment set:html={descr}></p>) }
 </div>

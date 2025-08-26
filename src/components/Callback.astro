@@ -6,8 +6,10 @@ interface Props {
     formName?: string;
     btn?: string;
 }
+import settings from '@/data/settings.json';
+const { improve_offer_background } = settings;
 const {
-    bgUrl = "https://cdn.alexsab.ru/models/default-model-bg.webp", 
+    bgUrl = improve_offer_background,
     title = "Улучшим предложение конкурентов!", 
     subtitle = "<p>У Вас уже есть предложение от другого дилера?</p><p>Сделаем лучше!</p><p>Оставьте Ваши контакты и в ближайшее время мы перезвоним!</p>",
     formName = "Улучшим предложение конкурентов",

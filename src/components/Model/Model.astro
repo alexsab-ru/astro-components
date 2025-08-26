@@ -10,6 +10,7 @@ import {Icon} from 'astro-icon/components';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import './model.scss';
 import { currencyFormat } from '@/js/utils/numbers.format';
+import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 const photoSlides = !model.photos
 	? []
 	: [].concat(
@@ -26,7 +27,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
 	{model?.badge && (
-		<img src={model?.badge?.imgModelPage || model?.badge.img} alt={model?.badge.alt} class="absolute right-4 top-4 xs:h-10 h-16 sm:h-24 w-auto z-10" loading="lazy" />
+		<img src={model?.badge?.imgModelPage || model?.badge.img} alt={model?.badge.alt} class="absolute right-4 top-4 xs:h-10 h-16 sm:h-24 w-auto z-10" height="96" loading="lazy" />
 	)}
 	<div
 		class="model__info"
@@ -54,6 +55,8 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 						model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ? (
 							<p class="uppercase text-3xl sm:text-4xl">
 								<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+								{/* Добавляем значок с дисклеймером для цены, если он существует */}
+								{model?.priceDisclaimer && <Fragment set:html={createDisclaimerIcon(model.priceDisclaimer)} />}
 							</p>
 						) : (
 							<Button
@@ -137,7 +140,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 								href={photo}
 								class="swiper-slide glightbox image-slide"
 								data-gallery={`gallery-${model.id}`}>
-								<img src={photo} loading="lazy" />
+								<img src={photo} loading="lazy" height="200" />
 								<div class="swiper-lazy-preloader" />
 							</a>
 						))}

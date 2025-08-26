@@ -2,7 +2,9 @@
 import type { TDataCollection, TCollection } from '@/types/TCollection';
 import { getCollection } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
-import { SITE_NAME, COLLECTIONS } from '@/const';
+import { COLLECTIONS } from '@/const';
+import settings from '@/data/settings.json';
+const { site_name } = settings;
 import PostItem from '@/components/Post/Item.astro';
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 import { getRandomInt } from '@/js/utils/numbers.format';
@@ -11,12 +13,12 @@ import SeoText from '@/components/Seo/Index.astro';
 export async function getStaticPaths() {
   return COLLECTIONS.map((collection) => ({ 
 		params: { collection: collection.name },
-		props: { title: collection.title }
+		props: { title: collection.title, description: collection.description }
 	}));
 }
 
 const { collection } = Astro.params;
-const { title } = Astro.props;
+const { title, description } = Astro.props;
 const entries = await getCollection(collection);
 let posts: TCollection[], image = '';
 if (entries && entries.length > 0) {
@@ -34,7 +36,8 @@ const breadcrumb = { name: title, href: `/${collection}/` };
 
 <PageLayout
 	h1={title}
-	title={`${title} | ${SITE_NAME}`}
+	title={`${title} | ${site_name}`}
+	description={`${description}`}
 	breadcrumb={[breadcrumb]}
 	image={image ? image : ''}
 	backLink={true}
@@ -46,7 +49,7 @@ const breadcrumb = { name: title, href: `/${collection}/` };
 				{ posts.map(post => ( <PostItem post={post} /> )) }
 			</div>
 		) : (
-			<p>Скоро здесь появятся {title.toLowerCase()} {SITE_NAME}.</p>
+			<p>Скоро здесь появятся {title.toLowerCase()} {site_name}.</p>
 		)
 	}
 </PageLayout>

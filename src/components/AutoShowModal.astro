@@ -3,16 +3,30 @@ import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import CloseModalBtn from '@/components/CloseModalBtn.astro';
+import FormSelect from '@/components/FormSelect.astro';
 import {AGREE_LABEL} from '@/const';
+
+import settings from '@/data/settings.json';
+const { manager_photo } = settings;
 
 const { 
 	modalShow = 20000,
 	title = '',
+	subtitle = '',
+	testDrive = false,
 	modalPosition = 'center',
-	img = 'https://cdn.alexsab.ru/people/user.webp',
+	img = manager_photo,
 	imgPosition = 'right',
 	formName = ''
 } = Astro.props;
+
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
+const options = testDrive ? models.filter(m => {
+	if(m?.testDrive){
+		return {id: m.id, name: m.name}
+	}
+}) : [];
 ---
 
 <div class={`modal fixed max-w-[700px] w-full max-h-full overflow-y-auto overflow-x-hidden bg-white z-[10000] hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
@@ -29,6 +43,7 @@ const {
 
 		<div class="col-span-3 p-5 sm:p-8">
 			{title && (<p class="caption text-xl sm:text-3xl mb-8 text-gray-800"><Fragment set:html={title} /></p>)}
+			{subtitle && (<p class="caption mb-8 text-gray-600"><Fragment set:html={subtitle} /></p>)}
 			<form class="flex flex-col gap-4" id="rating-form">
 				<input type="hidden" name="form" value={formName} />
 				<input
@@ -46,6 +61,9 @@ const {
 				required
 				errorClasses="text-red-500"
 				/>
+				
+				{testDrive && <FormSelect name="model" placeholder="Выберите модель" options={options} />}
+
 				<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
 
 				<Checkbox

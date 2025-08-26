@@ -7,7 +7,7 @@ const { link = {}, sublink = false, ...rest } = Astro.props;
 const path = Astro.url.pathname;
 ---
 <a
-	href={link.url === 'javascript:void(0)' || path === '/' ? link.url : '/'+link.url}
+	href={link.url}
 	class:list={[
 		{
 			'scroll-link': link.url.includes('#'),
@@ -21,7 +21,7 @@ const path = Astro.url.pathname;
 {link.name}
 {link?.thumb && (
 	<div class="aspect-video hidden lg:block w-full relative">
-		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" />
+		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" width="338" height="190" />
 	</div>
 )}
 </a>

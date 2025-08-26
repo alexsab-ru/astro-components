@@ -1,0 +1,16 @@
+---
+// Никакого SSR: скрипт исполняется в браузере
+---
+<script data-remove-script-after-work="check_empty_query" is:inline>
+    if (location.href.split("#")[0].slice(-1) === '?') {
+      const target = location.pathname + location.hash;
+      // replace() не добавляет запись в историю
+      location.replace(target);
+    } else {
+        // remove this script
+        const script = document.querySelector('script[data-remove-script-after-work="check_empty_query"]');
+        if (script) {
+            script.remove();
+        }
+    }
+</script>

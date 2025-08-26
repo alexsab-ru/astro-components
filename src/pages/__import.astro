@@ -4,29 +4,31 @@ import Button from '@/components/Button/Button.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import Input from '@/components/Input.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
-import {SITE_NAME, BRAND, AGREE_LABEL, LEGAL_ENTITY, LEGAL_INN, LEGAL_CITY} from '@/const';
+import {AGREE_LABEL} from '@/const';
+import settings from '@/data/settings.json';
+const { site_name, brand } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('import'));
 ---
 <PageLayout
 	h1="Новые и&nbsp;автомобили с&nbsp;пробегом из&nbsp;Казахстана от&nbsp;2024 года"
-	title={`Автомобили ${BRAND} из Казахстана`}
+	title={`Автомобили ${brand} из Казахстана`}
 	breadcrumb={[{name:"Автомобили из Казахстана", href:""}]}
-	description={`Подбор и доставка автомобилей ${BRAND} из Казахстана в Россию под ключ.`}
+	description={`Подбор и доставка автомобилей ${brand} из Казахстана в Россию под ключ.`}
 >
 	<form 
 		x-data 
 		x-cloak 
 		x-init={`
-			$store.import.brand = '${BRAND}';
+			$store.import.brand = '${brand}';
 		`}
 		class="mt-10"
 	>
 		<div x-show="$store.import.step === 0">
 			<ul>
 				<li> - Вы получите эПТС и тех. паспорт на авто</li>
-				<li> - Рассрочка на услуги ДЦ {SITE_NAME}</li>
+				<li> - Рассрочка на услуги ДЦ {site_name}</li>
 				<li> - Депозитный договор и инвойс на Ваше имя.</li>
 			</ul>
 		

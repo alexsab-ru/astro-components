@@ -5,26 +5,36 @@ import MapWidget from '@/components/Map/Widget.astro';
 import AutoShowModal from '@/components/AutoShowModal.astro';
 import InfoItem from '@/components/Contacts/InfoItem.astro';
 import WorkerItem from '@/components/Contacts/WorkerItem.astro';
-import {SITE_NAME, LEGAL_ENTITY, LEGAL_INN, LINK_WIDGET_ORGNIZATION} from '@/const';
+import settings from '@/data/settings.json';
+import PageH1 from '@/components/PageH1/Index.astro';
+const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_background, manager_photo } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
+import { map } from 'astro:schema';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
 const salon = salons.length > 0 ? salons[0] : null;
-let workers = [];
-salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map(worker => workers.push({...worker, salonName: salon.name})));
+const workers = salons.flatMap(salon => 
+    salon?.workers?.map(worker => ({
+        ...worker, 
+        salonName: salon.name
+    })) || []
+);
+const description = `Контакты автосалона ${site_name} - ${salons
+    .filter(salon => salon?.address && salon?.address !== '')
+    .map(s => `${s?.address}`).join(', ')}`;
 ---
 
-<Layout title={`Контакты автосалона ${SITE_NAME}`}>
+<Layout title={`Контакты автосалона ${site_name}`} description={`${description}`}>
 	<div class="h-full relative">
 		<div class="container">
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
 
 				<div class="md:w-2/5 py-10">
-					<h1 class="text-3xl sm:text-4xl font-bold">Контакты</h1>
-					{LEGAL_ENTITY ? (
+					<PageH1 h1="Контакты" classes="text-3xl sm:text-4xl font-bold" />
+					{legal_entity ? (
 						<div class="flex flex-wrap gap-y-5 sm:gap-y-8 mt-10">
-							{LEGAL_ENTITY && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={LEGAL_ENTITY} iconName="mdi:bank" />)}
-							{LEGAL_INN && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={LEGAL_INN} iconName="mdi:list-box-outline" />)}
+							{legal_entity && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />)}
+							{legal_inn && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={legal_inn} iconName="mdi:list-box-outline" />)}
 							{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
 							{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
 							{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
@@ -47,10 +57,10 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 				</div>
 
 				<div class="h-[400px] md:h-auto w-full md:w-1/2 absolute md:top-0 right-0 bottom-0">
-					{LINK_WIDGET_ORGNIZATION ? (
+					{yandex_widget_orgnization ? (
 						<MapWidget class="h-full" />
 					) : (
-						<Map mapImg="https://cdn.alexsab.ru/maps/map-bg.webp" salons={salons} classes="h-full" />
+						<Map mapImg={map_background} salons={salons} classes="h-full" />
 					)}
 				</div>
 
@@ -72,10 +82,10 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 </Layout>
 
 <!--
-	modalShow - Количество милесекунд до показа окна (по умолчанию 20000)
+	modalShow - Количество миллисекунд до показа окна (по умолчанию 20000)
 	title - Заголовок
 	modalPosition - позиция окна left-top|right-top|right-bottom|left-bottom|center (по умолчанию center)
-	img - фото человека (по умолчанию https://cdn.alexsab.ru/people/user.webp)
+	img - фото человека (по умолчанию пусто)
 	imgPosition - позиция фото right|left (по умолчанию right)
 -->
 
@@ -83,7 +93,7 @@ salons.map(salon => salon?.workers && salon?.workers.length && salon.workers.map
 	modalShow = 20000
 	title="Здравствуйте, оставьте телефон, я&nbsp;перезвоню и&nbsp;расскажу о&nbsp;преимуществах работы"
 	modalPosition="right-bottom"
-	img="https://cdn.alexsab.ru/people/user.webp"
+	img={manager_photo}
 	imgPosition="right"
 	formName="Форма со страницы - Контакты"
 />

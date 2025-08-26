@@ -39,6 +39,6 @@ export default defineConfig({
 			},
 		},
 	},
-	// site: 'https://alexsab-ru.github.io',
-	// base: 'astro-website'
+	site: 'https://alexsab-ru.github.io',
+	base: '/'
 });
