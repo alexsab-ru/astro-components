@@ -14,8 +14,8 @@ const { banners = bannersData } = Astro.props;
 			<div class="absolute inset-0">
 				<div class="swiper banner-slider h-full text-white">
 					<div class="swiper-wrapper">
-						{banners.map((banner: any) => (
-							banner.show && <BannerSlide banner={banner} />
+						{banners.map((banner: any, index: number) => (
+							banner.show && <BannerSlide banner={banner} index={index} />
 						))}
 					</div>
 

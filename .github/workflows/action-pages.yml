@@ -208,6 +208,13 @@ jobs:
             # Передаем закодированное значение
             echo "specials=$encoded_output" >> $GITHUB_OUTPUT
           fi
+          if [ -s special-offers-dates-marketing.txt ]; then
+            echo "$(cat special-offers-dates-marketing.txt)" > output_wrapped_marketing.txt
+            # Кодируем содержимое файла в base64
+            encoded_output_marketing=$(base64 -w 0 output_wrapped_marketing.txt)
+            # Передаем закодированное значение
+            echo "specials_marketing=$encoded_output_marketing" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
@@ -223,6 +230,7 @@ jobs:
     outputs:
       changes: ${{ steps.check_changes.outputs.changes }}
       specials: ${{ steps.check_specials.outputs.specials }}
+      specials_marketing: ${{ steps.check_specials.outputs.specials_marketing }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
 
   # Deployment job
@@ -258,6 +266,34 @@ jobs:
         ${{ needs.build.outputs.specials }}
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  check_marketing_secret:
+    needs: [build]
+    if: needs.build.outputs.specials_marketing != ''
+    runs-on: ubuntu-latest
+    outputs:
+      secret_exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Check if marketing telegram secret exists
+        id: check
+        run: |
+          if [ -n "${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  notify_telegram_about_special_marketing:
+    needs: [build, check_marketing_secret]
+    if: needs.check_marketing_secret.outputs.secret_exists == 'true'
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      include-header: false
+      additional-text: |
+        ${{ needs.build.outputs.specials_marketing }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   check_links:

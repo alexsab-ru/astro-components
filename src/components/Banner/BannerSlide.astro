@@ -2,8 +2,9 @@
 import type { TBanner } from './types';
 interface Props {
 	banner: TBanner;
+	index?: number;
 }
-const {banner} = Astro.props;
+const {banner, index} = Astro.props;
 import Button from '../Button/Button.astro';
 import Badge from './Badge.astro';
 import BannerTitle from './Title.astro';
@@ -58,10 +59,10 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 				{...banner?.dataFormName && {'data-form_name': banner.dataFormName}} 
 				{...banner?.target ? {target: banner.target} : {} }
 			>
-				<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} mobileUrl={banner?.mobileVideoUrl} />
+				<BannerVideo banner={banner} />
 			</a>			
 		) : banner?.type === 'video' && !banner?.bannerUrl ? (
-			<BannerVideo poster={banner?.imageUrl} url={banner?.videoUrl} mobileUrl={banner?.mobileVideoUrl} />
+			<BannerVideo banner={banner} />
 		) : banner?.type !== 'video' && banner?.bannerUrl ? (
 			<a 
 				href={banner.bannerUrl} 
@@ -70,10 +71,10 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 				{...banner?.dataFormName && {'data-form_name': banner.dataFormName}} 
 				{...banner?.target ? {target: banner.target} : {} }
 			>
-				<BannerImage imageUrl={banner.imageUrl} tabletImageUrl={banner?.tabletImageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+				<BannerImage banner={banner} index={index} />
 			</a>
 		) : (
-			<BannerImage imageUrl={banner.imageUrl} tabletImageUrl={banner?.tabletImageUrl} mobileImageUrl={banner?.mobileImageUrl} title={banner?.title} imagePosition={banner?.imagePosition} />
+			<BannerImage banner={banner} index={index} />
 		)
 	}
 </div>

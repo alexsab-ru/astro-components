@@ -154,21 +154,36 @@ const isDateWithinTwoDays = (dateStr) => {
 
 // Функция для поиска дат в содержимом файла
 const searchDates = (content, filePath) => {
-  // Ищем даты в формате DD.MM.YYYY или DD-MM-YYYY или DD/MM/YYYY
-  const format1 = content.match(/\b(\d{2}[.\-/]\d{2}[.\-/]\d{4})\b/g);
-  // Ищем даты в формате YYYY.MM.DD или YYYY-MM-DD или YYYY/MM/DD
-  const format2 = content.match(/\b(\d{4}[.\-/]\d{2}[.\-/]\d{2})\b/g);
-  console.log(filePath, format1, format2);
-  const allDates = [...(format1 || []), ...(format2 || [])];
-  const convertedDates = allDates.map(date => convertToDDMMYYYY(date));
-  const filteredDates = convertedDates.filter(isDateWithinTwoDays);
+  // Разбиваем текст на строки для более точной проверки
+  const lines = content.split('\n');
+  const allDates = [];
 
-  if (filteredDates.length) {
-    filesWithUpcomingDates.push({
-      filePath: filePath,
-      dates: filteredDates
-    });
+  for (const line of lines) {
+     // Проверяем, содержит ли строка pubDate: в начале
+     if (!line.trim().startsWith('pubDate:')) {
+      // Ищем даты в формате DD.MM.YYYY или DD-MM-YYYY или DD/MM/YYYY
+      const format1 = line.match(/\b(\d{2}[.\-/]\d{2}[.\-/]\d{4})\b/g);
+      // Ищем даты в формате YYYY.MM.DD или YYYY-MM-DD или YYYY/MM/DD
+      const format2 = line.match(/\b(\d{4}[.\-/]\d{2}[.\-/]\d{2})\b/g);
+
+      // Добавляем найденные даты в общий массив
+      if (format1) allDates.push(...format1);
+      if (format2) allDates.push(...format2);
+     }
   }
+
+  if (allDates.length) {
+    const convertedDates = allDates.map(date => convertToDDMMYYYY(date));
+    const filteredDates = convertedDates.filter(isDateWithinTwoDays);
+
+    if (filteredDates.length) {
+      filesWithUpcomingDates.push({
+        filePath: filePath,
+        dates: filteredDates
+      });
+    }
+  }
+  
 };
 
 // Функция для формирования URL в зависимости от расположения файла
@@ -279,6 +294,7 @@ if (filesWithUpcomingDates.length > 0) {
   console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
   const domain = process.env.DOMAIN;
   let htmlOutput = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
+  let htmlOutputMarketing = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
   
   filesWithUpcomingDates.forEach(({ filePath, dates }) => {
     const relativePath = path.relative(process.cwd(), filePath);
@@ -297,10 +313,14 @@ URL: ${url}
 <strong>URL:</strong> <a href="${url}">${url}</a>\n
 <strong>Даты окончания:</strong> ${dates.join(', ')}\n
 \n`;
+
+    htmlOutputMarketing += `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${dates.join(', ')}\n\n`;
   });
   
   // Сохраняем результаты в файл
   const outputPath = './special-offers-dates.txt';
   fs.writeFileSync(outputPath, htmlOutput, 'utf8');
-  console.log(`\nРезультаты сохранены в файл: ${outputPath}`);
+  const outputPathMarketing = './special-offers-dates-marketing.txt';
+  fs.writeFileSync(outputPathMarketing, htmlOutputMarketing, 'utf8');
+  console.log(`\nРезультаты сохранены в файл: ${outputPath}, ${outputPathMarketing}`);
 }
