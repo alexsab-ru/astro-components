@@ -309,18 +309,13 @@ if (filesWithUpcomingDates.length > 0) {
     const readableDates = dates.map(isoToDDMMYYYY).join(', ');
     
     // Формируем текст для вывода (одинаковый для консоли и HTML)
-    const outputText = `\nФайл: \`${relativePath}\`
-URL: ${url}
-Даты окончания: ${readableDates}`;
+    const outputText = `\nФайл: \`${relativePath}\`\nURL: ${url}\nДаты окончания: ${readableDates}`;
     
     // Выводим в консоль
     console.log(outputText);
     
     // Добавляем в HTML для файла
-    htmlOutput += `<strong>Файл:</strong> <code>${relativePath}</code>\n
-<strong>URL:</strong> <a href="${url}">${url}</a>\n
-<strong>Даты окончания:</strong> ${readableDates}\n
-\n`;
+    htmlOutput += `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
 
     htmlOutputMarketing += `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
   });
