@@ -11,7 +11,26 @@ import BannerTitle from './Title.astro';
 import BannerDescription from './Description.astro';
 import BannerVideo from './Video.astro';
 import BannerImage from './Image.astro';
+
+// Определяем цвет кнопки с fallback на белый
 const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
+
+// Определяем тип контента и наличие ссылки
+// Делаем код проще и читаемее
+const isVideo = banner?.type === 'video';
+const hasBannerUrl = !!banner?.bannerUrl;
+
+// Выбираем компонент медиа один раз
+const BannerType = isVideo ? BannerVideo : BannerImage;
+
+// Готовим атрибуты ссылки один раз (только если есть URL)
+const linkAttrs = hasBannerUrl ? {
+	href: banner.bannerUrl as string,
+	class: `absolute inset-0 h-full w-full z-10 block ${banner?.view === 'popup-link' ? 'popup-link' : ''}`,
+	...(banner?.dataTitle ? {'data-title': banner.dataTitle} : {}),
+	...(banner?.dataFormName ? {'data-form_name': banner.dataFormName} : {}),
+	...(banner?.target ? {target: banner.target} : {}),
+} : null;
 ---
 
 <div class={`swiper-slide banner-slide ${banner?.gradient === false ? '' : 'gradient'}`} data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
@@ -50,31 +69,19 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 			}
 		</div>
 	</div>
+	
+	{/* 
+		Простой и читаемый рендер медиа:
+		- `BannerType` выбирается один раз
+		- Если есть `bannerUrl`, оборачиваем в ссылку, иначе выводим как есть
+	*/}
 	{
-		banner?.type === 'video' && banner?.bannerUrl ? (
-			<a 
-				href={banner.bannerUrl} 
-				class={`absolute inset-0 h-full w-full z-10 block ${banner?.view === 'popup-link' ? 'popup-link' : ''}`} 
-				{...banner?.dataTitle && {'data-title': banner.dataTitle}} 
-				{...banner?.dataFormName && {'data-form_name': banner.dataFormName}} 
-				{...banner?.target ? {target: banner.target} : {} }
-			>
-				<BannerVideo banner={banner} />
-			</a>			
-		) : banner?.type === 'video' && !banner?.bannerUrl ? (
-			<BannerVideo banner={banner} />
-		) : banner?.type !== 'video' && banner?.bannerUrl ? (
-			<a 
-				href={banner.bannerUrl} 
-				class={`absolute inset-0 h-full w-full z-10 block ${banner?.view === 'popup-link' ? 'popup-link' : ''}`} 
-				{...banner?.dataTitle && {'data-title': banner.dataTitle}} 
-				{...banner?.dataFormName && {'data-form_name': banner.dataFormName}} 
-				{...banner?.target ? {target: banner.target} : {} }
-			>
-				<BannerImage banner={banner} index={index} />
+		hasBannerUrl ? (
+			<a {...linkAttrs}>
+				<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
 			</a>
 		) : (
-			<BannerImage banner={banner} index={index} />
+			<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
 		)
 	}
 </div>
