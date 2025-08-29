@@ -50,7 +50,7 @@ collect_commits() {
 ########################################
 # Функция для создания заголовка и разделения текста на части
 # Принимает:
-#   repository_name, ref_name, actor, repository, compare_hash и массив commit_messages
+#   repository_name, ref_name, actor, repository, compare_hash, include_header и массив commit_messages
 # Результат: разбитые чанки сохраняются в ./tmp_messages/part_X.txt,
 #          функция возвращает количество частей.
 ########################################
@@ -60,7 +60,8 @@ prepare_commits_message() {
     local actor=$(trim_quotes "$3")
     local repository=$(trim_quotes "$4")
     local compare_hash=$(trim_quotes "$5")
-    shift 5
+    local include_header=$(trim_quotes "$6")
+    shift 6
     local commit_messages=("$@")
     
     # Максимальная длина сообщения в Telegram
@@ -70,18 +71,25 @@ prepare_commits_message() {
 
     local TOTAL_COMMITS=${#commit_messages[@]}
     
-    # Подготовка заголовка
-    if [ -z "$compare_hash" ]; then
-        # Формат для одиночного коммита или кастомного сообщения
-        HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/commit/$(git rev-parse HEAD)\">Last commit</a></b>"
-    else
-        # Формат для множества коммитов
-        if [ "$TOTAL_COMMITS" -eq 1 ]; then
-            COMMITS_TEXT="$TOTAL_COMMITS new commit"
+    # Подготовка заголовка (включаем только если include_header = true)
+    # Новая переменная include_header позволяет контролировать отображение заголовка
+    # По умолчанию заголовок включен (true), но может быть отключен (false)
+    if [ "$include_header" = "true" ]; then
+        if [ -z "$compare_hash" ]; then
+            # Формат для одиночного коммита или кастомного сообщения
+            HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/commit/$(git rev-parse HEAD)\">Last commit</a></b>"
         else
-            COMMITS_TEXT="$TOTAL_COMMITS new commits"
+            # Формат для множества коммитов
+            if [ "$TOTAL_COMMITS" -eq 1 ]; then
+                COMMITS_TEXT="$TOTAL_COMMITS new commit"
+            else
+                COMMITS_TEXT="$TOTAL_COMMITS new commits"
+            fi
+            HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/compare/${compare_hash}\">$COMMITS_TEXT</a></b> by <b><a href=\"https://github.com/${actor}\">${actor}</a></b>"
         fi
-        HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/compare/${compare_hash}\">$COMMITS_TEXT</a></b> by <b><a href=\"https://github.com/${actor}\">${actor}</a></b>"
+    else
+        # Если заголовок не нужен, устанавливаем пустую строку
+        HEADER=""
     fi
 
     # Создаем временную директорию для сообщений
@@ -89,11 +97,19 @@ prepare_commits_message() {
 
     # Разбиваем сообщение на части по количеству символов
     local PART_INDEX=0
-    local CHUNK="$HEADER\n\n"
-    local CURRENT_LENGTH=${#CHUNK}
     
-    # Максимальная длина для одного коммита (с учетом заголовка и отступов)
-    local MAX_COMMIT_LENGTH=$(($MAX_LENGTH - ${#HEADER} - 30))
+    # Формируем начальный чанк в зависимости от наличия заголовка
+    if [ -n "$HEADER" ]; then
+        local CHUNK="$HEADER\n\n"
+        local CURRENT_LENGTH=${#CHUNK}
+        # Максимальная длина для одного коммита (с учетом заголовка и отступов)
+        local MAX_COMMIT_LENGTH=$(($MAX_LENGTH - ${#HEADER} - 30))
+    else
+        local CHUNK=""
+        local CURRENT_LENGTH=0
+        # Максимальная длина для одного коммита (без заголовка)
+        local MAX_COMMIT_LENGTH=$(($MAX_LENGTH - 30))
+    fi
 
     for COMMIT in "${commit_messages[@]}"; do
         # Добавляем перевод строки к коммиту
@@ -152,9 +168,14 @@ prepare_commits_message() {
             printf "%b" "$CHUNK" > "./tmp_messages/part_${PART_INDEX}.txt" || { echo "Error: Failed to write to file" >&2; return 1; }
             PART_INDEX=$(($PART_INDEX + 1))
             
-            # Начинаем новый чанк с заголовка
-            CHUNK="$HEADER\n\n$COMMIT_WITH_NEWLINE"
-            CURRENT_LENGTH=$((${#HEADER} + 2 + $COMMIT_LENGTH))
+            # Начинаем новый чанк с заголовка (если он есть)
+            if [ -n "$HEADER" ]; then
+                CHUNK="$HEADER\n\n$COMMIT_WITH_NEWLINE"
+                CURRENT_LENGTH=$((${#HEADER} + 2 + $COMMIT_LENGTH))
+            else
+                CHUNK="$COMMIT_WITH_NEWLINE"
+                CURRENT_LENGTH=$COMMIT_LENGTH
+            fi
         else
             # Добавляем коммит к текущему чанку
             CHUNK="${CHUNK}${COMMIT_WITH_NEWLINE}"
@@ -163,9 +184,18 @@ prepare_commits_message() {
     done
 
     # Сохраняем последний чанк, если он не пустой
-    if [ "$CHUNK" != "$HEADER\n\n" ]; then
-        printf "%b" "$CHUNK" > "./tmp_messages/part_${PART_INDEX}.txt" || { echo "Error: Failed to write to file" >&2; return 1; }
-        PART_INDEX=$(($PART_INDEX + 1))
+    if [ -n "$HEADER" ]; then
+        # Если есть заголовок, проверяем что чанк не равен только заголовку
+        if [ "$CHUNK" != "$HEADER\n\n" ]; then
+            printf "%b" "$CHUNK" > "./tmp_messages/part_${PART_INDEX}.txt" || { echo "Error: Failed to write to file" >&2; return 1; }
+            PART_INDEX=$(($PART_INDEX + 1))
+        fi
+    else
+        # Если заголовка нет, сохраняем чанк если он не пустой
+        if [ -n "$CHUNK" ]; then
+            printf "%b" "$CHUNK" > "./tmp_messages/part_${PART_INDEX}.txt" || { echo "Error: Failed to write to file" >&2; return 1; }
+            PART_INDEX=$(($PART_INDEX + 1))
+        fi
     fi
 
     echo $PART_INDEX

@@ -33,6 +33,11 @@ on:
         required: false
         type: string
         default: 'HTML'
+      include-header:
+        description: 'Whether to include header in the message'
+        required: false
+        type: boolean
+        default: true
     secrets:
       TELEGRAM_TO:
         description: 'Telegram ID passed from the caller workflow'
@@ -89,6 +94,7 @@ jobs:
             "${{ github.actor }}" \
             "${{ github.repository }}" \
             "${COMPARE_HASH}" \
+            "${{ inputs.include-header }}" \
             "${COMMIT_ARRAY[@]}")
           echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 
@@ -205,6 +211,7 @@ jobs:
             "${{ github.actor }}" \
             "${{ github.repository }}" \
             "" \
+            "${{ inputs.include-header }}" \
             "${TEXT_ARRAY[@]}")
           echo "total_parts=${total_parts}" >> $GITHUB_OUTPUT
 
