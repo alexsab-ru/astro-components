@@ -128,29 +128,32 @@ function replacePlaceholders(content) {
   return { content: updatedContent, hasChanges };
 }
 
-// Функция для конвертации даты в формат DD.MM.YYYY
-const convertToDDMMYYYY = (dateStr) => {
-  const parts = dateStr.split(/[^\d]/);
-  if (parts[0].length === 4) {
-    return `${parts[2]}.${parts[1]}.${parts[0]}`;
-  }
-  return `${parts[0]}.${parts[1]}.${parts[2]}`;
-};
+// Нормализуем любые DD.MM.YYYY / DD-MM-YYYY / YYYY.MM.DD / и т.п. в YYYY-MM-DD
+function normalizeToISO(dateStr) {
+  const p = dateStr.split(/[^\d]/).map(Number);
+  // если первый элемент — это год (YYYY)
+  if (p[0] > 1900) return `${p[0].toString().padStart(4,'0')}-${p[1].toString().padStart(2,'0')}-${p[2].toString().padStart(2,'0')}`;
+  // иначе DD,MM,YYYY
+  return `${p[2].toString().padStart(4,'0')}-${p[1].toString().padStart(2,'0')}-${p[0].toString().padStart(2,'0')}`;
+}
 
-// Функция для проверки, находится ли дата в пределах двух дней
-const isDateWithinTwoDays = (dateStr) => {
-  const [day, month, year] = dateStr.split('.').map(Number);
-  const date = new Date(year, month - 1, day);
+// Проверяем «в пределах 2 дней» для ISO (YYYY-MM-DD)
+function isDateWithinTwoDaysISO(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
   const today = new Date();
-  
-  today.setHours(0, 0, 0, 0);
-  date.setHours(0, 0, 0, 0);
-  
-  const diffTime = Math.abs(today - date);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
-  return diffDays <= 2 || diffDays === 0;
-};
+  today.setHours(0,0,0,0);
+  date.setHours(0,0,0,0);
+  const diffDays = Math.ceil(Math.abs(today - date) / (1000 * 60 * 60 * 24));
+  return diffDays <= 2;
+}
+
+// Функция для конвертации ISO даты (YYYY-MM-DD) в человеко-читаемый формат (DD.MM.YYYY)
+// Используется только для вывода пользователю, внутри всё хранится в ISO
+function isoToDDMMYYYY(iso) {
+  const [y, m, d] = iso.split('-');
+  return `${d}.${m}.${y}`;
+}
 
 // Функция для поиска дат в содержимом файла
 const searchDates = (content, filePath) => {
@@ -173,13 +176,15 @@ const searchDates = (content, filePath) => {
   }
 
   if (allDates.length) {
-    const convertedDates = allDates.map(date => convertToDDMMYYYY(date));
-    const filteredDates = convertedDates.filter(isDateWithinTwoDays);
+    const converted = allDates.map(normalizeToISO);
+    const filtered = converted.filter(isDateWithinTwoDaysISO);
+    // Уникализируем и сортируем по времени "как строки"
+    const uniqueSorted = Array.from(new Set(filtered)).sort();
 
-    if (filteredDates.length) {
+    if (uniqueSorted.length) {
       filesWithUpcomingDates.push({
         filePath: filePath,
-        dates: filteredDates
+        dates: uniqueSorted
       });
     }
   }
@@ -300,21 +305,19 @@ if (filesWithUpcomingDates.length > 0) {
     const relativePath = path.relative(process.cwd(), filePath);
     const url = generateUrl(filePath, domain);
     
+    // Преобразуем даты в человеко-читаемый формат один раз
+    const readableDates = dates.map(isoToDDMMYYYY).join(', ');
+    
     // Формируем текст для вывода (одинаковый для консоли и HTML)
-    const outputText = `\nФайл: \`${relativePath}\`
-URL: ${url}
-Даты окончания: ${dates.join(', ')}`;
+    const outputText = `\nФайл: \`${relativePath}\`\nURL: ${url}\nДаты окончания: ${readableDates}`;
     
     // Выводим в консоль
     console.log(outputText);
     
     // Добавляем в HTML для файла
-    htmlOutput += `<strong>Файл:</strong> <code>${relativePath}</code>\n
-<strong>URL:</strong> <a href="${url}">${url}</a>\n
-<strong>Даты окончания:</strong> ${dates.join(', ')}\n
-\n`;
+    htmlOutput += `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
 
-    htmlOutputMarketing += `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${dates.join(', ')}\n\n`;
+    htmlOutputMarketing += `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
   });
   
   // Сохраняем результаты в файл
