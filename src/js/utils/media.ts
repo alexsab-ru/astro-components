@@ -13,15 +13,11 @@ export function getObjectPosition(banner?: TBanner): { className: string; style?
 	const tabletRaw  = banner?.position?.tablet  ?? banner?.imagePosition ?? 'center';
 	const desktopRaw = banner?.position?.desktop ?? banner?.imagePosition ?? 'center';
 
-	console.log(mobileRaw, tabletRaw, desktopRaw);
-
 	// 2) Набор классов для top/bottom/center по брейкпоинтам (привычное поведение)
 	const mobileClass  = mobileRaw  === 'top' ? 'media-object-top' : mobileRaw  === 'bottom' ? 'media-object-bottom' : 'media-object-center';
 	const tabletClass  = tabletRaw  === 'top' ? 'md:media-object-top' : tabletRaw  === 'bottom' ? 'md:media-object-bottom' : 'md:media-object-center';
 	const desktopClass = desktopRaw === 'top' ? 'lg:media-object-top' : desktopRaw === 'bottom' ? 'lg:media-object-bottom' : 'lg:media-object-center';
-
-	console.log(mobileClass, tabletClass, desktopClass);
-
+	
 	// 3) Проценты для mobile: поддерживаем "Y%" или "X% Y%". Если указаны проценты, включаем класс
 	//    .media-object-pos и подставляем CSS-переменные --obj-x/--obj-y.
 	const isPercent = (val?: string) => typeof val === 'string' && /%/.test(val);
@@ -37,7 +33,7 @@ export function getObjectPosition(banner?: TBanner): { className: string; style?
 		const x = parts.length === 2 ? parts[0] : '50%';
 		const y = parts.length === 2 ? parts[1] : parts[0];
 		style = `--obj-x: ${x}; --obj-y: ${y};`;
-		className = `${desktopClass} ${tabletClass} media-object-pos`.trim();
+		className = `media-object-pos ${tabletClass} ${desktopClass}`.trim();
 	}
 
 	return { className, style };
