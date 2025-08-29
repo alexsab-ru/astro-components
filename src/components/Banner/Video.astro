@@ -1,17 +1,17 @@
 ---
-import { getMediaUrl, getPositions } from '@/js/utils/media';
+import { getObjectPosition } from '@/js/utils/media';
 import type { TBanner } from './types'
 interface Props{
 	banner?: TBanner;
 }
 const {banner} = Astro.props;
 
-const poster          = getMediaUrl(banner?.imageUrl, banner?.image?.desktop, null);
-const desktopVideoUrl = getMediaUrl(banner?.videoUrl, banner?.video?.desktop, null);
-const tabletVideoUrl  = getMediaUrl(banner?.video?.tablet, null, '');
-const mobileVideoUrl  = getMediaUrl(banner?.mobileVideoUrl, banner?.video?.mobile, null);
+const poster          = banner?.imageUrl ?? banner?.image?.desktop ?? null;
+const desktopVideoUrl = banner?.videoUrl ?? banner?.video?.desktop ?? null;
+const tabletVideoUrl  = banner?.video?.tablet ?? '';
+const mobileVideoUrl  = banner?.mobileVideoUrl ?? banner?.video?.mobile ?? null;
 
-const { mobilePositionClass, tabletPositionClass, desktopPositionClass } = getPositions(banner);
+const pos = getObjectPosition(banner);
 ---
 <div class="lazy absolute inset-0">
 	<video
@@ -20,7 +20,8 @@ const { mobilePositionClass, tabletPositionClass, desktopPositionClass } = getPo
 		autoplay
 		playsinline
 		poster={poster}
-		class={`absolute inset-0 h-full w-full object-cover ${mobilePositionClass} ${tabletPositionClass} ${desktopPositionClass}`}>
+		{...pos.style ? {style: pos.style} : {}}
+		class={`absolute inset-0 h-full w-full object-cover ${pos.className}`}>
 		{ mobileVideoUrl && <source data-src={desktopVideoUrl} type="video/mp4" media="(min-width: 1024px)" />}
 		{ tabletVideoUrl && <source data-src={tabletVideoUrl} type="video/mp4" media="(min-width: 767px)" /> }
 		<source data-src={mobileVideoUrl || desktopVideoUrl} type="video/mp4" />

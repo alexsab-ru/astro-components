@@ -1,5 +1,5 @@
 ---
-import { getMediaUrl, getPositions } from '@/js/utils/media';
+import { getObjectPosition } from '@/js/utils/media';
 import type { TBanner } from './types'
 interface Props{
 	banner?: TBanner;
@@ -9,18 +9,19 @@ import settings from '@/data/settings.json';
 const { site_name, site_description, legal_city_where } = settings;
 const {banner, index} = Astro.props;
 
-const desktopImage = getMediaUrl(banner?.imageUrl, banner?.image?.desktop, null);
-const tabletImage  = getMediaUrl(banner?.tabletImageUrl, banner?.image?.tablet, null);
-const mobileImage  = getMediaUrl(banner?.mobileImageUrl, banner?.image?.mobile, null);
+const desktopImage = banner?.imageUrl ?? banner?.image?.desktop ?? null;
+const tabletImage  = banner?.tabletImageUrl ?? banner?.image?.tablet ?? null;
+const mobileImage  = banner?.mobileImageUrl ?? banner?.image?.mobile ?? null;
 
-const { mobilePositionClass, tabletPositionClass, desktopPositionClass } = getPositions(banner);
+const pos = getObjectPosition(banner);
 ---
 <picture>
 	{mobileImage && <source media="(min-width: 1024px)" srcset={desktopImage} />}
 	{tabletImage && <source media="(min-width: 768px)" srcset={tabletImage} />}
 	<img
 		src={mobileImage || desktopImage}
-		class={`absolute inset-0 h-full w-full object-cover ${mobilePositionClass} ${tabletPositionClass} ${desktopPositionClass}`}
+		class={`absolute inset-0 h-full w-full object-cover ${pos.className}`}
+		{...pos.style ? {style: pos.style} : {}}
 		{...banner?.title ? {alt: banner.title.replace(/<[^>]*>/g, '')} : {alt: `${site_name} ${site_description} в ${legal_city_where}`} }
 		{...index === 0 ? {fetchpriority: 'high'} : {}}
 		loading="lazy"
