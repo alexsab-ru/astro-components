@@ -592,18 +592,18 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<url>https://geely-partner-orenburg.ru/cars/geely-emgrand-ii-15-at-122-лс-flagship-серый-2024/</url></car>
 		<car>
-			<unique_id>f28b043c08be0109b7a84e8e10ea645c</unique_id>
+			<unique_id>180a07c87d6593e26bf66e8dd1eb5f1f</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
 			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
 			<complectation_name>Flagship</complectation_name>
 			<body_type>Внедорожник 5 дв.</body_type>
 			<wheel>левый</wheel>
-			<color>Белый</color>
-			<metallic>нет</metallic>
+			<color>Серый</color>
+			<metallic>да</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>7</run>
+			<run>5</run>
 			<year>2025</year>
 			<price>4852190</price>
 			<credit_discount>0</credit_discount>
@@ -612,7 +612,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<optional_discount>0</optional_discount>
 			<max_discount>760000</max_discount>
 			<currency>RUR</currency>
-			<vin>LB37852D3SS059559</vin>
+			<vin>LB37852DXSS086001</vin>
 			<description>ПАРТНЕР АВТО - официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely MONJARO, в комплектации Flagship.
@@ -640,7 +640,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2025/</url></car>
+		<url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2025/</url></car>
 		<car>
 			<unique_id>3db3f5fe1a8ce5662aa8c0bdb1d52b02</unique_id>
 			<mark_id>Geely</mark_id>
@@ -702,18 +702,18 @@ Geely Coolray — это автомобиль, который подарит в�
 			</multiposting>
 		<url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2024/</url></car>
 		<car>
-			<unique_id>180a07c87d6593e26bf66e8dd1eb5f1f</unique_id>
+			<unique_id>f28b043c08be0109b7a84e8e10ea645c</unique_id>
 			<mark_id>Geely</mark_id>
 			<folder_id>Monjaro</folder_id>
 			<modification_id>2.0 AT (238 л.с.) 4WD</modification_id>
 			<complectation_name>Flagship</complectation_name>
 			<body_type>Внедорожник 5 дв.</body_type>
 			<wheel>левый</wheel>
-			<color>Серый</color>
-			<metallic>да</metallic>
+			<color>Белый</color>
+			<metallic>нет</metallic>
 			<availability>в наличии</availability>
 			<custom>растаможен</custom>
-			<run>5</run>
+			<run>7</run>
 			<year>2025</year>
 			<price>4852190</price>
 			<credit_discount>0</credit_discount>
@@ -722,7 +722,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<optional_discount>0</optional_discount>
 			<max_discount>760000</max_discount>
 			<currency>RUR</currency>
-			<vin>LB37852DXSS086001</vin>
+			<vin>LB37852D3SS059559</vin>
 			<description>ПАРТНЕР АВТО - официальный дилер GEELY в городе Оренбурге.
 
 В наличии новый Geely MONJARO, в комплектации Flagship.
@@ -750,7 +750,7 @@ Geely Coolray — это автомобиль, который подарит в�
 			<multiposting>
 				<classifieds>autoru,avito</classifieds>
 			</multiposting>
-		<url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-серый-2025/</url></car>
+		<url>https://geely-partner-orenburg.ru/cars/geely-monjaro-20-at-238-лс-4wd-flagship-белый-2025/</url></car>
 		<car>
 			<unique_id>cdc9810294bd18a8cb2b3f19a37037ed</unique_id>
 			<mark_id>Geely</mark_id>
