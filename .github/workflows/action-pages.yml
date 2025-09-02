@@ -168,7 +168,7 @@ jobs:
           DOMAIN: ${{ vars.DOMAIN }}
 
       - name: Get dealer prices
-        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN }}
+        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN && !vars.ONLY_FEDERAL_PRICE }}
         run: |
           pnpm getDealerPrices
         continue-on-error: true
@@ -176,6 +176,12 @@ jobs:
           CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
           QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
           KEY_MAPPING: ${{ vars.DEALER_PRICE_KEY_MAPPING }}
+
+      - name: remove dealer-models_cars_price.json
+        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.ONLY_FEDERAL_PRICE }}
+        run: |
+          rm src/data/dealer-models_cars_price.json
+        continue-on-error: true
 
       - name: ls files
         run: |
