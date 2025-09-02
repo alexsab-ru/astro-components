@@ -63,12 +63,13 @@ function init() {
 	salons.map((salon) => {
 		center = add(center,salon.map.coords);
 		const _ball_bg = salon.map.balloon ? salon.map.balloon : '/img/map.balloon.png';
+		const yaLink = salon.map.ya_link || generateYandexMapLink(salon.map.coords, salon.map.zoom);
 		myMapTemp.geoObjects.add(
 			new ymaps.Placemark(
 				[salon.map.coords[0], salon.map.coords[1]],
 				{
 					balloonContentHeader: balloonContentHeader(salon.name),
-					balloonContentBody: balloonContentBody(salon.work_hours, salon.phone, salon.map.ya_link),
+					balloonContentBody: balloonContentBody(salon.work_hours, salon.phone, yaLink),
 					balloonContentFooter: '',
 					hintContent: salon.address,
 				},
@@ -205,6 +206,31 @@ const cb = function(entries, observer) {
 let mapObserver = new IntersectionObserver(cb);
 mapObserver.observe(document.querySelector('#map'));
 
+}
+
+function generateYandexMapLink(coords: [number, number], zoom: number): string {
+	const [latitude, longitude] = coords;
+	
+	// Проверяем валидность координат
+	if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+			throw new Error('Некорректные координаты');
+	}
+	
+	// Проверяем валидность зума
+	if (zoom < 1 || zoom > 19) {
+			throw new Error('Некорректный уровень зума (должен быть от 1 до 19)');
+	}
+	
+	// Формируем ссылку на Яндекс Карты
+	const baseUrl = 'https://yandex.ru/maps/';
+	const params = new URLSearchParams({
+			ll: `${longitude},${latitude}`,
+			z: zoom.toString(),
+			l: 'map', // тип карты (map, sat, skl)
+			pt: `${longitude},${latitude},pm2rdm` // метка на карте
+	});
+	
+	return `${baseUrl}?${params.toString()}`;
 }
 
 </script>
