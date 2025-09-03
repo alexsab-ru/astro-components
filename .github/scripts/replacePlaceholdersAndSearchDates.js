@@ -263,10 +263,8 @@ function processDirectory(directory, fileExtensions) {
       // Пропускаем файлы с ценами
       if (!filePath.includes('all-prices.json') && 
           !filePath.includes('cars_dealer_price.json') && 
-          !filePath.includes('cars.json') && 
           !filePath.includes('dealer_price.json') && 
-          !filePath.includes('dealer-models_price.json') && 
-          !filePath.includes('federal-models_price.json')) {
+          !filePath.includes('dealer-models_price.json')) {
         processFile(filePath);
       }
     }
