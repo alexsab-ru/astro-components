@@ -35,9 +35,29 @@ const normalizeData = (data) => {
 const checkFiles = (path) => {
   if (fs.existsSync(path)) {
     let data = JSON.parse(fs.readFileSync(path, 'utf-8'));
+    // Если data не массив, то нормализуем через normalizeData
     if (!Array.isArray(data)) {
       return normalizeData(data);
     } else {
+      // Если массив не пустой и первый элемент - объект с ключом "Скидка", тоже нормализуем
+      if (
+        data.length &&
+        typeof data[0] === 'object' &&
+        data[0] !== null &&
+        Object.prototype.hasOwnProperty.call(data[0], 'Скидка')
+      ) {
+        // Документируем: иногда dealer-models_price.json - это массив объектов с ключами "Скидка", "Конечная цена" и т.д.
+        // В этом случае тоже нужно привести к единому виду через normalizeData
+        // Преобразуем массив объектов в объект, где ключ - название модели
+        const dataObj = {};
+        data.forEach(item => {
+          if (item && item['Модель']) {
+            dataObj[item['Модель']] = item;
+          }
+        });
+        return normalizeData(dataObj);
+      }
+      // В остальных случаях возвращаем массив как есть (или пустой массив)
       return data.length ? data : [];
     }
   }
