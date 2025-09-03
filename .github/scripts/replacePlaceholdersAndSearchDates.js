@@ -262,8 +262,6 @@ function processDirectory(directory, fileExtensions) {
     } else if (fileExtensions.includes(path.extname(filePath))) {
       // Пропускаем файлы с ценами
       if (!filePath.includes('all-prices.json') && 
-          !filePath.includes('cars_dealer_price.json') && 
-          !filePath.includes('dealer_price.json') && 
           !filePath.includes('dealer-models_price.json')) {
         processFile(filePath);
       }
