@@ -62,7 +62,7 @@ function init() {
 	});
 	salons.map((salon) => {
 		center = add(center,salon.map.coords);
-		const _ball_bg = salon.map.balloon ? salon.map.balloon : '/img/map.balloon.png';
+		const _ball_bg = salon.map.balloon ? salon.map.balloon : 'https://cdn.alexsab.ru/locator/empty-locator.svg';
 		const yaLink = salon.map.ya_link || generateYandexMapLink(salon.map.coords, salon.map.zoom);
 		myMapTemp.geoObjects.add(
 			new ymaps.Placemark(
