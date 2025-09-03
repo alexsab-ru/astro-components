@@ -46,7 +46,18 @@ const checkFiles = (path) => {
 
 const getValue = (data, model, key) => {
   if (data.length) {
-    const item = data.find(d => d?.model?.toLowerCase().replace(/\s/g, '') === model.toLowerCase().replace(/\s/g, ''));
+    // Для сравнения убираем слова "новая", "новый", "new" из названия модели
+    // Это позволит корректно сопоставлять модели с разными вариантами написания
+    const normalizeModelName = (name) => {
+      if (!name) return '';
+      // Удаляем слова "новая", "новый", "new" (без учета регистра), а также пробелы
+      return name
+        .toLowerCase()
+        .replace(/\b(новая|новый|new)\b/g, '') // убираем слова
+        .replace(/\s/g, ''); // убираем пробелы
+    };
+
+    const item = data.find(d => normalizeModelName(d?.model) === normalizeModelName(model));
     return item ? item[key] : 0;
   }
   return 0;
