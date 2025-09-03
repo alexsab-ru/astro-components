@@ -35,9 +35,29 @@ const normalizeData = (data) => {
 const checkFiles = (path) => {
   if (fs.existsSync(path)) {
     let data = JSON.parse(fs.readFileSync(path, 'utf-8'));
+    // Если data не массив, то нормализуем через normalizeData
     if (!Array.isArray(data)) {
       return normalizeData(data);
     } else {
+      // Если массив не пустой и первый элемент - объект с ключом "Скидка", тоже нормализуем
+      if (
+        data.length &&
+        typeof data[0] === 'object' &&
+        data[0] !== null &&
+        Object.prototype.hasOwnProperty.call(data[0], 'Скидка')
+      ) {
+        // Документируем: иногда dealer-models_price.json - это массив объектов с ключами "Скидка", "Конечная цена" и т.д.
+        // В этом случае тоже нужно привести к единому виду через normalizeData
+        // Преобразуем массив объектов в объект, где ключ - название модели
+        const dataObj = {};
+        data.forEach(item => {
+          if (item && item['Модель']) {
+            dataObj[item['Модель']] = item;
+          }
+        });
+        return normalizeData(dataObj);
+      }
+      // В остальных случаях возвращаем массив как есть (или пустой массив)
       return data.length ? data : [];
     }
   }
@@ -46,7 +66,18 @@ const checkFiles = (path) => {
 
 const getValue = (data, model, key) => {
   if (data.length) {
-    const item = data.find(d => d?.model?.toLowerCase().replace(/\s/g, '') === model.toLowerCase().replace(/\s/g, ''));
+    // Для сравнения убираем слова "новая", "новый", "new" из названия модели
+    // Это позволит корректно сопоставлять модели с разными вариантами написания
+    const normalizeModelName = (name) => {
+      if (!name) return '';
+      // Удаляем слова "новая", "новый", "new" (без учета регистра), а также пробелы
+      return name
+        .toLowerCase()
+        .replace(/\b(новая|новый|new)\b/g, '') // убираем слова
+        .replace(/\s/g, ''); // убираем пробелы
+    };
+
+    const item = data.find(d => normalizeModelName(d?.model) === normalizeModelName(model));
     return item ? item[key] : 0;
   }
   return 0;
