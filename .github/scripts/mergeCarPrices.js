@@ -10,7 +10,7 @@ const dealerCarsFilePath = path.join(dataDirectory, 'dealer-models_cars_price.js
 
 const Message = {
   SUCCESS: 'Файл all-prices.json успешно создан',
-  ERROR: 'Ошибка: Файл federal-models_price.json не найден'
+  ERROR: 'Ошибка: Файл all-cars.json не найден'
 };
 
 const Key = {
