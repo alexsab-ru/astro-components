@@ -2,6 +2,13 @@ name: Linkinator
 
 on:
   workflow_call:
+    secrets:
+      TELEGRAM_TO_LINKS:
+        description: Telegram chat ID для уведомлений о битых ссылках
+        required: false
+      TELEGRAM_TOKEN:
+        description: Telegram bot token
+        required: false
   workflow_dispatch:
 
 permissions:
