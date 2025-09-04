@@ -12,11 +12,7 @@ on:
       - closed
       - reopened
   create:
-    branches:
-      - '**'
   delete:
-    branches:
-      - '**'
   issues:
     types:
       - opened
