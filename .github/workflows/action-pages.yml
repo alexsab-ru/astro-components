@@ -306,3 +306,4 @@ jobs:
     needs: [build, deploy]
     if: ${{ github.event_name == 'schedule' }}
     uses: ./.github/workflows/linkinator.yml
+    secrets: inherit
