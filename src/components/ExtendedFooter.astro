@@ -1,6 +1,6 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common } = settings;
+const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
 import { YEAR } from '@/js/utils/date';
@@ -11,6 +11,7 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('footer'));
 const path = Astro.url.pathname;
+import DisclaimerCollapse from '@/components/DisclaimerCollapse/DisclaimerCollapse.astro';
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
@@ -23,6 +24,7 @@ salons
 
 <footer class="bg-black/90 text-white py-14 relative">
     <div class="container">
+
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-y-10 lg:gap-y-5">
 
             <div class="flex flex-col space-y-5 w-fit divide-y divide-white/5">
@@ -78,13 +80,11 @@ salons
 
         </div>
 
-        <hr class="mt-8 mb-5 opacity-20">
+        {FOOTER_INFO && <div class="text-xs text-white/60 pt-5 mt-7 border-white/20 border-t"><Fragment set:html={FOOTER_INFO} /></div>}
 
-        <p class="text-xs opacity-60"><Fragment set:html={FOOTER_INFO} /></p>
+        {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
 
-        <hr class="mt-5 mb-8 opacity-20">
-
-        <div class="flex justify-between items-start gap-10 flex-wrap">
+        <div class="flex justify-between items-start gap-10 flex-wrap pt-5 mt-7 border-white/20 border-t">
             <div class="flex flex-grow gap-10 flex-wrap">
                 <div>
                     <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
