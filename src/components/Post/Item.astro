@@ -14,12 +14,86 @@ post.data?.toDate && typeof post.data?.toDate === 'boolean'
 		: post.data?.pubDate
 			? (date = post.data?.pubDate)
 			: null;
+
+// -------------------------------
+// ЛОГИКА ФОРМИРОВАНИЯ ССЫЛКИ
+// -------------------------------
+// Цели:
+// 1) Брать ссылку из самого поста, если указана (url|link|slug при виде URL)
+// 2) Безопасно обрабатывать протоколы (http/https/tel/mailto)
+// 3) Для внешних ссылок ставить target="_blank" и rel
+// 4) Сохранить поведение isLink как оверрайда для открытия попапа
+
+const siteUrl = Astro.site; // Берём домен сайта из astro.config.mjs (site: 'https://site.com')
+
+/**
+ * Возвращает безопасную строку href или null если ссылка небезопасна/пустая
+ * Разрешаем: http:, https:, /, tel:, mailto:
+ */
+function getSafeHref(raw) {
+    if (!raw || typeof raw !== 'string') return null;
+    const value = raw.trim();
+    // Запрещаем потенциально опасные протоколы
+    const lower = value.toLowerCase();
+    if (lower.startsWith('javascript:') || lower.startsWith('data:')) return null;
+    // Разрешённые варианты
+    if (lower.startsWith('http://') || lower.startsWith('https://')) return value;
+    if (lower.startsWith('/')) return value;
+    if (lower.startsWith('tel:') || lower.startsWith('mailto:')) return value;
+    // Иначе считаем, что это не абсолютный URL и не абсолютный путь
+    return null;
+}
+
+/**
+ * Проверяем, является ли ссылка внешней относительно текущего сайта
+ */
+function isExternalLink(href) {
+    try {
+        if (!href) return false;
+        const lower = href.toLowerCase();
+        if (lower.startsWith('tel:') || lower.startsWith('mailto:')) return false; // не считаем внешними
+        if (lower.startsWith('/')) return false; // абсолютный путь внутри сайта
+        if (lower.startsWith('http://') || lower.startsWith('https://')) {
+            if (!siteUrl) return true; // если сайт не задан, считаем внешней
+            const siteHost = new URL(siteUrl).host;
+            const linkHost = new URL(href).host;
+            return siteHost !== linkHost;
+        }
+        return false;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Ищем ссылку в данных поста.
+// Приоритет: data.url -> data.link -> data.href -> (data.slug если это URL/путь)
+const dataLinkCandidate = post?.data?.url ?? post?.data?.link ?? post?.data?.href ?? null;
+const slugAsLinkCandidate = (typeof post?.data?.slug === 'string') ? post?.data?.slug : null;
+
+// Пробуем безопасно распознать ссылки
+const safeDataLink = getSafeHref(dataLinkCandidate);
+const safeSlugLink = getSafeHref(slugAsLinkCandidate);
+
+// Итоговый href для режима isLink === true
+let resolvedHref = safeDataLink || safeSlugLink;
+
+// Если ничего не нашли, используем ссылку по умолчанию на страницу поста
+if (!resolvedHref) {
+    resolvedHref = `/${post.collection}/${post.slug}/`;
+}
+
+// Настройка target/rel для внешних ссылок
+const external = isExternalLink(resolvedHref);
+const resolvedTarget = external ? '_blank' : undefined;
+const resolvedRel = external ? 'noopener noreferrer' : undefined;
 ---
 <a 
-	href={isLink ? `/${post.collection}/${post.slug}/` : '#common-modal'}
+	href={isLink ? resolvedHref : '#common-modal'}
 	class={`!no-underline ${!isLink ? 'popup-link' : ''}`}
 	data-title={!isLink ? (post?.data?.caption || post?.data?.title) : undefined}
 	data-form_name={!isLink ? (post?.data?.title || '') : undefined}
+	target={isLink ? resolvedTarget : undefined}
+	rel={isLink ? resolvedRel : undefined}
 >
 	<div class="bg-gray-50 group rounded-2xl relative aspect-video overflow-hidden lazy">
 		<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} width="485" height="273" loading="lazy">
