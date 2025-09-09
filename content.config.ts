@@ -1,6 +1,6 @@
 import { defineCollection } from 'astro:content';
-import { collectionSchema } from './collectionSchema';
-import { COLLECTIONS } from '@/const';
+import { collectionSchema } from './src/content/collectionSchema.js';
+import { COLLECTIONS } from './src/const.js';
 
 // Создаем коллекции
 const objectCollections = COLLECTIONS.reduce((acc, collection) => {
