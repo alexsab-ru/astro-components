@@ -241,3 +241,9 @@ section:not(.model-section) {
 .media-object-pos{
 	object-position: var(--obj-x, 50%) var(--obj-y, 50%);
 }
+
+blockquote{
+	a{
+		@apply underline hover:no-underline;
+	}
+}
