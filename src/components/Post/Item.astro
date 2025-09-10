@@ -28,7 +28,7 @@ const siteUrl = Astro.site; // Берём домен сайта из astro.confi
 
 /**
  * Возвращает безопасную строку href или null если ссылка небезопасна/пустая
- * Разрешаем: http:, https:, /, tel:, mailto:
+ * Разрешаем: http:, https:, /, tel:, mailto:, #
  */
 function getSafeHref(raw) {
     if (!raw || typeof raw !== 'string') return null;
@@ -40,6 +40,7 @@ function getSafeHref(raw) {
     if (lower.startsWith('http://') || lower.startsWith('https://')) return value;
     if (lower.startsWith('/')) return value;
     if (lower.startsWith('tel:') || lower.startsWith('mailto:')) return value;
+    if (lower.startsWith('#')) return value;
     // Иначе считаем, что это не абсолютный URL и не абсолютный путь
     return null;
 }
@@ -52,6 +53,7 @@ function isExternalLink(href) {
         if (!href) return false;
         const lower = href.toLowerCase();
         if (lower.startsWith('tel:') || lower.startsWith('mailto:')) return false; // не считаем внешними
+        if (lower.startsWith('#')) return false; // якоря не внешние
         if (lower.startsWith('/')) return false; // абсолютный путь внутри сайта
         if (lower.startsWith('http://') || lower.startsWith('https://')) {
             if (!siteUrl) return true; // если сайт не задан, считаем внешней
@@ -66,16 +68,18 @@ function isExternalLink(href) {
 }
 
 // Ищем ссылку в данных поста.
-// Приоритет: data.url -> data.link -> data.href -> (data.slug если это URL/путь)
+// Приоритет: data.url -> data.link -> data.href -> (data.slug если это URL/путь) -> (post.slug если это URL/путь)
 const dataLinkCandidate = post?.data?.url ?? post?.data?.link ?? post?.data?.href ?? null;
 const slugAsLinkCandidate = (typeof post?.data?.slug === 'string') ? post?.data?.slug : null;
+const topLevelSlugCandidate = (typeof post?.slug === 'string') ? post?.slug : null; // frontmatter slug применён к записи
 
 // Пробуем безопасно распознать ссылки
 const safeDataLink = getSafeHref(dataLinkCandidate);
 const safeSlugLink = getSafeHref(slugAsLinkCandidate);
+const safeTopLevelSlugLink = getSafeHref(topLevelSlugCandidate);
 
 // Итоговый href для режима isLink === true
-let resolvedHref = safeDataLink || safeSlugLink;
+let resolvedHref = safeDataLink || safeSlugLink || safeTopLevelSlugLink;
 
 // Если ничего не нашли, используем ссылку по умолчанию на страницу поста
 if (!resolvedHref) {
