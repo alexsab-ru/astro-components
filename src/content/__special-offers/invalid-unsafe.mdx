@@ -1,0 +1,15 @@
+---
+h1: "Небезопасная ссылка"
+title: "Небезопасная ссылка"
+caption: "Игнор небезопасного href"
+breadcrumb: "Unsafe"
+pubDate: "2025-02-27"
+toDate: true
+image: "https://cdn.alexsab.ru/models/default-model-bg.webp"
+description: "Тест: javascript: должен игнорироваться и заменяться на стандартную ссылку"
+slug: "invalid-unsafe"
+url: "javascript:alert('xss')"
+---
+
+Тестовая акция с небезопасным протоколом в поле `url`. Должен сработать fallback на `/${collection}/${slug}/`.
+
