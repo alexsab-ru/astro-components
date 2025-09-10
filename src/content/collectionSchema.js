@@ -11,6 +11,13 @@ export const collectionSchema = {
 		image: z.string().optional(),
 		pubDate: z.coerce.date().optional(),
 		toDate: z.union([z.boolean().optional(), z.coerce.date().optional()]),
+		// Добавляем поля ссылок, чтобы они попадали в post.data
+		// Astro с включенной схемой отбрасывает неописанные поля
+		url: z.string().optional(),
+		link: z.string().optional(),
+		href: z.string().optional(),
+		// Разрешаем задавать slug во frontmatter как альтернативную ссылку
+		slug: z.string().optional(),
 		// content: z.string().optional(),
 	}),
 };
