@@ -1,8 +1,9 @@
 ---
 interface Props {
-	post: any
+	post: any;
+	isLink?: boolean;
 }
-const { post } = Astro.props;
+const { post, isLink = true } = Astro.props;
 import FormattedDate from '@/components/FormattedDate.astro';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 let date = null;
@@ -13,14 +14,103 @@ post.data?.toDate && typeof post.data?.toDate === 'boolean'
 		: post.data?.pubDate
 			? (date = post.data?.pubDate)
 			: null;
+
+// -------------------------------
+// ЛОГИКА ФОРМИРОВАНИЯ ССЫЛКИ
+// -------------------------------
+// Цели:
+// 1) Брать ссылку из самого поста, если указана (url|link|slug при виде URL)
+// 2) Безопасно обрабатывать протоколы (http/https/tel/mailto)
+// 3) Для внешних ссылок ставить target="_blank" и rel
+// 4) Сохранить поведение isLink как оверрайда для открытия попапа
+
+const siteUrl = Astro.site; // Берём домен сайта из astro.config.mjs (site: 'https://site.com')
+
+/**
+ * Возвращает безопасную строку href или null если ссылка небезопасна/пустая
+ * Разрешаем: http:, https:, /, tel:, mailto:, #
+ */
+function getSafeHref(raw) {
+    if (!raw || typeof raw !== 'string') return null;
+    const value = raw.trim();
+    // Запрещаем потенциально опасные протоколы
+    const lower = value.toLowerCase();
+    if (lower.startsWith('javascript:') || lower.startsWith('data:')) return null;
+    // Разрешённые варианты
+    if (lower.startsWith('http://') || lower.startsWith('https://')) return value;
+    if (lower.startsWith('/')) return value;
+    if (lower.startsWith('tel:') || lower.startsWith('mailto:')) return value;
+    if (lower.startsWith('#')) return value;
+    // Иначе считаем, что это не абсолютный URL и не абсолютный путь
+    return null;
+}
+
+/**
+ * Проверяем, является ли ссылка внешней относительно текущего сайта
+ */
+function isExternalLink(href) {
+    try {
+        if (!href) return false;
+        const lower = href.toLowerCase();
+        if (lower.startsWith('tel:') || lower.startsWith('mailto:')) return false; // не считаем внешними
+        if (lower.startsWith('#')) return false; // якоря не внешние
+        if (lower.startsWith('/')) return false; // абсолютный путь внутри сайта
+        if (lower.startsWith('http://') || lower.startsWith('https://')) {
+            if (!siteUrl) return true; // если сайт не задан, считаем внешней
+            const siteHost = new URL(siteUrl).host;
+            const linkHost = new URL(href).host;
+            return siteHost !== linkHost;
+        }
+        return false;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Ищем ссылку в данных поста.
+// Приоритет: data.url -> data.link -> data.href -> (data.slug если это URL/путь) -> (post.slug если это URL/путь)
+const dataLinkCandidate = post?.data?.url ?? post?.data?.link ?? post?.data?.href ?? null;
+const slugAsLinkCandidate = (typeof post?.data?.slug === 'string') ? post?.data?.slug : null;
+const topLevelSlugCandidate = (typeof post?.slug === 'string') ? post?.slug : null; // frontmatter slug применён к записи
+
+// Пробуем безопасно распознать ссылки
+const safeDataLink = getSafeHref(dataLinkCandidate);
+const safeSlugLink = getSafeHref(slugAsLinkCandidate);
+const safeTopLevelSlugLink = getSafeHref(topLevelSlugCandidate);
+
+// Итоговый href для режима isLink === true
+let resolvedHref = safeDataLink || safeSlugLink || safeTopLevelSlugLink;
+
+// Если ничего не нашли, используем ссылку по умолчанию на страницу поста
+if (!resolvedHref) {
+    resolvedHref = `/${post.collection}/${post.slug}/`;
+}
+
+// Настройка target/rel для внешних ссылок
+const external = isExternalLink(resolvedHref);
+const resolvedTarget = external ? '_blank' : undefined;
+const resolvedRel = external ? 'noopener noreferrer' : undefined;
+
+// -------------------------------
+// АВТО-РЕЖИМ МОДАЛКИ ПО ССЫЛКЕ
+// -------------------------------
+// Если href начинается с # и включает слово "modal", считаем что это якорь модалки
+// и принудительно ведем себя как popup (isLinkAuto = false)
+const isModalAnchor = typeof resolvedHref === 'string' && resolvedHref.startsWith('#') && resolvedHref.toLowerCase().includes('modal');
+const isLinkEffective = isModalAnchor ? false : isLink;
 ---
 <a 
-	href={`/${post.collection}/${post.slug}/`}
-	class="!no-underline"
+	href={isLinkEffective ? resolvedHref : (isModalAnchor ? resolvedHref : '#common-modal')}
+	class={`!no-underline ${!isLinkEffective ? 'popup-link' : ''}`}
+	data-title={!isLinkEffective ? (post?.data?.title || post?.data?.caption) : undefined}
+	data-subtitle={!isLinkEffective ? (post?.data?.subtitle || post?.data?.description) : undefined}
+	data-form_name={!isLinkEffective ? (post?.data?.title || post?.data?.caption) : undefined}
+	target={isLinkEffective ? resolvedTarget : undefined}
+	rel={isLinkEffective ? resolvedRel : undefined}
 >
 	<div class="bg-gray-50 group rounded-2xl relative aspect-video overflow-hidden lazy">
 		<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} width="485" height="273" loading="lazy">
 	</div>
-	<div class="text-black mt-2 sm:mt-4 leading-none"><Fragment set:html={post.data.caption || post.data.title} /></div>
+	<div class="text-black mt-2 sm:mt-4 leading-none"><Fragment set:html={!isLink ? post.data.description : post.data.caption || post.data.title} /></div>
 	{date && (<FormattedDate date={date} toDate={post.data?.toDate ? true : false} />)}
 </a>

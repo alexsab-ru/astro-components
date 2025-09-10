@@ -15,6 +15,7 @@ interface Props {
 	pagination?: boolean;
 	offset?: number;
 	limit?: number;
+	showAllButton?: boolean;
 }
 const {
 	collectionName,
@@ -26,6 +27,7 @@ const {
 	pagination = false,
 	offset = 0,
 	limit = 10,
+	showAllButton = false,
 } = Astro.props;
 let posts = [];
 let rawPosts = await getCollection(collectionName);
@@ -71,7 +73,7 @@ if (rawPosts && rawPosts.length) {
 						<div class="swiper-wrapper">
 							{posts.map((post) => (
 								<div class="swiper-slide">
-									<PostItem post={post} />
+									<PostItem post={post} isLink={true} />
 								</div>
 							))}
 						</div>
@@ -83,7 +85,7 @@ if (rawPosts && rawPosts.length) {
 						/>
 					)}
 				</div>
-				{rawPosts.length > diffLimit - limit && rawPosts.length !== diffLimit && (
+				{(showAllButton || (rawPosts.length > diffLimit - limit && rawPosts.length !== diffLimit)) && (
 					<div class="flex justify-center mt-10">
 						<Button 
 							classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 

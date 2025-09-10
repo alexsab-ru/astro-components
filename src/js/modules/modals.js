@@ -28,9 +28,13 @@ document.querySelectorAll(".popup-link").forEach(
 				}
 			}
 
-			const captionEl = targetModal.querySelector(".caption");
-			if (captionEl) {
-				captionEl.innerHTML = link.dataset.title;
+			const formTitle = targetModal.querySelector(".title");
+			if (formTitle) {
+				formTitle.innerHTML = link.dataset.title || 'Обратная связь';
+			}
+			const formSubtitle = targetModal.querySelector(".subtitle");
+			if (formSubtitle) {
+				formSubtitle.innerHTML = link.dataset.subtitle || 'Оставьте свои данные и мы свяжемся с Вами в ближайшее время!';
 			}
 			const formName = link.dataset.form_name;
 			const formInput = targetModal.querySelector('input[name="form"]');

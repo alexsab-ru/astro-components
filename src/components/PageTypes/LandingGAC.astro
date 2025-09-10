@@ -56,7 +56,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 	</section>
 
 	<Timer endtime=`${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00` title={`Утвердите спецусловия только <span class="text-nowrap">до ${LAST_DAY} ${MONTH_GENITIVE}</span>!`} subtitle={TIMER.subtitle} btnName="Получить выгоду" class="bg-[url('https://cdn.alexsab.ru/b/gac/img/main-sliders/gs8-desk.webp')] bg-cover bg-center bg-fixed text-white" />
-	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="section bg-gray-100" />
+	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="section bg-gray-100" showAllButton={false} />
 
 	{ true && ( <ModelList id="models" /> )}
 
