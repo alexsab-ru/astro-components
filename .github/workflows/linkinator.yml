@@ -100,7 +100,7 @@ jobs:
           touch .env
           echo DOMAIN=${{ vars.DOMAIN }} >> .env
           export DOMAIN=${{ vars.DOMAIN }}
-          node .github/scripts/checkLinks.js
+          node .github/scripts/checkLinks/checkLinks.js
           if [ -s broken_links.txt ]; then
             echo "$(cat broken_links.txt)" > output_wrapped.txt
             encoded_output=$(base64 -w 0 output_wrapped.txt)
