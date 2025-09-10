@@ -90,14 +90,23 @@ if (!resolvedHref) {
 const external = isExternalLink(resolvedHref);
 const resolvedTarget = external ? '_blank' : undefined;
 const resolvedRel = external ? 'noopener noreferrer' : undefined;
+
+// -------------------------------
+// АВТО-РЕЖИМ МОДАЛКИ ПО ССЫЛКЕ
+// -------------------------------
+// Если href начинается с # и включает слово "modal", считаем что это якорь модалки
+// и принудительно ведем себя как popup (isLinkAuto = false)
+const isModalAnchor = typeof resolvedHref === 'string' && resolvedHref.startsWith('#') && resolvedHref.toLowerCase().includes('modal');
+const isLinkEffective = isModalAnchor ? false : isLink;
 ---
 <a 
-	href={isLink ? resolvedHref : '#common-modal'}
-	class={`!no-underline ${!isLink ? 'popup-link' : ''}`}
-	data-title={!isLink ? (post?.data?.caption || post?.data?.title) : undefined}
-	data-form_name={!isLink ? (post?.data?.title || '') : undefined}
-	target={isLink ? resolvedTarget : undefined}
-	rel={isLink ? resolvedRel : undefined}
+	href={isLinkEffective ? resolvedHref : (isModalAnchor ? resolvedHref : '#common-modal')}
+	class={`!no-underline ${!isLinkEffective ? 'popup-link' : ''}`}
+	data-title={!isLinkEffective ? (post?.data?.title || post?.data?.caption) : undefined}
+	data-subtitle={!isLinkEffective ? (post?.data?.subtitle || post?.data?.description) : undefined}
+	data-form_name={!isLinkEffective ? (post?.data?.title || post?.data?.caption) : undefined}
+	target={isLinkEffective ? resolvedTarget : undefined}
+	rel={isLinkEffective ? resolvedRel : undefined}
 >
 	<div class="bg-gray-50 group rounded-2xl relative aspect-video overflow-hidden lazy">
 		<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={post.data.image} class="absolute w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110" alt={post.data.title} width="485" height="273" loading="lazy">
