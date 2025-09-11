@@ -48,7 +48,8 @@ async function waitForServer(url, maxWaitTime = MAX_WAIT_TIME) {
  */
 function runCommand(command, args = [], options = {}) {
   return new Promise((resolve, reject) => {
-    const process = spawn(command, args, {
+    // Переименован в childProcess, чтобы не затенять глобальный process
+    const childProcess = spawn(command, args, {
       stdio: 'pipe',
       shell: true,
       ...options
@@ -57,34 +58,67 @@ function runCommand(command, args = [], options = {}) {
     let stdout = '';
     let stderr = '';
 
-    process.stdout?.on('data', (data) => {
+    childProcess.stdout?.on('data', (data) => {
       stdout += data.toString();
     });
 
-    process.stderr?.on('data', (data) => {
+    childProcess.stderr?.on('data', (data) => {
       stderr += data.toString();
     });
 
-    process.on('close', (code) => {
+    childProcess.on('close', (code) => {
       resolve({ code, stdout, stderr });
     });
 
-    process.on('error', (error) => {
+    childProcess.on('error', (error) => {
       reject(error);
     });
   });
 }
 
 /**
- * Останавливает все процессы astro dev
+ * Останавливает только тот dev-сервер, который мы запустили
+ * Без использования pkill, чтобы не задеть чужие процессы (например, VS Code)
  */
-async function stopAstroDev() {
+async function stopAstroDev(astroProcess) {
+  // Вспомогательная функция ожидания
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  if (!astroProcess?.pid) {
+    return;
+  }
+
   try {
     console.log('🛑 Останавливаю dev сервер...');
-    await runCommand('pkill', ['-f', 'astro dev']);
+    // Мы запускали процесс с detached:true → он лидер собственной группы.
+    // Шлём SIGTERM всей группе (минус перед pid = группа процессов на *nix).
+    try {
+      process.kill(-astroProcess.pid, 'SIGTERM');
+    } catch (e) {
+      // Мог уже завершиться — это нормально.
+    }
+
+    // Даем до 2 сек на корректное завершение
+    await wait(2000);
+
+    // Проверяем, осталась ли группа жива (signal 0 = только проверка)
+    let alive = true;
+    try {
+      process.kill(-astroProcess.pid, 0);
+    } catch (_) {
+      alive = false;
+    }
+
+    if (alive) {
+      // Эскалируем до SIGKILL, если не завершился
+      try {
+        process.kill(-astroProcess.pid, 'SIGKILL');
+      } catch (_) {}
+    }
+
     console.log('✅ Dev сервер остановлен');
   } catch (error) {
-    console.log('⚠️ Не удалось остановить dev сервер:', error.message);
+    console.log('⚠️ Не удалось корректно остановить dev сервер:', error.message);
   }
 }
 
@@ -102,8 +136,8 @@ async function testLocal() {
     // Используем npx для надежного поиска локального бинарника astro
     astroProcess = spawn('npx', ['astro', 'dev', '--port', PORT.toString(), '--config', 'astro.local.config.mjs'], {
       stdio: 'pipe',
-      shell: true,
-      detached: true
+      shell: true, // оставляем true для надежного поиска npx в PATH
+      detached: true // чтобы можно было завершать всю группу процессов корректно
     });
 
     // Обработчик ошибок запуска dev-сервера (например, если astro не найден)
@@ -148,16 +182,8 @@ async function testLocal() {
   } catch (error) {
     console.error('❌ Ошибка при тестировании:', error.message);
   } finally {
-    // Останавливаем dev сервер
-    await stopAstroDev();
-    
-    if (astroProcess) {
-      try {
-        process.kill(-astroProcess.pid);
-      } catch (error) {
-        // Процесс уже завершен
-      }
-    }
+    // Останавливаем только тот dev-сервер, который мы запускали выше
+    await stopAstroDev(astroProcess);
   }
   
   console.log('✨ Локальное тестирование завершено');
