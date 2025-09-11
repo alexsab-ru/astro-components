@@ -99,9 +99,16 @@ async function testLocal() {
   try {
     // Запускаем dev сервер
     console.log(`🌐 Запускаю dev сервер на порту ${PORT}...`);
-    astroProcess = spawn('astro', ['dev', '--port', PORT.toString(), '--config', 'astro.local.config.mjs'], {
+    // Используем npx для надежного поиска локального бинарника astro
+    astroProcess = spawn('npx', ['astro', 'dev', '--port', PORT.toString(), '--config', 'astro.local.config.mjs'], {
       stdio: 'pipe',
+      shell: true,
       detached: true
+    });
+
+    // Обработчик ошибок запуска dev-сервера (например, если astro не найден)
+    astroProcess.on('error', (err) => {
+      console.error(`❌ Не удалось запустить astro dev: ${err.message}`);
     });
 
     // Ждем пока сервер станет доступным
