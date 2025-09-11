@@ -116,7 +116,7 @@ async function testLocal() {
 
     // Запускаем проверку ссылок
     console.log('🔍 Запускаю проверку ссылок...');
-    const linkCheckResult = await runCommand('node', ['.github/scripts/checkLinks.js'], {
+    const linkCheckResult = await runCommand('node', ['.github/scripts/checkLinks/checkLinks.js'], {
       env: { ...process.env, DOMAIN }
     });
 
