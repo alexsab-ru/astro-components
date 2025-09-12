@@ -24,7 +24,7 @@ export async function getStaticPaths() {
 
 
 import settings from '@/data/settings.json';
-const { brand, legal_city_where } = settings;
+const { legal_city_where } = settings;
 import { getRandomInt } from '@/js/utils/numbers.format';
 import { breadcrumb } from './index.astro';
 const { model } = Astro.props;
@@ -53,13 +53,13 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   description={`${model.mark_id} ${model.name} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={model.image ?? model.thumb}
 >
-  <PageH1 h1={`Автомобиль ${brand} ${model.name} в ${legal_city_where}`} classes="sr-only" />
+  <PageH1 h1={`Автомобиль ${model?.mark_id} ${model.name} в ${legal_city_where}`} classes="sr-only" />
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     !!sections.length && sections.map(s => ( <UniversalSection section={s} /> ))
   }
   {
-    (model?.complectations !== undefined && !!model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={brand} />
+    (model?.complectations !== undefined && !!model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={model?.mark_id} />
   }
   <SeoText mdx={seoname} sectionPaddingBlock />
   <section>
