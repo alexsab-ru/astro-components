@@ -6,7 +6,8 @@ interface Props {
 	totalShow?: boolean;
 }
 const {car = {}, path = '/cars/', slug, totalShow = true} = Astro.props;
-const url = slug ? slug : `${path}${car.slug}/`;
+// Формируем URL по приоритету: переданный slug | внутренний путь по id
+const url = slug ? slug : `${path}${car.id}/`;
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';

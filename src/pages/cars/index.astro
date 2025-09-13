@@ -4,11 +4,12 @@ import { getCollection } from "astro:content";
 import settings from '@/data/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import CarsList from '@/components/Cars/List.astro';
-const rawCars = await getCollection("cars");
+const rawCars = await (getCollection as any)("cars");
 let cars: any, image: string;
 import { getRandomInt } from "@/js/utils/numbers.format";
 if (rawCars && rawCars.length > 0) {
-	cars = rawCars;
+	// Исключаем скрытые файлы
+	cars = rawCars.filter((car) => !(typeof car?.id === 'string' && car.id.startsWith('__')));
 	image = cars[getRandomInt(0, cars.length)].data.image;
 } else {
 	image = "";

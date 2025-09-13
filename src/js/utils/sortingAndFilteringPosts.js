@@ -4,6 +4,8 @@ nowWithoutTime.setHours(0, 0, 0, 0);
 
 export function sortingAndFilteringPosts(posts) {
 	return posts
+		// Исключаем файлы начинающиеся с '__'
+		.filter(post => !(typeof post?.id === 'string' && post.id.startsWith('__')))
 		.sort((a, b) => a.data.pubDate && b.data.pubDate ? b.data.pubDate.valueOf() - a.data.pubDate.valueOf() : parseInt(a.id.split('_')[0], 10) - parseInt(b.id.split('_')[0], 10))
 		.filter(post => !post.data.draft)
 		.filter(post => {

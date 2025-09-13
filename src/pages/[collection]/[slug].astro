@@ -11,6 +11,8 @@ export async function getStaticPaths() {
   for (const collection of COLLECTIONS) {
     const entries = await getCollection(collection.name as keyof DataEntryMap);
     for (const entry of entries) {
+      // Исключаем файлы начинающиеся с '__'
+      if (typeof entry.id === 'string' && entry.id.startsWith('__')) continue;
       paths.push({ 
         // В Astro 5 рекомендуется передавать сам объект записи в props,
         // а для параметра маршрута использовать id записи

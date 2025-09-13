@@ -10,11 +10,12 @@ interface Props {
 }
 
 const { cars: inputCars } = Astro.props;
-const rawCars = inputCars || await getCollection("cars");
+const rawCars = inputCars || await (getCollection as any)("cars");
 let cars: any, models = {}, years = {}, groupCars = {};
 
 if (rawCars && rawCars.length > 0) {
-	cars = rawCars;
+	// Исключаем файлы начинающиеся с '__'
+	cars = rawCars.filter((car) => !(typeof car?.id === 'string' && car.id.startsWith('__')));
 
 	groupCars = groupArrayByKey(cars, 'mark_id');
 	
@@ -40,7 +41,6 @@ if (rawCars && rawCars.length > 0) {
 		return acc;
 	}, {});
 }
-console.log(Object.keys(groupCars).length);
 ---
 <div x-data="sorting" x-cloak>
     <p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
