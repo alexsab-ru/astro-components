@@ -1,6 +1,6 @@
 ---
 import type { TDataCollection, TCollection } from '@/types/TCollection';
-import { getCollection } from "astro:content";
+import { getCollection, type DataEntryMap } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
 import { COLLECTIONS } from '@/const';
 import settings from '@/data/settings.json';
@@ -19,7 +19,7 @@ export async function getStaticPaths() {
 
 const { collection } = Astro.params;
 const { title, description } = Astro.props;
-const entries = await getCollection(collection);
+const entries = await getCollection(collection as keyof DataEntryMap);
 let posts: TCollection[], image = '';
 if (entries && entries.length > 0) {
 	posts = sortingAndFilteringPosts(entries);

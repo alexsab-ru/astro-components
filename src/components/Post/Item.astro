@@ -19,10 +19,11 @@ post.data?.toDate && typeof post.data?.toDate === 'boolean'
 // ЛОГИКА ФОРМИРОВАНИЯ ССЫЛКИ
 // -------------------------------
 // Цели:
-// 1) Брать ссылку из самого поста, если указана (url|link|slug при виде URL)
-// 2) Безопасно обрабатывать протоколы (http/https/tel/mailto)
-// 3) Для внешних ссылок ставить target="_blank" и rel
-// 4) Сохранить поведение isLink как оверрайда для открытия попапа
+// 1) Использовать только url|link|href из данных поста.
+// 2) НЕ искать ссылки в id/slug. id — это только идентификатор.
+// 3) Если url|link|href === id, открываем внутреннюю страницу по id.
+// 4) Если url|link|href пусты, по умолчанию открываем внутреннюю страницу по id.
+// 5) Обрабатывать безопасные протоколы (http/https/tel/mailto/#,/) и внешние ссылки.
 
 const siteUrl = Astro.site; // Берём домен сайта из astro.config.mjs (site: 'https://site.com')
 
@@ -67,23 +68,20 @@ function isExternalLink(href) {
     }
 }
 
-// Ищем ссылку в данных поста.
-// Приоритет: data.url -> data.link -> data.href -> (data.slug если это URL/путь) -> (post.slug если это URL/путь)
+// Ищем ссылку только в полях url|link|href
 const dataLinkCandidate = post?.data?.url ?? post?.data?.link ?? post?.data?.href ?? null;
-const slugAsLinkCandidate = (typeof post?.data?.slug === 'string') ? post?.data?.slug : null;
-const topLevelSlugCandidate = (typeof post?.slug === 'string') ? post?.slug : null; // frontmatter slug применён к записи
 
-// Пробуем безопасно распознать ссылки
-const safeDataLink = getSafeHref(dataLinkCandidate);
-const safeSlugLink = getSafeHref(slugAsLinkCandidate);
-const safeTopLevelSlugLink = getSafeHref(topLevelSlugCandidate);
+// Внутренний путь к странице поста по id
+const internalIdPath = `/${post.collection}/${post.id}/`;
 
-// Итоговый href для режима isLink === true
-let resolvedHref = safeDataLink || safeSlugLink || safeTopLevelSlugLink;
+// Если в ссылочном поле лежит сам id, открываем по id
+let resolvedHref = (typeof dataLinkCandidate === 'string' && dataLinkCandidate === post?.id)
+    ? internalIdPath
+    : getSafeHref(dataLinkCandidate);
 
-// Если ничего не нашли, используем ссылку по умолчанию на страницу поста
+// Если ссылочных полей нет или они пустые/небезопасные — открываем по id
 if (!resolvedHref) {
-    resolvedHref = `/${post.collection}/${post.slug}/`;
+    resolvedHref = internalIdPath;
 }
 
 // Настройка target/rel для внешних ссылок

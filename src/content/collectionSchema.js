@@ -16,8 +16,6 @@ export const collectionSchema = {
 		url: z.string().optional(),
 		link: z.string().optional(),
 		href: z.string().optional(),
-		// Разрешаем задавать slug во frontmatter как альтернативную ссылку
-		slug: z.string().optional(),
 		// content: z.string().optional(),
 	}),
 };

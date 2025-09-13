@@ -1,5 +1,5 @@
 ---
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 
 interface Props {
   mdx: string;
@@ -15,7 +15,7 @@ let showseo = false;
 let Content = null;
 
 if (content) {
-  const result = await content.render();
+  const result = await render(content);
   Content = result.Content;
   showseo = true;
 }
