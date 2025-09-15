@@ -51,6 +51,24 @@ function getDomainWithProtocol(domain) {
 const domain = getDomainWithProtocol(getDomain());
 const outputPath = './broken_links.txt';
 
+/**
+ * Преобразует VK embed-ссылки в прямые ссылки на видео
+ * @param {string} url - URL для проверки
+ * @returns {string} Преобразованная ссылка или оригинальная
+ */
+function transformVkEmbedUrl(url) {
+  // Проверяем, является ли это VK embed-ссылкой
+  const vkEmbedMatch = url.match(/vkvideo\.ru\/video_ext\.php\?oid=(-?\d+)&id=(\d+)/);
+  
+  if (vkEmbedMatch) {
+    const [, oid, id] = vkEmbedMatch;
+    // Преобразуем в прямую ссылку на видео VK
+    return `https://vk.com/video${oid}_${id}`;
+  }
+  
+  return url;
+}
+
 // Настройки для повторных запросов
 const RETRY_CONFIG = {
   maxRetries: 3,
@@ -70,11 +88,19 @@ async function retryBrokenLinks(brokenLinks) {
   const retryResults = [];
   
   for (const link of brokenLinks) {
-    console.log(`🔍 Проверяю повторно: ${link.url}`);
+    // Преобразуем VK embed-ссылки в прямые
+    const transformedUrl = transformVkEmbedUrl(link.url);
+    const isVkEmbed = transformedUrl !== link.url;
+    
+    if (isVkEmbed) {
+      console.log(`🔄 Преобразую VK embed-ссылку: ${link.url} → ${transformedUrl}`);
+    }
+    
+    console.log(`🔍 Проверяю повторно: ${transformedUrl}`);
     
     try {
       const result = await checker.check({
-        path: link.url,
+        path: transformedUrl,
         recurse: false,
         timeout: RETRY_CONFIG.timeout,
         retries: RETRY_CONFIG.maxRetries,
@@ -84,23 +110,25 @@ async function retryBrokenLinks(brokenLinks) {
       const linkResult = result.links[0];
       if (linkResult && linkResult.state === 'BROKEN') {
         retryResults.push({
-          url: link.url,
+          url: link.url, // Сохраняем оригинальную ссылку в отчете
           parent: link.parent,
           status: linkResult.status,
-          retryAttempts: RETRY_CONFIG.maxRetries + 1
+          retryAttempts: RETRY_CONFIG.maxRetries + 1,
+          transformedUrl: isVkEmbed ? transformedUrl : undefined
         });
-        console.log(`❌ Ссылка действительно битая: ${link.url} (статус: ${linkResult.status})`);
+        console.log(`❌ Ссылка действительно битая: ${transformedUrl} (статус: ${linkResult.status})`);
       } else {
-        console.log(`✅ Ссылка работает после повторной проверки: ${link.url}`);
+        console.log(`✅ Ссылка работает после повторной проверки: ${transformedUrl}`);
       }
     } catch (error) {
-      console.log(`⚠️ Ошибка при повторной проверке ${link.url}: ${error.message}`);
+      console.log(`⚠️ Ошибка при повторной проверке ${transformedUrl}: ${error.message}`);
       retryResults.push({
         url: link.url,
         parent: link.parent,
         status: 'TIMEOUT_ERROR',
         retryAttempts: RETRY_CONFIG.maxRetries + 1,
-        error: error.message
+        error: error.message,
+        transformedUrl: isVkEmbed ? transformedUrl : undefined
       });
     }
   }
@@ -140,6 +168,9 @@ async function checkLinks() {
     let message = `<b>На сайте ${domain} обнаружены битые ссылки. Всего: ${finalBrokenLinks.length}</b>\n\n`;
     message += finalBrokenLinks.map(item => {
       let linkInfo = `<b>Ссылка</b>: ${item.url}\n<b>Родитель</b>: ${item.parent}\n<b>Статус</b>: ${item.status}`;
+      if (item.transformedUrl) {
+        linkInfo += `\n<b>Проверялась как</b>: ${item.transformedUrl}`;
+      }
       if (item.retryAttempts) {
         linkInfo += `\n<b>Попыток проверки</b>: ${item.retryAttempts}`;
       }
