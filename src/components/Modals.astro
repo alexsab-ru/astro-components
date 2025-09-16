@@ -38,17 +38,16 @@ import {AGREE_LABEL} from '@/const'
 				classes="border-gray-100"
 				placeholder="+7 (999) 999-99-99*"
 				required
-				errorClasses="text-red-500"
+				errorText="Телефон является обязательным полем"
 			/>
 
-			<ChoosingDealerSelect required={true} salons={salons}/>
+			<ChoosingDealerSelect required salons={salons} />
 
 			<Checkbox
 				name="agree"
 				label={AGREE_LABEL}
 				color="black"
 				required
-				errorClasses="text-red-500 w-full"
 				errorText="Чтобы продолжить, установите флажок"
 			/>
 
