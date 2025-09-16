@@ -7,6 +7,7 @@ const baseCollectionSchema = z.object({
     h1: z.string().optional(),
     title: z.string().optional(),
     caption: z.string().optional(),
+    draft: z.boolean().optional(),
     breadcrumb: z.string().optional(),
     description: z.string().optional(),
     image: z.string().optional(),
