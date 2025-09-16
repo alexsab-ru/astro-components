@@ -14,9 +14,11 @@ const baseCollectionSchema = z.object({
     pubDate: z.coerce.date().optional(),
     toDate: z.union([z.boolean(), z.coerce.date()]).optional(),
     // Поля ссылок, чтобы не отбрасывались при включенной схеме
-    url: z.string().optional(),
-    link: z.string().optional(),
-    href: z.string().optional(),
+    tel: z.string().optional(),
+    mailto: z.string().optional(),
+    externalUrl: z.string().optional(),
+    internalUrl: z.string().optional(),
+    isModal: z.boolean().optional(),
 });
 
 // Создаем коллекции из константы COLLECTIONS с новым API (loader: glob)
