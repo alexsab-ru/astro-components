@@ -5,7 +5,7 @@ const { item } = Astro.props;
 <div class="swiper-slide">
   {
     item.image.length && (
-      <div class="mb-6"><img src={item.image} alt={item.title.length ? item.title : 'Alt'} loading="lazy" /></div>
+      <div class="mb-6"><img src={item.image} alt={item.title.length ? item.title : 'Alt'} loading="lazy" width="485" height="363" /></div>
     )
   }
   {

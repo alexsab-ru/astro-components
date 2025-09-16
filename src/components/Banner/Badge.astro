@@ -13,7 +13,7 @@ const images = image ? image.split(',') : [];
     { !!images && (
         <div class="flex items-center gap-5 flex-grow">
             {images.map(image => (
-                <img src={image} class="w-full max-w-sm xl:max-w-[280px] max-h-28 sm:max-h-36 md:max-h-[300px] object-contain h-full" loading="lazy" />
+                <img src={image} class="w-full max-w-sm xl:max-w-[280px] max-h-28 sm:max-h-36 md:max-h-[300px] object-contain h-full" loading="lazy" width="280" height="300" />
             ))}
         </div>
     )}
