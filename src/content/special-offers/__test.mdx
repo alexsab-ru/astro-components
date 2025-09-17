@@ -3,10 +3,19 @@ h1: "Заголовок акции"
 title: "Тайтл акции"
 caption: "Заголовок в плитке"
 breadcrumb: "Акция"
+draft: false # необязательно - флаг для исключения из списка акции
 pubDate: "2025-02-27" # необязательно - дата публикации в формате YYYY-MM-DD, возможность планирования публикации
 toDate: true # необязательно - дата окончания акции в формате YYYY-MM-DD или true для показа последнего дня месяца
 image: "https://cdn.alexsab.ru/models/default-model-bg.webp"
 description: "Описание акции"
+# Поля для ссылок
+# Нужно использовать одно на выбор
+slug: "test-slug" # необязательно - slug для внутренней ссылки
+externalUrl: "https://www.example.com" # необязательно - внешняя ссылка
+internalUrl: "/some/url/" # необязательно - внутренняя ссылка, можно использовать якорь
+isModal: false # необязательно - флаг для отображения модального окна
+mailto: "test@example.com" # необязательно - адрес email, превью статьи будет открывать почтового клиента
+tel: "+78887776665" # необязательно - телефон, превью статьи будет переводить на клиента для совершения звонка
 ---
 import Button from '@/components/Button/Button.astro';
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';

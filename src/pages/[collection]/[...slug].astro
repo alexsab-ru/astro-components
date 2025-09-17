@@ -9,7 +9,11 @@ export async function getStaticPaths() {
   const paths = [];
 
   for (const collection of COLLECTIONS) {
-    const entries = await getCollection(collection.name as keyof DataEntryMap);
+    const allEntries = await getCollection(collection.name as keyof DataEntryMap);
+    const entries = allEntries.filter(
+      // Исключаем записи с внешними ссылками, внутренними ссылками, модальными окнами, email и телефоном
+      (e) => !e.data?.externalUrl && !e.data?.internalUrl && !e.data?.isModal && !e.data?.mailto && !e.data?.tel
+    );
     for (const entry of entries) {
       // Исключаем файлы начинающиеся с '__'
       if (typeof entry.id === 'string' && entry.id.startsWith('__')) continue;
