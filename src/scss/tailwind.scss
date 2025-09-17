@@ -1,13 +1,16 @@
-// @tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "tailwindcss";
+@config "../../tailwind.config.js";
 
-@layer components {
+@theme {
+  --color-regal-blue: #243c5a; 
+}
+
+/* @layer components { */
 	.mobile-title-size {
 		font-size: calc((1vw + 1vh) * 2.2);
 	}
 	
-	// SEO content
+	/* // SEO content */
 	.seo-content {
 		@apply overflow-hidden h-[230px] relative;
 	}
@@ -32,7 +35,7 @@
 	}
 
 	.seo-content h2 {
-		@apply text-3xl font-bold mx-0 mb-3 text-left before:hidden #{!important};
+		@apply text-3xl font-bold mx-0 mb-3 text-left before:hidden;
 	}
 
 	.seo-content h2:not(:first-child) {
@@ -79,7 +82,7 @@
 		@apply -translate-y-1;
 	}
 
-	// Buttons
+	/* // Buttons */
 	.btn {
 		@apply cursor-pointer px-8 sm:px-14 rounded-btn border border-accent-500 py-3 bg-accent-500 text-white text-center font-medium transition-colors duration-300 hover:bg-accent-400 hover:border-accent-400 inline-block;
 		&.btn-o {
@@ -113,4 +116,4 @@
 			@apply bg-gray-300 border-gray-300 cursor-not-allowed hover:bg-gray-300 hover:border-gray-300;
 		}
 	}
-}
+/* } */

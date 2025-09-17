@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from "@tailwindcss/vite";
 import alpinejs from '@astrojs/alpinejs';
 import sitemap from "@astrojs/sitemap";
 import robots from "astro-robots";
@@ -11,9 +11,6 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
 	integrations: [
-		tailwind({
-			configFile: './tailwind.config.js'
-		}),
 		sitemap({
 			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/')
 		}),
@@ -50,7 +47,12 @@ export default defineConfig({
 		react(),
 	],
 	vite: {
-		plugins: [yaml()],
+		plugins: [
+			yaml(),
+			tailwindcss({
+				configFile: './tailwind.config.js'
+			}),
+		],
 		css: {
 			preprocessorOptions: {
 			  	scss: {

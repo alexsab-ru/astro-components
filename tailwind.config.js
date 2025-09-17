@@ -18,7 +18,7 @@ module.exports = {
 				'4xl': '0 0 60px rgba(0, 0, 0, 0.5)',
 			},
 			colors: {
-				accent: colors.cyan, // в основном используется 400 и 500
+				accent: {...colors.cyan}, // в основном используется 400 и 500
 				vk: '#4B76A8',
 				ok: '#F7931D',
 				fb: '#3C5A99',

@@ -25,7 +25,7 @@ const tabletPositionClass = imagePosition?.tablet ? `md:media-bg-${imagePosition
 const mobilePositionClass = imagePosition?.mobile ? `media-bg-${imagePosition?.mobile}` : 'media-bg-center';
 ---
 
-<section data-bg-id class={`section-with-bg text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1] ${classes} ${fixedClass} ${mobilePositionClass} ${tabletPositionClass} ${desktopPositionClass}`} {...image.mobile && {'data-image-mobile': image.mobile}} {...image.tablet && {'data-image-tablet': image.tablet}} data-image-desktop={image.desktop} {...rest}>
+<section data-bg-id class={`section-with-bg text-white z-1 relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1] ${classes} ${fixedClass} ${mobilePositionClass} ${tabletPositionClass} ${desktopPositionClass}`} {...image.mobile && {'data-image-mobile': image.mobile}} {...image.tablet && {'data-image-tablet': image.tablet}} data-image-desktop={image.desktop} {...rest}>
 	<slot />	
 </section>
 

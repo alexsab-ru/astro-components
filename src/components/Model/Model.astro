@@ -60,7 +60,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 							</p>
 						) : (
 							<Button
-								classes="popup-link btn !px-20 mt-5 flex-1 whitespace-nowrap"
+								classes="popup-link btn px-20! mt-5 flex-1 whitespace-nowrap"
 								url="#common-modal"
 								title="Узнать цену"
 								dataTitle={`Узнать цену ${model.mark_id} ${model.name}`}
@@ -105,7 +105,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 
 	<div class={`w-full lg:w-3/4 2xl:w-3/5 relative z-10 top-0 lg:top-[150px] xl:top-[120px] lg:pb-[120px] xl:pb-[120px] ${model?.centered ? 'mx-auto' : 'ml-auto'}`}>
 		<div class="flex flex-col justify-center">
-			<div class="lazy aspect-[1143/493]">
+			<div class="lazy aspect-1143/493">
 				<img
 					src="https://cdn.alexsab.ru/loaders/simple-loading.svg"
 					data-src={carImagePath}
@@ -173,28 +173,28 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 
 		<div class="flex justify-center flex-wrap xs:flex-col gap-4 mt-14">
 			<Button
-				classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
+				classes="popup-link btn black btn-o px-4! flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Купить"
 				dataTitle={`Купить ${model.mark_id}`}
 				dataFormName={`Купить. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
-				classes="popup-link btn !px-4 flex-1 whitespace-nowrap"
+				classes="popup-link btn px-4! flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Рассчитать кредит"
 				dataTitle="Рассчитать кредит"
 				dataFormName={`Рассчитать кредит. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
-				classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap"
+				classes="popup-link btn gray px-4! flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Записаться на тест-драйв"
 				dataTitle="Записаться на тест-драйв"
 				dataFormName={`Записаться на тест-драйв. ${model.mark_id} ${model.name}`}
 			/>
 			<Button
-				classes="popup-link btn black !px-4 flex-1 whitespace-nowrap"
+				classes="popup-link btn black px-4! flex-1 whitespace-nowrap"
 				url="#common-modal"
 				title="Узнать цену по акции"
 				dataTitle="Узнать цену по акции"
@@ -202,14 +202,14 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 			/>
 			{ (model?.complectations !== undefined && model?.complectations.length) ? (
 				<Button
-					classes="btn black btn-o !px-4 flex-1 whitespace-nowrap"
+					classes="btn black btn-o px-4! flex-1 whitespace-nowrap"
 					view="scroll-link"
 					url="#complectation"
 					title="Подобрать комплектацию"
 				/>
 			) : (
 				<Button
-					classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
+					classes="popup-link btn black btn-o px-4! flex-1 whitespace-nowrap"
 					view="popup-link"
 					url="#common-modal"
 					title="Подобрать комплектацию"

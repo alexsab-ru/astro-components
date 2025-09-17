@@ -60,10 +60,10 @@ import {Icon} from 'astro-icon/components';
 			</div>
 		)}
 		{section?.images && section?.images.length > 1 ? (
-			<div class="swiper simple-slider !pb-10">
+			<div class="swiper simple-slider pb-10!">
 				<div class="swiper-wrapper">
 					{section?.images.map(img => (
-						<a href={img.url} class="swiper-slide text-center glightbox !text-inherit !no-underline" data-title={img?.title} data-description={img?.description?.replace(/<[^>]*>/g, '').trim()} data-effect="slide" data-gallery={`gallery-${section?.id}`}>
+						<a href={img.url} class="swiper-slide text-center glightbox text-inherit! no-underline!" data-title={img?.title} data-description={img?.description?.replace(/<[^>]*>/g, '').trim()} data-effect="slide" data-gallery={`gallery-${section?.id}`}>
 							<div class="aspect-video relative mb-4 lazy">
 								<img data-src={img.url} class="absolute top-0 left-0 w-full h-full object-cover object-center" width="485" height="273" loading="lazy" />
 							</div>
@@ -72,7 +72,7 @@ import {Icon} from 'astro-icon/components';
 						</a>
 					))}
 				</div>
-				<div class="swiper-pagination simple-slider-pagination !bottom-0"></div>
+				<div class="swiper-pagination simple-slider-pagination bottom-0!"></div>
 				<div class="swiper-button-prev simple-slider-button-prev" />
 				<div class="swiper-button-next simple-slider-button-next" />
 			</div>

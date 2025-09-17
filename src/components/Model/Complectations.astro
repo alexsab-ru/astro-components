@@ -36,7 +36,7 @@ const { models = [], model, brand, title = "Подобрать комплект�
 			<div class="relative">
 				<img :src="currentModel.colors[0].carImage" class="w-full col-span-1" :alt="currentModel.name" width="748" height="323" loading="lazy" />
 				<div class="absolute -top-5 sm:top-0 left-0">
-					<div class="text-xl sm:text-3xl font-bold uppercase !leading-none" x-html={`'${brand}&nbsp;' + currentModel.name`}></div>
+					<div class="text-xl sm:text-3xl font-bold uppercase leading-none!" x-html={`'${brand}&nbsp;' + currentModel.name`}></div>
 					<div class="sm:text-xl" x-text="currentModelComplectation.name"></div>
 					<div class="sm:text-2xl" x-html="'от&nbsp;'+currencyFormat(currentModelComplectation.price)"></div>
 				</div>
@@ -47,7 +47,7 @@ const { models = [], model, brand, title = "Подобрать комплект�
 						<template x-if="key !== 'name' && key !== 'price'">
 							<div class="flex justify-between items-end leading-none">
 								<div class="" x-text="translit(key)"></div>
-								<div class="flex-grow border-b border-dotted mx-1"></div>
+								<div class="grow border-b border-dotted mx-1"></div>
 								<template x-if="key === 'engine_power'">
 									<div class="font-bold" x-text="value + ' л.с.'"></div>
 								</template>
@@ -59,10 +59,10 @@ const { models = [], model, brand, title = "Подобрать комплект�
 					</template>
 				</div>
 				<div class="flex flex-col gap-4">
-					<a class="popup-link btn black btn-o !px-4 whitespace-nowrap" href="#common-modal" :data-title={`'Купить ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`} :data-form_name={`'Купить. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Купить</a>
-					<a class="popup-link btn !px-4 whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
-					<a class="popup-link btn gray !px-4 whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
-					<a class="popup-link btn black !px-4 whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
+					<a class="popup-link btn black btn-o px-4! whitespace-nowrap" href="#common-modal" :data-title={`'Купить ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`} :data-form_name={`'Купить. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Купить</a>
+					<a class="popup-link btn px-4! whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
+					<a class="popup-link btn gray px-4! whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
+					<a class="popup-link btn black px-4! whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + currentModel.name + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
 				</div>
 			</div>
 		</div>

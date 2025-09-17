@@ -58,11 +58,11 @@ salons
                     salons.map(salon => (
                     <div class="flex flex-col gap-3">
                         <span class="flex items-center gap-1 flex-nowrap">
-                            <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" />
+                            <Icon name="mdi:map-marker-outline" class="text-2xl shrink-0" />
                             <Fragment set:html={salon.address} />
                         </span>
                         <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
-                            <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" />
+                            <Icon name="mdi:cellphone" class="text-xl shrink-0" />
                             {salon.phone}
                         </a>
                     </div>
@@ -85,15 +85,15 @@ salons
         {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
 
         <div class="flex justify-between items-start gap-10 flex-wrap pt-5 mt-7 border-white/20 border-t">
-            <div class="flex flex-grow gap-10 flex-wrap">
+            <div class="flex grow gap-10 flex-wrap">
                 <div>
                     <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
                 </div>
-                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light hover:!text-white">Политика конфиденциальности</a></div>
-                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light hover:!text-white">Правила использования cookie</a></div>
+                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light hover:text-white!">Политика конфиденциальности</a></div>
+                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light hover:text-white!">Правила использования cookie</a></div>
             </div>
-            <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:!text-white" target="_blank">alexsab.ru</a></div>
+            <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:text-white!" target="_blank">alexsab.ru</a></div>
         </div>
 
     </div>

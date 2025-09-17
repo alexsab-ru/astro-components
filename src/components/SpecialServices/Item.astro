@@ -13,7 +13,7 @@ const { item } = Astro.props;
 	data-form_name={`Запись на сервис. ${item.title}`}
 >
 	<div class="flex items-center">
-		<div class="rounded-full overflow-hidden relative z-10 border-4 border-black size-[100px] lg:size-[150px] flex-shrink-0">
+		<div class="rounded-full overflow-hidden relative z-10 border-4 border-black size-[100px] lg:size-[150px] shrink-0">
 			<img
 				src={item.img}
 				alt={item.title}
@@ -21,7 +21,7 @@ const { item } = Astro.props;
 				loading="lazy"
 			/>
 		</div>
-		<div class="relative flex-grow">
+		<div class="relative grow">
 			<h3
 				class="border-2 border-black bg-black text-white pr-6 pl-12 py-2 -ml-10 xs:text-[10px] text-xs md:text-sm lg:text-lg xl:text-3xl font-normal uppercase flex items-center h-auto leading-1 transition-colors duration-300 group-hover:bg-transparent group-hover:text-black"
 			>
@@ -29,7 +29,7 @@ const { item } = Astro.props;
 			</h3>
 			{
 				item.subtitle && (
-					<div class="absolute top-full pl-2 text-xs xs:text-sm md:text-base lg:text-lg xl:text-2xl font-semibold text-gray-900 mt-1 !leading-[1]">
+					<div class="absolute top-full pl-2 text-xs xs:text-sm md:text-base lg:text-lg xl:text-2xl font-semibold text-gray-900 mt-1 leading-none!">
 						<Fragment set:html={item.subtitle} />{' '}
 					</div>
 				)

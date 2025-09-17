@@ -15,7 +15,7 @@ const directionClass = direction === 'right' ? 'even:lg:flex-row-reverse odd:lg:
 		<slot />
 	</div>
 {image?.desktop && (
-    <div class="lg:w-1/2 flex-shrink-0">
+    <div class="lg:w-1/2 shrink-0">
         <picture>
             <source media="(min-width: 768px)" srcset={image.desktop} />
             <img src={image?.mobile || image.desktop} class="w-full h-full object-cover" width="748" loading="lazy" />

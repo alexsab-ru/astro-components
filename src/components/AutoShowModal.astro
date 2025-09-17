@@ -29,7 +29,7 @@ const options = testDrive ? models.filter(m => {
 }) : [];
 ---
 
-<div class={`modal fixed max-w-[700px] w-full max-h-full overflow-y-auto overflow-x-hidden bg-white z-[10000] hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
+<div class={`modal fixed max-w-[700px] w-full max-h-full overflow-y-auto overflow-x-hidden bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
 
 	<CloseModalBtn color="black" />
 
@@ -50,7 +50,7 @@ const options = testDrive ? models.filter(m => {
 					type="email"
 					tabindex="-1"
 					name="email"
-					class="h-0 opacity-0 absolute -z-[100]"
+					class="h-0 opacity-0 absolute -z-100"
 					placeholder="mail@example.com"
 				/>
 				<Input
@@ -95,7 +95,7 @@ const options = testDrive ? models.filter(m => {
 
 </div>
 
-<div class="fixed inset-0 overflow-x-hidden overflow-y-auto bg-black/70 z-[9999] hidden" id="modal-overlay" data-close></div>
+<div class="fixed inset-0 overflow-x-hidden overflow-y-auto bg-black/70 z-9999 hidden" id="modal-overlay" data-close></div>
 
 <style>
 	[data-position="left-top"]{

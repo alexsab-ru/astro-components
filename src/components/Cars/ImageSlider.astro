@@ -7,7 +7,7 @@ import '@/components/Banner/banner.scss';
 	<div class="swiper-wrapper">
 			{
 				data.images.map(img => (
-					<div class="swiper-slide !w-fit sm:!w-full">
+					<div class="swiper-slide w-fit! sm:w-full!">
 						<a 
 							href={img} 
 							class="inline-block sm:block cursor-zoom-in h-full w-auto sm:w-full select-none glightbox"
@@ -20,10 +20,10 @@ import '@/components/Banner/banner.scss';
 				))
 			}
 	</div>
-	<div class="swiper-button-prev car-image-slider-prev !hidden sm:!flex"></div>
-	<div class="swiper-button-next car-image-slider-next !hidden sm:!flex"></div>
+	<div class="swiper-button-prev car-image-slider-prev hidden! sm:flex!"></div>
+	<div class="swiper-button-next car-image-slider-next hidden! sm:flex!"></div>
 </div>
-<div class="swiper car-thumb-slider !hidden sm:!block h-[130px]">
+<div class="swiper car-thumb-slider hidden! sm:block! h-[130px]">
 	<div class="swiper-wrapper">
 		{
 			data.images.map(img => (

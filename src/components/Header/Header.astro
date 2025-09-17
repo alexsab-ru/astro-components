@@ -62,7 +62,7 @@ import './styles.scss';
 							</div>
 						)
 					}
-					<div class="flex items-center xs:gap-2 gap-4 flex-shrink-0">
+					<div class="flex items-center xs:gap-2 gap-4 shrink-0">
 						<Button
 							classes="popup-link hidden lg:inline-block px-4 xl:px-4 py-2 xl:py-3"
 							url="#common-modal"
@@ -103,7 +103,7 @@ import './styles.scss';
 
 	<div
 		x-cloak
-		class="fixed inset-0 bg-black/40 z-[35] transition-opacity duration-500"
+		class="fixed inset-0 bg-black/40 z-35 transition-opacity duration-500"
 		:class="open ? 'visible opacity-100' : 'invisible opacity-0'"
 		@click="open = false"
 	></div>
@@ -122,7 +122,7 @@ import './styles.scss';
 				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
 						<div class="font-medium text-lg">{salon.name}</div>
-						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap"><Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" /><Fragment set:html={salon.address} /></a>
+						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap"><Icon name="mdi:map-marker-outline" class="text-2xl shrink-0" /><Fragment set:html={salon.address} /></a>
 						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-black/80 flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
 					</div>
 				))}

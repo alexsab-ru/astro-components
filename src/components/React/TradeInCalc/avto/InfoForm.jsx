@@ -359,7 +359,7 @@ function AvtoInfoForm() {
 					<p className="m-0">Если вы заполните эти поля, то повысите точность расчета</p>
 				</div>
 
-				<div className="col-span-6 lg:col-span-3 !mb-5">
+				<div className="col-span-6 lg:col-span-3 mb-5!">
 					<input
 						type="tel"
 						name="ownerCount"
@@ -370,7 +370,7 @@ function AvtoInfoForm() {
 					/>
 				</div>
 
-				<div className="col-span-6 !mb-5">
+				<div className="col-span-6 mb-5!">
 					<h3 className="text-base font-bold mb-2">ПТС</h3>
 					<div className="flex gap-5">
 						{ptsTypes.map(pts => (
@@ -383,7 +383,7 @@ function AvtoInfoForm() {
 				</div>
 
 				<div className="col-span-6">
-					<h3 className="text-base font-bold !mb-2">Контактные данные</h3>
+					<h3 className="text-base font-bold mb-2!">Контактные данные</h3>
 					<div className="grid grid-cols-6 gap-5">
 						<div className="col-span-6 lg:col-span-3">
 							<input
@@ -424,7 +424,7 @@ function AvtoInfoForm() {
 				<div className="col-span-6 sticky bottom-0 left-0 right-0 z-10 bg-white border-t border-b border-t-gray-100 border-b-gray-100">
 					<div className="flex justify-between flex-wrap sm:justify-end">
 						<div
-							className="btn white border-0 flex flex-grow sm:flex-grow-0 items-center justify-center px-5 sm:px-20"
+							className="btn white border-0 flex grow sm:grow-0 items-center justify-center px-5 sm:px-20"
 							onClick={ () => {decrimentStep(); recalculate();} }
 						>
 							<span className="flex justify-center items-center gap-1 h-5">
@@ -432,7 +432,7 @@ function AvtoInfoForm() {
 								Шаг назад
 							</span>
 						</div>
-						<button type="submit" className="btn px-5 sm:px-20 flex-grow sm:flex-grow-0" disabled={isSubmitting}><span>Получить&nbsp;оценку</span></button>
+						<button type="submit" className="btn px-5 sm:px-20 grow sm:grow-0" disabled={isSubmitting}><span>Получить&nbsp;оценку</span></button>
 					</div>
 				</div>
 
