@@ -17,6 +17,7 @@ const { color = 'black' } = Astro.props;
 </div>
 
 <style>
+	@reference "tailwindcss";
 	.custom-stroke-black{
 		@apply stroke-black;
 	}
@@ -24,6 +25,6 @@ const { color = 'black' } = Astro.props;
 		@apply stroke-white;
 	}
 	.custom-stroke-accent-500{
-		@apply stroke-accent-500;
+		/* @apply stroke-accent-500; */
 	}
 </style>
