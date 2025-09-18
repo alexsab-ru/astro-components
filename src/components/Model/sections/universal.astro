@@ -24,6 +24,7 @@ interface Props {
 }
 const { section, ...rest } = Astro.props;
 import {Icon} from 'astro-icon/components';
+import '@/components/Banner/banner.css'
 ---
 
 <section class={`sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${section?.sectionClass}`} id={section?.id} {...rest}>
@@ -93,5 +94,4 @@ import {Icon} from 'astro-icon/components';
 
 <script>
 	import './slider';
-	import '@/components/Banner/banner.scss'
 </script>
