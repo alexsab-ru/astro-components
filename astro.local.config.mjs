@@ -29,9 +29,7 @@ export default defineConfig({
 	vite: {
 		plugins: [
 			yaml(),
-			tailwindcss({
-				configFile: './tailwind.config.js'
-			}),
+			tailwindcss(),
 		],
 		css: {
 			preprocessorOptions: {
