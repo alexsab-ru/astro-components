@@ -1,3 +1,5 @@
+@reference "../../scss/app.css";
+
 .banner-title {
 	@apply text-3xl md:text-4xl lg:text-5xl uppercase font-bold mb-3 sm:mb-5;
 }
@@ -7,7 +9,7 @@
 }
 
 .swiper-pagination-bullet {
-	@apply w-4 h-4 opacity-100 bg-transparent relative mx-1.5 transition-all duration-300 rounded-full border border-transparent p-0 #{!important};
+	@apply w-4 h-4 opacity-100 bg-transparent relative mx-1.5 transition-all duration-300 rounded-full border border-transparent p-0;
 	&::before{
 		content: '' !important;
 		width: 100% !important;
@@ -15,31 +17,31 @@
 		position: absolute !important;
 		top: 2.5% !important;
 		left: 3.5% !important;
-		// transform: translate(-50%, -50%) !important;
+		/* transform: translate(-50%, -50%) !important; */
 		background-color: #fff !important;
 		border-radius: 50% !important;
 		transform: scale(0.6) !important;
 	}
 	&.swiper-pagination-bullet-active {
-		@apply border-accent-500 #{!important};
+		@apply border-accent-500;
 		&::before{
-			@apply bg-accent-500 !important;
+			@apply bg-accent-500!;
 		}
 	}
 }
 
 .simple-slider-pagination{
 	.swiper-pagination-bullet{
-		@apply bg-black/30 mx-1 sm:mx-1.5 #{!important};
+		@apply bg-black/30 mx-1 sm:mx-1.5;
 		&.swiper-pagination-bullet-active {
-			@apply bg-accent-500 before:border-accent-500 #{!important};
+			@apply bg-accent-500 before:border-accent-500;
 		}
 	}
 }
 
 .swiper-button-next,
 .swiper-button-prev {
-	@apply bg-gray-200 text-black h-32 w-12 top-1/2 -translate-y-1/2 m-0 opacity-30 transition-opacity duration-500 ease-out hover:opacity-60 #{!important};
+	@apply bg-gray-200 text-black h-32 w-12 top-1/2 -translate-y-1/2 m-0 opacity-30 transition-opacity duration-500 ease-out hover:opacity-60;
 	&::after {
 		font-size: 20px !important;
 		font-weight: bold !important;
@@ -48,7 +50,7 @@
 
 .simple-slider-button-prev,
 .simple-slider-button-next{
-	@apply bg-gray-200 opacity-70 h-12 rounded-full top-24 sm:top-[20%] lg:top-[25%] #{!important};
+	@apply bg-gray-200 opacity-70 h-12 rounded-full top-24 sm:top-[20%] lg:top-[25%];
 }
 .swiper-button-next {
 	right: 0 !important;
