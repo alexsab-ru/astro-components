@@ -1,7 +1,7 @@
 /* Settings TailwindCSS */
 @import "tailwindcss";
 @reference "tailwindcss";
-@config "../../tailwind.belgee.js";
+@config "../../tailwind.config.js";
 
 /* Imports */
 @import './fonts.scss';
