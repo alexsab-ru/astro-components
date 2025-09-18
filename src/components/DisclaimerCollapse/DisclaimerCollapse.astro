@@ -16,5 +16,5 @@ const {content} = Astro.props;
     >
         <Fragment set:html={content} />
     </div>
-    <button class="text-xs" @click="onClick" x-text="showDisclaimer ? 'Скрыть -' : 'Показать все +'"></button>
+    <button class="text-xs cursor-pointer" @click="onClick" x-text="showDisclaimer ? 'Скрыть -' : 'Показать все +'"></button>
 </div>
