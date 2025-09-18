@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@reference "tailwindcss";
+@config "../../tailwind.belgee.js";
+
+@import './fonts.scss';
+@import './tailwind.scss';
+@import './global.scss';
+
+/* @import './blocks/header.scss'; */
+@import './responsive-menu.scss';

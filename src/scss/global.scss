@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 [x-cloak] {
 	display: none !important;
 }
@@ -148,6 +150,13 @@ section:not(.model-section) {
 	}
 }
 
+.discount{
+	@apply relative text-white rounded-xl w-fit text-[10px] sm:text-xs py-1 px-2.5 z-1 bg-accent-500;
+	&::before {
+		@apply content-[''] w-2.5 h-2.5 border-r-0 border-b-0 absolute -bottom-[5px] left-4 rotate-[-135deg] -z-1 bg-accent-500;
+	}
+}
+
 .modal-img{
 	@apply h-[calc(calc(1vw+1vh)*40)] sm:absolute inset-0 w-full sm:h-full object-cover object-center;
 }
@@ -186,10 +195,10 @@ section:not(.model-section) {
 .model-page-seo-text{
 	@apply space-y-5;
 	h2{
-		@apply text-2xl sm:text-3xl font-normal -mb-2 #{!important};
+		@apply text-2xl sm:text-3xl font-normal -mb-2;
 	}
 	h3{
-		@apply text-xl sm:text-2xl font-normal -mb-2 #{!important};
+		@apply text-xl sm:text-2xl font-normal -mb-2;
 	}
 	ul{
 		@apply list-disc pl-4;

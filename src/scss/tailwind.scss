@@ -1,11 +1,4 @@
-@use "tailwindcss";
-@config "../../tailwind.config.js";
-
-@theme {
-  --color-regal-blue: #243c5a; 
-}
-
-/* @layer components { */
+@layer components {
 	.mobile-title-size {
 		font-size: calc((1vw + 1vh) * 2.2);
 	}
@@ -116,4 +109,4 @@
 			@apply bg-gray-300 border-gray-300 cursor-not-allowed hover:bg-gray-300 hover:border-gray-300;
 		}
 	}
-/* } */
+}

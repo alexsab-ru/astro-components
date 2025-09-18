@@ -342,7 +342,7 @@ function AvtoInfoForm() {
 					<input
 						type="tel"
 						placeholder="Пробег *"
-						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${mileageState !== '' ? 'border-black' : 'border-gray-400'}`}
+						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black ${mileageState !== '' ? 'border-black' : 'border-gray-400'}`}
 						{...register('mileage')}
 						onChange={e => {
 							setMileage(e.target.value);
@@ -364,7 +364,7 @@ function AvtoInfoForm() {
 						type="tel"
 						name="ownerCount"
 						placeholder="Владельцев по ПТС"
-						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${ownerCount !== '' ? 'border-black' : 'border-gray-400'}`}
+						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black ${ownerCount !== '' ? 'border-black' : 'border-gray-400'}`}
 						value={ownerCount}
 						onChange={e => setOwnerCount(e.target.value.replace(/[^0-9\.]/g, ''))}
 					/>
@@ -390,7 +390,7 @@ function AvtoInfoForm() {
 								type="text"
 								name="name"
 								placeholder="Ваше имя"
-								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black border-gray-400 active:border-accent-500 focus-within:border-accent-500`}
+								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black border-gray-400 active:border-accent-500 focus-within:border-accent-500`}
 							/>
 						</div>
 						<div className="col-span-6 lg:col-span-3 relative">
@@ -398,7 +398,7 @@ function AvtoInfoForm() {
 								type="tel"
 								{...register('phone')}
 								placeholder="+7 999 999-99-99 *"
-								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
+								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
 								onChange={e => {
 									setPhone(maskphone(e));
 									setValue('phone', e.target.value);
