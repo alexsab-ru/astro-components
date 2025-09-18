@@ -28,6 +28,7 @@ interface Props {
 
 const { quizSteps = quizData, formName = 'Квиз' } = Astro.props;
 
+import './quiz.css';
 ---
 
 {
@@ -47,6 +48,5 @@ const { quizSteps = quizData, formName = 'Квиз' } = Astro.props;
 
     <script>
         import './quiz';
-        import './quiz.scss';
     </script>
 }
