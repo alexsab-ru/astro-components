@@ -6,7 +6,7 @@ interface Props {
 const { car= {}, url } = Astro.props;
 import settings from '@/data/settings.json';
 const { brand, legal_city_where } = settings;
-import './cars.sass'
+import './cars.css'
 ---
 <div class="w-full relative mb-2.5">
 	<div class="flex-full lg:flex-none relative flex group" x-data="usedPreviewGallery">
