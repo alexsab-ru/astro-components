@@ -4,7 +4,7 @@ interface Props {
 	class?: string;
 }
 const { id = '', class: classNames = '' } = Astro.props
-import './styles.scss'
+import './styles.css'
 ---
 
 <div class={`slider-pagination ${id}-pagination flex justify-center ${classNames}`}></div>

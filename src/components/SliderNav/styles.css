@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 .slider-navigation-prev,
 .slider-navigation-next{
 	@apply flex items-center justify-center size-10 shadow-sm rounded-full cursor-pointer text-2xl bg-white opacity-60 transition-opacity duration-300 hover:opacity-100;
