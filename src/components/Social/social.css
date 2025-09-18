@@ -1,3 +1,5 @@
+@reference "../../scss/app.css";
+
 .icon-link {
     &.social-link{
         @apply w-10 xs:w-12 sm:w-14 h-10 xs:h-12 sm:h-14;
