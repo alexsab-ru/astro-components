@@ -143,7 +143,10 @@ async function checkLinks() {
   const result = await checker.check({
     path: domain,
     recurse: true,
-    linksToSkip: [/javascript:void\(0\)/],
+    linksToSkip: [
+      /javascript:void\(0\)/,
+      /checkLinks\.md/
+    ],
     timeout: RETRY_CONFIG.timeout,
     retries: 1, // Первичная проверка с минимальными повторами
   });
