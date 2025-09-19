@@ -25,7 +25,7 @@
 	@apply rotate-0 origin-center transition-transform duration-300 ease-in;
 }
 .k-select-dropdown{
-	@apply absolute top-full left-0 max-h-[200px] overflow-y-auto min-w-full z-[100] border border-t-0 border-black bg-white shadow;
+	@apply absolute top-full left-0 max-h-[200px] overflow-y-auto min-w-full z-100 border border-t-0 border-black bg-white shadow;
 	&::-webkit-scrollbar{
 		@apply w-1 bg-white;
 	}
