@@ -5,7 +5,15 @@
 
 /* Imports */
 @import './fonts.scss';
-@import './tailwind.scss';
 @import './global.scss';
 
-@import './responsive-menu.scss';
+@import './ui/button.scss';
+@import './ui/discount.scss';
+@import './ui/custom-scrollbar.scss';
+@import './ui/video.scss';
+
+@import './blocks/responsive-menu.scss';
+@import './blocks/media-object.scss';
+@import './blocks/content.scss';
+@import './blocks/table.scss';
+@import './blocks/seo-content.scss';
