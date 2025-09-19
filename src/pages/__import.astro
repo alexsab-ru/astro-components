@@ -135,19 +135,19 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 
 		<div class="space-y-6 max-w-(--breakpoint-sm) w-full mx-auto mb-5" x-show="$store.import.step === 3">
 			<ul class="space-y-5">
-				<li class="flex items-end justify-between leading-none"><span>Модель</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.brand + ' ' + $store.import.model"></span>
+				<li class="flex items-end justify-between leading-none"><span>Модель</span><span class="grow border-b-black/20 border-b border-dotted"></span><span class="font-bold" x-text="$store.import.brand + ' ' + $store.import.model"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Комплектация</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.complectation"></span>
+				<li class="flex items-end justify-between leading-none"><span>Комплектация</span><span class="grow border-b-black/20 border-b border-dotted"></span><span class="font-bold" x-text="$store.import.complectation"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Цвет</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.color"></span>
+				<li class="flex items-end justify-between leading-none"><span>Цвет</span><span class="grow border-b-black/20 border-b border-dotted"></span><span class="font-bold" x-text="$store.import.color"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Привод</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.drive"></span>
+				<li class="flex items-end justify-between leading-none"><span>Привод</span><span class="grow border-b-black/20 border-b border-dotted"></span><span class="font-bold" x-text="$store.import.drive"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Условия покупки</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.termOfPurchase"></span>
+				<li class="flex items-end justify-between leading-none"><span>Условия покупки</span><span class="grow border-b-black/20 border-b border-dotted"></span><span class="font-bold" x-text="$store.import.termOfPurchase"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Первоначальный взнос</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.initialPayment"></span>
+				<li class="flex items-end justify-between leading-none"><span>Первоначальный взнос</span><span class="grow border-b-black/20 border-b border-dotted"></span><span class="font-bold" x-text="$store.import.initialPayment"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Покупка</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.planningPurchase"></span>
+				<li class="flex items-end justify-between leading-none"><span>Покупка</span><span class="grow border-b-black/20 border-b border-dotted"></span><span class="font-bold" x-text="$store.import.planningPurchase"></span>
 				</li>
 			</ul>
 			<input type="hidden" name="form" value="Форма предзаказа" />

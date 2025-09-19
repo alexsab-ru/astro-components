@@ -21,7 +21,7 @@ const { models = [], model, brand, title = "Подобрать комплект�
 			) : (''))}
 		</div>
 		<template x-if="currentModel.complectations !== undefined && currentModel.complectations.length > 0">
-			<div class="flex gap-x-5 gap-y-2 flex-wrap border-b mb-10">
+			<div class="flex gap-x-5 gap-y-2 flex-wrap border-b-black/20 border-b mb-10">
 				<template x-for="(c, idx) in currentModel.complectations" :key="idx">
 					<span 
 						class="compl_name"
