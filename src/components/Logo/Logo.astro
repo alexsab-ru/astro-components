@@ -2,7 +2,7 @@
 import settings from '@/data/settings.json';
 const { site_name, logo_header, logo_dealer_header } = settings;
 const path = Astro.url.pathname;
-const logoSize = "h-4 sm:h-5 xl:h-10"
+const logoSize = "h-4 sm:h-5 xl:h-10 w-auto";
 ---
 {path === '/' ? (
 <div class="flex xs:flex-col flex-nowrap items-center xs:gap-2 gap-3 xs:divide-x-0 divide-x divide-black/20 cursor-pointer" x-data="scrollTop" x-on:click="onClick">
