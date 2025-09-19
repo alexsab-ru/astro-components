@@ -124,46 +124,46 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 					x-bind:class="{'translate-x-0!': open}"
 				>
 					<div class="absolute w-10 h-10 flex items-center justify-center top-0 right-0 text-2xl opacity-60" x-on:click="open = false"><Icon name="mdi:close-circle-outline" /></div>
-					<div class="lg:sticky top-4 lg:top-[70px] lg:bg-gray-100 p-4 space-y-4 divide-black/20 divide-y overflow-y-auto h-screen lg:h-[90vh] custom-scrollbar">
-						<div class="space-y-2">
-							<h3 class="mb-2!">Модель</h3>
+					<div class="lg:sticky top-4 lg:top-[70px] lg:bg-gray-100 p-4 flex flex-col gap-4 *:pb-5 divide-black/20 divide-y overflow-y-auto h-screen lg:h-[90vh] custom-scrollbar">
+						<div class="flex flex-col gap-2">
+							<h3 class="mb-0!">Модель</h3>
 							{models.map((model) => (
 								<Checkbox value={model.name.toLocaleLowerCase()} id={model.id} color="black" label={model.name} @change={`toggleFilter('Models', '${model.name.toLocaleLowerCase()}')`} />
 							))}
 						</div>
-						<div class="pt-4 space-y-2">
-							<h3 class="mb-2!">Цвет</h3>
+						<div class="flex flex-col gap-2">
+							<h3 class="mb-0!">Цвет</h3>
 							{colors.map((color) =>(
 								<Checkbox value={color.toLocaleLowerCase()} id={color} color="black" label={color} @change={`toggleFilter('Colors', '${color.toLocaleLowerCase()}')`} />
 							))}
 						</div>
-						<div class="pt-4 space-y-2">
-							<h3 class="mb-2!">Комплектация</h3>
+						<div class="flex flex-col gap-2">
+							<h3 class="mb-0!">Комплектация</h3>
 							{complectations.map((complectation) =>(
 								<Checkbox value={complectation.toLocaleLowerCase()} id={complectation} color="black" label={complectation} @change={`toggleFilter('Complectations', '${complectation.toLocaleLowerCase()}')`} />
 							))}
 						</div>
-						<div class="pt-4 space-y-2">
-							<h3 class="mb-2!">Двигатель</h3>
+						<div class="flex flex-col gap-2">
+							<h3 class="mb-0!">Двигатель</h3>
 							{engines.map((engine) =>(
 								<Checkbox value={engine.toLocaleLowerCase()} id={engine} color="black" label={engine} @change={`toggleFilter('Engines', '${engine.toLocaleLowerCase()}')`} />
 							))}
 						</div>
-						<div class="pt-4 space-y-2">
-							<h3 class="mb-2!">Привод</h3>
+						<div class="flex flex-col gap-2">
+							<h3 class="mb-0!">Привод</h3>
 							{drives.map((drive) =>(
 								<Checkbox value={drive.toLocaleLowerCase()} id={drive} color="black" label={drive} @change={`toggleFilter('Drives', '${drive.toLocaleLowerCase()}')`} />
 							))}
 						</div>
-						<div class="pt-4 space-y-2">
-							<h3 class="mb-2!">Тип топлива</h3>
+						<div class="flex flex-col gap-2">
+							<h3 class="mb-0!">Тип топлива</h3>
 							<Checkbox value="Бензин" id="benzin" color="black" label="Бензин" checked disabled @change={`toggleFilter('', 'бензин')`} />
 						</div>
 					</div>
 				</div>
 				<div class="col-span-9">
 					<p x-text="`${total} ${declOfNums(total)}`"></p>
-					<hr class="my-5" />
+					<hr class="my-5 text-black/20" />
 					<div class="flex items-center flex-wrap justify-end sm:justify-start gap-4">
 						<SortSelect />
 						<div class="flex items-center flex-nowrap gap-2 justify-between xs:px-2 px-3 h-[34px] sm:h-[42px] lg:hidden border" x-on:click="open = true">
@@ -171,7 +171,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 							<span class="xs:text-[10px] text-xs sm:text-base leading-none!">Параметры</span>
 						</div>
 					</div>
-					<hr class="my-5" />
+					<hr class="my-5 text-black/20" />
 					<div class="sticky top-4 lg:top-[70px] z-30 shadow-xl">
 						<div class="stock-slider swiper w-full bg-accent-400">
 							<div class="swiper-wrapper">
@@ -186,7 +186,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 							<button class="stock-slider-nav stock-slider-next"><Icon name="mdi:chevron-right" /></button>
 						</div>
 					</div>
-					<hr class="my-5" />
+					<hr class="my-5 text-black/20" />
 					<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
 						{cars.map((car) => (
 							<CarItem car={car} slug={`/catalog/${car.slug}`} totalShow={false} />
@@ -201,25 +201,3 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 	}
 	<SeoText mdx="catalog" noPadding={true} />
 </PageLayout>
-
-<style lang="scss">
-	@reference "tailwindcss";
-	.filter-model-link{
-		@apply text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0;
-	}
-	.stock-slider-nav{
-		@apply w-8 h-8 flex items-center justify-center absolute top-1/2 -translate-y-1/2 z-40 text-white text-3xl font-light opacity-50 transition-opacity hover:opacity-100;
-		&.swiper-button-lock{
-			@apply hidden;
-		} 
-		&.swiper-button-disabled{
-			@apply cursor-not-allowed;
-		}
-	}
-	.stock-slider-prev{
-		@apply left-0;
-	}
-	.stock-slider-next{
-		@apply right-0;
-	}
-</style>

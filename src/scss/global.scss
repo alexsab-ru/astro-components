@@ -51,3 +51,7 @@ section:not(.model-section) {
 		width: auto;
 	}
 }
+
+.filter-model-link{
+	@apply text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0;
+}

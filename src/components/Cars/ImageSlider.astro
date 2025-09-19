@@ -1,6 +1,7 @@
 ---
 const { data = {} } = Astro.props;
 import '@/components/Banner/banner.css';
+import './image-slider.css';
 ---
 
 <div class="swiper car-image-slider w-full mb-2.5 bg-gray-50 h-[52.6vw] sm:h-auto sm:aspect-video">
@@ -39,22 +40,3 @@ import '@/components/Banner/banner.css';
 <script>
 	import './slider';
 </script>
-
-<style lang="scss">
-.swiper.car-thumb-slider{
-	.swiper-slide{
-		position: relative;
-		&::after{
-			content: '';
-			position: absolute;
-			inset: 0;
-			background-color: #000;
-			opacity: 0.6;
-			transition: opacity .3s;
-		}
-		&.swiper-slide-thumb-active::after{
-			opacity: 0;
-		}
-	}
-}
-</style>

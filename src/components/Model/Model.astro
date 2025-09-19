@@ -8,21 +8,21 @@ const {model, breadcrumb} = Astro.props;
 
 import {Icon} from 'astro-icon/components';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
-import './model.css';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 const photoSlides = !model.photos
-	? []
-	: [].concat(
-			...Object.values(
-				await fetch(model.photos).then((response) =>
-					response.json()
-				)
-			)
-	  );
+? []
+: [].concat(
+	...Object.values(
+		await fetch(model.photos).then((response) =>
+		response.json()
+	)
+)
+);
 import Button from '@/components/Button/Button.astro';
 import ColorLink from '@/components/ColorLink/ColorLink.astro'
 const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.colors[0].id}.png`;
+import './model.css';
 ---
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
@@ -220,21 +220,6 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 		</div>
 	</div>
 </section>
-
-<style lang="scss">
-	@reference "../../scss/app.css";
-	.image-slide {
-		@apply relative h-full cursor-zoom-in inline-flex w-auto;
-		&.swiper-slide-active {
-			img {
-				@apply brightness-100;
-			}
-		}
-		img {
-			@apply relative h-full w-full object-cover object-center inset-0 brightness-50 transition-[filter] duration-500 ease-in-out hover:brightness-110;
-		}
-	}
-</style>
 
 <script>
 	import GLightbox from 'glightbox';

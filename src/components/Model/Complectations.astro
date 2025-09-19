@@ -68,25 +68,3 @@ const { models = [], model, brand, title = "Подобрать комплект�
 		</div>
 	</div>
 </section>
-
-<style lang="scss">
-	@reference "../../scss/app.css";
-	.compl_name{
-		@apply pb-1 sm:pb-5 text-sm sm:text-xl font-medium uppercase cursor-pointer relative before:bg-accent-500 select-none;
-		&::before{
-			content: '';
-			width: 0;
-			height: 2px;
-			position: absolute;
-			bottom: -1px;
-			left: 0;
-			transition: all .3s;
-		}
-		&.active{
-			@apply text-accent-500;
-			&::before{
-				width: 100%;
-			}
-		}
-	}
-</style>

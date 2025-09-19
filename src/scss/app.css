@@ -9,11 +9,15 @@
 
 @import './ui/button.scss';
 @import './ui/discount.scss';
+@import './ui/close-modal-btn.scss';
 @import './ui/custom-scrollbar.scss';
 @import './ui/video.scss';
 
 @import './blocks/responsive-menu.scss';
+@import './blocks/marquee.scss';
 @import './blocks/media-object.scss';
 @import './blocks/content.scss';
 @import './blocks/table.scss';
 @import './blocks/seo-content.scss';
+@import './blocks/auto-show-modal.scss';
+@import './blocks/stock-slider.scss';
