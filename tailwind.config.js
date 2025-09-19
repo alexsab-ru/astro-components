@@ -12,6 +12,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				'sans': ['Roboto', ...defaultTheme.fontFamily.sans],
+				'heading': ['Roboto', ...defaultTheme.fontFamily.sans],
 			},
 			boxShadow: {
 				'3xl': '0 35px 60px rgba(0, 0, 0, 0.3)',

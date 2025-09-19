@@ -13,6 +13,11 @@ body {
 	@apply bg-accent-500 text-white;
 }
 
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	@apply font-heading;
+}
+
 section:not(.model-section) {
 	@apply relative py-8 sm:py-16 bg-cover bg-center;
 	h2 {
