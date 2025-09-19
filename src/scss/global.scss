@@ -4,11 +4,6 @@
 	display: none !important;
 }
 
-body {
-	min-width: 320px;
-	overflow-x: hidden;
-}
-
 ::selection{
 	@apply bg-accent-500 text-white;
 }
