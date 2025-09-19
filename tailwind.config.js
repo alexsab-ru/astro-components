@@ -19,8 +19,8 @@ module.exports = {
 			},
 			colors: {
 				accent: {
-					400: colors.cyan[400],
-					500: colors.cyan[500],
+					400: '#00d3f3',
+					500: '#00b8db',
 				}, // в основном используется 400 и 500
 				vk: '#4B76A8',
 				ok: '#F7931D',
