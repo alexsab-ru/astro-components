@@ -1044,7 +1044,7 @@ def get_breadcrumb(car, config):
 
 def get_title(car, config):
     """Генерирует title для автомобиля по шаблону (car - dict)."""
-    template = config.get('title_template') or 'Купить {{car.mark_id}} {{car.folder_id}} {{car.modification_id}} {{car.color}} у официального дилера в {{config.legal_city_where}}'
+    template = config.get('title_template') or 'Купить {{car.mark_id}} {{car.folder_id}} {{car.modification_id}} {{car.complectation_name}} {{car.color}} у официального дилера в {{config.legal_city_where}}'
     return render_template_string(template, car, config).strip()
 
 def get_description(car, config):
