@@ -9,11 +9,13 @@ module.exports = {
 			...baseConfig.theme.extend,
 			colors: {
 				...baseConfig.theme.extend.colors,
+				black: "#1C1C1B",
 				accent: {
-					400: "#eb0d0f",
-					500: "#c50b0d",
-					600: "#920809",
+					400: "#004C66",
+					500: "#005F7F",
 				},
+				"light-blue": "#E0ECF9",
+				"middle-blue": "#00A5CF",
 			},
 			fontFamily: {
 				...baseConfig.theme.extend.fontFamily
