@@ -663,6 +663,8 @@ class CarProcessor:
         model_full = car_data.get('folder_id', '')
         model = get_model_info(brand, model_full, 'name', None, car_data.get('vin', ''))
         if not model is None:
+            car_data['model_name'] = model
+            car_data['model_id'] = get_model_info(brand, model_full, 'id', None, car_data.get('vin', ''))
             key = (brand, model)
             
             if key in self.cars_price_data:
