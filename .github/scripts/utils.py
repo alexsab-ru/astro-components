@@ -574,6 +574,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
     color = str(car_data.get('color', '')).capitalize()
     model = car_data.get('folder_id', '')
     brand = car_data.get('mark_id', '')
+    run = car_data.get('run', 0)
 
     # Получаем color_image для CDN
     color_image = get_color_filename(brand, model, color, vin)
@@ -610,6 +611,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
     data['vin_hidden'] = vin_hidden
     data['color'] = color
     data['image'] = thumb
+    data['run'] = run
 
     # Корректно формируем total
     data['total'] = int(car_data.get('total', 1))
