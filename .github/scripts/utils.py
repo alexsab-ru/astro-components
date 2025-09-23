@@ -575,15 +575,14 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
     model = car_data.get('folder_id', '')
     brand = car_data.get('mark_id', '')
 
-    # Получаем folder и color_image для CDN
-    folder = get_folder(brand, model, vin)
+    # Получаем color_image для CDN
     color_image = get_color_filename(brand, model, color, vin)
 
     thumb = "https://cdn.alexsab.ru/errors/404.webp"
     # Проверка через CDN сервис
-    if folder and not config['skip_check_thumb']:
+    if not config['skip_check_thumb']:
         if color_image:
-            cdn_path = f"https://cdn.alexsab.ru/b/{brand.lower()}/img/models/{folder}/colors/{color_image}"
+            cdn_path = f"{color_image}"
             try:
                 response = requests.head(cdn_path)
                 if response.status_code == 200:
@@ -592,12 +591,12 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
                     # Если файл не найден в CDN, проверяем локальные файлы
                     errorText = f"\n<b>Не удалось найти файл на CDN</b>. Статус <b>{response.status_code}</b>\n<pre>{color_image}</pre>\n<a href='{cdn_path}'>{cdn_path}</a>"
                     print_message(errorText, 'error')
-                    thumb = check_local_files(brand, model, color, vin)
+                    # thumb = check_local_files(brand, model, color, vin)
             except requests.RequestException as e:
                 # В случае ошибки при проверке CDN, используем локальные файлы
                 errorText = f"\nОшибка при проверке CDN: {str(e)}"
                 print_message(errorText, 'error')
-                thumb = check_local_files(brand, model, color, vin)
+                # thumb = check_local_files(brand, model, color, vin)
 
     data = dict(car_data)  # Копируем все поля из car_data
     # Определяем порядок (order)

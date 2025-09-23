@@ -661,7 +661,7 @@ class CarProcessor:
         # Группировка и агрегация данных сразу в готовом формате
         brand = car_data.get('mark_id', '')
         model_full = car_data.get('folder_id', '')
-        model = get_model_info(brand, model_full, 'short')
+        model = get_model_info(brand, model_full, 'name', None, car_data.get('vin', ''))
         if not model is None:
             key = (brand, model)
             
