@@ -1,14 +1,14 @@
 ---
 import type { TDataCollection } from '@/types/TCollection';
 import { type CollectionEntry, type DataEntryMap, getCollection, render } from "astro:content";
-import { COLLECTIONS } from '@/const';
+import collectionsData from '@/data/collections.json';
 import PageLayout from '@/layouts/PageLayout.astro';
 import SeoText from '@/components/Seo/Index.astro';
 
 export async function getStaticPaths() {
   const paths = [];
 
-  for (const collection of COLLECTIONS) {
+  for (const collection of collectionsData) {
     const entries = await getCollection(collection.name as keyof DataEntryMap);
     for (const entry of entries) {
       // Исключаем файлы начинающиеся с '__'
@@ -32,7 +32,7 @@ const { collection, slug } = Astro.params;
 const post = Astro.props as Props;
 
 // Находим заголовок коллекции по имени коллекции
-const collectionMeta = COLLECTIONS.find((c) => c.name === collection) || { title: '' };
+const collectionMeta = collectionsData.find((c) => c.name === collection) || { title: '' };
 const title = collectionMeta.title as string;
 
 // Данные записи для передачи в layout

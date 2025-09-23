@@ -39,6 +39,7 @@ show_help() {
 # Список файлов для скачивания
 FILES=(
     "banners.json"
+    "collections.json"
     "faq.json"
     "federal-disclaimer.json"
     "menu.json"

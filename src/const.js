@@ -9,7 +9,7 @@ export const MARQUEE = { title: `Тотальная распродажа до ${
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 
 import settings from '@/data/settings.json';
-const { site_name, brand, legal_city, phone_common } = settings;
+const { phone_common } = settings;
 
 
 // Ссылки под хедером
@@ -67,11 +67,7 @@ menu.length > 0 && menu.map(item => {
 
 export const LINKS_MENU = menu;
 
-// Коллекции
-export const COLLECTIONS = [
-	{name: 'special-offers', title: 'Спецпредложения', description: `Спецпредложения официального дилерского центра ${site_name} ${brand} ${legal_city}`},
-	// {name: 'news', title: 'Новости', description: `Новости и акции дилерского центра ${site_name} ${brand} ${legal_city}`},
-];
+// Коллекции теперь хранятся в @/data/collections.json
 
 // Текст согласия в формах
 export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy/" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a> и на использование cookie на условиях, указанных <a href="/cookie-policy/" class="!m-0 underline transition-all hover:no-underline" target="_blank">здесь</a>';

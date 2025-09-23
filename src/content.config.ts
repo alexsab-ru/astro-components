@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
-import { COLLECTIONS } from './const.js';
+import collectionsData from './data/collections.json';
 
 // Базовая схема для markdown-контента (общие страницы коллекций из COLLECTIONS)
 const baseCollectionSchema = z.object({
@@ -18,8 +18,8 @@ const baseCollectionSchema = z.object({
     href: z.string().optional(),
 });
 
-// Создаем коллекции из константы COLLECTIONS с новым API (loader: glob)
-const objectCollections = COLLECTIONS.reduce((acc: Record<string, ReturnType<typeof defineCollection>>, collection) => {
+// Создаем коллекции из данных collections.json с новым API (loader: glob)
+const objectCollections = collectionsData.reduce((acc: Record<string, ReturnType<typeof defineCollection>>, collection) => {
     acc[collection.name] = defineCollection({
         // Используем exclude, т.к. массив pattern приводит к некорректной строке и ломает загрузку
         loader: glob({
