@@ -1,0 +1,59 @@
+---
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import Textarea from '../Textarea/Textarea.astro';
+import FormSelect from '@/components/FormSelect.astro';
+import { AGREE_LABEL } from '@/const';
+import modelsData from '@/data/models.json';
+const options = modelsData.services.map(({ id, name, mark_id }) => ({ 
+	id: `${mark_id}-${id}`.toLowerCase(), 
+	name: `${mark_id} ${name}` 
+}));
+
+const gearboxOptions = [
+  {id: 'option1', name: 'Механическая'},
+  {id: 'option2', name: 'Автоматическая'},
+  {id: 'option3', name: 'Вариатор'},
+  {id: 'option4', name: 'Роботизированная коробка передач'}
+];
+---
+<form class="flex flex-col gap-4 max-w-[500px] mx-auto js-trade-in-form" novalidate>
+  <input type="hidden" name="form" value="tradeInForm" />
+  <input
+    type="email"
+    tabindex="-1"
+    name="email"
+    class="h-0 opacity-0 absolute -z-[100]"
+    placeholder="mail@example.com"
+/>
+  
+  <p><strong>Ваш автомобиль</strong></p>
+  <Input name="brandAndModel" classes="border-gray-100" required placeholder="Марка и модель вашего авто*" errorText="Пожалуйста, укажите марку и модель Вашего авто" />
+  <Input name="year" classes="border-gray-100" required placeholder="Год выпуска*" errorText="Пожалуйста, укажите год выпуска Вашего авто" />
+  <Input name="mileage" classes="border-gray-100" required placeholder="Пробег*" errorText="Пожалуйста, укажите пробег Вашего авто" />
+  <FormSelect name="gearbox" required placeholder="Коробка передач*" options={gearboxOptions} errorMessage="Пожалуйста, выберите КПП Вашего авто" />
+  <Input name="cost" classes="border-gray-100" required placeholder="Желаемая стоимость*" errorText="Пожалуйста, укажите желаемую стоимость" />
+  <p><strong>Желаемый автомобиль</strong></p>
+  <FormSelect name="model" required placeholder="Модель*" options={options} errorMessage="Пожалуйста, выберите модель желаемого авто" />
+  <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+  <Input
+    type="tel"
+    name="phone"
+    classes="border-gray-100"
+    placeholder="+7 (999) 999-99-99*"
+    required  
+    errorText="Телефон является обязательным полем"
+  />
+  <Textarea name="comment" classes="border-gray-100 min-h-[100px] h-auto resize-none" placeholder="Комментарий" />
+
+  <Checkbox
+    name="agree"
+    label={AGREE_LABEL}
+    color="black"
+    required
+    errorText="Чтобы продолжить, установите флажок"
+  />
+
+  <Button view="form-button" classes="w-full" title="Отправить" />
+</form>

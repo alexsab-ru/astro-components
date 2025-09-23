@@ -2,15 +2,16 @@
 import type { ISalon } from '@/types/ISalon';
 interface Props {
 	required?: boolean;
+	disabled?: boolean;
 	errorMessage?: string;
 	salons: ISalon[];
 }
-const { required, errorMessage = 'Выберите дилерский центр', salons } = Astro.props;
+const { required, errorMessage = 'Выберите дилерский центр', salons, disabled = false } = Astro.props;
 import FormSelect from '@/components/FormSelect.astro';
 const options = salons.map((salon, idx) => ({ id: idx, name: salon.name }));
 ---
 {options.length > 1 && (
 	<div class="w-full">
-		<FormSelect name="dealer" placeholder="Выберите дилерский центр" options={options} required={required} errorMessage={errorMessage} />
+		<FormSelect name="dealer" placeholder="Выберите дилерский центр" options={options} required={required} errorMessage={errorMessage} disabled={disabled} />
 	</div>
 )}

@@ -1,0 +1,35 @@
+---
+import Form from './Form.astro';
+
+interface Props{
+  imageUrl?: string;
+  title?: string;
+  classes?: string;
+}
+
+const {
+  imageUrl = '',
+  title = '',
+  classes = ''
+} = Astro.props;
+---
+<div class={classes}>
+  {
+    title.length ? (
+    <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
+    ) : null
+  }
+
+  {imageUrl.length ? (
+    <div class="flex flex-col lg:flex-row lg:gap-10 lg:items-center lg:justify-center">
+      <div class="lazy !hidden lg:!flex justify-center lg:w-1/2">
+        <img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={imageUrl} alt={title ? title : 'Оценка вашего автомобиля'} class="w-full h-auto" loading="lazy" />
+      </div>
+      <div>
+        <Form />
+      </div>
+    </div>
+  ) : (
+    <Form />
+  )}
+</div>
