@@ -7,15 +7,18 @@ const baseCollectionSchema = z.object({
     h1: z.string().optional(),
     title: z.string().optional(),
     caption: z.string().optional(),
+    draft: z.boolean().optional(),
     breadcrumb: z.string().optional(),
     description: z.string().optional(),
     image: z.string().optional(),
     pubDate: z.coerce.date().optional(),
     toDate: z.union([z.boolean(), z.coerce.date()]).optional(),
     // Поля ссылок, чтобы не отбрасывались при включенной схеме
-    url: z.string().optional(),
-    link: z.string().optional(),
-    href: z.string().optional(),
+    tel: z.string().optional(),
+    mailto: z.string().optional(),
+    externalUrl: z.string().optional(),
+    internalUrl: z.string().optional(),
+    isModal: z.boolean().optional(),
 });
 
 // Создаем коллекции из константы COLLECTIONS с новым API (loader: glob)
