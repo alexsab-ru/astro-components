@@ -345,6 +345,7 @@ def avitoColor(color):
         'золотой': 'золотой',
         'коричневый': 'коричневый',
         'красный': 'красный',
+        'ярко-алый': 'красный',
         'оранжевый': 'оранжевый',
         'пурпурный': 'пурпурный',
         'розовый': 'розовый',
@@ -369,7 +370,7 @@ def avitoColor(color):
         return mapping[normalized_color].capitalize()
     else:
         # Логирование ошибки в файл
-        error_text = f"Не удается обработать цвет: {color}"
+        error_text = f"Не удается обработать цвет для Avito: {color}"
         with open('output.txt', 'a') as file:
             file.write(f"{error_text}\n")
         return color  # Возвращаем оригинальный ключ, если он не найден
