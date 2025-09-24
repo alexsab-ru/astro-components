@@ -10,7 +10,12 @@ import { getRandomInt } from "@/js/utils/numbers.format";
 if (rawCars && rawCars.length > 0) {
 	// Исключаем скрытые файлы
 	cars = rawCars.filter((car) => !(typeof car?.id === 'string' && car.id.startsWith('__')));
-	image = cars[getRandomInt(0, cars.length)].data.image;
+	// Проверяем что есть автомобили после фильтрации и что у них есть данные
+	if (cars.length > 0 && cars[0]?.data) {
+		image = cars[getRandomInt(0, cars.length)].data.image;
+	} else {
+		image = "";
+	}
 } else {
 	image = "";
 }
