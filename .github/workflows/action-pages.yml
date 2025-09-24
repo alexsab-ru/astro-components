@@ -252,7 +252,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  notify_telegram:
+  notify_telegram_after_deploy:
     needs: [build, deploy]
     if: needs.build.outputs.changes == 'true'
     uses: ./.github/workflows/github-telegram.yml
