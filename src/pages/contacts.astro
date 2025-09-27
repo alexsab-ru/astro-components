@@ -40,7 +40,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
 							{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
 						</div>
 					) : (
-						<div class="divide-y">
+						<div class="divide-black/20 divide-y">
 							{
 								salons.map(salon => (
 								<div class="flex flex-wrap gap-y-3 py-8">

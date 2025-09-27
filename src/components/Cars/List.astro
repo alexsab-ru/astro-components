@@ -44,16 +44,16 @@ if (rawCars && rawCars.length > 0) {
 ---
 <div x-data="sorting" x-cloak>
     <p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
-    <hr class="my-5" />
+    <hr class="my-5 text-black/20" />
     <SortSelect />
-    <hr class="my-5" />
+    <hr class="my-5 text-black/20" />
     {Object.keys(groupCars).length > 1 && (
         <div class="flex flex-wrap gap-2 sm:gap-4">
             {Object.keys(groupCars).map(brand => (
                 <FilterItemBtn name={brand} value={brand.toLocaleLowerCase().replace(',', '')} id={brand.toLocaleLowerCase()} filterType="Brands" data-filter-type="brand" />
             ))}
         </div>
-        <hr class="my-5" />
+        <hr class="my-5 text-black/20" />
     )}
     {Object.keys(models).length && (
         <div class="flex flex-wrap gap-2 sm:gap-4">
@@ -65,7 +65,7 @@ if (rawCars && rawCars.length > 0) {
         </div>
     )}
     {Object.keys(years).length && (
-        <hr class="my-5" />
+        <hr class="my-5 text-black/20" />
         <div class="flex flex-wrap gap-2 sm:gap-4">
             {Object.keys(years).map(key => (
                 <FilterItemBtn name={key} id={key} filterType="Years" data-filter-type="year" data-filter-brand={years[key].brands.join(';')} data-filter-model={years[key].models.join(';')} />
