@@ -45,7 +45,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
 							}
 						</div>
 					) : (
-						<div class="divide-y">
+						<div class={`divide-y ${salons.length > 1 ? 'max-h-[250px] md:max-h-[528px] overflow-y-auto custom-scrollbar' : ''}`}>
 							{
 								salons.map(salon => (
 								<div class="flex flex-wrap gap-y-3 py-8">
