@@ -28,7 +28,7 @@ def download_or_read_file(path, retries=3, delay=5):
     
     return None
 
-def detect_xpath(xml_content):
+def detect_xpath(xml_content, url):
     # Список известных XPath шаблонов (паттерн: xpath, родительский путь для проверки структуры)
     xpath_patterns = [
         ("//data/cars/car", "//data/cars"),
@@ -58,27 +58,27 @@ def detect_xpath(xml_content):
             parent_elements = root.xpath(parent_xpath)
             if parent_elements:
                 # Нашли подходящую структуру, но она пуста
-                warning_msg = f"⚠️ XML файл содержит структуру {parent_xpath}, но не содержит данных (пустой)"
+                warning_msg = f"⚠️ XML файл {url} содержит структуру {parent_xpath}, но не содержит данных (пустой)"
                 print(warning_msg)
                 # Записываем предупреждение в output.txt
-                with open('output.txt', 'a', encoding='utf-8') as file:
-                    file.write(f"{warning_msg}\n")
+                # with open('output.txt', 'a', encoding='utf-8') as file:
+                #     file.write(f"\n{warning_msg}\n")
                 return xpath
                 
         # Если вообще ничего не подошло
-        error_msg = "❌ Не удалось определить структуру XML - ни один из известных XPath паттернов не найден"
+        error_msg = "❌ Не удалось определить структуру XML {url} - ни один из известных XPath паттернов не найден"
         print(error_msg)
         # Записываем ошибку в output.txt
         with open('output.txt', 'a', encoding='utf-8') as file:
-            file.write(f"{error_msg}\n")
+            file.write(f"\n{error_msg}\n")
         # Возвращаем первый паттерн по умолчанию, чтобы не останавливать выполнение
         return xpath_patterns[0][0]
         
     except etree.XMLSyntaxError as e:
-        error_msg = f"❌ Невалидный XML контент: {str(e)}"
+        error_msg = f"❌ Невалидный XML контент {url}: {str(e)}"
         print(error_msg)
         with open('output.txt', 'a', encoding='utf-8') as file:
-            file.write(f"{error_msg}\n")
+            file.write(f"\n{error_msg}\n")
         raise ValueError(error_msg)
 
 def merge_xml_files(xml_contents, xpath):
@@ -188,7 +188,7 @@ def main():
     
     # Если xpath не указан, определяем его автоматически из первого XML
     if not args.xpath:
-        detected_xpath = detect_xpath(xml_contents[0])
+        detected_xpath = detect_xpath(xml_contents[0], url)
         print(f"Using detected XPath: {detected_xpath}")
         xpath = detected_xpath
     else:
