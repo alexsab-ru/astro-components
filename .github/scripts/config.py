@@ -118,6 +118,13 @@ def load_model_mapping(json_path: str = "./src/data/all-models.json"):
 
 model_mapping = load_model_mapping()
 
+# Сохраняем model_mapping в JSON для отладки и повторного использования
+with open('src/data/model_mapping.json', 'w', encoding='utf-8') as f:
+    # Документируем: сохраняем мэпинг моделей в файл model_mapping.json
+    # Это поможет быстро анализировать структуру и использовать её в других скриптах
+    json.dump(model_mapping, f, ensure_ascii=False, indent=2)
+
+
 
 def get_model_info(brand: str, model: str, property: str = None, color: str = None, vin: str = None) -> str | dict | None:
     """
@@ -153,7 +160,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not brand_key:
-        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден бренд</b> <code>{brand}</code> в мэпинге (модель {normalized_model})"
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден бренд</b> <code>{brand}</code> в models.json (модель {normalized_model})"
         print_message(errorText, 'error')
         return None
     
@@ -164,7 +171,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     )
     
     if not model_key:
-        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдена модель</b> <code>{model}</code> бренда <code>{brand}</code> в мэпинге (ищем {property or color})"
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в \"feed_names\" бренда <code>{brand}</code> в models.json (ищем {property or color})"
         print_message(errorText, 'error')
         return None
     
@@ -189,7 +196,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     if not model_obj:
         errorText = (
             f"\nvin: <code>{vin}</code>\n"
-            f"<b>Не найдены данные модели</b> <code>{model}</code> бренда <code>{brand}</code> в all-models.json"
+            f"<b>Не найдены данные модели</b> <code>{model}</code> бренда <code>{brand}</code> в models.json"
         )
         print_message(errorText, 'error')
         return None
@@ -218,7 +225,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
 
         errorText = (
             f"\nvin: <code>{vin}</code>\n"
-            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в all-models.json"
+            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в models.json"
         )
         print_message(errorText, 'error')
         return None
