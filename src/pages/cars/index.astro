@@ -32,7 +32,7 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 >
 	{
 		cars ? (
-			<CarsList cars={rawCars} />
+			<CarsList cars={rawCars} collection="cars" path="/cars/" />
 		) : (
 			<p>Скоро здесь появится список новых автомобилей.</p>
 		)

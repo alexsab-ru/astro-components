@@ -7,10 +7,13 @@ import { groupArrayByKey } from "@/js/utils/groupArrayByKey";
 
 interface Props {
     cars?: any[];
+    path?: string;
+    collection?: string;
 }
 
-const { cars: inputCars } = Astro.props;
-const rawCars = inputCars || await (getCollection as any)("cars");
+const { cars: inputCars, collection = 'cars', path = '/cars/' } = Astro.props;
+const rawCars = inputCars || await (getCollection as any)(collection);
+
 let cars: any, models = {}, years = {}, groupCars = {};
 
 if (rawCars && rawCars.length > 0) {
@@ -74,7 +77,7 @@ if (rawCars && rawCars.length > 0) {
     )}
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
         {cars.map((car) => (
-            <CarItem car={car} />
+            <CarItem car={car} path={path} />
         ))}
     </div>
 </div>
