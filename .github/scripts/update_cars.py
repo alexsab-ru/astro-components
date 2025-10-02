@@ -8,6 +8,7 @@ from pathlib import Path
 from utils import *
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Tuple
+import requests
 
 class CarProcessor:
     def __init__(self):
@@ -55,6 +56,12 @@ class CarProcessor:
             except Exception as e:
                 print(f"Произошла ошибка при работе с файлом: {e}")
 
+        # --- Кэш и настройки для внешних запросов по ID ---
+        # Задача: по числовым ID (generation/modification/complectation)
+        # получить человекочитаемые значения из внешнего API и подставить в данные.
+        self._lookup_cache: Dict[Tuple[str, str], Optional[str]] = {}
+        self._lookup_base_url = "https://cdn.alexsab.ru/getAutocatalog/index.php"
+
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
         configs = {
@@ -78,7 +85,7 @@ class CarProcessor:
                     'insurance_discount': 'insurance_discount',
                     'mark_id': 'mark_id',
                     'max_discount': 'max_discount',
-                    'modification_id': 'modification_id',
+                    'modification_id': ['modification_id', 'ModificationId'],
                     'optional_discount': 'optional_discount',
                     'price': 'price',
                     'priceWithDiscount': 'priceWithDiscount',
@@ -106,7 +113,7 @@ class CarProcessor:
                     'availability': 'Availability',
                     'body_type': 'BodyType',
                     'color': 'Color',
-                    'complectation_name': 'Complectation',
+                    'complectation_name': ['Complectation', 'ComplectationId'],
                     'credit_discount': 'credit_discount',
                     'description': 'Description',
                     'drive_type': 'DriveType',
@@ -119,7 +126,10 @@ class CarProcessor:
                     'insurance_discount': 'insurance_discount',
                     'mark_id': 'Make',
                     'max_discount': 'MaxDiscount',
-                    'modification_id': 'Modification',
+                    'modification_id': ['modification_id', 'ModificationId'],
+                    # Добавляем отдельные поля для числовых ID, чтобы их можно было резолвить через API
+                    'generation_id': 'GenerationId',
+                    'complectation_id': 'ComplectationId',
                     'optional_discount': 'optional_discount',
                     'price': 'Price',
                     'priceWithDiscount': 'priceWithDiscount',
@@ -129,7 +139,7 @@ class CarProcessor:
                     'tradeinDiscount': 'TradeinDiscount',
                     'vin': 'VIN',
                     'wheel': 'WheelType',
-                    'year': 'Year'
+                    'year': ['Year', 'GenerationId']
                 },
                 'elements_to_localize': [
                     'body_type',
@@ -397,10 +407,20 @@ class CarProcessor:
                     car_data['images'] = []
                 continue
                 
-            # Ищем элемент в XML
-            element = car.find(xml_field)
-            if element is not None and element.text:
-                car_data[internal_name] = element.text.strip()
+            # поддержка одиночного имени тега или списка имён
+            elem = None
+            if isinstance(xml_field, (list, tuple)):
+                # перебираем возможные варианты и берём первый найденный
+                for name in xml_field:
+                    candidate = car.find(name)
+                    if candidate is not None and candidate.text:
+                        elem = candidate
+                        break
+            else:
+                elem = car.find(xml_field)
+
+            if elem is not None and elem.text:
+                car_data[internal_name] = elem.text.strip()
         
         # Обработка специальных случаев для разных форматов
         if self.source_type == 'yml_catalog':
@@ -516,6 +536,136 @@ class CarProcessor:
         
         return params
 
+    def _fetch_lookup_value(self, kind: str, id_value: str) -> Optional[str]:
+        """
+        Делает GET-запрос к справочнику (`kind` ∈ {generation, modification, complectation})
+        и возвращает человекочитаемое имя из атрибута `name` первого подходящего тега.
+
+        Пример запроса:
+        - generation: https://cdn.alexsab.ru/getAutocatalog/index.php?lookup=1&type=generation&id=332036
+        - modification: https://cdn.alexsab.ru/getAutocatalog/index.php?lookup=1&type=modification&id=18488230
+        - complectation: https://cdn.alexsab.ru/getAutocatalog/index.php?lookup=1&type=complectation&id=18791852
+
+        Возвращаемое значение кэшируется по ключу (kind, id_value).
+        """
+        if not id_value:
+            return None
+
+        cache_key = (kind, str(id_value))
+        if cache_key in self._lookup_cache:
+            return self._lookup_cache[cache_key]
+
+        try:
+            params = {
+                'lookup': '1',
+                'type': kind,
+                'id': str(id_value)
+            }
+            # Делаем запрос к API с небольшим таймаутом.
+            resp = requests.get(self._lookup_base_url, params=params, timeout=7)
+            resp.raise_for_status()
+
+            # Пытаемся распарсить как XML и найти первый элемент с атрибутом name
+            # Документация: пользователь сообщил, что нужное значение лежит в атрибуте name
+            root = ET.fromstring(resp.content)
+            resolved_name: Optional[str] = None
+            for elem in root.iter():
+                if 'name' in elem.attrib and elem.attrib['name']:
+                    resolved_name = elem.attrib['name'].strip()
+                    break
+
+            self._lookup_cache[cache_key] = resolved_name
+            return resolved_name
+        except Exception as e:
+            # Логируем, но не прерываем обработку автомобиля
+            print(f"[lookup:{kind}] Ошибка при запросе ID={id_value}: {e}")
+            self._lookup_cache[cache_key] = None
+            return None
+
+    def _maybe_update_year_from_generation_name(self, car_data: Dict[str, any], generation_name: str) -> None:
+        """
+        Аккуратно обновляет поле 'year' на основе строки поколения, если год отсутствует
+        или содержит неподходящее значение (например, числовой ID вместо года).
+
+        Простая эвристика: берем первую 4-значную дату (19xx|20xx), если есть.
+        """
+        try:
+            import re
+            # Ничего не делаем, если 'year' уже нормальный год (четыре цифры)
+            existing_year = str(car_data.get('year', '')).strip()
+            if re.fullmatch(r'(19|20)\d{2}', existing_year):
+                return
+
+            match = re.search(r'(19|20)\d{2}', generation_name or '')
+            if match:
+                car_data['year'] = match.group(0)
+        except Exception:
+            # Безопасная деградация – не мешаем обработке
+            pass
+
+    def resolve_external_ids(self, car_data: Dict[str, any]) -> Dict[str, any]:
+        """
+        Обогащает car_data по внешним ID:
+        - GenerationId: тянем имя поколения; кладём в 'generation_name'; при необходимости обновляем 'year'
+        - ModificationId: подменяем 'modification_id' на человекочитаемое имя
+        - ComplectationId: заполняем/подменяем 'complectation_name' на человекочитаемое имя
+
+        Важно: вызывается ДО генерации friendly_url и расчёта цен.
+        """
+        # --- GenerationId → generation_name (+ попытка заполнить year) ---
+        gen_id = (
+            car_data.get('GenerationId')
+            or car_data.get('generation_id')
+            or car_data.get('generationId')
+        )
+        if gen_id and str(gen_id).isdigit():
+            gen_name = self._fetch_lookup_value('generation', str(gen_id))
+            if gen_name:
+                car_data['generation_name'] = gen_name
+                # Попробуем аккуратно выставить year, если его нет или он не в формате года
+                self._maybe_update_year_from_generation_name(car_data, gen_name)
+                # Лог: показываем значение, которое записали
+                print(f"[GENERATION] GenerationId={gen_id} -> generation_name='{gen_name}'")
+            else:
+                # Лог: не нашли расшифровку
+                print(f"[GENERATION] GenerationId={gen_id} -> не найдено")
+
+        # --- ModificationId → modification_id (человекочитаемая строка) ---
+        mod_id = (
+            car_data.get('ModificationId')
+            or car_data.get('modification_id')
+            or car_data.get('modificationId')
+        )
+        if mod_id and str(mod_id).isdigit():
+            mod_name = self._fetch_lookup_value('modification', str(mod_id))
+            if mod_name:
+                # Подменяем, чтобы URL и карточка имели читаемый текст
+                car_data['modification_id'] = mod_name
+                # Лог: показываем значение, которое записали
+                print(f"[MODIFICATION] ModificationId={mod_id} -> modification_id='{mod_name}'")
+            else:
+                # Лог: не нашли расшифровку
+                print(f"[MODIFICATION] ModificationId={mod_id} -> не найдено")
+
+        # --- ComplectationId → complectation_name ---
+        comp_id = (
+            car_data.get('ComplectationId')
+            or car_data.get('complectation_id')
+            or car_data.get('complectationId')
+        )
+        if comp_id and str(comp_id).isdigit():
+            comp_name = self._fetch_lookup_value('complectation', str(comp_id))
+            if comp_name:
+                # Заполняем или подменяем значение имени комплектации
+                car_data['complectation_name'] = comp_name
+                # Лог: показываем значение, которое записали
+                print(f"[COMPLECTATION] ComplectationId={comp_id} -> complectation_name='{comp_name}'")
+            else:
+                # Лог: не нашли расшифровку
+                print(f"[COMPLECTATION] ComplectationId={comp_id} -> не найдено")
+
+        return car_data
+
     def calculate_max_discount(self, car_data: Dict[str, any]) -> int:
         """Расчёт максимальной скидки в зависимости от типа источника"""
         if self.source_type in ['catalog_vehicles_vehicle', 'vehicles_vehicle', 'data_cars_car']:
@@ -608,6 +758,9 @@ class CarProcessor:
         # Извлекаем данные автомобиля
         car_data = self.extract_car_data(car)
         
+        # Обогащаем по внешним ID ДО генерации URL и расчётов
+        car_data = self.resolve_external_ids(car_data)
+
         # Проверяем наличие обязательных полей
         if not car_data.get('vin') or not car_data.get('mark_id') or not car_data.get('folder_id'):
             print(car_data)
