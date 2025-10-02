@@ -34,16 +34,31 @@ if (carsData.length > 0) {
       
       numericKeys.forEach(key => {
         if (car[key] !== undefined) {
-          // Обычный плейсхолдер
-          carsPlaceholder[`{{${key}-${car.id}}}`] = car[key];
-          // Плейсхолдер с форматированием
-          carsPlaceholder[`{{${key}b-${car.id}}}`] = currencyFormat(car[key]);
-
-          // если объект не пустой и есть ключ для текущего car.id и одно из значений не пустое, то добавляем в плейсхолдер дисклеймер
-          if( Object.keys(disclaimerData).length && (disclaimerData?.[car.id] && disclaimerData?.[car.id]?.[key] !== '') ) {
-            carsPlaceholder[`{{${key}b-${car.id}}}`] += quoteEscaper(`<span>&nbsp;</span><span class="tooltip-icon" data-text="${disclaimerData[car.id][key]}">${infoIcon}</span>`);
+          // Обычный плейсхолдер: заполняем только если ещё не установлен
+          // Это важно, т.к. у одного car.id может быть несколько ценовых ключей,
+          // и нам нужно зафиксировать самое первое попавшееся значение
+          const plainKey = `{{${key}-${car.id}}}`;
+          if (carsPlaceholder[plainKey] === undefined) {
+            carsPlaceholder[plainKey] = car[key];
           }
 
+          // Плейсхолдер с форматированием: также только если ещё не установлен
+          const formattedKey = `{{${key}b-${car.id}}}`;
+          if (carsPlaceholder[formattedKey] === undefined) {
+            carsPlaceholder[formattedKey] = currencyFormat(car[key]);
+
+            // если объект не пустой и есть ключ для текущего car.id и значение не пустое,
+            // то добавляем в плейсхолдер дисклеймер. Делаем это только при первом заполнении,
+            // чтобы избежать многократного добавления подсказки
+            if (
+              Object.keys(disclaimerData).length &&
+              (disclaimerData?.[car.id] && disclaimerData?.[car.id]?.[key] !== '')
+            ) {
+              carsPlaceholder[formattedKey] += quoteEscaper(
+                `<span>&nbsp;</span><span class="tooltip-icon" data-text="${disclaimerData[car.id][key]}">${infoIcon}</span>`
+              );
+            }
+          }
         }
       });
     }
