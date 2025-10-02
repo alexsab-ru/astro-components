@@ -188,7 +188,7 @@ def main():
     
     # Если xpath не указан, определяем его автоматически из первого XML
     if not args.xpath:
-        detected_xpath = detect_xpath(xml_contents[0], url)
+        detected_xpath = detect_xpath(xml_contents[0], urls[0])
         print(f"Using detected XPath: {detected_xpath}")
         xpath = detected_xpath
     else:
