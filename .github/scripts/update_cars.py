@@ -126,7 +126,7 @@ class CarProcessor:
                     'insurance_discount': 'insurance_discount',
                     'mark_id': 'Make',
                     'max_discount': 'MaxDiscount',
-                    'modification_id': ['modification_id', 'ModificationId'],
+                    'modification_id': ['Modification', 'ModificationId'],
                     # Добавляем отдельные поля для числовых ID, чтобы их можно было резолвить через API
                     'generation_id': 'GenerationId',
                     'complectation_id': 'ComplectationId',
@@ -184,7 +184,7 @@ class CarProcessor:
                 'elements_to_localize': [
                     'body_type',
                     'color',
-                    'driveType',
+                    'drive_type',
                     'engineType',
                     'gearboxType',
                     'ptsType',
@@ -305,7 +305,7 @@ class CarProcessor:
                 'elements_to_localize': [
                     'body_type',
                     'color',
-                    'driveType',
+                    'drive_type',
                     'engineType',
                     'gearboxType',
                     'ptsType',
@@ -732,6 +732,23 @@ class CarProcessor:
             "automatic": "Автомат",
             # bodyType
             "suv": "SUV",
+            "left": "Левый",
+            "right": "Правый",
+            "L": "Левый",
+            "R": "Правый",
+            "bodytype": "Кузов",
+            "body_type": "Кузов",
+            "engine": "Объем двигателя",
+            "engine_volume": "Объем двигателя",
+            "gear_rus": "Трансмиссия",
+            "gear_box": "Коробка передач",
+            "engine_power": "Мощность",
+            "drive": "Привод",
+            "fuel": "Тип топлива",
+            "engine_type": "Тип топлива",
+            "year": "Год выпуска",
+            "color_rus": "Цвет кузова",
+            "color_simple": "Цвет кузова",
         }
         
         return translations.get(value, value)
