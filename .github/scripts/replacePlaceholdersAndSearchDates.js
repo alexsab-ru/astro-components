@@ -334,10 +334,10 @@ class PlaceholderProcessor {
     outputUpcomingDates() {
         if (this.filesWithUpcomingDates.length === 0) return;
 
-        console.log('\n◐ ВНИМАНИЕ! Приближаются даты окончания:');
+        console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
         const domain = process.env.DOMAIN;
-        let htmlOutput = '<b>◐ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
-        let htmlOutputMarketing = '<b>◐ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
+        let htmlOutput = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
+        let htmlOutputMarketing = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
         
         this.filesWithUpcomingDates.forEach(({ filePath, dates }) => {
             const relativePath = path.relative(process.cwd(), filePath);
