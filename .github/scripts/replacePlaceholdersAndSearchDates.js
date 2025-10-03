@@ -22,48 +22,10 @@ const filesWithUpcomingDates = [];
 
 // Получаем данные с валидацией типов
 const carsData = readAndValidateJSON('all-prices.json', 'array', []);
-const disclaimerData = readAndValidateJSON('federal-disclaimer.json', 'object', {});
+let disclaimerData = readAndValidateJSON('federal-disclaimer.json', 'object', {});
 
-// Создаем объект для хранения плейсхолдеров
-const carsPlaceholder = {};
-if (carsData.length > 0) {
-  carsData.forEach(car => {
-    if (car.id) {
-      // Список ключей для создания плейсхолдеров
-      const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
-      
-      numericKeys.forEach(key => {
-        if (car[key] !== undefined) {
-          // Обычный плейсхолдер: заполняем только если ещё не установлен
-          // Это важно, т.к. у одного car.id может быть несколько ценовых ключей,
-          // и нам нужно зафиксировать самое первое попавшееся значение
-          const plainKey = `{{${key}-${car.id}}}`;
-          if (carsPlaceholder[plainKey] === undefined) {
-            carsPlaceholder[plainKey] = car[key];
-          }
-
-          // Плейсхолдер с форматированием: также только если ещё не установлен
-          const formattedKey = `{{${key}b-${car.id}}}`;
-          if (carsPlaceholder[formattedKey] === undefined) {
-            carsPlaceholder[formattedKey] = currencyFormat(car[key]);
-
-            // если объект не пустой и есть ключ для текущего car.id и значение не пустое,
-            // то добавляем в плейсхолдер дисклеймер. Делаем это только при первом заполнении,
-            // чтобы избежать многократного добавления подсказки
-            if (
-              Object.keys(disclaimerData).length &&
-              (disclaimerData?.[car.id] && disclaimerData?.[car.id]?.[key] !== '')
-            ) {
-              carsPlaceholder[formattedKey] += quoteEscaper(
-                `<span>&nbsp;</span><span class="tooltip-icon" data-text="${disclaimerData[car.id][key]}">${infoIcon}</span>`
-              );
-            }
-          }
-        }
-      });
-    }
-  });
-}
+// Создаем объект для хранения плейсхолдеров (будет заполнен после обработки disclaimer)
+let carsPlaceholder = {};
 
 // Общая функция для чтения и валидации JSON-файла
 function readAndValidateJSON(fileName, expectedType, defaultValue) {
@@ -111,6 +73,65 @@ if(Object.keys(settingsData).length > 0) {
   Object.keys(settingsData).forEach(sKey => {
     if (settingsKeys.includes(sKey)) {
       settingsPlaceholder[`{{${sKey}}}`] = settingsData[sKey];
+    }
+  });
+}
+
+// Сначала обрабатываем disclaimer файл, заменяя в нем все плейсхолдеры
+const disclaimerFilePath = path.join(dataDirectory, 'federal-disclaimer.json');
+if (fs.existsSync(disclaimerFilePath)) {
+  try {
+    const disclaimerContent = fs.readFileSync(disclaimerFilePath, 'utf-8');
+    const { content: updatedDisclaimerContent, hasChanges } = replacePlaceholders(disclaimerContent);
+    
+    if (hasChanges) {
+      fs.writeFileSync(disclaimerFilePath, updatedDisclaimerContent, 'utf-8');
+      console.log(`Плейсхолдеры в файле federal-disclaimer.json предварительно заменены!`);
+      
+      // Перечитываем обработанные данные
+      disclaimerData = JSON.parse(updatedDisclaimerContent);
+    }
+  } catch (error) {
+    console.error(`Ошибка предварительной обработки federal-disclaimer.json:`, error);
+  }
+}
+
+// Теперь создаем ценовые плейсхолдеры с уже обработанными disclaimer'ами
+if (carsData.length > 0) {
+  carsData.forEach(car => {
+    if (car.id) {
+      // Список ключей для создания плейсхолдеров
+      const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
+      
+      numericKeys.forEach(key => {
+        if (car[key] !== undefined) {
+          // Обычный плейсхолдер: заполняем только если ещё не установлен
+          // Это важно, т.к. у одного car.id может быть несколько ценовых ключей,
+          // и нам нужно зафиксировать самое первое попавшееся значение
+          const plainKey = `{{${key}-${car.id}}}`;
+          if (carsPlaceholder[plainKey] === undefined) {
+            carsPlaceholder[plainKey] = car[key];
+          }
+
+          // Плейсхолдер с форматированием: также только если ещё не установлен
+          const formattedKey = `{{${key}b-${car.id}}}`;
+          if (carsPlaceholder[formattedKey] === undefined) {
+            carsPlaceholder[formattedKey] = currencyFormat(car[key]);
+
+            // если объект не пустой и есть ключ для текущего car.id и значение не пустое,
+            // то добавляем в плейсхолдер дисклеймер. Делаем это только при первом заполнении,
+            // чтобы избежать многократного добавления подсказки
+            if (
+              Object.keys(disclaimerData).length &&
+              (disclaimerData?.[car.id] && disclaimerData?.[car.id]?.[key] !== '')
+            ) {
+              carsPlaceholder[formattedKey] += quoteEscaper(
+                `<span>&nbsp;</span><span class="tooltip-icon" data-text="${disclaimerData[car.id][key]}">${infoIcon}</span>`
+              );
+            }
+          }
+        }
+      });
     }
   });
 }
@@ -275,9 +296,10 @@ function processDirectory(directory, fileExtensions) {
     if (stat.isDirectory()) {
       processDirectory(filePath, fileExtensions);
     } else if (fileExtensions.includes(path.extname(filePath))) {
-      // Пропускаем файлы с ценами
+      // Пропускаем файлы с ценами и federal-disclaimer.json (уже обработан)
       if (!filePath.includes('all-prices.json') && 
-          !filePath.includes('dealer-models_price.json')) {
+          !filePath.includes('dealer-models_price.json') &&
+          !filePath.includes('federal-disclaimer.json')) {
         processFile(filePath);
       }
     }
