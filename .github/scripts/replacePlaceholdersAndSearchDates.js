@@ -204,9 +204,33 @@ class PlaceholderProcessor {
                 // Ищем даты в формате YYYY.MM.DD или YYYY-MM-DD или YYYY/MM/DD
                 const format2 = line.match(/\b(\d{4}[.\-/]\d{2}[.\-/]\d{2})\b/g);
 
-                // Добавляем найденные даты в общий массив
-                if (format1) allDates.push(...format1);
-                if (format2) allDates.push(...format2);
+                // Функция для проверки, не стоит ли перед датой предлог "с", "со", "от"
+                // Исключаем даты начала акций, которые обычно идут после этих предлогов
+                const isNotStartDate = (dateMatch, line) => {
+                    const dateIndex = line.indexOf(dateMatch);
+                    if (dateIndex === -1) return true; // если дата не найдена, считаем что это не дата начала
+                    
+                    // Берем текст перед датой (до 4 символов назад)
+                    const textBefore = line.substring(Math.max(0, dateIndex - 4), dateIndex);
+                    
+                    // Проверяем наличие предлогов "с", "со", "от" (с учетом регистра)
+                    // Используем \b для границ слов и \s* для возможных пробелов
+                    const hasStartPreposition = (str) => {
+                    return str.includes(' с ') || str.includes(' со ') || str.includes(' от ');
+                    };
+                    
+                    return !hasStartPreposition(textBefore); // возвращаем true если НЕТ предлога начала
+                };
+
+                // Добавляем найденные даты в общий массив, исключая даты начала
+                if (format1) {
+                    const filteredFormat1 = format1.filter(date => isNotStartDate(date, line));
+                    allDates.push(...filteredFormat1);
+                }
+                if (format2) {
+                    const filteredFormat2 = format2.filter(date => isNotStartDate(date, line));
+                    allDates.push(...filteredFormat2);
+                }
             }
         }
 
