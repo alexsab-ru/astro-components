@@ -2,7 +2,7 @@ export const noValidPhone = (phoneValue) => {
 	return ([...new Set(phoneValue.replace(/^(\+7)/g, "").replace(/\D/g, ""))].length === 1);
 };
 
-export function maskphone(e) {
+export const maskphone = (e) => {
 	let num = this.value.replace(/^(\+7|8|7)/g, "").replace(/\D/g, "").split(/(?=.)/),
 		i = num.length;
 
