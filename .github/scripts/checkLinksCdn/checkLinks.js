@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { LinkChecker } from 'linkinator';
 import { getDomains } from './getDomains.js';
 import { transformVkUrl } from './transformVkUrl.js';
+import { sendNotificationToTelegram } from './sendTelegram.js';
 
 // Настройки для повторных запросов
 const RETRY_CONFIG = {
@@ -30,6 +31,10 @@ for (const domain of domains) {
 }
 
 console.log('✨ Все проверки завершены');
+
+// Отправляем уведомление в Telegram, если были найдены битые ссылки
+await sendNotificationToTelegram();
+
 process.exit(0);
 
 async function retryBrokenLinks(brokenLinks) {
