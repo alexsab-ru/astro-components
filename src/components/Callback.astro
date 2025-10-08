@@ -7,6 +7,8 @@ interface Props {
     btn?: string;
 }
 import settings from '@/data/settings.json';
+import salons from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
 const { improve_offer_background } = settings;
 const {
     bgUrl = improve_offer_background,
@@ -19,6 +21,7 @@ const {
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import {AGREE_LABEL} from '@/const'
 ---
 
@@ -37,22 +40,41 @@ import {AGREE_LABEL} from '@/const'
                     class="h-0 opacity-0 absolute -z-[100]"
                     placeholder="mail@example.com"
                 />
-                <Input
-                    type="tel"
-                    name="phone"
-                    classes="border-gray-100 mb-4"
-                    placeholder="+7 (999) 999-99-99*"
-                    required
-                    errorClasses="text-red-500"
-                />
 
-                <input
-                    type="checkbox"
-                    name="subscribe"
-                    class="absolute w-0 h-0 opacity-0 invisible"
-                />
+                <div class="flex flex-col gap-y-4 mb-5">
 
-                <Button view="form-button" classes="w-full mb-5" title={btn} />
+                    <Input
+                        type="text"
+                        name="name"
+                        classes="border-gray-100"
+                        placeholder="Имя (необязательное)"
+                    />
+
+                    <Input
+                        type="tel"
+                        name="phone"
+                        classes="border-gray-100"
+                        placeholder="+7 (999) 999-99-99*"
+                        required
+                        errorClasses="text-red-500"
+                    />
+
+                    <ChoosingDealerSelect required={true} salons={salons} />
+
+                    <div class="w-full">
+                        <textarea name="comment" class="border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-none border-gray-100 resize-none min-h-[100px] overflow-y-auto w-full text-black" placeholder="Напишите предложение конкурента*" minlength="10" required></textarea>
+                        <div class={`error-message text-xs hidden comment yexy-red-500`}></div>
+                    </div>
+
+                    <input
+                        type="checkbox"
+                        name="subscribe"
+                        class="absolute w-0 h-0 opacity-0 invisible"
+                    />
+
+                    <Button view="form-button" classes="w-full" title={btn} />
+
+                </div>
 
                 <Checkbox
                     name="agree"
