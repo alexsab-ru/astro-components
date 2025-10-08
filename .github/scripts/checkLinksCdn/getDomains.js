@@ -1,4 +1,5 @@
 const domainFoldersUrl = 'https://api.github.com/repos/alexsab-ru/astro-json/contents/src';
+const excludeDomains = ['dev.alexsab.ru', 'localhost'];
 let domains = [];
 
 export async function getDomains() {
@@ -14,7 +15,7 @@ export async function getDomains() {
         if (!Array.isArray(data)) {
           throw new Error('Данные не являются массивом.');
         }
-        return domains = data.filter(item => item.type === 'dir').map(item => item.name);
+        return domains = data.filter(item => item.type === 'dir' && !excludeDomains.includes(item.name)).map(item => item.name);
       })
       .catch(err => {
         console.log(`Ошибка при получении списка данных: `, err?.message);
@@ -24,3 +25,6 @@ export async function getDomains() {
         console.log('Конец запроса получения списка доменов');
       });
 };
+
+// const result = await getDomains();
+// console.log(result);
