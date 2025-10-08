@@ -25,7 +25,7 @@ import { Icon } from 'astro-icon/components';
 	x-cloak>
 	<input type="hidden" name={name} :value="value" {...(required ? { required: true } : {})} />
 	<div 
-		class="relative min-w-[160px] xs:w-full sm:min-w-[250px] w-auto" 
+		class="relative min-w-[160px] xs:w-full sm:min-w-[250px] w-auto bg-white" 
 		@click.outside="open = false"
 	>
 		<span 
@@ -33,10 +33,10 @@ import { Icon } from 'astro-icon/components';
 			tabindex="-1" 
 			@click="open = !open" 
 			@keydown.escape="open = false">
-			<span x-text="value || placeholder" :class="{'text-gray-400': !value}"></span>
+			<span x-text="value || placeholder" :class="{'text-gray-400': !value, 'text-black': value}"></span>
 			<Icon 
 				name="mdi:chevron-down" 
-				class="text-xl transition-transform duration-300 origin-center"
+				class="text-xl transition-transform duration-300 origin-center text-black"
 				:class="{'-rotate-180': open}" 
 			/>
 		</span>
