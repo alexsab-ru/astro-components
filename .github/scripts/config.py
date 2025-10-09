@@ -38,8 +38,8 @@ def build_all_models_index(all_models: list) -> dict:
     """Строим индекс для быстрого доступа: { mark_id: { id: model_obj } }"""
     index: dict = {}
     for model in all_models:
-        brand = model.get('mark_id')
-        model_id = model.get('id')
+        brand = model.get('mark_id').lower()
+        model_id = model.get('id').lower()
         if not brand or not model_id:
             continue
         index.setdefault(brand, {})[model_id] = model
@@ -50,6 +50,10 @@ def build_all_models_index(all_models: list) -> dict:
 all_models_data = load_all_models()
 # Строим индекс моделей по бренду и сохраняем результат в файл для тестирования
 all_models_index_by_brand = build_all_models_index(all_models_data)
+with open('src/data/all_models_index_by_brand.json', 'w', encoding='utf-8') as f:
+    # Документируем: сохраняем файл с группировкой по бренду и ID, для ознакомления
+    # Это поможет быстро анализировать структуру и использовать её в других скриптах
+    json.dump(all_models_index_by_brand, f, ensure_ascii=False, indent=2)
 
 
 # Генерация model_mapping из файла all-models.json
@@ -88,8 +92,8 @@ def load_model_mapping(json_path: str = "./src/data/all-models.json"):
     # Проходим по всем моделям и собираем мэпинг
     for model in all_models:
         # Безопасно читаем ключевые поля
-        brand = model.get('mark_id')
-        model_id = model.get('id')
+        brand = model.get('mark_id').lower()
+        model_id = model.get('id').lower()
         feed_names = model.get('feed_names') or []
 
         # Если ключевых полей нет — пропускаем запись
@@ -109,7 +113,7 @@ def load_model_mapping(json_path: str = "./src/data/all-models.json"):
 
         # Записываем все синонимы модели в мэпинг
         for model_name in model_names:
-            mapping[brand][model_name] = {
+            mapping[brand][model_name.lower()] = {
                 'mark_id': brand,
                 'id': model_id,
             }
