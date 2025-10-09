@@ -1,0 +1,9 @@
+---
+const { brands } = Astro.props;
+---
+
+<div class="flex flex-wrap gap-2 p-2">
+  {brands.map((brand: string) => (
+    <div class="flex items-center object-contain w-[70px]"><img src={`https://cdn.alexsab.ru/logo/${brand}/logo-footer.svg`} alt={brand} loading="lazy" class="h-auto w-full filter brightness-0 invert opacity-70" /></div>
+  ))}
+</div>

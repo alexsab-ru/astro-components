@@ -2,7 +2,7 @@
 import type { TDataCollection, TCollection } from '@/types/TCollection';
 import { getCollection, type DataEntryMap } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
-import { COLLECTIONS } from '@/const';
+import collectionsData from '@/data/collections.json';
 import settings from '@/data/settings.json';
 const { site_name } = settings;
 import PostItem from '@/components/Post/Item.astro';
@@ -11,7 +11,7 @@ import { getRandomInt } from '@/js/utils/numbers.format';
 import SeoText from '@/components/Seo/Index.astro';
 
 export async function getStaticPaths() {
-  return COLLECTIONS.map((collection) => ({ 
+  return collectionsData.map((collection) => ({ 
 		params: { collection: collection.name },
 		props: { title: collection.title, description: collection.description }
 	}));

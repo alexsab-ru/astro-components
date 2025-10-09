@@ -24,7 +24,7 @@ function BrandsList() {
 	const handleBrand = async (brand) => {
 		setAvtoInfo({ brand });
 		const data = {
-			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`,
+			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-models`,
 			name: 'models',
 			params: {brandId: brand.id}
 		};

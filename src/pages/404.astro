@@ -7,8 +7,12 @@ const title = 'Ошибка 404';
 const description = '404. Такая страница не найдена';
 const h1 = '404. Такая страница не найдена';
 import { getCollection } from 'astro:content';
+// Фильтруем записи коллекций на 404, чтобы исключить тестовые/черновые/просроченные
+import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 const cars = await getCollection('cars');
-const special = await getCollection('special-offers');
+// Получаем все записи спецпредложений и применяем единую фильтрацию
+const specialAll = await getCollection('special-offers');
+const special = sortingAndFilteringPosts(specialAll);
 // if(Astro.url.pathname.slice(-1) != "/") {
 	// return Astro.redirect(Astro.url.pathname+'/', 308);
 // }

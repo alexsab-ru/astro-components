@@ -22,7 +22,7 @@ import {AGREE_LABEL} from '@/const'
 
 		<p class="title text-center text-3xl mb-2 text-gray-800">Заголовок модалки</p>
 		<p class="subtitle text-center mb-10 font-normal text-gray-600">Подзаголовок модалки</p>
-		<form class="flex flex-col gap-4" id="rating-form">
+		<form class="flex flex-col gap-4" id="rating-form" novalidate>
 			<input type="hidden" name="form" value="" />
 			<input
 				type="email"
@@ -38,17 +38,16 @@ import {AGREE_LABEL} from '@/const'
 				classes="border-gray-100"
 				placeholder="+7 (999) 999-99-99*"
 				required
-				errorClasses="text-red-500"
+				errorText="Телефон является обязательным полем"
 			/>
 
-			<ChoosingDealerSelect required={true} salons={salons}/>
+			<ChoosingDealerSelect required salons={salons} />
 
 			<Checkbox
 				name="agree"
 				label={AGREE_LABEL}
 				color="black"
 				required
-				errorClasses="text-red-500 w-full"
 				errorText="Чтобы продолжить, установите флажок"
 			/>
 

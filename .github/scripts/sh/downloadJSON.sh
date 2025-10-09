@@ -39,6 +39,7 @@ show_help() {
 # Список файлов для скачивания
 FILES=(
     "banners.json"
+    "collections.json"
     "faq.json"
     "federal-disclaimer.json"
     "menu.json"
@@ -157,15 +158,3 @@ if [ ! -s src/data/all-cars.json ] || grep -q '<!DOCTYPE html' src/data/all-cars
 else
     printf "${BGGREEN}Общий файл cars.json успешно скачан${Color_Off}\n"
 fi
-
-# Скачиваем общий model_mapping.json
-echo -e "\n${BGGREEN}Скачиваем общий model_mapping.json...${Color_Off}"
-curl -s "$JSON_PATH/model_mapping.json" -o src/data/model_mapping.json
-
-# Проверяем, что файл скачался и это не HTML-страница (например, 404)
-if [ ! -s src/data/model_mapping.json ] || grep -q '<!DOCTYPE html' src/data/model_mapping.json; then
-    printf "${BGRED}Внимание: файл model_mapping.json не найден или получен некорректный файл!${Color_Off}\n"
-else
-    printf "${BGGREEN}Общий файл model_mapping.json успешно скачан${Color_Off}\n"
-fi
-

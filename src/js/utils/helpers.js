@@ -1,17 +1,3 @@
-export const maskphone = (e) => {
-	let num = e.target.value.replace(/^(\+7|8|7)/g, "").replace(/\D/g, "").split(/(?=.)/),
-		i = num.length;
-
-	if(e.target.value != "" && e.target.value != "+") {
-		if (0 <= i) num.unshift("+7");
-		if (1 <= i) num.splice(1, 0, " ");
-		if (4 <= i) num.splice(5, 0, " ");
-		if (7 <= i) num.splice(9, 0, "-");
-		if (9 <= i) num.splice(12, 0, "-");
-		e.target.value = num.join("");
-	}
-};
-
 export const calcMinPrice = (price) => {
 	var minimum = 0;
 	var percent = 25;

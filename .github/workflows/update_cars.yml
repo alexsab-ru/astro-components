@@ -431,7 +431,7 @@ jobs:
       changes: ${{ steps.check_changes.outputs.changes }}
       script_output: ${{ steps.set_output.outputs.script_output }}
 
-  notify_telegram:
+  notify_telegram_error:
     needs: build
     if: ${{ needs.build.outputs.script_output != '' }}
     uses: ./.github/workflows/github-telegram.yml

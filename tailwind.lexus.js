@@ -9,16 +9,26 @@ module.exports = {
 			...baseConfig.theme.extend,
 			colors: {
 				...baseConfig.theme.extend.colors,
-				black: "#1C1C1B",
 				accent: {
-					400: "#004C66",
-					500: "#005F7F",
+					300: "#DFDFDD",
+					400: "#5B6671",
+					500: "#25282A",
+					600: "#25282A",
 				},
-				"light-blue": "#E0ECF9",
-				"middle-blue": "#00A5CF",
+				blue: {
+					400: "#0a64dc",
+				},
+				orange:	{
+					400: '#f88d2b',
+				}
 			},
 			fontFamily: {
 				...baseConfig.theme.extend.fontFamily
+				// Manrope
+			},
+			transitionTimingFunction: {
+				"in-expo": "cubic-bezier(0.95, 0.05, 0.795, 0.035)",
+				"out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
 			},
 		},
 	},
