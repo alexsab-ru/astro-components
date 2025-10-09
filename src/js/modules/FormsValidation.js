@@ -54,10 +54,23 @@ export default class FormsValidation {
             ) {
                 return true;
             }
-            // pattern для телефона, только если поле не пустое
-            if (element.type === 'tel' && element.value.trim() && !phoneChecker(element)) {
-                this.isValid = false;
-                return true;
+            // Телефон: используем внешнюю проверку и выставляем customValidity,
+            // чтобы корректно отобразить сообщение об ошибке через HTML5-валидацию.
+            if (element.type === 'tel') {
+                // Всегда сбрасываем предыдущую кастомную ошибку перед новой проверкой
+                element.setCustomValidity('');
+
+                // Проверяем только непустое поле (пустоту покрывает valueMissing выше)
+                if (element.value.trim()) {
+                    // phoneChecker из @alexsab-ru/scripts: ожидает input-элемент и возвращает boolean
+                    // true — номер валиден, false — невалиден. Внутри может происходить нормализация.
+                    const isPhoneValid = phoneChecker(element, { silent: true });
+                    if (!isPhoneValid) {
+                        // Включаем customError для стандартного цикла обработки ошибок ниже
+                        element.setCustomValidity('Укажите номер телефона в формате +7 999 999-99-99');
+                        return true;
+                    }
+                }
             }
         });        
         
