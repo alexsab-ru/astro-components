@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { LinkChecker } from 'linkinator';
 import dotenv from 'dotenv';
+const excludeDomains = ['dev.alexsab.ru'];
 
 dotenv.config();
 
@@ -138,12 +139,22 @@ async function retryBrokenLinks(brokenLinks) {
 
 async function checkLinks() {
   console.log(`🔍 Начинаю проверку ссылок на ${domain}...`);
+
+  // Пропускаем проверку для исключенных доменов
+  if (excludeDomains.some(excluded => domain.includes(excluded))) {
+    console.log(`⏭️ Домен ${domain} находится в списке исключений. Пропускаю проверку`);
+    process.exit(0);
+  }
+
   const checker = new LinkChecker();
 
   const result = await checker.check({
     path: domain,
     recurse: true,
-    linksToSkip: [/javascript:void\(0\)/],
+    linksToSkip: [
+      /javascript:void\(0\)/,
+      /checkLinks\.md/
+    ],
     timeout: RETRY_CONFIG.timeout,
     retries: 1, // Первичная проверка с минимальными повторами
   });

@@ -1,0 +1,41 @@
+---
+import settingsData from '@/data/settings.json';
+import BrandLogos from './BrandLogos.astro';
+import BrandCards from './BrandCards.astro';
+
+interface Props {
+  type?: string;
+}
+
+const ViewType = {
+  LOGO: 'logo',
+  CARD: 'card'
+};
+
+const modules = import.meta.glob('/src/content/cars/*.mdx', { eager: true });
+const filePaths = Object.keys(modules);
+// Здесь мы считаем кол-во файлов для конкретой марки авто в src/content/cars. Кол-во файлов - это кол-во АВН. Получим примерно следующее { jetour: 14, soueast: 1 }
+const brandCounts = filePaths.reduce((acc, path) => {
+  const fileName = path.split('/').pop();
+  if (!fileName) return acc;
+  const brand = fileName.split('-')[0];
+  acc[brand] = (acc[brand] ?? 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const brands = settingsData.brand.split(',').map((brand) => brand.trim().toLowerCase());
+
+const { type = ViewType.LOGO } = Astro.props;
+---
+{
+  brands.length ? (() => {
+    switch (type) {
+      case ViewType.LOGO:
+        return <BrandLogos brands={brands} />;
+      case ViewType.CARD:
+        return <BrandCards brands={brands} brandCounts={brandCounts} />;
+      default:
+        return null;
+    }
+  })() : null
+}

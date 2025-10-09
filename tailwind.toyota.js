@@ -11,15 +11,18 @@ module.exports = {
 				...baseConfig.theme.extend.colors,
 				black: '#282830',
 				accent: { // в основном в верстке используется 400 и 500
-					400: '#4a4a54',
+					400: '#3f3f4b',
 					500: '#282830',
+				},
+				red: {
+					500: "#f02",
 				},
 			},
 			fontFamily: {
 				'sans': ['ToyotaType', ...defaultTheme.fontFamily.sans],
 			},
 			borderRadius:  {
-				btn: '8px'
+				btn: '5px'
 			}
 		},
 	},

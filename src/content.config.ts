@@ -1,12 +1,13 @@
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
-import { COLLECTIONS } from './const.js';
+import collectionsData from './data/collections.json';
 
 // Базовая схема для markdown-контента (общие страницы коллекций из COLLECTIONS)
 const baseCollectionSchema = z.object({
     h1: z.string().optional(),
     title: z.string().optional(),
     caption: z.string().optional(),
+    draft: z.boolean().optional(),
     breadcrumb: z.string().optional(),
     description: z.string().optional(),
     image: z.string().optional(),
@@ -18,8 +19,8 @@ const baseCollectionSchema = z.object({
     href: z.string().optional(),
 });
 
-// Создаем коллекции из константы COLLECTIONS с новым API (loader: glob)
-const objectCollections = COLLECTIONS.reduce((acc: Record<string, ReturnType<typeof defineCollection>>, collection) => {
+// Создаем коллекции из данных collections.json с новым API (loader: glob)
+const objectCollections = collectionsData.reduce((acc: Record<string, ReturnType<typeof defineCollection>>, collection) => {
     acc[collection.name] = defineCollection({
         // Используем exclude, т.к. массив pattern приводит к некорректной строке и ломает загрузку
         loader: glob({
@@ -70,20 +71,25 @@ export const collections = {
             insurance_discount: z.number().default(0).optional(),
             optional_discount: z.number().default(0).optional(),
             tradein_discount: z.number().default(0).optional(),
-            // Прочее
+            // Доп. характеристики для карточек и страниц (используются в компонентах)
             availability: z.string().default('в наличии').optional(),
-            modification_id: z.string(),
+            modification_id: z.string().optional(),
+            run: z.number(),
+            body_type: z.string().optional(),
+            complectation_name: z.string().optional(),
+            wheel: z.string().optional(),
+            year: z.number(),
+            // Медиа
             image: z.string(),
             images: z.array(z.string()).default([]),
             thumbs: z.array(z.string()).default([]),
+            // Прочее
             order: z.number(),
             total: z.number(),
             url: z.string(),
             vin: z.string(),
             vin_hidden: z.string(),
             vin_list: z.string(),
-            wheel: z.string(),
-            year: z.number(),
         }),
     }),
     used_cars: defineCollection({
@@ -102,12 +108,24 @@ export const collections = {
             mark_id: z.string(),
             folder_id: z.string(),
             color: z.string(),
-            // Цены и характеристики
+            // Цены и скидки
             price: z.number(),
             priceWithDiscount: z.number(),
             sale_price: z.number(),
             max_discount: z.number(),
+            // Скидки встречаются не во всех карточках (исторические записи) — делаем их опциональными
+            credit_discount: z.number().default(0).optional(),
+            insurance_discount: z.number().default(0).optional(),
+            optional_discount: z.number().default(0).optional(),
+            tradein_discount: z.number().default(0).optional(),
+            // Доп. характеристики для карточек и страниц (используются в компонентах)
+            availability: z.string().default('в наличии').optional(),
+            modification_id: z.string().optional(),
             run: z.number(),
+            body_type: z.string().optional(),
+            complectation_name: z.string().optional(),
+            wheel: z.string().optional(),
+            year: z.number(),
             // Медиа
             image: z.string(),
             images: z.array(z.string()).default([]),
@@ -119,7 +137,6 @@ export const collections = {
             vin: z.string(),
             vin_hidden: z.string(),
             vin_list: z.string(),
-            year: z.number(),
         }),
     }),
 };

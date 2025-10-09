@@ -29,11 +29,11 @@ salons
 
             <div class="flex flex-col space-y-5 w-fit divide-y divide-white/5">
                 <div class="">
-                    <img src={logo_footer || logo_header} class="h-8 w-auto" loading="lazy" alt={site_name} />
+                    <img src={logo_footer || logo_header} class="h-8 w-auto" loading="lazy" alt={site_name} width="151" height="32" />
                 </div>
                 <div>
                     {logo_dealer ? (
-                        <img src={logo_dealer} class={`max-w-[200px] pt-4`} alt={site_name} loading="lazy" />
+                        <img src={logo_dealer} class={`max-w-[200px] pt-4`} alt={site_name} loading="lazy" width="200" height="40" />
                     ) : (
                         <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70 pt-4">{site_name}</a>
                     )}

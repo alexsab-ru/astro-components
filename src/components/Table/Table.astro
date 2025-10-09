@@ -1,19 +1,84 @@
 ---
-interface DataItem {
-  name: string;
-  price: string;
+import Image from './Image.astro';
+
+interface Props {
+  data: any[];
+  head?: string[];
+  headClasses?: string;
+  popupText?: string | HTMLElement;
+  imageClasses?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  tableLoyoutFixed?: boolean;
+  lightbox?: boolean;
+  lightboxId?: string;
 }
 
-const {
-  data = []
+const { 
+  data = [],
+  head = [],
+  headClasses = 'sm:sticky sm:-top-[1px] lg:top-[49px] !bg-accent-500 text-white z-10',
+  popupText,
+  imageClasses = 'min-w-[50px] sm:min-w-0 max-w-[250px] mx-auto',
+  imageWidth = 250,
+  imageHeight = 177,
+  tableLoyoutFixed = false,
+  lightbox = false,
+  lightboxId = 'gallery-id',
 } = Astro.props;
+const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
 ---
 {
-  data.length ? (
-    <table class="table-fixed">
+  !!data.length && (
+    <table class={tableClass}>
+
+      {!!head.length && (
+        <thead class={headClasses}>
+          <tr>
+            {head.map(th => (
+              <th>{th}</th>
+            ))}
+          </tr>
+        </thead>
+      )}
+
       <tbody>
-        {data.map((item: DataItem) => (<tr><td>{item.name}</td><td>{item.price}</td></tr>))}
+        {data.map((item: any) => (
+          <tr>
+            {Object.keys(item).map(key => (
+              <td>
+                {
+                  key === 'name' || key === 'title' ? (
+                    popupText ? (
+                      <a 
+                        class="popup-link" 
+                        href="#common-modal" 
+                        data-title={`${popupText} <strong>${item[key]}</strong>`} 
+                        data-form_name={`${popupText} ${item[key]}`}
+                      >
+                        {item[key]}
+                      </a>
+                    ) : item[key]
+                  ) : key === 'image' || key === 'img' || key === 'photo' ? (
+                    <Image 
+                      src={item[key]}
+                      class={imageClasses}
+                      width={imageWidth}
+                      height={imageHeight}
+                      alt={item?.name || item?.title || ''}
+                      price={item?.price || ''}
+                      lightbox={lightbox}
+                      lightboxId={lightboxId}
+                      loading="lazy"
+                    />
+                  ) : item[key]
+                }
+              </td>
+            ))}
+          </tr>
+        ))}
       </tbody>
+
     </table>
-  ) : ('')
+  )
 }

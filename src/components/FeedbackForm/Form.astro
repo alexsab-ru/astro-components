@@ -12,10 +12,12 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 interface Props{
   dataFormName?: string;
   showModelSelect?: boolean;
+  labelBtn?: string;
 }
 const {
   dataFormName = 'Форма обратной связи на странице',
   showModelSelect = false,
+  labelBtn = 'Отправить',
 } = Astro.props;
 
 import modelsData from '@/data/models.json';
@@ -64,5 +66,5 @@ const options = modelsData.services.map(({ id, name, mark_id }) => ({
     class="absolute w-0 h-0 opacity-0 invisible"
   />
 
-  <Button view="form-button" classes="w-full" title="Отправить" />
+  <Button view="form-button" classes="w-full" title={labelBtn} />
 </form>
