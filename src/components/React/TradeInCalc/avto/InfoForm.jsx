@@ -91,20 +91,20 @@ function AvtoInfoForm() {
 		{value: 'electronic', name: 'Электронный' },
 	];
 
-	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
+	const selectBrand = (brandId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-models`, name: 'models', params: { brandId } });
 	const selectModel = async (modelId) => {
-		await fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-years`, name: 'years', params: { brandId: avtoInfo?.brand?.id, modelId } });
+		await fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-years`, name: 'years', params: { brandId: avtoInfo?.brand?.id, modelId } });
 		const currentModelName = models.find(m => m.id === Number(modelId))?.name;		
 		setValue('model', currentModelName);
 		trigger('model');
 	};
 	const selectYear = async (year) => {
-		await fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-generations`, name: 'generations', params: { modelId: avtoInfo?.model?.id, year } });
+		await fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-generations`, name: 'generations', params: { modelId: avtoInfo?.model?.id, year } });
 		setValue('year-of-issue', year);
 		trigger('year-of-issue');
 	};
-	const selectGeneration = (generationId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-body-configurations`, name: 'bodyConf', params: { modelId: avtoInfo?.model?.id, year: avtoInfo?.year, generationId } });
-	const selectBodyConfiguration = (bodyConfigurationId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-modifications`, name: 'modifications', params: { modelId: avtoInfo?.model?.id, year: avtoInfo?.year, generationId: avtoInfo?.generation?.id, bodyConfigurationId } });
+	const selectGeneration = (generationId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-body-configurations`, name: 'bodyConf', params: { modelId: avtoInfo?.model?.id, year: avtoInfo?.year, generationId } });
+	const selectBodyConfiguration = (bodyConfigurationId) => fetchCarsInfo({ url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-modifications`, name: 'modifications', params: { modelId: avtoInfo?.model?.id, year: avtoInfo?.year, generationId: avtoInfo?.generation?.id, bodyConfigurationId } });
 	const selectModification = (modificationId) => {
 		const currentModification = modifications.find(m => m.id === Number(modificationId));		
 		setEngineType(useTranslit(currentModification.engineType));
@@ -156,7 +156,7 @@ function AvtoInfoForm() {
 			}
 		}
 
-		axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/express`, params)
+		axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}express`, params)
 		.then(async (res) => {
 			if(res.data.status == 'success'){
 				if (window.location.hostname == "localhost")

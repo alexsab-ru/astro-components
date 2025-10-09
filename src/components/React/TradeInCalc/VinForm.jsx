@@ -37,18 +37,17 @@ const VinForm = () => {
 		if (bodyNumber.length) {
 			incrementStep();
 		} else {
-			// await axios.post("https://api.maxposter.ru/partners-api/vin/info", {
 			recalculate();
 			showLoader()
-			await axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}/vin/info`, {
+			await axios.post(`${import.meta.env.PUBLIC_MAXPOSTER_URL}vin/info`, {
 				vin,
 			},
 			{
-				// headers: {
-				// 	"Authorization": `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`,
-				// 	"Accept": "application/json",
-				// 	"Content-Type": "application/json",
-				// }
+				headers: {
+					"Authorization": `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`,
+					"Accept": "application/json",
+					"Content-Type": "application/json",
+				}
 			})
 				.then(res => {
 					const data = res.data;

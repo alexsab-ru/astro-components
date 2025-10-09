@@ -12,7 +12,7 @@ export default function TradeInCalc() {
 	const {step, error, brands, loading, fetchCarsInfo} = useCarInfo();
 	useEffect(() => {
 		const data = {
-			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-brands`,
+			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-brands`,
 			name: 'brands',
 			params: {}
 		}	 
