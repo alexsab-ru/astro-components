@@ -1,13 +1,22 @@
 import { phoneChecker } from "@alexsab-ru/scripts";
 
+// Класс валидации формы.
+// Отвечает за:
+// 1) Определение невалидных обязательных полей.
+// 2) Формирование сообщений об ошибках для встроенной HTML5-валидации.
+// 3) Показ/скрытие ошибок и скролл к первому ошибочному полю.
 export default class FormsValidation {
     constructor(form) {
         this.form = form;
+        // Карта преобразования флагов ValidityState -> человеческие сообщения.
+        // Важно: сообщения короткие и понятные. Для customError берём текст из setCustomValidity.
         this.errors = {
             valueMissing: ({ title }) => title || 'Пожалуйста, заполните это поле',
             patternMismatch: ({ title }) => title || 'Данные не соответствуют формату',
             tooShort: ({ minLength }) => `Слишком короткое значение, минимум символов — ${minLength}`,
             tooLong: ({ maxLength }) => `Слишком длинное значение, ограничение символов — ${maxLength}`,
+            // Покрытие кастомных ошибок (например, телефон):
+            customError: ({ validationMessage }) => validationMessage || 'Проверьте корректность введённых данных',
         };
         this.isValid = true;
         this.validate();
@@ -26,22 +35,23 @@ export default class FormsValidation {
                 (element.offsetParent === null && element.type !== 'radio' && element.type !== 'checkbox') // скрытые (display: none), кроме radio/checkbox (их может не быть в DOM)
             ) return false;
 
-            // Для radio-групп: required только если ни один не выбран (только для первого в группе)
+            // Для radio-групп: считаем невалидной только группу, где ни один не выбран
+            // (фильтруем только первый инпут в группе, чтобы не дублировать ошибки)
             if (element.type === 'radio') {
                 const group = this.form.querySelectorAll(`input[type="radio"][name="${element.name}"]`);
                 if (element !== group[0]) return false; // только один раз на группу
                 return [...group].every(radio => !radio.checked);
             }
 
-            // Для чекбокса: если обязательный и не отмечен — ошибка
+            // Для чекбокса: обязательный и не отмечен — невалидно
             if (element.type === 'checkbox') {
                 return !element.checked;
             }
 
-            // Остальные: если required и пусто
+            // Остальные контролы: если required и пусто — невалидно
             if (!element.value.trim()) return true;
 
-            // minLength/maxLength только если поле не пустое
+            // minLength/maxLength: проверяем только если поле не пустое
             if (
                 typeof element.minLength === 'number' && element.minLength > 0 &&
                 element.value.trim().length < element.minLength
@@ -72,14 +82,16 @@ export default class FormsValidation {
                     }
                 }
             }
-        });        
-        
+        });
+
 
         requiredControlElements.forEach((element, idx) => {
+            // Состояние валидности HTML5 для элемента (включая наш customError)
             const elementValidityErrors = element.validity;
-            
+
             const errorMessages = [];
 
+            // Собираем сообщения для всех истинных флагов валидности
             Object.entries(this.errors).forEach(([errorType, getErrorMessage]) => {
                 if (elementValidityErrors[errorType]) {
                     errorMessages.push(getErrorMessage(element));
@@ -95,7 +107,7 @@ export default class FormsValidation {
                     errorField.classList.remove('hidden');
                     // Снимаем предыдущий обработчик, если был
                     errorField._inputHandler && element.removeEventListener('input', errorField._inputHandler);
-                    // Добавляем новый обработчик
+                    // Добавляем новый обработчик: при вводе скрываем сообщение
                     const handler = () => {
                         errorField.classList.add('hidden');
                         element.removeEventListener('input', handler);
