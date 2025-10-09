@@ -2,7 +2,8 @@ import Select from '@/components/React/Select';
 import { useCarInfo } from '@/store/useCarInfo';
 import { useTranslit } from '@/js/utils/translit';
 import { scroll } from '@/js/modules/scroll';
-import { maskphone, calcMinPrice, getPair } from '@/js/utils/helpers';
+import { maskphone } from '@alexsab-ru/scripts';
+import { calcMinPrice, getPair } from '@/js/utils/helpers';
 import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';

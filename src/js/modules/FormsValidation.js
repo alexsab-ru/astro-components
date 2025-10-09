@@ -1,4 +1,4 @@
-import { phoneChecker } from "../utils/helpers";
+import { phoneChecker } from "@alexsab-ru/scripts";
 
 export default class FormsValidation {
     constructor(form) {

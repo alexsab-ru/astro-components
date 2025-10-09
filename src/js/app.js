@@ -12,8 +12,6 @@ import Tooltip from './modules/Tooltip';
 
 import FormsValidation from './modules/FormsValidation';
 
-import { maskphone, phoneChecker } from './utils/helpers';
-
 import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
 
 startNoBounce();
@@ -39,12 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	new LazyLoader();
 
 	new Tooltip();
-
-	document.querySelectorAll("input[name=phone]").forEach(function (element) {
-		// element.addEventListener("focus", maskphone);
-		element.addEventListener("input", maskphone);
-		element.addEventListener("change", () => phoneChecker(element));
-	});
 
 });
 
