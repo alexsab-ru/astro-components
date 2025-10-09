@@ -24,7 +24,11 @@ if (!domains?.length) {
   process.exit(0);
 }
 
-if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+// Удаляем старый файл с битыми ссылками перед началом новой проверки
+if (fs.existsSync(outputPath)) {
+  fs.unlinkSync(outputPath);
+  console.log('🗑️ Старый файл broken_links.txt удален');
+}
 
 for (const domain of domains) {
   await checkLinks(`https://${domain}`);
@@ -34,6 +38,12 @@ console.log('✨ Все проверки завершены');
 
 // Отправляем уведомление в Telegram, если были найдены битые ссылки
 await sendNotificationToTelegram();
+
+// Удаляем файл после успешной отправки уведомления
+if (fs.existsSync(outputPath)) {
+  fs.unlinkSync(outputPath);
+  console.log('🗑️ Файл broken_links.txt удален после отправки уведомления');
+}
 
 process.exit(0);
 
