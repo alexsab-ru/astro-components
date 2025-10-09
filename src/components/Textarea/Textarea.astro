@@ -7,28 +7,22 @@ interface Props {
     required?: boolean,
     errorText?: string,
     errorClasses?: string,
-    autocomplete?: string,
-    list?: string,
-    listOptions?: {id: string | number, name: string}[] | []
+    autocomplete?: string
 }
 const {
-    type = 'text',
     name,
     classes = '',
     placeholder = 'Введите значение',
     required = false,
     autocomplete = 'on',
     errorText = '',
-    errorClasses = 'xs:text-[10px] text-xs text-red-500',
-    list = '',
-    listOptions=[],
+    errorClasses = 'text-xs text-red-500',
     ...rest
 } = Astro.props
 ---
 
 <div class="w-full">
-    <input
-        type={type}
+    <textarea
         name={name}
         class={`border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-none w-full text-black xs:text-sm ${classes}`} 
         placeholder={placeholder}
@@ -36,20 +30,10 @@ const {
         autocomplete={autocomplete}
         {...errorText ? {title: errorText} : {}}
         {...rest}
-        list={list}
-    >
+    ></textarea>
 {
     required ? (
-    <div class={`error-message hidden mt-2 ${name} ${errorClasses}`}>{errorText}</div>
+    <div class={`error-message text-xs hidden ${name} ${errorClasses}`}>{errorText}</div>
     ) : ('')
-}
-{
-    list.length ? (
-        <datalist id={list}>
-            {
-                listOptions.map(option => <option value={option.name} />)
-            }
-        </datalist>
-    ) : null
 }
 </div>

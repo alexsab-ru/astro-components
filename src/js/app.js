@@ -10,6 +10,8 @@ import LazyLoader from './modules/LazyLoader';
 
 import Tooltip from './modules/Tooltip';
 
+import FormsValidation from './modules/FormsValidation';
+
 import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
 
 startNoBounce();
@@ -22,14 +24,18 @@ const waitForDp = setInterval(() => {
 		clearInterval(waitForDp);
 		connectForms(window._dp.connectforms_link, {
 			confirmModalText: 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!',
+			validation: FormsValidation
 		});
 	}
 }, 100); // Check every 100ms
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
 	new ResponsiveMenu('#site_nav ul');
+	
 	new LazyLoader();
+
 	new Tooltip();
 
 });

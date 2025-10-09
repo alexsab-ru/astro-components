@@ -3,18 +3,37 @@ interface Props {
 	name: string;
 	placeholder?: string;
 	required?: boolean;
+	disabled?: boolean;
 	errorMessage?: string;
+	errorClasses?: string;
 	options?: {id: string | number; name: string;}[];
 }
-const {name, placeholder = 'Выберите значение', required = false, errorMessage = 'Это поле обязательное', options = []} = Astro.props
+const {
+	name, 
+	placeholder = 'Выберите значение', 
+	required = false, 
+	disabled = false, 
+	errorMessage = 'Это поле обязательное!',
+	errorClasses = 'xs:text-[10px] text-xs hidden text-red-500 mt-2',
+	options = []
+} = Astro.props
 import { Icon } from 'astro-icon/components';
 ---
-<div x-data={ `{
+<div
+	class="relative custom-select"
+	:class="{'opacity-70': disabled}"
+	x-data={ `{
 		open: false, 
 		options: ${JSON.stringify(options)},
 		placeholder: '${placeholder}',
+		disabled: ${disabled},
 		value: null,
 		currentOption: {},
+		openSelect() {
+			if (!this.disabled) {
+				this.open = !this.open;
+			}
+		},
 		select(id){
 			this.currentOption = this.options.find(o => o.id === id);
 			this.value = this.currentOption.name || null;
@@ -23,15 +42,24 @@ import { Icon } from 'astro-icon/components';
 		}
 	}` }
 	x-cloak>
-	<input type="hidden" name={name} :value="value" {...(required ? { required: true } : {})} />
+	<input 
+		type="text" 
+		class="sr-only" 
+		name={name} 
+		:value="value" 
+		{...(required ? { required: true } : {})} 
+		{...(disabled ? { disabled: true } : {})} 
+		{...(errorMessage ? { title: errorMessage } : {})} 
+	/>
 	<div 
 		class="relative min-w-[160px] xs:w-full sm:min-w-[250px] w-auto bg-white" 
 		@click.outside="open = false"
 	>
 		<span 
-			class="border-2 border-gray-100 py-2.5 px-4 cursor-pointer flex items-center justify-between gap-5 flex-nowrap outline-none select-none" 
+			class="border-2 bg-white border-gray-100 py-2.5 px-4 flex items-center justify-between gap-5 flex-nowrap outline-none select-none xs:text-sm"
+			:class="{'cursor-pointer': !disabled, 'cursor-not-allowed': disabled}"
 			tabindex="-1" 
-			@click="open = !open" 
+			@click="openSelect()" 
 			@keydown.escape="open = false">
 			<span x-text="value || placeholder" :class="{'text-gray-400': !value, 'text-black': value}"></span>
 			<Icon 
@@ -56,5 +84,5 @@ import { Icon } from 'astro-icon/components';
 			</template>
 		</div>
 	</div>
-	{required && (<div class={`${name} error-message text-xs hidden text-red-500`} x-ref="error"><Fragment set:html={errorMessage} /></div>)}
+	{required && (<div class={`${name} error-message ${errorClasses}`} x-ref="error"><Fragment set:html={errorMessage} /></div>)}
 </div>

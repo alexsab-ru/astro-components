@@ -18,7 +18,7 @@ const {
 	color = 'white',
 	required = false,
 	errorText = '',
-	errorClasses = '',
+	errorClasses = 'xs:text-[10px] text-xs text-red-500 w-full',
 	classes = '',
 	...rest
 } = Astro.props;
@@ -30,7 +30,9 @@ import './checkbox.scss';
 		type={type}
 		name={name}
 		value={value}
-		class="absolute w-0 h-0 opacity-0 invisible"
+		class="sr-only"
+		{...required ? { required: true } : {}}
+		{...errorText ? { title: errorText } : {}}
 		{...rest}
 	/>
 	<div class={`text-${color}/80 text-sm sm:text-base flex items-start`}>
@@ -39,7 +41,7 @@ import './checkbox.scss';
 			<Fragment set:html={label} />
 			{
 				required ? (
-					<div class={`error-message text-xs mt-2 hidden ${name} ${errorClasses}`}>
+					<div class={`error-message mt-2 hidden ${name} ${errorClasses}`}>
 						{errorText}
 					</div>
 				) : (

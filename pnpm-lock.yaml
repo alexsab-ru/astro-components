@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@alexsab-ru/scripts':
-        specifier: ^0.15.1
-        version: 0.15.1
+        specifier: ^0.15.3
+        version: 0.15.3
       '@astrojs/alpinejs':
         specifier: ^0.4.1
         version: 0.4.3(@types/alpinejs@3.13.11)(alpinejs@3.14.8)
@@ -99,8 +99,8 @@ importers:
 
 packages:
 
-  '@alexsab-ru/scripts@0.15.1':
-    resolution: {integrity: sha512-WxLXCmkgYCNUyQhmjBMsfPdUHrGm37uaRxrlz3abRYJESx13AN58As7SZLkoh49ySL0ovnazDt8XTpUfSA3l2w==}
+  '@alexsab-ru/scripts@0.15.3':
+    resolution: {integrity: sha512-eo8YNeZFmkqcv54dk/bH5DDus03BeJ2+WF1gAho1ocAdyKq+u414Flxx/kggn6DO7LUN5m9QipO1Eh1r/hUgnQ==}
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -2804,7 +2804,7 @@ packages:
 
 snapshots:
 
-  '@alexsab-ru/scripts@0.15.1': {}
+  '@alexsab-ru/scripts@0.15.3': {}
 
   '@alloc/quick-lru@5.2.0': {}
 
