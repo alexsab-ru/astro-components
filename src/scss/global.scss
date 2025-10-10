@@ -1,12 +1,13 @@
-@reference "tailwindcss";
-
 @theme {
-	--font-heading: inherit;
+  --font-heading: inherit;
 }
+
+@reference "tailwindcss";
 
 @layer base {
 	button:not(:disabled),
-	[role="button"]:not(:disabled) {
+	[role="button"]:not(:disabled),
+	[type="submit"]:not(:disabled) {
 		cursor: pointer;
 	}
 }
