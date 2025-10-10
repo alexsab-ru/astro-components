@@ -28,7 +28,7 @@
 	@apply lg:!object-bottom;
 }
 
-// Object position by percents via CSS variables
+/* Object position by percents via CSS variables */
 .media-object-pos{
 	object-position: var(--obj-x, 50%) var(--obj-y, 50%);
 }
