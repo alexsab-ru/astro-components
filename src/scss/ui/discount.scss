@@ -1,0 +1,6 @@
+.discount{
+	@apply relative text-white rounded-xl w-fit text-[10px] sm:text-xs py-1 px-2.5 z-1 bg-accent-500;
+	&::before {
+		@apply content-[''] w-2.5 h-2.5 border-r-0 border-b-0 absolute -bottom-[5px] left-4 rotate-[-135deg] -z-1 bg-accent-500;
+	}
+}
