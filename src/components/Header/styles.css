@@ -7,7 +7,6 @@
 	}
 }
 .header-child-link{
-	// @apply lg:!block text-black pl-8 lg:pl-5 max-w-[200px];
 	@apply lg:!block text-black pl-8 lg:pl-5;
 }
 .cols-0 {
