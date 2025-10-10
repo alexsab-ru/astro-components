@@ -27,15 +27,15 @@ salons
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-y-10 lg:gap-y-5">
 
-            <div class="flex flex-col gap-5 w-fit divide-y divide-white/5">
-                <div class="">
+            <div class="flex flex-col gap-3 w-fit divide-y divide-white/5">
+                <div class="pb-5">
                     <img src={logo_footer || logo_header} class="h-8 w-auto" loading="lazy" alt={site_name} width="151" height="32" />
                 </div>
                 <div>
                     {logo_dealer ? (
-                        <img src={logo_dealer} class={`max-w-[200px] pt-4`} alt={site_name} loading="lazy" width="200" height="40" />
+                        <img src={logo_dealer} class={`max-w-[200px]`} alt={site_name} loading="lazy" width="200" height="40" />
                     ) : (
-                        <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70 pt-4">{site_name}</a>
+                        <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70">{site_name}</a>
                     )}
                 </div>
             </div>
