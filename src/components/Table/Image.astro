@@ -5,7 +5,7 @@ const {src, alt: title} = rest;
 {lightbox ? (
     <a 
         href={src} 
-        class="text-center glightbox !m-0 !no-underline block hover:opacity-90"
+        class="text-center glightbox m-0! no-underline! block hover:opacity-90"
         {...title && {'data-title': title}}
         {...price && {'data-description': `<strong>${price}</strong>`}}
         data-gallery={lightboxId}
