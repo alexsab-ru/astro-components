@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { LinkChecker } from 'linkinator';
 import dotenv from 'dotenv';
-const excludeDomains = ['dev.alexsab.ru', 'promo.kia-szr.ru'];
+const excludeDomains = ['dev.alexsab.ru', 'promo.kia-szr.ru', 'promo.kia-engels.ru','service.kia-samara.ru', 'omoda-ulyanovsk.alexsab.ru', 'jaecoo-ulyanovsk.alexsab.ru'];
 const linksToSkip = [
   /javascript:void\(0\)/,
   /checkLinks\.md/,
