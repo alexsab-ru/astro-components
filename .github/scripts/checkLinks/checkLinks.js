@@ -2,6 +2,13 @@ import fs from 'fs';
 import { LinkChecker } from 'linkinator';
 import dotenv from 'dotenv';
 const excludeDomains = ['dev.alexsab.ru'];
+const linksToSkip = [
+  /javascript:void\(0\)/,
+  /checkLinks\.md/,
+  'http://carcade.com/',
+  'https://shop.vsk.ru/',
+  'https://www.vsk.ru/klientam'
+]
 
 dotenv.config();
 
@@ -151,10 +158,7 @@ async function checkLinks() {
   const result = await checker.check({
     path: domain,
     recurse: true,
-    linksToSkip: [
-      /javascript:void\(0\)/,
-      /checkLinks\.md/
-    ],
+    linksToSkip,
     timeout: RETRY_CONFIG.timeout,
     retries: 1, // Первичная проверка с минимальными повторами
   });
