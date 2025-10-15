@@ -1,7 +1,9 @@
 /* Settings TailwindCSS */
+/* 1) Load brand theme variables BEFORE Tailwind so utilities are generated */
+@import './brand.css';
+/* 2) Load Tailwind (v4) */
 @import "tailwindcss";
 @reference "tailwindcss";
-@config "../../tailwind.config.js";
 
 /* Imports */
 @import './fonts.scss';
