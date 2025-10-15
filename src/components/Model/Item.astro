@@ -35,8 +35,8 @@ import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 		{
 			model?.badge && (
 				<img
-					data-src={model?.badge.img}
-					alt={model?.badge.alt}
+					data-src={model.badge?.horisontal || model.badge?.img }
+					alt={model.badge?.alt}
 					class="opacity-0 absolute right-0 top-0 xs:h-7 h-8 sm:h-14 w-auto z-10"
 				/>
 			)
