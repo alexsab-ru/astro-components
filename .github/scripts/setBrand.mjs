@@ -24,16 +24,15 @@ if (!brand) {
   }
 }
 
-brand = brand || 'toyota'
+brand = (brand || '').trim()
 
 const projectRoot = process.cwd()
 const brandCssPath = path.join(projectRoot, 'src', 'scss', 'brand.css')
-const brandThemeRelPath = `./brands/theme.${brand}.css`
-
-const content = `/* Active brand theme aggregator - auto generated */
-@import './brands/theme.base.css';
-@import '${brandThemeRelPath}';
-`
+let content = `/* Active brand theme aggregator - auto generated */\n@import './brands/theme.base.css';\n`
+if (brand) {
+  const brandThemeRelPath = `./brands/theme.${brand}.css`
+  content += `@import '${brandThemeRelPath}';\n`
+}
 
 fs.writeFileSync(brandCssPath, content, 'utf8')
 console.log(`[setBrand] Active brand: ${brand} -> wrote ${path.relative(projectRoot, brandCssPath)}`)
