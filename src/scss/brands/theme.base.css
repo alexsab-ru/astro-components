@@ -16,6 +16,9 @@
 
   /* Radii */
   --radius-btn: 0px;
+
+  /* Breakpoints (to enable xs: variant and others if needed) */
+  --breakpoint-xs: 430px;
 }
 
 
