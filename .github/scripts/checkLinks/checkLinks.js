@@ -7,7 +7,10 @@ const linksToSkip = [
   /checkLinks\.md/,
   'http://carcade.com/',
   'https://shop.vsk.ru/',
-  'https://www.vsk.ru/klientam'
+  'https://www.vsk.ru/klientam',
+  'https://service.kia-samara.ru/?utm_source=promo',
+  'https://probegcentr.ru/?utm_source=infiniti-samauto.ru',
+  'https://www.cbr.ru/statistics/insurance/ssd_stat/'
 ];
 
 dotenv.config();
