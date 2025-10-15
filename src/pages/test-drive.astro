@@ -17,6 +17,35 @@ const { testDrive } = modelsData;
 const optionsJSON = JSON.stringify(testDrive);
 ---
 
+<script is:inline>
+	// Логируем источник перехода в консоль.
+	// document.referrer — URL страницы, с которой пользователь пришёл на текущую.
+	// Может быть пустым, если:
+	// - прямой заход (ввёл адрес вручную / закладка)
+	// - сайт-источник или браузер обрезал заголовок из-за Referrer-Policy
+	// - переход из некоторых приложений
+	(function () {
+		const ref = document.referrer || '';
+		let hasModelsInReferrer = false;
+		if (ref) {
+			const { pathname } = new URL(ref, location.href);
+			const searchPath = '/models/';
+			let modelId;
+			hasModelsInReferrer = pathname.includes(searchPath);
+			if (hasModelsInReferrer) {
+				modelId = pathname.replace(/\/+$/, '').split('/').filter(Boolean).pop() || '';
+				console.log('model id: ', modelId);
+				// если modelId есть — кладём его глобально, чтобы Alpine смог прочитать
+				if (modelId) window.__preselectedModelId = modelId;
+			}
+			console.log('[test-drive] Пользователь пришёл со страницы:', ref);
+			console.log('[test-drive] referrer содержит "/models/"?', hasModelsInReferrer);
+		} else {
+			console.log('[test-drive] Реферер отсутствует (прямой заход или политика Referrer-Policy)');
+		}
+	})();
+</script>
+
 <Layout title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
 	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data=`{
 		models: null,
@@ -29,6 +58,14 @@ const optionsJSON = JSON.stringify(testDrive);
 		},
 		init: function() {
 			this.getModels();
+			const preId = window.__preselectedModelId;
+			if (preId) {
+				const found = this.models.find(m => m.id === preId);
+				if (found) {
+					this.current = found;
+					return;
+				}
+			}
 			this.currentModel([...this.models][0].id);
 		}
 	}`>
