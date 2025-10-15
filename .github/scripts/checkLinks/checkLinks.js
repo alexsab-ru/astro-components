@@ -5,11 +5,11 @@ const excludeDomains = ['dev.alexsab.ru', 'promo.kia-szr.ru', 'promo.kia-engels.
 const linksToSkip = [
   /javascript:void\(0\)/,
   /checkLinks\.md/,
+  /^https?:\/\/(www\.)?probegcentr\.ru/,
   'http://carcade.com/',
   'https://shop.vsk.ru/',
   'https://www.vsk.ru/klientam',
   'https://service.kia-samara.ru/?utm_source=promo',
-  'https://probegcentr.ru/?utm_source=infiniti-samauto.ru',
   'https://www.cbr.ru/statistics/insurance/ssd_stat/'
 ];
 
