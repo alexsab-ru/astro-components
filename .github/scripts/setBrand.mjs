@@ -10,7 +10,21 @@ import path from 'node:path'
 
 const brandFromArg = process.argv[2]?.trim()
 const brandFromEnv = process.env.ASTRO_ACTIVE_BRAND?.trim()
-const brand = brandFromArg || brandFromEnv || 'toyota'
+let brand = brandFromArg || brandFromEnv
+
+if (!brand) {
+  // Try reading from src/data/settings.json
+  try {
+    const settingsPath = path.join(process.cwd(), 'src', 'data', 'settings.json')
+    const raw = fs.readFileSync(settingsPath, 'utf8')
+    const settings = JSON.parse(raw)
+    brand = (settings?.site_brand_style || '').trim()
+  } catch (_) {
+    // ignore, fallback below
+  }
+}
+
+brand = brand || 'toyota'
 
 const projectRoot = process.cwd()
 const brandCssPath = path.join(projectRoot, 'src', 'scss', 'brand.css')
