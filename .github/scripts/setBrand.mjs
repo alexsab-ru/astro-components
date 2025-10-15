@@ -28,9 +28,9 @@ brand = (brand || '').trim()
 
 const projectRoot = process.cwd()
 const brandCssPath = path.join(projectRoot, 'src', 'scss', 'brand.css')
-let content = `/* Active brand theme aggregator - auto generated */\n@import './brands/theme.base.css';\n`
+let content = `/* Active brand theme aggregator - auto generated */\n`
 if (brand) {
-  const brandThemeRelPath = `./brands/theme.${brand}.css`
+  const brandThemeRelPath = `./brands/${brand}.css`
   content += `@import '${brandThemeRelPath}';\n`
 }
 

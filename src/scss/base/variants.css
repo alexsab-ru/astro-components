@@ -1,0 +1,5 @@
+/* Custom range breakpoints as named variants */
+@variant xs (max-width: 430px);
+@variant s1024_1074 (min-width: 1024px) and (max-width: 1074px);
+@variant s1280_1330 (min-width: 1280px) and (max-width: 1330px);
+@variant s1536_1586 (min-width: 1536px) and (max-width: 1586px);

@@ -1,0 +1,27 @@
+/* Base theme tokens shared across brands.
+   Define only defaults here. Brand files override below. */
+
+@theme {
+    /* Colors */
+    --color-accent-400: oklch(0.79 0.12 205);
+    --color-accent-500: oklch(0.74 0.14 205);
+    --color-vk: #4B76A8;
+    --color-ok: #F7931D;
+    --color-fb: #3C5A99;
+    --color-youtube: #FF0018;
+    --color-tiktok: #000000;
+    --color-telegram: #2FACE1;
+
+    /* Fonts */
+    --font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+    /* Radii */
+    --radius-btn: 0px;
+
+    /* Shadows (from boxShadow) */
+    --shadow-3xl: 0 35px 60px rgba(0 0 0 / 0.3);
+    --shadow-4xl: 0 0 60px rgba(0 0 0 / 0.5);
+
+    /* Breakpoints (to enable xs: variant and others if needed) */
+    --breakpoint-xs: 430px;
+}
