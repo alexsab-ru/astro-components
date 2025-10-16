@@ -1,0 +1,13 @@
+/* Kaiyi theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, etc. */
+
+@theme {
+  /* Colors */
+  --color-accent-400: #f82b1e;
+  --color-accent-500: #d2251a;
+  --color-accent-600: #9f1c13;
+
+  /* Using base font configuration */
+}
+
+
