@@ -60,6 +60,7 @@ export const collections = {
             // Идентификаторы и классификация
             mark_id: z.string(),
             folder_id: z.string(),
+            model_id: z.string().optional(),
             color: z.string(),
             // Цены и скидки
             price: z.number(),
