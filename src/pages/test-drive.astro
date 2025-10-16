@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 import { AGREE_LABEL } from '@/const';
 import settings from '@/data/settings.json';
 const { brand, legal_city_where } = settings;
@@ -15,31 +16,42 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
 import modelsData from '@/data/models.json';
 const { testDrive } = modelsData;
 const optionsJSON = JSON.stringify(testDrive);
+
+const allCars = await getCollection('cars');
+// Получаем объект вида { 'belgee-x70-i-15-amt-177-лс-4wd-style-черный-2025': 'x70'}, чтобы сопоставить потом slug с моделью авто.
+const slugToModelId = Object.fromEntries(
+  allCars.map(car => [car.id, car.data.model_id])
+);
 ---
 
-<script is:inline>
-	// Логируем источник перехода в консоль.
-	// document.referrer — URL страницы, с которой пользователь пришёл на текущую.
-	// Может быть пустым, если:
-	// - прямой заход (ввёл адрес вручную / закладка)
-	// - сайт-источник или браузер обрезал заголовок из-за Referrer-Policy
-	// - переход из некоторых приложений
+<script is:inline define:vars={{ slugToModelId }}>
 	(function () {
 		const ref = document.referrer || '';
-		let hasModelsInReferrer = false;
+		let foundPath;
 		if (ref) {
 			const { pathname } = new URL(ref, location.href);
-			const searchPath = '/models/';
+			const searchPaths = ['/models/', '/cars/'];
 			let modelId;
-			hasModelsInReferrer = pathname.includes(searchPath);
-			if (hasModelsInReferrer) {
-				modelId = pathname.replace(/\/+$/, '').split('/').filter(Boolean).pop() || '';
-				console.log('model id: ', modelId);
+			foundPath = searchPaths.find(path => pathname.includes(path));
+			if (foundPath) {
+				console.log('foundPath: ', foundPath);
+				if (foundPath === searchPaths[0]) {
+					modelId = pathname.replace(/\/+$/, '').split('/').filter(Boolean).pop() || '';
+					console.log('model id: ', modelId);
+				}
+				if (foundPath === searchPaths[1]) {
+					// Извлекаем slug из URL
+					const slug = pathname.split('/').filter(Boolean).pop();
+					const decodedSlug = decodeURIComponent(slug);
+					// Получаем model_id из mapping
+					modelId = slugToModelId[decodedSlug];
+					console.log('slug:', slug);
+					console.log('model id from /cars/: ', modelId);
+				}
 				// если modelId есть — кладём его глобально, чтобы Alpine смог прочитать
 				if (modelId) window.__preselectedModelId = modelId;
 			}
 			console.log('[test-drive] Пользователь пришёл со страницы:', ref);
-			console.log('[test-drive] referrer содержит "/models/"?', hasModelsInReferrer);
 		} else {
 			console.log('[test-drive] Реферер отсутствует (прямой заход или политика Referrer-Policy)');
 		}
