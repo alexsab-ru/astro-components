@@ -26,8 +26,8 @@ const slugToModelId = Object.fromEntries(
 	window.__slugToModelId = slugToModelId;
 </script>
 <script>
-	import { trackReferrer } from '@/js/modules/trackReferrer.js';
-	const preselectedModelId = trackReferrer(window.__slugToModelId);
+	import { getModelIdFromReferrer } from '@/js/modules/getModelIdFromReferrer.js';
+	const preselectedModelId = getModelIdFromReferrer(window.__slugToModelId);
 	if (preselectedModelId) {
 		window.__preselectedModelId = preselectedModelId;
 	}
