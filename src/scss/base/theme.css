@@ -14,6 +14,7 @@
 
     /* Fonts */
     --font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-heading: inherit;
 
     /* Radii */
     --radius-btn: 0px;
