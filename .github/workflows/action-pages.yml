@@ -266,7 +266,7 @@ jobs:
 
   notify_telegram_about_special:
     needs: [build]
-    if: needs.build.outputs.specials != ''
+    if: ${{ needs.build.outputs.specials != '' && github.event_name == 'schedule' }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'special-offers'
@@ -294,7 +294,7 @@ jobs:
 
   notify_telegram_about_special_marketing:
     needs: [build, check_marketing_secret]
-    if: needs.check_marketing_secret.outputs.secret_exists == 'true'
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && github.event_name == 'schedule' }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'special-marketing'
