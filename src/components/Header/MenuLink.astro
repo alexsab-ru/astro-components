@@ -5,6 +5,8 @@ interface Props {
 }
 const { link = {}, sublink = false, ...rest } = Astro.props;
 const path = Astro.url.pathname;
+const badge = link?.badge || null;
+const badgeImage = badge && badge?.horisontal || badge?.img || badge?.vertical || null;
 ---
 <a
 	href={link.url}
@@ -21,7 +23,8 @@ const path = Astro.url.pathname;
 {link.name}
 {link?.thumb && (
 	<div class="aspect-video hidden lg:block w-full relative">
-		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" width="338" height="190" />
+		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" width="338" height="190" alt={link.name || ''} />
+		{badgeImage && (<img src={badgeImage} class="absolute h-8 xl:h-10 2xl:h-12 w-auto top-0 right-5 xl:right-10" width="92" height="48" alt={badge?.alt || link.name || ''} title={badge?.alt || link.name || ''} />)}
 	</div>
 )}
 </a>
