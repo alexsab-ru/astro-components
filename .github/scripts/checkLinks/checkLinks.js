@@ -6,10 +6,11 @@ const linksToSkip = [
   /javascript:void\(0\)/,
   /checkLinks\.md/,
   /^https?:\/\/(www\.)?probegcentr\.ru/,
+  // Пропускаем ссылку https://service.kia-samara.ru/?utm_source=promo Берется из menu.json
+  /^https?:\/\/(www\.)?service\.kia-samara\.ru/,
   'http://carcade.com/',
   'https://shop.vsk.ru/',
   'https://www.vsk.ru/klientam',
-  'https://service.kia-samara.ru/?utm_source=promo',
   'https://www.cbr.ru/statistics/insurance/ssd_stat/'
 ];
 
