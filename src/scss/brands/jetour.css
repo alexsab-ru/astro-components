@@ -1,0 +1,12 @@
+/* Jetour theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, etc. */
+
+@theme {
+  /* Colors */
+  --color-accent-400: #59c4d4;
+  --color-accent-500: #49a1ae;
+
+  /* Using base font configuration */
+}
+
+

@@ -11,7 +11,7 @@ const {content} = Astro.props;
     x-cloak
 >
     <div 
-        class="!text-xs text-white/60 mb-2 space-y-4 overflow-hidden"
+        class="text-xs! text-white/60 mb-2 space-y-4 overflow-hidden"
         :class="{'line-clamp-none': showDisclaimer, 'line-clamp-3': !showDisclaimer}"
     >
         <Fragment set:html={content} />
