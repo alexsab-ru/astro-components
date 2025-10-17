@@ -26,11 +26,12 @@ const slugToModelId = Object.fromEntries(
 	window.__slugToModelId = slugToModelId;
 </script>
 <script>
-	import { getModelIdFromReferrer } from '@/js/modules/getModelIdFromReferrer.js';
+	import { getModelIdFromReferrer, saveSelectedModel } from '@/js/modules/getModelIdFromReferrer.js';
 	const preselectedModelId = getModelIdFromReferrer(window.__slugToModelId);
 	if (preselectedModelId) {
 		window.__preselectedModelId = preselectedModelId;
 	}
+	window.__saveSelectedModel = saveSelectedModel;
 </script>
 
 <Layout title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
@@ -42,6 +43,9 @@ const slugToModelId = Object.fromEntries(
 		},
 		currentModel: function(id) {
 			this.current = this.models.find(m => m.id === id);
+			if (window.__saveSelectedModel) {
+				window.__saveSelectedModel(id);
+			}
 		},
 		init: function() {
 			this.getModels();
