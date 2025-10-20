@@ -13,7 +13,7 @@ import modelsData from '@/data/models.json';
 const { models } = modelsData;
 const model = models.find(model => 
 	model.id.toLowerCase() === car.data?.folder_id.toLowerCase() || 
-	model?.feed_names.length && model.feed_names.includes(car.data.folder_id)
+	model?.feed_names?.length && model.feed_names.includes(car.data.folder_id)
 );
 const badgeImage = model?.badge?.vertical || null;
 
