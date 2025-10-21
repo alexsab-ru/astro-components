@@ -12,17 +12,50 @@ import Tooltip from './modules/Tooltip';
 
 import FormsValidation from './modules/FormsValidation';
 
-import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
+// Импортируем нашу расширенную систему отслеживания форм
+import connectFormsWithTracking from './modules/ConnectFormsWrapper';
+import { formsIntegration } from './modules/EnhancedFormsIntegration';
+import FormTrackingDebug from './utils/FormTrackingDebug';
+
+import { cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
 
 startNoBounce();
 initPersistCampaignData();
 cookiecook();
 
+// Инициализируем систему отслеживания активности пользователя
+// Это запустит отслеживание визитов и подготовит систему блокировки
+formsIntegration.integrate();
+
+// Добавляем debug-утилиту ТОЛЬКО в development (не на production!)
+// Проверяем окружение: localhost, 127.0.0.1 или import.meta.env.DEV
+if (typeof window !== 'undefined') {
+	const isDevelopment = 
+		window.location.hostname === 'localhost' || 
+		window.location.hostname === '127.0.0.1' ||
+		window.location.hostname.includes('192.168.') || // локальная сеть
+		window.location.hostname.endsWith('.local') ||   // .local домены
+		(typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV); // Vite/Astro dev mode
+	
+	if (isDevelopment) {
+		// Debug-утилиты доступны ТОЛЬКО в development
+		window.formDebug = new FormTrackingDebug(formsIntegration);
+		window.formsIntegration = formsIntegration; // для прямого доступа к интеграции
+		console.log('💡 [DEV] Form Tracking Debug доступен! Введите window.formDebug.help() для справки');
+	} else {
+		// На production debug НЕ доступен, но можно оставить базовую информацию
+		console.log('Form tracking system initialized');
+	}
+}
+
 // Wait for window._dp to be available before connecting forms
 const waitForDp = setInterval(() => {
 	if (window._dp && window._dp.connectforms_link) {
 		clearInterval(waitForDp);
-		connectForms(window._dp.connectforms_link, {
+		
+		// Используем обертку connectFormsWithTracking вместо стандартного connectForms
+		// Она автоматически добавит данные активности и обработает успешные отправки
+		connectFormsWithTracking(window._dp.connectforms_link, {
 			confirmModalText: 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!',
 			validation: FormsValidation
 		});
