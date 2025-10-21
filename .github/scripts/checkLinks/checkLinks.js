@@ -1,7 +1,20 @@
 import fs from 'fs';
 import { LinkChecker } from 'linkinator';
 import dotenv from 'dotenv';
-const excludeDomains = ['dev.alexsab.ru'];
+const excludeDomains = ['dev.alexsab.ru', 'promo.kia-szr.ru', 'promo.kia-engels.ru','service.kia-samara.ru', 'omoda-ulyanovsk.alexsab.ru', 'jaecoo-ulyanovsk.alexsab.ru', 'belgee-penza.ru'];
+const linksToSkip = [
+  /javascript:void\(0\)/,
+  /checkLinks\.md/,
+  /^https?:\/\/(www\.)?probegcentr\.ru/,
+  /^https?:\/\/(www\.)?vtb\.ru/,
+  // Пропускаем ссылку https://service.kia-samara.ru/?utm_source=promo Берется из menu.json
+  /^https?:\/\/(www\.)?service\.kia-samara\.ru/,
+  'http://carcade.com/',
+  'https://shop.vsk.ru/',
+  'https://www.vsk.ru/klientam',
+  'https://www.cbr.ru/statistics/insurance/ssd_stat/',
+
+];
 
 dotenv.config();
 
@@ -151,10 +164,7 @@ async function checkLinks() {
   const result = await checker.check({
     path: domain,
     recurse: true,
-    linksToSkip: [
-      /javascript:void\(0\)/,
-      /checkLinks\.md/
-    ],
+    linksToSkip,
     timeout: RETRY_CONFIG.timeout,
     retries: 1, // Первичная проверка с минимальными повторами
   });

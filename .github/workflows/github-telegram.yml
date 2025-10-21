@@ -20,6 +20,11 @@ on:
       - reopened
   workflow_call:
     inputs:
+      caller-id:
+        description: 'Unique identifier for the caller to prevent concurrency conflicts'
+        required: false
+        type: string
+        default: 'default'
       additional-text:
         description: 'Additional text passed from the caller workflow'
         required: false
@@ -49,7 +54,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}-${{ inputs.caller-id || 'default' }}
   cancel-in-progress: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel

@@ -257,6 +257,7 @@ jobs:
     if: needs.build.outputs.changes == 'true'
     uses: ./.github/workflows/github-telegram.yml
     with:
+      caller-id: 'after-deploy'
       additional-text: |
         $(echo -n '${{ needs.build.outputs.after_deploy }}' | base64)
     secrets:
@@ -265,9 +266,10 @@ jobs:
 
   notify_telegram_about_special:
     needs: [build]
-    if: needs.build.outputs.specials != ''
+    if: ${{ needs.build.outputs.specials != '' && github.event_name == 'schedule' }}
     uses: ./.github/workflows/github-telegram.yml
     with:
+      caller-id: 'special-offers'
       additional-text: |
         ${{ needs.build.outputs.specials }}
     secrets:
@@ -292,9 +294,10 @@ jobs:
 
   notify_telegram_about_special_marketing:
     needs: [build, check_marketing_secret]
-    if: needs.check_marketing_secret.outputs.secret_exists == 'true'
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && github.event_name == 'schedule' }}
     uses: ./.github/workflows/github-telegram.yml
     with:
+      caller-id: 'special-marketing'
       include-header: false
       additional-text: |
         ${{ needs.build.outputs.specials_marketing }}

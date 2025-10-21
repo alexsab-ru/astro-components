@@ -26,7 +26,8 @@ const dynamicMenuConfig = {
 		transform: (model) => ({
 			url: `/models/${model.id}/`,
 			name: model.name.toUpperCase(),
-			thumb: model.thumb
+			thumb: model.thumb,
+			badge: model?.badge || null,
 		})
 	}
 	// В будущем можно добавить другие типы:
