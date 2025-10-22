@@ -1,7 +1,7 @@
 import UserActivityTracker from './UserActivityTracker';
 import { showMessageModal, errorIcon, successIcon, messageModal } from '@alexsab-ru/scripts';
 
-const warningIcon = '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><path fill="#f26522" d="M26,0A26,26,0,1,0,52,26,26,26,0,0,0,26,0Zm9.6,17.5a1.94,1.94,0,0,1,2,2,2,2,0,1,1-2-2Zm-19.2,0a1.94,1.94,0,0,1,2,2,2,2,0,1,1-2-2ZM40,40.36a.93.93,0,0,1-.5.14,1,1,0,0,1-.86-.5C36.55,36.42,32.3,34.6,26,34.6S15.45,36.42,13.36,40a1,1,0,0,1-1.72-1C14.07,34.81,19,32.6,26,32.6S37.93,34.81,40.36,39A1,1,0,0,1,40,40.36Z"/></svg>';
+const InfoIcon = '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><path fill="#7ba343" d="M26,0A26,26,0,1,0,52,26,26,26,0,0,0,26,0Zm9.6,17.5a1.94,1.94,0,0,1,2,2,2,2,0,1,1-2-2Zm-19.2,0a1.94,1.94,0,0,1,2,2,2,2,0,1,1-2-2Zm24,16.6C37.93,38.29,33,40.5,26,40.5s-11.93-2.21-14.36-6.4a1,1,0,1,1,1.72-1c2.09,3.58,6.34,5.4,12.64,5.4s10.55-1.82,12.64-5.4a1,1,0,1,1,1.72,1Z"/></svg>';
 
 // Кастомный обработчик форм с расширенной функциональностью.
 // Добавляет:
@@ -41,7 +41,7 @@ export default class CustomFormsHandler {
             `;
 
             if (messageModal) {
-                showMessageModal(messageModal, warningIcon, blockMessage);
+                showMessageModal(messageModal, InfoIcon, blockMessage);
             } else {
                 alert('Вы уже отправили заявку. С Вами обязательно свяжутся в ближайшее рабочее время!');
             }
@@ -173,7 +173,7 @@ export default class CustomFormsHandler {
                 // Показываем стандартное сообщение ошибки
                 if (messageModal) {
                     const errorText = '<b class="text-bold block text-2xl mb-4">Упс!</b> Что-то пошло не так. Перезагрузите страницу и попробуйте снова.';
-                    showMessageModal(messageModal, warningIcon, errorText);
+                    showMessageModal(messageModal, InfoIcon, errorText);
                 }
             }
         };
