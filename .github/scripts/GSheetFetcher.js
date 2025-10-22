@@ -18,7 +18,10 @@ class GSheetFetcher {
                 process.env.OUTPUT_PATHS.split(',') : 
                 config.outputPaths || ['./output/prices.json'],
             // Новый параметр для определения формата вывода
-            outputFormat: config.outputFormat || 'simple' // 'simple' or 'detailed'
+            outputFormat: config.outputFormat || 'simple', // 'simple' or 'detailed'
+            // Новый параметр для выбора типа сохраняемого файла
+            // json (по умолчанию) | csv
+            outputType: process.env.OUTPUT_TYPE || config.outputType || 'json'
         };
 
         // Преобразование URL Google Sheets в формат для скачивания
@@ -166,6 +169,21 @@ class GSheetFetcher {
         });
     }
 
+    // Сохранение исходного CSV без преобразований.
+    // Используется, когда требуется выгрузить весь лист/результат запроса в .csv
+    async saveCsv(csvData) {
+        for (const filePath of this.config.outputPaths) {
+            try {
+                const directory = path.dirname(filePath);
+                await fsPromises.mkdir(directory, { recursive: true });
+                await fsPromises.writeFile(filePath, csvData, 'utf8');
+                console.log(`CSV successfully saved to file: ${filePath}`);
+            } catch (error) {
+                console.error(`Error saving CSV file ${filePath}: ${error}`);
+            }
+        }
+    }
+
     async saveJson(data) {
         for (const filePath of this.config.outputPaths) {
             try {
@@ -182,6 +200,13 @@ class GSheetFetcher {
     async process() {
         try {
             const csvData = await this.downloadCsv();
+            // Если запрошен вывод в CSV — сохраняем исходный CSV и выходим
+            if (this.config.outputType === 'csv') {
+                await this.saveCsv(csvData);
+                return csvData;
+            }
+
+            // Иначе — преобразуем в JSON согласно правилам и сохраняем
             const jsonData = await this.convertCsvToJson(csvData);
             await this.saveJson(jsonData);
             return jsonData;
@@ -206,7 +231,9 @@ const config = {
     keyColumn: process.env.KEY_COLUMN || '',
     keyMapping: process.env.KEY_MAPPING || '{}',
     outputPaths: process.env.OUTPUT_PATHS ? process.env.OUTPUT_PATHS.split(',') : ['./output.json'],
-    outputFormat: process.env.OUTPUT_FORMAT || 'simple'
+    outputFormat: process.env.OUTPUT_FORMAT || 'simple',
+    // Тип вывода: json (по умолчанию) или csv
+    outputType: process.env.OUTPUT_TYPE || 'json'
 };
 
 const fetcher = new GSheetFetcher(config);
