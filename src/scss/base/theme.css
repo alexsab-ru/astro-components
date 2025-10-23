@@ -12,6 +12,8 @@
     --color-tiktok: #000000;
     --color-telegram: #2FACE1;
 
+    --color-border: #e5e7eb;
+
     /* Fonts */
     --font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --font-heading: inherit;

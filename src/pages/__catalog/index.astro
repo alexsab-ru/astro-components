@@ -124,7 +124,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 					x-bind:class="{'translate-x-0!': open}"
 				>
 					<div class="absolute w-10 h-10 flex items-center justify-center top-0 right-0 text-2xl opacity-60" x-on:click="open = false"><Icon name="mdi:close-circle-outline" /></div>
-					<div class="lg:sticky top-4 lg:top-[70px] lg:bg-gray-100 p-4 flex flex-col gap-4 *:pb-5 divide-black/20 divide-y overflow-y-auto h-screen lg:h-[90vh] custom-scrollbar">
+					<div class="lg:sticky top-4 lg:top-[70px] lg:bg-gray-100 p-4 flex flex-col gap-4 *:pb-5 divide-y overflow-y-auto h-screen lg:h-[90vh] custom-scrollbar">
 						<div class="flex flex-col gap-2">
 							<h3 class="mb-0!">Модель</h3>
 							{models.map((model) => (

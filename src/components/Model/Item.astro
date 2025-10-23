@@ -10,7 +10,7 @@ import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 
 <a
 	href={`/models/${model.id}/`}
-	class="mb-[4%] lg:mb-0 w-[48%] lg:w-[calc(33.33%-calc(40px/3))] xl:w-[calc(25%-calc(60px/4))] flex flex-col border border-black/20 p-3 sm:pt-10 sm:pb-4 sm:px-5 overflow-hidden shadow-xl transition-all duration-500 in-expo group hover:border-gray-400 hover:shadow-md no-underline!"
+	class="mb-[4%] lg:mb-0 w-[48%] lg:w-[calc(33.33%-calc(40px/3))] xl:w-[calc(25%-calc(60px/4))] flex flex-col border p-3 sm:pt-10 sm:pb-4 sm:px-5 overflow-hidden shadow-xl transition-all duration-500 in-expo group hover:border-gray-400 hover:shadow-md no-underline!"
 >
 	<div>
 		<h2
@@ -64,7 +64,7 @@ import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 		)
 	}
 	</div>
-	<div class="flex flex-col sm:flex-row sm:mt-10 sm:divide-x divide-black/20">
+	<div class="flex flex-col sm:flex-row sm:mt-10 sm:divide-x">
 		{
 			Object.keys(model.chars).map((key) => (
 				<div class="flex-1 py-1.5 sm:py-0 sm:p-4 flex sm:flex-col items-center gap-0.5 sm:gap-2">
