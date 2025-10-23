@@ -1,0 +1,15 @@
+.stock-slider-nav{
+	@apply w-8 h-8 flex items-center justify-center absolute top-1/2 -translate-y-1/2 z-40 text-white text-3xl font-light opacity-50 transition-opacity hover:opacity-100;
+	&.swiper-button-lock{
+		@apply hidden;
+	} 
+	&.swiper-button-disabled{
+		@apply cursor-not-allowed;
+	}
+}
+.stock-slider-prev{
+	@apply left-0;
+}
+.stock-slider-next{
+	@apply right-0;
+}

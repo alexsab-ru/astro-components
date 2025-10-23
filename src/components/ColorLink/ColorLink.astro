@@ -7,7 +7,7 @@ interface Props {
 	idx?: number;
 }
 const {title, id, carImage, style,  idx} = Astro.props;
-import './color-links.scss';
+import './color-links.css';
 ---
 
 <button class={`color-link ${idx === 0 ? 'active' : ''}`} title={title} data-color={id} data-car-image={carImage} style={style}></button>

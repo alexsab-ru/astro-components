@@ -1,0 +1,40 @@
+/* Chery theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "HarmonyOS";
+  src: url("https://cdn.alexsab.ru/b/chery/fonts/harmonyos_sans_sc_regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HarmonyOS";
+  src: url("https://cdn.alexsab.ru/b/chery/fonts/harmonyos_sans_sc_medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HarmonyOS";
+  src: url("https://cdn.alexsab.ru/b/chery/fonts/harmonyos_sans_sc_bold.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #c6213a;
+  --color-accent-500: #a6192e;
+  --color-yellow: #ffc000;
+  --color-dark: #0d171a;
+
+  /* Fonts */
+  --font-sans: HarmonyOS, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+}
+
+
