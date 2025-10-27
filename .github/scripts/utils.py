@@ -588,12 +588,30 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
     brand = car_data.get('mark_id', '')
     run = car_data.get('run', 0)
 
-    # Получаем color_image для CDN
-    color_image = get_color_filename(brand, model, color, vin)
+    # Сначала получаем изображения из car_data
+    images = car_data.get('images', [])
+    # Добавляем фото дилера, если есть
+    if vin in dealer_photos_for_cars_avito:
+        new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
+        images.extend(new_images)
+    
+    # Проверяем, есть ли у машины свои превью
+    has_own_images = len(images) > 0
 
     thumb = "https://cdn.alexsab.ru/errors/404.webp"
-    # Проверка через CDN сервис
-    if not config['skip_check_thumb']:
+    
+    # Логика выбора изображения для thumb:
+    # 1. Если у машины есть свои превью - используем первое из них
+    # 2. Если нет своих превью - ищем заглушку по цвету модели на CDN
+    # 3. Если заглушка на CDN не найдена - выводим ошибку
+    
+    if has_own_images:
+        # У машины есть свои превью - используем первое изображение
+        thumb = images[0]
+    elif not config['skip_check_thumb']:
+        # Своих превью нет - ищем заглушку по цвету модели на CDN
+        color_image = get_color_filename(brand, model, color, vin)
+        
         if color_image:
             cdn_path = f"{color_image}"
             try:
@@ -601,15 +619,13 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
                 if response.status_code == 200:
                     thumb = cdn_path
                 else:
-                    # Если файл не найден в CDN, проверяем локальные файлы
+                    # Заглушка на CDN не найдена - выводим ошибку
                     errorText = f"\n<b>Не удалось найти файл на CDN</b>. Статус <b>{response.status_code}</b>\n<pre>{color_image}</pre>\n<a href='{cdn_path}'>{cdn_path}</a>"
                     print_message(errorText, 'error')
-                    # thumb = check_local_files(brand, model, color, vin)
             except requests.RequestException as e:
-                # В случае ошибки при проверке CDN, используем локальные файлы
+                # Ошибка при проверке CDN
                 errorText = f"\nОшибка при проверке CDN: {str(e)}"
                 print_message(errorText, 'error')
-                # thumb = check_local_files(brand, model, color, vin)
 
     data = dict(car_data)  # Копируем все поля из car_data
     # Определяем порядок (order)
@@ -647,11 +663,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
     if vin in dealer_photos_for_cars_avito and dealer_photos_for_cars_avito[vin]['description'] and not description_for_content:
         description_for_content = dealer_photos_for_cars_avito[vin]['description']
 
-    # Обработка изображений
-    images = car_data.get('images', [])
-    if vin in dealer_photos_for_cars_avito:
-        new_images = [img for img in dealer_photos_for_cars_avito[vin]['images'] if img not in images]
-        images.extend(new_images)
+    # Обработка изображений (images уже получены и обработаны выше)
     data['images'] = images
     thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['temp_thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
     data['thumbs'] = thumbs_files
