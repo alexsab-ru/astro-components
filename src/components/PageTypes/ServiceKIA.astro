@@ -77,13 +77,12 @@ if (fs.existsSync(jsonPath)) {
 		
 		// Создаем rows для Table (данные таблицы)
 		// Фильтруем услуги: показываем только те, у которых есть цена
-		// Форматируем данные: ["Название работы", "Цена"]
 		const rows = services
 			.filter(service => service['цена от'] !== null)  // Исключаем услуги без цены
-			.map(service => [
-				service['Работы'],  // Наименование работы
-				service['цена от'].toLocaleString('ru-RU')  // Форматируем цену по российским стандартам (456 000)
-			]);
+			.map(service => ({
+				name: service['Работы'],  // Наименование работы
+				price: service['цена от'].toLocaleString('ru-RU')  // Форматируем цену по российским стандартам (456 000)
+		}));
 		
 		return { item, rows };
 	})
