@@ -16,7 +16,11 @@ const {
 	errorMessage = 'Это поле обязательное!',
 	errorClasses = 'xs:text-[10px] text-xs hidden text-red-500 mt-2',
 	options = []
-} = Astro.props
+} = Astro.props;
+
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
+
 import { Icon } from 'astro-icon/components';
 ---
 <div
@@ -25,9 +29,11 @@ import { Icon } from 'astro-icon/components';
 	x-data={ `{
 		open: false, 
 		options: ${JSON.stringify(options)},
+		models: ${JSON.stringify(models)},
 		placeholder: '${placeholder}',
 		disabled: ${disabled},
 		value: null,
+		pathname: window.location.pathname,
 		currentOption: {},
 		openSelect() {
 			if (!this.disabled) {
@@ -35,12 +41,23 @@ import { Icon } from 'astro-icon/components';
 			}
 		},
 		select(id){
+			if(!id) return;
 			this.currentOption = this.options.find(o => o.id === id);
 			this.value = this.currentOption.name || null;
 			this.open = false;
 			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
-		}
+		},
 	}` }
+	x-init="
+	if(pathname.includes('models')){
+		const split = pathname.slice(1, -1).split('/');
+		const modelID = split.length > 1 ? split[split.length-1] : null;
+		const model = modelID ? models.find(m => m.id === modelID) : null;
+		const currentOption = model ? options.find(o => o.name.toLowerCase().includes(model?.mark_id.toLowerCase())) : null;
+		if(currentOption){
+			select(currentOption?.id);
+		}
+	}"
 	x-cloak>
 	<input 
 		type="text" 
