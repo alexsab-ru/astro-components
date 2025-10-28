@@ -39,43 +39,56 @@ import SeoText from '@/components/Seo/Index.astro';
 import FaqItem from '@/components/Faq/Item.astro';
 import { type TFaqItem } from '@/components/Faq/types';
 import Table from '@/components/Table/Table.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Парсим JSON и готовим данные для заголовков аккордеона + таблиц
 // Получить файл с таблицей можно командой pnpm run get_table_services_json
-import servicesJsonData from '@/data/tables/services.json';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const jsonPath = path.resolve(__dirname, '../../data/tables/services.json');
 
-// Группируем услуги по типу
-const servicesGrouped: Record<string, any[]> = {};
-servicesJsonData.forEach((service: any) => {
-	const type = service['Тип'];
-	if (!servicesGrouped[type]) {
-		servicesGrouped[type] = [];
-	}
-	servicesGrouped[type].push(service);
-});
+// Проверяем существование файла и создаем faqBlocks
+// Если файл отсутствует - компонент работает без таблицы услуг
+let faqBlocks = [];
 
-// Создаем faqBlocks для использования в компоненте FaqItem + Table
-const faqBlocks = Object.entries(servicesGrouped).map(([type, services], index) => {
-	// Создаем item для FaqItem (заголовок аккордеона)
-	const item: TFaqItem = {
-		id: index,
-		question: type,  // Название типа услуги (например, "Диагностика")
-		answer: '',  // Не используется, т.к. контент будет таблицей
-		open: false  // По умолчанию аккордеон закрыт
-	};
-	
-	// Создаем rows для Table (данные таблицы)
-	// Фильтруем услуги: показываем только те, у которых есть цена
-	// Форматируем данные: ["Название работы", "Цена"]
-	const rows = services
-		.filter(service => service['цена от'] !== null)  // Исключаем услуги без цены
-		.map(service => [
-			service['Работы'],  // Наименование работы
-			service['цена от'].toLocaleString('ru-RU')  // Цена (теперь всегда есть)
-		]);
-	
-	return { item, rows };
-});
+if (fs.existsSync(jsonPath)) {
+	// Читаем JSON файл с услугами
+	const servicesJsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+
+	// Группируем услуги по типу
+	const servicesGrouped: Record<string, any[]> = {};
+	servicesJsonData.forEach((service: any) => {
+		const type = service['Тип'];
+		if (!servicesGrouped[type]) {
+			servicesGrouped[type] = [];
+		}
+		servicesGrouped[type].push(service);
+	});
+
+	// Создаем faqBlocks для использования в компоненте FaqItem + Table
+	faqBlocks = Object.entries(servicesGrouped).map(([type, services], index) => {
+		// Создаем item для FaqItem (заголовок аккордеона)
+		const item: TFaqItem = {
+			id: index,
+			question: type,  // Название типа услуги (например, "Диагностика")
+			answer: '',  // Не используется, т.к. контент будет таблицей
+			open: false  // По умолчанию аккордеон закрыт
+		};
+		
+		// Создаем rows для Table (данные таблицы)
+		// Фильтруем услуги: показываем только те, у которых есть цена
+		// Форматируем данные: ["Название работы", "Цена"]
+		const rows = services
+			.filter(service => service['цена от'] !== null)  // Исключаем услуги без цены
+			.map(service => [
+				service['Работы'],  // Наименование работы
+				service['цена от'].toLocaleString('ru-RU')  // Форматируем цену по российским стандартам (456 000)
+			]);
+		
+		return { item, rows };
+	});
+}
 
 ---
 
