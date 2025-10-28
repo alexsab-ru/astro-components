@@ -38,6 +38,8 @@ class GSheetFetcher {
         const query = this.config.csvUrl + encodeURIComponent(this.config.queryString);
         return new Promise((resolve, reject) => {
             https.get(query, (response) => {
+                // Устанавливаем кодировку utf8 для корректной обработки кириллических символов
+                response.setEncoding('utf8');
                 let data = '';
                 response.on('data', (chunk) => {
                     data += chunk;
