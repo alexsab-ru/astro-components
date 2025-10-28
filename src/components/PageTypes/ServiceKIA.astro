@@ -41,12 +41,11 @@ import { type TFaqItem } from '@/components/Faq/types';
 import Table from '@/components/Table/Table.astro';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 // Парсим JSON и готовим данные для заголовков аккордеона + таблиц
 // Получить файл с таблицей можно командой pnpm run get_table_services_json
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const jsonPath = path.resolve(__dirname, '../../data/tables/services.json');
+// Используем путь от корня проекта (работает и в dev, и в build)
+const jsonPath = path.resolve(process.cwd(), 'src/data/tables/services.json');
 
 // Проверяем существование файла и создаем faqBlocks
 // Если файл отсутствует - компонент работает без таблицы услуг
@@ -87,7 +86,8 @@ if (fs.existsSync(jsonPath)) {
 			]);
 		
 		return { item, rows };
-	});
+	})
+	.filter(({ rows }) => rows.length > 0);  // Исключаем группы без услуг с ценами
 }
 
 ---
