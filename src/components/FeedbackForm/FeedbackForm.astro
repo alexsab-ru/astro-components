@@ -9,11 +9,14 @@ interface Props{
   showModelSelect?: boolean;
 }
 
+const defaultTitle = 'Узнать подробнее';
+const defaultDataFormName = 'Форма обратной связи на странице';
+
 const {
-  title = 'Узнать подробнее',
+  title = defaultTitle,
   subtitle = '',
   imageUrl = '',
-  dataFormName = 'Форма обратной связи на странице',
+  dataFormName = defaultDataFormName,
   showModelSelect = false,
 } = Astro.props;
 ---
@@ -23,15 +26,15 @@ const {
       <img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={imageUrl} alt={title} class="w-full h-auto" loading="lazy" width="748" height="323" />
     </div>
     <div>
-      <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
+      {title.length ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>): null }
       {subtitle.length ? (<p class="text-center">{subtitle}</p>) : ('')}
-      <Form dataFormName={dataFormName} showModelSelect={showModelSelect} />
+      <Form dataFormName={title.length && title !== defaultTitle ? title : dataFormName} showModelSelect={showModelSelect} />
     </div>
   </div>
 ) : (
   <>
-    <h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>
+    {title.length ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>): null }
     {subtitle.length ? (<p class="text-center mb-8">{subtitle}</p>) : ('')}
-    <Form dataFormName={dataFormName} showModelSelect={showModelSelect} />
+    <Form dataFormName={title.length && title !== defaultTitle ? title : dataFormName} showModelSelect={showModelSelect} />
   </>
 )}
