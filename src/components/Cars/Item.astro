@@ -9,18 +9,15 @@ const {car = {}, path = '/cars/', slug, totalShow = true} = Astro.props;
 // Формируем URL по приоритету: переданный slug | внутренний путь по id
 const url = slug ? slug : `${path}${car.id}/`;
 
-import modelsData from '@/data/models.json';
-const { models } = modelsData;
-const model = models.find(model => 
-	model.id.toLowerCase() === car.data?.folder_id.toLowerCase() || 
-	model?.feed_names?.length && model.feed_names.includes(car.data.folder_id)
-);
-const badgeImage = model?.badge?.vertical || null;
+import { calculateCarPrice, getModelBadgeData } from '@/js/utils/car.utils';
+// Подсказка: при необходимости можно отдельно получить модель через findModelByCarData(car.data).
+// Теперь мы тянем сразу картинку и alt в одном месте, чтобы не повторять поиск модели.
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(car.data);
+const price = calculateCarPrice(car.data);
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';
-const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.data.max_discount ? car.data.price - car.data.max_discount : car.data.price);
 ---
 
 <div 
@@ -52,7 +49,7 @@ const price = car.data.priceWithDiscount ? car.data.priceWithDiscount : (car.dat
 			{car.data.run ? <Fragment set:html={`&nbsp;/&nbsp;${car.data.run}&nbsp;км`} /> : ''}
 		</div></noindex>
 		{(car.data.total && totalShow) && (<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>)}
-		{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 xs:h-12 h-16 lg:h-20 xl:h-24 w-auto" alt={model?.badge?.alt || model?.name} />)}
+		{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 xs:h-12 h-16 lg:h-20 xl:h-24 w-auto" alt={badgeAlt} />)}
 	</div>
 	<div class="px-3 xl:px-4 flex flex-wrap justify-between gap-y-2 sm:gap-y-3">
 		<Button 

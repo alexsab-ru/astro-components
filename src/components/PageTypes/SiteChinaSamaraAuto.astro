@@ -1,0 +1,52 @@
+---
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import {TIMER, MARQUEE} from '@/const.js';
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
+import Timer from '@/components/Timer/Timer.astro';
+import ModelList from '@/components/Model/ModelList.astro';
+import LatestPosts from '@/components/LatestPosts/Index.astro';
+import Model from '@/components/Model/Model.astro';
+import ModelComplectations from '@/components/Model/Complectations.astro';
+import Callback from '@/components/Callback.astro';
+import Services from '@/components/Services.astro';
+import Contacts from '@/components/Contacts.astro';
+import Morquee from '@/components/Marquee/Index.astro';
+
+import modelsData from '@/data/models.json'
+const { models } = modelsData;
+
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
+const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
+import SeoText from '@/components/Seo/Index.astro';
+import Brands from '../Brands/Brands.astro';
+---
+
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
+	<Banner />
+	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
+	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
+		<div class="container">
+			<PageH1 h1=`Официальные дилеры китайских автомобилей в ${legal_city_where}` classes="text-center fz-[3] text-white font-medium leading-none" />
+		</div>
+	</section>
+	{TIMER.show && <Timer endtime={TIMER.endtime} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
+	
+	<section>
+		<div class="container">
+			<Brands type="card" />
+		</div>
+	</section>
+	
+	<ModelList />
+	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" />
+	<Callback />
+	<Services />
+	<SeoText mdx="index" />
+	<Contacts />
+</Layout>
