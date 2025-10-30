@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Form from '@/components/FeedbackForm/Form.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import settings from '@/data/settings.json';
 import PageH1 from '@/components/PageH1/Index.astro';
 const { brand, legal_city_where } = settings;
@@ -12,6 +12,6 @@ const { brand, legal_city_where } = settings;
 			<PageH1 h1={`Записаться на сервис ${brand}`} classes="text-3xl sm:text-4xl font-bold text-center" />
 			<p class="text-center mt-1 text-gray-500">Профессиональное обслуживание с сохранением гарантии</p>
 		</div>
-		<Form dataFormName="Запись на сервис" showModelSelect={true} />
+		<FeedbackForm title="" dataFormName="Запись на сервис" showModelSelect={true} />
 	</div>
 </Layout>

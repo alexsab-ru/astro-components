@@ -19,7 +19,6 @@ export default class FormsValidation {
             customError: ({ validationMessage }) => validationMessage || 'Проверьте корректность введённых данных',
         };
         this.isValid = true;
-        this.validate();
     }
 
     validate() {
@@ -101,20 +100,55 @@ export default class FormsValidation {
             if (errorMessages.length) {
                 this.isValid = false;
                 const errorMessage = errorMessages[0];
-                const errorField = element.parentElement.querySelector(`.error-message.${element.name}`);
+                // Для radio/checkbox ищем ошибку в форме (они могут быть вложены в label)
+                // Для остальных полей ищем в parentElement (как раньше)
+                const errorField = (element.type === 'radio' || element.type === 'checkbox')
+                    ? this.form.querySelector(`.error-message.${element.name}`)
+                    : element.parentElement.querySelector(`.error-message.${element.name}`);
                 if (errorField) {
                     errorField.innerText = errorMessage;
                     errorField.classList.remove('hidden');
-                    // Снимаем предыдущий обработчик, если был
-                    errorField._inputHandler && element.removeEventListener('input', errorField._inputHandler);
-                    // Добавляем новый обработчик: при вводе скрываем сообщение
-                    const handler = () => {
-                        errorField.classList.add('hidden');
-                        element.removeEventListener('input', handler);
-                        errorField._inputHandler = null;
-                    };
-                    element.addEventListener('input', handler);
-                    errorField._inputHandler = handler;
+                    // Определяем тип события в зависимости от типа поля
+                    // radio и checkbox используют 'change', остальные — 'input'
+                    const eventType = (element.type === 'radio' || element.type === 'checkbox') ? 'change' : 'input';
+                    
+                    // Для radio-групп добавляем обработчик на все элементы группы
+                    if (element.type === 'radio') {
+                        const group = this.form.querySelectorAll(`input[type="radio"][name="${element.name}"]`);
+                        // Снимаем предыдущие обработчики со всех элементов группы
+                        if (errorField._radioHandlers) {
+                            group.forEach((radio, idx) => {
+                                radio.removeEventListener(eventType, errorField._radioHandlers[idx]);
+                            });
+                        }
+                        // Создаем новый обработчик для скрытия сообщения об ошибке
+                        const handler = () => {
+                            errorField.classList.add('hidden');
+                            // Удаляем обработчики со всех radio в группе
+                            group.forEach((radio, idx) => {
+                                radio.removeEventListener(eventType, errorField._radioHandlers[idx]);
+                            });
+                            errorField._radioHandlers = null;
+                        };
+                        // Сохраняем ссылки на обработчики для каждого radio
+                        errorField._radioHandlers = [];
+                        group.forEach((radio) => {
+                            radio.addEventListener(eventType, handler);
+                            errorField._radioHandlers.push(handler);
+                        });
+                    } else {
+                        // Для остальных полей (не radio) стандартная обработка
+                        // Снимаем предыдущий обработчик, если был
+                        errorField._inputHandler && element.removeEventListener(eventType, errorField._inputHandler);
+                        // Добавляем новый обработчик: при изменении/вводе скрываем сообщение
+                        const handler = () => {
+                            errorField.classList.add('hidden');
+                            element.removeEventListener(eventType, handler);
+                            errorField._inputHandler = null;
+                        };
+                        element.addEventListener(eventType, handler);
+                        errorField._inputHandler = handler;
+                    }
                 }
                 // Скроллим только к первому невалидному полю
                 if (idx === 0) {
