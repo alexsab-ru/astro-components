@@ -3,6 +3,8 @@
 
 @theme {
     /* Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
     --color-accent-400: oklch(0.79 0.12 205);
     --color-accent-500: oklch(0.74 0.14 205);
     --color-vk: #4B76A8;
