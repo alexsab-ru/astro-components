@@ -14,6 +14,7 @@ module.exports = {
 					500: "#626b6f",
 					600: "#626b6f",
 				},
+				'green-accent': '#00caba'
 			},
 			fontFamily: {
 				'sans': ['Haval', ...defaultTheme.fontFamily.sans],
