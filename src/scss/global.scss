@@ -92,3 +92,10 @@ blockquote{
 .substrate-skew-both {
 	clip-path: polygon(1rem 0, 100% 0, calc(100% - 1rem) 100%, 0 100%);
 }
+
+.border-t,
+.border-r,
+.border-b,
+.border-l {
+	border-color: var(--color-gray-200); /* светло-серый gray-200 */
+}
