@@ -163,7 +163,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 				</div>
 				<div class="col-span-9">
 					<p x-text="`${total} ${declOfNums(total)}`"></p>
-					<hr class="my-5 text-black/20" />
+					<hr class="my-5" />
 					<div class="flex items-center flex-wrap justify-end sm:justify-start gap-4">
 						<SortSelect />
 						<div class="flex items-center flex-nowrap gap-2 justify-between xs:px-2 px-3 h-[34px] sm:h-[42px] lg:hidden border" x-on:click="open = true">
@@ -171,7 +171,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 							<span class="xs:text-[10px] text-xs sm:text-base leading-none!">Параметры</span>
 						</div>
 					</div>
-					<hr class="my-5 text-black/20" />
+					<hr class="my-5" />
 					<div class="sticky top-4 lg:top-[70px] z-30 shadow-xl">
 						<div class="stock-slider swiper w-full bg-accent-400">
 							<div class="swiper-wrapper">
@@ -186,7 +186,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 							<button class="stock-slider-nav stock-slider-next"><Icon name="mdi:chevron-right" /></button>
 						</div>
 					</div>
-					<hr class="my-5 text-black/20" />
+					<hr class="my-5" />
 					<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
 						{cars.map((car) => (
 							<CarItem car={car} slug={`/catalog/${car.slug}`} totalShow={false} />
