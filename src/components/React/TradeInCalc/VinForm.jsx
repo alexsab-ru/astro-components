@@ -95,7 +95,7 @@ const VinForm = () => {
 				<div className="flex">
 					<input
 						type="text"
-						className={`w-[270px] border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-none text-black border-gray-100 ${vin ? '!border-black !text-black' : ''}`}
+						className={`w-[270px] border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-hidden text-black border-gray-100 ${vin ? 'border-black! text-black!' : ''}`}
 						placeholder="Введите VIN-номер"
 						{...register('vin')}
 						onInput={(e) => setVIN(e.target.value)}

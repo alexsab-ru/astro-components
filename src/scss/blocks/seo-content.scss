@@ -1,0 +1,83 @@
+.seo-content {
+	@apply overflow-hidden h-[230px] relative;
+}
+
+.seo-content::before {
+	content: '';
+	@apply absolute bottom-0 left-0 w-full z-10;
+	height: 100px;
+	background: linear-gradient(
+		to top,
+		rgba(255, 255, 255, 1),
+		rgba(255, 255, 255, 0)
+	);
+	transition: opacity 0.25s;
+}
+.seo-content.open {
+	@apply h-auto;
+}
+
+.seo-content.open::before {
+	opacity: 0;
+}
+
+.seo-content h2 {
+	@apply text-3xl font-bold mx-0 mb-3 text-left before:hidden;
+}
+
+.seo-content h2:not(:first-child) {
+	@apply mt-10;
+}
+
+.seo-content h3 {
+	@apply text-2xl font-bold mb-3;
+}
+
+.seo-content strong {
+	@apply font-bold;
+}
+
+.seo-content p{
+	@apply mb-3;
+}
+
+.seo-content ul {
+	@apply list-disc pl-5 mb-5;
+}
+
+.seo-content li:not(:last-child) {
+	@apply mb-3;
+}
+
+.seo-show-more {
+	@apply text-sm opacity-50 transition-opacity hover:opacity-90 leading-none py-3 relative;
+}
+
+.seo-show-more-arrow {
+	@apply inline-block rotate-90 transition-transform absolute bottom-0 left-1/2 transform -translate-x-1/2 origin-center;
+}
+
+.seo-show-more.active .seo-show-more-arrow {
+	@apply -rotate-90 bottom-auto top-0;
+}
+
+.seo-show-more:hover .seo-show-more-arrow {
+	@apply translate-y-1;
+}
+
+.seo-show-more.active:hover .seo-show-more-arrow {
+	@apply -translate-y-1;
+}
+
+.model-page-seo-text{
+	@apply space-y-5;
+	h2{
+		@apply text-2xl sm:text-3xl font-normal -mb-2;
+	}
+	h3{
+		@apply text-xl sm:text-2xl font-normal -mb-2;
+	}
+	ul{
+		@apply list-disc pl-4;
+	}
+}

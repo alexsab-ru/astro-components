@@ -46,7 +46,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 function updateSlideClasses(slider) {
     slider.slides.forEach(slide => {
         slide.classList.remove('min-w-[200px]');
-        slide.classList.add('min-w-[73px]', '!w-fit');
+        slide.classList.add('min-w-[73px]', 'w-fit!');
     });
 }
 

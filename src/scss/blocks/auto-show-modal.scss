@@ -1,0 +1,15 @@
+[data-position="left-top"]{
+	@apply top-0 md:top-5 left-0 md:left-5;
+}
+[data-position="right-top"]{
+	@apply top-0 md:top-5 right-0 md:right-5;
+}
+[data-position="right-bottom"]{
+	@apply bottom-0 md:bottom-5 right-0 md:right-5;
+}
+[data-position="left-bottom"]{
+	@apply bottom-0 md:bottom-5 left-0 md:left-5;
+}
+[data-position="center"]{
+	@apply top-0 md:top-20 left-1/2 -translate-x-1/2;
+}

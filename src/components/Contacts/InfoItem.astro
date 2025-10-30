@@ -12,7 +12,7 @@ import { Icon } from 'astro-icon/components';
 import { phoneFormat } from '@/js/utils/numbers.format';
 ---
 <div class={className} {...rest}>
-	{iconName && ( <Icon name={iconName} class={`flex-shrink-0 ${iconClass}`} /> )}
+	{iconName && ( <Icon name={iconName} class={`shrink-0 ${iconClass}`} /> )}
 	<div>
 		{label && ( <small class="text-xs sm:text-sm text-gray-500 block">{label}</small> )}
 		{type === 'phone' ? (

@@ -1,0 +1,45 @@
+/* Base theme tokens shared across brands.
+   Define only defaults here. Brand files override below. */
+
+@theme {
+    /* Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-accent-400: oklch(0.79 0.12 205);
+    --color-accent-500: oklch(0.74 0.14 205);
+    --color-vk: #4B76A8;
+    --color-ok: #F7931D;
+    --color-fb: #3C5A99;
+    --color-youtube: #FF0018;
+    --color-tiktok: #000000;
+    --color-telegram: #2FACE1;
+
+    --color-border: #e5e7eb;
+
+    /* Полная палитра серых цветов для границ и других элементов */
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;  /* дефолтный цвет для border */
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    --color-gray-950: #030712;
+
+    /* Fonts */
+    --font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-heading: inherit;
+
+    /* Radii */
+    --radius-btn: 0px;
+
+    /* Shadows (from boxShadow) */
+    --shadow-3xl: 0 35px 60px rgba(0 0 0 / 0.3);
+    --shadow-4xl: 0 0 60px rgba(0 0 0 / 0.5);
+
+    /* Breakpoints (to enable xs: variant and others if needed) */
+    --breakpoint-xs: 430px;
+}
