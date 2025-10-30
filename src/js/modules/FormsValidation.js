@@ -19,7 +19,6 @@ export default class FormsValidation {
             customError: ({ validationMessage }) => validationMessage || 'Проверьте корректность введённых данных',
         };
         this.isValid = true;
-        this.validate();
     }
 
     validate() {
