@@ -247,3 +247,20 @@ blockquote{
 		@apply underline hover:no-underline;
 	}
 }
+
+// Утилитарные классы для плашек с наклонными краями
+.substrate-skew {
+	@apply relative overflow-hidden w-fit px-4 sm:px-5 md:px-7 py-1.5 lg:py-2;
+}
+
+.substrate-skew-right {
+	clip-path: polygon(0 0, 100% 0, calc(100% - 1rem) 100%, 0 100%);
+}
+
+.substrate-skew-left {
+	clip-path: polygon(1rem 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.substrate-skew-both {
+	clip-path: polygon(1rem 0, 100% 0, calc(100% - 1rem) 100%, 0 100%);
+}
