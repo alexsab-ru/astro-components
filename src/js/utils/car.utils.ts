@@ -16,39 +16,55 @@ export function findModelByCarData(carData: any) {
 }
 
 /**
- * Получает изображение бейджа модели
+ * Собирает данные бейджа модели одним проходом.
+ * Раньше мы возвращали только изображение, теперь сразу отдаем и картинку, и alt.
+ * Это избавляет нас от повторных вызовов findModelByCarData в разных вспомогательных функциях.
+ * @param carData - данные автомобиля
+ * @returns объект с изображением бейджа и alt текстом
+ */
+export function getModelBadgeData(carData: any) {
+  const model = findModelByCarData(carData);
+  const badge = model?.badge;
+
+  // Если бейджа нет, все равно возвращаем alt с названием модели, чтобы было что показать.
+  if (!badge) {
+    return {
+      image: null,
+      alt: model?.name || '',
+    };
+  }
+
+  // Когда badge строка, это готовый URL. Alt берем из имени модели.
+  if (typeof badge === 'string') {
+    return {
+      image: badge,
+      alt: model?.name || '',
+    };
+  }
+
+  // Для объектного badge отдаем vertical вариант и alt из данных, подстрахуемся именем.
+  return {
+    image: badge.vertical || null,
+    alt: badge.alt || model?.name || '',
+  };
+}
+
+/**
+ * Обертка, чтобы старый код мог получать только изображение через новый общий расчёт.
  * @param carData - данные автомобиля
  * @returns URL изображения бейджа или null
  */
 export function getModelBadgeImage(carData: any) {
-  const model = findModelByCarData(carData);
-  if (!model?.badge) return null;
-  
-  // Если badge - строка, возвращаем её
-  if (typeof model.badge === 'string') {
-    return model.badge;
-  }
-  
-  // Если badge - объект, возвращаем vertical изображение
-  return model.badge.vertical || null;
+  return getModelBadgeData(carData).image;
 }
 
 /**
- * Получает alt текст для бейджа модели
+ * Обертка, чтобы старый код мог получать только alt через новый общий расчёт.
  * @param carData - данные автомобиля
  * @returns alt текст или название модели
  */
 export function getModelBadgeAlt(carData: any) {
-  const model = findModelByCarData(carData);
-  if (!model?.badge) return model?.name || '';
-  
-  // Если badge - строка, возвращаем название модели
-  if (typeof model.badge === 'string') {
-    return model.name || '';
-  }
-  
-  // Если badge - объект, возвращаем alt или название модели
-  return model.badge.alt || model.name || '';
+  return getModelBadgeData(carData).alt;
 }
 
 /**

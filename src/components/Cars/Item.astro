@@ -9,10 +9,10 @@ const {car = {}, path = '/cars/', slug, totalShow = true} = Astro.props;
 // Формируем URL по приоритету: переданный slug | внутренний путь по id
 const url = slug ? slug : `${path}${car.id}/`;
 
-import { calculateCarPrice, findModelByCarData, getModelBadgeImage, getModelBadgeAlt } from '@/js/utils/car.utils';
-// const model = findModelByCarData(car.data);
-const badgeImage = getModelBadgeImage(car.data);
-const badgeAlt = getModelBadgeAlt(car.data);
+import { calculateCarPrice, getModelBadgeData } from '@/js/utils/car.utils';
+// Подсказка: при необходимости можно отдельно получить модель через findModelByCarData(car.data).
+// Теперь мы тянем сразу картинку и alt в одном месте, чтобы не повторять поиск модели.
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(car.data);
 const price = calculateCarPrice(car.data);
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';

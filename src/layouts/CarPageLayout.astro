@@ -10,12 +10,12 @@ interface Props {
 const {car = {}, breadcrumb, backLink = false, keywords, totalShow = true} = Astro.props;
 const data = car?.data || {};
 
-import { getCarThumbnail, calculateCarPrice, findModelByCarData, getModelBadgeImage, getModelBadgeAlt } from '@/js/utils/car.utils';
+import { getCarThumbnail, calculateCarPrice, getModelBadgeData } from '@/js/utils/car.utils';
 const thumb = getCarThumbnail(data);
 const price = calculateCarPrice(data);
-// const model = findModelByCarData(data);
-const badgeImage = getModelBadgeImage(data);
-const badgeAlt = getModelBadgeAlt(data);
+// При желании можно отдельно получить модель через findModelByCarData(data).
+// Мы сразу берем картинку и alt из одного расчёта, чтобы не повторять одинаковую работу.
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(data);
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import Layout from '@/layouts/Layout.astro';
