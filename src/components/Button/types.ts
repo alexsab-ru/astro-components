@@ -5,6 +5,7 @@ export type TButtonData = {
 	title?: string,
 	dataTitle?: string,
 	dataFormName?: string,
+	dataChooseDepartment?: boolean,
 	dataImg?: string,
 	dataImgPosition?: string,
 	icon?: string,
