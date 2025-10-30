@@ -13,12 +13,17 @@ const defaultTitle = 'Узнать подробнее';
 const defaultDataFormName = 'Форма обратной связи на странице';
 
 const {
-  title = defaultTitle,
+  title, // undefined если не передан, "" если нужно скрыть, или строка для отображения
   subtitle = '',
   imageUrl = '',
-  dataFormName = defaultDataFormName,
+  dataFormName = '',
   showModelSelect = false,
 } = Astro.props;
+
+// Определяем заголовок для отображения (undefined -> defaultTitle, "" -> скрываем, "текст" -> показываем)
+const displayTitle = title ?? defaultTitle;
+// Определяем название формы: приоритет dataFormName, потом title (если не пустой), потом defaultDataFormName
+const formName = dataFormName || title || defaultDataFormName;
 ---
 {imageUrl.length ? (
   <div class="flex flex-col lg:flex-row lg:gap-10 lg:items-center lg:justify-center">
@@ -26,15 +31,15 @@ const {
       <img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={imageUrl} alt={title} class="w-full h-auto" loading="lazy" width="748" height="323" />
     </div>
     <div>
-      {title.length ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>): null }
+      {title !== "" ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{displayTitle}</h3>): null }
       {subtitle.length ? (<p class="text-center">{subtitle}</p>) : ('')}
-      <Form dataFormName={title.length && title !== defaultTitle ? title : dataFormName} showModelSelect={showModelSelect} />
+      <Form dataFormName={formName} showModelSelect={showModelSelect} />
     </div>
   </div>
 ) : (
   <>
-    {title.length ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{title}</h3>): null }
+    {title !== "" ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{displayTitle}</h3>): null }
     {subtitle.length ? (<p class="text-center mb-8">{subtitle}</p>) : ('')}
-    <Form dataFormName={title.length && title !== defaultTitle ? title : dataFormName} showModelSelect={showModelSelect} />
+    <Form dataFormName={formName} showModelSelect={showModelSelect} />
   </>
 )}
