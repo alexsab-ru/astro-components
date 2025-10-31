@@ -4,16 +4,20 @@ import Site from '@/components/PageTypes/Site.astro';
 import SiteAlphaCenter from '@/components/PageTypes/SiteAlphaCenter.astro';
 import SiteChinaSamaraAuto from '@/components/PageTypes/SiteChinaSamaraAuto.astro';
 import Landing from '@/components/PageTypes/Landing.astro';
+import LandingEVOLUTE from '@/components/PageTypes/LandingEVOLUTE.astro';
 import LandingGAC from '@/components/PageTypes/LandingGAC.astro';
 import LandingGEELY from '@/components/PageTypes/LandingGEELY.astro';
 import LandingHAVAL from '@/components/PageTypes/LandingHAVAL.astro';
+import LandingINFINITI from '@/components/PageTypes/LandingINFINITI.astro';
 import ServiceKIA from '@/components/PageTypes/ServiceKIA.astro';
 
 const SiteType = {
 	LANDING: 'landing',
+	LANDING_EVOLUTE: 'landing-evolute',
 	LANDING_GAC: 'landing-gac',
 	LANDING_GEELY: 'landing-geely',
 	LANDING_HAVAL: 'landing-haval',
+	LANDING_INFINITI: 'landing-infiniti',
 	SITE: 'site',
 	SITE_ALPHA_CENTER: 'site-alpha-center',
 	SITE_CHINA_SAMARA_AUTO: 'site-china-samara-auto',
@@ -26,6 +30,9 @@ switch(siteType) {
 	case SiteType.LANDING:
 		Content = Landing;
 		break;
+	case SiteType.LANDING_EVOLUTE:
+		Content = LandingEVOLUTE;
+		break;
 	case SiteType.LANDING_GAC:
 		Content = LandingGAC;
 		break;
@@ -34,6 +41,9 @@ switch(siteType) {
 		break;
 	case SiteType.LANDING_HAVAL:
 		Content = LandingHAVAL;
+		break;
+	case SiteType.LANDING_INFINITI:
+		Content = LandingINFINITI;
 		break;
 	case SiteType.SITE:
 		Content = Site;

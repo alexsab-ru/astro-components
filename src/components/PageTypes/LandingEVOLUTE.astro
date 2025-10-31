@@ -1,0 +1,268 @@
+---
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import {TIMER, MARQUEE} from '@/const.js';
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import Slider from '@/components/Slider/Slider.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
+import Timer from '@/components/Timer/Timer.astro';
+import ModelList from '@/components/Model/ModelList.astro';
+import LatestPosts from '@/components/LatestPosts/Index.astro';
+import Model from '@/components/Model/Model.astro';
+import ModelComplectations from '@/components/Model/Complectations.astro';
+import Callback from '@/components/Callback.astro';
+import Services from '@/components/Services.astro';
+import Contacts from '@/components/Contacts.astro';
+import Morquee from '@/components/Marquee/Index.astro';
+import InfoSectionWithImage from '@/components/InfoSectionWithImage/InfoSectionWithImage.astro';
+import SectionWithBg from '@/components/SectionWithBg/SectionWithBg.astro';
+import modelsData from '@/data/models.json'
+const { models } = modelsData;
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
+const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
+import SeoText from '@/components/Seo/Index.astro';
+import InfoList from '@/components/Info/List.astro';
+const iSpaceModel = models.find(model => model.id === 'i-space');
+
+import modelsSections from '@/data/models-sections.yml';
+const currentModel = modelsSections.find(m => m?.id === 'i-space') || {};
+const sections = currentModel?.sections || [];
+import UniversalSection from '@/components/Model/sections/universal.astro';
+
+const bannersSection = [
+    {
+        "id": 1,
+        "show": true,
+        "imageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/1-desktop.webp",
+        "mobileImageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/1-mobile.webp",
+        "title": "Гибридный привод",
+        "descr": "<ul class=\"list-disc pl-2 sm:pl-4 lg:w-1/2 space-y-2 sm:mt-10 text-sm sm:text-lg\"><li><nobr>EVOLUTE i-SPACE</nobr> оснащен гибридной силовой установкой.</li><li>Под капотом установлен бензиновый атмосферный ДВС объемом 1.5 литра, который работает в качестве генератора для подзарядки тяговой батареи (зарядить ее можно и от обычной розетки).</li><li>За взаимодействие с ведущими колесами отвечает трансмиссия HDC300 Hybrid Power Box.</li><li>Привод передний, автомобиль оснащен системой рекуперации, позволяющей заряжать батарею не только от розетки и ДВС, но и при движении накатом.</li><li>В автомобиле используется интеллектуальная система зарядки, позволяющая настроить при каком минимальном запасе емкости батареи включается ДВС.</li><li>Мощность электродвигателей составляет 177 л.с. с крутящим моментом 300 Нм, мощность двигателя внутреннего сгорания составляет 110 л.с. с крутящим моментом 135 Нм.</li></ul>",
+    },
+    {
+        "id": 2,
+        "show": true,
+        "imageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/2-desktop.webp",
+        "mobileImageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/2-mobile.webp",
+        "title": "Динамичный разгон",
+        "descr": "Мгновенная реакция на нажатие педали акселератора, <br/>ускорение 0–50 км/ч за 2,9 секунды.",
+    },
+    {
+        "id": 3,
+        "show": true,
+        "imageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/3-desktop.webp",
+        "mobileImageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/3-mobile.webp",
+        "title": "Высокий уровень  выносливости",
+        "descr": "Максимальный запас хода на электротяге — 87 км, <br/>а всего автомобиль может преодолеть без дозаправки <br/>и подзарядки до 1150 км (цикл WLTC).",
+    },
+    {
+        "id": 4,
+        "show": true,
+        "imageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/4-desktop.webp",
+        "mobileImageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/4-mobile.webp",
+        "title": "Высокая плавность хода и отзывчивость",
+        "descr": "Включение и отключение ДВС-генератора происходит незаметно, <br>а крутящий момент электродвигателя передается к колесам плавно и без разрывов, что гарантирует высокую плавность хода и отличный отклик на действия водителя.",
+    },
+    {
+        "id": 5,
+        "show": true,
+        "imageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/5-desktop.webp",
+        "mobileImageUrl": "https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/banner/5-mobile.webp",
+        "title": "Тишина в салоне",
+        "descr": "На скорости 60 км/ч в салоне по-премиальному<br>тихо и спокойно.",
+    }
+]
+---
+
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официалоного дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
+	<Banner />
+	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
+	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
+		<div class="container">
+			<PageH1 h1=`Автомобили ${brand} в&nbsp;наличии в&nbsp;${legal_city_where}` classes="text-center fz-[3] text-white font-medium leading-none" />
+		</div>
+	</section>
+	{TIMER.show && <Timer endtime={TIMER.endtime} title="До конца акции осталось" subtitle="Подзаголовок" />}
+	<Model model={iSpaceModel} />
+
+	{ sections.length > 0 && sections.map(s => 
+		s.id === 'info' ? (<InfoList items={s.items} title={s?.title} classes={s?.sectionClass} id={s.id} grid={true}/>) : (<UniversalSection section={s} />)
+	)}
+
+	<section class="bg-[#404a59]">
+		<div class="container">
+			<h2 class="text-white text-center xs:!text-lg !text-3xl sm:!text-5xl">Энергоэффективность и экономичность</h2>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/i-space-block-4-new.webp',}} direction="left">
+				<div class="space-y-4 text-white lg:text-inherit text-sm sm:text-base">
+					<div>
+						<ul class="list-disc pl-2 sm:pl-4">
+							<li><strong>Экономия на топливе до 500&nbsp;000&nbsp;₽*</strong></li>
+						</ul>
+						<p>Во время движения на электротяге бензин не расходуется, только электроэнергия.</p>
+					</div>
+					<div>
+						<ul class="list-disc pl-2 sm:pl-4">
+							<li><strong>Значительное сокращение эксплуатационных расходов</strong></li>
+						</ul>
+						<p>Благодаря гибридному приводу средний расход топлива (в цикле WLTC) составляет всего 5,5 л/100 км. Это примерно на 25% ниже, чем у аналогичных автомобилей с традиционным приводом на базе бензинового ДВС.</p>
+					</div>
+					<div>
+						<ul class="list-disc pl-2 sm:pl-4">
+							<li><strong>Экономия на&nbsp;ТО и транспортном налоге до 185&nbsp;000&nbsp;₽**</strong></li>
+						</ul>
+						<p>Владение полноценным динамичным семиместным кроссовером с минимальным транспортным налогом и другими ежегодными расходами.</p>
+					</div>
+					<div>
+						<ul class="list-disc pl-2 sm:pl-4">
+							<li><strong>Низкий уровень вредных выбросов</strong></li>
+						</ul>
+						<p>Автомобиль наносит меньше вреда окружающей среде.</p>
+						<div class="mt-4">
+							<small>* Экономия на топливе рассчитана на 5 лет, исходя из ежегодного пробега 20 000 км при сравнении с аналоговым&nbsp;ДВС автомобилем.</small><br/>
+							<small>** Экономия на ТО и транспортном налоге рассчитана<br/>
+							на 5 лет, исходя из ежегодного пробега 20 000 км при сравнении с аналоговым ДВС автомобилем.</small>
+						</div>
+					</div>
+				</div>
+			</InfoSectionWithImage>
+		</div>
+	</section>
+
+	<SectionWithBg 
+		image={ {desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/salon-up-desk.webp', mobile: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/salon-up-mobile.webp'} }
+		classes="!py-10 md:!py-32 before:hidden"
+	>
+		<div class="container">		
+			<h2 class="!text-left !mx-0 before:hidden md:max-w-[600px]">Простор, комфорт и&nbsp;ощущение пространства</h2>
+			<ul class="list-disc sm:pl-4 pl-2 space-y-3 sm:space-y-4 mt-10 sm:max-w-[400px]">
+				<li>Уникальная 7-местная компоновка салона с трансформацией на все случаи жизни.</li>
+				<li>Сиденья второго ряда складываются в пропорции 40/60 и&nbsp;имеют мультирегулировку.</li>
+				<li>Сиденья третьего ряда складываются в&nbsp;пропорции 50/50.</li>
+				<li>Складывая отдельные сиденья или целые ряды, вы&nbsp;можете расширить багажное пространство до&nbsp;2&nbsp;125&nbsp;литров.</li>
+			</ul>
+		</div>
+	</SectionWithBg>
+
+	<section>
+		<div class="container">
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/GYNjoB_forma2.webp',}}>
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Функциональный салон</h3>
+					<ul class="list-disc pl-2 sm:pl-4">
+						<li>12.3 дюймовый мультимедийный комплекс Huawei HiCar</li>
+						<li>Интегрированная в нишу центральной консоли беспроводная зарядка для телефона</li>
+						<li>Акустически-комфортное остекление</li>
+						<li>Эргономичный  селектор с электронным управлением</li>
+						<li>Интеллектуальная функция очистки воздуха</li>
+					</ul>
+				</div>
+			</InfoSectionWithImage>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/qz5PuA__forma1.webp',}}>
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Комфортная посадка</h3>
+					<ul class="list-disc pl-2 sm:pl-4">
+						<li>Комфортное положение за рулем без компромиссов в отношении обзорности</li>
+						<li>Сиденье водителя и переднего пассажира с электрорегулировками, подогревом и вентиляцией</li>
+					</ul>
+				</div>
+			</InfoSectionWithImage>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/f9BaCg__forma4.webp',}}>
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Высококачественная аудиосистема</h3>
+					<ul class="list-disc pl-2 sm:pl-4">
+						<li>В салоне установлено 12 динамиков: 4 в передней части, 4 в зоне второго и третьего рядов и 4 в потолке. Кроме того, автомобиль оснащается профессиональным усилителем</li>
+						<li>Уникальный акустический дизайн и расположение динамиков обеспечивают иммерсивный музыкальный опыт с объемным звучанием, мощными басами и насыщенными средними частотами</li>
+					</ul>
+				</div>
+			</InfoSectionWithImage>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/fLh62B__i-space-app1.webp',}}>
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Управление с приложения EVOLUTE</h3>
+					<p>Телематическая система позволит управлять вашим EVOLUTE i‑SPACE через мобильное приложение собственной разработки бренда.</p>
+					<ul class="list-disc pl-2 sm:pl-4">
+						<li>Отслеживание уровня заряда и потребления электроэнергии</li>
+						<li>Поиск ближайшей ЭЗС</li>
+						<li>Управление зарядной сессией, находясь как рядом с вашим автомобилем, так и вдали от него</li>
+						<li>Управление климат-контролем и прогревом автомобиля дистанционно</li>
+						<li>Использование телефона для дистанционного открытия и закрытия дверей и багажника автомобиля</li>
+					</ul>
+				</div>
+			</InfoSectionWithImage>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/m68LJr__karplej.webp',}}>
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Apple CarPlay / Android Auto</h3>
+					<p>С помощью данных сервисов вы сможете получить доступ к музыке, навигации, сообщениям и другим функциям вашего смартфона на экране автомобиля</p>
+				</div>
+			</InfoSectionWithImage>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/oWQX5Y__panorama-up-desk-2.webp',}}>
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Панорамная крыша</h3>
+					<ul class="list-disc pl-2 sm:pl-4">
+						<li>Большая панорамная крыша со сдвижным люком для наслаждения видами всей семьей</li>
+						<li>Площадь панорамного остекления 1.14 м2</li>
+					</ul>
+				</div>
+			</InfoSectionWithImage>
+		</div>
+	</section>
+
+	<section>
+		<div class="container">
+			<h2 class="text-center">Драйв и функциональность</h2>
+		</div>
+	</section>	
+	<Banner banners={bannersSection} />
+	
+	<section>
+		<h2 class="text-center">Прогрессивный дизайн</h2>
+		<div class="container">
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/design-1.webp',}} direction="left">
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Светодиодная оптика</h3>
+					<p>Заостренные светодиодные фары с голубыми «веками» светят ярко и далеко.<br class="hidden md:block">Светодиодные дневные ходовые огни привлекают к автомобилю еще больше внимания.<br class="hidden md:block">Эти фары обеспечивают прекрасную обзорность и повышают заметность автомобиля на дороге вне зависимости от погоды и времени суток.<br class="hidden md:block">За счет этого повышается безопасность движения в снег, дождь, а также на неосвещенных участках</p>
+				</div>
+			</InfoSectionWithImage>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/design-2.webp',}} direction="left">
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Пятиспицевые 19-дюймовые колесные диски с аэродинамичным дизайном</h3>
+					<p>Подчеркивают мощь, спортивный характер и способствуют снижению аэродинамического сопротивления.</p>
+				</div>
+			</InfoSectionWithImage>
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/design-3.webp',}} direction="left">
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<h3 class="">Футуристичная матричная решетка радиатора</h3>
+					<p>Массивная матричная решетка радиатора в футуристичном стиле притягивает взгляды.</p>
+				</div>
+			</InfoSectionWithImage>
+		</div>
+	</section>
+
+	<section class="bg-[#404a59]">
+		<h2 class="text-center text-white">Системы помощи водителю</h2>
+		<div class="container">
+			<InfoSectionWithImage image={{desktop: 'https://cdn.alexsab.ru/b/evolute/img/models/i-space/sections/help-1.webp',}} direction="left">
+				<div class="flex flex-col justify-center gap-5 sm:gap-10 h-full">
+					<ul class="list-disc pl-2 sm:pl-4">
+						<li>Система мониторинга слепых зон</li>
+						<li>Ассистент смены полосы</li>
+						<li>Предупреждение о столкновении при движении задним ходом</li>
+						<li>Оповещение о перекрестном трафике сзади</li>
+						<li>Безопасное открытие дверей</li>
+						<li>Встроенный видеорегистратор</li>
+						<li>Камеры кругового обзора 360</li>
+						<li>Датчики света и дождя</li>
+					</ul>
+				</div>
+			</InfoSectionWithImage>
+		</div>
+	</section>
+
+	<ModelComplectations model={iSpaceModel} brand={brand} />
+	<Callback />
+	<Services />
+	<SeoText mdx="index" />
+	<Contacts/>
+</Layout>
