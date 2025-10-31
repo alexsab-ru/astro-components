@@ -3,13 +3,18 @@ import settings from '@/data/settings.json';
 const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
+import Brands from '@/components/Brands/Brands.astro';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${site_name}`;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('footer'));
+const salons = salonsData.filter((salon: ISalon) => {
+    if (salon?.hidden_in?.includes('footer')) return false;
+    if (salon?.type && salon.type.length) return salon.type.includes('footer');
+    return true;
+});
 const path = Astro.url.pathname;
 import DisclaimerCollapse from '@/components/DisclaimerCollapse/DisclaimerCollapse.astro';
 // SOCIALS
@@ -51,25 +56,29 @@ salons
                 }
                 </ul>
             </div>
-            <div class="">
-                <div class="text-xl mb-3 md:mb-5">Контакты</div>
-                <div class="space-y-6">
-                {
-                    salons.map(salon => (
-                    <div class="flex flex-col gap-3">
-                        <span class="flex items-center gap-1 flex-nowrap">
-                            <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" />
-                            <Fragment set:html={salon.address} />
-                        </span>
-                        <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
-                            <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" />
-                            {salon.phone}
-                        </a>
+            {
+                salons.length ? (
+                    <div class="">
+                        <div class="text-xl mb-3 md:mb-5">Контакты</div>
+                        <div class="space-y-6">
+                        {
+                            salons.map(salon => (
+                            <div class="flex flex-col gap-3">
+                                <span class="flex items-center gap-1 flex-nowrap">
+                                    <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" />
+                                    <Fragment set:html={salon.address} />
+                                </span>
+                                <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
+                                    <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" />
+                                    {salon.phone}
+                                </a>
+                            </div>
+                            ))
+                        }
+                        </div>
                     </div>
-                    ))
-                }
-                </div>
-            </div>
+                ) : <Brands type="logo" />
+            }
 
             <div class="">
                 {Object.keys(socials.footer).length ? (
