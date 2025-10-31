@@ -3,6 +3,7 @@ import './modules/scroll';
 import './modules/modals';
 import './modules/latest.posts';
 import './modules/stock-slider';
+import './modules/determiningBehaviorMouse/determiningBehaviorMouse';
 
 import ResponsiveMenu from './modules/ResponsiveMenu';
 
