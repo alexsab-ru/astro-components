@@ -7,7 +7,7 @@ import MenuListItem from './MenuListItem.astro';
 import { IS_HEADER_TRANSPARENT } from '@/const';
 const listClasses = IS_HEADER_TRANSPARENT ? 'relative z-20' : '';
 ---
-<ul class={listClasses + ' overflow-hidden flex flex-col lg:flex-row border-b lg:border-b-0'}>
+<ul class={`${listClasses} overflow-hidden flex flex-col lg:flex-row border-b lg:border-b-0`}>
 	{
 		links.map(link => (
 			<MenuListItem link={link} />

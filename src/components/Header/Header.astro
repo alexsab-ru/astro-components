@@ -5,9 +5,9 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 
 const path = Astro.url.pathname;
 
+import { LINKS_MENU as links, IS_HEADER_TRANSPARENT } from '@/const.js';
 import settings from '@/data/settings.json';
 const { header_top_line } = settings;
-import { LINKS_MENU as links, IS_HEADER_TRANSPARENT } from '@/const.js';
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
 import { Icon } from 'astro-icon/components';
@@ -28,10 +28,10 @@ const headerClasses = IS_HEADER_TRANSPARENT ? 'transparent-header backdrop-blur-
 ---
 <div
 	x-data="header"
-	class={headerParentClasses + ' top-0 transition-all duration-300 z-50'}
+	class={`${headerParentClasses} top-0 transition-all duration-300 z-50`}
 	:class="{'shadow-3xl': scrolling}"
 >
-	<header class={headerClasses}>
+	<header class={`${headerClasses}`}>
 		{
 			header_top_line && <HeaderTopLine content={header_top_line} />
 		}

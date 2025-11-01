@@ -37,7 +37,7 @@ const containerClasses = IS_HEADER_TRANSPARENT ? ' pt-[100px] pb-10 md:pt-[150px
 ---
 
 <div class={`swiper-slide banner-slide ${banner?.gradient === false ? '' : 'gradient'}`} data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
-	<div class={'container h-full relative z-[2]' + containerClasses}>
+	<div class={`container h-full relative z-[2] ${containerClasses}`}>
 		<div class="h-full flex flex-col justify-between">
 			<div class="mb-10">
 				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
