@@ -56,6 +56,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
   title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${legal_city_where}`} 
   description={`${model.mark_id} ${model.name} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={(model as any).image ?? (model as any).thumb}
+  brand={model?.mark_id}
 >
   <PageH1 h1={`Автомобиль ${model?.mark_id} ${model.name} в ${legal_city_where}`} classes="sr-only" />
 	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />

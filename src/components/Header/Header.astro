@@ -1,9 +1,14 @@
 ---
+
+const { brand = null } = Astro.props;
+const path = Astro.url.pathname;
+
+console.log(brand);
+
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('header'));
 
-const path = Astro.url.pathname;
 
 import { LINKS_MENU as links } from '@/const.js';
 import settings from '@/data/settings.json';
@@ -69,6 +74,7 @@ import './styles.scss';
 							title="Заказать звонок"
 							dataTitle="Заказать звонок"
 							dataFormName="Заказ звонка. Шапка"
+							{...brand ? {'data-sorting': brand} : {}}
 						/>
 						<a
 							href="#common-modal"
@@ -77,6 +83,7 @@ import './styles.scss';
 							title="Заказать звонок"
 							data-title="Заказать звонок"
 							data-form_name="Заказ звонка. Шапка"
+							{...brand ? {'data-sorting': brand} : {}}
 						>
 							<Icon name="mdi:phone-incoming" class="text-3xl" />
 						</a>
