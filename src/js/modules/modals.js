@@ -41,6 +41,21 @@ document.querySelectorAll(".popup-link").forEach(
 			if (formName && formInput) {
 				formInput.value = formName;
 			}
+
+			const sorting = link.dataset.sorting;
+			if(sorting){
+				window.dispatchEvent(new CustomEvent('priority-select', {
+					detail: { priorities: sorting.split(',') }
+				}));
+			}
+
+			const filtering = link.dataset.filtering;
+			if(filtering){				
+				window.dispatchEvent(new CustomEvent('filter-select', {
+					detail: { value: filtering.split(',') }
+				}));
+			}
+
 			reachGoal("form_open");
 			targetModal.classList.remove("hidden");
 			document.body.classList.add("overflow-hidden");
