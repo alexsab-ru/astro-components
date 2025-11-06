@@ -26,38 +26,14 @@ import { Icon } from 'astro-icon/components';
 <div
 	class="relative custom-select"
 	:class="{'opacity-70': disabled}"
-	x-data={ `{
-		open: false, 
-		options: ${JSON.stringify(options)},
-		models: ${JSON.stringify(models)},
-		placeholder: '${placeholder}',
-		disabled: ${disabled},
-		value: null,
-		pathname: window.location.pathname,
-		currentOption: {},
-		openSelect() {
-			if (!this.disabled) {
-				this.open = !this.open;
-			}
-		},
-		select(id){
-			if(!id) return;
-			this.currentOption = this.options.find(o => o.id === id);
-			this.value = this.currentOption.name || null;
-			this.open = false;
-			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
-		},
-	}` }
-	x-init="
-	if(pathname.includes('models')){
-		const split = pathname.slice(1, -1).split('/');
-		const modelID = split.length > 1 ? split[split.length-1] : null;
-		const model = modelID ? models.find(m => m.id === modelID) : null;
-		const currentOption = model ? options.find(o => o.name.toLowerCase().includes(model?.mark_id.toLowerCase())) : null;
-		if(currentOption){
-			select(currentOption?.id);
-		}
-	}"
+	x-data={`formSelect(${JSON.stringify(options)}, null, '${placeholder}', ${disabled})`}
+	x-init="initModelSelection()"
+	@select.window="select($event.detail.id)"
+	@filter-select.window="setFilter($event.detail.value)"
+	@sort-select.window="setSortType($event.detail.type)"
+	@search-select.window="setSearchQuery($event.detail.query)"
+	@priority-select.window="setPriorityOptions($event.detail.priorities)"
+	@reset-select-filters.window="resetFilters()"
 	x-cloak>
 	<input 
 		type="text" 

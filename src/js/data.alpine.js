@@ -7,6 +7,7 @@ import { footer } from './alpine/footer.js';
 import { sorting } from './alpine/sorting.js';
 import { complectation } from './alpine/complectation.js';
 import { store } from './alpine/store.js';
+import { formSelect } from './alpine/formSelect.js';
 
 document.addEventListener('alpine:init', () => {
 	usedPreviewGallery();
@@ -16,6 +17,7 @@ document.addEventListener('alpine:init', () => {
 	sorting();
 	complectation();
 	store();
+	formSelect();
 });
 
 // window.Alpine = Alpine;
