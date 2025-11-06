@@ -78,9 +78,12 @@ export function formSelect() {
 				const priorityList = [];
 				const otherList = [];
 				
-				processed.forEach(option => {
+				processed.forEach(option => {					
 					const isPriority = priorityIds.some(priorityId => 
-						option.id == priorityId || option.name === priorityId || String(option.id) === String(priorityId)
+						option.id == priorityId || 
+						option.name === priorityId || 
+						option.name.toLowerCase().includes(priorityId.toLowerCase()) || 
+						String(option.id) === String(priorityId)
 					);
 					if (isPriority) {
 						priorityList.push(option);
