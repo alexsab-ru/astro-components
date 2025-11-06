@@ -178,6 +178,7 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 				title="Купить"
 				dataTitle={`Купить ${model.mark_id}`}
 				dataFormName={`Купить. ${model.mark_id} ${model.name}`}
+				data-filtering={model.mark_id}
 			/>
 			<Button
 				classes="popup-link btn !px-4 flex-1 whitespace-nowrap"
