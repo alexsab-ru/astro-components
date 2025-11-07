@@ -47,3 +47,18 @@ export const getPair = (openURL = '') => {
 export function quoteEscaper(str) {
 	return str.replace(/"/g, '\\"').replace(/\n/g, '<br/>');
 }
+
+// Общая функция-хелпер для обработки значений (строка, массив, null)
+// Преобразует различные форматы входных данных в массив
+export function normalizeToArray(value) {
+	if (!value || value === '') {
+		return [];
+	} else if (typeof value === 'string') {
+		// Если строка, разделяем по запятым и очищаем от пробелов
+		return value.split(',').map(item => item.trim()).filter(item => item);
+	} else if (Array.isArray(value)) {
+		return value;
+	} else {
+		return [value];
+	}
+}
