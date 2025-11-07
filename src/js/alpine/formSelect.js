@@ -1,6 +1,7 @@
 // formSelect.js
 // Логика компонента FormSelect с поддержкой сортировки и фильтрации
 import Alpine from 'alpinejs';
+import { normalizeToArray } from '../utils/helpers';
 
 export function formSelect() {
 	Alpine.data('formSelect', (options, models, placeholder, disabled) => ({
@@ -19,7 +20,7 @@ export function formSelect() {
 		// Параметры для сортировки и фильтрации
 		searchQuery: '',
 		sortType: 'none', // 'none', 'asc', 'desc'
-		filterValue: null, // для фильтрации по значению
+		filterValues: null, // для фильтрации по значению
 		priorityOptions: [], // массив ID опций, которые должны быть в начале списка
 		
 		// Получить обработанные опции с учетом фильтрации и сортировки
@@ -35,16 +36,16 @@ export function formSelect() {
 			}
 			
 			// Применяем фильтрацию по значению (если указано)
-			if (this.filterValue !== null && this.filterValue !== undefined && this.filterValue !== '') {
-				// Если filterValue - массив, проверяем вхождение
-				if (Array.isArray(this.filterValue)) {
+			if (this.filterValues !== null && this.filterValues !== undefined && this.filterValues !== '') {
+				// Если filterValues - массив, проверяем вхождение
+				if (Array.isArray(this.filterValues)) {
 					processed = processed.filter(option => {
 						// Проверяем точное совпадение по ID
-						const matchesId = this.filterValue.some(filterVal => 
+						const matchesId = this.filterValues.some(filterVal => 
 							option.id == filterVal || String(option.id) === String(filterVal)
 						);
 						// Проверяем вхождение подстроки по name (без учета регистра)
-						const matchesName = this.filterValue.some(filterVal => {
+						const matchesName = this.filterValues.some(filterVal => {
 							const filterStr = String(filterVal).toLowerCase().trim();
 							const optionName = String(option.name).toLowerCase();
 							return optionName.includes(filterStr);
@@ -53,10 +54,10 @@ export function formSelect() {
 					});
 				} else {
 					// Для строки: точное совпадение по ID или вхождение подстроки по name
-					const filterStr = String(this.filterValue).toLowerCase().trim();
+					const filterStr = String(this.filterValues).toLowerCase().trim();
 					processed = processed.filter(option => {
 						// Точное совпадение по ID
-						const matchesId = option.id == this.filterValue || String(option.id) === String(this.filterValue);
+						const matchesId = option.id == this.filterValues || String(option.id) === String(this.filterValues);
 						// Вхождение подстроки по name (без учета регистра)
 						const optionName = String(option.name).toLowerCase();
 						const matchesName = optionName.includes(filterStr);
@@ -79,12 +80,7 @@ export function formSelect() {
 				const otherList = [];
 				
 				processed.forEach(option => {					
-					const isPriority = priorityIds.some(priorityId => 
-						option.id == priorityId || 
-						option.name === priorityId || 
-						option.name.toLowerCase().includes(priorityId.toLowerCase()) || 
-						String(option.id) === String(priorityId)
-					);
+					const isPriority = priorityIds.some(priorityId => option.name.toLowerCase().includes(priorityId.toLowerCase()));
 					if (isPriority) {
 						priorityList.push(option);
 					} else {
@@ -92,49 +88,24 @@ export function formSelect() {
 					}
 				});
 				
-				// Сортируем приоритетные опции в порядке указанных ID
-				priorityList.sort((a, b) => {
-					const indexA = priorityIds.findIndex(id => 
-						a.id == id || a.name === id || String(a.id) === String(id)
-					);
-					const indexB = priorityIds.findIndex(id => 
-						b.id == id || b.name === id || String(b.id) === String(id)
-					);
-					return indexA - indexB;
-				});
-				
-				// Сортируем остальные опции по алфавиту (если нужно)
-				if (this.sortType === 'asc') {
-					otherList.sort((a, b) => {
-						const nameA = a.name.toLowerCase();
-						const nameB = b.name.toLowerCase();
-						return nameA.localeCompare(nameB, 'ru');
-					});
-				} else if (this.sortType === 'desc') {
-					otherList.sort((a, b) => {
-						const nameA = a.name.toLowerCase();
-						const nameB = b.name.toLowerCase();
-						return nameB.localeCompare(nameA, 'ru');
-					});
-				}
-				
 				// Объединяем: сначала приоритетные, потом остальные
 				processed = [...priorityList, ...otherList];
-			} else {
-				// Если приоритетных опций нет, применяем обычную сортировку
-				if (this.sortType === 'asc') {
-					processed.sort((a, b) => {
-						const nameA = a.name.toLowerCase();
-						const nameB = b.name.toLowerCase();
-						return nameA.localeCompare(nameB, 'ru');
-					});
-				} else if (this.sortType === 'desc') {
-					processed.sort((a, b) => {
-						const nameA = a.name.toLowerCase();
-						const nameB = b.name.toLowerCase();
-						return nameB.localeCompare(nameA, 'ru');
-					});
-				}
+			}
+
+			// Сортировка
+
+			if (this.sortType === 'asc') {
+				processed.sort((a, b) => {
+					const nameA = a.name.toLowerCase();
+					const nameB = b.name.toLowerCase();
+					return nameA.localeCompare(nameB, 'ru');
+				});
+			} else if (this.sortType === 'desc') {
+				processed.sort((a, b) => {
+					const nameA = a.name.toLowerCase();
+					const nameB = b.name.toLowerCase();
+					return nameB.localeCompare(nameA, 'ru');
+				});
 			}
 			
 			return processed;
@@ -204,24 +175,16 @@ export function formSelect() {
 		},
 		
 		// Метод для установки фильтра
-		setFilter(value) {
-			this.filterValue = value;
+		setFilter(values) {
+			this.resetFilters();
+			this.filterValues = normalizeToArray(values);
 			this.updateOptions();
 		},
 		
 		// Метод для установки приоритетных опций
 		setPriorityOptions(priorities) {
-			// Поддерживаем разные форматы: строку с запятыми, массив, или null для сброса
-			if (!priorities || priorities === '') {
-				this.priorityOptions = [];
-			} else if (typeof priorities === 'string') {
-				// Если строка, разделяем по запятым
-				this.priorityOptions = priorities.split(',').map(id => id.trim()).filter(id => id);
-			} else if (Array.isArray(priorities)) {
-				this.priorityOptions = priorities;
-			} else {
-				this.priorityOptions = [priorities];
-			}
+			this.resetFilters();
+			this.priorityOptions = normalizeToArray(priorities);
 			this.updateOptions();
 		},
 		
@@ -229,7 +192,7 @@ export function formSelect() {
 		resetFilters() {
 			this.searchQuery = '';
 			this.sortType = 'none';
-			this.filterValue = null;
+			this.filterValues = null;
 			this.priorityOptions = [];
 			// Сбрасываем выбранное значение и опцию
 			this.value = null;

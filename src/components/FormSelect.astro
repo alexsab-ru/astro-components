@@ -29,7 +29,7 @@ import { Icon } from 'astro-icon/components';
 	x-data={`formSelect(${JSON.stringify(options)}, null, '${placeholder}', ${disabled})`}
 	x-init="initModelSelection()"
 	@select.window="select($event.detail.id)"
-	@filter-select.window="setFilter($event.detail.value)"
+	@filter-select.window="setFilter($event.detail.values)"
 	@sort-select.window="setSortType($event.detail.type)"
 	@search-select.window="setSearchQuery($event.detail.query)"
 	@priority-select.window="setPriorityOptions($event.detail.priorities)"

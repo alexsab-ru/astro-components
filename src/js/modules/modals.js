@@ -45,14 +45,14 @@ document.querySelectorAll(".popup-link").forEach(
 			const sorting = link.dataset.sorting;
 			if(sorting){
 				window.dispatchEvent(new CustomEvent('priority-select', {
-					detail: { priorities: sorting.split(',') }
+					detail: { priorities: sorting }
 				}));
 			}
 
 			const filtering = link.dataset.filtering;
 			if(filtering){				
 				window.dispatchEvent(new CustomEvent('filter-select', {
-					detail: { value: filtering.split(',') }
+					detail: { values: filtering }
 				}));
 			}
 
@@ -88,4 +88,5 @@ function closeModal(modal) {
 	});
 	modal.classList.add("hidden");
 	document.body.classList.remove("overflow-hidden");
+	// window.dispatchEvent(new CustomEvent('reset-select-filters'));
 }
