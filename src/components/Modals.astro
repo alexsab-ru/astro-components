@@ -8,13 +8,21 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('common_modal'));
 import {AGREE_LABEL} from '@/const'
+
+const { brand } = Astro.props;
+
+console.log('MODALS BRAND', brand);
+
+
 ---
 
 <!-- MODALS -->
 <div
 	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-[300000000]"
 	id="common-modal"
-	data-close>
+	data-close
+	{...brand ? {} : {}}	
+	>
 	<div
 		class="modal-content relative top-10 sm:top-20 mb-10 left-1/2 translate-x-[-50%] max-w-xl w-full bg-white py-8 px-4 sm:p-8">
 

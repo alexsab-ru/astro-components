@@ -42,6 +42,13 @@ document.querySelectorAll(".popup-link").forEach(
 				formInput.value = formName;
 			}
 
+			const showAll = link.dataset.showAllSalons;
+			if(showAll){
+				// window.dispatchEvent(new CustomEvent('priority-select', {
+				// 	detail: { priorities: showAll }
+				// }));
+			}
+
 			const sorting = link.dataset.sorting;
 			if(sorting){
 				window.dispatchEvent(new CustomEvent('priority-select', {
