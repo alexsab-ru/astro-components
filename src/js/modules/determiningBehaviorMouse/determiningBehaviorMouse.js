@@ -4,6 +4,7 @@ import { calculateSmoothnessScore } from './_calculateSmoothnessScore';
 import { calculateSpeedAndAcceleration } from './_calculateSpeedAndAcceleration';
 import { calculateTimeBetweenMouseEvents } from './_calculateTimeBetweenMouseEvents';
 import { calculateMouseActivityBeforeSending } from './_calculateMouseActivityBeforeSending';
+import { initFormTimers, getFormFillingTime, getInteractionCount } from './_calculateFormFillingTime';
 
 // Критерии для определения подозрительного поведения (возможный бот)
 const Criteria = {
@@ -53,7 +54,7 @@ function initMouseTracking() {
 }
 
 /**
- * Вычисляет все метрики поведения мыши перед отправкой формы
+ * Вычисляет все метрики поведения мыши
  * Записывает результаты в объект data
  */
 function calculateMouseMetrics() {
@@ -67,15 +68,54 @@ function calculateMouseMetrics() {
   data.mouseBehavior.timeBetweenMouseEvents = calculateTimeBetweenMouseEvents();
   // Подсчитываем общее количество событий мыши
   data.mouseBehavior.mouseActivityBeforeSending = calculateMouseActivityBeforeSending();
-  
-  console.log('Метрики мыши рассчитаны:', data.mouseBehavior);
 }
 
-// Инициализируем отслеживание при загрузке модуля
-initMouseTracking();
-document.addEventListener('click', () => {
+/**
+ * Обработчик отправки формы
+ * Собирает все метрики перед отправкой
+ * @param {Event} event - событие submit
+ */
+function handleFormSubmit(event) {
+  const form = event.target;
+  
+  // Вычисляем все метрики мыши
   calculateMouseMetrics();
-});
+  
+  // Получаем время заполнения конкретной формы
+  data.formFillingTime = getFormFillingTime(form);
+  
+  // Получаем количество взаимодействий с формой (для дополнительного анализа)
+  const interactionCount = getInteractionCount(form);
+  
+  console.log('📊 Полные данные о поведении пользователя:', {
+    ...data,
+    interactionCount: interactionCount
+  });
+  
+  // TODO: Здесь можно добавить проверку на подозрительное поведение
+  // TODO: И добавить скрытые поля с метриками в форму
+}
+
+/**
+ * Инициализирует все системы отслеживания поведения
+ * Запускается автоматически при загрузке модуля
+ */
+function init() {
+  // Инициализируем отслеживание движения мыши
+  initMouseTracking();
+  
+  // Инициализируем отслеживание времени заполнения форм
+  initFormTimers();
+  
+  // Добавляем обработчик на все формы страницы
+  // Используем capture phase (true) чтобы поймать событие раньше других обработчиков
+  document.addEventListener('submit', handleFormSubmit, true);
+  
+  console.log('✅ Система защиты от ботов инициализирована');
+}
+
+// Запускаем инициализацию при загрузке модуля
+init();
 
 // Экспортируем необходимые функции и данные
-export { data, Criteria, calculateMouseMetrics };
+export { data, Criteria, calculateMouseMetrics, handleFormSubmit };
