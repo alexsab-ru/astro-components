@@ -35,7 +35,7 @@ function BrandsList() {
 	return ( 
 		<>
 			<div className="flex items-end mb-8">
-				<span className="flex-shrink-1 leading-none! text-gray-600">Или выберите из списка</span>
+				<span className="shrink leading-none! text-gray-600">Или выберите из списка</span>
 				<span className="grow bg-gray-400 h-px ml-2"></span>
 			</div>
 
