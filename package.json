@@ -109,7 +109,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@hookform/resolvers": "^5.2.2",
     "@iconify-json/mdi": "^1.2.3",
-    "@tailwindcss/vite": "^4.1.14",
+    "@tailwindcss/vite": "^4.1.17",
     "@types/alpinejs": "^3.13.11",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
@@ -126,7 +126,7 @@
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",
     "swiper": "^12.0.2",
-    "tailwindcss": "^4.1.14",
+    "tailwindcss": "^4.1.17",
     "yup": "^1.7.0",
     "zustand": "5.0.8"
   },
