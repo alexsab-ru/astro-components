@@ -1,6 +1,8 @@
 // store.js
 import Alpine from 'alpinejs';
 
+import salons from '@/data/salons.json';
+
 export function store() {
 	Alpine.store('import', {
 		currentModel: null,
@@ -65,4 +67,17 @@ export function store() {
 			});
 		},
 	});
+
+	Alpine.store('salonsStore', {
+		data: salons ? salons.map((salon, idx) => ({id: idx, ...salon})) : [],
+		filteredData: salons ? salons.map((salon, idx) => ({id: idx, ...salon})) : [],
+		filterData(id = null) {
+			if(!id){
+				this.filteredData = this.data; 
+				return;
+			}  
+			this.filteredData = this.data.filter((salon, index) => salon.id === id);
+		}
+	});
+
 }
