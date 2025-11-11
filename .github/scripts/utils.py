@@ -343,6 +343,8 @@ def avitoColor(color):
         'бежевый': 'бежевый',
         'бордовый': 'бордовый',
         'белый': 'белый',
+        'белый/песочный': 'белый',
+        'белый/черный': 'белый',
         '089/20 белый перламутр': 'белый',
         '070/20 белый перламутр': 'белый',
         '058/11': 'белый',
@@ -1059,7 +1061,7 @@ def render_template_string(template: str, car, config):
 
 def get_h1(car, config):
     """Генерирует h1 для автомобиля по шаблону (car - dict)."""
-    template = config.get('h1_template') or '{{car.mark_id}} {{car.folder_id}} {{car.modification_id}}'
+    template = config.get('h1_template') or '{{car.mark_id}} {{car.folder_id}} {{car.modification_id}} {{car.complectation_name}} {{car.color}}'
     return render_template_string(template, car, config).strip()
 
 def get_breadcrumb(car, config):

@@ -8,6 +8,7 @@ const {
     title = 'BUTTON',
     dataTitle,
     dataFormName,
+    dataChooseDepartment,
     dataImg,
     dataImgPosition,
     icon,
@@ -26,6 +27,7 @@ import {Icon} from 'astro-icon/components';
         data-form_name={dataFormName}
         data-img={dataImg}
         data-img_position={dataImgPosition}
+        data-choose_department={dataChooseDepartment}
         {...rest}
     >
         <span>{title}</span>
@@ -46,6 +48,7 @@ import {Icon} from 'astro-icon/components';
             href={url ? url : '#'}
             data-title={dataTitle}
             data-form_name={dataFormName}
+            data-choose_department={dataChooseDepartment}
             {...rest}
         >
             <span>{title}</span>
