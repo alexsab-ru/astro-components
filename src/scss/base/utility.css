@@ -1,0 +1,46 @@
+/* 
+ * Dynamic utilities with arbitrary values for Tailwind CSS v4
+ * Использование: class="ptop-[2.7]" или class="fz-[1.5]"
+ * Символ * подставляется напрямую в calc()
+ */
+
+/* Адаптивный размер шрифта */
+@utility fz-* {
+	font-size: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}
+
+/* Адаптивные отступы сверху */
+@utility ptop-* {
+	padding-top: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}
+
+/* Адаптивные отступы снизу */
+@utility pbottom-* {
+	padding-bottom: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}
+
+/* Адаптивные отступы слева и справа */
+@utility plr-* {
+	padding-left: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+	padding-right: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}
+
+/* Адаптивное позиционирование: top */
+@utility t-* {
+	top: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}
+
+/* Адаптивное позиционирование: right */
+@utility r-* {
+	right: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}
+
+/* Адаптивное позиционирование: bottom */
+@utility b-* {
+	bottom: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}
+
+/* Адаптивное позиционирование: left */
+@utility l-* {
+	left: clamp(1rem, calc(calc(1vw + 1vh) * --value(--font-size-*, integer, [integer])), 3rem);
+}

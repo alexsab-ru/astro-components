@@ -1,0 +1,41 @@
+/* Belgee theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "Neo Sans Cyr";
+  src: url("https://cdn.alexsab.ru/fonts/belgee/NeoSansCyr-Light.woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neo Sans Cyr";
+  src: url("https://cdn.alexsab.ru/fonts/belgee/NeoSansCyr-Regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neo Sans Cyr";
+  src: url("https://cdn.alexsab.ru/fonts/belgee/NeoSansCyr-Medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-light-gray: #bacad2;
+  --color-dark-gray: #6c6d70;
+  --color-red-500: #df202a;
+  --color-accent-400: #00a1e3;
+  --color-accent-500: #0b70b7;
+
+  /* Fonts */
+  --font-sans: "Neo Sans Cyr", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+}
+
+

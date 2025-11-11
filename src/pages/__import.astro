@@ -33,17 +33,17 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			</ul>
 		
 			<Button 
-				classes="!text-white !no-underline"
+				classes="text-white! no-underline!"
 				title="Подобрать авто"
 				x-on:click.prevent="$store.import.step = 1"
 			/>
 		</div>
 
-		<div x-show="$store.import.step === 1" class="grid lg:grid-cols-3 xl:grid-cols-5 gap-y-5 xl:divide-x divide-black/20">
+		<div x-show="$store.import.step === 1" class="grid lg:grid-cols-3 xl:grid-cols-5 gap-y-5 xl:divide-x">
 			<div class="lg:px-5 first:pl-0">
 				<div class="text-xl font-bold mb-3">Выберите модель:</div>
 				<template x-for="(item, index) in $store.import.models" :key="item+index">
-					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-checked:bg-accent-400 has-checked:text-white border border-accent-400/20 mb-4 sm:mb-5">
 						<input type="radio" x-model="$store.import.model" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.modelSelected(item)" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
@@ -56,7 +56,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 						<div class="text-xl font-bold mb-3">Выберите комплектацию:</div>
 						<div class="grid xs:grid-cols-1 grid-cols-2 gap-4 sm:gap-5">
 							<template x-for="(item, index) in $store.import.complectations" :key="item+index">
-								<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20">
+								<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-checked:bg-accent-400 has-checked:text-white border border-accent-400/20">
 									<input type="radio" x-model="$store.import.complectation" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.colorsBlock)" />
 									<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 										<span class="fake-radio-black rounded-full before:rounded-full"></span>
@@ -70,7 +70,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 					<div class="text-xl font-bold mb-3">Выберите цвет:</div>
 					<div class="grid xs:grid-cols-1 grid-cols-2 gap-4 sm:gap-5 xl:grid-cols-1">
 						<template x-for="(item, index) in $store.import.colors" :key="item.id+index">
-							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20">
+							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-checked:bg-accent-400 has-checked:text-white border border-accent-400/20">
 								<input type="radio" x-model="$store.import.color" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.drivesBlock)" />
 								<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 									<span class="fake-radio-black rounded-full before:rounded-full"></span>
@@ -83,7 +83,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			<div x-ref="drivesBlock" x-show="$store.import.model && $store.import.color" class="lg:px-5 first:pl-0">
 						<div class="text-xl font-bold mb-3">Привод:</div>
 						<template x-for="(item, index) in $store.import.drives" :key="item+index">
-							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+							<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-checked:bg-accent-400 has-checked:text-white border border-accent-400/20 mb-4 sm:mb-5">
 								<input type="radio" x-model="$store.import.drive" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" />
 								<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 									<span class="fake-radio-black rounded-full before:rounded-full"></span>
@@ -94,11 +94,11 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			</div>
 		</div>
 
-		<div x-show="$store.import.step === 2" class="grid lg:grid-cols-3 gap-y-5 lg:divide-x divide-black/20">
+		<div x-show="$store.import.step === 2" class="grid lg:grid-cols-3 gap-y-5 lg:divide-x">
 			<div class="lg:px-5 first:pl-0" x-ref="termsOfPurchaseBlock">
 				<div class="text-xl font-bold mb-3">Условия покупки:</div>
 				<template x-for="(item, index) in $store.import.termsOfPurchase" :key="item+index">
-					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-checked:bg-accent-400 has-checked:text-white border border-accent-400/20 mb-4 sm:mb-5">
 						<input type="radio" x-model="$store.import.termOfPurchase" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.initialPaymentsBlock)" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
@@ -110,7 +110,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			<div class="lg:px-5 first:pl-0" x-ref="initialPaymentsBlock">
 				<div class="text-xl font-bold mb-3">Первоначальный взнос:</div>
 				<template x-for="(item, index) in $store.import.initialPayments" :key="item+index">
-					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-checked:bg-accent-400 has-checked:text-white border border-accent-400/20 mb-4 sm:mb-5">
 						<input type="radio" x-model="$store.import.initialPayment" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" @change="$store.import.scrollToElement($refs.planningPurchasesBlock)" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
@@ -122,7 +122,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			<div class="lg:px-5 first:pl-0" x-ref="planningPurchasesBlock">
 				<div class="text-xl font-bold mb-3">Когда планируете покупку?</div>
 				<template x-for="(item, index) in $store.import.planningPurchases" :key="item+index">
-					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-[:checked]:bg-accent-400 has-[:checked]:text-white border border-accent-400/20 mb-4 sm:mb-5">
+					<label class="label cursor-pointer flex items-center px-3 py-2 md:py-3 rounded has-checked:bg-accent-400 has-checked:text-white border border-accent-400/20 mb-4 sm:mb-5">
 						<input type="radio" x-model="$store.import.planningPurchase" :value="item" class="absolute w-0 h-0 opacity-0 invisible peer" />
 						<div class={`flex items-center flex-nowrap gap-x-2 text-black peer-checked:text-white`}>
 							<span class="fake-radio-black rounded-full before:rounded-full"></span>
@@ -133,21 +133,21 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			</div>
 		</div>
 
-		<div class="space-y-6 max-w-screen-sm w-full mx-auto mb-5" x-show="$store.import.step === 3">
+		<div class="space-y-6 max-w-(--breakpoint-sm) w-full mx-auto mb-5" x-show="$store.import.step === 3">
 			<ul class="space-y-5">
-				<li class="flex items-end justify-between leading-none"><span>Модель</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.brand + ' ' + $store.import.model"></span>
+				<li class="flex items-end justify-between leading-none"><span>Модель</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.brand + ' ' + $store.import.model"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Комплектация</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.complectation"></span>
+				<li class="flex items-end justify-between leading-none"><span>Комплектация</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.complectation"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Цвет</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.color"></span>
+				<li class="flex items-end justify-between leading-none"><span>Цвет</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.color"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Привод</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.drive"></span>
+				<li class="flex items-end justify-between leading-none"><span>Привод</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.drive"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Условия покупки</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.termOfPurchase"></span>
+				<li class="flex items-end justify-between leading-none"><span>Условия покупки</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.termOfPurchase"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Первоначальный взнос</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.initialPayment"></span>
+				<li class="flex items-end justify-between leading-none"><span>Первоначальный взнос</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.initialPayment"></span>
 				</li>
-				<li class="flex items-end justify-between leading-none"><span>Покупка</span><span class="flex-grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.planningPurchase"></span>
+				<li class="flex items-end justify-between leading-none"><span>Покупка</span><span class="grow border-b border-dotted"></span><span class="font-bold" x-text="$store.import.planningPurchase"></span>
 				</li>
 			</ul>
 			<input type="hidden" name="form" value="Форма предзаказа" />
@@ -155,7 +155,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 				type="email"
 				tabindex="-1"
 				name="email"
-				class="h-0 opacity-0 absolute -z-[100]"
+				class="h-0 opacity-0 absolute -z-100"
 				placeholder="mail@example.com"
 			/>
 			<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
@@ -189,13 +189,13 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			:class="{'translate-y-0 opacity-100': $store.import.color && $store.import.drive && $store.import.step !== 0, 'translate-y-full opacity-0': !$store.import.color || !$store.import.drive || $store.import.step === 0}"
 		>
 			<Button 
-				classes="!no-underline btn-o black !m-0"
+				classes="no-underline! btn-o black m-0!"
 				title="Назад"
 				x-on:click.prevent="$store.import.step--; $store.import.scrollToElement(window)"
 				:style="$store.import.step < 2 ? 'display: none' : ''"
 			/>
 			<Button 
-				classes="!text-white !no-underline !m-0"
+				classes="text-white! no-underline! m-0!"
 				title="Далее"
 				x-on:click.prevent="$store.import.step++; $store.import.scrollToElement(window)"
 				:style="$store.import.step > 2 ? 'display: none' : ''"
@@ -203,7 +203,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			<div :class="{'hidden': $store.import.step < 3}">
 				<Button 
 					view="form-button"
-					classes="!text-white !no-underline !m-0 sm:!py-3.5"
+					classes="text-white! no-underline! m-0! sm:py-3.5!"
 					title="Отправить"
 				/>
 			</div>

@@ -5,8 +5,7 @@ interface Props {
 	color?: string;
 }
 
-const { breadcrumb, color = 'black' } = Astro.props;
-const linkClass = `!text-${color}`;
+const { breadcrumb, color = 'text-(--color-black)!' } = Astro.props;
 
 breadcrumb.unshift({name:"Главная", href:"/"});
 ---
@@ -14,11 +13,11 @@ breadcrumb.unshift({name:"Главная", href:"/"});
 <nav aria-label="Breadcrumb" class="mb-5 sm:mb-10">
 	<ol class="flex items-center flex-nowrap whitespace-nowrap gap-1">
 		{breadcrumb.map((crumb, index) => (
-		<li class={`!m-0 flex items-center flex-nowrap gap-1 ${(breadcrumb.length - 1) === index ? 'truncate' : ''}`}>
+		<li class={`m-0! flex items-center flex-nowrap gap-1 ${(breadcrumb.length - 1) === index ? 'truncate' : ''}`}>
 		{(breadcrumb.length - 1) !== index ? (
-			<a href={crumb.href} class={`!text-xs sm:!text-sm !m-0 !leading-none !no-underline font-semibold hover:opacity-80 ${linkClass}`}>{crumb.name}</a> <span class="text-xs !leading-none">&#62;</span>
+			<a href={crumb.href} class={`text-xs! sm:text-sm! m-0! leading-none! no-underline! font-semibold hover:opacity-80 ${color}`}>{crumb.name}</a> <span class="text-xs leading-none!">&#62;</span>
 		) : (
-			<span class="text-xs sm:text-sm !leading-none opacity-80 truncate">{crumb.name}</span>
+			<span class="text-xs sm:text-sm leading-none! opacity-80 truncate">{crumb.name}</span>
 		)}
 		</li>
 		))}
