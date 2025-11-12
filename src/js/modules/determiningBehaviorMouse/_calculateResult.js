@@ -37,13 +37,15 @@ const SUSPICIOUS_COUNT_THRESHOLD = 2;
  * Анализирует все собранные метрики и определяет, является ли пользователь человеком или ботом
  * @param {Object} data - Объект с полными данными о поведении пользователя
  * @param {Object} criteria - Объект с критериями для определения бота
- * @returns {string} ANALYSIS_RESULT.HUMAN | ANALYSIS_RESULT.BOT | ANALYSIS_RESULT.SUSPICIOUS
+ * @returns {Object} { user: string, description: string }
  */
 function calculateResult(data, criteria) {
   // Проверяем, что данные собраны
   if (!data || !data.device) {
-    console.warn('⚠️ Недостаточно данных для анализа');
-    return ANALYSIS_RESULT.SUSPICIOUS;
+    return {
+      user: ANALYSIS_RESULT.SUSPICIOUS,
+      description: 'Недостаточно данных для анализа'
+    };
   }
   
   // Массив для сбора подозрительных признаков
@@ -53,14 +55,18 @@ function calculateResult(data, criteria) {
   
   // 1. Обнаружен headless браузер - это почти 100% бот
   if (data.device.headless && data.device.headless.isHeadless) {
-    console.warn('🚨 КРИТИЧНО: Обнаружен headless браузер!', data.device.headless.suspiciousFeatures);
-    return ANALYSIS_RESULT.BOT;
+    return {
+      user: ANALYSIS_RESULT.BOT,
+      description: `Обнаружен headless браузер. Признаки: ${data.device.headless.suspiciousFeatures.join(', ')}`
+    };
   }
   
   // 2. Слишком быстрое заполнение формы (менее критического порога) - невозможно для человека
   if (data.formFillingTime !== null && data.formFillingTime < TIME_THRESHOLDS.CRITICAL_FAST) {
-    console.warn(`🚨 КРИТИЧНО: Форма заполнена менее чем за ${TIME_THRESHOLDS.CRITICAL_FAST}ms!`);
-    return ANALYSIS_RESULT.BOT;
+    return {
+      user: ANALYSIS_RESULT.BOT,
+      description: `Форма заполнена слишком быстро: ${data.formFillingTime}ms (критический порог: ${TIME_THRESHOLDS.CRITICAL_FAST}ms)`
+    };
   }
   
   // === ПРОВЕРКИ В ЗАВИСИМОСТИ ОТ ТИПА УСТРОЙСТВА ===
@@ -72,7 +78,7 @@ function calculateResult(data, criteria) {
   
   if (isMobile) {
     // ============ ПРОВЕРКИ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ============
-    console.log('📱 Анализ мобильного устройства');
+    // console.log('📱 Анализ мобильного устройства');
     
     // Для мобильных используем упрощенные критерии
     
@@ -108,12 +114,14 @@ function calculateResult(data, criteria) {
     
   } else {
     // ============ ПРОВЕРКИ ДЛЯ ДЕСКТОПНЫХ УСТРОЙСТВ ============
-    console.log('🖥️ Анализ десктопного устройства');
+    // console.log('🖥️ Анализ десктопного устройства');
     
     // 1. Критическая проверка: полное отсутствие движения мыши на desktop
     if (data.mouseBehavior.mouseActivityBeforeSending === 0) {
-      console.warn(`🚨 КРИТИЧНО: Нет движения мыши вообще на ${DEVICE_TYPE.DESKTOP} устройстве!`);
-      return ANALYSIS_RESULT.BOT;
+      return {
+        user: ANALYSIS_RESULT.BOT,
+        description: `Полное отсутствие движения мыши на ${DEVICE_TYPE.DESKTOP} устройстве`
+      };
     }
     
     // 2. Проверяем количество изменений направления
@@ -187,22 +195,35 @@ function calculateResult(data, criteria) {
   
   const suspiciousCount = suspiciousFlags.length;
   
-  // Логируем результаты анализа
+  // Формируем результат на основе количества подозрительных признаков
   if (suspiciousCount === 0) {
-    console.log('✅ Анализ завершен: Все проверки пройдены');
-    return ANALYSIS_RESULT.HUMAN;
+    return {
+      user: ANALYSIS_RESULT.HUMAN,
+      description: 'Все проверки пройдены успешно'
+    };
   } else if (suspiciousCount === 1) {
-    console.log('⚠️ Анализ завершен: Обнаружен 1 подозрительный признак');
-    console.log('Признак:', suspiciousFlags[0]);
-    return ANALYSIS_RESULT.SUSPICIOUS;
+    // Один подозрительный признак - выводим его описание
+    return {
+      user: ANALYSIS_RESULT.SUSPICIOUS,
+      description: `Обнаружен 1 подозрительный признак: ${suspiciousFlags[0].message}`
+    };
   } else if (suspiciousCount >= SUSPICIOUS_COUNT_THRESHOLD) {
-    console.warn(`🚨 Анализ завершен: Обнаружено ${suspiciousCount} подозрительных признаков`);
-    console.warn('Признаки:', suspiciousFlags);
-    return ANALYSIS_RESULT.BOT;
+    // Два или более признаков - формируем список
+    const flagsDescription = suspiciousFlags
+      .map((flag, index) => `${index + 1}. ${flag.message}`)
+      .join('; ');
+    
+    return {
+      user: ANALYSIS_RESULT.BOT,
+      description: `Обнаружено ${suspiciousCount} подозрительных признаков: ${flagsDescription}`
+    };
   }
   
   // Этот случай не должен произойти, но на всякий случай
-  return ANALYSIS_RESULT.SUSPICIOUS;
+  return {
+    user: ANALYSIS_RESULT.SUSPICIOUS,
+    description: 'Неопределенное поведение'
+  };
 }
 
 /**
@@ -216,13 +237,14 @@ function getDetailedAnalysis(data, criteria) {
   const result = calculateResult(data, criteria);
   
   return {
-    result: result,
+    result: result, // { user, description }
     deviceType: data.device?.type || 'unknown',
     isMobile: data.device?.type === DEVICE_TYPE.MOBILE || 
               data.device?.type === DEVICE_TYPE.TABLET || 
               data.device?.touchSupport,
     headlessDetected: data.device?.headless?.isHeadless || false,
     formFillingTime: data.formFillingTime,
+    interactionCount: data.interactionCount || 0,
     timestamp: Date.now()
   };
 }
