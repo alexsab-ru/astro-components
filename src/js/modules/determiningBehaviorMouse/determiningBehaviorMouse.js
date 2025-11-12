@@ -42,8 +42,12 @@ const data = {
     mouseActivityBeforeSending: null
   },
   formFillingTime: null,
+  interactionCount: null,
   device: null,
-  result: null,
+  result: {
+    user: null,
+    description: null,
+  },
 };
 
 /**
@@ -53,8 +57,6 @@ const data = {
 function initMouseTracking() {
   // Добавляем обработчик на весь документ
   document.addEventListener('mousemove', handleMouseMove);
-  
-  console.log('Отслеживание движения мыши активировано');
 }
 
 /**
@@ -89,27 +91,16 @@ function handleFormSubmit(event) {
   data.formFillingTime = getFormFillingTime(form);
   
   // Получаем количество взаимодействий с формой (для дополнительного анализа)
-  const interactionCount = getInteractionCount(form);
+  data.interactionCount = getInteractionCount(form);
+  
   
   // Вычисляем итоговый результат: человек или бот
   data.result = calculateResult(data, Criteria);
   
-  // Выводим полные данные в консоль
-  console.log('📊 Полные данные о поведении пользователя:', {
-    ...data,
-    interactionCount: interactionCount
-  });
-  
-  // Выводим итоговый вердикт
-  if (data.result === ANALYSIS_RESULT.HUMAN) {
-    console.log('✅ РЕЗУЛЬТАТ: Это человек');
-  } else if (data.result === ANALYSIS_RESULT.BOT) {
-    console.warn('🤖 РЕЗУЛЬТАТ: Это бот!');
-  } else if (data.result === ANALYSIS_RESULT.SUSPICIOUS) {
-    console.warn('⚠️ РЕЗУЛЬТАТ: Подозрительное поведение');
-  }
+  // Выводим полные данные в консоль (для отладки)
+  // console.log('📊 Полные данные о поведении пользователя:', data);
 
-  event.preventDefault();
+  // event.preventDefault();
   
   // TODO: Добавить скрытые поля с метриками в форму
 }
@@ -122,7 +113,6 @@ function init() {
   // Собираем информацию об устройстве сразу при загрузке
   // Эти данные не изменятся во время сессии
   data.device = getDeviceInfo();
-  console.log('🖥️ Информация об устройстве собрана:', data.device);
   
   // Инициализируем отслеживание движения мыши
   initMouseTracking();
@@ -133,8 +123,6 @@ function init() {
   // Добавляем обработчик на все формы страницы
   // Используем capture phase (true) чтобы поймать событие раньше других обработчиков
   document.addEventListener('submit', handleFormSubmit, true);
-  
-  console.log('✅ Система защиты от ботов инициализирована');
 }
 
 // Запускаем инициализацию при загрузке модуля
