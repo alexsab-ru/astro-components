@@ -6,6 +6,7 @@ import { calculateTimeBetweenMouseEvents } from './_calculateTimeBetweenMouseEve
 import { calculateMouseActivityBeforeSending } from './_calculateMouseActivityBeforeSending';
 import { initFormTimers, getFormFillingTime, getInteractionCount } from './_calculateFormFillingTime';
 import { getDeviceInfo } from './_determiningDevice';
+import { calculateResult, ANALYSIS_RESULT } from './_calculateResult';
 
 // Критерии для определения подозрительного поведения (возможный бот)
 const Criteria = {
@@ -42,6 +43,7 @@ const data = {
   },
   formFillingTime: null,
   device: null,
+  result: null,
 };
 
 /**
@@ -89,15 +91,27 @@ function handleFormSubmit(event) {
   // Получаем количество взаимодействий с формой (для дополнительного анализа)
   const interactionCount = getInteractionCount(form);
   
+  // Вычисляем итоговый результат: человек или бот
+  data.result = calculateResult(data, Criteria);
+  
+  // Выводим полные данные в консоль
   console.log('📊 Полные данные о поведении пользователя:', {
     ...data,
     interactionCount: interactionCount
   });
-
-  // event.preventDefault();
   
-  // TODO: Здесь можно добавить проверку на подозрительное поведение
-  // TODO: И добавить скрытые поля с метриками в форму
+  // Выводим итоговый вердикт
+  if (data.result === ANALYSIS_RESULT.HUMAN) {
+    console.log('✅ РЕЗУЛЬТАТ: Это человек');
+  } else if (data.result === ANALYSIS_RESULT.BOT) {
+    console.warn('🤖 РЕЗУЛЬТАТ: Это бот!');
+  } else if (data.result === ANALYSIS_RESULT.SUSPICIOUS) {
+    console.warn('⚠️ РЕЗУЛЬТАТ: Подозрительное поведение');
+  }
+
+  event.preventDefault();
+  
+  // TODO: Добавить скрытые поля с метриками в форму
 }
 
 /**
