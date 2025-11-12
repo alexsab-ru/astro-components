@@ -72,9 +72,15 @@ document.querySelectorAll(".popup-link").forEach(
 			}
 
 			const root = document.documentElement;
-			if(root.dataset.brand){
+			const brand = root.dataset.brand;
+			if(brand){
 				let salonsStore = Alpine.store('salonsStore');
-				salonsStore.filterData(2);
+				const sorting = link.dataset.sorting;
+				if(sorting){
+					salonsStore.filteredData = salonsStore.sortingData(brand);
+				}else{
+					salonsStore.filteredData = salonsStore.filterData(brand);
+				}
 			}
 			
 
