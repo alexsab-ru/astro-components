@@ -73,12 +73,23 @@ export function store() {
 		filteredData: salons.map((salon, idx) => ({id: idx, ...salon})),
 		pageFilteredData: salons.map((salon, idx) => ({id: idx, ...salon})),
 		shouldResetModalSelect: false,
+		// Вспомогательная функция для проверки соответствия бренду
+		matchesBrand(option, brandString) {
+			if (!brandString) return false;
+			const brands = brandString.split(',').map(b => b.trim().toLowerCase());
+			const optionBrands = option?.brands ? option.brands.toLowerCase() : '';
+			const optionName = option?.name ? option.name.toLowerCase() : '';
+			
+			return brands.some(brand => 
+				optionBrands.includes(brand) || optionName.includes(brand)
+			);
+		},
 		filterData(brand = null) {
 			if(!brand){
 				this.filteredData = this.data;
 				return this.data;
 			}  
-			const filtered = this.data.filter((option, index) => option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase()));
+			const filtered = this.data.filter((option) => this.matchesBrand(option, brand));
 			this.filteredData = filtered;
 			return filtered;
 		},
@@ -87,7 +98,7 @@ export function store() {
 				this.pageFilteredData = this.data;
 				return this.data;
 			}
-			const filtered = this.data.filter((option, index) => option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase()));
+			const filtered = this.data.filter((option) => this.matchesBrand(option, brand));
 			this.pageFilteredData = filtered;
 			return filtered;
 		},
@@ -101,7 +112,7 @@ export function store() {
 			const otherList = [];
 			
 			this.data.map(option => {
-				const isPriority = option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase());
+				const isPriority = this.matchesBrand(option, brand);
 				isPriority ? priorityList.push(option) : otherList.push(option);
 			});
 			const sorted = [...priorityList, ...otherList];
