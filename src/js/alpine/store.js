@@ -72,17 +72,29 @@ export function store() {
 		data: salons.map((salon, idx) => ({id: idx, ...salon})),
 		filteredData: salons.map((salon, idx) => ({id: idx, ...salon})),
 		pageFilteredData: salons.map((salon, idx) => ({id: idx, ...salon})),
+		shouldResetModalSelect: false,
 		filterData(brand = null) {
 			if(!brand){
 				this.filteredData = this.data;
-				return;
+				return this.data;
 			}  
-			return this.data.filter((option, index) => option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase()));
+			const filtered = this.data.filter((option, index) => option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase()));
+			this.filteredData = filtered;
+			return filtered;
+		},
+		filterPageData(brand = null) {
+			if(!brand){
+				this.pageFilteredData = this.data;
+				return this.data;
+			}
+			const filtered = this.data.filter((option, index) => option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase()));
+			this.pageFilteredData = filtered;
+			return filtered;
 		},
 		sortingData(brand = null) {
 			if(!brand){
 				this.filteredData = this.data;
-				return;
+				return this.data;
 			}
 			// Разделяем опции на приоритетные и остальные
 			const priorityList = [];
@@ -92,7 +104,14 @@ export function store() {
 				const isPriority = option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase());
 				isPriority ? priorityList.push(option) : otherList.push(option);
 			});
-			return [...priorityList, ...otherList];
+			const sorted = [...priorityList, ...otherList];
+			this.filteredData = sorted;
+			// Устанавливаем флаг для очистки селекта
+			this.shouldResetModalSelect = true;
+			Alpine.nextTick(() => {
+				this.shouldResetModalSelect = false;
+			});
+			return sorted;
 		},
 	});
 }
