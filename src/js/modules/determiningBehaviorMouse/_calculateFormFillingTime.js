@@ -16,7 +16,7 @@ function startFormTimer(formElement) {
       interactionCount: 1    // счетчик взаимодействий с формой
     });
     
-    console.log('⏱️ Таймер формы запущен');
+    // console.log('⏱️ Таймер формы запущен');
   } else {
     // Если таймер уже есть - просто увеличиваем счетчик взаимодействий
     const timer = formTimers.get(formElement);
@@ -35,13 +35,13 @@ function getFormFillingTime(formElement) {
   // Если таймер был запущен - вычисляем разницу времени
   if (timer) {
     const fillingTime = Date.now() - timer.startTime;
-    console.log(`⏱️ Время заполнения формы: ${fillingTime}ms (${(fillingTime / 1000).toFixed(1)}s)`);
+    // console.log(`⏱️ Время заполнения формы: ${fillingTime}ms (${(fillingTime / 1000).toFixed(1)}s)`);
     return fillingTime;
   }
   
   // Если таймер не был запущен (форма отправлена без взаимодействий)
   // Это подозрительно - возможно бот
-  console.warn('⚠️ Форма отправлена без взаимодействий!');
+  // console.warn('⚠️ Форма отправлена без взаимодействий!');
   return 0;
 }
 
@@ -92,7 +92,7 @@ function initFormTimers() {
     }
   }, true);
   
-  console.log('✅ Отслеживание времени заполнения форм активировано');
+  // console.log('✅ Отслеживание времени заполнения форм активировано');
 }
 
 // Экспортируем функции для использования в основном модуле
