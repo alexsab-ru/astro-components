@@ -69,15 +69,30 @@ export function store() {
 	});
 
 	Alpine.store('salonsStore', {
-		data: salons ? salons.map((salon, idx) => ({id: idx, ...salon})) : [],
-		filteredData: salons ? salons.map((salon, idx) => ({id: idx, ...salon})) : [],
-		filterData(id = null) {
-			if(!id){
-				this.filteredData = this.data; 
+		data: salons.map((salon, idx) => ({id: idx, ...salon})),
+		filteredData: salons.map((salon, idx) => ({id: idx, ...salon})),
+		pageFilteredData: salons.map((salon, idx) => ({id: idx, ...salon})),
+		filterData(brand = null) {
+			if(!brand){
+				this.filteredData = this.data;
 				return;
 			}  
-			this.filteredData = this.data.filter((salon, index) => salon.id === id);
-		}
+			return this.data.filter((option, index) => option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase()));
+		},
+		sortingData(brand = null) {
+			if(!brand){
+				this.filteredData = this.data;
+				return;
+			}
+			// Разделяем опции на приоритетные и остальные
+			const priorityList = [];
+			const otherList = [];
+			
+			this.data.map(option => {
+				const isPriority = option?.brands && option.brands.toLowerCase().includes(brand.toLowerCase()) || option.name.toLowerCase().includes(brand.toLowerCase());
+				isPriority ? priorityList.push(option) : otherList.push(option);
+			});
+			return [...priorityList, ...otherList];
+		},
 	});
-
 }
