@@ -5,6 +5,7 @@ import { calculateSpeedAndAcceleration } from './_calculateSpeedAndAcceleration'
 import { calculateTimeBetweenMouseEvents } from './_calculateTimeBetweenMouseEvents';
 import { calculateMouseActivityBeforeSending } from './_calculateMouseActivityBeforeSending';
 import { initFormTimers, getFormFillingTime, getInteractionCount } from './_calculateFormFillingTime';
+import { getDeviceInfo } from './_determiningDevice';
 
 // Критерии для определения подозрительного поведения (возможный бот)
 const Criteria = {
@@ -40,6 +41,7 @@ const data = {
     mouseActivityBeforeSending: null
   },
   formFillingTime: null,
+  device: null,
 };
 
 /**
@@ -91,6 +93,8 @@ function handleFormSubmit(event) {
     ...data,
     interactionCount: interactionCount
   });
+
+  // event.preventDefault();
   
   // TODO: Здесь можно добавить проверку на подозрительное поведение
   // TODO: И добавить скрытые поля с метриками в форму
@@ -101,6 +105,11 @@ function handleFormSubmit(event) {
  * Запускается автоматически при загрузке модуля
  */
 function init() {
+  // Собираем информацию об устройстве сразу при загрузке
+  // Эти данные не изменятся во время сессии
+  data.device = getDeviceInfo();
+  console.log('🖥️ Информация об устройстве собрана:', data.device);
+  
   // Инициализируем отслеживание движения мыши
   initMouseTracking();
   
