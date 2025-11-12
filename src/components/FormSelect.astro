@@ -55,12 +55,29 @@ import { Icon } from 'astro-icon/components';
 		},
 		effect(){
 			this.options = ${modalData ? '$store.salonsStore.filteredData' : pageData ? '$store.salonsStore.pageFilteredData' : 'this.options'};
-			$store.salonsStore.filteredData.length === 1 ? this.selectOneOption($store.salonsStore.filteredData[0].id) : this.resetSelect();
-			this.options.length === 1 ? this.select(this.options[0].id) : null;
+			${pageData ? `
+			if ($store.salonsStore.pageFilteredData.length === 1) {
+				this.selectOneOption($store.salonsStore.pageFilteredData[0].id);
+			} else if ($store.salonsStore.pageFilteredData.length > 1 && this.disabled) {
+				this.disabled = false;
+			}
+			` : modalData ? `
+			if ($store.salonsStore.shouldResetModalSelect) {
+				this.resetSelect();
+			} else if ($store.salonsStore.filteredData.length === 1) {
+				this.selectOneOption($store.salonsStore.filteredData[0].id);
+			} else if ($store.salonsStore.filteredData.length > 1 && this.disabled) {
+				this.disabled = false;
+			}
+			` : `
+			if (this.options.length === 1 && !this.value) {
+				this.select(this.options[0].id);
+			}
+			`}
 		},
 	}` }
 	x-effect="effect()"
-	x-init={`document.documentElement.dataset.brand ? $store.salonsStore.pageFilteredData = $store.salonsStore.filterData(document.documentElement.dataset.brand) : null `}
+	x-init={`document.documentElement.dataset.brand ? $store.salonsStore.filterPageData(document.documentElement.dataset.brand) : null `}
 	x-cloak>
 	<input 
 		type="text" 
