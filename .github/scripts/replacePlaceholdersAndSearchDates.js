@@ -29,6 +29,7 @@ class PlaceholderProcessor {
         
         // Placeholders
         this.carsPlaceholder = {};
+        this.carsPlaceholderWithoutDisclaimer = {}; // Плейсхолдеры без дисклеймера для seo.json
         this.settingsPlaceholder = {};
     }
 
@@ -116,7 +117,7 @@ class PlaceholderProcessor {
                     this.carsPlaceholder[plainKey] = car[key];
                 }
 
-                // Плейсхолдер с форматированием
+                // Плейсхолдер с форматированием (с дисклеймером для обычных файлов)
                 const formattedKey = `{{${key}b-${car.id}}}`;
                 if (this.carsPlaceholder[formattedKey] === undefined) {
                     this.carsPlaceholder[formattedKey] = currencyFormat(car[key]);
@@ -131,12 +132,25 @@ class PlaceholderProcessor {
                         );
                     }
                 }
+
+                // Плейсхолдер с форматированием БЕЗ дисклеймера (для seo.json)
+                if (this.carsPlaceholderWithoutDisclaimer[formattedKey] === undefined) {
+                    this.carsPlaceholderWithoutDisclaimer[formattedKey] = currencyFormat(car[key]).replace(/\u00a0/g, ' '); // с заменой &nbsp;
+                }
             });
         });
     }
 
     // Функция для замены плейсхолдеров в содержимом файла
-    replacePlaceholders(content) {
+    replacePlaceholders(content, filePath = '') {
+        // Определяем, является ли файл seo.json - для него используем плейсхолдеры без дисклеймера
+        const isSeoFile = filePath && path.basename(filePath) === 'seo.json';
+        
+        // Выбираем набор ценовых плейсхолдеров в зависимости от файла
+        const carsPlaceholdersToUse = isSeoFile 
+            ? this.carsPlaceholderWithoutDisclaimer 
+            : this.carsPlaceholder;
+        
         const placeholders = {
             '{{firstDay}}': FIRST_DAY,
             '{{lastDay}}': LAST_DAY,
@@ -146,7 +160,7 @@ class PlaceholderProcessor {
             '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
             '{{year}}': YEAR,
             ...this.settingsPlaceholder,
-            ...this.carsPlaceholder,
+            ...carsPlaceholdersToUse,
         };
 
         let hasChanges = false;
@@ -292,7 +306,8 @@ class PlaceholderProcessor {
     processFile(filePath) {
         try {
             const content = fs.readFileSync(filePath, 'utf-8');
-            const { content: updatedContent, hasChanges } = this.replacePlaceholders(content);
+            // Передаем путь файла для определения, нужно ли использовать плейсхолдеры без дисклеймера
+            const { content: updatedContent, hasChanges } = this.replacePlaceholders(content, filePath);
 
             // Проверяем даты в файле
             this.searchDates(content, filePath);
