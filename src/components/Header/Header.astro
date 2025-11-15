@@ -3,6 +3,7 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('header'));
 
+const { brand = null } = Astro.props;
 const path = Astro.url.pathname;
 
 import { LINKS_MENU as links } from '@/const.js';
@@ -70,6 +71,7 @@ import './styles.scss';
 							dataTitle="Заказать звонок"
 							dataFormName="Заказ звонка. Шапка"
 							dataChooseDepartment={true}
+							{...salons.length > 1 ? {'data-sorting': true} : {}}
 						/>
 						<a
 							href="#common-modal"
@@ -79,6 +81,7 @@ import './styles.scss';
 							data-title="Заказать звонок"
 							data-form_name="Заказ звонка. Шапка"
 							data-choose_department={true}
+							{...salons.length > 1 ? {'data-sorting': true} : {}}
 						>
 							<Icon name="mdi:phone-incoming" class="text-3xl" />
 						</a>
