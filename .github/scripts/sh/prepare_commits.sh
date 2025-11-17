@@ -74,7 +74,7 @@ prepare_commits_message() {
     # Подготовка заголовка (включаем только если include_header = true)
     # Новая переменная include_header позволяет контролировать отображение заголовка
     # По умолчанию заголовок включен (true), но может быть отключен (false)
-    if [ "$include_header" = "true" ]; then
+    if [ "$include_header" = true ]; then
         if [ -z "$compare_hash" ]; then
             # Формат для одиночного коммита или кастомного сообщения
             HEADER="<b>[${repository_name}:${ref_name}]</b> <b><a href=\"https://github.com/${repository}/commit/$(git rev-parse HEAD)\">Last commit</a></b>"
