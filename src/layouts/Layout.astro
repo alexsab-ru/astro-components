@@ -52,7 +52,13 @@ if (seo[currentPath]) {
 ---
 
 <!doctype html>
-<html lang="ru" {...brand ? {'data-brand': brand} : {}}>
+<html lang="ru" {
+	...brand ? {
+		'data-brand': brand, 
+		'x-data': '{selectBrand: null}', 
+		"x-init" : `$store.salonsStore.filterPageData('${brand}'); $watch('selectBrand', value => $store.salonsStore.filterPageData(selectBrand))` } : 
+		{}
+	}>
 	<head>
 		<StripEmptyQuery />
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />

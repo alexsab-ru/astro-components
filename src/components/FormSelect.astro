@@ -57,8 +57,10 @@ import { Icon } from 'astro-icon/components';
 			this.options = ${modalData ? '$store.salonsStore.filteredData' : pageData ? '$store.salonsStore.pageFilteredData' : 'this.options'};
 			${pageData ? `
 			if ($store.salonsStore.pageFilteredData.length === 1) {
+				this.resetSelect();
 				this.selectOneOption($store.salonsStore.pageFilteredData[0].id);
 			} else if ($store.salonsStore.pageFilteredData.length > 1 && this.disabled) {
+				this.resetSelect();
 				this.disabled = false;
 			}
 			` : modalData ? `
@@ -67,6 +69,7 @@ import { Icon } from 'astro-icon/components';
 			} else if ($store.salonsStore.filteredData.length === 1) {
 				this.selectOneOption($store.salonsStore.filteredData[0].id);
 			} else if ($store.salonsStore.filteredData.length > 1 && this.disabled) {
+			 	this.resetSelect();
 				this.disabled = false;
 			}
 			` : `
@@ -77,7 +80,6 @@ import { Icon } from 'astro-icon/components';
 		},
 	}` }
 	x-effect="effect()"
-	x-init={`document.documentElement.dataset.brand ? $store.salonsStore.filterPageData(document.documentElement.dataset.brand) : null `}
 	x-cloak>
 	<input 
 		type="text" 
@@ -110,7 +112,7 @@ import { Icon } from 'astro-icon/components';
 			:class="open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-2'"
 			x-cloak
 		>
-			<template x-for={`option in options`} :key="option.id">
+			<template x-for="option in options" :key="option.id">
 				<a 
 					href="#" 
 					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 !no-underline !text-black !mb-0"
