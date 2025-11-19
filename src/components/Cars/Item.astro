@@ -5,7 +5,7 @@ interface Props {
 	slug?: string;
 	totalShow?: boolean;
 }
-const {car = {}, path = '/cars/', slug, totalShow = true} = Astro.props;
+const {car = {}, path = '/cars/', slug, totalShow = true, ...rest} = Astro.props;
 // Формируем URL по приоритету: переданный slug | внутренний путь по id
 const url = slug ? slug : `${path}${car.id}/`;
 
@@ -33,6 +33,7 @@ import Button from '@/components/Button/Button.astro';
 	data-year={ car.data?.year } 
 	data-total={ car.data.total }
 	data-max-discount={ car.data?.max_discount }
+	{...rest}
 >
 	<PreviewSlider car={car} url={url} />
 	<div class="flex-grow mb-3 md:mb-5 px-3 xl:px-4 flex flex-col justify-end">
