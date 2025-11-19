@@ -90,8 +90,12 @@ export function store() {
 				return this.data;
 			}  
 			const filtered = this.data.filter((option) => this.matchesBrand(option, brand));
-			this.filteredData = filtered;
-			return filtered;
+			if(filtered.length === 0){
+				this.filteredData = this.data;
+			} else {
+				this.filteredData = filtered;
+			}
+			return this.filteredData;
 		},
 		filterPageData(brand = null) {
 			if(!brand){
@@ -99,8 +103,12 @@ export function store() {
 				return this.data;
 			}
 			const filtered = this.data.filter((option) => this.matchesBrand(option, brand));
-			this.pageFilteredData = filtered;
-			return filtered;
+			if(filtered.length === 0){
+				this.pageFilteredData = this.data;
+			} else {
+				this.pageFilteredData = filtered;
+			}
+			return this.pageFilteredData;
 		},
 		sortingData(brand = null) {
 			if(!brand){
