@@ -70,6 +70,21 @@ document.querySelectorAll(".popup-link").forEach(
 					});
 				}
 			}
+
+			const params = new URLSearchParams(document.location.search);
+			const brandParams = params.get("brand");
+			const root = document.documentElement;
+			const dataBrand = root.dataset.brand || brandParams || link.dataset.filtering;
+			
+			if(dataBrand){
+				let salonsStore = Alpine.store('salonsStore');
+				const sorting = link.dataset.sorting;
+				if(sorting){
+					salonsStore.sortingData(dataBrand);
+				}else{
+					salonsStore.filterData(dataBrand);
+				}
+			}
 			
 
 			reachGoal("form_open");

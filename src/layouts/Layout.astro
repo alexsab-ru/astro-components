@@ -5,8 +5,9 @@ interface Props {
 	description?: string;
 	image?: string;
 	keywords?: string;
+	brand?: string;
 }
-let {title, h1, description, image, keywords} = Astro.props;
+let {title, h1, description, image, keywords, brand = null} = Astro.props;
 
 import settings from '@/data/settings.json';
 const { site_name, site_description } = settings;
@@ -51,7 +52,15 @@ if (seo[currentPath]) {
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang="ru" {
+	...brand ? {
+		'data-brand': brand, 
+		'x-data': '{selectBrand: null}', 
+		"x-init" : `$store.salonsStore.filterPageData(${JSON.stringify(brand)}); $watch('selectBrand', value => $store.salonsStore.filterPageData(selectBrand))`,
+		"@brand-updated.window" : "selectBrand = $event.detail.brand"
+	} : 
+		{}
+	}>
 	<head>
 		<StripEmptyQuery />
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
@@ -59,7 +68,7 @@ if (seo[currentPath]) {
 	</head>
 	<body class="min-h-screen flex flex-col" x-data="complectation">
 		<ScriptBodyBegin />
-		<Header />
+		<Header brand={brand} />
 		<main class="flex-grow relative">
 			<slot />
 		</main>
