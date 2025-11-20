@@ -14,9 +14,10 @@ const { phone_common } = settings;
 
 // Ссылки под хедером
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
-const groupModelsByBrand = groupArrayByKey(models.filter(model => ((model?.status && model.status !== 'disable' && model.status !== 'hide') || model?.show)), 'mark_id');
+const groupModelsByBrand = groupArrayByKey(models.filter(isModelVisible), 'mark_id');
 
 // Конфигурация для динамических меню
 const dynamicMenuConfig = {

@@ -12,9 +12,10 @@ const seoname = 'models-'+slug;
 
 
 import modelsData from '@/data/models.json';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 export async function getStaticPaths() {
   const { models } = modelsData;
-  return models.filter(m => ((m?.status && m.status !== 'disable' && m.status !== 'hide') || m?.show)).map((model) => {
+  return models.filter(isModelVisible).map((model) => {
     return {
       params: { slug: model.id },
       props: { model },

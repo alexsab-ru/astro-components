@@ -21,7 +21,8 @@ const {
 } = Astro.props;
 
 import modelsData from '@/data/models.json';
-const options = modelsData.services.filter(m => ((m?.status && m.status !== 'disable' && m.status !== 'hide') || m?.show)).map(({ id, name, mark_id }) => ({ 
+import { isModelVisible } from '@/js/utils/modelVisibility';
+const options = modelsData.services.filter(isModelVisible).map(({ id, name, mark_id }) => ({ 
 	id: `${mark_id}-${id}`.toLowerCase(), 
 	name: `${mark_id} ${name}` 
 }));
