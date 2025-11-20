@@ -80,4 +80,13 @@ if (rawCars && rawCars.length > 0) {
             <CarItem car={car} path={path} />
         ))}
     </div>
+    <div x-show="loading" class="text-center py-8" x-cloak>
+        <p class="text-gray-500">Загрузка...</p>
+    </div>
 </div>
+
+<style>
+    .car-item[data-lazy-hidden="true"] {
+        display: none !important;
+    }
+</style>

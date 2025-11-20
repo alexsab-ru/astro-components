@@ -21,7 +21,8 @@ const {
 } = Astro.props;
 
 import modelsData from '@/data/models.json';
-const options = modelsData.services.map(({ id, name, mark_id }) => ({ 
+import { isModelVisible } from '@/js/utils/modelVisibility';
+const options = modelsData.services.filter(isModelVisible).map(({ id, name, mark_id }) => ({ 
 	id: `${mark_id}-${id}`.toLowerCase(), 
 	name: `${mark_id} ${name}` 
 }));
@@ -49,7 +50,7 @@ const options = modelsData.services.map(({ id, name, mark_id }) => ({
     errorClasses="text-red-500"
   />
 
-  <ChoosingDealerSelect required={true} salons={salons} />
+  <ChoosingDealerSelect required={true} salons={salons} pageData />
 
   <Checkbox
     name="agree"

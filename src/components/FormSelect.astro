@@ -4,6 +4,8 @@ interface Props {
 	placeholder?: string;
 	required?: boolean;
 	disabled?: boolean;
+	pageData?: boolean;
+	modalData?: boolean;
 	errorMessage?: string;
 	errorClasses?: string;
 	options?: {id: string | number; name: string;}[];
@@ -13,6 +15,8 @@ const {
 	placeholder = 'Выберите значение', 
 	required = false, 
 	disabled = false, 
+	pageData = false,
+	modalData = false,
 	errorMessage = 'Это поле обязательное!',
 	errorClasses = 'xs:text-[10px] text-xs hidden text-red-500 mt-2',
 	options = []
@@ -39,8 +43,43 @@ import { Icon } from 'astro-icon/components';
 			this.value = this.currentOption.name || null;
 			this.open = false;
 			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
-		}
+		},
+		selectOneOption(id){
+			this.select(id);
+			this.disabled = true;
+		},
+		resetSelect(){
+			this.value = null;
+			this.currentOption = {};
+			this.disabled = false;
+		},
+		effect(){
+			this.options = ${modalData ? '$store.salonsStore.filteredData' : pageData ? '$store.salonsStore.pageFilteredData' : 'this.options'};
+			${pageData ? `
+			if ($store.salonsStore.pageFilteredData.length === 1) {
+				this.resetSelect();
+				this.selectOneOption($store.salonsStore.pageFilteredData[0].id);
+			} else if ($store.salonsStore.pageFilteredData.length > 1 && this.disabled) {
+				this.resetSelect();
+				this.disabled = false;
+			}
+			` : modalData ? `
+			if ($store.salonsStore.shouldResetModalSelect) {
+				this.resetSelect();
+			} else if ($store.salonsStore.filteredData.length === 1) {
+				this.selectOneOption($store.salonsStore.filteredData[0].id);
+			} else if ($store.salonsStore.filteredData.length > 1 && this.disabled) {
+			 	this.resetSelect();
+				this.disabled = false;
+			}
+			` : `
+			if (this.options.length === 1 && !this.value) {
+				this.select(this.options[0].id);
+			}
+			`}
+		},
 	}` }
+	x-effect="effect()"
 	x-cloak>
 	<input 
 		type="text" 

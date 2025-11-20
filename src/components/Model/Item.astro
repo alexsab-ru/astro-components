@@ -6,6 +6,7 @@ const { model } = Astro.props;
 import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
+const noPriceText = (model?.status && (model.status === 'preorder' || model.status === 'comminsoon')) ? 'cкоро появится' : 'по запросу';
 ---
 
 <a
@@ -59,7 +60,7 @@ import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 			</span>
 		) : (
 			<span>
-				<span class="text-lg">по запросу</span>
+				<span class="text-lg">{noPriceText}</span>
 			</span>
 		)
 	}

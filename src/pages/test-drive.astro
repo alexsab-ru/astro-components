@@ -13,11 +13,16 @@ import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import modelsData from '@/data/models.json';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 const { testDrive } = modelsData;
-const optionsJSON = JSON.stringify(testDrive);
+const optionsJSON = JSON.stringify(testDrive.filter(isModelVisible));
 ---
 
-<Layout title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
+<Layout 
+	title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} 
+	description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`} 
+	{...salons.length > 1 ? {'brand': testDrive[0]?.mark_id} : {} }
+>
 	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data=`{
 		models: null,
 		current: null,
@@ -26,6 +31,7 @@ const optionsJSON = JSON.stringify(testDrive);
 		},
 		currentModel: function(id) {
 			this.current = this.models.find(m => m.id === id);
+			${salons.length > 1 ? "const brandValue = this.current?.mark_id; if (brandValue) { document.documentElement.setAttribute('data-brand', brandValue); $dispatch('brand-updated', { brand: brandValue }); }" : ""}
 		},
 		init: function() {
 			this.getModels();
@@ -53,7 +59,7 @@ const optionsJSON = JSON.stringify(testDrive);
 		<div class="p-5 sm:p-10 space-y-10 w-full lg:w-2/5 2xl:w-1/2" x-cloak>
 			<PageH1 h1="Записаться на&nbsp;тест-драйв" classes="text-3xl sm:text-4xl font-bold text-center" />
 			<div class="flex justify-center gap-4 flex-wrap">
-				<template x-for="(model, index) in models" :key="model.id">
+				<template x-for="(model, index) in models" :key="model.id+index">
 					<div class="contents">
 						<!-- Невидимый разделитель перед новым брендом -->
 						<div x-show="index > 0 && models[index - 1].mark_id !== model.mark_id" 
@@ -88,7 +94,7 @@ const optionsJSON = JSON.stringify(testDrive);
 					errorClasses="text-red-500"
 				/>
 
-				<ChoosingDealerSelect required={true} salons={salons} />
+				<ChoosingDealerSelect required={true} salons={salons} pageData />
 
 				<Checkbox
 					name="agree"

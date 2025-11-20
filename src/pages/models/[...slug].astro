@@ -12,9 +12,10 @@ const seoname = 'models-'+slug;
 
 
 import modelsData from '@/data/models.json';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 export async function getStaticPaths() {
   const { models } = modelsData;
-  return models.filter(m => m.show).map((model) => {
+  return models.filter(isModelVisible).map((model) => {
     return {
       params: { slug: model.id },
       props: { model },
@@ -50,15 +51,18 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-
+const status: 'enable' | 'show' | 'disable' | 'hide' | 'preorder' | 'comminsoon' = (model?.status && ['enable', 'show', 'disable', 'hide', 'preorder', 'comminsoon'].includes(model.status)) 
+  ? model.status as 'enable' | 'show' | 'disable' | 'hide' | 'preorder' | 'comminsoon'
+  : 'enable';
 ---
 <Layout 
   title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${legal_city_where}`} 
   description={`${model.mark_id} ${model.name} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={(model as any).image ?? (model as any).thumb}
+  brand={model.mark_id}
 >
   <PageH1 h1={`Автомобиль ${model?.mark_id} ${model.name} в ${legal_city_where}`} classes="sr-only" />
-	<Model model={model} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
+	<Model model={model} status={status} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     !!sections.length && sections.map(s => ( <UniversalSection section={s} /> ))
   }
@@ -66,22 +70,25 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
     (model?.complectations !== undefined && !!model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={model?.mark_id} />
   }
   <SeoText mdx={seoname} sectionPaddingBlock />
-  <section>
-    <div class="container">
-      <FeedbackForm 
-        title="Записаться на тест-драйв" 
-        imageUrl={sections.length > 0
-          ? (sections[0]?.images && sections[0].images.length > 0 ? sections[0].images[0].url : null) || 
-            (sections[1]?.images && sections[1].images.length > 0 ? sections[1].images[0].url : null) || 
-            (sections[2]?.images && sections[2].images.length > 0 ? sections[2].images[0].url : null) || 
-            model.thumb
-          : (model.colors && model.colors.length > 0) 
-            ? model.colors[getRandomInt(0, model.colors.length)].carImage 
-            : model.thumb
-        } 
-      />
-    </div>
-  </section>
+
+  {(status === 'enable' || status === 'show') && (
+    <section>
+      <div class="container">
+        <FeedbackForm 
+          title="Записаться на тест-драйв" 
+          imageUrl={sections.length > 0
+            ? (sections[0]?.images && sections[0].images.length > 0 ? sections[0].images[0].url : null) || 
+              (sections[1]?.images && sections[1].images.length > 0 ? sections[1].images[0].url : null) || 
+              (sections[2]?.images && sections[2].images.length > 0 ? sections[2].images[0].url : null) || 
+              model.thumb
+            : (model.colors && model.colors.length > 0) 
+              ? model.colors[getRandomInt(0, model.colors.length)].carImage 
+              : model.thumb
+          } 
+        />
+      </div>
+    </section>
+  )}
   {!!cars.length && (
     <section class="odd:bg-gray-100">
       <div class="container">

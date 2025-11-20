@@ -6,19 +6,23 @@ interface Props {
 	title?: string
 }
 const { models = [], model, brand, title = "Подобрать комплектацию" } = Astro.props
+import { isModelVisible } from '@/js/utils/modelVisibility';
 ---
 
 <section class="odd:bg-gray-100" id="complectation" x-init={`selectedModel('${models.length ? models[0]?.id : model?.id}')`}>
 	<div class="container">
 		<h2 class="text-center mb-10">{title}</h2>
 		<div class="flex gap-4 flex-wrap justify-center my-10">
-			{models.length > 0 && models.map(model => ((model.show && model.complectations) && (model.show && model.complectations.length)) ? (
+			{models.length > 0 && models.map(model => {
+				const isVisible = isModelVisible(model);
+				return (isVisible && model.complectations && model.complectations.length) ? (
 				<span 
 					class="inline border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer min-w-[100px] w-auto sm:flex-initial text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500 select-none"
 					:class={`{'border-accent-500 text-accent-500': currentModel.id === '${model.id}' }`}
 					@click={`selectedModel('${model.id}')`}
 				>{model.name}</span>
-			) : (''))}
+			) : ('');
+			})}
 		</div>
 		<template x-if="currentModel.complectations !== undefined && currentModel.complectations.length > 0">
 			<div class="flex gap-x-5 gap-y-2 flex-wrap border-b mb-10">

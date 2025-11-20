@@ -5,7 +5,7 @@ interface Props {
 	slug?: string;
 	totalShow?: boolean;
 }
-const {car = {}, path = '/cars/', slug, totalShow = true} = Astro.props;
+const {car = {}, path = '/cars/', slug, totalShow = true, ...rest} = Astro.props;
 // Формируем URL по приоритету: переданный slug | внутренний путь по id
 const url = slug ? slug : `${path}${car.id}/`;
 
@@ -18,6 +18,10 @@ const price = calculateCarPrice(car.data);
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';
+
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('common_modal'));
 ---
 
 <div 
@@ -33,6 +37,7 @@ import Button from '@/components/Button/Button.astro';
 	data-year={ car.data?.year } 
 	data-total={ car.data.total }
 	data-max-discount={ car.data?.max_discount }
+	{...rest}
 >
 	<PreviewSlider car={car} url={url} />
 	<div class="grow mb-3 md:mb-5 px-3 xl:px-4 flex flex-col justify-end">
@@ -58,6 +63,7 @@ import Button from '@/components/Button/Button.astro';
 			title="Купить"
 			dataTitle={`Купить ${ car.data.mark_id } ${car.data?.folder_id}`}
 			dataFormName={`Купить. ${car.data?.color} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			{...salons.length > 1 ? {'data-filtering': car.data.mark_id} : {}}
 		/>
 		<Button 
 			classes="popup-link gray block px-2! py-2! md:text-base! sm:text-sm! text-xs! text-white! no-underline! mb-0! w-full md:w-[48%]" 
@@ -65,6 +71,7 @@ import Button from '@/components/Button/Button.astro';
 			title="Кредит"
 			dataTitle={`Рассчитать кредит ${ car.data.mark_id } ${car.data?.folder_id}`}
 			dataFormName={`Рассчитать кредит. ${car.data?.color} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			{...salons.length > 1 ? {'data-filtering': car.data.mark_id} : {}}
 		/>
 		<Button 
 			classes="popup-link black btn-o block px-2! py-2! md:text-base! sm:text-sm! text-xs! no-underline! mb-0! w-full md:w-[48%]" 
@@ -72,6 +79,7 @@ import Button from '@/components/Button/Button.astro';
 			title="Рассрочка"
 			dataTitle={`Рассрочка на ${ car.data.mark_id } ${car.data?.folder_id}`}
 			dataFormName={`Рассрочка. ${car.data?.color} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			{...salons.length > 1 ? {'data-filtering': car.data.mark_id} : {}}
 		/>
 		<Button 
 			classes="block px-2! py-2! md:text-base! sm:text-sm! text-xs! no-underline! mb-0! text-white! w-full md:w-[48%]" 
