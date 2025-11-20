@@ -14,7 +14,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import modelsData from '@/data/models.json';
 const { testDrive } = modelsData;
-const optionsJSON = JSON.stringify(testDrive);
+const optionsJSON = JSON.stringify(testDrive.filter(m => ((m?.status && m.status !== 'disable' && m.status !== 'hide') || m?.show)));
 ---
 
 <Layout 

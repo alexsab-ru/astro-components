@@ -16,7 +16,7 @@ const { phone_common } = settings;
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
-const groupModelsByBrand = groupArrayByKey(models.filter(model => model.show), 'mark_id');
+const groupModelsByBrand = groupArrayByKey(models.filter(model => ((model?.status && model.status !== 'disable' && model.status !== 'hide') || model?.show)), 'mark_id');
 
 // Конфигурация для динамических меню
 const dynamicMenuConfig = {
@@ -27,6 +27,7 @@ const dynamicMenuConfig = {
 			url: `/models/${model.id}/`,
 			name: model.name.toUpperCase(),
 			thumb: model.thumb,
+			status: model?.status || null,
 			badge: model?.badge || null,
 		})
 	}

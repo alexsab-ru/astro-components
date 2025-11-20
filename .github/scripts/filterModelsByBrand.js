@@ -68,7 +68,9 @@ try {
   const filterBy = (targetIDs) => (m) => {
     const markMatch = m.mark_id && brands.includes(String(m.mark_id).toLowerCase());
     const idMatch = m.id && targetIDs.includes(String(m.id).toLowerCase());
-    return markMatch && (targetIDs.length === 0 || idMatch) &&  m.show;
+    // Модель видна, если: (status существует и не 'disable' и не 'hide') ИЛИ show === true
+    const isVisible = (m?.status && m.status !== 'disable' && m.status !== 'hide') || m?.show;
+    return markMatch && (targetIDs.length === 0 || idMatch) && isVisible;
   };
 
   /**
@@ -118,7 +120,7 @@ try {
     .filter(filterBy(testDriveIDs))
     .map(m => {
       const modelWithDisclaimers = addDisclaimersToModel(m);
-      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'thumb', 'globalChars', 'show', 'priceDisclaimer', 'benefitDisclaimer']);
+      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'thumb', 'globalChars', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
     });
 
   // Обработка моделей для сервисов - фильтруем и добавляем дисклеймеры
@@ -127,7 +129,7 @@ try {
     .filter(filterBy(serviceIDs))
     .map(m => {
       const modelWithDisclaimers = addDisclaimersToModel(m);
-      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'show', 'priceDisclaimer', 'benefitDisclaimer']);
+      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
     });
 
   if (

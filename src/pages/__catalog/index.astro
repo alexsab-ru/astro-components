@@ -17,7 +17,7 @@ let image = '';
 
 export async function getReadyCars(legal_city_where, models) {
     const cars = [];
-    models.filter(m => m.show).forEach(model => {
+    models.filter(m => ((m?.status && m.status !== 'disable' && m.status !== 'hide') || m?.show)).forEach(model => {
         const id = model.id;
         const benefit = Number(model?.benefit);
 
