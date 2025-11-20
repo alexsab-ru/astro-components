@@ -10,6 +10,7 @@ import SortSelect from "@/components/Cars/SortSelect.astro";
 import Checkbox from "@/components/Checkbox/Checkbox.astro";
 import SeoText from '@/components/Seo/Index.astro';
 import {Icon} from 'astro-icon/components';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
@@ -17,7 +18,7 @@ let image = '';
 
 export async function getReadyCars(legal_city_where, models) {
     const cars = [];
-    models.filter(m => m.show).forEach(model => {
+    models.filter(isModelVisible).forEach(model => {
         const id = model.id;
         const benefit = Number(model?.benefit);
 

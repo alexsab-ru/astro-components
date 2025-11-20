@@ -3,8 +3,9 @@ import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
 interface Props {
 	model: any;
 	breadcrumb?: TBreadcrumb[];
+	status?: 'enable' | 'show' | 'disable' | 'hide' | 'preorder' | 'comminsoon';
 }
-const {model, breadcrumb} = Astro.props;
+const {model, breadcrumb, status} = Astro.props;
 
 import {Icon} from 'astro-icon/components';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
@@ -23,6 +24,7 @@ const photoSlides = !model.photos
 import Button from '@/components/Button/Button.astro';
 import ColorLink from '@/components/ColorLink/ColorLink.astro'
 const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.colors[0].id}.png`;
+const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
 ---
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
@@ -62,9 +64,9 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 							<Button
 								classes="popup-link btn !px-20 mt-5 flex-1 whitespace-nowrap"
 								url="#common-modal"
-								title="Узнать цену"
-								dataTitle={`Узнать цену ${model.mark_id} ${model.name}`}
-								dataFormName={`Узнать цену. ${model.mark_id} ${model.name}`}
+								title={labelBtn}
+								dataTitle={`${labelBtn} ${model.mark_id} ${model.name}`}
+								dataFormName={`${labelBtn}. ${model.mark_id} ${model.name}`}
 							/>
 						)
 					}
@@ -171,53 +173,56 @@ const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.color
 			)
 		}
 
-		<div class="flex justify-center flex-wrap xs:flex-col gap-4 mt-14">
-			<Button
-				classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
-				url="#common-modal"
-				title="Купить"
-				dataTitle={`Купить ${model.mark_id}`}
-				dataFormName={`Купить. ${model.mark_id} ${model.name}`}
-			/>
-			<Button
-				classes="popup-link btn !px-4 flex-1 whitespace-nowrap"
-				url="#common-modal"
-				title="Рассчитать кредит"
-				dataTitle="Рассчитать кредит"
-				dataFormName={`Рассчитать кредит. ${model.mark_id} ${model.name}`}
-			/>
-			<Button
-				classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap"
-				url="#common-modal"
-				title="Записаться на тест-драйв"
-				dataTitle="Записаться на тест-драйв"
-				dataFormName={`Записаться на тест-драйв. ${model.mark_id} ${model.name}`}
-			/>
-			<Button
-				classes="popup-link btn black !px-4 flex-1 whitespace-nowrap"
-				url="#common-modal"
-				title="Узнать цену по акции"
-				dataTitle="Узнать цену по акции"
-				dataFormName={`Узнать цену по акции. ${model.mark_id} ${model.name}`}
-			/>
-			{ (model?.complectations !== undefined && model?.complectations.length) ? (
-				<Button
-					classes="btn black btn-o !px-4 flex-1 whitespace-nowrap"
-					view="scroll-link"
-					url="#complectation"
-					title="Подобрать комплектацию"
-				/>
-			) : (
+		{(status === 'enable' || status === 'show' || model?.show) && (
+			<div class="flex justify-center flex-wrap xs:flex-col gap-4 mt-14">
 				<Button
 					classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
-					view="popup-link"
 					url="#common-modal"
-					title="Подобрать комплектацию"
-					dataTitle="Подобрать комплектацию"
-					dataFormName={`Подобрать комплектацию. ${model.mark_id} ${model?.name}`}
+					title="Купить"
+					dataTitle={`Купить ${model.mark_id}`}
+					dataFormName={`Купить. ${model.mark_id} ${model.name}`}
 				/>
-			)}
-		</div>
+				<Button
+					classes="popup-link btn !px-4 flex-1 whitespace-nowrap"
+					url="#common-modal"
+					title="Рассчитать кредит"
+					dataTitle="Рассчитать кредит"
+					dataFormName={`Рассчитать кредит. ${model.mark_id} ${model.name}`}
+				/>
+				<Button
+					classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap"
+					url="#common-modal"
+					title="Записаться на тест-драйв"
+					dataTitle="Записаться на тест-драйв"
+					dataFormName={`Записаться на тест-драйв. ${model.mark_id} ${model.name}`}
+				/>
+				<Button
+					classes="popup-link btn black !px-4 flex-1 whitespace-nowrap"
+					url="#common-modal"
+					title="Узнать цену по акции"
+					dataTitle="Узнать цену по акции"
+					dataFormName={`Узнать цену по акции. ${model.mark_id} ${model.name}`}
+				/>
+				{ (model?.complectations !== undefined && model?.complectations.length) ? (
+					<Button
+						classes="btn black btn-o !px-4 flex-1 whitespace-nowrap"
+						view="scroll-link"
+						url="#complectation"
+						title="Подобрать комплектацию"
+					/>
+				) : (
+					<Button
+						classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
+						view="popup-link"
+						url="#common-modal"
+						title="Подобрать комплектацию"
+						dataTitle="Подобрать комплектацию"
+						dataFormName={`Подобрать комплектацию. ${model.mark_id} ${model?.name}`}
+					/>
+				)}
+			</div>
+		)}
+
 	</div>
 </section>
 
