@@ -21,7 +21,7 @@ import Button from '@/components/Button/Button.astro';
 
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('common_modal'));
 ---
 
 <div 
