@@ -56,7 +56,9 @@ if (seo[currentPath]) {
 	...brand ? {
 		'data-brand': brand, 
 		'x-data': '{selectBrand: null}', 
-		"x-init" : `$store.salonsStore.filterPageData('${brand}'); $watch('selectBrand', value => $store.salonsStore.filterPageData(selectBrand))` } : 
+		"x-init" : `$store.salonsStore.filterPageData(${JSON.stringify(brand)}); $watch('selectBrand', value => $store.salonsStore.filterPageData(selectBrand))`,
+		"@brand-updated.window" : "selectBrand = $event.detail.brand"
+	} : 
 		{}
 	}>
 	<head>

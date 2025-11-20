@@ -30,7 +30,7 @@ const optionsJSON = JSON.stringify(testDrive);
 		},
 		currentModel: function(id) {
 			this.current = this.models.find(m => m.id === id);
-			${salons.length > 1 ? "document.documentElement.setAttribute('data-brand', this.current?.mark_id); this.selectBrand = this.current?.mark_id;" : ""}
+			${salons.length > 1 ? "const brandValue = this.current?.mark_id; if (brandValue) { document.documentElement.setAttribute('data-brand', brandValue); $dispatch('brand-updated', { brand: brandValue }); }" : ""}
 		},
 		init: function() {
 			this.getModels();
