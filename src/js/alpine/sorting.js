@@ -30,6 +30,17 @@ export function sorting() {
 		total: 0,
 		declOfNums,
 		firstLoadPage: true,
+		// Ленивая загрузка
+		itemsPerPage: 8,
+		currentPage: 0,
+		loading: false,
+		hasMore: true,
+		visibleCars: [],
+		observer: null,
+		scrollHandler: null,
+		isAnchorScrolling() {
+			return Boolean(window.__isAnchorScrolling);
+		},
 
 		setTitle() {
 			this.options.find(c => {
@@ -85,6 +96,13 @@ export function sorting() {
 			this.cars.forEach(element => {
 				this.carListWrapper.appendChild(element);
 			});
+			
+			// Сброс пагинации при сортировке
+			this.currentPage = 0;
+			this.visibleCars = [];
+			this.hasMore = true;
+			this.updateVisibleCars();
+			
 			if (!this.firstLoadPage) {
 				this.addQueryParam("sort_by", id);
 			}
@@ -121,10 +139,18 @@ export function sorting() {
 					(this.selectedYears.length === 0 || this.selectedYears.includes(carYear))
 				);
 				element.style.display = isVisible ? "flex" : "none";
+				element.dataset.filterHidden = isVisible ? "false" : "true";
 				if (isVisible) {
 					vm.total += Number(element.dataset.total);
 				}
 			});
+			
+			// Сброс пагинации при фильтрации
+			this.currentPage = 0;
+			this.visibleCars = [];
+			this.hasMore = true;
+			this.updateVisibleCars();
+			
 			this.selectedBrands.length ? this.addQueryParam("brand", this.selectedBrands.join(",")) : this.deleteQueryParam('brand');
 			this.selectedModels.length ? this.addQueryParam("model", this.selectedModels.join(",")) : this.deleteQueryParam('model');
 			this.selectedColors.length ? this.addQueryParam("color", this.selectedColors.join(",")) : this.deleteQueryParam('color');
@@ -144,6 +170,163 @@ export function sorting() {
 			}
 			this.updateFilterVisibility();
 			this.filteredCars();
+		},
+
+		// Ленивая загрузка
+		getVisibleCars() {
+			return Array.from(this.cars).filter(car => {
+				return car.dataset.filterHidden !== "true";
+			});
+		},
+
+		updateVisibleCars() {
+			const visibleCars = this.getVisibleCars();
+			const itemsToShow = (this.currentPage + 1) * this.itemsPerPage;
+			const carsToShow = visibleCars.slice(0, itemsToShow);
+
+			// Создаем Set для быстрой проверки
+			const carsToShowSet = new Set(carsToShow);
+
+			// Управляем видимостью карточек через data-атрибут
+			this.cars.forEach((car) => {
+				const isVisibleAfterFilter = visibleCars.includes(car);
+
+				// Если карточка скрыта фильтрами, сбрасываем ленивый атрибут
+				if (!isVisibleAfterFilter) {
+					car.removeAttribute('data-lazy-hidden');
+					return;
+				}
+
+				const shouldShow = carsToShowSet.has(car);
+				if (shouldShow) {
+					car.removeAttribute('data-lazy-hidden');
+				} else {
+					car.setAttribute('data-lazy-hidden', 'true');
+				}
+			});
+
+			this.visibleCars = carsToShow;
+			this.hasMore = itemsToShow < visibleCars.length;
+
+			// Настройка Intersection Observer для следующей загрузки
+			if (this.hasMore && this.visibleCars.length > 0 && !this.isAnchorScrolling()) {
+				// Используем setTimeout для того, чтобы DOM обновился
+				setTimeout(() => {
+					this.setupIntersectionObserver();
+				}, 100);
+			} else {
+				// Отключаем observer и обработчик скролла, если больше нет элементов
+				if (this.observer) {
+					this.observer.disconnect();
+					this.observer = null;
+				}
+				if (this.scrollHandler) {
+					window.removeEventListener('scroll', this.scrollHandler);
+					this.scrollHandler = null;
+				}
+			}
+		},
+
+		loadMore() {
+			if (this.loading || !this.hasMore || this.isAnchorScrolling()) {
+				return;
+			}
+			
+			this.loading = true;
+			
+			// Отключаем observer и обработчик скролла перед обновлением
+			if (this.observer) {
+				this.observer.disconnect();
+				this.observer = null;
+			}
+			if (this.scrollHandler) {
+				window.removeEventListener('scroll', this.scrollHandler);
+				this.scrollHandler = null;
+			}
+			
+			// Имитация задержки для плавности
+			setTimeout(() => {
+				this.currentPage++;
+				this.updateVisibleCars();
+				this.loading = false;
+			}, 150);
+		},
+
+		setupIntersectionObserver() {
+			if (this.observer) {
+				this.observer.disconnect();
+				this.observer = null;
+			}
+
+			// Удаляем старый обработчик скролла
+			if (this.scrollHandler) {
+				window.removeEventListener('scroll', this.scrollHandler);
+				this.scrollHandler = null;
+			}
+
+			if (!this.hasMore || this.visibleCars.length === 0) {
+				return;
+			}
+
+			// Находим последнюю видимую карточку из отображаемых
+			const lastVisibleCar = this.visibleCars[this.visibleCars.length - 1];
+			if (!lastVisibleCar) {
+				return;
+			}
+
+			// Проверяем, что элемент действительно в DOM и видим
+			const isHidden = lastVisibleCar.hasAttribute('data-lazy-hidden');
+			if (isHidden) {
+				return;
+			}
+
+			const rect = lastVisibleCar.getBoundingClientRect();
+			if (rect.width === 0 && rect.height === 0) {
+				return;
+			}
+
+			// Настройка Intersection Observer
+			this.observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting && this.hasMore && !this.loading) {
+						if (this.isAnchorScrolling()) {
+							return;
+						}
+						this.loadMore();
+					}
+				});
+			}, {
+				rootMargin: '200px', // Начинаем загрузку за 200px до конца
+				threshold: 0.1
+			});
+
+			try {
+				this.observer.observe(lastVisibleCar);
+			} catch (e) {
+				console.warn('IntersectionObserver error:', e);
+			}
+
+			// Резервный обработчик скролла на случай, если Intersection Observer не сработает
+			this.scrollHandler = () => {
+				if (this.loading || !this.hasMore || this.isAnchorScrolling()) {
+					return;
+				}
+
+				const carRect = lastVisibleCar.getBoundingClientRect();
+				const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+				// Если пользователь перешел по якорю ниже списка, не подгружаем карточки
+				if (carRect.bottom <= 0) {
+					return;
+				}
+				
+				// Если последняя карточка видна или близко к видимой области
+				if (carRect.top <= windowHeight + 200) {
+					this.loadMore();
+				}
+			};
+
+			window.addEventListener('scroll', this.scrollHandler, { passive: true });
 		},
 
 		updateFilterVisibility() {
@@ -254,6 +437,19 @@ export function sorting() {
 
 			this.updateFilterVisibility();
 			this.filteredCars();
+			
+			// Инициализация ленивой загрузки
+			// Используем двойной setTimeout для гарантии, что DOM полностью готов
+			setTimeout(() => {
+				this.updateVisibleCars();
+				// Дополнительная проверка через небольшую задержку
+				setTimeout(() => {
+					if (this.hasMore && this.visibleCars.length > 0) {
+						this.setupIntersectionObserver();
+					}
+				}, 200);
+			}, 200);
+			
 			this.firstLoadPage = false;
 		},
 	}));
