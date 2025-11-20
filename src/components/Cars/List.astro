@@ -76,8 +76,8 @@ if (rawCars && rawCars.length > 0) {
         </div>
     )}
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
-        {cars.map((car, index) => (
-            <CarItem car={car} path={path} data-lazy-index={index} />
+        {cars.map((car) => (
+            <CarItem car={car} path={path} />
         ))}
     </div>
     <div x-show="loading" class="text-center py-8" x-cloak>
