@@ -28,6 +28,12 @@ OUTPUT_FILENAME = "complectations_prices.json"
 # Корень проекта (2 уровня вверх от текущего скрипта: .github/scripts -> root)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
+# Директория для сохранения данных
+DATA_DIR = PROJECT_ROOT / "src" / "data"
+
+# Путь к файлу настроек
+SETTINGS_PATH = DATA_DIR / "settings.json"
+
 def load_env_config() -> Dict[str, str]:
     """
     Загружает конфигурацию из .env файла.
@@ -52,6 +58,49 @@ def load_env_config() -> Dict[str, str]:
                     config[key.strip()] = value.strip()
     
     return config
+
+def load_brands_from_settings() -> List[str]:
+    """
+    Загружает список брендов из settings.json.
+    Поле brand может содержать один бренд или несколько через запятую.
+    Например: "WEY" или "WEY,Toyota" или "WEY, Toyota"
+    
+    Returns:
+        Список брендов
+    """
+    print("Загрузка брендов из settings.json...")
+    
+    try:
+        if not SETTINGS_PATH.exists():
+            print(f"⚠ Файл {SETTINGS_PATH} не найден. Будут использованы все бренды.")
+            return []
+        
+        with open(SETTINGS_PATH, 'r', encoding='utf-8') as f:
+            settings = json.load(f)
+        
+        brand_value = settings.get('brand')
+        
+        if not brand_value:
+            print("⚠ Поле 'brand' не найдено в settings.json. Будут использованы все бренды.")
+            return []
+        
+        if not isinstance(brand_value, str):
+            print(f"⚠ Неожиданный тип поля 'brand': {type(brand_value)}. Будут использованы все бренды.")
+            return []
+        
+        # Разделяем по запятой и убираем пробелы
+        brands = [brand.strip() for brand in brand_value.split(',') if brand.strip()]
+        
+        if not brands:
+            print("⚠ Поле 'brand' пустое. Будут использованы все бренды.")
+            return []
+        
+        print(f"✓ Загружены бренды: {', '.join(brands)}")
+        return brands
+        
+    except Exception as e:
+        print(f"⚠ Ошибка при чтении settings.json: {e}. Будут использованы все бренды.")
+        return []
 
 def convert_to_export_url(url: str) -> str:
     """Преобразует URL Google Sheets из формата edit в export (CSV)"""
@@ -120,7 +169,7 @@ def download_spreadsheet_data(url: str) -> List[List[str]]:
         raise
 
 
-def transform_to_json(data: List[List[str]]) -> Dict[str, List[Dict[str, Any]]]:
+def transform_to_json(data: List[List[str]], allowed_brands: List[str] = None) -> Dict[str, List[Dict[str, Any]]]:
     """
     Преобразует данные из CSV в JSON формат с группировкой по брендам и моделям.
     
@@ -142,6 +191,7 @@ def transform_to_json(data: List[List[str]]) -> Dict[str, List[Dict[str, Any]]]:
     
     Args:
         data: Список строк из CSV (первая строка - заголовки)
+        allowed_brands: Список разрешенных брендов (None = все бренды)
         
     Returns:
         Объект с брендами, моделями и комплектациями
@@ -168,6 +218,10 @@ def transform_to_json(data: List[List[str]]) -> Dict[str, List[Dict[str, Any]]]:
         
         # Пропускаем строки без обязательных данных
         if not mark_id or not model_id or not model_name:
+            continue
+        
+        # Фильтрация по брендам
+        if allowed_brands and mark_id not in allowed_brands:
             continue
         
         # Инициализируем бренд, если его еще нет
@@ -213,7 +267,8 @@ def transform_to_json(data: List[List[str]]) -> Dict[str, List[Dict[str, Any]]]:
         for model in brand_models
     )
     
-    print(f"✓ Обработано {len(result)} брендов, {total_models} моделей, {total_complectations} комплектаций")
+    brands_info = f" (отфильтровано по брендам: {', '.join(allowed_brands)})" if allowed_brands else ""
+    print(f"✓ Обработано {len(result)} брендов, {total_models} моделей, {total_complectations} комплектаций{brands_info}")
     return result
 
 
@@ -247,14 +302,17 @@ def main() -> int:
     print("=" * 70)
     
     try:
-        # 1. Скачиваем данные
+        # 1. Загружаем список разрешенных брендов
+        allowed_brands = load_brands_from_settings()
+        
+        # 2. Скачиваем данные
         raw_data = download_spreadsheet_data(EXPORT_CSV_URL)
         
-        # 2. Преобразуем в JSON
-        json_data = transform_to_json(raw_data)
+        # 3. Преобразуем в JSON с фильтрацией по брендам
+        json_data = transform_to_json(raw_data, allowed_brands if allowed_brands else None)
         
-        # 3. Сохраняем файл
-        output_path = PROJECT_ROOT / OUTPUT_FILENAME
+        # 4. Сохраняем файл
+        output_path = DATA_DIR / OUTPUT_FILENAME
         save_json_file(json_data, output_path)
         
         print("✓ ГОТОВО!")
