@@ -38,6 +38,9 @@ export function sorting() {
 		visibleCars: [],
 		observer: null,
 		scrollHandler: null,
+		isAnchorScrolling() {
+			return Boolean(window.__isAnchorScrolling);
+		},
 
 		setTitle() {
 			this.options.find(c => {
@@ -206,7 +209,7 @@ export function sorting() {
 			this.hasMore = itemsToShow < visibleCars.length;
 
 			// Настройка Intersection Observer для следующей загрузки
-			if (this.hasMore && this.visibleCars.length > 0) {
+			if (this.hasMore && this.visibleCars.length > 0 && !this.isAnchorScrolling()) {
 				// Используем setTimeout для того, чтобы DOM обновился
 				setTimeout(() => {
 					this.setupIntersectionObserver();
@@ -225,7 +228,7 @@ export function sorting() {
 		},
 
 		loadMore() {
-			if (this.loading || !this.hasMore) {
+			if (this.loading || !this.hasMore || this.isAnchorScrolling()) {
 				return;
 			}
 			
@@ -286,6 +289,9 @@ export function sorting() {
 			this.observer = new IntersectionObserver((entries) => {
 				entries.forEach(entry => {
 					if (entry.isIntersecting && this.hasMore && !this.loading) {
+						if (this.isAnchorScrolling()) {
+							return;
+						}
 						this.loadMore();
 					}
 				});
@@ -302,15 +308,20 @@ export function sorting() {
 
 			// Резервный обработчик скролла на случай, если Intersection Observer не сработает
 			this.scrollHandler = () => {
-				if (this.loading || !this.hasMore) {
+				if (this.loading || !this.hasMore || this.isAnchorScrolling()) {
 					return;
 				}
 
 				const carRect = lastVisibleCar.getBoundingClientRect();
 				const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+				// Если пользователь перешел по якорю ниже списка, не подгружаем карточки
+				if (carRect.bottom <= 0) {
+					return;
+				}
 				
 				// Если последняя карточка видна или близко к видимой области
-				if (carRect.top <= windowHeight + 500) {
+				if (carRect.top <= windowHeight + 200) {
 					this.loadMore();
 				}
 			};
