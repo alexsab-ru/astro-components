@@ -290,7 +290,7 @@ export function sorting() {
 					}
 				});
 			}, {
-				rootMargin: '200px', // Начинаем загрузку за 300px до конца
+				rootMargin: '200px', // Начинаем загрузку за 200px до конца
 				threshold: 0.1
 			});
 
