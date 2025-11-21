@@ -1,9 +1,11 @@
 ---
-import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
+import type {TBreadcrumb} from '@/components/Breadcrumbs/types';
+import type { TStatus } from '@/types/TStatus';
+
 interface Props {
 	model: any;
 	breadcrumb?: TBreadcrumb[];
-	status?: 'enable' | 'show' | 'disable' | 'hide' | 'preorder' | 'comminsoon';
+	status?: TStatus;
 }
 const {model, breadcrumb, status} = Astro.props;
 

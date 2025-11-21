@@ -51,9 +51,11 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-const status: 'enable' | 'show' | 'disable' | 'hide' | 'preorder' | 'comminsoon' = (model?.status && ['enable', 'show', 'disable', 'hide', 'preorder', 'comminsoon'].includes(model.status)) 
-  ? model.status as 'enable' | 'show' | 'disable' | 'hide' | 'preorder' | 'comminsoon'
-  : 'enable';
+
+import {STATUS} from '@/const';
+import type { TStatus } from '@/types/TStatus';
+
+const status: TStatus = (model?.status && STATUS.includes(model.status as TStatus)) ? model.status : 'enable';
 ---
 <Layout 
   title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${legal_city_where}`} 
@@ -67,7 +69,7 @@ const status: 'enable' | 'show' | 'disable' | 'hide' | 'preorder' | 'comminsoon'
     !!sections.length && sections.map(s => ( <UniversalSection section={s} /> ))
   }
   {
-    (model?.complectations !== undefined && !!model?.complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={model?.mark_id} />
+    ((model as any)?.complectations && (model as any).complectations !== undefined && !!(model as any).complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={model?.mark_id} />
   }
   <SeoText mdx={seoname} sectionPaddingBlock />
 
