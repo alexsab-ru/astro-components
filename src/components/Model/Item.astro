@@ -6,7 +6,7 @@ const { model } = Astro.props;
 import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
-const noPriceText = (model?.status && (model.status === 'preorder' || model.status === 'comminsoon')) ? 'cкоро появится' : 'по запросу';
+const noPriceText = (model?.status && (model.status === 'preorder' || model.status === 'comminsoon')) ? 'cкоро в продаже' : 'по запросу';
 ---
 
 <a
