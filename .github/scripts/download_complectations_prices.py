@@ -23,7 +23,7 @@ COLUMN_PRICE = 4        # E - price (цена)
 COLUMN_BENEFIT = 5      # F - benefit (выгода)
 
 # Путь для сохранения результата
-OUTPUT_FILENAME = "complectations_prices.json"
+OUTPUT_FILENAME = "complectations-prices.json"
 
 # Корень проекта (2 уровня вверх от текущего скрипта: .github/scripts -> root)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
