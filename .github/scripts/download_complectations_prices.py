@@ -66,7 +66,7 @@ def load_brands_from_settings() -> List[str]:
     Например: "WEY" или "WEY,Toyota" или "WEY, Toyota"
     
     Returns:
-        Список брендов
+        Список брендов в нижнем регистре
     """
     print("Загрузка брендов из settings.json...")
     
@@ -88,8 +88,8 @@ def load_brands_from_settings() -> List[str]:
             print(f"⚠ Неожиданный тип поля 'brand': {type(brand_value)}. Будут использованы все бренды.")
             return []
         
-        # Разделяем по запятой и убираем пробелы
-        brands = [brand.strip() for brand in brand_value.split(',') if brand.strip()]
+        # Разделяем по запятой, убираем пробелы и приводим к нижнему регистру
+        brands = [brand.strip().lower() for brand in brand_value.split(',') if brand.strip()]
         
         if not brands:
             print("⚠ Поле 'brand' пустое. Будут использованы все бренды.")
@@ -220,8 +220,8 @@ def transform_to_json(data: List[List[str]], allowed_brands: List[str] = None) -
         if not mark_id or not model_id or not model_name:
             continue
         
-        # Фильтрация по брендам
-        if allowed_brands and mark_id not in allowed_brands:
+        # Фильтрация по брендам (сравниваем в нижнем регистре)
+        if allowed_brands and mark_id.lower() not in allowed_brands:
             continue
         
         # Инициализируем бренд, если его еще нет
