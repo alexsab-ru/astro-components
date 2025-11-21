@@ -125,13 +125,13 @@ ENV_CONFIG = load_env_config()
 
 
 raw_url = ENV_CONFIG.get('COMPLECTATIONS_PRICE_CSV_URL')
-if not raw_url:
-    raise ValueError(
-        "Переменная COMPLECTATIONS_PRICE_CSV_URL не найдена в .env файле. "
-        "Добавьте в .env: COMPLECTATIONS_PRICE_CSV_URL=https://docs.google.com/.../export?format=csv&gid=..."
-    )
+EXPORT_CSV_URL = None
 
-EXPORT_CSV_URL = convert_to_export_url(raw_url)
+if raw_url:
+    EXPORT_CSV_URL = convert_to_export_url(raw_url)
+else:
+    # Если переменная не найдена - это не критично, просто пропускаем скачивание
+    EXPORT_CSV_URL = None
 
 def download_spreadsheet_data(url: str) -> List[List[str]]:
     """
@@ -302,6 +302,23 @@ def main() -> int:
     print("=" * 70)
     
     try:
+        # Проверяем наличие URL для скачивания
+        if not EXPORT_CSV_URL:
+            print("⚠ Переменная COMPLECTATIONS_PRICE_CSV_URL не найдена в .env файле")
+            print("⚠ Пропускаем скачивание цен комплектаций")
+            
+            # Удаляем старый файл, если он существует (чтобы не использовались устаревшие данные)
+            output_path = DATA_DIR / OUTPUT_FILENAME
+            if output_path.exists():
+                print(f"Удаляем устаревший файл {OUTPUT_FILENAME}...")
+                output_path.unlink()
+                print(f"✓ Файл {OUTPUT_FILENAME} удален")
+            
+            print("⚠ Для настройки добавьте в .env:")
+            print("   COMPLECTATIONS_PRICE_CSV_URL=https://docs.google.com/.../edit#gid=...")
+            print("✓ ПРОПУЩЕНО")
+            return 0
+        
         # 1. Загружаем список разрешенных брендов
         allowed_brands = load_brands_from_settings()
         
