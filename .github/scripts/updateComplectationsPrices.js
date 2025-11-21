@@ -12,8 +12,7 @@ const readJson = (filePath) => {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
   } catch (err) {
-    logError(`Ошибка чтения JSON файла: ${filePath}`);
-    console.error(err);
+    // Не выводим полный стек ошибки, только информацию о том, что файл не найден
     return null;
   }
 };
@@ -24,8 +23,7 @@ const writeJson = (filePath, data) => {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
     return true;
   } catch (err) {
-    logError(`Ошибка записи JSON файла: ${filePath}`);
-    console.error(err);
+    logWarning(`⚠ Ошибка записи JSON файла: ${err.message}`);
     return false;
   }
 };
@@ -56,9 +54,19 @@ const updateComplectationsPrices = () => {
   const modelsData = readJson(modelsFilePath);
   const complectationsPrices = readJson(complectationsPricesFilePath);
   
-  if (!modelsData || !complectationsPrices) {
-    logError('Не удалось загрузить необходимые файлы');
-    process.exit(1);
+  // Если не удалось загрузить файл с ценами - это не критично
+  if (!complectationsPrices) {
+    logWarning('⚠ Файл complectations-prices.json не найден или пуст');
+    logWarning('⚠ Обновление цен пропущено. Будут использованы текущие цены из models.json');
+    logInfo('=== Обновление завершено (пропущено) ===');
+    return;
+  }
+  
+  // Если нет models.json - это более критично, но всё равно не падаем
+  if (!modelsData) {
+    logWarning('⚠ Файл models.json не найден');
+    logWarning('⚠ Обновление цен невозможно');
+    return;
   }
   
   let updatedCount = 0;
@@ -137,8 +145,8 @@ const updateComplectationsPrices = () => {
     logSuccess(`✓ Успешно обновлено цен: ${updatedCount} из ${totalComplectations} комплектаций`);
     logInfo('=== Обновление завершено ===');
   } else {
-    logError('Не удалось сохранить обновленный файл models.json');
-    process.exit(1);
+    logWarning('⚠ Не удалось сохранить обновленный файл models.json');
+    logWarning('⚠ Будут использованы текущие цены');
   }
 };
 
@@ -146,8 +154,8 @@ const updateComplectationsPrices = () => {
 try {
   updateComplectationsPrices();
 } catch (error) {
-  logError('Критическая ошибка при выполнении скрипта');
-  console.error(error);
-  process.exit(1);
+  logWarning('⚠ Ошибка при выполнении скрипта обновления цен');
+  logWarning(`⚠ ${error.message}`);
+  logWarning('⚠ Продолжаем работу со старыми ценами');
 }
 
