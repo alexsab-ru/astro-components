@@ -70,6 +70,8 @@ menu.length > 0 && menu.map(item => {
 
 export const LINKS_MENU = menu;
 
+export const STATUS = ['enable','show','disable','hide','preorder','comminsoon'];
+
 // Коллекции теперь хранятся в @/data/collections.json
 
 // Текст согласия в формах
