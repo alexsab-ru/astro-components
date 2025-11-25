@@ -19,6 +19,24 @@ import modelsData from '@/data/models.json';
 const { models } = modelsData;
 const groupModelsByBrand = groupArrayByKey(models.filter(isModelVisible), 'mark_id');
 
+// Вычисляем минимальную цену и максимальную выгоду из всех моделей
+const prices = models
+	.map(model => {
+		const price = typeof model.price === 'string' ? parseFloat(model.price) : (typeof model.price === 'number' ? model.price : 0);
+		return price;
+	})
+	.filter(price => price > 0); // Исключаем нулевые и отрицательные цены
+
+const benefits = models
+	.map(model => {
+		const benefit = typeof model.benefit === 'string' ? parseFloat(model.benefit) : (typeof model.benefit === 'number' ? model.benefit : 0);
+		return benefit;
+	})
+	.filter(benefit => benefit >= 0); // Включаем нулевые выгоды, но исключаем отрицательные
+
+export const MODEL_MIN_PRICE = prices.length > 0 ? Math.min(...prices) : 0;
+export const MODEL_MAX_BENEFIT = benefits.length > 0 ? Math.max(...benefits) : 0;
+
 // Конфигурация для динамических меню
 const dynamicMenuConfig = {
 	models: {
