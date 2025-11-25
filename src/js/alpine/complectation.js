@@ -1,6 +1,7 @@
 // complectation.js
 import Alpine from 'alpinejs';
-import models from '@/data/models.json';
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
 import { useTranslit } from '@/js/utils/translit';
 import { currencyFormat } from '@/js/utils/numbers.format';
 
@@ -11,7 +12,7 @@ export function complectation() {
 		selectedModel(id) {
 			if (this.currentModel.id === id) return;
 			this.currentModel = models.find(model => model.id === id);
-			this.currentModelComplectation = this.currentModel.complectations[0];
+			this.currentModelComplectation = this.currentModel?.complectations ? this.currentModel.complectations[0] : {};
 		},
 		selectedModelComplectation(name) {
 			if (this.currentModelComplectation.name === name) return;

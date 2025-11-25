@@ -1,5 +1,6 @@
 ---
 import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
+import PageH1 from '@/components/PageH1/Index.astro';
 interface Props {
 	title?: string;
 	h1?: string;
@@ -19,7 +20,7 @@ import BackLink from '@/components/BackLink.astro';
 	<section class="content">
 		<div class="container">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
-			{h1 && <h1><Fragment set:html={h1} /></h1> }
+			<PageH1 h1={h1} />
 			<slot />
 
 			{backLink && (

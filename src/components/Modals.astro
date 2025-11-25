@@ -8,23 +8,23 @@ import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('common_modal'));
 import {AGREE_LABEL} from '@/const'
+
 ---
 
 <!-- MODALS -->
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-[3000000000]"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-[300000000]"
 	id="common-modal"
-	data-close>
+	data-close
+>
 	<div
 		class="modal-content relative top-10 sm:top-20 mb-10 left-1/2 translate-x-[-50%] max-w-xl w-full bg-white py-8 px-4 sm:p-8">
 
 		<CloseModalBtn />
 
-		<p class="caption text-center text-3xl mb-2 text-gray-800">Обратная связь</p>
-		<p class="text-center mb-10 font-normal text-gray-600">
-			Оставьте свои данные и мы свяжемся с Вами в ближайшее время!
-		</p>
-		<form class="flex flex-col gap-4" id="rating-form">
+		<p class="title text-center text-3xl mb-2 text-gray-800">Заголовок модалки</p>
+		<p class="subtitle text-center mb-10 font-normal text-gray-600">Подзаголовок модалки</p>
+		<form class="flex flex-col gap-4" id="rating-form" novalidate>
 			<input type="hidden" name="form" value="" />
 			<input
 				type="email"
@@ -33,6 +33,7 @@ import {AGREE_LABEL} from '@/const'
 				class="h-0 opacity-0 absolute -z-[100]"
 				placeholder="mail@example.com"
 			/>
+
 			<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
 			<Input
 				type="tel"
@@ -40,17 +41,33 @@ import {AGREE_LABEL} from '@/const'
 				classes="border-gray-100"
 				placeholder="+7 (999) 999-99-99*"
 				required
-				errorClasses="text-red-500"
+				errorText="Телефон является обязательным полем"
 			/>
 
-			<ChoosingDealerSelect required={true} salons={salons}/>
+			<div class="flex flex-col gap-2" data-departament-block>
+				<label class="text-sm font-medium text-gray-700">
+					Ваш вопрос о сервисе или покупке автомобиля? <span class="text-red-500">*</span>
+				</label>
+				<div class="flex flex-col gap-4 md:flex-row md:gap-3">
+					<label class="flex items-center gap-2 cursor-pointer border border-gray-200 rounded p-3 hover:border-accent-500 transition-colors">
+						<input type="radio" name="departament" value="Отдел продаж" class="w-4 h-4" required />
+						<span>Покупка автомобиля</span>
+					</label>
+					<label class="flex items-center gap-2 cursor-pointer border border-gray-200 rounded p-3 hover:border-accent-500 transition-colors">
+						<input type="radio" name="departament" value="Сервис" class="w-4 h-4" required />
+						<span>Сервис</span>
+					</label>
+				</div>
+				<div class="error-message departament text-xs hidden text-red-500">Пожалуйста, выберите цель обращения</div>
+			</div>
+
+			<ChoosingDealerSelect required salons={salons} modalData />
 
 			<Checkbox
 				name="agree"
 				label={AGREE_LABEL}
 				color="black"
 				required
-				errorClasses="text-red-500 w-full"
 				errorText="Чтобы продолжить, установите флажок"
 			/>
 
@@ -66,7 +83,7 @@ import {AGREE_LABEL} from '@/const'
 </div>
 
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black/70 z-[3000000000] overflow-x-hidden overflow-y-auto hidden modal-overlay"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/70 z-[300000000] overflow-x-hidden overflow-y-auto hidden modal-overlay"
 	id="message-modal"
 	data-close>
 	<div
@@ -80,7 +97,7 @@ import {AGREE_LABEL} from '@/const'
 </div>
 
 <div
-	class="fixed w-screen h-screen left-0 top-0 bg-black/50 z-[3000000000] overflow-x-hidden overflow-y-auto hidden modal-overlay"
+	class="fixed w-screen h-screen left-0 top-0 bg-black/50 z-[300000000] overflow-x-hidden overflow-y-auto hidden modal-overlay"
 	id="confirm-modal"
 	data-close>
 	<div

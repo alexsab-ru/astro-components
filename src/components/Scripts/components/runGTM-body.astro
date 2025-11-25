@@ -1,0 +1,11 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json && scripts_json.gtm && typeof scripts_json.gtm.value === 'string' && scripts_json.gtm.value.trim() !== "" && (
+
+<noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${scripts_json.gtm}`}
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+)}

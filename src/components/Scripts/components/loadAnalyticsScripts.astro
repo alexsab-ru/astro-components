@@ -1,0 +1,74 @@
+---
+---
+<script>
+(function() {
+    const e = document.querySelector("#scripts_json");
+
+    var scripts_json = {};
+    if (e && e.textContent) {
+        scripts_json = JSON.parse(e.textContent)
+    }
+
+    const e2 = document.querySelector("#settings_json");
+    if (e2 && e2.textContent) {
+        window._dp = JSON.parse(e2.textContent)
+    }
+
+    // Check if analytics were already loaded in this session
+    var analyticsLoaded = sessionStorage.getItem('analyticsLoaded') === 'true';
+
+    function loadAnalyticsScripts() {
+        if (!analyticsLoaded) {
+            analyticsLoaded = true;
+            // Save the state to sessionStorage
+            sessionStorage.setItem('analyticsLoaded', 'true');
+            
+            window.removeEventListener('scroll', loadAnalyticsScripts);
+            document.removeEventListener('mousemove', loadAnalyticsScripts);
+
+            // Проходим по всем ключам в JSON
+            Object.keys(scripts_json).forEach(key => {
+                if (key === 'site') return; // Пропускаем служебные ключи
+                
+                const config = scripts_json[key];
+                
+                // Проверяем структуру конфигурации
+                if (!config || typeof config !== 'object' || !config.fn || !config.value) return;
+                
+                // Проверка на production окружение
+                if (config.prod && process.env.NODE_ENV !== "production") return;
+                
+                // Проверка существования функции
+                if (typeof window[config.fn] !== 'function') return;
+                
+                try {
+                    // Запускаем функцию с данными
+                    window[config.fn](config.value);
+                } catch (error) {
+                    console.error(`Ошибка при запуске ${config.fn}:`, error);
+                }
+            });
+        }
+    }
+
+    function initializeEventListeners() {
+        // If analytics are already loaded, just run the scripts directly
+        if (analyticsLoaded) {
+            analyticsLoaded = false;
+            loadAnalyticsScripts();
+            return;
+        }
+        
+        // Otherwise, set up event listeners
+        window.addEventListener('scroll', loadAnalyticsScripts);
+        document.addEventListener('mousemove', loadAnalyticsScripts);
+    }
+
+    // Initialize based on document ready state
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeEventListeners);
+    } else {
+        initializeEventListeners();
+    }
+})();
+</script>

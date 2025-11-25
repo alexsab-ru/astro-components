@@ -1,0 +1,57 @@
+---
+import type { TDataCollection } from '@/types/TCollection';
+import { type CollectionEntry, type DataEntryMap, getCollection, render } from "astro:content";
+import collectionsData from '@/data/collections.json';
+import PageLayout from '@/layouts/PageLayout.astro';
+import SeoText from '@/components/Seo/Index.astro';
+
+export async function getStaticPaths() {
+  const paths = [];
+
+  for (const collection of collectionsData) {
+    const entries = await getCollection(collection.name as keyof DataEntryMap);
+    for (const entry of entries) {
+      // Исключаем файлы начинающиеся с '__'
+      if (typeof entry.id === 'string' && entry.id.startsWith('__')) continue;
+      paths.push({ 
+        // В Astro 5 рекомендуется передавать сам объект записи в props,
+        // а для параметра маршрута использовать id записи
+        params: { collection: collection.name, slug: entry.id },
+        props: entry
+      });
+    }
+  }
+
+  return paths;
+}
+
+// Тип записи контента. Для общей страницы используем универсальный тип.
+type Props = CollectionEntry<any>;
+
+const { collection, slug } = Astro.params;
+const post = Astro.props as Props;
+
+// Находим заголовок коллекции по имени коллекции
+const collectionMeta = collectionsData.find((c) => c.name === collection) || { title: '' };
+const title = collectionMeta.title as string;
+
+// Данные записи для передачи в layout
+const data: TDataCollection = (post as any)?.data || {};
+
+// Хлебные крошки и контент записи
+const breadcrumb = { name: title, href: `/${collection}/` };
+// Приводим к any, т.к. страница универсальна для разных коллекций
+const { Content } = await render(post as any);
+---
+<PageLayout 
+  {...data} 
+  breadcrumb={[
+    breadcrumb, 
+    { name: data?.breadcrumb, href: Astro.url.pathname }
+  ]} 
+  backLink={true}
+>
+
+	<Content />
+  <SeoText mdx={`${collection}-${slug}`} noPadding />
+</PageLayout>

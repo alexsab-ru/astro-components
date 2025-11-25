@@ -34,11 +34,11 @@ module.exports = {
 			},
 			borderRadius: {
 				btn: '0px'
-			}
+			},
 		},
 	},
 	plugins: [
-		plugin(function({ matchUtilities, theme }) {
+		plugin(function({ addUtilities, matchUtilities, theme }) {			
 			matchUtilities({ fz: (value) => ({ fontSize: `clamp(1rem, calc(calc(1vw + 1vh) * ${value}), 3rem)` })});
 			matchUtilities({ ptop: (value) => ({ paddingTop: `clamp(1rem, calc(calc(1vw + 1vh) * ${value}), 3rem)` })});
 			matchUtilities({ pbottom: (value) => ({ paddingBottom: `clamp(1rem, calc(calc(1vw + 1vh) * ${value}), 3rem)` })});
@@ -47,6 +47,10 @@ module.exports = {
 			matchUtilities({ r: (value) => ({ right: `clamp(1rem, calc(calc(1vw + 1vh) * ${value}), 3rem)`})});
 			matchUtilities({ b: (value) => ({ bottom: `clamp(1rem, calc(calc(1vw + 1vh) * ${value}), 3rem)`})});
 			matchUtilities({ l: (value) => ({ left: `clamp(1rem, calc(calc(1vw + 1vh) * ${value}), 3rem)`})});
+			
+			addUtilities({ '.brand-gradient': { backgroundImage: `linear-gradient(90deg, ${theme('colors').accent[500]} -14.69%, ${theme('colors').accent[400]} 175.76%)` }});
+			addUtilities({ '.brand-gradient-transparent': { backgroundImage: `linear-gradient(90deg, ${theme('colors').transparent} -14.69%, ${theme('colors').transparent} 175.76%)` }});
+			addUtilities({ '.brand-gradient-hover': { backgroundImage: `linear-gradient(90deg, ${theme('colors').accent[500]} -14.69%, ${theme('colors').accent[500]} 175.76%)` }});
 		})
 	]
 }

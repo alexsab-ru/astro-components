@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import { useCarInfo } from '@/store/useCarInfo';
 import { scroll } from '@/js/modules/scroll';
-import { BRAND } from '@/const';
+import settings from '@/data/settings.json';
+const { brand } = settings;
+const BRAND = brand;
 import './styles.scss';
 
 function BrandsList() {
@@ -22,7 +24,7 @@ function BrandsList() {
 	const handleBrand = async (brand) => {
 		setAvtoInfo({ brand });
 		const data = {
-			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}/dynamic-directories/vehicle-models`,
+			url: `${import.meta.env.PUBLIC_MAXPOSTER_URL}dynamic-directories/vehicle-models`,
 			name: 'models',
 			params: {brandId: brand.id}
 		};

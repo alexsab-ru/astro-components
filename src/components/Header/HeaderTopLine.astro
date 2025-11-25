@@ -1,0 +1,22 @@
+---
+interface Props{
+	content: string;
+	classes?: string;
+	closeBtn?: boolean;
+}
+import { Icon } from 'astro-icon/components';
+const {content, classes = 'bg-accent-500 px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative', closeBtn = true} = Astro.props
+---
+<div x-show="showTopLine === 1" x-cloak>
+	<div class={classes}>
+		<Fragment set:html={content}>
+		{closeBtn && (
+			<button 
+				class="text-base absolute h-8 sm:h-full w-8 sm:w-10 right-0 top-0 z-10"
+				@click="hideTopLine"
+			>
+				<Icon name="mdi:close" class="text-lg text-white/80 hover:text-white transition-colors" />
+			</button>
+		)}
+	</div>
+</div>

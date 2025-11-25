@@ -1,10 +1,43 @@
-<!-- Google Tag Manager -->
-<script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-NMDLDB3F');</script>
-<!-- End Google Tag Manager -->
+---
+import scripts_json from '@/data/scripts.json';
+import settings_json from '@/data/settings.json';
+const { site_name, legal_city, connectforms_link, grecaptcha_open, grecaptcha_action } = settings_json;
+const dealer_params = JSON.stringify({
+    domain_region: site_name,
+    region: legal_city,
+    ...(connectforms_link && { connectforms_link }),
+    ...(grecaptcha_open && { grecaptcha_open }),
+    ...(grecaptcha_action && { grecaptcha_action })
+});
+import { cleanScriptsData } from '@/components/Scripts/components/cleanScriptsData';
+import GTM from '@/components/Scripts/components/runGTM.astro';
+import METRIKA_DEV from '@/components/Scripts/components/runMETRIKA_DEV.astro';
+import METRIKA from '@/components/Scripts/components/runMETRIKA.astro';
+import GA4 from '@/components/Scripts/components/runGA4.astro';
+import RE from '@/components/Scripts/components/runRE.astro';
+import VK_RTRG from '@/components/Scripts/components/runVK_RTRG.astro';
+import TOP_MAIL_RU from '@/components/Scripts/components/runTOP_MAIL_RU.astro';
+import CALLTOUCH from '@/components/Scripts/components/runCALLTOUCH.astro';
+import KONGET from '@/components/Scripts/components/runKONGET.astro';
+import STREAMWOOD from '@/components/Scripts/components/runSTREAMWOOD.astro';
+import SMARTPOINT from '@/components/Scripts/components/runSMARTPOINT.astro';
+import WIDGETS from '@/components/Scripts/components/runWIDGETS.astro';
+import LoadAnalyticsScripts from '@/components/Scripts/components/loadAnalyticsScripts.astro';
 
-<script async defer src="https://www.google.com/recaptcha/api.js?render=6Lepfy4pAAAAAAGHFP655qNe6Bb_BcskklcxajC6"></script>
-
+const cleanedScripts = cleanScriptsData(scripts_json);
+---
+<script id="scripts_json" type="application/ld+json" set:html={cleanedScripts}/>
+<script id="settings_json" type="application/ld+json" set:html={dealer_params}/>
+<GTM />
+<METRIKA_DEV />
+<METRIKA />
+<GA4 />
+<RE />
+<VK_RTRG />
+<TOP_MAIL_RU />
+<CALLTOUCH />
+<KONGET />
+<STREAMWOOD />
+<SMARTPOINT />
+<WIDGETS />
+<LoadAnalyticsScripts />

@@ -1,35 +1,28 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { BRAND, LEGAL_CITY_WHERE, AGREE_LABEL } from '@/const';
+import { AGREE_LABEL } from '@/const';
+import settings from '@/data/settings.json';
+const { brand, legal_city_where } = settings;
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-import modelsJSON from '@/data/models.json';
-function filterAndExtractKeys(items) {
-    return items.reduce((acc, item) => {
-        if (item.show) {
-            acc.push({
-                id: item.id,
-                name: item.name,
-                show: item.show,
-                thumb: item.thumb,
-                globalChars: item.globalChars
-            });
-        }
-        return acc;
-    }, []);
-}
-const options = filterAndExtractKeys(modelsJSON);
-const optionsJSON = JSON.stringify(options);
-
+import modelsData from '@/data/models.json';
+import { isModelVisible } from '@/js/utils/modelVisibility';
+const { testDrive } = modelsData;
+const optionsJSON = JSON.stringify(testDrive.filter(isModelVisible));
 ---
 
-<Layout title={`Тест-драйв автомобиля ${BRAND} – Онлайн запись в салон официального дилера ${BRAND} в ${LEGAL_CITY_WHERE}`} description={`Записаться на тест-драйв автомобиля ${BRAND} в ${LEGAL_CITY_WHERE} вы можете на официальном сайте дилера ${BRAND} в ${LEGAL_CITY_WHERE}, заполнив специальную форму, или по телефонам: ${salonsPhone}`}>
+<Layout 
+	title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} 
+	description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`} 
+	{...salons.length > 1 ? {'brand': testDrive[0]?.mark_id} : {} }
+>
 	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data=`{
 		models: null,
 		current: null,
@@ -38,6 +31,7 @@ const optionsJSON = JSON.stringify(options);
 		},
 		currentModel: function(id) {
 			this.current = this.models.find(m => m.id === id);
+			${salons.length > 1 ? "const brandValue = this.current?.mark_id; if (brandValue) { document.documentElement.setAttribute('data-brand', brandValue); $dispatch('brand-updated', { brand: brandValue }); }" : ""}
 		},
 		init: function() {
 			this.getModels();
@@ -48,7 +42,7 @@ const optionsJSON = JSON.stringify(options);
 		<div class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-[1]" style="background-image: url('https://cdn.alexsab.ru/models/default-model-bg.webp')" x-cloak>
 			<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
 			<h2 class="p-5 sm:p-10 text-2xl font-bold text-white" x-text="current?.name"></h2>
-			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.name">
+			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.name" width="533" height="300" loading="lazy" />
 			<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white xl:text-black">
 				<template x-for="char in current?.globalChars">
 					<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
@@ -63,17 +57,22 @@ const optionsJSON = JSON.stringify(options);
 		</div>
 
 		<div class="p-5 sm:p-10 space-y-10 w-full lg:w-2/5 2xl:w-1/2" x-cloak>
-			<h1 class="text-3xl sm:text-4xl font-bold text-center">Записаться на тест-драйв</h1>
+			<PageH1 h1="Записаться на&nbsp;тест-драйв" classes="text-3xl sm:text-4xl font-bold text-center" />
 			<div class="flex justify-center gap-4 flex-wrap">
-				<template x-for="model in models">
-					<template x-if="model.show">
+				<template x-for="(model, index) in models" :key="model.id+index">
+					<div class="contents">
+						<!-- Невидимый разделитель перед новым брендом -->
+						<div x-show="index > 0 && models[index - 1].mark_id !== model.mark_id" 
+							 class="basis-full h-0"></div>
+						
+						<!-- Ваша кнопка -->
 						<button
-							class="text-sm sm:text-base py-2 px-2 sm:px-4 rounded"
-							:class="model?.id === current?.id ? 'bg-accent-500 text-white' : 'bg-gray-200'"
-							x-text="model?.name"
+							class="text-sm sm:text-base py-3 px-2 sm:px-4 rounded relative"
+							:class="model?.id === current?.id ? 'bg-accent-500 !text-white' : 'bg-gray-200'"
+							x-html="`${model?.name} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] !leading-none text-gray-500'>${model?.mark_id}</small>`"
 							@click="currentModel(model.id)"
 						></button>
-					</template>
+					</div>
 				</template>
 			</div>
 			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
@@ -95,7 +94,7 @@ const optionsJSON = JSON.stringify(options);
 					errorClasses="text-red-500"
 				/>
 
-				<ChoosingDealerSelect required={true} salons={salons} />
+				<ChoosingDealerSelect required={true} salons={salons} pageData />
 
 				<Checkbox
 					name="agree"

@@ -1,60 +1,67 @@
 ---
+import settings from '@/data/settings.json';
+const { yandex_widget_orgnization, map_background } = settings;
+
 interface Props{
+	widgetId?: string;
 	mapImg?: string;
 	class?: string;
 }
-const {mapImg = 'https://cdn.alexsab.ru/maps/map-bg.webp', class: className = '', ...rest} = Astro.props
+const {mapImg = map_background, class: className = '', widgetId = yandex_widget_orgnization, ...rest} = Astro.props
+
 import './map.sass';
 ---
-<div style={`background-image: url(${mapImg})`} class={`relative overflow-hidden w-full flex items-center justify-center bg-gray-100 bg-cover bg-center z-10 cursor-pointer ${className}`} {...rest} id="map-widget-wrapper">
+<div style={`background-image: url(${mapImg})`} class={`relative overflow-hidden w-full flex items-center justify-center bg-gray-100 bg-cover bg-center z-10 cursor-pointer ${className}`} {...rest} id="map-widget-wrapper" data-widget-id={widgetId}>
 	<div class="loader loader-default"></div>
 	<div id="map-widget" class="h-full w-full flex items-center justify-center"></div>
 </div>
 
 <script>
-	import { LINK_WIDGET, LINK_WIDGET_ORGNIZATION } from '@/const';
+	import { LINK_WIDGET } from '@/const';
 	const widgetWrapper = document.getElementById('map-widget-wrapper');
 	const widget = document.getElementById('map-widget');
 	let onHover = false;
-	const mouseEnterHandler = function() {
-		ymap();
-	};
-	const ymap = function() {
-		if(!onHover){
-			widgetWrapper.removeEventListener('mouseenter', mouseEnterHandler);
-			widgetWrapper.classList.add('is-active');
-			const iframe = document.createElement("iframe");
-			iframe.classList.add('absolute', 'w-full', 'h-full', 'z-20');
-			iframe.onload = function(e) {
-				widgetWrapper.setAttribute('style', '');
-				widgetWrapper.classList.remove('is-active');
-				// console.log("iframe загрузился");
-			};
-			iframe.onerror = function() {
-				// console.log("Что-то пошло не так, давай, ищи ошибку!");
-				showError(widget);
-				widgetWrapper.classList.remove('is-active');
-			};
-			iframe.src = LINK_WIDGET+LINK_WIDGET_ORGNIZATION;
-			widget.appendChild(iframe);
-			onHover = true;
-		}
-	}
-	widgetWrapper.addEventListener('mouseenter', mouseEnterHandler);
-	
-	function showError(el: HTMLElement){
-		el.innerHTML = '<p class="text-center font-medium text-lg">Упс! Что-то пошло не так :( <br /> Перезагрузите страницу и попробуйте снова... </p>'
-	}
-
-	const cb = function(entries, observer) {
-		entries.forEach((entry) => {
-			if (entry.isIntersecting) {
-				ymap();
-				observer.unobserve(entry.target);
+	const yandex_widget_orgnization = widgetWrapper.dataset.widgetId;
+	if(yandex_widget_orgnization){
+		const mouseEnterHandler = function() {
+			ymap();
+		};
+		const ymap = function() {
+			if(!onHover){
+				widgetWrapper.removeEventListener('mouseenter', mouseEnterHandler);
+				widgetWrapper.classList.add('is-active');
+				const iframe = document.createElement("iframe");
+				iframe.classList.add('absolute', 'w-full', 'h-full', 'z-20');
+				iframe.onload = function(e) {
+					widgetWrapper.setAttribute('style', '');
+					widgetWrapper.classList.remove('is-active');
+					// console.log("iframe загрузился");
+				};
+				iframe.onerror = function() {
+					// console.log("Что-то пошло не так, давай, ищи ошибку!");
+					showError(widget);
+					widgetWrapper.classList.remove('is-active');
+				};
+				iframe.src = LINK_WIDGET+yandex_widget_orgnization;
+				widget.appendChild(iframe);
+				onHover = true;
 			}
-		})
-	}
-	let mapObserver = new IntersectionObserver(cb);
-	mapObserver.observe(document.querySelector('#map-widget'));
+		}
+		widgetWrapper.addEventListener('mouseenter', mouseEnterHandler);
+		
+		function showError(el: HTMLElement){
+			el.innerHTML = '<p class="text-center font-medium text-lg">Упс! Что-то пошло не так :( <br /> Перезагрузите страницу и попробуйте снова... </p>'
+		}
 
+		const cb = function(entries, observer) {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					ymap();
+					observer.unobserve(entry.target);
+				}
+			})
+		}
+		let mapObserver = new IntersectionObserver(cb);
+		mapObserver.observe(document.querySelector('#map-widget'));
+	}
 </script>

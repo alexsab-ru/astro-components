@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="club" fill="none" viewBox="0 0 24 24">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M15.0005 8C15.0005 9.657 13.6575 11 12.0005 11C10.3435 11 9.00049 9.657 9.00049 8C9.00049 6.343 10.3435 5 12.0005 5C13.6575 5 15.0005 6.343 15.0005 8Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.0005 11C21.0005 12.105 20.1055 13 19.0005 13C17.8955 13 17.0005 12.105 17.0005 11C17.0005 9.895 17.8955 9 19.0005 9C20.1055 9 21.0005 9.895 21.0005 11Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M3.07129 11C3.07129 12.105 3.96629 13 5.07129 13C6.17529 13 7.07129 12.105 7.07129 11C7.07129 9.895 6.17529 9 5.07129 9C3.96629 9 3.07129 9.895 3.07129 11Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.00049 19C6.00049 15.686 8.68649 13 12.0005 13C15.3145 13 18.0005 15.686 18.0005 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M16.9297 15.577C17.5337 15.211 18.2427 15 19.0007 15C21.2097 15 23.0007 16.791 23.0007 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.071 15.577C6.467 15.211 5.758 15 5 15C2.791 15 1 16.791 1 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

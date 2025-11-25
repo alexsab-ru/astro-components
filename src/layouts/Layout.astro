@@ -5,21 +5,25 @@ interface Props {
 	description?: string;
 	image?: string;
 	keywords?: string;
+	brand?: string;
 }
-let {title, h1, description, image, keywords} = Astro.props;
+let {title, h1, description, image, keywords, brand = null} = Astro.props;
 
-import {SITE_NAME, SITE_DESCR} from '@/const.js';
+import settings from '@/data/settings.json';
+const { site_name, site_description } = settings;
 
 import Head from '@/components/Head.astro';
 import ScriptHead from '@/components/Scripts/Head.astro';
 import ScriptBodyBegin from '@/components/Scripts/BodyBegin.astro';
 import ScriptBodyEnd from '@/components/Scripts/BodyEnd.astro';
-import Header from '@/components/Header.astro';
+import Header from '@/components/Header/Header.astro';
 import Footer from '@/components/ExtendedFooter.astro';
 import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
 import seo from '@/data/seo.json';
+import StripEmptyQuery from '../components/StripEmptyQuery.astro';
+import Tooltip from '@/components/Tooltip/Tooltip.astro';
 
 const currentPath = Astro.url.pathname;
 if (seo[currentPath]) {
@@ -33,21 +37,38 @@ if (seo[currentPath]) {
 		description = pageSeo.description;
 	}
 
+	if (pageSeo.keywords && pageSeo.keywords.trim()) {
+		keywords = pageSeo.keywords;
+	}
+
 	if (pageSeo.h1 && pageSeo.h1.trim()) {
 		h1 = pageSeo.h1;
+	}
+
+	if (pageSeo.image && pageSeo.image.trim()) {
+		image = pageSeo.image;
 	}
 }
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang="ru" {
+	...brand ? {
+		'data-brand': brand, 
+		'x-data': '{selectBrand: null}', 
+		"x-init" : `$store.salonsStore.filterPageData(${JSON.stringify(brand)}); $watch('selectBrand', value => $store.salonsStore.filterPageData(selectBrand))`,
+		"@brand-updated.window" : "selectBrand = $event.detail.brand"
+	} : 
+		{}
+	}>
 	<head>
-		<Head title={title || h1 || SITE_NAME} description={description ?? SITE_DESCR} image={image} keywords={keywords} />
+		<StripEmptyQuery />
+		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
 	<body class="min-h-screen flex flex-col" x-data="complectation">
 		<ScriptBodyBegin />
-		<Header />
+		<Header brand={brand} />
 		<main class="flex-grow relative">
 			<slot />
 		</main>
@@ -56,6 +77,7 @@ if (seo[currentPath]) {
 		<UpBtn />
 		<Cookie />
 		<ScriptBodyEnd />
+		<Tooltip />
 	</body>
 </html>
 <style is:global lang="scss">

@@ -1,0 +1,23 @@
+---
+import scripts_json from '@/data/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+---
+{ isProd && scripts_json.ga4 && scripts_json.ga4.value.length > 0 && scripts_json.ga4.value[0].id && String(scripts_json.ga4.value[0].id) !== "" && (
+<script>
+function runGA4(scripts_json_ga4) {
+    // console.log("runGA4", scripts_json_ga4);
+    scripts_json_ga4.forEach(ga => {
+        var script = document.createElement('script');
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${ga.id}`;
+        script.async = true;
+        document.head.appendChild(script);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', ga.id);
+    });
+}
+window._ga = runGA4;
+</script>
+)}

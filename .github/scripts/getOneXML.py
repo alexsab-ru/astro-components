@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import time
 import requests
@@ -12,25 +13,30 @@ def download_or_read_file(path, retries=3, delay=5):
         with open(path, 'rb') as file:
             return file.read()
 
-    for attempt in range(retries):
-        try:
-            response = requests.get(path, timeout=10)  # Установим тайм-аут
-            response.raise_for_status()
-            return response.content
-        except (ConnectionError, Timeout) as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            if attempt < retries - 1:
-                time.sleep(delay)  # Ждем перед повторной попыткой
-            else:
-                raise
+    if path.startswith('http://') or path.startswith('https://'):
+        for attempt in range(retries):
+            try:
+                response = requests.get(path, timeout=10)  # Установим тайм-аут
+                response.raise_for_status()
+                return response.content
+            except (ConnectionError, Timeout) as e:
+                print(f"Attempt {attempt + 1} failed: {e}")
+                if attempt < retries - 1:
+                    time.sleep(delay)  # Ждем перед повторной попыткой
+                else:
+                    raise
+    
+    return None
 
-def detect_xpath(xml_content):
-    # Список известных XPath шаблонов
+def detect_xpath(xml_content, url):
+    # Список известных XPath шаблонов (паттерн: xpath, родительский путь для проверки структуры)
     xpath_patterns = [
-        "//data/cars/car",
-        "//vehicles/vehicle",
-        "//Ads/Ad",
-        "//carcopy/offers/offer"
+        ("//data/cars/car", "//data/cars"),
+        ("//catalog/vehicles/vehicle", "//catalog/vehicles"),
+        ("//vehicles/vehicle", "//vehicles"),
+        ("//Ads/Ad", "//Ads"),
+        ("//carcopy/offers/offer", "//carcopy/offers"),
+        ("//yml_catalog/shop/offers/offer", "//yml_catalog/shop/offers")
     ]
     
     try:
@@ -40,18 +46,40 @@ def detect_xpath(xml_content):
             
         root = etree.fromstring(xml_content)
         
-        # Проверяем каждый шаблон
-        for xpath in xpath_patterns:
+        # Сначала проверяем каждый шаблон на наличие элементов
+        for xpath, parent_xpath in xpath_patterns:
             elements = root.xpath(xpath)
             if elements:
                 print(f"Detected XPath pattern: {xpath}")
                 return xpath
+        
+        # Если элементов нет, пробуем определить по структуре (пустые контейнеры)
+        for xpath, parent_xpath in xpath_patterns:
+            parent_elements = root.xpath(parent_xpath)
+            if parent_elements:
+                # Нашли подходящую структуру, но она пуста
+                warning_msg = f"⚠️ XML файл {url} содержит структуру {parent_xpath}, но не содержит данных (пустой)"
+                print(warning_msg)
+                # Записываем предупреждение в output.txt
+                # with open('output.txt', 'a', encoding='utf-8') as file:
+                #     file.write(f"\n{warning_msg}\n")
+                return xpath
                 
-        # Если ни один шаблон не подошел
-        raise ValueError("No matching XPath pattern found in XML")
+        # Если вообще ничего не подошло
+        error_msg = "❌ Не удалось определить структуру XML {url} - ни один из известных XPath паттернов не найден"
+        print(error_msg)
+        # Записываем ошибку в output.txt
+        with open('output.txt', 'a', encoding='utf-8') as file:
+            file.write(f"\n{error_msg}\n")
+        # Возвращаем первый паттерн по умолчанию, чтобы не останавливать выполнение
+        return xpath_patterns[0][0]
         
     except etree.XMLSyntaxError as e:
-        raise ValueError(f"Invalid XML content: {str(e)}")
+        error_msg = f"❌ Невалидный XML контент {url}: {str(e)}"
+        print(error_msg)
+        with open('output.txt', 'a', encoding='utf-8') as file:
+            file.write(f"\n{error_msg}\n")
+        raise ValueError(error_msg)
 
 def merge_xml_files(xml_contents, xpath):
     # Определяем путь до родительского элемента для объединения
@@ -160,7 +188,7 @@ def main():
     
     # Если xpath не указан, определяем его автоматически из первого XML
     if not args.xpath:
-        detected_xpath = detect_xpath(xml_contents[0])
+        detected_xpath = detect_xpath(xml_contents[0], urls[0])
         print(f"Using detected XPath: {detected_xpath}")
         xpath = detected_xpath
     else:
@@ -169,10 +197,25 @@ def main():
     merged_root = merge_xml_files(xml_contents, xpath)
     deduplicated_root = remove_duplicates(merged_root, xpath)
 
+    # Подсчитываем финальное количество элементов
+    final_elements = deduplicated_root.xpath(xpath)
+    final_count = len(final_elements)
+    
+    # Если финальный файл пустой, записываем предупреждение
+    if final_count == 0:
+        warning_msg = f"⚠️ Результирующий XML файл {args.output_path} не содержит данных (0 элементов)"
+        print(warning_msg)
+        with open('output.txt', 'a', encoding='utf-8') as file:
+            file.write(f"{warning_msg}\n")
+
     merged_tree = etree.ElementTree(deduplicated_root)
+    # Создаём директории для output_path, если их нет
+    output_dir = os.path.dirname(args.output_path)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
     merged_tree.write(args.output_path, encoding="UTF-8", xml_declaration=True, pretty_print=True)
 
-    print(f"XML files successfully downloaded and merged into {args.output_path}")
+    print(f"\033[30;42mXML files successfully downloaded and merged into {args.output_path} ({final_count} elements)\033[0m")
 
 if __name__ == "__main__":
     main()

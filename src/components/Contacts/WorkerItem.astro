@@ -10,13 +10,13 @@ interface Props {
 	}
 }
 const {worker} = Astro.props;
-const workerPhoto = worker?.photo || 'https://cdn.alexsab.ru/people/user.webp';
+const workerPhoto = worker?.photo || '';
 
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { Icon } from 'astro-icon/components';
 ---
 <div class="w-full sm:w-[49%] lg:w-[32%] xl:w-[24%] p-4 bg-white flex flex-col">
-	{workerPhoto && (<img src={workerPhoto} alt={worker?.name} class="w-full sm:max-h-[490px] object-cover object-left-top h-auto mb-5" loading="lazy" />)}
+	{workerPhoto && (<img src={workerPhoto} alt={worker?.name} class="w-full sm:max-h-[490px] object-cover object-left-top h-auto mb-5" loading="lazy" width="327" height="490" />)}
 	<div class="flex-grow flex flex-col gap-4 justify-between">
 		<div>
 			<div class="text-lg font-bold !leading-none">{worker.name}</div>
@@ -32,7 +32,7 @@ import { Icon } from 'astro-icon/components';
 			{worker?.email && (
 				<div class="flex items-center gap-1.5">
 					<Icon name="mdi:email-outline" class="text-xl flex-shrink-0 text-gray-600" />
-					<a href={`mailto:${worker.email}`} class="font-bold transition-colors hover:text-accent-500 inline-block">{worker.email}</a>
+					<a href={`mailto:${worker.email}`} class="font-bold transition-colors hover:text-accent-500 inline-block !m-0">{worker.email}</a>
 				</div>
 			)}
 		</div>

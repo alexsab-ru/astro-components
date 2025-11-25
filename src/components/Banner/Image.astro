@@ -1,23 +1,29 @@
 ---
+import { getObjectPosition } from '@/js/utils/media';
+import type { TBanner } from './types'
 interface Props{
-	title?: string;
-	imageUrl: string;
-	mobileImageUrl?: string;
-	tabletImageUrl?: string;
-	imagePosition?: string;
+	banner?: TBanner;
+	index?: number;
 }
-import { SITE_NAME, SITE_DESCR, LEGAL_CITY_WHERE } from '@/const';
-const {title, imageUrl, mobileImageUrl, tabletImageUrl, imagePosition} = Astro.props
-const positionClass = imagePosition === 'bottom' ? 'object-bottom' : imagePosition === 'top' ? 'object-top' : 'object-center';
+import settings from '@/data/settings.json';
+const { site_name, site_description, legal_city_where } = settings;
+const {banner, index} = Astro.props;
+
+const desktopImage = banner?.imageUrl ?? banner?.image?.desktop ?? null;
+const tabletImage  = banner?.tabletImageUrl ?? banner?.image?.tablet ?? null;
+const mobileImage  = banner?.mobileImageUrl ?? banner?.image?.mobile ?? null;
+
+const pos = getObjectPosition(banner);
 ---
 <picture>
-	<source media="(min-width: 1024px)" srcset={imageUrl} />
-	{tabletImageUrl && <source media="(min-width: 768px)" srcset={tabletImageUrl} />}
+	{mobileImage && <source media="(min-width: 1024px)" srcset={desktopImage} />}
+	{tabletImage && <source media="(min-width: 768px)" srcset={tabletImage} />}
 	<img
-		src={mobileImageUrl || imageUrl}
-		class={`absolute inset-0 h-full w-full object-cover ${positionClass}`}
-		{...title ? {alt: title.replace(/<[^>]*>/g, '')} : {alt: `${SITE_NAME} ${SITE_DESCR} в ${LEGAL_CITY_WHERE}`} }
-		fetchpriority="high"
+		src={mobileImage || desktopImage}
+		class={`absolute inset-0 h-full w-full object-cover ${pos.className}`}
+		{...pos.style ? {style: pos.style} : {}}
+		{...banner?.title ? {alt: banner.title.replace(/<[^>]*>/g, '')} : {alt: `${site_name} ${site_description} в ${legal_city_where}`} }
+		{...index === 0 ? {fetchpriority: 'high'} : {}}
 		loading="lazy"
 	/>
 </picture>

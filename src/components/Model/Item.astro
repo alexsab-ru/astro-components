@@ -5,6 +5,8 @@ interface Props {
 const { model } = Astro.props;
 import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format';
+import { createDisclaimerIcon } from '@/js/utils/disclaimer';
+const noPriceText = (model?.status && (model.status === 'preorder' || model.status === 'comminsoon')) ? 'cкоро в продаже' : 'по запросу';
 ---
 
 <a
@@ -21,6 +23,8 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 			model?.benefit && !isNaN(model?.benefit) && model?.benefit != 0 && model?.benefit != '' && (
 				<span class="block text-xs sm:text-lg text-black/80">
 					Выгода до {currencyFormat(model.benefit)}
+					{/* Добавляем значок с дисклеймером для выгоды, если он существует */}
+					{model?.benefitDisclaimer && <Fragment set:html={createDisclaimerIcon(model.benefitDisclaimer)} />}
 				</span>
 			)
 		}
@@ -32,8 +36,8 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 		{
 			model?.badge && (
 				<img
-					data-src={model?.badge.img}
-					alt={model?.badge.alt}
+					data-src={model.badge?.horisontal || model.badge?.img }
+					alt={model.badge?.alt}
 					class="opacity-0 absolute right-0 top-0 xs:h-7 h-8 sm:h-14 w-auto z-10"
 				/>
 			)
@@ -51,10 +55,12 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 		model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ?  (
 			<span>
 				<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+				{/* Добавляем значок с дисклеймером для цены, если он существует */}
+				{model?.priceDisclaimer && <Fragment set:html={createDisclaimerIcon(model.priceDisclaimer)} />}
 			</span>
 		) : (
 			<span>
-				<span class="text-lg">по запросу</span>
+				<span class="text-lg">{noPriceText}</span>
 			</span>
 		)
 	}

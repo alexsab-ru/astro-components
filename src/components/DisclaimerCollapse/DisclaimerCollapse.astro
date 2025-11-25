@@ -1,0 +1,20 @@
+---
+interface Props {
+    content: string | HTMLElement
+}
+const {content} = Astro.props;
+---
+<div 
+    class="pt-5 mt-8 border-white/20 border-t"
+    x-data="footer"
+    x-init="showDisclaimer = false"
+    x-cloak
+>
+    <div 
+        class="!text-xs text-white/60 mb-2 space-y-4 overflow-hidden"
+        :class="{'line-clamp-none': showDisclaimer, 'line-clamp-3': !showDisclaimer}"
+    >
+        <Fragment set:html={content} />
+    </div>
+    <button class="text-xs" @click="onClick" x-text="showDisclaimer ? 'Скрыть -' : 'Показать все +'"></button>
+</div>

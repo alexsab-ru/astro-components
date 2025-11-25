@@ -1,0 +1,66 @@
+---
+type TMediaKeys = {
+    desktop?: string;
+    tablet?: string;
+    mobile?: string;
+}
+interface Props {
+    image: TMediaKeys;
+    imagePosition?: TMediaKeys;
+    classes?: string;
+    fixed?: boolean;
+    id?: string; // поддержка ID
+}
+const {
+    image,
+    imagePosition,
+    classes = '',
+    fixed = false,
+    id,
+    ...rest
+} = Astro.props as Props;
+const fixedClass = fixed ? 'bg-fixed' : 'bg-scroll';
+const desktopPositionClass = imagePosition?.desktop ? `lg:media-bg-${imagePosition?.desktop}` : 'lg:media-bg-center';
+const tabletPositionClass = imagePosition?.tablet ? `md:media-bg-${imagePosition?.tablet}` : 'md:media-bg-center';
+const mobilePositionClass = imagePosition?.mobile ? `media-bg-${imagePosition?.mobile}` : 'media-bg-center';
+---
+
+<section data-bg-id class={`section-with-bg text-white z-[1] relative before:content-[''] before:absolute before:inset-0 before:bg-black/70 before:z-[-1] ${classes} ${fixedClass} ${mobilePositionClass} ${tabletPositionClass} ${desktopPositionClass}`} {...image.mobile && {'data-image-mobile': image.mobile}} {...image.tablet && {'data-image-tablet': image.tablet}} data-image-desktop={image.desktop} {...rest}>
+	<slot />	
+</section>
+
+<script>  
+    import './update.image';
+</script>
+
+<style>
+    .media-bg-center{
+	    @apply bg-center;
+    }
+    .media-bg-top{
+        @apply bg-top;
+    }
+    .media-bg-bottom{
+        @apply bg-bottom;
+    }
+
+    .md\:media-bg-center{
+        @apply md:bg-center;
+    }
+    .md\:media-bg-top{
+        @apply md:bg-top;
+    }
+    .md\:media-bg-bottom{
+        @apply md:bg-bottom;
+    }
+
+    .lg\:media-bg-center{
+        @apply lg:bg-center;
+    }
+    .lg\:media-bg-top{
+        @apply lg:bg-top;
+    }
+    .lg\:media-bg-bottom{
+        @apply lg:bg-bottom;
+    }
+</style>
