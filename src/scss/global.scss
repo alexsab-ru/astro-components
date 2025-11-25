@@ -196,8 +196,8 @@ section:not(.model-section) {
 	}
 }
 
-.lazy{
-	display: flex;
+[class*='lazy']{
+	display: flex !important;
 	align-items: center;
 	justify-content: center;
 	img{
@@ -206,6 +206,10 @@ section:not(.model-section) {
 	}
 }
 
+img[src*='simple-loading']{
+	max-height: 70px;
+	width: auto;
+}
 // Custom classes for media object
 .media-object-center{
 	@apply object-center;
