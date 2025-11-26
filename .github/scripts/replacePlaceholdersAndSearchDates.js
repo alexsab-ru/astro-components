@@ -233,10 +233,10 @@ class PlaceholderProcessor {
         };
 
         // Создаем плейсхолдеры для минимальной цены
-        setPlaceholders('minprice', minPrice, minPriceModel, 'price', 'от', '-from');
+        setPlaceholders('min-price', minPrice, minPriceModel, 'price', 'от', '-from');
 
         // Создаем плейсхолдеры для максимальной выгоды
-        setPlaceholders('maxbenefit', maxBenefit, maxBenefitModel, 'benefit', 'до', '-to');
+        setPlaceholders('max-benefit', maxBenefit, maxBenefitModel, 'benefit', 'до', '-to');
     }
 
     // Функция для замены плейсхолдеров в содержимом файла
