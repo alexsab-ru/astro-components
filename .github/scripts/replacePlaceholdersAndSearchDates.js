@@ -24,6 +24,7 @@ class PlaceholderProcessor {
         
         // Данные
         this.carsData = [];
+        this.modelsData = [];
         this.disclaimerData = {};
         this.settingsData = {};
         
@@ -31,6 +32,8 @@ class PlaceholderProcessor {
         this.carsPlaceholder = {};
         this.carsPlaceholderWithoutDisclaimer = {}; // Плейсхолдеры без дисклеймера для seo.json
         this.settingsPlaceholder = {};
+        this.minPriceMaxBenefitPlaceholders = {}; // Плейсхолдеры для минимальной цены и максимальной выгоды
+        this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer = {}; // Без дисклеймера для seo.json
     }
 
     // Общая функция для чтения и валидации JSON-файла
@@ -61,6 +64,8 @@ class PlaceholderProcessor {
     // Загрузка всех данных
     loadData() {
         this.carsData = this.readAndValidateJSON('all-prices.json', 'array', []);
+        const modelsDataFile = this.readAndValidateJSON('models.json', 'object', {});
+        this.modelsData = modelsDataFile.models || [];
         this.disclaimerData = this.readAndValidateJSON('federal-disclaimer.json', 'object', {});
         this.settingsData = this.readAndValidateJSON('settings.json', 'object', {});
     }
@@ -141,6 +146,105 @@ class PlaceholderProcessor {
         });
     }
 
+    // Создание плейсхолдеров для минимальной цены и максимальной выгоды из models.json
+    createMinPriceMaxBenefitPlaceholders() {
+        if (this.modelsData.length === 0) return;
+
+        // Находим модель с минимальной ценой и максимальной выгодой (исключаем нулевые)
+        let minPriceModel = null;
+        let minPrice = Infinity;
+
+        let maxBenefitModel = null;
+        let maxBenefit = 0;
+        
+        this.modelsData.forEach(model => {
+            const price = typeof model.price === 'string' ? parseFloat(model.price) : (typeof model.price === 'number' ? model.price : 0);
+            if (price > 0 && price < minPrice) {
+                minPrice = price;
+                minPriceModel = model;
+            }
+            const benefit = typeof model.benefit === 'string' ? parseFloat(model.benefit) : (typeof model.benefit === 'number' ? model.benefit : 0);
+            if (benefit > 0 && benefit > maxBenefit) {
+                maxBenefit = benefit;
+                maxBenefitModel = model;
+            }
+        });
+
+        if (minPrice === Infinity) minPrice = 0;
+
+        // Создаем глобальные плейсхолдеры для минимальной цены
+        if (minPrice > 0 && minPriceModel) {
+            // Обычный плейсхолдер (число)
+            this.minPriceMaxBenefitPlaceholders['{{minprice}}'] = minPrice;
+            this.minPriceMaxBenefitPlaceholders['{{minprice-from}}'] = ` от&nbsp;${minPrice}`;
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice}}'] = minPrice;
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice-from}}'] = ` от ${minPrice}`;
+
+            // Плейсхолдер с форматированием (с дисклеймером для обычных файлов)
+            // Используем mark_id и id модели для поиска дисклеймера
+            let minPriceFormatted = currencyFormat(minPrice);
+            const minPriceCarId = `${minPriceModel.mark_id.toLowerCase()}-${minPriceModel.id}`;
+            
+            if (this.disclaimerData[minPriceCarId]?.price && this.disclaimerData[minPriceCarId].price !== '') {
+                minPriceFormatted += quoteEscaper(
+                    `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[minPriceCarId].price}">${this.infoIcon}</span>`
+                );
+            }
+            
+            this.minPriceMaxBenefitPlaceholders['{{minpriceb}}'] = minPriceFormatted;
+            this.minPriceMaxBenefitPlaceholders['{{minpriceb-from}}'] = ` от&nbsp;${minPriceFormatted}`;
+            // Без дисклеймера для seo.json
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb}}'] = currencyFormat(minPrice).replace(/\u00a0/g, ' ');
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb-from}}'] = ` от ${currencyFormat(minPrice).replace(/\u00a0/g, ' ')}`;
+        } else if(minPrice === 0){
+            this.minPriceMaxBenefitPlaceholders['{{minprice}}'] = 
+            this.minPriceMaxBenefitPlaceholders['{{minprice-from}}'] = 
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice}}'] = 
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice-from}}'] = 
+            this.minPriceMaxBenefitPlaceholders['{{minpriceb}}'] = 
+            this.minPriceMaxBenefitPlaceholders['{{minpriceb-from}}'] = 
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb}}'] = 
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb-from}}'] = 
+            '';
+        }
+
+        // Создаем глобальные плейсхолдеры для максимальной выгоды
+        if (maxBenefit > 0 && maxBenefitModel) {
+            // Обычный плейсхолдер (число)
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefit}}'] = maxBenefit;
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefit-to}}'] = ` до&nbsp;${maxBenefit}`;
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit}}'] = maxBenefit;
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit-to}}'] = ` до ${maxBenefit}`;
+
+            // Плейсхолдер с форматированием (с дисклеймером для обычных файлов)
+            // Используем mark_id и id модели для поиска дисклеймера
+            let maxBenefitFormatted = currencyFormat(maxBenefit);
+            const maxBenefitCarId = `${maxBenefitModel.mark_id.toLowerCase()}-${maxBenefitModel.id}`;
+            
+            if (this.disclaimerData[maxBenefitCarId]?.benefit && this.disclaimerData[maxBenefitCarId].benefit !== '') {
+                maxBenefitFormatted += quoteEscaper(
+                    `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[maxBenefitCarId].benefit}">${this.infoIcon}</span>`
+                );
+            }
+            
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb}}'] = maxBenefitFormatted;
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb-to}}'] = ` до&nbsp;${maxBenefitFormatted}`;
+            // Без дисклеймера для seo.json
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb}}'] = currencyFormat(maxBenefit).replace(/\u00a0/g, ' ');
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb-to}}'] = ` до ${currencyFormat(maxBenefit).replace(/\u00a0/g, ' ')}`;
+        } else if(maxBenefit === 0){
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefit}}'] =
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefit-to}}'] =
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit}}'] =
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit-to}}'] =
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb}}'] =
+            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb-to}}'] =
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb}}'] =
+            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb-to}}'] =
+            '';
+        }
+    }
+
     // Функция для замены плейсхолдеров в содержимом файла
     replacePlaceholders(content, filePath = '') {
         // Определяем, является ли файл seo.json - для него используем плейсхолдеры без дисклеймера
@@ -150,6 +254,11 @@ class PlaceholderProcessor {
         const carsPlaceholdersToUse = isSeoFile 
             ? this.carsPlaceholderWithoutDisclaimer 
             : this.carsPlaceholder;
+        
+        // Выбираем набор плейсхолдеров для минимальной цены и максимальной выгоды
+        const minMaxPlaceholdersToUse = isSeoFile
+            ? this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer
+            : this.minPriceMaxBenefitPlaceholders;
         
         const placeholders = {
             '{{firstDay}}': FIRST_DAY,
@@ -161,13 +270,15 @@ class PlaceholderProcessor {
             '{{year}}': YEAR,
             ...this.settingsPlaceholder,
             ...carsPlaceholdersToUse,
+            ...minMaxPlaceholdersToUse,
         };
 
         let hasChanges = false;
         let updatedContent = content;
 
+        // Заменяем все плейсхолдеры
         for (let placeholder in placeholders) {
-            const regex = new RegExp(placeholder, 'g');
+            const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
             if (regex.test(updatedContent)) {
                 updatedContent = updatedContent.replace(regex, placeholders[placeholder]);
                 hasChanges = true;
@@ -418,6 +529,9 @@ class PlaceholderProcessor {
         
         // 4. Создаем ценовые placeholders с уже обработанными disclaimer'ами
         this.createCarsPricePlaceholders();
+        
+        // 4.1. Создаем плейсхолдеры для минимальной цены и максимальной выгоды
+        this.createMinPriceMaxBenefitPlaceholders();
         
         // 5. Обрабатываем все директории
         this.processAllDirectories();
