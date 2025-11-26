@@ -66,8 +66,6 @@ class PlaceholderProcessor {
         this.carsData = this.readAndValidateJSON('all-prices.json', 'array', []);
         this.disclaimerData = this.readAndValidateJSON('federal-disclaimer.json', 'object', {});
         this.settingsData = this.readAndValidateJSON('settings.json', 'object', {});
-        // const modelsDataFile = this.readAndValidateJSON('models.json', 'object', {});
-        // this.modelsData = modelsDataFile.models || [];
     }
 
     // Создание настроечных placeholders
