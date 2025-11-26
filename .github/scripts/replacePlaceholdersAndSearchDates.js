@@ -172,77 +172,53 @@ class PlaceholderProcessor {
 
         if (minPrice === Infinity) minPrice = 0;
 
-        // Создаем глобальные плейсхолдеры для минимальной цены
-        if (minPrice > 0 && minPriceModel) {
-            // Обычный плейсхолдер (число)
-            this.minPriceMaxBenefitPlaceholders['{{minprice}}'] = minPrice;
-            this.minPriceMaxBenefitPlaceholders['{{minprice-from}}'] = ` от&nbsp;${minPrice}`;
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice}}'] = minPrice;
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice-from}}'] = ` от ${minPrice}`;
-
-            // Плейсхолдер с форматированием (с дисклеймером для обычных файлов)
-            // Используем mark_id и id модели для поиска дисклеймера
-            let minPriceFormatted = currencyFormat(minPrice);
-            const minPriceCarId = `${minPriceModel.mark_id.toLowerCase()}-${minPriceModel.id}`;
+        // Вспомогательная функция для установки плейсхолдеров
+        const setPlaceholders = (prefix, value, model, disclaimerKey, textPrefix, textSuffix) => {
+            const keys = [
+                `{{${prefix}}}`,
+                `{{${prefix}${textSuffix}}}`,
+                `{{${prefix}b}}`,
+                `{{${prefix}b${textSuffix}}}`
+            ];
             
-            if (this.disclaimerData[minPriceCarId]?.price && this.disclaimerData[minPriceCarId].price !== '') {
-                minPriceFormatted += quoteEscaper(
-                    `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[minPriceCarId].price}">${this.infoIcon}</span>`
-                );
+            if (value > 0 && model) {
+                // Форматируем значение с дисклеймером
+                let formatted = currencyFormat(value);
+                const carId = `${model.mark_id.toLowerCase()}-${model.id}`;
+                
+                if (this.disclaimerData[carId]?.[disclaimerKey] && this.disclaimerData[carId][disclaimerKey] !== '') {
+                    formatted += quoteEscaper(
+                        `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[carId][disclaimerKey]}">${this.infoIcon}</span>`
+                    );
+                }
+                
+                // Форматируем без дисклеймера для seo.json
+                const formattedWithoutDisclaimer = currencyFormat(value).replace(/\u00a0/g, ' ');
+                
+                // Устанавливаем значения
+                this.minPriceMaxBenefitPlaceholders[keys[0]] = value;
+                this.minPriceMaxBenefitPlaceholders[keys[1]] = `${textPrefix}&nbsp;${value}`;
+                this.minPriceMaxBenefitPlaceholders[keys[2]] = formatted;
+                this.minPriceMaxBenefitPlaceholders[keys[3]] = `${textPrefix}&nbsp;${formatted}`;
+                
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[0]] = value;
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[1]] = `${textPrefix} ${value}`;
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[2]] = formattedWithoutDisclaimer;
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[3]] = `${textPrefix} ${formattedWithoutDisclaimer}`;
+            } else {
+                // Очищаем плейсхолдеры
+                keys.forEach(key => {
+                    this.minPriceMaxBenefitPlaceholders[key] = '';
+                    this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[key] = '';
+                });
             }
-            
-            this.minPriceMaxBenefitPlaceholders['{{minpriceb}}'] = minPriceFormatted;
-            this.minPriceMaxBenefitPlaceholders['{{minpriceb-from}}'] = ` от&nbsp;${minPriceFormatted}`;
-            // Без дисклеймера для seo.json
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb}}'] = currencyFormat(minPrice).replace(/\u00a0/g, ' ');
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb-from}}'] = ` от ${currencyFormat(minPrice).replace(/\u00a0/g, ' ')}`;
-        } else if(minPrice === 0){
-            this.minPriceMaxBenefitPlaceholders['{{minprice}}'] = 
-            this.minPriceMaxBenefitPlaceholders['{{minprice-from}}'] = 
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice}}'] = 
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minprice-from}}'] = 
-            this.minPriceMaxBenefitPlaceholders['{{minpriceb}}'] = 
-            this.minPriceMaxBenefitPlaceholders['{{minpriceb-from}}'] = 
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb}}'] = 
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{minpriceb-from}}'] = 
-            '';
-        }
+        };
 
-        // Создаем глобальные плейсхолдеры для максимальной выгоды
-        if (maxBenefit > 0 && maxBenefitModel) {
-            // Обычный плейсхолдер (число)
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefit}}'] = maxBenefit;
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefit-to}}'] = ` до&nbsp;${maxBenefit}`;
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit}}'] = maxBenefit;
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit-to}}'] = ` до ${maxBenefit}`;
+        // Создаем плейсхолдеры для минимальной цены
+        setPlaceholders('minprice', minPrice, minPriceModel, 'price', 'от', '-from');
 
-            // Плейсхолдер с форматированием (с дисклеймером для обычных файлов)
-            // Используем mark_id и id модели для поиска дисклеймера
-            let maxBenefitFormatted = currencyFormat(maxBenefit);
-            const maxBenefitCarId = `${maxBenefitModel.mark_id.toLowerCase()}-${maxBenefitModel.id}`;
-            
-            if (this.disclaimerData[maxBenefitCarId]?.benefit && this.disclaimerData[maxBenefitCarId].benefit !== '') {
-                maxBenefitFormatted += quoteEscaper(
-                    `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[maxBenefitCarId].benefit}">${this.infoIcon}</span>`
-                );
-            }
-            
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb}}'] = maxBenefitFormatted;
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb-to}}'] = ` до&nbsp;${maxBenefitFormatted}`;
-            // Без дисклеймера для seo.json
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb}}'] = currencyFormat(maxBenefit).replace(/\u00a0/g, ' ');
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb-to}}'] = ` до ${currencyFormat(maxBenefit).replace(/\u00a0/g, ' ')}`;
-        } else if(maxBenefit === 0){
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefit}}'] =
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefit-to}}'] =
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit}}'] =
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefit-to}}'] =
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb}}'] =
-            this.minPriceMaxBenefitPlaceholders['{{maxbenefitb-to}}'] =
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb}}'] =
-            this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer['{{maxbenefitb-to}}'] =
-            '';
-        }
+        // Создаем плейсхолдеры для максимальной выгоды
+        setPlaceholders('maxbenefit', maxBenefit, maxBenefitModel, 'benefit', 'до', '-to');
     }
 
     // Функция для замены плейсхолдеров в содержимом файла
