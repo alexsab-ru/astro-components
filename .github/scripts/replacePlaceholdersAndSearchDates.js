@@ -64,10 +64,10 @@ class PlaceholderProcessor {
     // Загрузка всех данных
     loadData() {
         this.carsData = this.readAndValidateJSON('all-prices.json', 'array', []);
-        const modelsDataFile = this.readAndValidateJSON('models.json', 'object', {});
-        this.modelsData = modelsDataFile.models || [];
         this.disclaimerData = this.readAndValidateJSON('federal-disclaimer.json', 'object', {});
         this.settingsData = this.readAndValidateJSON('settings.json', 'object', {});
+        // const modelsDataFile = this.readAndValidateJSON('models.json', 'object', {});
+        // this.modelsData = modelsDataFile.models || [];
     }
 
     // Создание настроечных placeholders
@@ -101,6 +101,24 @@ class PlaceholderProcessor {
             }
         } catch (error) {
             console.error('Ошибка предварительной обработки federal-disclaimer.json:', error);
+        }
+    }
+
+    // Предварительная обработка models.json для замены плейсхолдеров цен
+    preprocessModelsJson() {
+        const modelsFilePath = path.join(this.dataDirectory, 'models.json');
+        if (!fs.existsSync(modelsFilePath)) return;
+        
+        try {
+            const modelsContent = fs.readFileSync(modelsFilePath, 'utf-8');
+            const { content: updatedModelsContent, hasChanges } = this.replacePlaceholders(modelsContent, modelsFilePath);
+            
+            if (hasChanges) {
+                fs.writeFileSync(modelsFilePath, updatedModelsContent, 'utf-8');
+                console.log('Плейсхолдеры в файле models.json предварительно заменены!');
+            }
+        } catch (error) {
+            console.error('Ошибка предварительной обработки models.json:', error);
         }
     }
 
@@ -506,7 +524,16 @@ class PlaceholderProcessor {
         // 4. Создаем ценовые placeholders с уже обработанными disclaimer'ами
         this.createCarsPricePlaceholders();
         
-        // 4.1. Создаем плейсхолдеры для минимальной цены и максимальной выгоды
+        // 4.1. Предварительно обрабатываем models.json для замены плейсхолдеров цен
+        // Это нужно, чтобы при вычислении минимальной цены и максимальной выгоды
+        // в models.json уже были реальные значения вместо плейсхолдеров
+        this.preprocessModelsJson();
+        
+        // 4.2. Перезагружаем models.json с уже замененными плейсхолдерами
+        const modelsDataFile = this.readAndValidateJSON('models.json', 'object', {});
+        this.modelsData = modelsDataFile.models || [];
+        
+        // 4.3. Создаем плейсхолдеры для минимальной цены и максимальной выгоды
         this.createMinPriceMaxBenefitPlaceholders();
         
         // 5. Обрабатываем все директории
