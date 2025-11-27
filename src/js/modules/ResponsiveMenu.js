@@ -4,8 +4,8 @@ export default class ResponsiveMenu {
 		this.items = [...this.menu.children];
 		this.moreButton = document.createElement('button');
 		this.moreButton.type = 'button';
-		this.moreButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 text-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>';
-		this.moreButton.classList.add('menu-more-btn', 'bg-transparent', 'border-0', 'cursor-pointer', 'px-[13px]', 'inline-flex', 'items-center', 'h-full', 'transition-colors', 'text-icon', 'hover:text-link-hover', 'focus-visible:outline-none');
+		this.moreButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 text-header-text"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>';
+		this.moreButton.classList.add('menu-more-btn', 'bg-transparent', 'border-0', 'cursor-pointer', 'px-[13px]', 'inline-flex', 'items-center', 'h-full', 'transition-colors', 'text-icon', 'text-header-text', 'hover:text-header-text', 'focus-visible:outline-none');
 		this.moreMenu = document.createElement('ul');
 		this.moreMenu.classList.add('more-menu', 'hidden', 'absolute', 'bg-submenu-bg', 'text-submenu-text', 'list-none', 'p-0', 'top-full', 'right-0', 'shadow-2xl', 'z-50', 'min-w-[10rem]', 'border', 'border-border');
 		this.div = document.createElement('div');
