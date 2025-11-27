@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "../../scss/app.css";
 
 .slider-navigation-prev,
 .slider-navigation-next{

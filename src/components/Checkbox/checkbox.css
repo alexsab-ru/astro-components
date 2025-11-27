@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "../../scss/app.css";
 
 span[class^='fake-checkbox'],
 span[class^='fake-radio'] {

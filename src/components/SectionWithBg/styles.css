@@ -1,4 +1,5 @@
-@reference "tailwindcss";
+@reference "../../scss/app.css";
+
 .media-bg-center{
 	@apply bg-center;
 }
