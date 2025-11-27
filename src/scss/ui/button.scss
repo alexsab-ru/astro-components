@@ -1,7 +1,7 @@
 .btn {
-	@apply px-8 sm:px-14 rounded-btn border border-accent-500 py-3 bg-accent-500 text-white text-center font-medium transition-colors duration-300 hover:bg-accent-400 hover:border-accent-400 inline-block;
+	@apply px-8 sm:px-14 rounded-btn border border-button-bg py-3 bg-button-bg text-button-text text-center font-medium transition-colors duration-300 hover:bg-button-bg-hover hover:border-button-bg-hover hover:text-button-text-hover inline-block;
 	&.btn-o {
-		@apply bg-transparent text-accent-500 hover:bg-accent-400 hover:text-white;
+		@apply bg-transparent text-button-bg hover:bg-button-bg hover:text-button-text;
 	}
 	&.gray {
 		@apply bg-gray-500 border-gray-500 hover:bg-gray-400 hover:border-gray-400;

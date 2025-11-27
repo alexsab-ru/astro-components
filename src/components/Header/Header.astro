@@ -26,7 +26,7 @@ import './styles.css';
 ---
 <div
 	x-data="header"
-	class="bg-white sticky top-0 transition-all duration-300 z-50"
+	class="bg-header-bg text-header-text sticky top-0 transition-all duration-300 z-50"
 	:class="{'shadow-3xl': scrolling}"
 >
 	<header>
@@ -41,7 +41,7 @@ import './styles.css';
 					{
 						salons.length && salons.map((salon: any, index) => {
 							return index < 2 && (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-black/80 text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-phone text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-phone-hover" title={salon.name}><Icon name="mdi:cellphone" class="text-xl text-icon" /> {salon.phone}</a>
 							)
 						})
 					}
@@ -58,7 +58,7 @@ import './styles.css';
 								<small class="block text-xs">{salons.length}&nbsp;{declOfNums(salons.length, ['салон', 'салона', 'салонов'])}</small>
 							</div>) : (
 							<div class="hidden lg:flex items-center gap-1 font-medium text-sm xl:text-base">
-								<Icon name="mdi:map-marker-outline" class="text-2xl" />
+								<Icon name="mdi:map-marker-outline" class="text-2xl text-icon" />
 								<Fragment set:html={salons[0].address} />
 							</div>
 						)
@@ -83,7 +83,7 @@ import './styles.css';
 							data-choose_department={true}
 							{...salons.length > 1 ? {'data-sorting': true} : {}}
 						>
-							<Icon name="mdi:phone-incoming" class="text-3xl" />
+							<Icon name="mdi:phone-incoming" class="text-3xl text-icon" />
 						</a>
 						{Object.keys(socials.header).length ? (
 							<SocialList data={socials.header} />
@@ -96,7 +96,7 @@ import './styles.css';
 						aria-label="Mobile menu"
 						@click.prevent="open = !open"
 					>
-						<Icon name="mdi:hamburger-menu" class="text-2xl" />
+						<Icon name="mdi:hamburger-menu" class="text-2xl text-icon" />
 					</button>
 				</div>
 			</div>
@@ -115,7 +115,7 @@ import './styles.css';
 
 	<div
 		x-cloak
-		class="fixed top-0 bottom-0 right-0 z-40 bg-white py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
+		class="fixed top-0 bottom-0 right-0 z-40 bg-header-bg text-header-text py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
 		:class="open ? 'translate-x-0' : 'translate-x-[110%]'"
 	>
 		<button class="w-10 h-10 absolute right-0 top-0 text-2xl font-mono transition-opacity opacity-60 hover:opacity-100" @click.prevent="open = false">&times;</button>
@@ -127,8 +127,8 @@ import './styles.css';
 				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
 						<div class="font-medium text-lg">{salon.name}</div>
-						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap"><Icon name="mdi:map-marker-outline" class="text-2xl shrink-0" /><Fragment set:html={salon.address} /></a>
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-black/80 flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap text-link hover:text-link-hover"><Icon name="mdi:map-marker-outline" class="text-2xl shrink-0 text-icon" /><Fragment set:html={salon.address} /></a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-phone flex items-center gap-1 flex-nowrap transition-colors hover:text-phone-hover" title={salon.name}><Icon name="mdi:cellphone" class="text-xl text-icon" /> {salon.phone}</a>
 					</div>
 				))}
 				</div>

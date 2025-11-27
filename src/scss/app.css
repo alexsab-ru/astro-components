@@ -17,7 +17,6 @@
 @import './ui/custom-scrollbar.scss';
 @import './ui/video.scss';
 
-@import './blocks/responsive-menu.scss';
 @import './blocks/marquee.scss';
 @import './blocks/media-object.scss';
 @import './blocks/content.scss';
