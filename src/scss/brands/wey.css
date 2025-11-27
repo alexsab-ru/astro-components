@@ -22,9 +22,28 @@
   --color-accent-400: #036a92;
   --color-accent-500: #024e6b;
 
+  --color-header-bg: var(--color-accent-500);
+  --color-header-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+  --color-submenu-bg: var(--color-accent-500);
+  --color-submenu-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+  --color-button-bg: var(--color-accent-500);
+  --color-button-bg-hover: var(--color-accent-400);
+  --color-button-text: var(--color-white);
+  --color-button-text-hover: var(--color-white);
+  --color-link: var(--color-accent-500);
+  --color-link-hover: var(--color-accent-400);
+  --color-phone: color-mix(in srgb, var(--color-black) 82%, transparent);
+  --color-phone-hover: var(--color-accent-500);
+  --color-icon: var(--color-gray-600);
+  --color-border: rgba(255, 255, 255, 0.3);
+  --color-pagination-bg: var(--color-white);
+  --color-pagination-border: color-mix(in srgb, var(--color-black) 25%, transparent);
+  --color-pagination-inactive: color-mix(in srgb, var(--color-black) 45%, transparent);
+  --color-pagination-active: var(--color-accent-500);
+  --color-pagination-contrast: var(--color-white);
+  
   /* Fonts */
   --font-sans: "TT Runs", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;
 }
-
 
