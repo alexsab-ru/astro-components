@@ -40,6 +40,8 @@
   --color-brand-color: #3a3c4e;
   --color-brand-light-color: #f5f4f3;
 
+  --footer-bg: var(--brand-gradient);
+
   /* Fonts */
   --font-sans: Mulish, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;
