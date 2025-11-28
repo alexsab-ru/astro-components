@@ -32,7 +32,7 @@
     /* Logo sizing */
     --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
     --logo-map-info-height: clamp(1.75rem, calc(1.5vw + 0.5rem), 2.75rem);
-    --logo-footer-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
+    --logo-footer-height: var(--logo-header-height);
     --logo-dealer-header-height: var(--logo-header-height);
     --logo-dealer-map-info-height: var(--logo-map-info-height);
     --logo-dealer-footer-height: var(--logo-footer-height);

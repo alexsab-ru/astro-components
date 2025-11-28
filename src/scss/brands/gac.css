@@ -9,7 +9,6 @@
 
   --logo-header-height: clamp(1.2rem, calc(1.5vw + 0.25rem), 2.25rem);
   --logo-dealer-header-height: clamp(0.7rem, 1vw, 1.25rem);
-  --logo-footer-height: var(--logo-header-height);
   --logo-dealer-footer-height: var(--logo-footer-height);
 
   /* Using base font configuration */
