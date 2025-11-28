@@ -41,7 +41,7 @@ import './styles.css';
 					{
 						salons.length && salons.map((salon: any, index) => {
 							return index < 2 && (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-header-text text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-header-text" title={salon.name}><Icon name="mdi:cellphone" class="text-xl text-header-text" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors text-header-text hover:text-header-text/80 *:transition-colors *:text-header-text hover:*:text-header-text/80" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
 							)
 						})
 					}
@@ -65,7 +65,7 @@ import './styles.css';
 					}
 					<div class="flex items-center xs:gap-2 gap-4 shrink-0">
 						<Button
-							classes="popup-link hidden! lg:inline-block! px-4! py-2! xl:py-3!"
+							classes="popup-link bg-header-button-bg! hover:bg-header-button-bg-hover! border-bg-header-button-bg! hover:border-bg-header-button-bg-hover! text-header-button-text! hover:text-header-button-text-hover! hidden! lg:inline-block! px-4! py-2! xl:py-3!"
 							url="#common-modal"
 							title="Заказать звонок"
 							dataTitle="Заказать звонок"
