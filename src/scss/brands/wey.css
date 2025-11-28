@@ -36,6 +36,8 @@
 
   --color-header-menu-link-bg-hover: var(--color-accent-400);
 
+  --shadow-header-btn: none;
+
   --color-border: rgba(255, 255, 255, 0.3);
   
   /* Fonts */
