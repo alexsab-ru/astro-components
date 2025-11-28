@@ -9,7 +9,7 @@
 }
 
 .swiper-pagination-bullet {
-	@apply w-4! h-4! opacity-100! bg-transparent! relative mx-1.5! transition-all duration-300 rounded-full border border-pagination-border p-0;
+	@apply w-4! h-4! opacity-100! bg-transparent! relative mx-1.5! transition-all duration-300 rounded-full border border-transparent p-0;
 }
 
 .swiper-pagination-bullet::before{
