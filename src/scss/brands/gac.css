@@ -1,6 +1,38 @@
 /* GAC theme overrides using Tailwind v4 @theme variables.
    Map tokens to classes like text-accent-500, bg-accent-500, etc. */
 
+   @font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Regular.woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Medium.woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-SemiBold.woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Bold.woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
 @theme {
   /* Colors */
   --color-accent-400: #e9231f;
@@ -11,7 +43,9 @@
   --logo-dealer-header-height: clamp(0.7rem, 1vw, 1.25rem);
   --logo-dealer-footer-height: var(--logo-footer-height);
 
-  /* Using base font configuration */
+  /* Fonts */
+  --font-sans: Montserrat, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
 }
 
 
