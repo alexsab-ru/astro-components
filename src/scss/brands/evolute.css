@@ -42,6 +42,9 @@
   --color-orange: #fa5f1a;
   --color-dark: #040606;
 
+  --logo-header-height: clamp(1rem, 2vw + 0.25rem, 1.5rem);
+  --logo-footer-height: clamp(1rem, 2vw + 0.25rem, 2rem);
+
   /* Fonts */
   --font-sans: Montserrat, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;
