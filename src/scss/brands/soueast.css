@@ -38,6 +38,17 @@
   --color-accent-400: #ff8700;
   --color-accent-500: #fe7600;
 
+  --logo-header-height: clamp(0.75rem, 2vw + 0.25rem, 1rem);
+
+  --color-header-bg: var(--color-black);
+  --color-header-text: var(--color-white);
+  --color-submenu-bg: var(--color-black);
+  --color-submenu-text: var(--color-white);
+
+  --shadow-header-btn: none;
+
+  --color-border: rgba(255, 255, 255, 0.3);
+
   /* Fonts */
   --font-sans: Montserrat, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;
