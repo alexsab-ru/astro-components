@@ -48,6 +48,11 @@
     --color-link: var(--color-black);
     --color-link-hover: var(--color-accent-500);
     --color-phone: color-mix(in srgb, var(--color-black) 82%, transparent);
+    /* BRAND GRADIENTS */
+    --brand-gradient: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-400) 175.76%;
+    --brand-gradient-transparent: 90deg, transparent -14.69%, transparent 175.76%;
+    --brand-gradient-hover: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-500) 175.76%;
+
     --color-phone-hover: var(--color-accent-500);
     --color-icon: var(--color-gray-600);
     --color-pagination-bg: var(--color-white);
