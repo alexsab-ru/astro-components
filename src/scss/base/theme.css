@@ -58,6 +58,9 @@
     /* HEADER LINK MENU BG HOVER COLOR */
     --color-header-menu-link-bg-hover: var(--color-accent-500);
 
+    /* DEFAULT SHADOW FOR HEADER MOBILE BTN'S */
+    --shadow-header-btn: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+
     /* BRAND GRADIENTS */
     --brand-gradient: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-400) 175.76%;
     --brand-gradient-transparent: 90deg, transparent -14.69%, transparent 175.76%;
