@@ -1,5 +1,13 @@
 .btn {
-	@apply px-8 sm:px-14 rounded-btn border border-button-bg py-3 bg-button-bg text-button-text text-center font-medium transition-colors duration-300 hover:bg-button-bg-hover hover:border-button-bg-hover hover:text-button-text-hover inline-block;
+	@apply 
+		inline-flex items-center justify-center
+		px-8 sm:px-14 py-3 
+		rounded-btn 
+		border border-button-bg hover:border-button-bg-hover
+		bg-button-bg hover:bg-button-bg-hover
+		text-button-text hover:text-button-text-hover
+		text-center font-medium 
+		transition-colors duration-300; 
 	&.btn-o {
 		@apply bg-transparent text-button-bg hover:bg-button-bg hover:text-button-text;
 	}
