@@ -1,0 +1,40 @@
+/* Hyundai theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "Hyundai";
+  src: url("https://cdn.alexsab.ru/b/hyundai/fonts/hyundaisanshead-light.woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hyundai";
+  src: url("https://cdn.alexsab.ru/b/hyundai/fonts/hyundaisanshead-regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hyundai";
+  src: url("https://cdn.alexsab.ru/b/hyundai/fonts/hyundaisanshead-medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #043a7a;
+  --color-accent-500: #002c5f;
+
+  --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2rem);
+
+  /* Fonts */
+  --font-sans: Hyundai, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+}
+
+

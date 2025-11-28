@@ -180,7 +180,7 @@ export default function Select({
 						)}
 					)
 					) : (
-						<p className="px-2.5 !text-base !mb-2.5">
+						<p className="px-2.5 text-base! mb-2.5!">
 							Нет доступных опций
 						</p>
 					)}

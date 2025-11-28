@@ -7,18 +7,18 @@ interface Props{
 	iconClass?: string;
 	type?: string
 }
-const { label, value, iconName, class: className, iconClass = 'text-3xl sm:text-4xl text-gray-500', type = '', ...rest  } = Astro.props
+const { label, value, iconName, class: className, iconClass = 'text-3xl sm:text-4xl text-icon', type = '', ...rest  } = Astro.props
 import { Icon } from 'astro-icon/components';
 import { phoneFormat } from '@/js/utils/numbers.format';
 ---
 <div class={className} {...rest}>
-	{iconName && ( <Icon name={iconName} class={`flex-shrink-0 ${iconClass}`} /> )}
+	{iconName && ( <Icon name={iconName} class={`shrink-0 ${iconClass}`} /> )}
 	<div>
-		{label && ( <small class="text-xs sm:text-sm text-gray-500 block">{label}</small> )}
+		{label && ( <small class="text-xs sm:text-sm text-icon block">{label}</small> )}
 		{type === 'phone' ? (
 			<a
 				href={`tel:${phoneFormat(value)}`}
-				class="text-sm sm:text-lg font-medium transition-colors hover:text-accent-500 goal-click-lead-tel">
+				class="text-sm sm:text-lg font-medium transition-colors text-phone hover:text-phone-hover goal-click-lead-tel">
 				{value}
 			</a>
 		) : (
