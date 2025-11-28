@@ -7,6 +7,8 @@
   --color-accent-500: #007578;
   --color-accent-600: #007578;
 
+  --logo-header-height: clamp(2.25rem, calc(2vw + 0.25rem), 3.25rem);
+
   /* Using base font configuration */
 }
 
