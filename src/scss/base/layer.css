@@ -16,34 +16,3 @@
     .brand-gradient-transparent { background-image: linear-gradient(90deg, transparent -14.69%, transparent 175.76%) }
     .brand-gradient-hover { background-image: linear-gradient(90deg, var(--color-accent-500) -14.69%, var(--color-accent-500) 175.76%) }
 }
-
-@layer utilities {
-    .text-link { color: var(--color-link) }
-    .hover\:text-link-hover:hover { color: var(--color-link-hover) }
-    .text-phone { color: var(--color-phone) }
-    .hover\:text-phone-hover:hover { color: var(--color-phone-hover) }
-    .text-icon { color: var(--color-icon) }
-    .text-button-text { color: var(--color-button-text) }
-    .hover\:text-button-text:hover { color: var(--color-button-text) }
-    .hover\:text-button-text-hover:hover { color: var(--color-button-text-hover) }
-    .text-header-text { color: var(--color-header-text) }
-    .hover\:text-header-text:hover { color: var(--color-header-text) }
-    .text-submenu-text { color: var(--color-submenu-text) }
-    .hover\:text-submenu-text:hover { color: var(--color-submenu-text) }
-
-    .bg-header-bg { background-color: var(--color-header-bg) }
-    .bg-submenu-bg { background-color: var(--color-submenu-bg) }
-    .border-border { border-color: var(--color-border) }
-
-    .bg-button-bg { background-color: var(--color-button-bg) }
-    .hover\:bg-button-bg-hover:hover { background-color: var(--color-button-bg-hover) }
-    .border-button-bg { border-color: var(--color-button-bg) }
-    .hover\:border-button-bg-hover:hover { border-color: var(--color-button-bg-hover) }
-
-    .bg-pagination-bg { background-color: var(--color-pagination-bg) }
-    .border-pagination-border { border-color: var(--color-pagination-border) }
-    .bg-pagination-active { background-color: var(--color-pagination-active) }
-    .border-pagination-active { border-color: var(--color-pagination-active) }
-    .text-pagination-contrast { color: var(--color-pagination-contrast) }
-    .text-pagination-active { color: var(--color-pagination-active) }
-}
