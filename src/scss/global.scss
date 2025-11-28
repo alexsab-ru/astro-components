@@ -1,10 +1,20 @@
 @reference "tailwindcss";
 
 @layer base {
+	html {
+		scroll-behavior: smooth;
+		scrollbar-gutter: stable;
+	}
+	svg * {
+		transition-property: fill, stroke;
+	}
 	button:not(:disabled),
 	[role="button"]:not(:disabled),
 	[type="submit"]:not(:disabled) {
 		cursor: pointer;
+	}
+	a:not([class]){
+		@apply text-link underline hover:text-link-hover hover:no-underline;
 	}
 }
 
