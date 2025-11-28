@@ -31,6 +31,8 @@
   --color-accent-500: #363e40;
   --color-accent-600: #363e40;
 
+  --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 1.25rem);
+
   /* Fonts */
   --font-sans: NotoSans, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;

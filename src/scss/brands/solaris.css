@@ -40,6 +40,8 @@
   --color-brand-color: #3a3c4e;
   --color-brand-light-color: #f5f4f3;
 
+  --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 1.75rem);
+
   --footer-bg: var(--brand-gradient);
 
   /* Fonts */

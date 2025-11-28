@@ -30,6 +30,8 @@
   --color-accent-400: #043a7a;
   --color-accent-500: #002c5f;
 
+  --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2rem);
+
   /* Fonts */
   --font-sans: Hyundai, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;
