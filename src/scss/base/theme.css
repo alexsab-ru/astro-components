@@ -14,8 +14,6 @@
     --color-tiktok: #000000;
     --color-telegram: #2FACE1;
 
-    --color-border: #e5e7eb;
-
     /* Полная палитра серых цветов для границ и других элементов */
     --color-gray-50: #f9fafb;
     --color-gray-100: #f3f4f6;
@@ -29,6 +27,8 @@
     --color-gray-900: #111827;
     --color-gray-950: #030712;
 
+    --color-border: var(--color-gray-200);
+
     /* Logo sizing */
     --logo-header-height: clamp(1rem, 2vw + 0.25rem, 2.5rem);
     --logo-map-info-height: clamp(1.75rem, 1.5vw + 0.5rem, 2.75rem);
@@ -37,17 +37,27 @@
     --logo-dealer-map-info-height: var(--logo-map-info-height);
     --logo-dealer-footer-height: var(--logo-footer-height);
 
+    /* HEADER COLORS */
     --color-header-bg: var(--color-white);
     --color-header-text: var(--color-black);
     --color-submenu-bg: var(--color-white);
     --color-submenu-text: var(--color-black);
+    
+    /* BUTTON COLORS */
     --color-button-bg: var(--color-accent-500);
     --color-button-bg-hover: var(--color-accent-400);
     --color-button-text: var(--color-white);
     --color-button-text-hover: var(--color-white);
-    --color-link: var(--color-black);
-    --color-link-hover: var(--color-accent-500);
-    --color-phone: color-mix(in srgb, var(--color-black) 82%, transparent);
+    
+    /* HEADER BUTTON COLORS */
+    --color-header-button-bg: var(--color-accent-500);
+    --color-header-button-bg-hover: var(--color-accent-400);
+    --color-header-button-text: var(--color-white);
+    --color-header-button-text-hover: var(--color-white);
+
+    /* HEADER LINK MENU BG HOVER COLOR */
+    --color-header-menu-link-bg-hover: var(--color-accent-500);
+
     /* BRAND GRADIENTS */
     --brand-gradient: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-400) 175.76%;
     --brand-gradient-transparent: 90deg, transparent -14.69%, transparent 175.76%;
@@ -57,6 +67,11 @@
     --footer-bg: color-mix(in srgb, var(--color-black) 90%, transparent);
     --color-footer-text-color: color-mix(in srgb, var(--color-white) 90%, transparent);
 
+    /* COLOR LINKS DEFAULT */
+    --color-link: var(--color-accent-500);
+    --color-link-hover: var(--color-accent-400);
+
+    --color-phone: color-mix(in srgb, var(--color-black) 80%, transparent);
     --color-phone-hover: var(--color-accent-500);
 
     --color-icon: var(--color-gray-600);
