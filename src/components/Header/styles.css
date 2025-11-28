@@ -1,9 +1,9 @@
 @reference "../../scss/app.css";
 
 .scroll-link, .header-link, .header-child-link{
-	@apply block lg:inline-block py-3 px-5 transition-colors duration-300 text-header-text hover:bg-button-bg hover:text-button-text whitespace-nowrap;
+	@apply block lg:inline-block py-3 px-5 transition-colors duration-300 text-header-text hover:bg-header-menu-link-bg-hover hover:text-button-text whitespace-nowrap;
 	&.active{
-		@apply bg-button-bg text-button-text;
+		@apply bg-header-menu-link-bg-hover text-button-text;
 	}
 }
 .header-child-link{
@@ -26,4 +26,12 @@
 }
 .cols-5 {
 	@apply lg:columns-3 xl:columns-4 2xl:columns-5;
+}
+
+.clone-menu {
+	@apply relative flex items-center;
+
+	li, a {
+		@apply w-full block;
+	}
 }
