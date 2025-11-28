@@ -53,8 +53,14 @@
     --brand-gradient-transparent: 90deg, transparent -14.69%, transparent 175.76%;
     --brand-gradient-hover: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-500) 175.76%;
 
+    /* FOOTER COLORS */
+    --footer-bg: color-mix(in srgb, var(--color-black) 90%, transparent);
+    --color-footer-text-color: color-mix(in srgb, var(--color-white) 90%, transparent);
+
     --color-phone-hover: var(--color-accent-500);
+
     --color-icon: var(--color-gray-600);
+
     --color-pagination-bg: var(--color-white);
     --color-pagination-border: color-mix(in srgb, var(--color-black) 25%, transparent);
     --color-pagination-inactive: color-mix(in srgb, var(--color-black) 45%, transparent);
