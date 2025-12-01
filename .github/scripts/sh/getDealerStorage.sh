@@ -72,7 +72,7 @@ gid=$(echo "$CSV_URL" | sed -n 's/.*gid=\([0-9]*\).*/\1/p')
 
 if [ -n "$document_id" ] && [ -n "$gid" ]; then
     # Формируем новый URL для скачивания
-    DOWNLOAD_URL="https://docs.google.com/spreadsheets/d/${document_id}/gviz/tq?gid=${gid}&tqx=out:CSV&headers=1&tq=${QUERY_STRING}"
+    DOWNLOAD_URL="https://docs.google.com/spreadsheets/d/${document_id}/gviz/tq?gid=${gid}&tqx=out:CSV&tq=${QUERY_STRING}"
     
     echo "Преобразованный URL: $DOWNLOAD_URL"
 
