@@ -367,42 +367,27 @@ class PlaceholderProcessor {
     }
 
     // Функция для формирования URL в зависимости от расположения файла
-    generateUrl(filePath, domain) {
-        const relativePath = path.relative(process.cwd(), filePath);
-        
-        // Если файл находится в src/content/
-        if (relativePath.startsWith('src/content/')) {
-            const pathWithoutPrefix = relativePath.replace('src/content/', '');
-            const fileNameWithoutExt = path.basename(pathWithoutPrefix, path.extname(pathWithoutPrefix));
-            const directoryPath = path.dirname(pathWithoutPrefix);
-            
-            if (directoryPath === '.') {
-                return `https://${domain}/${fileNameWithoutExt}/`;
-            } else {
-                return `https://${domain}/${directoryPath}/${fileNameWithoutExt}/`;
-            }
+    buildUrl(relativePath, domain) {
+        const sanitizedPath = relativePath.replace(/^src\/(content|pages)\//, '');
+        const pathChanged = sanitizedPath !== relativePath;
+
+        if (pathChanged) {
+            const fileNameWithoutExt = path.basename(sanitizedPath, path.extname(sanitizedPath));
+            const directoryPath = path.dirname(sanitizedPath);
+            const slug = directoryPath === '.' ? fileNameWithoutExt : `${directoryPath}/${fileNameWithoutExt}`;
+            return `https://${domain}/${slug}/`;
         }
-        
-        // Если файл находится в src/pages/
-        if (relativePath.startsWith('src/pages/')) {
-            const pathWithoutPrefix = relativePath.replace('src/pages/', '');
-            const fileNameWithoutExt = path.basename(pathWithoutPrefix, path.extname(pathWithoutPrefix));
-            const directoryPath = path.dirname(pathWithoutPrefix);
-            
-            if (directoryPath === '.') {
-                return `https://${domain}/${fileNameWithoutExt}/`;
-            } else {
-                return `https://${domain}/${directoryPath}/${fileNameWithoutExt}/`;
-            }
-        }
-        
-        // Если файл banners.json - ссылка на главную страницу
+
         if (relativePath.includes('banners.json')) {
             return `https://${domain}/`;
         }
-        
-        // Для остальных файлов - просто домен
+
         return `https://${domain}/`;
+    }
+
+    generateUrl(filePath, domain) {
+        const relativePath = path.relative(process.cwd(), filePath);
+        return this.buildUrl(relativePath, domain);
     }
 
     // Функция для обработки файла
@@ -478,29 +463,30 @@ class PlaceholderProcessor {
 
         console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
         const domain = process.env.DOMAIN;
-        let htmlOutput = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
-        let htmlOutputMarketing = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
-        
-        this.filesWithUpcomingDates.forEach(({ filePath, dates }) => {
+        const htmlHeader = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
+        const parsedDates = this.filesWithUpcomingDates.map(({ filePath, dates }) => {
             const relativePath = path.relative(process.cwd(), filePath);
             const url = this.generateUrl(filePath, domain);
-            
-            // Преобразуем даты в человеко-читаемый формат один раз
             const readableDates = dates.map(iso => this.isoToDDMMYYYY(iso)).join(', ');
-            
-            // Формируем текст для вывода (одинаковый для консоли и HTML)
-            const outputText = `\nФайл: \`${relativePath}\`\nURL: ${url}\nДаты окончания: ${readableDates}`;
-            
-            // Выводим в консоль
-            console.log(outputText);
-            
-            // Добавляем в HTML для файла
-            htmlOutput += `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
-
-            htmlOutputMarketing += `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
+            return { relativePath, url, readableDates };
         });
-        
-        // Сохраняем результаты в файл
+
+        parsedDates.forEach(({ relativePath, url, readableDates }) => {
+            console.log(`\nФайл: \`${relativePath}\`\nURL: ${url}\nДаты окончания: ${readableDates}`);
+        });
+
+        const htmlOutput = htmlHeader + parsedDates
+            .map(({ relativePath, url, readableDates }) =>
+                `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}`
+            )
+            .join('\n\n');
+
+        const htmlOutputMarketing = htmlHeader + parsedDates
+            .map(({ url, readableDates }) =>
+                `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}`
+            )
+            .join('\n\n');
+
         const outputPath = './special-offers-dates.txt';
         fs.writeFileSync(outputPath, htmlOutput, 'utf8');
         const outputPathMarketing = './special-offers-dates-marketing.txt';
