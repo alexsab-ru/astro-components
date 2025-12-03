@@ -91,6 +91,17 @@ const status: TStatus = (model?.status && STATUS.includes(model.status as TStatu
       </div>
     </section>
   )}
+
+  {(status === 'preorder') && (
+    <section>
+      <div class="container">
+        <FeedbackForm 
+          title="Забронировать новый JAC RF8"
+        />
+      </div>
+    </section>
+  )}
+
   {!!cars.length && (
     <section class="odd:bg-gray-100">
       <div class="container">
