@@ -24,6 +24,7 @@ class PlaceholderProcessor {
         
         // Данные
         this.carsData = [];
+        this.modelsData = [];
         this.disclaimerData = {};
         this.settingsData = {};
         
@@ -31,6 +32,8 @@ class PlaceholderProcessor {
         this.carsPlaceholder = {};
         this.carsPlaceholderWithoutDisclaimer = {}; // Плейсхолдеры без дисклеймера для seo.json
         this.settingsPlaceholder = {};
+        this.minPriceMaxBenefitPlaceholders = {}; // Плейсхолдеры для минимальной цены и максимальной выгоды
+        this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer = {}; // Без дисклеймера для seo.json
     }
 
     // Общая функция для чтения и валидации JSON-файла
@@ -99,6 +102,24 @@ class PlaceholderProcessor {
         }
     }
 
+    // Предварительная обработка models.json для замены плейсхолдеров цен
+    preprocessModelsJson() {
+        const modelsFilePath = path.join(this.dataDirectory, 'models.json');
+        if (!fs.existsSync(modelsFilePath)) return;
+        
+        try {
+            const modelsContent = fs.readFileSync(modelsFilePath, 'utf-8');
+            const { content: updatedModelsContent, hasChanges } = this.replacePlaceholders(modelsContent, modelsFilePath);
+            
+            if (hasChanges) {
+                fs.writeFileSync(modelsFilePath, updatedModelsContent, 'utf-8');
+                console.log('Плейсхолдеры в файле models.json предварительно заменены!');
+            }
+        } catch (error) {
+            console.error('Ошибка предварительной обработки models.json:', error);
+        }
+    }
+
     // Создание ценовых placeholders
     createCarsPricePlaceholders() {
         if (this.carsData.length === 0) return;
@@ -141,6 +162,81 @@ class PlaceholderProcessor {
         });
     }
 
+    // Создание плейсхолдеров для минимальной цены и максимальной выгоды из models.json
+    createMinPriceMaxBenefitPlaceholders() {
+        if (this.modelsData.length === 0) return;
+
+        // Находим модель с минимальной ценой и максимальной выгодой (исключаем нулевые)
+        let minPriceModel = null;
+        let minPrice = Infinity;
+
+        let maxBenefitModel = null;
+        let maxBenefit = 0;
+        
+        this.modelsData.forEach(model => {
+            const price = typeof model.price === 'string' ? parseFloat(model.price) : (typeof model.price === 'number' ? model.price : 0);
+            if (price > 0 && price < minPrice) {
+                minPrice = price;
+                minPriceModel = model;
+            }
+            const benefit = typeof model.benefit === 'string' ? parseFloat(model.benefit) : (typeof model.benefit === 'number' ? model.benefit : 0);
+            if (benefit > 0 && benefit > maxBenefit) {
+                maxBenefit = benefit;
+                maxBenefitModel = model;
+            }
+        });
+
+        if (minPrice === Infinity) minPrice = 0;
+
+        // Вспомогательная функция для установки плейсхолдеров
+        const setPlaceholders = (prefix, value, model, disclaimerKey, textPrefix, textSuffix) => {
+            const keys = [
+                `{{${prefix}}}`,
+                `{{${prefix}${textSuffix}}}`,
+                `{{${prefix}b}}`,
+                `{{${prefix}b${textSuffix}}}`
+            ];
+            
+            if (value > 0 && model) {
+                // Форматируем значение с дисклеймером
+                let formatted = currencyFormat(value);
+                const carId = `${model.mark_id.toLowerCase()}-${model.id}`;
+                
+                if (this.disclaimerData[carId]?.[disclaimerKey] && this.disclaimerData[carId][disclaimerKey] !== '') {
+                    formatted += quoteEscaper(
+                        `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[carId][disclaimerKey]}">${this.infoIcon}</span>`
+                    );
+                }
+                
+                // Форматируем без дисклеймера для seo.json
+                const formattedWithoutDisclaimer = currencyFormat(value).replace(/\u00a0/g, ' ');
+                
+                // Устанавливаем значения
+                this.minPriceMaxBenefitPlaceholders[keys[0]] = value;
+                this.minPriceMaxBenefitPlaceholders[keys[1]] = `${textPrefix}&nbsp;${value}`;
+                this.minPriceMaxBenefitPlaceholders[keys[2]] = formatted;
+                this.minPriceMaxBenefitPlaceholders[keys[3]] = `${textPrefix}&nbsp;${formatted}`;
+                
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[0]] = value;
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[1]] = `${textPrefix} ${value}`;
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[2]] = formattedWithoutDisclaimer;
+                this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[keys[3]] = `${textPrefix} ${formattedWithoutDisclaimer}`;
+            } else {
+                // Очищаем плейсхолдеры
+                keys.forEach(key => {
+                    this.minPriceMaxBenefitPlaceholders[key] = '';
+                    this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer[key] = '';
+                });
+            }
+        };
+
+        // Создаем плейсхолдеры для минимальной цены
+        setPlaceholders('min-price', minPrice, minPriceModel, 'price', 'от', '-from');
+
+        // Создаем плейсхолдеры для максимальной выгоды
+        setPlaceholders('max-benefit', maxBenefit, maxBenefitModel, 'benefit', 'до', '-to');
+    }
+
     // Функция для замены плейсхолдеров в содержимом файла
     replacePlaceholders(content, filePath = '') {
         // Определяем, является ли файл seo.json - для него используем плейсхолдеры без дисклеймера
@@ -150,6 +246,11 @@ class PlaceholderProcessor {
         const carsPlaceholdersToUse = isSeoFile 
             ? this.carsPlaceholderWithoutDisclaimer 
             : this.carsPlaceholder;
+        
+        // Выбираем набор плейсхолдеров для минимальной цены и максимальной выгоды
+        const minMaxPlaceholdersToUse = isSeoFile
+            ? this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer
+            : this.minPriceMaxBenefitPlaceholders;
         
         const placeholders = {
             '{{firstDay}}': FIRST_DAY,
@@ -161,13 +262,15 @@ class PlaceholderProcessor {
             '{{year}}': YEAR,
             ...this.settingsPlaceholder,
             ...carsPlaceholdersToUse,
+            ...minMaxPlaceholdersToUse,
         };
 
         let hasChanges = false;
         let updatedContent = content;
 
+        // Заменяем все плейсхолдеры
         for (let placeholder in placeholders) {
-            const regex = new RegExp(placeholder, 'g');
+            const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
             if (regex.test(updatedContent)) {
                 updatedContent = updatedContent.replace(regex, placeholders[placeholder]);
                 hasChanges = true;
@@ -264,42 +367,27 @@ class PlaceholderProcessor {
     }
 
     // Функция для формирования URL в зависимости от расположения файла
-    generateUrl(filePath, domain) {
-        const relativePath = path.relative(process.cwd(), filePath);
-        
-        // Если файл находится в src/content/
-        if (relativePath.startsWith('src/content/')) {
-            const pathWithoutPrefix = relativePath.replace('src/content/', '');
-            const fileNameWithoutExt = path.basename(pathWithoutPrefix, path.extname(pathWithoutPrefix));
-            const directoryPath = path.dirname(pathWithoutPrefix);
-            
-            if (directoryPath === '.') {
-                return `https://${domain}/${fileNameWithoutExt}/`;
-            } else {
-                return `https://${domain}/${directoryPath}/${fileNameWithoutExt}/`;
-            }
+    buildUrl(relativePath, domain) {
+        const sanitizedPath = relativePath.replace(/^src\/(content|pages)\//, '');
+        const pathChanged = sanitizedPath !== relativePath;
+
+        if (pathChanged) {
+            const fileNameWithoutExt = path.basename(sanitizedPath, path.extname(sanitizedPath));
+            const directoryPath = path.dirname(sanitizedPath);
+            const slug = directoryPath === '.' ? fileNameWithoutExt : `${directoryPath}/${fileNameWithoutExt}`;
+            return `https://${domain}/${slug}/`;
         }
-        
-        // Если файл находится в src/pages/
-        if (relativePath.startsWith('src/pages/')) {
-            const pathWithoutPrefix = relativePath.replace('src/pages/', '');
-            const fileNameWithoutExt = path.basename(pathWithoutPrefix, path.extname(pathWithoutPrefix));
-            const directoryPath = path.dirname(pathWithoutPrefix);
-            
-            if (directoryPath === '.') {
-                return `https://${domain}/${fileNameWithoutExt}/`;
-            } else {
-                return `https://${domain}/${directoryPath}/${fileNameWithoutExt}/`;
-            }
-        }
-        
-        // Если файл banners.json - ссылка на главную страницу
+
         if (relativePath.includes('banners.json')) {
             return `https://${domain}/`;
         }
-        
-        // Для остальных файлов - просто домен
+
         return `https://${domain}/`;
+    }
+
+    generateUrl(filePath, domain) {
+        const relativePath = path.relative(process.cwd(), filePath);
+        return this.buildUrl(relativePath, domain);
     }
 
     // Функция для обработки файла
@@ -375,29 +463,30 @@ class PlaceholderProcessor {
 
         console.log('\n❗️ ВНИМАНИЕ! Приближаются даты окончания:');
         const domain = process.env.DOMAIN;
-        let htmlOutput = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
-        let htmlOutputMarketing = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
-        
-        this.filesWithUpcomingDates.forEach(({ filePath, dates }) => {
+        const htmlHeader = '<b>❗️ ВНИМАНИЕ! Приближаются даты окончания:</b>\n\n';
+        const parsedDates = this.filesWithUpcomingDates.map(({ filePath, dates }) => {
             const relativePath = path.relative(process.cwd(), filePath);
             const url = this.generateUrl(filePath, domain);
-            
-            // Преобразуем даты в человеко-читаемый формат один раз
             const readableDates = dates.map(iso => this.isoToDDMMYYYY(iso)).join(', ');
-            
-            // Формируем текст для вывода (одинаковый для консоли и HTML)
-            const outputText = `\nФайл: \`${relativePath}\`\nURL: ${url}\nДаты окончания: ${readableDates}`;
-            
-            // Выводим в консоль
-            console.log(outputText);
-            
-            // Добавляем в HTML для файла
-            htmlOutput += `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
-
-            htmlOutputMarketing += `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}\n\n`;
+            return { relativePath, url, readableDates };
         });
-        
-        // Сохраняем результаты в файл
+
+        parsedDates.forEach(({ relativePath, url, readableDates }) => {
+            console.log(`\nФайл: \`${relativePath}\`\nURL: ${url}\nДаты окончания: ${readableDates}`);
+        });
+
+        const htmlOutput = htmlHeader + parsedDates
+            .map(({ relativePath, url, readableDates }) =>
+                `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}`
+            )
+            .join('\n\n');
+
+        const htmlOutputMarketing = htmlHeader + parsedDates
+            .map(({ url, readableDates }) =>
+                `<strong>URL:</strong> <a href="${url}">${url}</a>\n<strong>Даты окончания:</strong> ${readableDates}`
+            )
+            .join('\n\n');
+
         const outputPath = './special-offers-dates.txt';
         fs.writeFileSync(outputPath, htmlOutput, 'utf8');
         const outputPathMarketing = './special-offers-dates-marketing.txt';
@@ -418,6 +507,18 @@ class PlaceholderProcessor {
         
         // 4. Создаем ценовые placeholders с уже обработанными disclaimer'ами
         this.createCarsPricePlaceholders();
+        
+        // 4.1. Предварительно обрабатываем models.json для замены плейсхолдеров цен
+        // Это нужно, чтобы при вычислении минимальной цены и максимальной выгоды
+        // в models.json уже были реальные значения вместо плейсхолдеров
+        this.preprocessModelsJson();
+        
+        // 4.2. Перезагружаем models.json с уже замененными плейсхолдерами
+        const modelsDataFile = this.readAndValidateJSON('models.json', 'object', {});
+        this.modelsData = modelsDataFile.models || [];
+        
+        // 4.3. Создаем плейсхолдеры для минимальной цены и максимальной выгоды
+        this.createMinPriceMaxBenefitPlaceholders();
         
         // 5. Обрабатываем все директории
         this.processAllDirectories();
