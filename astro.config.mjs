@@ -90,7 +90,9 @@ export default defineConfig({
 	vite: {
 		plugins: [
 			yaml(),
-			tailwindcss(),
+			tailwindcss({
+				compat: true,
+			}),
 		],
 		css: {
 			preprocessorOptions: {
