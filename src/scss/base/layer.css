@@ -15,5 +15,4 @@
     .brand-gradient { background-image: var(--brand-gradient) }
     .brand-gradient-transparent { background-image: var(--brand-gradient-transparent) }
     .brand-gradient-hover { background-image: var(--brand-gradient-hover) }
-    .max-w-\[530px\] { max-width: 530px; }
 }
