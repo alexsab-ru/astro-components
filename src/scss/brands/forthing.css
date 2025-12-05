@@ -44,6 +44,16 @@
   --color-accent-900: #7f1d1d;
   --color-accent-950: #450a0a;
 
+  /* HEADER COLORS */
+  --color-header-bg: var(--color-black);
+  --color-header-text: var(--color-white);
+  --color-submenu-bg: var(--color-white);
+  --color-submenu-text: var(--color-black);
+
+  --color-border: color-mix(in srgb, var(--color-white) 20%, transparent);
+
+  --logo-map-info-height: 1.5rem;
+
   /* Fonts - используется шрифт Neo Sans Cyr */
   --font-sans: "Neo Sans Cyr", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;
