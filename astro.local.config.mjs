@@ -70,9 +70,7 @@ export default defineConfig({
 	vite: {
 		plugins: [
 			yaml(),
-			tailwindcss({
-				compat: true,
-			}),
+			tailwindcss(),
 		],
 		css: {
 			preprocessorOptions: {
