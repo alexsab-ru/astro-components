@@ -67,7 +67,7 @@
     --brand-gradient-hover: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-500) 175.76%;
 
     /* FOOTER COLORS */
-    --footer-bg: color-mix(in srgb, var(--color-black) 90%, transparent);
+    --footer-bg: color-mix(in srgb, #000000 90%, transparent);
     --color-footer-text-color: color-mix(in srgb, var(--color-white) 90%, transparent);
 
     /* COLOR LINKS DEFAULT */
