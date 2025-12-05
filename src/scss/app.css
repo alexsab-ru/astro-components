@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@source "../**/*.{json,yml,yaml}";
+
 @import './base/theme.css';
 @import './base/variants.css';
 @import './base/layer.css';
