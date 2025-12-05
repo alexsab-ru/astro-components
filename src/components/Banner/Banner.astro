@@ -28,8 +28,8 @@ const { banners = bannersData } = Astro.props;
 						<span />
 					</div>
 
-					<div class="swiper-button-prev banner-button-prev !hidden md:!flex" />
-					<div class="swiper-button-next banner-button-next !hidden md:!flex" />
+					<div class="swiper-button-prev banner-button-prev hidden! md:flex!" />
+					<div class="swiper-button-next banner-button-next hidden! md:flex!" />
 				</div>
 			</div>
 		</div>
@@ -38,5 +38,5 @@ const { banners = bannersData } = Astro.props;
 
 <script>
 	import './banner'
-	import './banner.scss';
+	import './banner.css';
 </script>

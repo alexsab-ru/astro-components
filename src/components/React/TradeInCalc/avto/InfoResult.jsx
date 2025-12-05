@@ -10,21 +10,21 @@ function AvtoInfoResult() {
 				{dealerPrice !== 0 ? (
 					<div className="mb-6">
 						<h3 className="text-3xl font-bold">{ dealerPrice.toLocaleString('ru-RU') }&nbsp;₽</h3>
-						<p className="!text-xs">Предварительная оценка стоимости автомобиля <sup>*</sup></p>
+						<p className="text-xs!">Предварительная оценка стоимости автомобиля <sup>*</sup></p>
 					</div>
 				) : (
-					<p className="!text-xs mb-6">К сожалению, по указанным параметрам сделать расчет не удалось</p>
+					<p className="text-xs! mb-6">К сожалению, по указанным параметрам сделать расчет не удалось</p>
 				)}
-				<p className="!text-xl">В ближайшее время наш менеджер перезвонит Вам!</p>
+				<p className="text-xl!">В ближайшее время наш менеджер перезвонит Вам!</p>
 			</div>
 
 			<div className="flex flex-wrap justify-between items-center gap-5 text-gray-800 font-medium py-10 px-6 border-b border-b-gray-300 mb-12">
 				<div>
-					<p className="!mb-3">При самостоятельной продаже</p>
+					<p className="mb-3!">При самостоятельной продаже</p>
 				{selfSale !== 0 ? (
-						<p className="font-bold !mb-2">{ selfSale.toLocaleString('ru-RU') }&nbsp;₽</p>
+						<p className="font-bold mb-2!">{ selfSale.toLocaleString('ru-RU') }&nbsp;₽</p>
 					) : (
-						<p className="!mb-0 !text-xs">К сожалению, по указанным параметрам сделать расчет не удалось</p>
+						<p className="mb-0! text-xs!">К сожалению, по указанным параметрам сделать расчет не удалось</p>
 					)}
 				</div>
 				<button

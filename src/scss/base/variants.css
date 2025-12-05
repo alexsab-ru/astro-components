@@ -1,0 +1,13 @@
+/* Custom range breakpoints as named variants - правильный синтаксис для Tailwind v4 */
+
+/* xs: для экранов до 430px */
+@custom-variant xs (@media (max-width: 430px));
+
+/* s1024_1074: для экранов от 1024px до 1074px */
+@custom-variant s1024_1074 (@media (min-width: 1024px) and (max-width: 1074px));
+
+/* s1280_1330: для экранов от 1280px до 1330px */
+@custom-variant s1280_1330 (@media (min-width: 1280px) and (max-width: 1330px));
+
+/* s1536_1586: для экранов от 1536px до 1586px */
+@custom-variant s1536_1586 (@media (min-width: 1536px) and (max-width: 1586px));
