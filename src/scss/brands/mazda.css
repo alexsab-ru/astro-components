@@ -23,7 +23,15 @@
   --color-accent-400: #910a2d;
   --color-accent-500: #910a2d;
 
-  --logo-header-height: clamp(2.5rem, calc(2vw + 0.25rem), 3.5rem);
+  --logo-header-height: clamp(2.5rem, calc(3vw + 0.25rem), 3.5rem);
+  --logo-map-info-height: clamp(8rem, calc(3vw + 0.25rem), 9rem);
+
+  --color-header-bg: var(--color-black);
+  --color-header-text: var(--color-white);
+  --color-submenu-bg: var(--color-black);
+  --color-submenu-text: var(--color-white);
+
+  --color-border: color-mix(in srgb, var(--color-white) 30%, transparent);
 
   /* Fonts */
   --font-sans: Mazda, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
