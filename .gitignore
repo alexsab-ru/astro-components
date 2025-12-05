@@ -1,7 +1,5 @@
 # Generated brand aggregator
 src/scss/brand.css
-# Generated extractTailwindClasses.js
-src/js/customTailwindClasses.js
 # build output
 dist/
 # generated types
