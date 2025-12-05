@@ -4,6 +4,8 @@ import './modules/modals';
 import './modules/latest.posts';
 import './modules/stock-slider';
 
+import { customTailwindClasses } from './customTailwindClasses';
+
 import ResponsiveMenu from './modules/ResponsiveMenu';
 
 import LazyLoader from './modules/LazyLoader';
