@@ -72,6 +72,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 			const loadQueue = [];
 			let isLoading = false;
 			let lastActive = slider.activeIndex ?? 0;
+			const FAILSAFE_TIMEOUT = 5000;
 
 			const shrinkSlide = (slide) => {
 				slide.classList.remove('min-w-[200px]');
@@ -115,14 +116,25 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 				item.loading = true;
 				const img = item.img;
 
-				const handleLoaded = () => {
-					img.removeEventListener('load', handleLoaded);
-					item.loading = false;
-					item.loaded = true;
-					isLoading = false;
+				const cleanup = (handlers) => {
+					img.removeEventListener('load', handlers.onLoad);
+					img.removeEventListener('error', handlers.onFail);
+					img.removeEventListener('abort', handlers.onFail);
+					clearTimeout(handlers.timeoutId);
+				};
 
-					shrinkSlide(item.slide);
-					loadedCount += 1;
+				const settle = (status) => {
+					if (!isLoading) return;
+					isLoading = false;
+					item.loading = false;
+					if (status === 'loaded') {
+						item.loaded = true;
+						shrinkSlide(item.slide);
+						loadedCount += 1;
+						dbg('loaded', { index: item.index, loadedCount, shrinkAllAfter, allShrunk });
+					} else {
+						dbg('failed', { index: item.index, status });
+					}
 
 					if (!allShrunk && loadedCount >= shrinkAllAfter) {
 						allShrunk = true;
@@ -134,11 +146,29 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 					processQueue();
 				};
 
-				img.addEventListener('load', handleLoaded);
+				const handlers = {
+					onLoad: () => {
+						cleanup(handlers);
+						settle('loaded');
+					},
+					onFail: (event) => {
+						cleanup(handlers);
+						settle(event?.type || 'failed');
+					},
+					timeoutId: setTimeout(() => {
+						cleanup(handlers);
+						settle('timeout');
+					}, FAILSAFE_TIMEOUT),
+				};
+
+				img.addEventListener('load', handlers.onLoad);
+				img.addEventListener('error', handlers.onFail);
+				img.addEventListener('abort', handlers.onFail);
+
 				img.src = img.dataset.src;
 
 				if (img.complete && img.naturalWidth > 0) {
-					handleLoaded();
+					handlers.onLoad();
 				}
 			};
 
