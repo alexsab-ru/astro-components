@@ -54,12 +54,29 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 
 			const loadQueue = [];
 			let isLoading = false;
-			let observer = null;
 
 			const shrinkSlide = (slide) => {
 				slide.classList.remove('min-w-[200px]');
 				slide.classList.add('min-w-[73px]', '!w-fit');
 				refreshSliderLayout(slider);
+			};
+
+			const enqueueLoad = (index) => {
+				if (index < 0 || index >= images.length) return;
+				const item = images[index];
+				if (!item || item.loaded || item.loading) return;
+				if (!loadQueue.includes(index)) loadQueue.push(index);
+				processQueue();
+			};
+
+			const enqueueVisibleSlides = () => {
+				const sliderRect = slider.el.getBoundingClientRect();
+				images.forEach((item) => {
+					if (item.loaded || item.loading) return;
+					const rect = item.slide.getBoundingClientRect();
+					const isVisible = rect.right > sliderRect.left && rect.left < sliderRect.right;
+					if (isVisible) enqueueLoad(item.index);
+				});
 			};
 
 			const processQueue = () => {
@@ -84,13 +101,10 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 					shrinkSlide(item.slide);
 					loadedCount += 1;
 
-					if (observer) {
-						observer.unobserve(item.slide);
-					}
-
 					if (!allShrunk && loadedCount >= shrinkAllAfter) {
 						allShrunk = true;
 						updateSlideClasses(slider); // сжать все слайды
+						enqueueVisibleSlides();
 					}
 
 					processQueue();
@@ -104,37 +118,20 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 				}
 			};
 
-			const enqueueLoad = (index) => {
-				if (index < 0 || index >= images.length) return;
-				const item = images[index];
-				if (!item || item.loaded || item.loading) return;
-				if (!loadQueue.includes(index)) loadQueue.push(index);
-				processQueue();
-			};
-
 			// грузим первые слайды по одному
 			for (let i = 0; i < shrinkAllAfter; i += 1) {
 				enqueueLoad(i);
 			}
+			enqueueVisibleSlides();
 
 			// при смене активного добавляем его в очередь
 			slider.on('slideChange', () => {
 				enqueueLoad(slider.activeIndex);
+				enqueueVisibleSlides();
 				ensureSlideInView(slider, slider.activeIndex);
 			});
-
-			// грузим слайды при появлении в зоне видимости по одному
-			observer = new IntersectionObserver((entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						const slideEl = entry.target;
-						const item = images.find((it) => it.slide === slideEl);
-						if (item) enqueueLoad(item.index);
-					}
-				});
-			}, { root: slider.el, threshold: 0.01 });
-
-			images.forEach(({ slide }) => observer.observe(slide));
+			slider.on('resize', enqueueVisibleSlides);
+			slider.on('update', enqueueVisibleSlides);
 		},
 	},
 });
