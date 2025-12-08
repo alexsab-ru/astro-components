@@ -10,6 +10,18 @@ const refreshSliderLayout = (slider) => {
 	slider.update();
 };
 
+const ensureSlideInView = (slider, index) => {
+	const slide = slider.slides[index];
+	if (!slide) return;
+	const sliderRect = slider.el.getBoundingClientRect();
+	const slideRect = slide.getBoundingClientRect();
+	const hiddenLeft = slideRect.left < sliderRect.left;
+	const hiddenRight = slideRect.right > sliderRect.right;
+	if (hiddenLeft || hiddenRight) {
+		slider.slideTo(index);
+	}
+};
+
 const carThumbSlider = new Swiper('.car-thumb-slider', {
 	rewind: true,
 	modules: [],
@@ -108,6 +120,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 			// при смене активного добавляем его в очередь
 			slider.on('slideChange', () => {
 				enqueueLoad(slider.activeIndex);
+				ensureSlideInView(slider, slider.activeIndex);
 			});
 
 			// грузим слайды при появлении в зоне видимости по одному
@@ -133,6 +146,7 @@ function updateSlideClasses(slider) {
         slide.classList.add('min-w-[73px]', '!w-fit');
     });
 	refreshSliderLayout(slider);
+	ensureSlideInView(slider, slider.activeIndex);
 }
 
 const carImageSlider = new Swiper('.car-image-slider', {
