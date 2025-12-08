@@ -2,6 +2,13 @@ import Swiper from "swiper";
 import { Navigation, Thumbs, Keyboard } from "swiper/modules";
 import "swiper/css/bundle";
 
+const DEBUG_THUMBS = false;
+const dbg = (...args) => {
+	if (DEBUG_THUMBS) {
+		console.log('[thumbs]', ...args);
+	}
+};
+
 const refreshSliderLayout = (slider) => {
 	slider.updateSlides();
 	slider.updateProgress();
@@ -26,6 +33,7 @@ const ensureSlideInView = (slider, index) => {
 	const hiddenLeft = slideRect.left < sliderRect.left;
 	const hiddenRight = slideRect.right > sliderRect.right;
 	if (hiddenLeft || hiddenRight) {
+		dbg('ensureSlideInView slideTo', index, { hiddenLeft, hiddenRight, slideRect, sliderRect });
 		slider.slideTo(index);
 	}
 };
@@ -43,6 +51,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 		init: function (slider) {
 			if (!slider.slides.length) return;
 			const SHRINK_ALL_AFTER = 4; // поменяй на 4, если нужно дождаться четырех
+			dbg('init', { slides: slider.slides.length, SHRINK_ALL_AFTER });
 
 			const images = Array.from(slider.slides)
 				.map((slide, index) => ({
@@ -75,6 +84,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 				const item = images[index];
 				if (!item || item.loaded || item.loading) return;
 				if (!loadQueue.includes(index)) loadQueue.push(index);
+				dbg('enqueueLoad', { index, queue: [...loadQueue] });
 				processQueue();
 			};
 
@@ -85,6 +95,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 					const rect = item.slide.getBoundingClientRect();
 					const isVisible = rect.right > sliderRect.left && rect.left < sliderRect.right;
 					if (isVisible) {
+						dbg('visible -> enqueue', { index: item.index, rect, sliderRect });
 						enqueueLoad(item.index);
 					}
 				});
@@ -98,6 +109,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 					processQueue();
 					return;
 				}
+				dbg('processQueue start', { index: nextIndex, queue: [...loadQueue] });
 
 				isLoading = true;
 				item.loading = true;
@@ -114,6 +126,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 
 					if (!allShrunk && loadedCount >= shrinkAllAfter) {
 						allShrunk = true;
+						dbg('mass shrink all slides');
 						updateSlideClasses(slider); // сжать все слайды
 						enqueueVisibleSlides();
 					}
@@ -148,11 +161,13 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 				const next = slider.activeIndex;
 				const direction = next > prev ? 'forward' : next < prev ? 'backward' : 'stay';
 				lastActive = next;
+				dbg('slideChange', { active: next, previous: prev, direction });
 				enqueueLoad(slider.activeIndex);
 				enqueueVisibleSlides();
 				ensureSlideInView(slider, slider.activeIndex);
 			});
 			slider.on('slideChangeTransitionEnd', () => {
+				dbg('slideChangeTransitionEnd', { active: slider.activeIndex });
 				enqueueVisibleSlides();
 			});
 			slider.on('resize', enqueueVisibleSlides);
