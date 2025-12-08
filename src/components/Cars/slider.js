@@ -22,14 +22,15 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 	on: {
 		init: function (slider) {
 			if (!slider.slides.length) return;
-			const SHRINK_ALL_AFTER = 3; // поменяй на 4, если нужно дождаться четырех
+			const SHRINK_ALL_AFTER = 4; // поменяй на 4, если нужно дождаться четырех
 
 			const images = Array.from(slider.slides)
-				.map((slide) => ({
+				.map((slide, index) => ({
 					slide,
 					img: slide.querySelector('img'),
 					loaded: false,
 					loading: false,
+					index,
 				}))
 				.filter((item) => item.img && item.img.dataset.src);
 
@@ -41,6 +42,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 
 			const loadQueue = [];
 			let isLoading = false;
+			let observer = null;
 
 			const shrinkSlide = (slide) => {
 				slide.classList.remove('min-w-[200px]');
@@ -69,6 +71,10 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 
 					shrinkSlide(item.slide);
 					loadedCount += 1;
+
+					if (observer) {
+						observer.unobserve(item.slide);
+					}
 
 					if (!allShrunk && loadedCount >= shrinkAllAfter) {
 						allShrunk = true;
@@ -103,6 +109,19 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 			slider.on('slideChange', () => {
 				enqueueLoad(slider.activeIndex);
 			});
+
+			// грузим слайды при появлении в зоне видимости по одному
+			observer = new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						const slideEl = entry.target;
+						const item = images.find((it) => it.slide === slideEl);
+						if (item) enqueueLoad(item.index);
+					}
+				});
+			}, { root: slider.el, threshold: 0.01 });
+
+			images.forEach(({ slide }) => observer.observe(slide));
 		},
 	},
 });
