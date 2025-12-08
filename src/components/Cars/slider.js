@@ -17,6 +17,11 @@ const refreshSliderLayout = (slider) => {
 	slider.update();
 };
 
+const applyThumbSize = (slide) => {
+	slide.classList.remove('min-w-[200px]');
+	slide.classList.add('min-w-[73px]', '!w-fit');
+};
+
 const syncThumbFromMain = (activeIndex) => {
 	const helpers = carThumbSlider?.__thumbHelpers;
 	if (!helpers) return;
@@ -75,8 +80,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 			const FAILSAFE_TIMEOUT = 5000;
 
 			const shrinkSlide = (slide) => {
-				slide.classList.remove('min-w-[200px]');
-				slide.classList.add('min-w-[73px]', '!w-fit');
+				applyThumbSize(slide);
 				refreshSliderLayout(slider);
 			};
 
@@ -209,8 +213,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 // Функция для обновления классов слайдов
 function updateSlideClasses(slider) {
     slider.slides.forEach((slide) => {
-        slide.classList.remove('min-w-[200px]');
-        slide.classList.add('min-w-[73px]', '!w-fit');
+        applyThumbSize(slide);
     });
 	refreshSliderLayout(slider);
 	ensureSlideInView(slider, slider.activeIndex);
