@@ -1,7 +1,32 @@
 import fs from 'fs';
-import { LinkChecker } from 'linkinator';
+import dns from 'node:dns';
 import dotenv from 'dotenv';
-const excludeDomains = ['dev.alexsab.ru', 'promo.kia-szr.ru', 'promo.kia-engels.ru','service.kia-samara.ru', 'omoda-ulyanovsk.alexsab.ru', 'jaecoo-ulyanovsk.alexsab.ru', 'belgee-penza.ru'];
+
+// Подавляем warning от устаревшего builtin punycode, который тянет node-fetch
+const originalEmitWarning = process.emitWarning.bind(process);
+process.emitWarning = (warning, ...args) => {
+  const code = typeof warning === 'object' && warning?.code ? warning.code : args[1];
+  const message = typeof warning === 'string' ? warning : warning?.message;
+  if (code === 'DEP0040' || message?.includes('punycode')) {
+    return;
+  }
+  return originalEmitWarning(warning, ...args);
+};
+
+// GitHub runners и часть локальных сетей без IPv6 → принудительно идём по IPv4
+dns.setDefaultResultOrder('ipv4first');
+
+// Динамически импортируем после подавления warning
+const { LinkChecker } = await import('linkinator');
+
+const excludeDomains = [
+  'service.kia-samara.ru',
+  'service.kia-szr.ru',
+  'service.kia-engels.ru',
+  'ac-engels.ru',
+  'dev.alexsab.ru'
+];
+
 const linksToSkip = [
   /javascript:void\(0\)/,
   /checkLinks\.md/,
@@ -17,6 +42,15 @@ const linksToSkip = [
 ];
 
 dotenv.config();
+const PROBE_TIMEOUT_MS = 8000;
+const outputPath = './broken_links.txt';
+
+// Настройки для повторных запросов
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  retryDelay: 2000, // 2 секунды
+  timeout: 10000, // 10 секунд
+};
 
 /**
  * Gets domain from environment variable or .env file
@@ -62,8 +96,75 @@ function getDomainWithProtocol(domain) {
   return `${protocol}://${domain}`;
 }
 
-const domain = getDomainWithProtocol(getDomain());
-const outputPath = './broken_links.txt';
+/**
+ * Упрощенный fetch с таймаутом
+ */
+async function fetchWithTimeout(url, options = {}, timeout = PROBE_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(new Error('Request timeout')), timeout);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/**
+ * Проверяем, что домен вообще доступен, и при необходимости откатываемся на http
+ */
+async function probeDomainAvailability(domainUrl) {
+  const normalized = getDomainWithProtocol(domainUrl);
+  const candidates = [normalized];
+
+  if (normalized.startsWith('https://')) {
+    candidates.push(normalized.replace(/^https:/, 'http:'));
+  }
+
+  const errors = [];
+
+  for (const candidate of candidates) {
+    try {
+      const response = await fetchWithTimeout(candidate, { method: 'HEAD', redirect: 'follow' });
+      if (Number.isInteger(response?.status)) {
+        return { ok: true, url: candidate, status: response.status };
+      }
+      errors.push(`${candidate} ответил статусом ${response?.status ?? 'unknown'}`);
+    } catch (error) {
+      const cause = error?.cause || {};
+      const extra = cause.code || cause.errno || cause.type || cause.reason;
+      errors.push(`${candidate}: ${error.message}${extra ? ` (${extra})` : ''}`);
+    }
+  }
+
+  return { ok: false, errors };
+}
+
+/**
+ * Достаём человекочитаемую ошибку из failureDetails linkinator
+ */
+function extractFailureReason(failureDetails) {
+  if (!Array.isArray(failureDetails)) return undefined;
+
+  for (const detail of failureDetails) {
+    if (!detail) continue;
+    if (detail.error?.message) {
+      return `${detail.code ? `${detail.code}: ` : ''}${detail.error.message}`;
+    }
+    if (detail.code && detail.message) {
+      return `${detail.code}: ${detail.message}`;
+    }
+    if (detail.message) {
+      return detail.message;
+    }
+    if (detail.status) {
+      return `HTTP ${detail.status}`;
+    }
+  }
+
+  return undefined;
+}
+
+const configuredDomain = getDomainWithProtocol(getDomain());
 
 /**
  * Преобразует VK embed-ссылки в прямые ссылки на видео
@@ -82,13 +183,6 @@ function transformVkEmbedUrl(url) {
   
   return url;
 }
-
-// Настройки для повторных запросов
-const RETRY_CONFIG = {
-  maxRetries: 3,
-  retryDelay: 2000, // 2 секунды
-  timeout: 10000, // 10 секунд
-};
 
 /**
  * Выполняет повторную проверку битых ссылок
@@ -117,8 +211,9 @@ async function retryBrokenLinks(brokenLinks) {
         path: transformedUrl,
         recurse: false,
         timeout: RETRY_CONFIG.timeout,
-        retries: RETRY_CONFIG.maxRetries,
-        retryDelay: RETRY_CONFIG.retryDelay,
+        retryErrors: true,
+        retryErrorsCount: RETRY_CONFIG.maxRetries,
+        retryErrorsJitter: RETRY_CONFIG.retryDelay,
       });
       
       const linkResult = result.links[0];
@@ -128,7 +223,8 @@ async function retryBrokenLinks(brokenLinks) {
           parent: link.parent,
           status: linkResult.status,
           retryAttempts: RETRY_CONFIG.maxRetries + 1,
-          transformedUrl: isVkEmbed ? transformedUrl : undefined
+          transformedUrl: isVkEmbed ? transformedUrl : undefined,
+          error: extractFailureReason(linkResult.failureDetails),
         });
         console.log(`❌ Ссылка действительно битая: ${transformedUrl} (статус: ${linkResult.status})`);
       } else {
@@ -151,12 +247,31 @@ async function retryBrokenLinks(brokenLinks) {
 }
 
 async function checkLinks() {
+  let domain = configuredDomain;
   console.log(`🔍 Начинаю проверку ссылок на ${domain}...`);
+  const strictProbe = ['1', 'true', 'yes'].includes(String(process.env.STRICT_DOMAIN_PROBE || '').toLowerCase());
 
   // Пропускаем проверку для исключенных доменов
   if (excludeDomains.some(excluded => domain.includes(excluded))) {
     console.log(`⏭️ Домен ${domain} находится в списке исключений. Пропускаю проверку`);
     process.exit(0);
+  }
+
+  // Пробуем достучаться до домена заранее и откатываемся на http при проблемах с TLS
+  const reachability = await probeDomainAvailability(domain);
+  if (!reachability.ok) {
+    console.log('⚠️ Не удалось подтвердить доступность домена предварительно (DNS/сертификат?):');
+    reachability.errors.forEach(error => console.log(` - ${error}`));
+    if (strictProbe) {
+      process.exit(1);
+    } else {
+      console.log('⏩ Продолжаю проверку ссылок, несмотря на неуспешную пробу. Установите STRICT_DOMAIN_PROBE=1 чтобы останавливать процесс.');
+    }
+  }
+
+  if (reachability.ok && reachability.url && reachability.url !== domain) {
+    console.log(`ℹ️ HTTPS не ответил корректно, переключаюсь на ${reachability.url}`);
+    domain = reachability.url;
   }
 
   const checker = new LinkChecker();
@@ -166,16 +281,21 @@ async function checkLinks() {
     recurse: true,
     linksToSkip,
     timeout: RETRY_CONFIG.timeout,
-    retries: 1, // Первичная проверка с минимальными повторами
+    retryErrors: true,
+    retryErrorsCount: 2,
+    retryErrorsJitter: 500,
   });
 
-  const brokenLinks = result.links.filter(x => x.state === 'BROKEN').map((item) => {
-    return {
-      url: item.url,
-      parent: item.parent,
-      status: item.status,
-    }
-  });
+  const brokenLinks = result.links
+    .filter(x => x.state === 'BROKEN')
+    .map((item) => {
+      return {
+        url: item.url,
+        parent: item.parent,
+        status: item.status,
+        error: extractFailureReason(item.failureDetails),
+      }
+    });
 
   console.log(`📊 Первичная проверка завершена. Найдено ${brokenLinks.length} потенциально битых ссылок.`);
 
