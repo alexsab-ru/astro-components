@@ -52,7 +52,8 @@ class CarFeedProcessorCSV:
                 return None
 
             vin_value = get_value(["VIN", "Vin", "vin"])
-            if vin_value and vin_value not in {"Обязательный", "Подробнее о параметре"}:
+            availability_value = get_value(["availability", "Наличие", "Availability"])
+            if vin_value and vin_value not in {"Обязательный", "Подробнее о параметре"} and availability_value and availability_value not in {"пример", "Обязательный", "Подробнее о параметре"}:
                 car = ET.SubElement(cars, 'car')
 
                 def safe_set(tag, keys=None, default=None, transform=None):
