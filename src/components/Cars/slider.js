@@ -10,6 +10,14 @@ const refreshSliderLayout = (slider) => {
 	slider.update();
 };
 
+const syncThumbFromMain = (activeIndex) => {
+	const helpers = carThumbSlider?.__thumbHelpers;
+	if (!helpers) return;
+	helpers.enqueueLoad(activeIndex);
+	helpers.enqueueVisibleSlides();
+	helpers.ensureInView(activeIndex);
+};
+
 const ensureSlideInView = (slider, index) => {
 	const slide = slider.slides[index];
 	if (!slide) return;
@@ -54,6 +62,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 
 			const loadQueue = [];
 			let isLoading = false;
+			let lastActive = slider.activeIndex ?? 0;
 
 			const shrinkSlide = (slide) => {
 				slide.classList.remove('min-w-[200px]');
@@ -75,7 +84,9 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 					if (item.loaded || item.loading) return;
 					const rect = item.slide.getBoundingClientRect();
 					const isVisible = rect.right > sliderRect.left && rect.left < sliderRect.right;
-					if (isVisible) enqueueLoad(item.index);
+					if (isVisible) {
+						enqueueLoad(item.index);
+					}
 				});
 			};
 
@@ -124,11 +135,25 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 			}
 			enqueueVisibleSlides();
 
+			// делаем методы доступными снаружи (для основного слайдера)
+			slider.__thumbHelpers = {
+				enqueueLoad,
+				enqueueVisibleSlides,
+				ensureInView: (index) => ensureSlideInView(slider, index),
+			};
+
 			// при смене активного добавляем его в очередь
 			slider.on('slideChange', () => {
+				const prev = lastActive;
+				const next = slider.activeIndex;
+				const direction = next > prev ? 'forward' : next < prev ? 'backward' : 'stay';
+				lastActive = next;
 				enqueueLoad(slider.activeIndex);
 				enqueueVisibleSlides();
 				ensureSlideInView(slider, slider.activeIndex);
+			});
+			slider.on('slideChangeTransitionEnd', () => {
+				enqueueVisibleSlides();
 			});
 			slider.on('resize', enqueueVisibleSlides);
 			slider.on('update', enqueueVisibleSlides);
@@ -170,5 +195,16 @@ const carImageSlider = new Swiper('.car-image-slider', {
 	},
 	thumbs: {
 		swiper: carThumbSlider,
-	}
-})
+	},
+	on: {
+		init(swiper) {
+			syncThumbFromMain(swiper.activeIndex);
+		},
+		slideChange(swiper) {
+			syncThumbFromMain(swiper.activeIndex);
+		},
+		slideChangeTransitionEnd(swiper) {
+			syncThumbFromMain(swiper.activeIndex);
+		},
+	},
+});
