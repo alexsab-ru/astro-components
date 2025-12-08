@@ -1,13 +1,22 @@
 import Swiper from "swiper";
-import { Navigation, Thumbs, Keyboard, FreeMode } from "swiper/modules";
+import { Navigation, Thumbs, Keyboard } from "swiper/modules";
 import "swiper/css/bundle";
+
+const refreshSliderLayout = (slider) => {
+	slider.updateSlides();
+	slider.updateProgress();
+	slider.updateSlidesClasses();
+	slider.updateSize();
+	slider.update();
+};
 
 const carThumbSlider = new Swiper('.car-thumb-slider', {
 	rewind: true,
-	modules: [FreeMode],
-	freeMode: true,
+	modules: [],
+	freeMode: false,
 	spaceBetween: 10, 
 	slidesPerView: 'auto',
+	slidesPerGroup: 1,
 	slideToClickedSlide: true,
 	watchSlidesProgress: true,
 	on: {
@@ -49,6 +58,7 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 			const shrinkSlide = (slide) => {
 				slide.classList.remove('min-w-[200px]');
 				slide.classList.add('min-w-[73px]', '!w-fit');
+				refreshSliderLayout(slider);
 			};
 
 			const handleLoad = (event) => {
@@ -83,6 +93,7 @@ function updateSlideClasses(slider) {
         slide.classList.remove('min-w-[200px]');
         slide.classList.add('min-w-[73px]', '!w-fit');
     });
+	refreshSliderLayout(slider);
 }
 
 const carImageSlider = new Swiper('.car-image-slider', {
