@@ -22,22 +22,16 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 	on: {
 		init: function (slider) {
 			if (!slider.slides.length) return;
-			const SHRINK_ALL_AFTER = 4; // поменяй на 4, если нужно дождаться четырех
-
-			const normalizeSrc = (src) => {
-				try {
-					return new URL(src, window.location.href).href;
-				} catch (error) {
-					return src;
-				}
-			};
+			const SHRINK_ALL_AFTER = 3; // поменяй на 4, если нужно дождаться четырех
 
 			const images = Array.from(slider.slides)
 				.map((slide) => ({
 					slide,
 					img: slide.querySelector('img'),
+					loaded: false,
+					loading: false,
 				}))
-				.filter((item) => item.img);
+				.filter((item) => item.img && item.img.dataset.src);
 
 			if (!images.length) return;
 
@@ -45,15 +39,8 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 			let loadedCount = 0;
 			let allShrunk = false;
 
-			const isRealImageLoaded = (img) => {
-				const targetSrc = normalizeSrc(img.dataset.src || img.src);
-				const currentSrc = normalizeSrc(img.currentSrc || img.src);
-				return img.complete && img.naturalWidth > 0 && currentSrc === targetSrc;
-			};
-
-			const cleanup = () => {
-				images.forEach(({ img }) => img.removeEventListener('load', handleLoad));
-			};
+			const loadQueue = [];
+			let isLoading = false;
 
 			const shrinkSlide = (slide) => {
 				slide.classList.remove('min-w-[200px]');
@@ -61,27 +48,60 @@ const carThumbSlider = new Swiper('.car-thumb-slider', {
 				refreshSliderLayout(slider);
 			};
 
-			const handleLoad = (event) => {
-				const img = event.target;
-				if (allShrunk || img.dataset.thumbRealLoaded || !isRealImageLoaded(img)) return;
+			const processQueue = () => {
+				if (isLoading || !loadQueue.length) return;
+				const nextIndex = loadQueue.shift();
+				const item = images[nextIndex];
+				if (!item || item.loaded) {
+					processQueue();
+					return;
+				}
 
-				img.dataset.thumbRealLoaded = "true";
-				const slideObj = images.find((item) => item.img === img);
-				if (slideObj) shrinkSlide(slideObj.slide);
+				isLoading = true;
+				item.loading = true;
+				const img = item.img;
 
-				loadedCount += 1; // считаем только реальные загрузки
+				const handleLoaded = () => {
+					img.removeEventListener('load', handleLoaded);
+					item.loading = false;
+					item.loaded = true;
+					isLoading = false;
 
-				if (loadedCount >= shrinkAllAfter) {
-					allShrunk = true;
-					cleanup(); // после массового применения слушатели больше не нужны
-					updateSlideClasses(slider); // сжать все слайды
+					shrinkSlide(item.slide);
+					loadedCount += 1;
+
+					if (!allShrunk && loadedCount >= shrinkAllAfter) {
+						allShrunk = true;
+						updateSlideClasses(slider); // сжать все слайды
+					}
+
+					processQueue();
+				};
+
+				img.addEventListener('load', handleLoaded);
+				img.src = img.dataset.src;
+
+				if (img.complete && img.naturalWidth > 0) {
+					handleLoaded();
 				}
 			};
 
-			images.forEach(({ img }) => {
-				img.addEventListener('load', handleLoad);
-				// Обработаем случай, когда изображение уже загружено (например, из кэша)
-				handleLoad({ target: img });
+			const enqueueLoad = (index) => {
+				if (index < 0 || index >= images.length) return;
+				const item = images[index];
+				if (!item || item.loaded || item.loading) return;
+				if (!loadQueue.includes(index)) loadQueue.push(index);
+				processQueue();
+			};
+
+			// грузим первые слайды по одному
+			for (let i = 0; i < shrinkAllAfter; i += 1) {
+				enqueueLoad(i);
+			}
+
+			// при смене активного добавляем его в очередь
+			slider.on('slideChange', () => {
+				enqueueLoad(slider.activeIndex);
 			});
 		},
 	},
