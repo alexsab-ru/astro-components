@@ -13,6 +13,7 @@ const baseCollectionSchema = z.object({
     image: z.string().optional(),
     pubDate: z.coerce.date().optional(),
     toDate: z.union([z.boolean(), z.coerce.date()]).optional(),
+    brand: z.string().optional(),
     // Поля ссылок, чтобы не отбрасывались при включенной схеме
     url: z.string().optional(),
     link: z.string().optional(),

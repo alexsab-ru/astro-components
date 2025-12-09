@@ -4,13 +4,14 @@ title: "Тайтл акции"
 caption: "Заголовок в плитке"
 breadcrumb: "Акция"
 draft: false # необязательно - флаг для исключения из списка акции
-pubDate: "2025-02-27" # необязательно - дата публикации в формате YYYY-MM-DD, возможность планирования публикации
+pubDate: "{{year}}-{{month}}-01"
 toDate: true # необязательно - дата окончания акции в формате YYYY-MM-DD или true для показа последнего дня месяца
 image: "https://cdn.alexsab.ru/models/default-model-bg.webp"
 description: "Описание акции"
 ---
 import Button from '@/components/Button/Button.astro';
 import SpecialSalonsInfo from '@/components/SpecialSalonsInfo.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import settings from '@/data/settings.json';
 export const { site_name, phone_common } = settings;
 import { phoneFormat } from '@/js/utils/numbers.format';
@@ -32,6 +33,12 @@ export const dateToPrepositional = `${MONTH_PREPOSITIONAL} ${YEAR}`;
 - ☑ Пункт 1
 - ☑ Пункт 2
 - ☑ Пункт 3
+
+<div class="py-20" id="service-request">
+	<h2>Записаться на сервис</h2>
+	<FeedbackForm title="" dataFormName="Запись на сервис" showModelSelect={true} />
+</div>
+
 
 <div class="table_wrapper overflow-auto min-w-full my-14">
 	<table border="1">
