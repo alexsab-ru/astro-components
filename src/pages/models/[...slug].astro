@@ -34,6 +34,13 @@ import modelsSections from '@/data/models-sections.yml';
 const currentModel = modelsSections.find(m => m?.id === model.id) || {};
 const sections = currentModel?.sections || [];
 
+// Данные для сохранения "последней просмотренной модели" в Alpine store
+const lastViewedModelForStore = {
+  idNormalized: model.id.replace(/\W/gm, '').toLowerCase(),
+  markId: model.mark_id,
+};
+const lastViewedModelJSON = JSON.stringify(lastViewedModelForStore);
+
 import { getCollection, type DataEntryMap } from "astro:content";
 const rawCars = await getCollection("cars" as keyof DataEntryMap);
 const cars = rawCars && rawCars.length ? rawCars
@@ -63,8 +70,9 @@ const status: TStatus = (model?.status && STATUS.includes(model.status as TStatu
   image={(model as any).image ?? (model as any).thumb}
   brand={model.mark_id}
 >
+  <div x-init={`$store.lastViewedModel.setModel(${lastViewedModelJSON})`} class="hidden"></div>
   <PageH1 h1={`Автомобиль ${model?.mark_id} ${model.name} в ${legal_city_where}`} classes="sr-only" />
-	<Model model={model} status={status} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
+  <Model model={model} status={status} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     !!sections.length && sections.map(s => ( <UniversalSection section={s} /> ))
   }
