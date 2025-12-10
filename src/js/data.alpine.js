@@ -7,7 +7,7 @@ import { footer } from './alpine/footer.js';
 import { sorting } from './alpine/sorting.js';
 import { complectation } from './alpine/complectation.js';
 import { store } from './alpine/store.js';
-import { testDriveComponent } from './alpine/testDrive.js';
+
 
 document.addEventListener('alpine:init', () => {
 	usedPreviewGallery();
@@ -17,7 +17,6 @@ document.addEventListener('alpine:init', () => {
 	sorting();
 	complectation();
 	store();
-	testDriveComponent();
 });
 
 // window.Alpine = Alpine;

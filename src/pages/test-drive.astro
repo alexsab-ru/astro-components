@@ -100,3 +100,8 @@ const { testDrive } = modelsData;
 
 	</div>
 </Layout>
+
+<script>
+	import { testDriveComponent } from '@/js/alpine/testDrive.js';
+	document.addEventListener('alpine:init', testDriveComponent);
+</script>
