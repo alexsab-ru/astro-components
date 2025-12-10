@@ -11,7 +11,8 @@ export function testDriveComponent() {
 		current: null,
 
 		getModels() {
-			this.models = testDrive.filter(isModelVisible);
+			const list = Array.isArray(testDrive) ? testDrive : [];
+			this.models = list.filter(isModelVisible);
 		},
 
 		getInitialModelId() {
