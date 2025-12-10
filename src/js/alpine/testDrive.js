@@ -1,9 +1,10 @@
 import Alpine from 'alpinejs';
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
-import { normalize } from '@/js/utils/textNormalize';
 
 const { testDrive } = modelsData;
+
+const normalize = (str) => (str || '').toString().replace(/\W/gm, '').toLowerCase();
 
 export function testDriveComponent() {
 	Alpine.data('testDrive', () => ({
