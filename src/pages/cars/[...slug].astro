@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import CarPageLayout from '@/layouts/CarPageLayout.astro';
 import { findModelByCarData } from '@/js/utils/car.utils';
+import { normalizeModelId } from '@/js/utils/normalizeModelId';
 
 export async function getStaticPaths() {
 const cars = await (getCollection as any)('cars');
@@ -29,7 +30,7 @@ const lastViewedModelForStore = car?.data
 		const relatedModel = findModelByCarData(car.data);
 		const baseId = relatedModel?.id || String(car.data.folder_id || '');
 		return {
-			idNormalized: baseId.replace(/\W/gm, '').toLowerCase(),
+			idNormalized: normalizeModelId(baseId),
 			markId: relatedModel?.mark_id || car.data.mark_id,
 		};
 	})()

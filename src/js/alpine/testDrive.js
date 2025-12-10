@@ -1,10 +1,9 @@
 import Alpine from 'alpinejs';
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
+import { normalizeModelId } from '@/js/utils/normalizeModelId';
 
 const { testDrive } = modelsData;
-
-const normalize = (str) => (str || '').toString().replace(/\W/gm, '').toLowerCase();
 
 export function testDriveComponent() {
 	Alpine.data('testDrive', () => ({
@@ -24,7 +23,7 @@ export function testDriveComponent() {
 			}
 
 			const match = this.models.find(m => {
-				const modelIdNormalized = normalize(m.id);
+				const modelIdNormalized = normalizeModelId(m.id);
 				const brandMatch =
 					!stored.markId ||
 					(m.mark_id && m.mark_id.toLowerCase() === stored.markId.toLowerCase());
@@ -42,7 +41,7 @@ export function testDriveComponent() {
 			const stored = Alpine.store('lastViewedModel');
 			if (this.current && stored && typeof stored.setModel === 'function') {
 				stored.setModel({
-					idNormalized: normalize(this.current.id),
+					idNormalized: normalizeModelId(this.current.id),
 					markId: this.current.mark_id,
 				});
 			}
