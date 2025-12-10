@@ -29,9 +29,7 @@ const lastViewedModelForStore = car?.data
 		const relatedModel = findModelByCarData(car.data);
 		const baseId = relatedModel?.id || String(car.data.folder_id || '');
 		return {
-			idNormalized: baseId
-				.replace(/\W/gm, '')
-				.toLowerCase(),
+			idNormalized: baseId.replace(/\W/gm, '').toLowerCase(),
 			markId: relatedModel?.mark_id || car.data.mark_id,
 		};
 	})()
