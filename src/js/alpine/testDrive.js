@@ -38,9 +38,15 @@ export function testDriveComponent() {
 		currentModel(id) {
 			this.current = this.models.find(m => m.id === id);
 
+			if (!this.current) {
+				document.documentElement.removeAttribute('data-brand');
+				this.$dispatch('brand-updated', { brand: null });
+				return;
+			}
+
 			// Сохраняем выбор пользователя в Alpine store (и localStorage)
 			const stored = Alpine.store('lastViewedModel');
-			if (this.current && stored && typeof stored.setModel === 'function') {
+			if (stored && typeof stored.setModel === 'function') {
 				stored.setModel({
 					idNormalized: normalizeModelId(this.current.id),
 					markId: this.current.mark_id,
@@ -51,11 +57,20 @@ export function testDriveComponent() {
 			if (brandValue) {
 				document.documentElement.setAttribute('data-brand', brandValue);
 				this.$dispatch('brand-updated', { brand: brandValue });
+			} else {
+				document.documentElement.removeAttribute('data-brand');
+				this.$dispatch('brand-updated', { brand: null });
 			}
 		},
 
 		init() {
 			this.getModels();
+			if (!this.models || !this.models.length) {
+				this.current = null;
+				document.documentElement.removeAttribute('data-brand');
+				this.$dispatch('brand-updated', { brand: null });
+				return;
+			}
 			const initialId = this.getInitialModelId();
 			if (initialId) {
 				this.currentModel(initialId);
@@ -63,4 +78,3 @@ export function testDriveComponent() {
 		},
 	}));
 }
-
