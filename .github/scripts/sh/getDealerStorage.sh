@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # =====================
-# Выбор режима работы: new_cars или used_cars
+# Выбор режима работы: new_cars, used_cars или avito
 # =====================
 # MODE можно передать через ENV или как аргумент (по умолчанию new_cars)
 MODE=${MODE:-new_cars}
@@ -26,8 +26,15 @@ elif [ "$MODE" = "used_cars" ]; then
     XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-USED_CARS_DATA_CARS_CAR}
     CSV_URL=${CSV_URL:-$(grep '^USED_CARS_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
     QUERY_STRING=${QUERY_STRING:-$(grep '^USED_CARS_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+elif [ "$MODE" = "avito" ]; then
+    # Для машин с пробегом
+    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/feeds/avito/csv/data.csv}
+    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/feeds/avito/csv/cars.xml}
+    XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-AVITO_XML_URL_DATA_CARS_CAR}
+    CSV_URL=${CSV_URL:-$(grep '^AVITO_DEALER_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+    QUERY_STRING=${QUERY_STRING:-$(grep '^AVITO_DEALER_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
 else
-    echo "Error: Неизвестный режим MODE='$MODE'. Используйте 'new_cars' или 'used_cars'" >&2
+    echo "Error: Неизвестный режим MODE='$MODE'. Используйте 'new_cars' или 'used_cars' или 'avito'" >&2
     exit 1
 fi
 

@@ -38,6 +38,7 @@
     "getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL": "pnpm run cars getone DEALER_PHOTOS_FOR_CARS_AVITO_URL \"./tmp/feeds/photos/dealer_photos_for_cars_avito.xml\"",
     "getDealerStorage_new_cars_xml": "export MODE=new_cars && pnpm run getDealerStorage",
     "getDealerStorage_used_cars_xml": "export MODE=used_cars && pnpm run getDealerStorage",
+    "getDealerStorage_avito_xml": "export MODE=avito && pnpm run getDealerStorage",
     "getAllNewCars": "pnpm getOne_XML_URL_DATA_CARS_CAR && pnpm getOne_XML_URL_CATALOG_VEHICLES_VEHICLE && pnpm getOne_XML_URL_VEHICLES_VEHICLE && pnpm getOne_XML_URL_ADS_AD && pnpm getOne_XML_URL_CARCOPY_OFFERS_OFFER",
     "getAllUsedCars": "pnpm getOne_USED_CARS_DATA_CARS_CAR && pnpm getOne_USED_CARS_CATALOG_VEHICLES_VEHICLE && pnpm getOne_USED_CARS_VEHICLES_VEHICLE && pnpm getOne_USED_CARS_ADS_AD && pnpm getOne_USED_CARS_CARCOPY_OFFERS_OFFER",
     "getAll": "export IGNORE_ERRORS=1 && rm -rf ./tmp/feeds && pnpm run getDealerStorage_new_cars_xml && pnpm run getDealerStorage_used_cars_xml && pnpm run getOne_DEALER_PHOTOS_FOR_CARS_AVITO_URL && pnpm run getAllNewCars && pnpm run getAllUsedCars && pnpm run getAirStorage && pnpm run getSortStorage && pnpm run getDealerCarsPrice",
