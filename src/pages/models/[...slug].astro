@@ -13,6 +13,7 @@ const seoname = 'models-'+slug;
 
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
+import { normalizeModelId } from '@/js/utils/normalizeModelId';
 export async function getStaticPaths() {
   const { models } = modelsData;
   return models.filter(isModelVisible).map((model) => {
@@ -34,6 +35,13 @@ import modelsSections from '@/data/models-sections.yml';
 const currentModel = modelsSections.find(m => m?.id === model.id) || {};
 const sections = currentModel?.sections || [];
 
+// Данные для сохранения "последней просмотренной модели" в Alpine store
+const lastViewedModelForStore = {
+  idNormalized: normalizeModelId(model.id),
+  markId: model.mark_id,
+};
+const lastViewedModelJSON = JSON.stringify(lastViewedModelForStore);
+
 import { getCollection, type DataEntryMap } from "astro:content";
 const rawCars = await getCollection("cars" as keyof DataEntryMap);
 const cars = rawCars && rawCars.length ? rawCars
@@ -41,8 +49,8 @@ const cars = rawCars && rawCars.length ? rawCars
   .filter((car) => {
     const carMark = car.data.mark_id.toLowerCase();
     const modelMark = model.mark_id.toLowerCase();
-    const carFolder = car.data.folder_id.replace(/\W/gm, '').toLowerCase();
-    const modelId = model.id.replace(/\W/gm, '').toLowerCase();
+    const carFolder = normalizeModelId(car.data.folder_id);
+    const modelId = normalizeModelId(model.id);
     const feedNames = Array.isArray((model as any)?.feed_names) ? (model as any).feed_names : [];
     return carMark === modelMark && (carFolder === modelId || feedNames.includes(car.data.folder_id));
   })
@@ -63,8 +71,9 @@ const status: TStatus = (model?.status && STATUS.includes(model.status as TStatu
   image={(model as any).image ?? (model as any).thumb}
   brand={model.mark_id}
 >
+  <div x-init={`$store.lastViewedModel.setModel(${lastViewedModelJSON})`} class="hidden"></div>
   <PageH1 h1={`Автомобиль ${model?.mark_id} ${model.name} в ${legal_city_where}`} classes="sr-only" />
-	<Model model={model} status={status} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
+  <Model model={model} status={status} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
   {
     !!sections.length && sections.map(s => ( <UniversalSection section={s} /> ))
   }
