@@ -1,0 +1,46 @@
+/* Jaecoo theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "Dopis";
+  src: url("https://cdn.alexsab.ru/b/jaecoo/fonts/dopis-regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dopis";
+  src: url("https://cdn.alexsab.ru/b/jaecoo/fonts/dopis-bold.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-300: #bfd8de;
+  --color-accent-400: #3b9db2;
+  --color-accent-500: #00657b;
+  --color-accent-600: #00657b;
+  --color-yellow: #ffc000;
+  --color-dark: #0d171a;
+
+  --logo-map-info-height: 1rem;
+
+  /* HEADER COLORS */
+  --color-header-bg: var(--color-dark);
+  --color-header-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+  --color-submenu-bg: var(--color-dark);
+  --color-submenu-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+
+  --color-border: color-mix(in srgb, var(--color-white) 30%, transparent);
+
+  --logo-header-height: clamp(0.75rem, calc(2vw + 0.25rem), 1.25rem);
+
+  /* Fonts */
+  --font-sans: Dopis, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+}
+
+

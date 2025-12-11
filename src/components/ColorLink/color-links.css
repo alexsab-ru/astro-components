@@ -1,5 +1,7 @@
+@reference "../../scss/app.css";
+
 .color-link {
-	@apply relative block w-6 sm:w-8 lg:w-10 h-6 sm:h-8 lg:h-10 rounded-full shadow-sm shadow-[#eee] bg-contain;
+	@apply relative block w-6 sm:w-8 lg:w-10 h-6 sm:h-8 lg:h-10 rounded-full shadow-xs shadow-[#eee] bg-contain;
 	&[data-color="gray"] {
 		@apply bg-gray-400;
 	}

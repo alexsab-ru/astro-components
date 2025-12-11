@@ -1,0 +1,18 @@
+/* Container behavior: center + padding-inline 1.25rem */
+@layer components {
+    .container { margin-inline: auto; padding-inline: 1.25rem }
+}
+
+/* Дефолтный цвет границы для всего проекта */
+@layer base {
+    * {
+        border-color: var(--color-border);
+    }
+}
+
+/* Utilities converted from plugin addUtilities/matchUtilities */
+@layer utilities {
+    .brand-gradient { background-image: var(--brand-gradient) }
+    .brand-gradient-transparent { background-image: var(--brand-gradient-transparent) }
+    .brand-gradient-hover { background-image: var(--brand-gradient-hover) }
+}

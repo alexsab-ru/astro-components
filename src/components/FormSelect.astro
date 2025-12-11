@@ -95,7 +95,7 @@ import { Icon } from 'astro-icon/components';
 		@click.outside="open = false"
 	>
 		<span 
-			class="border-2 bg-white border-gray-100 py-2.5 px-4 flex items-center justify-between gap-5 flex-nowrap outline-none select-none xs:text-sm"
+			class="border-2 bg-white border-gray-100 py-2.5 px-4 flex items-center justify-between gap-5 flex-nowrap outline-none select-hidden xs:text-sm"
 			:class="{'cursor-pointer': !disabled, 'cursor-not-allowed': disabled}"
 			tabindex="-1" 
 			@click="openSelect()" 
@@ -115,7 +115,7 @@ import { Icon } from 'astro-icon/components';
 			<template x-for="option in options" :key="option.id">
 				<a 
 					href="#" 
-					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 !no-underline !text-black !mb-0"
+					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 no-underline! text-black! mb-0!"
 					:class="{'bg-gray-200': option.id === currentOption.id}"
 					@click.prevent="select(option.id)"
 					x-text="option.name"

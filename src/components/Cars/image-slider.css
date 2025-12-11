@@ -1,0 +1,16 @@
+.swiper.car-thumb-slider .swiper-slide{
+	position: relative;
+}
+
+.swiper.car-thumb-slider .swiper-slide::after{
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-color: #000;
+	opacity: 0.6;
+	transition: opacity .3s;
+}
+
+.swiper.car-thumb-slider .swiper-slide.swiper-slide-thumb-active::after{
+	opacity: 0;
+}

@@ -11,21 +11,21 @@ const {model, breadcrumb, status} = Astro.props;
 
 import {Icon} from 'astro-icon/components';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
-import './model.scss';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 const photoSlides = !model.photos
-	? []
-	: [].concat(
-			...Object.values(
-				await fetch(model.photos).then((response) =>
-					response.json()
-				)
-			)
-	  );
+? []
+: [].concat(
+	...Object.values(
+		await fetch(model.photos).then((response) =>
+		response.json()
+	)
+)
+);
 import Button from '@/components/Button/Button.astro';
 import ColorLink from '@/components/ColorLink/ColorLink.astro'
 const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.colors[0].id}.png`;
+import './model.css';
 const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
 ---
 
@@ -37,7 +37,7 @@ const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предз�
 		class="model__info"
 		style={`background-image: url(${model?.homeImg})`}>
 		<div class="container h-full pt-8 sm:pt-[2.5%] xl:pb-10">
-			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} color="white" />}
+			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} color="text-(--color-white)!" />}
 			<div class="flex justify-between items-start flex-col lg:flex-row">
 				<div>
 					<h2
@@ -64,7 +64,7 @@ const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предз�
 							</p>
 						) : (
 							<Button
-								classes="popup-link btn !px-20 mt-5 flex-1 whitespace-nowrap"
+								classes="popup-link btn px-20! mt-5 flex-1 whitespace-nowrap"
 								url="#common-modal"
 								title={labelBtn}
 								dataTitle={`${labelBtn} ${model.mark_id} ${model.name}`}
@@ -109,7 +109,7 @@ const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предз�
 
 	<div class={`w-full lg:w-3/4 2xl:w-3/5 relative z-10 top-0 lg:top-[150px] xl:top-[120px] lg:pb-[120px] xl:pb-[120px] ${model?.centered ? 'mx-auto' : 'ml-auto'}`}>
 		<div class="flex flex-col justify-center">
-			<div class="lazy aspect-[1143/493]">
+			<div class="lazy aspect-1143/493">
 				<img
 					src="https://cdn.alexsab.ru/loaders/simple-loading.svg"
 					data-src={carImagePath}
@@ -159,7 +159,7 @@ const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предз�
 			model.globalChars && (
 				<div class="flex justify-center flex-wrap gap-4 mt-10 lg:mt-14 text-black">
 					{model.globalChars.map((char: any) => (
-						<div class="flex flex-col justify-between gap-4 sm:gap-8 xs:p-3 p-4 shadow rounded w-[calc((100%/2)-8px)] sm:w-[calc((100%/3)-11px)] xl:w-[calc((100%/6)-14px)]">
+						<div class="flex flex-col justify-between gap-4 sm:gap-8 xs:p-3 p-4 shadow-sm rounded w-[calc((100%/2)-8px)] sm:w-[calc((100%/3)-11px)] xl:w-[calc((100%/6)-14px)]">
 							<div class="text-xs sm:text-base">{char.title}:</div>
 							<div>
 								<b class="xs:text-xl text-2xl sm:text-3xl 2xl:text-4xl font-bold">
@@ -178,28 +178,28 @@ const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предз�
 		{(status === 'enable' || status === 'show' || model?.show) && (
 			<div class="flex justify-center flex-wrap xs:flex-col gap-4 mt-14">
 				<Button
-					classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
+					classes="popup-link btn black btn-o px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Купить"
 					dataTitle={`Купить ${model.mark_id}`}
 					dataFormName={`Купить. ${model.mark_id} ${model.name}`}
 				/>
 				<Button
-					classes="popup-link btn !px-4 flex-1 whitespace-nowrap"
+					classes="popup-link btn px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Рассчитать кредит"
 					dataTitle="Рассчитать кредит"
 					dataFormName={`Рассчитать кредит. ${model.mark_id} ${model.name}`}
 				/>
 				<Button
-					classes="popup-link btn gray !px-4 flex-1 whitespace-nowrap"
+					classes="popup-link btn gray px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Записаться на тест-драйв"
 					dataTitle="Записаться на тест-драйв"
 					dataFormName={`Записаться на тест-драйв. ${model.mark_id} ${model.name}`}
 				/>
 				<Button
-					classes="popup-link btn black !px-4 flex-1 whitespace-nowrap"
+					classes="popup-link btn black px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Узнать цену по акции"
 					dataTitle="Узнать цену по акции"
@@ -207,14 +207,14 @@ const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предз�
 				/>
 				{ (model?.complectations !== undefined && model?.complectations.length) ? (
 					<Button
-						classes="btn black btn-o !px-4 flex-1 whitespace-nowrap"
+						classes="btn black btn-o px-4! flex-1 whitespace-nowrap"
 						view="scroll-link"
 						url="#complectation"
 						title="Подобрать комплектацию"
 					/>
 				) : (
 					<Button
-						classes="popup-link btn black btn-o !px-4 flex-1 whitespace-nowrap"
+						classes="popup-link btn black btn-o px-4! flex-1 whitespace-nowrap"
 						view="popup-link"
 						url="#common-modal"
 						title="Подобрать комплектацию"
@@ -227,20 +227,6 @@ const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предз�
 
 	</div>
 </section>
-
-<style lang="scss">
-	.image-slide {
-		@apply relative h-full cursor-zoom-in inline-flex w-auto;
-		&.swiper-slide-active {
-			img {
-				@apply brightness-100;
-			}
-		}
-		img {
-			@apply relative h-full w-full object-cover object-center inset-0 brightness-50 transition-[filter] duration-500 ease-in-out hover:brightness-110;
-		}
-	}
-</style>
 
 <script>
 	import GLightbox from 'glightbox';

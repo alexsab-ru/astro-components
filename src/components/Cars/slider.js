@@ -19,7 +19,7 @@ const refreshSliderLayout = (slider) => {
 
 const applyThumbSize = (slide) => {
 	slide.classList.remove('min-w-[200px]');
-	slide.classList.add('min-w-[73px]', '!w-fit');
+	slide.classList.add('min-w-[73px]', 'w-fit!');
 };
 
 const syncThumbFromMain = (activeIndex) => {

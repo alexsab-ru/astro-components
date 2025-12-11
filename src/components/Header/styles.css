@@ -1,0 +1,37 @@
+@reference "../../scss/app.css";
+
+.scroll-link, .header-link, .header-child-link{
+	@apply block lg:inline-block py-3 px-5 transition-colors duration-300 text-header-text hover:bg-header-menu-link-bg-hover hover:text-button-text whitespace-nowrap;
+	&.active{
+		@apply bg-header-menu-link-bg-hover text-button-text;
+	}
+}
+.header-child-link{
+	@apply lg:!block text-submenu-text pl-8 lg:pl-5;
+}
+.cols-0 {
+	@apply columns-auto;
+}
+.cols-1 {
+	@apply columns-1;
+}
+.cols-2 {
+	@apply md:columns-2;
+}
+.cols-3 {
+	@apply lg:columns-3;
+}
+.cols-4 {
+	@apply lg:columns-3 xl:columns-4;
+}
+.cols-5 {
+	@apply lg:columns-3 xl:columns-4 2xl:columns-5;
+}
+
+.clone-menu {
+	@apply relative flex items-center;
+
+	li, a {
+		@apply w-full block;
+	}
+}
