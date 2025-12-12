@@ -161,10 +161,7 @@ class CarFeedProcessorCSV:
             safe_set('ContactMethod', ['ContactMethod'])
             safe_set('Category', ['Category', 'Категория'], 'Автомобили')
             safe_set('Description', ['Описание', 'Description'])
-
-            price_value = self._get_value(row, ['Конечная цена', 'Price', 'РРЦ'])
-            if price_value:
-                ET.SubElement(ad, 'Price').text = price_value
+            safe_set('Price', ['Price', 'РРЦ'])
 
             images_element = ET.SubElement(ad, 'Images')
             images_str = self._get_value(row, ['Картинки', 'ImageUrls']) or ''
@@ -192,8 +189,8 @@ class CarFeedProcessorCSV:
             safe_set('Make', ['Марка', 'Make'])
             safe_set('Model', ['Модель', 'Model'])
             safe_set('GenerationId', ['GenerationId', 'Поколение ID'])
-            # safe_set('ModificationId', ['Модификация ID', 'ModificationId'])
-            # safe_set('ComplectationId', ['Комплектация ID', 'ComplectationId'])
+            safe_set('ModificationId', ['Модификация ID', 'ModificationId'])
+            safe_set('ComplectationId', ['Комплектация ID', 'ComplectationId'])
             safe_set('FuelType', ['Топливо', 'FuelType'])
             safe_set('Transmission', ['Коробка', 'Transmission'])
             safe_set('EngineSize', ['Объем', 'EngineSize', 'Объем двигателя','Объём', 'Объём двигателя'])
