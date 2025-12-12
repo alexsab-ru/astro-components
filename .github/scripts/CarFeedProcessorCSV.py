@@ -2,6 +2,7 @@
 import csv
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import hashlib
 import argparse
 try:
     import requests
@@ -33,6 +34,11 @@ class CarFeedProcessorCSV:
         elif self.data is None:
             raise ValueError("No data to read. Provide a URL or file path.")
     
+    @staticmethod
+    def vin_to_code_md5(vin: str) -> str:
+        vin = vin.strip().upper()
+        return hashlib.md5(vin.encode("utf-8")).hexdigest()
+
     @staticmethod
     def _get_value(row, keys):
         if not isinstance(keys, (list, tuple)):
@@ -144,7 +150,7 @@ class CarFeedProcessorCSV:
             safe_set('Address', ['Address', 'Адрес'])
             safe_set('Latitude', ['Latitude', 'Широта'])
             safe_set('Longitude', ['Longitude', 'Долгота'])
-            safe_set('Id', ['Id', 'ID', 'id', 'ExternalId'], default=self._get_value(row, ["VIN", "Vin", "vin"]))
+            safe_set('Id', ['Id', 'ID', 'id', 'ExternalId'], default=self.vin_to_code_md5(self._get_value(row, ["VIN", "Vin", "vin"])))
             safe_set('DateBegin', ['DateBegin'])
             safe_set('DateEnd', ['DateEnd'])
             safe_set('ListingFee', ['ListingFee'])
@@ -170,32 +176,32 @@ class CarFeedProcessorCSV:
                         ET.SubElement(images_element, 'Image', {'url': cleaned_url})
 
             safe_set('VideoURL', ['VideoURL'])
-            safe_set('Generation', ['Generation'])
-            safe_set('Modification', ['Modification'])
+            safe_set('Generation', ['Поколение', 'Generation'])
+            safe_set('Modification', ['Модификация', 'Modification'])
             safe_set('Complectation', ['Complectation', 'Комплектация'])
             safe_set('InternetCalls', ['InternetCalls'])
             safe_set('CallsDevices', ['CallsDevices'])
-            safe_set('CarType', ['CarType'], 'Новые')
+            safe_set('CarType', ['CarType', 'Тип автомобиля'], 'Новые')
             safe_set('TradeinDiscount', ['Скидка по trade-in', 'TradeinDiscount'])
             safe_set('CreditDiscount', ['Скидка по кредиту', 'CreditDiscount'])
             safe_set('InsuranceDiscount', ['Скидка по страховке'])
-            safe_set('MaxDiscount', ['Скидка', 'MaxDiscount'])
+            safe_set('MaxDiscount', ['Скидка', 'MaxDiscount', 'Максимальная скидка'])
             safe_set('Availability', ['Наличие', 'Availability'], 'в наличии')
             safe_set('Color', ['Цвет', 'Цвет экстерьера', 'Color'])
             safe_set('VideoFileURL', ['VideoFileURL'])
             safe_set('Make', ['Марка', 'Make'])
             safe_set('Model', ['Модель', 'Model'])
-            safe_set('GenerationId', ['GenerationId'])
-            safe_set('ModificationId', ['Модификация', 'ModificationId'])
-            safe_set('ComplectationId', ['Комплектация', 'ComplectationId'])
+            safe_set('GenerationId', ['GenerationId', 'Поколение ID'])
+            # safe_set('ModificationId', ['Модификация ID', 'ModificationId'])
+            # safe_set('ComplectationId', ['Комплектация ID', 'ComplectationId'])
             safe_set('FuelType', ['Топливо', 'FuelType'])
             safe_set('Transmission', ['Коробка', 'Transmission'])
-            safe_set('EngineSize', ['Объем', 'EngineSize'])
+            safe_set('EngineSize', ['Объем', 'EngineSize', 'Объем двигателя','Объём', 'Объём двигателя'])
             safe_set('Year', ['Год', 'Год выпуска', 'Year'])
-            safe_set('Doors', ['Doors'])
+            safe_set('Doors', ['Doors', 'Количество дверей'])
             safe_set('BodyType', ['Тип кузова', 'BodyType'])
             safe_set('DriveType', ['Привод', 'DriveType'], 'Передний')
-            safe_set('Power', ['Power', 'Мощность'])
+            safe_set('Power', ['Power', 'Мощность', 'Мощность двигателя'])
             safe_set('WheelType', ['Руль', 'WheelType'], 'Левый')
             safe_set('PowerSteering', ['PowerSteering'])
             safe_set('ClimateControl', ['ClimateControl'])
@@ -216,7 +222,7 @@ class CarFeedProcessorCSV:
             safe_set('AudioSystemOptions', ['AudioSystemOptions'])
             safe_set('Lights', ['Lights'])
             safe_set('LightsOptions', ['LightsOptions'])
-            safe_set('Wheels', ['Wheels'])
+            safe_set('Wheels', ['Wheels', 'Колеса'])
             safe_set('WheelsOptions', ['WheelsOptions'])
             safe_set('Maintenance', ['Maintenance'])
             safe_set('AuctionPriceLastDate', ['AuctionPriceLastDate'])
