@@ -45,7 +45,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			<noindex><div class="discount">с&nbsp;учетом выгоды до&nbsp;<span class="font-semibold">{ currencyFormat(car.data.max_discount) }</span></div></noindex>
 		): ('')}
 		<div class="sm:text-lg md:text-xl xl:text-3xl font-medium mt-3"><span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(price)}</div>
-		<h2 class="xs:text-xs! sm:text-base! md:text-lg! xl:text-xl! font-normal mt-1 mb-0! transition-colors hover:text-accent grow ml-0! mr-0! p-0! before:hidden!">
+		<h2 class="xs:text-xs! sm:text-base! md:text-lg! xl:text-xl! mt-1 mb-0! transition-colors hover:text-accent grow ml-0! mr-0! p-0! before:hidden!">
 			<a href={ url } class="no-underline! text-black! mb-0!"><b class="font-bold">{ car.data.mark_id } { car.data.folder_id }</b> { car.data.complectation_name }</a>
 		</h2>
 		{car.data?.color && (<small class="text-gray-700">{car.data.color}</small>)}

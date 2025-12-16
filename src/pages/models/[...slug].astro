@@ -105,7 +105,7 @@ const status: TStatus = (model?.status && STATUS.includes(model.status as TStatu
   {!!cars.length && (
     <section class="odd:bg-gray-100">
       <div class="container">
-        <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${legal_city_where}`} /></h2>
+        <h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${legal_city_where}`} /></h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
           {cars.map((car) => ( <CarItem car={car} /> ))}
         </div>

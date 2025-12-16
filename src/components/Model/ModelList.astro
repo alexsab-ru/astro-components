@@ -19,11 +19,11 @@ const groupModelsByBrand = groupArrayByKey(filteredModels, 'mark_id');
 	Object.keys(groupModelsByBrand).length > 0 && (
 		<section class={`models py-10 sm:py-20 ${classes}`} {...rest}>
 			<div class="container">
-				{title && ( <h2 class="text-center font-medium mobile-title-size sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
+				{title && ( <h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
 				{Object.keys(groupModelsByBrand).map(key => (
 					<>
 
-						{Object.keys(groupModelsByBrand).length > 1 && (<h3 class="font-bold text-2xl md:text-3xl lg:text-5xl mb-5 lg:mb-8">{key}</h3>)}
+						{Object.keys(groupModelsByBrand).length > 1 && (<h3 class="text-2xl md:text-3xl lg:text-5xl mb-5 lg:mb-8">{key}</h3>)}
 
 						<div class={`flex flex-wrap mb-10 lg:mb-20 last:mb-0 lg:gap-5 text-xs 2xl:text-base justify-between ${Object.keys(groupModelsByBrand).length > 1 ? 'lg:justify-start' : 'lg:justify-center'}`}>
 							{groupModelsByBrand[key].map((model: any, idx: number) => (
