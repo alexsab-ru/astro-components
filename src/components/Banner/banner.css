@@ -1,11 +1,11 @@
 @reference "../../scss/app.css";
 
 .banner-title {
-	@apply text-3xl md:text-4xl lg:text-5xl uppercase font-bold mb-3 sm:mb-5;
+	@apply text-3xl md:text-4xl lg:text-5xl uppercase font-heading-weight mb-3 sm:mb-5;
 }
 
 .banner-description {
-	@apply text-sm sm:text-xl md:text-3xl relative z-10;
+	@apply xs:text-sm text-base sm:text-xl md:text-3xl relative z-10;
 }
 
 .swiper-pagination-bullet {
