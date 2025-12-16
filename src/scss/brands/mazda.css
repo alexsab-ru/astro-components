@@ -24,7 +24,8 @@
   --color-accent-500: #910a2d;
 
   --logo-header-height: clamp(2.5rem, calc(3vw + 0.25rem), 3.5rem);
-  --logo-map-info-height: clamp(8rem, calc(3vw + 0.25rem), 9rem);
+  --logo-map-info-height: 5rem;
+  --logo-footer-height: 5rem;
 
   --color-header-bg: var(--color-black);
   --color-header-text: var(--color-white);
