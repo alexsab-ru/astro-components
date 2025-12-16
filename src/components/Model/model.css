@@ -9,7 +9,7 @@
 		content: '';
 		position: absolute;
 		inset: 0;
-		background-color: rgba(#000, 0.4);
+		background-color: color-mix(in srgb, #000000 40%, transparent);
 		z-index: -1;
 	}
 }
