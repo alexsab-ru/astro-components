@@ -1,0 +1,27 @@
+.marquee_run_string {
+	animation: runstring var(--animation-speed) infinite linear;
+}
+.marquee_run_string span {
+	display: inline-block;
+	position: relative;
+	font-weight: 500;
+}
+.marquee_run_string span:after {
+	content: '';
+	display: block;
+	width: 10px;
+	height: 10px;
+	background: #ffffff;
+	border-radius: 50%;
+	position: absolute;
+	right: -5px;
+	top: calc(50% - 5px);
+}
+@keyframes runstring {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-50%);
+	}
+}

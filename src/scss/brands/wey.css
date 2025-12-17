@@ -1,0 +1,48 @@
+/* Wey theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "TT Runs";
+  src: url("https://cdn.alexsab.ru/b/wey/fonts/ttruns-regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Runs";
+  src: url("https://cdn.alexsab.ru/b/wey/fonts/ttruns-bold.woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #036a92;
+  --color-accent-500: #024e6b;
+
+  --logo-header-height: clamp(1rem, 2vw + 0.25rem, 1.5rem);
+
+  --color-header-bg: var(--color-accent-500);
+  --color-header-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+  --color-submenu-bg: var(--color-accent-500);
+  --color-submenu-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+
+  --color-header-button-bg: color-mix(in srgb, var(--color-white) 90%, transparent);
+  --color-header-button-bg-hover: color-mix(in srgb, var(--color-white) 70%, transparent);;
+  --color-header-button-text: var(--color-black);
+  --color-header-button-text-hover: var(--color-black);
+
+  --color-header-menu-link-bg-hover: var(--color-accent-400);
+
+  --shadow-header-btn: none;
+
+  --color-border: rgba(255, 255, 255, 0.3);
+  
+  /* Fonts */
+  --font-sans: "TT Runs", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+  --font-weight-heading-weight: 600;
+}
+

@@ -33,8 +33,8 @@ send_telegram_messages() {
 
     # Разбиваем chat_ids по переносу строки
     while IFS= read -r chat_line; do
-        # Разбиваем строку по запятой
-        IFS=',' read -r chat_id message_thread_id <<< "$chat_line"
+        # Разбиваем строку по запятой или слешу
+        IFS=',/' read -r chat_id message_thread_id <<< "$chat_line"
         
         for i in $(seq 0 $((total_parts - 1))); do
             if [ ! -f "./tmp_messages/part_${i}.txt" ]; then
@@ -93,8 +93,8 @@ send_telegram_message() {
 
     # Разбиваем chat_ids по переносу строки
     while IFS= read -r chat_line; do
-        # Разбиваем строку по запятой
-        IFS=',' read -r chat_id message_thread_id <<< "$chat_line"
+        # Разбиваем строку по запятой или слешу
+        IFS=',/' read -r chat_id message_thread_id <<< "$chat_line"
         
         echo "Sending message to Telegram chat $chat_id"
         

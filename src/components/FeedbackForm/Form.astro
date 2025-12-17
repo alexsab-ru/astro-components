@@ -15,13 +15,14 @@ interface Props{
   labelBtn?: string;
 }
 const {
-  dataFormName = 'Форма обратной связи на странице',
+  dataFormName,
   showModelSelect = false,
   labelBtn = 'Отправить',
 } = Astro.props;
 
 import modelsData from '@/data/models.json';
-const options = modelsData.services.map(({ id, name, mark_id }) => ({ 
+import { isModelVisible } from '@/js/utils/modelVisibility';
+const options = modelsData.services.filter(isModelVisible).map(({ id, name, mark_id }) => ({ 
 	id: `${mark_id}-${id}`.toLowerCase(), 
 	name: `${mark_id} ${name}` 
 }));
@@ -33,7 +34,7 @@ const options = modelsData.services.map(({ id, name, mark_id }) => ({
     type="email"
     tabindex="-1"
     name="email"
-    class="h-0 opacity-0 absolute -z-[100]"
+    class="h-0 opacity-0 absolute -z-100"
     placeholder="mail@example.com"
 />
   
@@ -49,7 +50,7 @@ const options = modelsData.services.map(({ id, name, mark_id }) => ({
     errorClasses="text-red-500"
   />
 
-  <ChoosingDealerSelect required={true} salons={salons} />
+  <ChoosingDealerSelect required={true} salons={salons} pageData />
 
   <Checkbox
     name="agree"

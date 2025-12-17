@@ -8,12 +8,12 @@ const { item } = Astro.props;
 
 <a
 	href="#common-modal"
-	class="popup-link special border-4 border-black px-4 pt-6 pb-8 sm:px-5 sm:pt-8 sm:pb-12 cursor-pointer transition hover:bg-gray-100 group"
+	class="popup-link special sm:border-4 border-accent-500 xs:px-0 px-4 pt-2 pb-2 sm:px-5 sm:pt-8 sm:pb-8 cursor-pointer transition hover:bg-gray-100 group overflow-x-hidden"
 	data-title={item.title}
 	data-form_name={`Запись на сервис. ${item.title}`}
 >
 	<div class="flex items-center">
-		<div class="rounded-full overflow-hidden relative z-10 border-4 border-black size-[100px] lg:size-[150px] flex-shrink-0">
+		<div class="rounded-full overflow-hidden relative z-10 border-4 border-accent-500 size-[110px] lg:size-[150px] shrink-0">
 			<img
 				src={item.img}
 				alt={item.title}
@@ -21,19 +21,19 @@ const { item } = Astro.props;
 				loading="lazy"
 			/>
 		</div>
-		<div class="relative flex-grow">
+		<div class="relative grow">
 			<h3
-				class="border-2 border-black bg-black text-white pr-6 pl-12 py-2 -ml-10 xs:text-[10px] text-xs md:text-sm lg:text-lg xl:text-3xl font-normal uppercase flex items-center h-auto leading-1 transition-colors duration-300 group-hover:bg-transparent group-hover:text-black"
+				class="border-4 border-accent-500 bg-accent-500 text-white pr-6 pl-12 py-2 -ml-10 xs:text-[10px]! text-xs! sm:text-sm! lg:text-lg! xl:text-2xl! font-normal uppercase flex items-center h-auto transition-colors duration-300 group-hover:bg-transparent group-hover:text-accent-500"
 			>
 				{item.title}
 			</h3>
 			{
 				item.subtitle && (
-					<div class="absolute top-full pl-2 text-xs xs:text-sm md:text-base lg:text-lg xl:text-2xl font-semibold text-gray-900 mt-1 !leading-[1]">
+					<div class="absolute top-full pl-2 text-xs xs:text-sm md:text-base lg:text-lg xl:text-2xl font-semibold text-gray-900 mt-1 leading-none!">
 						<Fragment set:html={item.subtitle} />{' '}
 					</div>
 				)
 			}
 		</div>
-	</div></a
->
+	</div>
+</a>

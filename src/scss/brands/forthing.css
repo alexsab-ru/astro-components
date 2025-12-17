@@ -1,0 +1,61 @@
+/* Forthing theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "Neo Sans Cyr";
+  src: url("https://cdn.alexsab.ru/fonts/belgee/NeoSansCyr-Light.woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neo Sans Cyr";
+  src: url("https://cdn.alexsab.ru/fonts/belgee/NeoSansCyr-Regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neo Sans Cyr";
+  src: url("https://cdn.alexsab.ru/fonts/belgee/NeoSansCyr-Medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors - цветовая палитра Forthing */
+  --color-light-gray: #bacad2;
+  --color-dark-gray: #6c6d70;
+  --color-red-500: #fe0525;
+  
+  /* Accent colors - используется красная палитра Tailwind */
+  --color-accent-50: #fef2f2;
+  --color-accent-100: #fee2e2;
+  --color-accent-200: #fecaca;
+  --color-accent-300: #fca5a5;
+  --color-accent-400: #f87171;
+  --color-accent-500: #ef4444;
+  --color-accent-600: #dc2626;
+  --color-accent-700: #b91c1c;
+  --color-accent-800: #991b1b;
+  --color-accent-900: #7f1d1d;
+  --color-accent-950: #450a0a;
+
+  /* HEADER COLORS */
+  --color-header-bg: var(--color-black);
+  --color-header-text: var(--color-white);
+  --color-submenu-bg: var(--color-white);
+  --color-submenu-text: var(--color-black);
+
+  --color-border: color-mix(in srgb, var(--color-white) 20%, transparent);
+
+  --logo-map-info-height: 1.5rem;
+
+  /* Fonts - используется шрифт Neo Sans Cyr */
+  --font-sans: "Neo Sans Cyr", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+}
+

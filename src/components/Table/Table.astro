@@ -17,7 +17,7 @@ interface Props {
 const { 
   data = [],
   head = [],
-  headClasses = 'sm:sticky sm:-top-[1px] lg:top-[49px] !bg-accent-500 text-white z-10',
+  headClasses = 'sm:sticky sm:-top-px lg:top-[49px] bg-accent-500! text-white z-10',
   popupText,
   imageClasses = 'min-w-[50px] sm:min-w-0 max-w-[250px] mx-auto',
   imageWidth = 250,
@@ -51,7 +51,7 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
                   key === 'name' || key === 'title' ? (
                     popupText ? (
                       <a 
-                        class="popup-link" 
+                        class="popup-link underline hover:no-underline" 
                         href="#common-modal" 
                         data-title={`${popupText} <strong>${item[key]}</strong>`} 
                         data-form_name={`${popupText} ${item[key]}`}

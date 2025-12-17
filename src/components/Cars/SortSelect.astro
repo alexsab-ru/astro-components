@@ -2,13 +2,13 @@
 import { Icon } from 'astro-icon/components';
 ---
 <div class="flex items-center xs:gap-2 gap-4 xs:text-[10px] text-xs sm:text-base" x-data="sorting">
-	<span class="flex-shrink-0">Сортировать по:</span>
+	<span class="shrink-0">Сортировать по:</span>
 	<div 
 		class="relative min-w-[160px] xs:w-full sm:min-w-[250px] w-auto" 
 		@click.outside="open = false"
 	>
 		<span 
-			class="border py-1.5 sm:py-2 px-3 sm:px-4 cursor-pointer flex items-center justify-between gap-5 flex-nowrap outline-none" 
+			class="border py-1.5 sm:py-2 px-3 sm:px-4 cursor-pointer flex items-center justify-between gap-5 flex-nowrap outline-hidden" 
 			tabindex="-1" 
 			@click="open = !open" 
 			@keydown.escape="open = false">
@@ -20,14 +20,14 @@ import { Icon } from 'astro-icon/components';
 			/>
 		</span>
 		<div 
-			class="absolute top-full left-0 min-w-fit w-full border bg-white shadow-xl z-[60] overflow-y-auto transition-all duration-300 custom-scroll"
+			class="absolute top-full left-0 min-w-fit w-full border bg-white shadow-xl z-60 overflow-y-auto transition-all duration-300 custom-scroll"
 			:class="open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-2'"
 			x-cloak
 		>
 			<template x-for="option in options" :key="option.id">
 				<a 
 					href="#" 
-					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 !no-underline !text-black !text-xs sm:!text-base !mb-0"
+					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 no-underline! text-black! text-xs! sm:text-base! mb-0!"
 					:class="{'bg-gray-200': option.id === current}"
 					@click.prevent="sortBy(option.id)"
 					x-text="option.title"

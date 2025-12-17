@@ -12,7 +12,7 @@ export function complectation() {
 		selectedModel(id) {
 			if (this.currentModel.id === id) return;
 			this.currentModel = models.find(model => model.id === id);
-			this.currentModelComplectation = this.currentModel.complectations[0];
+			this.currentModelComplectation = this.currentModel?.complectations ? this.currentModel.complectations[0] : {};
 		},
 		selectedModelComplectation(name) {
 			if (this.currentModelComplectation.name === name) return;

@@ -6,7 +6,7 @@ const {
 	class: className,
 	...rest
 } = Astro.props;
-import './social.scss';
+import './social.css';
 import { Icon } from 'astro-icon/components';
 ---
 
@@ -16,7 +16,7 @@ import { Icon } from 'astro-icon/components';
 			class={className}
 			{...rest}
 		>
-		{title && <h2 class="text-xl sm:text-2xl font-medium mb-6 sm:mb-10"><Fragment set:html={title}/></h2>}
+		{title && <h2 class="text-xl sm:text-2xl mb-6 sm:mb-10"><Fragment set:html={title}/></h2>}
 			<svg class="absolute w-0 h-0 opacity-0">
 				<linearGradient
 					id="SVGID_1_"

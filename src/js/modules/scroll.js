@@ -1,4 +1,5 @@
 let $nav = document.getElementById('site_nav');
+let anchorScrollTimer;
 
 const hashURL = window.location.hash.substring(1);
 window.location.hash = '';
@@ -27,6 +28,10 @@ document.querySelectorAll('.scroll-link').forEach((link) => {
 export function scroll(hash) {
 	const scrollTarget = document.getElementById(hash);
 	if (scrollTarget) {
+		if (anchorScrollTimer) {
+			clearTimeout(anchorScrollTimer);
+		}
+		window.__isAnchorScrolling = true;
 		const topOffset = $nav ? $nav.offsetHeight : 0;
 		// const topOffset = 0; // если не нужен отступ сверху
 		const elementPosition = scrollTarget.getBoundingClientRect().top;
@@ -35,6 +40,9 @@ export function scroll(hash) {
 			top: offsetPosition,
 			behavior: 'smooth',
 		});
+		anchorScrollTimer = setTimeout(() => {
+			window.__isAnchorScrolling = false;
+		}, 800);
 	}
 }
 const navOffset = $nav ? $nav.offsetHeight * 2.5 : 0;

@@ -1,0 +1,31 @@
+@reference "../../scss/app.css";
+
+.media-bg-center{
+	@apply bg-center;
+}
+.media-bg-top{
+	@apply bg-top;
+}
+.media-bg-bottom{
+	@apply bg-bottom;
+}
+
+.md\:media-bg-center{
+	@apply md:bg-center;
+}
+.md\:media-bg-top{
+	@apply md:bg-top;
+}
+.md\:media-bg-bottom{
+	@apply md:bg-bottom;
+}
+
+.lg\:media-bg-center{
+	@apply lg:bg-center;
+}
+.lg\:media-bg-top{
+	@apply lg:bg-top;
+}
+.lg\:media-bg-bottom{
+	@apply lg:bg-bottom;
+}

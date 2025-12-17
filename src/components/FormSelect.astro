@@ -4,6 +4,8 @@ interface Props {
 	placeholder?: string;
 	required?: boolean;
 	disabled?: boolean;
+	pageData?: boolean;
+	modalData?: boolean;
 	errorMessage?: string;
 	errorClasses?: string;
 	options?: {id: string | number; name: string;}[];
@@ -13,6 +15,8 @@ const {
 	placeholder = 'Выберите значение', 
 	required = false, 
 	disabled = false, 
+	pageData = false,
+	modalData = false,
 	errorMessage = 'Это поле обязательное!',
 	errorClasses = 'xs:text-[10px] text-xs hidden text-red-500 mt-2',
 	options = []
@@ -26,14 +30,60 @@ import { Icon } from 'astro-icon/components';
 <div
 	class="relative custom-select"
 	:class="{'opacity-70': disabled}"
-	x-data={`formSelect(${JSON.stringify(options)}, null, '${placeholder}', ${disabled})`}
-	x-init="initModelSelection()"
-	@select.window="select($event.detail.id)"
-	@filter-select.window="setFilter($event.detail.values)"
-	@sort-select.window="setSortType($event.detail.type)"
-	@search-select.window="setSearchQuery($event.detail.query)"
-	@priority-select.window="setPriorityOptions($event.detail.priorities)"
-	@reset-select-filters.window="resetFilters()"
+	x-data={ `{
+		open: false, 
+		options: ${JSON.stringify(options)},
+		placeholder: '${placeholder}',
+		disabled: ${disabled},
+		value: null,
+		currentOption: {},
+		openSelect() {
+			if (!this.disabled) {
+				this.open = !this.open;
+			}
+		},
+		select(id){
+			this.currentOption = this.options.find(o => o.id === id);
+			this.value = this.currentOption.name || null;
+			this.open = false;
+			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
+		},
+		selectOneOption(id){
+			this.select(id);
+			this.disabled = true;
+		},
+		resetSelect(){
+			this.value = null;
+			this.currentOption = {};
+			this.disabled = false;
+		},
+		effect(){
+			this.options = ${modalData ? '$store.salonsStore.filteredData' : pageData ? '$store.salonsStore.pageFilteredData' : 'this.options'};
+			${pageData ? `
+			if ($store.salonsStore.pageFilteredData.length === 1) {
+				this.resetSelect();
+				this.selectOneOption($store.salonsStore.pageFilteredData[0].id);
+			} else if ($store.salonsStore.pageFilteredData.length > 1 && this.disabled) {
+				this.resetSelect();
+				this.disabled = false;
+			}
+			` : modalData ? `
+			if ($store.salonsStore.shouldResetModalSelect) {
+				this.resetSelect();
+			} else if ($store.salonsStore.filteredData.length === 1) {
+				this.selectOneOption($store.salonsStore.filteredData[0].id);
+			} else if ($store.salonsStore.filteredData.length > 1 && this.disabled) {
+			 	this.resetSelect();
+				this.disabled = false;
+			}
+			` : `
+			if (this.options.length === 1 && !this.value) {
+				this.select(this.options[0].id);
+			}
+			`}
+		},
+	}` }
+	x-effect="effect()"
 	x-cloak>
 	<input 
 		type="text" 
@@ -49,7 +99,7 @@ import { Icon } from 'astro-icon/components';
 		@click.outside="open = false"
 	>
 		<span 
-			class="border-2 bg-white border-gray-100 py-2.5 px-4 flex items-center justify-between gap-5 flex-nowrap outline-none select-none xs:text-sm"
+			class="border-2 bg-white border-gray-100 py-2.5 px-4 flex items-center justify-between gap-5 flex-nowrap outline-none select-hidden xs:text-sm"
 			:class="{'cursor-pointer': !disabled, 'cursor-not-allowed': disabled}"
 			tabindex="-1" 
 			@click="openSelect()" 
@@ -69,7 +119,7 @@ import { Icon } from 'astro-icon/components';
 			<template x-for="option in options" :key="option.id">
 				<a 
 					href="#" 
-					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 !no-underline !text-black !mb-0"
+					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 no-underline! text-black! mb-0!"
 					:class="{'bg-gray-200': option.id === currentOption.id}"
 					@click.prevent="select(option.id)"
 					x-text="option.name"

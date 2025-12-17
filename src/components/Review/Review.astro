@@ -1,0 +1,12 @@
+---
+import { type TReviewItem } from '@/components/Reviews/types';
+interface Props {
+	item: TReviewItem;
+}
+const { item } = Astro.props;
+---
+<blockquote class="px-5 py-8 bg-white shadow-lg rounded-lg mb-5">
+  <header class="mb-3 text-xl">{item.name}</header>
+  <p class="text-base!">{item.text}</p>
+  <footer class="text-base text-gray-500">{item.date}</footer>
+</blockquote>

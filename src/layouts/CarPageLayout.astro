@@ -9,8 +9,14 @@ interface Props {
 }
 const {car = {}, breadcrumb, backLink = false, keywords, totalShow = true} = Astro.props;
 const data = car?.data || {};
-const thumb = data.thumbs && data.thumbs.length ? data.thumbs[0] : data.image;
-const price = data.priceWithDiscount ? data.priceWithDiscount : (data.max_discount ? data.price - data.max_discount : data.price);
+
+import { getCarThumbnail, calculateCarPrice, getModelBadgeData } from '@/js/utils/car.utils';
+const thumb = getCarThumbnail(data);
+const price = calculateCarPrice(data);
+// При желании можно отдельно получить модель через findModelByCarData(data).
+// Мы сразу берем картинку и alt из одного расчёта, чтобы не повторять одинаковую работу.
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(data);
+
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import Layout from '@/layouts/Layout.astro';
 import CarImageSlider from '@/components/Cars/ImageSlider.astro';
@@ -20,7 +26,7 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import BackLink from '@/components/BackLink.astro';
 ---
 
-<Layout title={data?.title || data?.h1} description={data?.description} image={thumb} keywords={keywords}>
+<Layout title={data?.title || data?.h1} description={data?.description} image={thumb} keywords={keywords} brand={data?.mark_id}>
 	<section>
 		<div class="container">
 
@@ -32,7 +38,9 @@ import BackLink from '@/components/BackLink.astro';
 
 			<div class="grid grid-cols-12 gap-y-10 lg:gap-x-14">
 
-				<div class="col-span-12 lg:col-span-6">
+				<div class="col-span-12 lg:col-span-6 relative">
+
+				{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 xs:h-12 h-16 lg:h-20 xl:h-24 w-auto" alt={badgeAlt} />)}
 
 				{ data.images && data.images.length > 0 ? (
 					<CarImageSlider data={data} />
@@ -78,8 +86,8 @@ import BackLink from '@/components/BackLink.astro';
 						<div class="font-bold text-4xl"><span class="text-sm text-gray-400 font-normal">от</span>&nbsp;{currencyFormat(price)}</div>
 					</div>
 					<div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
-						<a href="#common-modal" class="popup-link btn flex-grow !p-2" data-title="Получить предложение" data-form_name={`Получить предложение. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Получить предложение</a>
-						<a href="#common-modal" class="popup-link btn gray flex-grow !p-2" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Рассчитать кредит</a>
+						<a href="#common-modal" class="popup-link btn grow p-2!" data-title="Получить предложение" data-form_name={`Получить предложение. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Получить предложение</a>
+						<a href="#common-modal" class="popup-link btn gray grow p-2!" data-title="Рассчитать кредит" data-form_name={`Рассчитать кредит. ${data?.color} ${data?.mark_id} ${data?.folder_id} ${data?.complectation_name} ${data?.modification_id}, ${data?.vin}. ${currencyFormat(data.price)}`}>Рассчитать кредит</a>
 					</div>
 				</div>
 

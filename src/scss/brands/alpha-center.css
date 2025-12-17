@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-Regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-Medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-SemiBold.woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-Bold.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #D90429;
+  --color-accent-500: #1F1F1F;
+  --color-bgcolor-500: #E5E5E5;
+  --color-textlight-500: #F9FAFB;
+  --color-red-500: #D90429;
+  --color-orange-500: #F59E0B;
+
+  /* Fonts */
+  --font-sans: Montserrat, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+  --font-weight-heading-weight: 500;
+}

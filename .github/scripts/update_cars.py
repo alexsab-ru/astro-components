@@ -62,6 +62,13 @@ class CarProcessor:
         self._lookup_cache: Dict[Tuple[str, str], Optional[str]] = {}
         self._lookup_base_url = "https://cdn.alexsab.ru/getAutocatalog/index.php"
 
+        # --- Поля, требующие обязательной нормализации значений ---
+        # Документируем: расширяем список по мере появления новых кейсов,
+        # чтобы дальше не искать, где именно нужно приводить данные к эталону.
+        self.normalizable_fields: List[str] = [
+            'mark_id',  # бренды часто приходят в разном регистре — выравниваем сразу
+        ]
+
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
         configs = {
@@ -666,6 +673,29 @@ class CarProcessor:
 
         return car_data
 
+    def normalize_car_fields(self, car_data: Dict[str, any]) -> Dict[str, any]:
+        """
+        Приводит значения заранее оговорённых полей к единообразному виду.
+        Нужна, чтобы фильтры (remove_mark_ids, friendly_url и т.п.) работали стабильно.
+        """
+        for field_name in self.normalizable_fields:
+            if field_name not in car_data:
+                continue
+
+            raw_value = car_data[field_name]
+            if raw_value is None:
+                continue
+
+            normalized_value = str(raw_value).strip()
+
+            if field_name == 'mark_id':
+                # Приводим бренд к заглавной букве
+                normalized_value = normalized_value.title()
+
+            car_data[field_name] = normalized_value
+
+        return car_data
+
     def calculate_max_discount(self, car_data: Dict[str, any]) -> int:
         """Расчёт максимальной скидки в зависимости от типа источника"""
         if self.source_type in ['catalog_vehicles_vehicle', 'vehicles_vehicle', 'data_cars_car']:
@@ -777,6 +807,9 @@ class CarProcessor:
         
         # Обогащаем по внешним ID ДО генерации URL и расчётов
         car_data = self.resolve_external_ids(car_data)
+
+        # Нормализуем заранее выбранные поля (начинаем с mark_id → нижний регистр).
+        car_data = self.normalize_car_fields(car_data)
 
         # Проверяем наличие обязательных полей
         if not car_data.get('vin') or not car_data.get('mark_id') or not car_data.get('folder_id'):

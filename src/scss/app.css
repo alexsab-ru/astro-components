@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import "tailwindcss";
+
+@source "../**/*.{json,yml,yaml}";
+
+@import './base/theme.css';
+@import './base/variants.css';
+@import './base/layer.css';
+@import './base/utility.css';
+@import './brand.css';
+
+/* Imports */
+@import './global.scss';
+
+@import './ui/button.scss';
+@import "./ui/slider.scss";
+@import './ui/discount.scss';
+@import './ui/close-modal-btn.scss';
+@import './ui/custom-scrollbar.scss';
+@import './ui/video.scss';
+
+@import './blocks/marquee.scss';
+@import './blocks/media-object.scss';
+@import './blocks/content.scss';
+@import './blocks/table.scss';
+@import './blocks/seo-content.scss';
+@import './blocks/auto-show-modal.scss';
+@import './blocks/stock-slider.scss';

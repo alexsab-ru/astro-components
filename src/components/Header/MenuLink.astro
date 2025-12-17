@@ -20,7 +20,7 @@ const badgeImage = badge && badge?.horisontal || badge?.img || badge?.vertical |
 	]}
 	{...rest}
 >
-{link.name}
+<Fragment set:html={`${link.name} ${(link?.status && (link.status === 'preorder' || link.status === 'comminsoon')) ? ' - <b>Скоро в продаже</b>' : '' }`} />
 {link?.thumb && (
 	<div class="aspect-video hidden lg:block w-full relative">
 		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" width="338" height="190" alt={link.name || ''} />

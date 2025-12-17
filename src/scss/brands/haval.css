@@ -1,0 +1,64 @@
+/* Haval theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "Haval";
+  src: url("https://cdn.alexsab.ru/b/haval/fonts/Haval-300.woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Haval";
+  src: url("https://cdn.alexsab.ru/b/haval/fonts/Haval-400.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Haval";
+  src: url("https://cdn.alexsab.ru/b/haval/fonts/Haval-500.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Haval";
+  src: url("https://cdn.alexsab.ru/b/haval/fonts/Haval-700.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #83888b;
+  --color-accent-500: #626b6f;
+  --color-accent-600: #626b6f;
+  --color-green-accent: #00caba;
+
+  --logo-map-info-height: 1.25rem;
+
+  /* Fonts */
+  --font-sans: Haval, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --spacing: 0.333rem;
+}
+
+@layer base {
+  html{
+    font-size: 75%;
+  }
+}
+
+

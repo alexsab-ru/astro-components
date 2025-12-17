@@ -1,0 +1,59 @@
+/* Solaris theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, rounded-btn, etc. */
+
+@font-face {
+  font-family: "Mulish";
+  src: url("https://cdn.alexsab.ru/fonts/Mulish/Mulish-Regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("https://cdn.alexsab.ru/fonts/Mulish/Mulish-Medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("https://cdn.alexsab.ru/fonts/Mulish/Mulish-SemiBold.woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("https://cdn.alexsab.ru/fonts/Mulish/Mulish-Bold.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #418fde;
+  --color-accent-500: #1b365d;
+  --color-brand-color: #3a3c4e;
+  --color-brand-light-color: #f5f4f3;
+
+  --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 1.75rem);
+
+  --footer-bg: var(--brand-gradient);
+
+  /* Fonts */
+  --font-sans: Mulish, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+
+  /* Radii */
+  --radius-btn: 100px;
+
+  /* Background utilities */
+  /* Note: Background size and position need custom utility classes in Tailwind v4 */
+  /* Original values: backgroundSize: '150% 200%', backgroundPosition: '0% 0%' / '100% 100%' */
+}
+
+

@@ -58,7 +58,7 @@ if (rawPosts && rawPosts.length) {
 		>
 			<div class="container">
 				{title && (
-					<h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">
+					<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">
 						{title}
 					</h2>
 				)}
@@ -88,7 +88,7 @@ if (rawPosts && rawPosts.length) {
 				{(showAllButton || (rawPosts.length > diffLimit - limit && rawPosts.length !== diffLimit)) && (
 					<div class="flex justify-center mt-10">
 						<Button 
-							classes="inline-block !px-4 xl:!px-8 !py-2 xl:!py-3 !text-white !no-underline" 
+							classes="inline-block px-4! xl:px-8! py-2! xl:py-3! text-white! no-underline!" 
 							url={`/${collectionName}/`}
 							title="Смотреть все"
 						/>
