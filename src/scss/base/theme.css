@@ -81,11 +81,13 @@
 
     --color-icon: var(--color-gray-600);
 
+    /* Swiper Slider */
     --color-pagination-bg: var(--color-white);
-    --color-pagination-border: color-mix(in srgb, var(--color-black) 25%, transparent);
-    --color-pagination-inactive: color-mix(in srgb, var(--color-black) 45%, transparent);
-    --color-pagination-active: var(--color-accent-500);
-    --color-pagination-contrast: var(--color-white);
+    --swiper-pagination-bullet-width: 18px;
+    --swiper-pagination-bullet-height: 18px;
+    --swiper-pagination-bullet-inactive-opacity: 1;
+    --swiper-pagination-bullet-inactive-color: transparent;
+    --swiper-pagination-color: var(--color-accent-500);
 
     /* Fonts */
     --font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -94,6 +96,8 @@
 
     /* Radii */
     --radius-btn: 0px;
+
+    --spacing: 0.25rem;
 
     /* Shadows (from boxShadow) */
     --shadow-3xl: 0 35px 60px rgba(0 0 0 / 0.3);
