@@ -51,7 +51,7 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
                   key === 'name' || key === 'title' ? (
                     popupText ? (
                       <a 
-                        class="popup-link" 
+                        class="popup-link underline hover:no-underline" 
                         href="#common-modal" 
                         data-title={`${popupText} <strong>${item[key]}</strong>`} 
                         data-form_name={`${popupText} ${item[key]}`}
