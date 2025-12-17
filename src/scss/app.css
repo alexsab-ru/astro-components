@@ -14,6 +14,7 @@
 @import './global.scss';
 
 @import './ui/button.scss';
+@import "./ui/slider.scss";
 @import './ui/discount.scss';
 @import './ui/close-modal-btn.scss';
 @import './ui/custom-scrollbar.scss';

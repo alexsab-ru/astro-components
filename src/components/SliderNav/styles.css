@@ -8,19 +8,6 @@
 	}
 }
 
-.slider-pagination{
-	&.swiper-pagination-clickable{
-		.swiper-pagination-bullet{
-			background-color: var(--color-pagination-inactive) !important;
-			opacity: 0.4 !important;
-			&.swiper-pagination-bullet-active{
-				background-color: var(--color-pagination-active) !important;
-				opacity: 1 !important;
-			}
-		}
-	}
-}
-
 .swiper-button-lock {
 	display: none;
  }
