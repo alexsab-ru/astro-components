@@ -1,6 +1,5 @@
 import Swiper from "swiper";
 import { Navigation, Thumbs, Keyboard } from "swiper/modules";
-import "swiper/css/bundle";
 
 const DEBUG_THUMBS = false;
 const dbg = (...args) => {

@@ -1,7 +1,6 @@
 import Swiper from "swiper";
 import { Navigation, Pagination, Keyboard } from "swiper/modules";
 
-import "swiper/css/bundle";
 const sliders = document.querySelectorAll(".simple-slider");
 if(sliders.length){
 	Array.from(sliders).map(slider => {
