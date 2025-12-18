@@ -34,7 +34,7 @@ const linkAttrs = hasBannerUrl ? {
 ---
 
 <div class={`swiper-slide banner-slide ${banner?.gradient === false ? '' : 'gradient'}`} data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
-	<div class="container h-full relative z-[2] py-10 lg:py-20">
+	<div class="container h-full relative z-2 py-10 lg:py-20">
 		<div class="h-full flex flex-col justify-between">
 			<div class="mb-10">
 				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
@@ -43,7 +43,7 @@ const linkAttrs = hasBannerUrl ? {
 					banner?.btn && (
 						<div data-swiper-parallax="-55%">
 							<Button
-								classes={`btn inline-block !py-2 sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
+								classes={`btn inline-block py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
 								view={banner?.view}
 								url={banner?.btnUrl}
 								title={banner?.btn}

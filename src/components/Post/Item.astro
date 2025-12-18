@@ -99,7 +99,7 @@ const isLinkEffective = isModalAnchor ? false : isLink;
 ---
 <a 
 	href={isLinkEffective ? resolvedHref : (isModalAnchor ? resolvedHref : '#common-modal')}
-	class={`!no-underline ${!isLinkEffective ? 'popup-link' : ''}`}
+	class={`no-underline! ${!isLinkEffective ? 'popup-link' : ''}`}
 	data-title={!isLinkEffective ? (post?.data?.title || post?.data?.caption) : undefined}
 	data-subtitle={!isLinkEffective ? (post?.data?.subtitle || post?.data?.description) : undefined}
 	data-form_name={!isLinkEffective ? (post?.data?.title || post?.data?.caption) : undefined}

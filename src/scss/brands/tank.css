@@ -1,0 +1,44 @@
+/* Tank theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, rounded-btn, etc. */
+
+@font-face {
+  font-family: "TT_TANK";
+  src: url("https://cdn.alexsab.ru/b/tank/fonts/TT_TANK_Light.woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT_TANK";
+  src: url("https://cdn.alexsab.ru/b/tank/fonts/TT_TANK_Medium.woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT_TANK";
+  src: url("https://cdn.alexsab.ru/b/tank/fonts/TT_TANK_Bold.woff");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-black: #252c2c;
+  --color-accent-400: #ff9549;
+  --color-accent-500: #ff9549;
+
+  --logo-header-height: clamp(2.25rem, calc(2vw + 0.25rem), 3.25rem);
+
+  /* Fonts */
+  --font-sans: TT_TANK, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+
+  /* Radii */
+  --radius-btn: 8px;
+}
+
+

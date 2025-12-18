@@ -1,0 +1,108 @@
+/* Base theme tokens shared across brands.
+   Define only defaults here. Brand files override below. */
+
+@theme {
+    /* Colors */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-accent-400: oklch(0.79 0.12 205);
+    --color-accent-500: oklch(0.74 0.14 205);
+    --color-vk: #4B76A8;
+    --color-ok: #F7931D;
+    --color-fb: #3C5A99;
+    --color-youtube: #FF0018;
+    --color-tiktok: #000000;
+    --color-telegram: #2FACE1;
+
+    /* Полная палитра серых цветов для границ и других элементов */
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;  /* дефолтный цвет для border */
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    --color-gray-950: #030712;
+
+    --color-border: var(--color-gray-200);
+
+    /* Logo sizing */
+    --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
+    --logo-dealer-header-height: var(--logo-header-height);
+    
+    --logo-map-info-height: clamp(1.75rem, calc(1.5vw + 0.5rem), 2.75rem);
+    --logo-dealer-map-info-height: var(--logo-map-info-height);
+    
+    --logo-footer-height: var(--logo-header-height);
+    --logo-dealer-footer-height: var(--logo-footer-height);
+
+    /* HEADER COLORS */
+    --color-header-bg: var(--color-white);
+    --color-header-text: var(--color-black);
+    --color-submenu-bg: var(--color-white);
+    --color-submenu-text: var(--color-black);
+    
+    /* BUTTON COLORS */
+    --color-button-bg: var(--color-accent-500);
+    --color-button-bg-hover: var(--color-accent-400);
+    --color-button-text: var(--color-white);
+    --color-button-text-hover: var(--color-white);
+    
+    /* HEADER BUTTON COLORS */
+    --color-header-button-bg: var(--color-accent-500);
+    --color-header-button-bg-hover: var(--color-accent-400);
+    --color-header-button-text: var(--color-white);
+    --color-header-button-text-hover: var(--color-white);
+
+    /* HEADER LINK MENU BG HOVER COLOR */
+    --color-header-menu-link-bg-hover: var(--color-accent-500);
+
+    /* DEFAULT SHADOW FOR HEADER MOBILE BTN'S */
+    --shadow-header-btn: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+
+    /* BRAND GRADIENTS */
+    --brand-gradient: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-400) 175.76%;
+    --brand-gradient-transparent: 90deg, transparent -14.69%, transparent 175.76%;
+    --brand-gradient-hover: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-500) 175.76%;
+
+    /* FOOTER COLORS */
+    --footer-bg: color-mix(in srgb, #000000 90%, transparent);
+    --color-footer-text-color: color-mix(in srgb, var(--color-white) 90%, transparent);
+
+    /* COLOR LINKS DEFAULT */
+    --color-link: var(--color-accent-500);
+    --color-link-hover: var(--color-accent-400);
+
+    --color-phone: color-mix(in srgb, var(--color-black) 80%, transparent);
+    --color-phone-hover: var(--color-accent-500);
+
+    --color-icon: var(--color-gray-600);
+
+    /* Swiper Slider */
+    --color-pagination-bg: var(--color-white);
+    --swiper-pagination-bullet-width: 18px;
+    --swiper-pagination-bullet-height: 18px;
+    --swiper-pagination-bullet-inactive-opacity: 1;
+    --swiper-pagination-bullet-inactive-color: transparent;
+    --swiper-pagination-color: var(--color-accent-500);
+
+    /* Fonts */
+    --font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-heading: inherit;
+    --font-weight-heading-weight: 700;
+
+    /* Radii */
+    --radius-btn: 0px;
+
+    --spacing: 0.25rem;
+
+    /* Shadows (from boxShadow) */
+    --shadow-3xl: 0 35px 60px rgba(0 0 0 / 0.3);
+    --shadow-4xl: 0 0 60px rgba(0 0 0 / 0.5);
+
+    /* Breakpoints (to enable xs: variant and others if needed) */
+    --breakpoint-xs: 430px;
+}

@@ -27,18 +27,18 @@ const formName = dataFormName || title || defaultDataFormName;
 ---
 {imageUrl.length ? (
   <div class="flex flex-col lg:flex-row lg:gap-10 lg:items-center lg:justify-center">
-    <div class="lazy !hidden lg:!flex justify-center lg:w-1/2">
+    <div class="lazy hidden! lg:flex! justify-center lg:w-1/2">
       <img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={imageUrl} alt={title} class="w-full h-auto" loading="lazy" width="748" height="323" />
     </div>
     <div>
-      {title !== "" ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{displayTitle}</h3>): null }
+      {title !== "" ? (<h3 class="text-center text-3xl! sm:text-4xl! mb-8!">{displayTitle}</h3>): null }
       {subtitle.length ? (<p class="text-center">{subtitle}</p>) : ('')}
       <Form dataFormName={formName} showModelSelect={showModelSelect} />
     </div>
   </div>
 ) : (
   <>
-    {title !== "" ? (<h3 class="text-center font-bold !text-3xl sm:!text-4xl !mb-8">{displayTitle}</h3>): null }
+    {title !== "" ? (<h3 class="text-center text-3xl! sm:text-4xl! mb-8!">{displayTitle}</h3>): null }
     {subtitle.length ? (<p class="text-center mb-8">{subtitle}</p>) : ('')}
     <Form dataFormName={formName} showModelSelect={showModelSelect} />
   </>

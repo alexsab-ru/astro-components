@@ -25,19 +25,19 @@ import MapInfo from './Map/MapInfo.astro';
 ---
 
 <section
-	class={`section bg-gray-50 ${title ? 'pt-8 sm:pt-16 !pb-0' : 'p-0'}`}
+	class={`section bg-gray-50 ${title ? 'pt-8 sm:pt-16 pb-0!' : 'p-0'}`}
 	id="contacts"
 	style=`--height: ${height}px; --y-offset: ${yOffset}px`
 >
 	<div class="container relative">
 		{
 			title && (
-				<h2 class="text-xl sm:text-4xl font-medium mb-14 before:hidden text-left mx-0">
+				<h2 class="text-xl sm:text-4xl mb-14 before:hidden text-left mx-0">
 					{title}
 				</h2>
 			)
 		}
-			<MapInfo salons={salons} classes={`h-[var(--height)] ${title ? 'lg:top-[135px]' : 'top-[var(--y-offset)]'}`} />
+			<MapInfo salons={salons} classes={`h-(--height) ${title ? 'lg:top-[135px]' : 'top-(--y-offset)'}`} />
 	</div>
 
 	<Map mapImg={mapImg} salons={salons} classes="h-[400px] lg:h-[calc(var(--height)+var(--y-offset)*2)]"></Map>

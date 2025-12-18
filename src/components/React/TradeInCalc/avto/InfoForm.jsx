@@ -343,7 +343,7 @@ function AvtoInfoForm() {
 					<input
 						type="tel"
 						placeholder="Пробег *"
-						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${mileageState !== '' ? 'border-black' : 'border-gray-400'}`}
+						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black ${mileageState !== '' ? 'border-black' : 'border-gray-400'}`}
 						{...register('mileage')}
 						onChange={e => {
 							setMileage(e.target.value);
@@ -360,18 +360,18 @@ function AvtoInfoForm() {
 					<p className="m-0">Если вы заполните эти поля, то повысите точность расчета</p>
 				</div>
 
-				<div className="col-span-6 lg:col-span-3 !mb-5">
+				<div className="col-span-6 lg:col-span-3 mb-5!">
 					<input
 						type="tel"
 						name="ownerCount"
 						placeholder="Владельцев по ПТС"
-						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${ownerCount !== '' ? 'border-black' : 'border-gray-400'}`}
+						className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black ${ownerCount !== '' ? 'border-black' : 'border-gray-400'}`}
 						value={ownerCount}
 						onChange={e => setOwnerCount(e.target.value.replace(/[^0-9\.]/g, ''))}
 					/>
 				</div>
 
-				<div className="col-span-6 !mb-5">
+				<div className="col-span-6 mb-5!">
 					<h3 className="text-base font-bold mb-2">ПТС</h3>
 					<div className="flex gap-5">
 						{ptsTypes.map(pts => (
@@ -384,14 +384,14 @@ function AvtoInfoForm() {
 				</div>
 
 				<div className="col-span-6">
-					<h3 className="text-base font-bold !mb-2">Контактные данные</h3>
+					<h3 className="text-base font-bold mb-2!">Контактные данные</h3>
 					<div className="grid grid-cols-6 gap-5">
 						<div className="col-span-6 lg:col-span-3">
 							<input
 								type="text"
 								name="name"
 								placeholder="Ваше имя"
-								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black border-gray-400 active:border-accent-500 focus-within:border-accent-500`}
+								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black border-gray-400 active:border-accent-500 focus-within:border-accent-500`}
 							/>
 						</div>
 						<div className="col-span-6 lg:col-span-3 relative">
@@ -399,7 +399,7 @@ function AvtoInfoForm() {
 								type="tel"
 								{...register('phone')}
 								placeholder="+7 999 999-99-99 *"
-								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-none w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
+								className={`border transition-all focus:border-accent-500 px-4 py-[9px] outline-hidden w-full text-black ${phone !== '' ? 'border-black' : 'border-gray-400'}`}
 								onChange={e => {
 									setPhone(maskphone(e));
 									setValue('phone', e.target.value);
@@ -425,7 +425,7 @@ function AvtoInfoForm() {
 				<div className="col-span-6 sticky bottom-0 left-0 right-0 z-10 bg-white border-t border-b border-t-gray-100 border-b-gray-100">
 					<div className="flex justify-between flex-wrap sm:justify-end">
 						<div
-							className="btn white border-0 flex flex-grow sm:flex-grow-0 items-center justify-center px-5 sm:px-20"
+							className="btn white border-0 flex grow sm:grow-0 items-center justify-center px-5 sm:px-20"
 							onClick={ () => {decrimentStep(); recalculate();} }
 						>
 							<span className="flex justify-center items-center gap-1 h-5">
@@ -433,7 +433,7 @@ function AvtoInfoForm() {
 								Шаг назад
 							</span>
 						</div>
-						<button type="submit" className="btn px-5 sm:px-20 flex-grow sm:flex-grow-0" disabled={isSubmitting}><span>Получить&nbsp;оценку</span></button>
+						<button type="submit" className="btn px-5 sm:px-20 grow sm:grow-0" disabled={isSubmitting}><span>Получить&nbsp;оценку</span></button>
 					</div>
 				</div>
 

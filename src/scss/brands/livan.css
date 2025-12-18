@@ -1,0 +1,20 @@
+/* Livan theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, etc. */
+
+@theme {
+  /* Colors */
+  --color-accent-300: #DFDFDD;
+  --color-accent-400: #5B6671;
+  --color-accent-500: #25282A;
+  --color-accent-600: #25282A;
+  --color-blue-400: #0a64dc;
+  --color-orange-400: #f88d2b;
+
+  /* Using base font configuration (Manrope) */
+
+  /* Timing functions */
+  --ease-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+

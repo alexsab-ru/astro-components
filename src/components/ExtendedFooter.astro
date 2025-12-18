@@ -27,20 +27,20 @@ salons
     .map(s => `<p class="text-sm">${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
 ---
 
-<footer class="bg-black/90 text-white py-14 relative">
+<footer class="bg-linear-[var(--footer-bg)] text-footer-text-color py-14 relative">
     <div class="container">
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-y-10 lg:gap-y-5">
 
-            <div class="flex flex-col space-y-5 w-fit divide-y divide-white/5">
-                <div class="">
-                    <img src={logo_footer || logo_header} class="h-8 w-auto" loading="lazy" alt={site_name} width="151" height="32" />
+            <div class="flex flex-col gap-3 w-fit divide-y divide-white/5">
+                <div class="pb-5">
+                    <img src={logo_footer || logo_header} class="h-[var(--logo-footer-height)] w-auto" loading="lazy" alt={site_name} width="151" height="32" />
                 </div>
                 <div>
                     {logo_dealer ? (
-                        <img src={logo_dealer} class={`max-w-[200px] pt-4`} alt={site_name} loading="lazy" width="200" height="40" />
+                        <img src={logo_dealer} class="h-[var(--logo-dealer-footer-height)] w-auto" alt={site_name} loading="lazy" width="200" height="40" />
                     ) : (
-                        <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70 pt-4">{site_name}</a>
+                        <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70">{site_name}</a>
                     )}
                 </div>
             </div>
@@ -65,11 +65,11 @@ salons
                             salons.map(salon => (
                             <div class="flex flex-col gap-3">
                                 <span class="flex items-center gap-1 flex-nowrap">
-                                    <Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" />
+                                    <Icon name="mdi:map-marker-outline" class="text-2xl shrink-0" />
                                     <Fragment set:html={salon.address} />
                                 </span>
                                 <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
-                                    <Icon name="mdi:cellphone" class="text-xl flex-shrink-0" />
+                                    <Icon name="mdi:cellphone" class="text-xl shrink-0" />
                                     {salon.phone}
                                 </a>
                             </div>
@@ -94,15 +94,15 @@ salons
         {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
 
         <div class="flex justify-between items-start gap-10 flex-wrap pt-5 mt-7 border-white/20 border-t">
-            <div class="flex flex-grow gap-10 flex-wrap">
+            <div class="flex grow gap-10 flex-wrap">
                 <div>
                     <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
                 </div>
-                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light hover:!text-white">Политика конфиденциальности</a></div>
-                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light hover:!text-white">Правила использования cookie</a></div>
+                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light hover:text-white!">Политика конфиденциальности</a></div>
+                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light hover:text-white!">Правила использования cookie</a></div>
             </div>
-            <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:!text-white" target="_blank">alexsab.ru</a></div>
+            <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:text-white!" target="_blank">alexsab.ru</a></div>
         </div>
 
     </div>

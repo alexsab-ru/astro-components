@@ -1,3 +1,5 @@
+# Generated brand aggregator
+src/scss/brand.css
 # build output
 dist/
 # generated types

@@ -1,0 +1,46 @@
+/* Jetour theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, etc. */
+@font-face {
+    font-family: 'Manrope';
+    src: url('https://cdn.alexsab.ru/fonts/Manrope/Manrope-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Manrope';
+    src: url('https://cdn.alexsab.ru/fonts/Manrope/Manrope-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Manrope';
+    src: url('https://cdn.alexsab.ru/fonts/Manrope/Manrope-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+  font-family: "Russo One";
+  src: url("https://cdn.alexsab.ru/fonts/RussoOne/RussoOne-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #59c4d4;
+  --color-accent-500: #49a1ae;
+
+  /* Using base font configuration */
+  --font-sans: Manrope, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: Russo One, Manrope, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-weight-heading-weight: 400;
+}
+
+

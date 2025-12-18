@@ -49,6 +49,7 @@ if (seo[currentPath]) {
 		image = pageSeo.image;
 	}
 }
+import '../scss/app.css';
 ---
 
 <!doctype html>
@@ -66,10 +67,10 @@ if (seo[currentPath]) {
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
-	<body class="min-h-screen flex flex-col" x-data="complectation">
+	<body class="antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black" x-data="complectation">
 		<ScriptBodyBegin />
 		<Header brand={brand} />
-		<main class="flex-grow relative">
+		<main class="grow relative">
 			<slot />
 		</main>
 		<Footer />
@@ -80,6 +81,3 @@ if (seo[currentPath]) {
 		<Tooltip />
 	</body>
 </html>
-<style is:global lang="scss">
-	@use '@/scss/app.scss';
-</style>

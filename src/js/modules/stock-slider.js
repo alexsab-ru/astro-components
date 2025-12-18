@@ -1,8 +1,6 @@
 import Swiper from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
 
-import "swiper/css/bundle";
-
 const stockSlider = new Swiper(".stock-slider", {
 	modules: [Navigation, Autoplay],
 	autoplay: {

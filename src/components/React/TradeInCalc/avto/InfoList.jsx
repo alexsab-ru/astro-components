@@ -15,12 +15,12 @@ function AvtoInfoList() {
 					
 					{Object.keys(avtoInfo).map(key => rusKey(key) && useTranslit(typeof avtoInfo[key] === 'object' ? avtoInfo[key]?.name : avtoInfo[key]) && (
 						<li
-							className={`flex justify-between ${rusKey(key).orderId == 3 ? '!mb-8' : '!mb-3'}`}
+							className={`flex justify-between ${rusKey(key).orderId == 3 ? 'mb-8!' : 'mb-3!'}`}
 							style={{ order: rusKey(key).orderId }}
 							key={key}
 						>
 							<span>{ rusKey(key).label }</span>
-							<span className="flex-grow border-b border-dotted mx-2 mb-2"></span>
+							<span className="grow border-b border-dotted mx-2 mb-2"></span>
 							{key === 'engineVolume' ? (
 								<span className="font-bold">{ useTranslit(typeof avtoInfo[key] === 'object' ? round(avtoInfo[key]?.name) : round(avtoInfo[key])) }</span>
 							) : (
@@ -32,7 +32,7 @@ function AvtoInfoList() {
 					{Number(mileageState) !== 0 && (
 						<li className="flex justify-between order-last mt-5">
 							<span>Пробег</span>
-							<span className="flex-grow border-b border-dotted mx-2 mb-2"></span>
+							<span className="grow border-b border-dotted mx-2 mb-2"></span>
 							<span className="font-bold">{Number(mileageState).toLocaleString('ru-RU')} км</span>
 						</li>
 					)}

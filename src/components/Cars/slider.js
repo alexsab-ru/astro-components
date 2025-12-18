@@ -1,6 +1,5 @@
 import Swiper from "swiper";
 import { Navigation, Thumbs, Keyboard } from "swiper/modules";
-import "swiper/css/bundle";
 
 const DEBUG_THUMBS = false;
 const dbg = (...args) => {
@@ -19,7 +18,7 @@ const refreshSliderLayout = (slider) => {
 
 const applyThumbSize = (slide) => {
 	slide.classList.remove('min-w-[200px]');
-	slide.classList.add('min-w-[73px]', '!w-fit');
+	slide.classList.add('min-w-[73px]', 'w-fit!');
 };
 
 const syncThumbFromMain = (activeIndex) => {

@@ -23,12 +23,13 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import {AGREE_LABEL} from '@/const'
+import Textarea from '@/components/Textarea/Textarea.astro';
 ---
 
-<section class="text-white py-20 sm:py-24 bg-cover bg-bottom relative z-[1] before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-[-1] model-section" style={`background-image: url(${bgUrl});`} {...rest}>
+<section class="text-white py-20 sm:py-24 bg-cover bg-bottom relative z-1 before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-[-1] model-section" style={`background-image: url(${bgUrl});`} {...rest}>
     <div class="container">
-        <div class="w-wull xl:w-1/2 text-base sm:text-xl !leading-normal">
-            {title && (<h2 class="text-left text-xl sm:text-5xl font-medium mb-4 before:hidden ml-0 mr-0">{title}</h2>)}
+        <div class="w-wull xl:w-1/2 text-base sm:text-xl leading-normal!">
+            {title && (<h2 class="text-left text-xl sm:text-5xl mb-4 before:hidden ml-0 mr-0">{title}</h2>)}
             {subtitle !== '' && <Fragment set:html={subtitle} />}
             <form class="mt-14 sm:max-w-md text-base">
                 <input type="hidden" name="form" value={formName}>
@@ -37,7 +38,7 @@ import {AGREE_LABEL} from '@/const'
                     type="email"
                     tabindex="-1"
                     name="email"
-                    class="h-0 opacity-0 absolute -z-[100]"
+                    class="h-0 opacity-0 absolute -z-100"
                     placeholder="mail@example.com"
                 />
 
@@ -56,15 +57,12 @@ import {AGREE_LABEL} from '@/const'
                         classes="border-gray-100"
                         placeholder="+7 (999) 999-99-99*"
                         required
-                        errorClasses="text-red-500"
+                        errorClasses="text-red-500 text-xs"
                     />
 
                     <ChoosingDealerSelect required={true} salons={salons} />
 
-                    <div class="w-full">
-                        <textarea name="comment" class="border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-none border-gray-100 resize-none min-h-[100px] overflow-y-auto w-full text-black" placeholder="Напишите предложение конкурента*" minlength="10" required></textarea>
-                        <div class={`error-message text-xs hidden comment text-red-500`}></div>
-                    </div>
+                    <Textarea classes="border-gray-100 resize-none min-h-[100px] overflow-y-auto" name="comment" required placeholder="Напишите предложение конкурента*" minlength="10" />
 
                     <input
                         type="checkbox"
@@ -81,7 +79,7 @@ import {AGREE_LABEL} from '@/const'
                     label={AGREE_LABEL}
                     color="white"
                     required
-                    errorClasses="text-red-500 w-full"
+                    errorClasses="text-red-500 text-xs w-full"
                     errorText="Чтобы продолжить, установите флажок"
                 />
 

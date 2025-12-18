@@ -18,7 +18,7 @@ const {title = 'Услуги дилерского центра', services = serv
 	services.length ? (
 		<section class="py-14 sm:py-20 section" id="services">
 			<div class="container">
-				<h2 class="text-xl sm:text-4xl font-medium mb-8 sm:mb-14">{title}</h2>
+				<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">{title}</h2>
 
 				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-5">
 					{services.map((service: TService) =>
@@ -31,7 +31,7 @@ const {title = 'Услуги дилерского центра', services = serv
 								{service?.icon && (
 									<Icon
 										name={service.icon}
-										class="text-gray-800 flex-shrink-0 text-2xl sm:text-[44px]"
+										class="text-gray-800 shrink-0 text-2xl sm:text-[44px]"
 									/>
 								)}
 								<span class="block text-xs sm:text-lg 2xl:text-xl">
@@ -43,7 +43,7 @@ const {title = 'Услуги дилерского центра', services = serv
 								{service?.icon && (
 									<Icon
 										name={service.icon}
-										class="text-gray-800 flex-shrink-0 text-2xl sm:text-[44px]"
+										class="text-gray-800 shrink-0 text-2xl sm:text-[44px]"
 									/>
 								)}
 								<span class="block text-xs sm:text-lg 2xl:text-xl">

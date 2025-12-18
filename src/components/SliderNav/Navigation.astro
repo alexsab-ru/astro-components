@@ -5,7 +5,7 @@ interface Props {
 	class?: string;
 }
 const { id = '', class: classNames = '' } = Astro.props
-import './styles.scss'
+import './styles.css'
 ---
 <div class={`slider-navigation ${id}-navigation flex flex-nowrap items-center justify-end gap-2 ${classNames}`}>
 	<div class={`slider-navigation-prev ${id}-navigation-prev`}><Icon name="mdi:keyboard-arrow-left" /></div>

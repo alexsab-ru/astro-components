@@ -22,11 +22,11 @@ import HeaderMenuList from './MenuList.astro';
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
 
-import './styles.scss';
+import './styles.css';
 ---
 <div
 	x-data="header"
-	class="bg-white sticky top-0 transition-all duration-300 z-50"
+	class="bg-header-bg text-header-text sticky top-0 transition-all duration-300 z-50"
 	:class="{'shadow-3xl': scrolling}"
 >
 	<header>
@@ -41,7 +41,7 @@ import './styles.scss';
 					{
 						salons.length && salons.map((salon: any, index) => {
 							return index < 2 && (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-black/80 text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors text-header-text hover:text-header-text/80 *:transition-colors *:text-header-text hover:*:text-header-text/80" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
 							)
 						})
 					}
@@ -58,14 +58,14 @@ import './styles.scss';
 								<small class="block text-xs">{salons.length}&nbsp;{declOfNums(salons.length, ['салон', 'салона', 'салонов'])}</small>
 							</div>) : (
 							<div class="hidden lg:flex items-center gap-1 font-medium text-sm xl:text-base">
-								<Icon name="mdi:map-marker-outline" class="text-2xl" />
+								<Icon name="mdi:map-marker-outline" class="text-2xl text-header-text" />
 								<Fragment set:html={salons[0].address} />
 							</div>
 						)
 					}
-					<div class="flex items-center xs:gap-2 gap-4 flex-shrink-0">
+					<div class="flex items-center xs:gap-2 gap-4 shrink-0">
 						<Button
-							classes="popup-link hidden lg:inline-block px-4 xl:px-4 py-2 xl:py-3"
+							classes="popup-link bg-header-button-bg! hover:bg-header-button-bg-hover! border-bg-header-button-bg! hover:border-bg-header-button-bg-hover! text-header-button-text! hover:text-header-button-text-hover! hidden! lg:inline-block! px-4! py-2! xl:py-3!"
 							url="#common-modal"
 							title="Заказать звонок"
 							dataTitle="Заказать звонок"
@@ -75,7 +75,7 @@ import './styles.scss';
 						/>
 						<a
 							href="#common-modal"
-							class="lg:hidden popup-link shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow"
+							class="lg:hidden popup-link shadow-[var(--shadow-header-btn)] rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10"
 							aria-label="Заказать звонок"
 							title="Заказать звонок"
 							data-title="Заказать звонок"
@@ -83,20 +83,20 @@ import './styles.scss';
 							data-choose_department={true}
 							{...salons.length > 1 ? {'data-sorting': true} : {}}
 						>
-							<Icon name="mdi:phone-incoming" class="text-3xl" />
+							<Icon name="mdi:phone-incoming" class="text-3xl text-header-text" />
 						</a>
 						{Object.keys(socials.header).length ? (
 							<SocialList data={socials.header} />
 					  	) : ('')}
 					</div>
 					<button
-						class="lg:hidden shadow-md rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 transition-shadow hover:shadow shrink-0"
+						class="lg:hidden shadow-[var(--shadow-header-btn)] rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 shrink-0"
 						id="mobile-menu" 
 						title="Mobile menu"
 						aria-label="Mobile menu"
 						@click.prevent="open = !open"
 					>
-						<Icon name="mdi:hamburger-menu" class="text-2xl" />
+						<Icon name="mdi:hamburger-menu" class="text-2xl text-header-text" />
 					</button>
 				</div>
 			</div>
@@ -108,14 +108,14 @@ import './styles.scss';
 
 	<div
 		x-cloak
-		class="fixed inset-0 bg-black/40 z-[35] transition-opacity duration-500"
+		class="fixed inset-0 bg-black/40 z-35 transition-opacity duration-500"
 		:class="open ? 'visible opacity-100' : 'invisible opacity-0'"
 		@click="open = false"
 	></div>
 
 	<div
 		x-cloak
-		class="fixed top-0 bottom-0 right-0 z-40 bg-white py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
+		class="fixed top-0 bottom-0 right-0 z-40 bg-header-bg text-header-text py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
 		:class="open ? 'translate-x-0' : 'translate-x-[110%]'"
 	>
 		<button class="w-10 h-10 absolute right-0 top-0 text-2xl font-mono transition-opacity opacity-60 hover:opacity-100" @click.prevent="open = false">&times;</button>
@@ -127,8 +127,8 @@ import './styles.scss';
 				{salons.length && salons.map(salon => (
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
 						<div class="font-medium text-lg">{salon.name}</div>
-						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap"><Icon name="mdi:map-marker-outline" class="text-2xl flex-shrink-0" /><Fragment set:html={salon.address} /></a>
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-black/80 flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap text-header-text hover:text-header-text"><Icon name="mdi:map-marker-outline" class="text-2xl shrink-0 text-header-text" /><Fragment set:html={salon.address} /></a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-header-text flex items-center gap-1 flex-nowrap transition-colors hover:text-header-text" title={salon.name}><Icon name="mdi:cellphone" class="text-xl text-header-text" /> {salon.phone}</a>
 					</div>
 				))}
 				</div>

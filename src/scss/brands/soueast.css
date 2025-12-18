@@ -1,0 +1,57 @@
+/* Soueast theme overrides using Tailwind v4 @theme variables.
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, etc. */
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-Regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-Medium.woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-SemiBold.woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("https://cdn.alexsab.ru/b/soueast/fonts/Montserrat-Bold.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #ff8700;
+  --color-accent-500: #fe7600;
+
+  --logo-header-height: clamp(0.75rem, 2vw + 0.25rem, 1rem);
+
+  --color-header-bg: var(--color-black);
+  --color-header-text: var(--color-white);
+  --color-submenu-bg: var(--color-black);
+  --color-submenu-text: var(--color-white);
+
+  --shadow-header-btn: none;
+
+  --color-border: rgba(255, 255, 255, 0.3);
+
+  /* Fonts */
+  --font-sans: Montserrat, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+}
+
+

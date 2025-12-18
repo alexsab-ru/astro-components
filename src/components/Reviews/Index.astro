@@ -16,7 +16,7 @@ const slides = items.length ? items.filter(item => item.show) : [];
 	slides.length > 0 && (
 		<section class={`reviews ${classNames}`} id="reviews">
 			<div class="container">
-				{title && ( <h2 class="text-xl sm:text-4xl font-normal mb-8 sm:mb-14">{title}</h2> )}
+				{title && ( <h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">{title}</h2> )}
 				<div class="relative">
 					<SliderNavigation id="reviews" class="mb-4 sm:mb-6" />
 					<div class="swiper reviews-slider">

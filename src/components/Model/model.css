@@ -1,0 +1,49 @@
+@reference "../../scss/app.css";
+
+.model {
+	@apply min-h-[350px] sm:min-h-[420px] h-auto py-0 mb-10 lg:mb-20 text-white;
+}
+.model__info {
+	@apply relative lg:absolute w-full top-0 left-0 bg-cover bg-center z-[1];
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-color: color-mix(in srgb, #000000 40%, transparent);
+		z-index: -1;
+	}
+}
+
+.image-slide {
+	@apply relative h-full cursor-zoom-in inline-flex w-auto;	
+}
+
+.image-slide img {
+	@apply relative h-full w-full object-cover object-center inset-0 brightness-50 transition-[filter] duration-500 ease-in-out hover:brightness-110;
+}
+
+.image-slide.swiper-slide-active img {
+	@apply brightness-100;
+}
+
+.compl_name{
+	@apply pb-1 sm:pb-5 text-sm sm:text-xl font-medium uppercase cursor-pointer relative before:bg-accent-500 select-none;
+}
+
+.compl_name::before{
+	content: '';
+	width: 0;
+	height: 2px;
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	transition: all .3s;
+}
+
+.compl_name.active{
+	@apply text-accent-500;
+}
+
+.compl_name.active::before{
+	width: 100%;
+}

@@ -3,7 +3,7 @@ import colors from 'tailwindcss/colors'
 import plugin from 'tailwindcss/plugin'
 
 module.exports = {
-	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,json,yml}'],
+	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,json,yml,scss,css}'],
 	theme: {
 		container: {
 			center: true,
@@ -18,7 +18,10 @@ module.exports = {
 				'4xl': '0 0 60px rgba(0, 0, 0, 0.5)',
 			},
 			colors: {
-				accent: colors.cyan, // в основном используется 400 и 500
+				accent: {
+					400: '#00d3f3',
+					500: '#00b8db',
+				}, // в основном используется 400 и 500
 				vk: '#4B76A8',
 				ok: '#F7931D',
 				fb: '#3C5A99',
