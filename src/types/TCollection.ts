@@ -7,6 +7,7 @@ export type TDataCollection = {
 	image?: string;
 	pubDate?: string;
 	toDate?: boolean | string;
+	brand?: string;
 };
 
 export type TCollection = {

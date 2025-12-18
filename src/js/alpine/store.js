@@ -133,4 +133,53 @@ export function store() {
 			return sorted;
 		},
 	});
+
+	// Хранилище последней просмотренной модели (для тест-драйва и др. страниц)
+	const lastViewedModelStore = {
+		// Нормализованный ID модели (без пробелов/спецсимволов, в нижнем регистре)
+		idNormalized: null,
+		// Бренд модели
+		markId: null,
+
+		setModel(model) {
+			if (!model || !model.idNormalized || !model.markId) return;
+
+			this.idNormalized = model.idNormalized;
+			this.markId = model.markId;
+
+			// Сохраняем в localStorage, чтобы использовать между страницами
+			try {
+				localStorage.setItem(
+					'lastViewedModel',
+					JSON.stringify({
+						idNormalized: this.idNormalized,
+						markId: this.markId,
+					}),
+				);
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.warn('Cannot persist lastViewedModel to localStorage', e);
+			}
+		},
+
+		init() {
+			try {
+				const raw = localStorage.getItem('lastViewedModel');
+				if (!raw) return;
+
+				const parsed = JSON.parse(raw);
+				if (parsed?.idNormalized && parsed?.markId) {
+					this.idNormalized = parsed.idNormalized;
+					this.markId = parsed.markId;
+				}
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.warn('Cannot read lastViewedModel from localStorage', e);
+			}
+		},
+	};
+
+	// Инициализируем сохранённое значение при старте Alpine
+	lastViewedModelStore.init();
+	Alpine.store('lastViewedModel', lastViewedModelStore);
 }

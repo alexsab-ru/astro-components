@@ -184,7 +184,17 @@ def main():
         print("No URLs provided. Please specify them using --urls or XML_URL.")
         return
 
-    xml_contents = [download_or_read_file(url) for url in urls]
+    # Собираем только успешно полученные XML (None пропускаем, чтобы не падать)
+    xml_contents = [
+        content for content in (download_or_read_file(url) for url in urls) if content is not None
+    ]
+    # Если ничего не скачалось/не прочиталось, выходим раньше, чтобы не падать на xml_contents[0]
+    if not xml_contents:
+        warning_msg = "⚠️ Ни один XML не удалось получить. Проверьте URL или доступность файлов."
+        print(warning_msg)
+        with open('output.txt', 'a', encoding='utf-8') as file:
+            file.write(f"{warning_msg}\n")
+        return
     
     # Если xpath не указан, определяем его автоматически из первого XML
     if not args.xpath:

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # =====================
-# Выбор режима работы: new_cars или used_cars
+# Выбор режима работы: new_cars, used_cars или avito
 # =====================
 # MODE можно передать через ENV или как аргумент (по умолчанию new_cars)
 MODE=${MODE:-new_cars}
@@ -19,6 +19,7 @@ if [ "$MODE" = "new_cars" ]; then
     XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-XML_URL_DATA_CARS_CAR}
     CSV_URL=${CSV_URL:-$(grep '^DEALER_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
     QUERY_STRING=${QUERY_STRING:-$(grep '^DEALER_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+    FEED_TYPE=${FEED_TYPE:-yandex}
 elif [ "$MODE" = "used_cars" ]; then
     # Для машин с пробегом
     CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/feeds/used_cars/csv/data.csv}
@@ -26,8 +27,17 @@ elif [ "$MODE" = "used_cars" ]; then
     XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-USED_CARS_DATA_CARS_CAR}
     CSV_URL=${CSV_URL:-$(grep '^USED_CARS_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
     QUERY_STRING=${QUERY_STRING:-$(grep '^USED_CARS_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+    FEED_TYPE=${FEED_TYPE:-yandex}
+elif [ "$MODE" = "avito" ]; then
+    # Для фида Avito
+    CSV_FILE_PATH=${CSV_FILE_PATH:-./tmp/feeds/avito/csv/data.csv}
+    XML_FILE_PATH=${XML_FILE_PATH:-./tmp/feeds/avito/csv/cars.xml}
+    XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-AVITO_XML_URL_DATA_CARS_CAR}
+    CSV_URL=${CSV_URL:-$(grep '^AVITO_DEALER_STORAGE_CSV_URL=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+    QUERY_STRING=${QUERY_STRING:-$(grep '^AVITO_DEALER_STORAGE_CSV_COLUMN=' .env | cut -d '=' -f 2- | sed 's/^"//; s/"$//')}
+    FEED_TYPE=${FEED_TYPE:-avito}
 else
-    echo "Error: Неизвестный режим MODE='$MODE'. Используйте 'new_cars' или 'used_cars'" >&2
+    echo "Error: Неизвестный режим MODE='$MODE'. Используйте 'new_cars' или 'used_cars' или 'avito'" >&2
     exit 1
 fi
 
@@ -85,7 +95,7 @@ if [ -n "$document_id" ] && [ -n "$gid" ]; then
     # Раскомментируйте для скачивания и обработки
     curl "$DOWNLOAD_URL" -o "$CSV_FILE_PATH"
     # Передаем путь к CSV и XML в Python-скрипт
-    python3 .github/scripts/CarFeedProcessorCSV.py --csv "$CSV_FILE_PATH" --xml "$XML_FILE_PATH"
+    python3 .github/scripts/CarFeedProcessorCSV.py --csv "$CSV_FILE_PATH" --xml "$XML_FILE_PATH" --feed "$FEED_TYPE"
 
     # Имя переменной для .env (по умолчанию XML_URL_DATA_CARS_CAR)
     XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-XML_URL_DATA_CARS_CAR}

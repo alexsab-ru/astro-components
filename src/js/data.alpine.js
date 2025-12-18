@@ -8,6 +8,7 @@ import { sorting } from './alpine/sorting.js';
 import { complectation } from './alpine/complectation.js';
 import { store } from './alpine/store.js';
 
+
 document.addEventListener('alpine:init', () => {
 	usedPreviewGallery();
 	headerComponent();

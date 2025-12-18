@@ -13,31 +13,14 @@ import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import modelsData from '@/data/models.json';
-import { isModelVisible } from '@/js/utils/modelVisibility';
 const { testDrive } = modelsData;
-const optionsJSON = JSON.stringify(testDrive.filter(isModelVisible));
 ---
-
 <Layout 
 	title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} 
 	description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`} 
 	{...salons.length > 1 ? {'brand': testDrive[0]?.mark_id} : {} }
 >
-	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data=`{
-		models: null,
-		current: null,
-		getModels: function() {
-			this.models = ${optionsJSON};
-		},
-		currentModel: function(id) {
-			this.current = this.models.find(m => m.id === id);
-			${salons.length > 1 ? "const brandValue = this.current?.mark_id; if (brandValue) { document.documentElement.setAttribute('data-brand', brandValue); $dispatch('brand-updated', { brand: brandValue }); }" : ""}
-		},
-		init: function() {
-			this.getModels();
-			this.currentModel([...this.models][0].id);
-		}
-	}`>
+	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data="testDrive">
 
 		<div class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-1" style="background-image: url('https://cdn.alexsab.ru/models/default-model-bg.webp')" x-cloak>
 			<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
@@ -75,8 +58,9 @@ const optionsJSON = JSON.stringify(testDrive.filter(isModelVisible));
 					</div>
 				</template>
 			</div>
+			</template>
 			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
-				<input type="hidden" name="form" :value="`Запись на тест-драйв. ${current?.name}`" />
+				<input type="hidden" name="form" :value="current?.name ? `Запись на тест-драйв. ${current.name}` : 'Запись на тест-драйв'" />
 				<input
 					type="email"
 					tabindex="-1"
@@ -117,3 +101,8 @@ const optionsJSON = JSON.stringify(testDrive.filter(isModelVisible));
 
 	</div>
 </Layout>
+
+<script>
+	import { testDriveComponent } from '@/js/alpine/testDrive.js';
+	document.addEventListener('alpine:init', testDriveComponent);
+</script>

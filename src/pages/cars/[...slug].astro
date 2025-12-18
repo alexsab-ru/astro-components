@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import CarPageLayout from '@/layouts/CarPageLayout.astro';
+import { findModelByCarData } from '@/js/utils/car.utils';
+import { normalizeModelId } from '@/js/utils/normalizeModelId';
 
 export async function getStaticPaths() {
 const cars = await (getCollection as any)('cars');
@@ -21,8 +23,24 @@ const cars = await (getCollection as any)('cars');
 const car: any = Astro.props;
 const { Content } = await render(car as any);
 import { breadcrumb } from './index.astro';
+
+// Данные для сохранения "последней просмотренной модели" в Alpine store
+const lastViewedModelForStore = car?.data
+	? (() => {
+		const relatedModel = findModelByCarData(car.data);
+		const baseId = relatedModel?.id || String(car.data.folder_id || '');
+		return {
+			idNormalized: normalizeModelId(baseId),
+			markId: relatedModel?.mark_id || car.data.mark_id,
+		};
+	})()
+	: null;
+const lastViewedModelJSON = lastViewedModelForStore ? JSON.stringify(lastViewedModelForStore) : null;
 ---
 
 <CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]} backLink={true}>
+	{lastViewedModelJSON && (
+		<div x-init={`$store.lastViewedModel.setModel(${lastViewedModelJSON})`} class="hidden"></div>
+	)}
 	<Content />
 </CarPageLayout>

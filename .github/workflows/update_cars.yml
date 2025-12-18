@@ -137,6 +137,18 @@ jobs:
         QUERY_STRING: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
         USED_CARS_STORAGE_CSV_COLUMN: ${{ vars.USED_CARS_STORAGE_CSV_COLUMN }}
 
+    - name: Get Avito Dealer cars Storage
+      if: ${{ vars.AVITO_DEALER_STORAGE_CSV_URL }}
+      run: |
+        pnpm run getDealerStorage_avito_xml
+      continue-on-error: true
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        CSV_URL: ${{ vars.AVITO_DEALER_STORAGE_CSV_URL }}
+        AVITO_DEALER_STORAGE_CSV_URL: ${{ vars.AVITO_DEALER_STORAGE_CSV_URL }}
+        QUERY_STRING: ${{ vars.AVITO_DEALER_STORAGE_CSV_COLUMN }}
+        AVITO_DEALER_STORAGE_CSV_COLUMN: ${{ vars.AVITO_DEALER_STORAGE_CSV_COLUMN }}
+
 
     - name: Get XML from Avito to get dealer photos for cars
       if: ${{ vars.DEALER_PHOTOS_FOR_CARS_AVITO_URL }}
@@ -324,7 +336,7 @@ jobs:
         python .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/avito.xml"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
+        XML_URL: "${{ vars.AVITO_XML_URL_DATA_CARS_CAR }} ./tmp/feeds/avito/csv/cars.xml"
         AVITO_XML_URL_DATA_CARS_CAR: ${{ vars.AVITO_XML_URL_DATA_CARS_CAR }}
 
     - name: Get Dealer XML for avito and generate avito xml if friend url not exists
@@ -334,7 +346,7 @@ jobs:
         python .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito.xml"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: ${{ vars.AVITO_XML_URL }}
+        XML_URL: "${{ vars.AVITO_XML_URL }} ./tmp/feeds/avito/csv/cars.xml"
         AVITO_XML_URL: ${{ vars.AVITO_XML_URL }}
 
     - name: Get Dealer Avito xml if friend url exists
@@ -363,7 +375,7 @@ jobs:
         python .github/scripts/getOneXML.py --output_path="./public/avito.xml"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
-        XML_URL: "./public/avito_dc.xml ./public/avito_friend.xml"
+        XML_URL: "./public/avito_dc.xml ./public/avito_friend.xml ./tmp/feeds/avito/csv/cars.xml"
 
     - name: Set output
       id: set_output
