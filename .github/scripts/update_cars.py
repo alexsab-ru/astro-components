@@ -444,6 +444,42 @@ class CarProcessor:
             model_elem = car.find('model')
             if model_elem is not None and model_elem.text:
                 car_data['modification_id'] = model_elem.text.strip()
+
+        # Подготовка цветовых полей (рус/eng) для дальнейшего использования
+        raw_color = car_data.get('color')
+        if raw_color:
+            color_rus = None
+            color_eng = None
+
+            brand_for_color = car_data.get('mark_id')
+            model_for_color = car_data.get('folder_id')
+
+            if brand_for_color and model_for_color:
+                color_entry = get_model_info(
+                    brand_for_color,
+                    model_for_color,
+                    property='color',
+                    color=raw_color,
+                    vin=car_data.get('vin')
+                )
+                if isinstance(color_entry, dict):
+                    color_eng = color_entry.get('id') or color_eng
+                    color_rus = (
+                        color_entry.get('name')
+                        or next(
+                            (n for n in (color_entry.get('names') or []) if n),
+                            None
+                        )
+                    )
+
+            if not color_rus:
+                color_rus = self.localize_value(raw_color)
+
+            if not color_eng:
+                color_eng = process_friendly_url(str(raw_color).strip())
+
+            car_data['color_rus'] = color_rus
+            car_data['color_eng'] = color_eng
         
         return car_data
 
@@ -800,18 +836,21 @@ class CarProcessor:
             if field in car_data and car_data[field]:
                 value = str(car_data[field]).strip()
                 if field == 'color':
-                    brand = car_data.get('mark_id')
-                    model = car_data.get('folder_id')
-                    if brand and model:
-                        color_id = get_model_info(
-                            brand,
-                            model,
-                            property='color_id',
-                            color=value,
-                            vin=car_data.get('vin')
-                        )
-                        if color_id:
-                            value = str(color_id).strip()
+                    if car_data.get('color_eng'):
+                        value = str(car_data.get('color_eng')).strip()
+                    else:
+                        brand = car_data.get('mark_id')
+                        model = car_data.get('folder_id')
+                        if brand and model:
+                            color_id = get_model_info(
+                                brand,
+                                model,
+                                property='color_id',
+                                color=value,
+                                vin=car_data.get('vin')
+                            )
+                            if color_id:
+                                value = str(color_id).strip()
                 parts.append(value)
         return " ".join(parts)
 
@@ -835,7 +874,7 @@ class CarProcessor:
         # Создание URL
         friendly_url = process_friendly_url(
             self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'generation', 'modification_id',
-                                 'complectation_name', 'color', 'year')
+                                 'complectation_name', 'color_eng', 'year')
         )
         print(f"\n\n🆔 Уникальный идентификатор: {friendly_url}")
         
