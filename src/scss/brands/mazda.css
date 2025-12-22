@@ -23,9 +23,13 @@
   --color-accent-400: #910a2d;
   --color-accent-500: #910a2d;
 
-  --logo-header-height: clamp(2.5rem, calc(3vw + 0.25rem), 3.5rem);
-  --logo-map-info-height: 5rem;
-  --logo-footer-height: 5rem;
+  /* Logo sizing */
+  --logo-dealer-header-height: clamp(1rem, calc(2vw + 0.25rem), 1.8rem);
+  
+  --logo-map-info-height: 3rem;
+  --logo-dealer-map-info-height: 1.15rem;
+
+  --logo-dealer-footer-height: var(--logo-dealer-header-height);
 
   --color-header-bg: var(--color-black);
   --color-header-text: var(--color-white);
