@@ -137,14 +137,15 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     Теперь поддерживаются только свойства мэпинга:
       - 'mark_id' — бренд из all-models.json
       - 'id' — идентификатор модели (slug) из all-models.json
+      - 'color_id' — идентификатор цвета (при указании color)
 
     Поиск модели идёт по любому имени из массива feed_names (или по name, если feed_names пуст).
 
     Args:
         brand: Название бренда (любая регистровая форма)
         model: Название модели (значение из feed_names или name)
-        property: Запрашиваемое свойство ('mark_id' или 'id')
-        color: Цвет автомобиля (не поддерживается в новой схеме)
+        property: Запрашиваемое свойство ('mark_id', 'id' или 'color_id' при указании color)
+        color: Цвет автомобиля (для поиска carImage или id цвета)
         vin: VIN автомобиля (для удобства логирования)
 
     Returns:
@@ -152,6 +153,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     """
     if vin:
         vin = vin.upper()
+    normalized_property = property.lower() if property else None
 
     # Нормализуем входные данные
     normalized_brand = brand.lower()
@@ -205,7 +207,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         print_message(errorText, 'error')
         return None
     
-    # Поиск изображения цвета по списку colors[].names / id / name
+    # Поиск информации о цвете по списку colors[].names / id / name
     if color:
         normalized_color = color.lower().strip()
         colors = model_obj.get('colors') or []
@@ -225,6 +227,13 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
 
         for entry in colors:
             if isinstance(entry, dict) and match_color(entry):
+                if normalized_property in (None, 'carimage', 'color_image'):
+                    return entry.get('carImage')
+                if normalized_property in ('color_id', 'colorid'):
+                    return entry.get('id')
+                if normalized_property in ('color', 'color_entry'):
+                    return entry
+                # Если передано свойство, но оно не связано с цветом — возвращаем carImage для обратной совместимости
                 return entry.get('carImage')
 
         errorText = (
@@ -236,7 +245,6 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     
     # Если запрашивается конкретное свойство
     if property:
-        normalized_property = property.lower()
         if normalized_property == 'mark_id':
             return target_brand
         if normalized_property == 'id':
@@ -244,6 +252,13 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         if normalized_property == 'folder':
             # По новой схеме folder = id
             return target_id
+        if normalized_property == 'color_id':
+            errorText = (
+                f"\nvin: <code>{vin}</code>\n"
+                f"<b>Для получения color_id необходимо указать цвет</b> для модели <code>{model}</code> бренда <code>{brand}</code>"
+            )
+            print_message(errorText, 'error')
+            return None
         if normalized_property == 'cyrillic':
             value = model_obj.get('cyrillic')
             if value:

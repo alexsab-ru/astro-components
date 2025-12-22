@@ -798,7 +798,21 @@ class CarProcessor:
         parts = []
         for field in fields:
             if field in car_data and car_data[field]:
-                parts.append(str(car_data[field]).strip())
+                value = str(car_data[field]).strip()
+                if field == 'color':
+                    brand = car_data.get('mark_id')
+                    model = car_data.get('folder_id')
+                    if brand and model:
+                        color_id = get_model_info(
+                            brand,
+                            model,
+                            property='color_id',
+                            color=value,
+                            vin=car_data.get('vin')
+                        )
+                        if color_id:
+                            value = str(color_id).strip()
+                parts.append(value)
         return " ".join(parts)
 
     def process_car(self, car: ET.Element, config: Dict) -> ET.Element:
