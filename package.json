@@ -7,7 +7,7 @@
     "start_win": "copy .env.example .env",
     "python": "echo \"Copy and run:\" && echo \"\\033[30;43mpython3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt\\033[0m\n\"",
     "get_report": "git log --since='2024-04-01' --until='2024-10-31' --pretty=format:'%h\t%ad\t%an\t%s' --first-parent --date=format:'%Y-%m-%d %H:%M:%S' > commit_report.csv",
-    "pull_without_merge": "COUNT=$(git rev-list --count origin/main..main) && git checkout -b new-branch-for-pull-without-merge && git checkout main && git reset --hard HEAD~$COUNT && git pull origin main && git checkout new-branch-for-pull-without-merge && git rebase main && git checkout main && git merge new-branch-for-pull-without-merge && git branch -D new-branch-for-pull-without-merge",
+    "pull_without_merge": "NEW_BRANCH=$(new-branch-for-pull-without-merge) && MAIN_BRANCH=$(git rev-parse --abbrev-ref HEAD) && COUNT=$(git rev-list --count origin/$MAIN_BRANCH..$MAIN_BRANCH) && git checkout -b $NEW_BRANCH && git checkout $MAIN_BRANCH && git reset --hard HEAD~$COUNT && git pull origin $MAIN_BRANCH && git checkout $NEW_BRANCH && git rebase $MAIN_BRANCH && git checkout $MAIN_BRANCH && git merge $NEW_BRANCH && git branch -D $NEW_BRANCH",
     "\n# Get data commands:": "",
     "CarFeedProcessorCSV": "CSV_URL=$(grep '^CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && curl $CSV_URL -o data.csv && python3 .github/scripts/CarFeedProcessorCSV.py",
     "getAirStorage": "bash ./.github/scripts/sh/getAirStorage.sh",
