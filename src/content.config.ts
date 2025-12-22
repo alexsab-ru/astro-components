@@ -62,8 +62,8 @@ export const collections = {
             mark_id: z.string(),
             folder_id: z.string(),
             color: z.string(),
-            color_rus: z.string(),
-            color_eng: z.string(),
+            color_rus: z.string().optional(),
+            color_eng: z.string().optional(),
             // Цены и скидки
             price: z.number(),
             priceWithDiscount: z.number(),
@@ -111,6 +111,8 @@ export const collections = {
             mark_id: z.string(),
             folder_id: z.string(),
             color: z.string(),
+            color_rus: z.string().optional(),
+            color_eng: z.string().optional(),
             // Цены и скидки
             price: z.number(),
             priceWithDiscount: z.number(),
