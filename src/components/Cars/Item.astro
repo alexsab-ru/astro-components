@@ -48,7 +48,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 		<h2 class="xs:text-xs! sm:text-base! md:text-lg! xl:text-xl! mt-1 mb-0! transition-colors hover:text-accent grow ml-0! mr-0! p-0! before:hidden! text-left!">
 			<a href={ url } class="no-underline! text-black! mb-0!"><b class="font-heading-weight">{ car.data.mark_id } { car.data.folder_id }</b> { car.data.complectation_name }</a>
 		</h2>
-		{car.data?.color && (<small class="text-gray-700">{car.data.color}</small>)}
+		{car.data?.color_rus && (<small class="text-gray-700">{car.data.color_rus}</small>)}
 		<noindex><div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-400">
 			{ car.data.modification_id }{ car.data?.year && ` · ${car.data.year}` }
 			{car.data.run ? <Fragment set:html={`&nbsp;/&nbsp;${car.data.run}&nbsp;км`} /> : ''}
@@ -62,7 +62,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			url="#common-modal" 
 			title="Купить"
 			dataTitle={`Купить ${ car.data.mark_id } ${car.data?.folder_id}`}
-			dataFormName={`Купить. ${car.data?.color} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			dataFormName={`Купить. ${car.data?.color_rus} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 			{...salons.length > 1 ? {'data-filtering': car.data.mark_id} : {}}
 		/>
 		<Button 
@@ -70,7 +70,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			url="#common-modal" 
 			title="Кредит"
 			dataTitle={`Рассчитать кредит ${ car.data.mark_id } ${car.data?.folder_id}`}
-			dataFormName={`Рассчитать кредит. ${car.data?.color} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			dataFormName={`Рассчитать кредит. ${car.data?.color_rus} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 			{...salons.length > 1 ? {'data-filtering': car.data.mark_id} : {}}
 		/>
 		<Button 
@@ -78,7 +78,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			url="#common-modal" 
 			title="Рассрочка"
 			dataTitle={`Рассрочка на ${ car.data.mark_id } ${car.data?.folder_id}`}
-			dataFormName={`Рассрочка. ${car.data?.color} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
+			dataFormName={`Рассрочка. ${car.data?.color_rus} ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.complectation_name} ${car.data?.modification_id}, ${car.data?.vin}. ${currencyFormat(car.data.price)}`}
 			{...salons.length > 1 ? {'data-filtering': car.data.mark_id} : {}}
 		/>
 		<Button 

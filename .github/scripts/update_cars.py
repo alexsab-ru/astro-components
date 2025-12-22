@@ -171,6 +171,7 @@ class CarProcessor:
                     'engineType': 'engineType',
                     'folder_id': 'model',
                     'gearboxType': 'gearboxType',
+                    'generation': 'generation',
                     'image_tag': 'photo',
                     'image_url_attr': None,
                     'images': 'photos',
@@ -443,6 +444,42 @@ class CarProcessor:
             model_elem = car.find('model')
             if model_elem is not None and model_elem.text:
                 car_data['modification_id'] = model_elem.text.strip()
+
+        # Подготовка цветовых полей (рус/eng) для дальнейшего использования
+        raw_color = car_data.get('color')
+        if raw_color:
+            color_rus = None
+            color_eng = None
+
+            brand_for_color = car_data.get('mark_id')
+            model_for_color = car_data.get('folder_id')
+
+            if brand_for_color and model_for_color:
+                color_entry = get_model_info(
+                    brand_for_color,
+                    model_for_color,
+                    property='color',
+                    color=raw_color,
+                    vin=car_data.get('vin')
+                )
+                if isinstance(color_entry, dict):
+                    color_eng = color_entry.get('id') or color_eng
+                    color_rus = (
+                        color_entry.get('name')
+                        or next(
+                            (n for n in (color_entry.get('names') or []) if n),
+                            None
+                        )
+                    )
+
+            if not color_rus:
+                color_rus = self.localize_value(raw_color)
+
+            if not color_eng:
+                color_eng = process_friendly_url(str(raw_color).strip())
+
+            car_data['color_rus'] = color_rus
+            car_data['color_eng'] = color_eng
         
         return car_data
 
@@ -797,7 +834,8 @@ class CarProcessor:
         parts = []
         for field in fields:
             if field in car_data and car_data[field]:
-                parts.append(str(car_data[field]).strip())
+                value = str(car_data[field]).strip()
+                parts.append(value)
         return " ".join(parts)
 
     def process_car(self, car: ET.Element, config: Dict) -> ET.Element:
@@ -819,8 +857,8 @@ class CarProcessor:
         
         # Создание URL
         friendly_url = process_friendly_url(
-            self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id',
-                                 'complectation_name', 'color', 'year')
+            self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'generation', 'modification_id',
+                                 'complectation_name', 'color_eng', 'year')
         )
         print(f"\n\n🆔 Уникальный идентификатор: {friendly_url}")
         
