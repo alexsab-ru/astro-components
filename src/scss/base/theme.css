@@ -94,6 +94,9 @@
     --font-heading: inherit;
     --font-weight-heading-weight: 700;
 
+    --color-title-model-page: var(--color-white);
+    --color-title-brand-model-page: color-mix(in srgb, var(--color-title-model-page) 100%, transparent);
+
     /* Radii */
     --radius-btn: 0px;
 
