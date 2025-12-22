@@ -835,22 +835,6 @@ class CarProcessor:
         for field in fields:
             if field in car_data and car_data[field]:
                 value = str(car_data[field]).strip()
-                if field == 'color':
-                    if car_data.get('color_eng'):
-                        value = str(car_data.get('color_eng')).strip()
-                    else:
-                        brand = car_data.get('mark_id')
-                        model = car_data.get('folder_id')
-                        if brand and model:
-                            color_id = get_model_info(
-                                brand,
-                                model,
-                                property='color_id',
-                                color=value,
-                                vin=car_data.get('vin')
-                            )
-                            if color_id:
-                                value = str(color_id).strip()
                 parts.append(value)
         return " ".join(parts)
 
