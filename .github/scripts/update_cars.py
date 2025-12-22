@@ -171,6 +171,7 @@ class CarProcessor:
                     'engineType': 'engineType',
                     'folder_id': 'model',
                     'gearboxType': 'gearboxType',
+                    'generation': 'generation',
                     'image_tag': 'photo',
                     'image_url_attr': None,
                     'images': 'photos',
@@ -819,7 +820,7 @@ class CarProcessor:
         
         # Создание URL
         friendly_url = process_friendly_url(
-            self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'modification_id',
+            self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'generation', 'modification_id',
                                  'complectation_name', 'color', 'year')
         )
         print(f"\n\n🆔 Уникальный идентификатор: {friendly_url}")
