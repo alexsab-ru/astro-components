@@ -19,8 +19,23 @@
 
 @theme {
   /* Colors */
-  --color-accent-400: #1059a2;
-  --color-accent-500: #0b457f;
+  --color-gray-100: #abb2bb;
+  --color-gray-300: #4e5561;
+  --color-orange: #f89435;
+  --color-orange-transparent: #f89435cc;
+  --color-dark: #3c4650;
+  --color-accent-400: #f89435;
+  --color-accent-500: #3c4650cc;
+
+  --color-header-bg: var(--color-dark);
+  --color-header-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+  --color-submenu-bg: var(--color-dark);
+  --color-submenu-text: color-mix(in srgb, var(--color-white) 90%, transparent);
+
+  --color-header-button-bg: var(--color-orange);
+  --color-header-button-bg-hover: var(--color-white);
+  --color-header-button-text: var(--color-white);
+  --color-header-button-text-hover: var(--color-orange);
 
   /* Fonts */
   --font-sans: ChangAnunitype, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
