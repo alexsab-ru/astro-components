@@ -9,7 +9,7 @@ const images = image ? image.split(',') : [];
 ---
 
 <div class={`px-5 py-3 w-fit inline-flex flex-col items-center justify-center ${classPosition} ${textColor} ${background}`}>
-    { autoname && (<div class="text-xl md:text-2xl xl:text-3xl font-bold uppercase"><Fragment set:html={autoname}></div>) }
+    { autoname && (<div class="text-xl md:text-2xl xl:text-3xl font-weight-bold uppercase"><Fragment set:html={autoname}></div>) }
     { !!images && (
         <div class="flex items-center gap-5 grow">
             {images.map(image => (

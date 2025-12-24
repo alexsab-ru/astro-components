@@ -22,7 +22,7 @@
 }
 
 .seo-content h2 {
-	@apply text-3xl font-bold mx-0 mb-3 text-left before:hidden;
+	@apply text-3xl font-weight-bold mx-0 mb-3 text-left before:hidden;
 }
 
 .seo-content h2:not(:first-child) {
@@ -30,11 +30,11 @@
 }
 
 .seo-content h3 {
-	@apply text-2xl font-bold mb-3;
+	@apply text-2xl font-weight-bold mb-3;
 }
 
 .seo-content strong {
-	@apply font-bold;
+	@apply font-weight-bold;
 }
 
 .seo-content p{

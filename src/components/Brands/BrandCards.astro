@@ -8,8 +8,8 @@ const { brands, brandCounts } = Astro.props;
     brands.map((brand: string) => (
     <a href={`/cars/?brand=${brand}`} class="mb-[4%] lg:mb-0 w-[48%] lg:w-[calc(33.33%-calc(40px/3))] xl:w-[calc(25%-calc(60px/4))] flex flex-col justify-center items-center border p-3 sm:pt-10 sm:pb-4 sm:px-5 overflow-hidden shadow-xl transition-all duration-500 in-expo group hover:border-gray-400 hover:shadow-md no-underline!">
       <div class="flex items-center object-contain w-[100px] mb-8"><img src={`https://cdn.alexsab.ru/logo/${brand}/logo-color.svg`} alt={brand} loading="lazy" class="h-auto w-full" /></div>
-      <div class="uppercase font-bold text-base md:text-xl mb-2">{brand}</div>
-      {brandCounts[brand] ? (<div class="text-center md:text-base md:font-bold">{declOfNums(brandCounts[brand] ?? 0)}</div>) : null}
+      <div class="uppercase font-weight-bold text-base md:text-xl mb-2">{brand}</div>
+      {brandCounts[brand] ? (<div class="text-center md:text-base md:font-weight-bold">{declOfNums(brandCounts[brand] ?? 0)}</div>) : null}
     </a>
     ))
   }

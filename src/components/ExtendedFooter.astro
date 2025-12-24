@@ -51,7 +51,7 @@ salons
                     links
                         .filter(link => link.url !== 'javascript:void(0)')
                         .map(link => (
-                            <li><a href={link.url} class={`transition hover:underline ${path === link.url ? 'font-bold' : ''}`}>{link.name}</a></li>
+                            <li><a href={link.url} class={`transition hover:underline ${path === link.url ? 'font-weight-bold' : ''}`}>{link.name}</a></li>
                     ))
                 }
                 </ul>
