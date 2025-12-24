@@ -41,7 +41,7 @@ import './styles.css';
 					{
 						salons.length && salons.map((salon: any, index) => {
 							return index < 2 && (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-extrabold text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors text-header-text hover:text-header-text/80 *:transition-colors *:text-header-text hover:*:text-header-text/80" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-bold text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors text-header-text hover:text-header-text/80 *:transition-colors *:text-header-text hover:*:text-header-text/80" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
 							)
 						})
 					}
@@ -128,7 +128,7 @@ import './styles.css';
 					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
 						<div class="font-medium text-lg">{salon.name}</div>
 						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap text-header-text hover:text-header-text"><Icon name="mdi:map-marker-outline" class="text-2xl shrink-0 text-header-text" /><Fragment set:html={salon.address} /></a>
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-extrabold text-header-text flex items-center gap-1 flex-nowrap transition-colors hover:text-header-text" title={salon.name}><Icon name="mdi:cellphone" class="text-xl text-header-text" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-bold text-header-text flex items-center gap-1 flex-nowrap transition-colors hover:text-header-text" title={salon.name}><Icon name="mdi:cellphone" class="text-xl text-header-text" /> {salon.phone}</a>
 					</div>
 				))}
 				</div>

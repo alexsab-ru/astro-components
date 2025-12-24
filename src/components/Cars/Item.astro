@@ -42,7 +42,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 	<PreviewSlider car={car} url={url} />
 	<div class="grow mb-3 md:mb-5 px-3 xl:px-4 flex flex-col justify-end">
 		{ car.data.max_discount ? (
-			<noindex><div class="discount">с&nbsp;учетом выгоды до&nbsp;<span class="font-semibold">{ currencyFormat(car.data.max_discount) }</span></div></noindex>
+			<noindex><div class="discount">с&nbsp;учетом выгоды до&nbsp;<span class="font-bold">{ currencyFormat(car.data.max_discount) }</span></div></noindex>
 		): ('')}
 		<div class="sm:text-lg md:text-xl xl:text-3xl font-medium mt-3"><span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(price)}</div>
 		<h2 class="xs:text-xs! sm:text-base! md:text-lg! xl:text-xl! mt-1 mb-0! transition-colors hover:text-accent grow ml-0! mr-0! p-0! before:hidden! text-left!">
