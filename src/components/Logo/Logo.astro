@@ -6,21 +6,21 @@ const logoHeaderSize = "h-[var(--logo-header-height)] w-auto";
 const dealerLogoSize = "h-[var(--logo-dealer-header-height)] w-auto";
 ---
 {path === '/' ? (
-<div class="flex xs:flex-col flex-nowrap items-center xs:gap-2 gap-3 xs:divide-x-0 divide-x cursor-pointer" x-data="scrollTop" x-on:click="onClick">
-    <img src={logo_header} class={`${logoHeaderSize} xs:pr-0 pr-3`} alt={site_name} loading="eager" width="200" height="40" />
+<div class="flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 sm:divide-x text-center sm:text-left cursor-pointer" x-data="scrollTop" x-on:click="onClick">
+    <img src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} loading="eager" width="200" height="40" />
     {logo_dealer_header ? (
         <img src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} loading="eager" width="200" height="40" />
     ) : (
-        <span class="xl:text-2xl uppercase font-medium leading-none! select-none">{site_name}</span>
+        <span class="text-logo-header-daeler-size uppercase font-medium leading-none! select-none">{site_name}</span>
     ) }    
 </div>
 ) : (
-<a href="/" class="flex xs:flex-col flex-nowrap items-center xs:gap-2 gap-3 xs:divide-x-0 divide-x">
-    <img src={logo_header} class={`${logoHeaderSize} xs:pr-0 pr-3`} alt={site_name} loading="eager" width="200" height="40" />
+<a href="/" class="flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 sm:divide-x text-center sm:text-left">
+    <img src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} loading="eager" width="200" height="40" />
     {logo_dealer_header ? (
         <img src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} loading="eager" width="200" height="40" />
     ) : (
-        <span class="xl:text-2xl uppercase font-medium leading-none! select-none">{site_name}</span>
+        <span class="text-logo-header-daeler-size uppercase font-medium leading-none! select-none">{site_name}</span>
     ) } 
 </a>
 )}
