@@ -27,6 +27,8 @@
   --color-accent-400: #f89435;
   --color-accent-500: #3c4650cc;
 
+  --color-header-border: var(--color-gray-300);
+
   --color-header-bg: var(--color-dark);
   --color-header-text: color-mix(in srgb, var(--color-white) 90%, transparent);
   --color-submenu-bg: var(--color-dark);
@@ -36,6 +38,12 @@
   --color-header-button-bg-hover: var(--color-white);
   --color-header-button-text: var(--color-white);
   --color-header-button-text-hover: var(--color-orange);
+
+  --color-header-menu-link-bg-hover: var(--color-orange-transparent);
+
+  --logo-header-height: clamp(1rem, 2vw, 2.5rem);
+
+  --text-logo-header-daeler-size: clamp(0.75rem, 1.04vw, 1.25rem);
 
   /* Fonts */
   --font-sans: ChangAnunitype, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
