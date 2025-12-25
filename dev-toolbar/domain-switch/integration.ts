@@ -30,7 +30,7 @@ export default function domainSwitchToolbar(): AstroIntegration {
         addDevToolbarApp({
           id: APP_ID,
           name: "Domain",
-          icon: "astro:logo",
+          icon: "searchFile",
           entrypoint: fileURLToPath(new URL("./app.ts", import.meta.url)),
         });
       },
