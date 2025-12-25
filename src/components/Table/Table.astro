@@ -12,6 +12,7 @@ interface Props {
   tableLoyoutFixed?: boolean;
   lightbox?: boolean;
   lightboxId?: string;
+  calc?: boolean;
 }
 
 const { 
@@ -25,12 +26,13 @@ const {
   tableLoyoutFixed = false,
   lightbox = false,
   lightboxId = 'gallery-id',
+  calc = false,
 } = Astro.props;
 const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
 ---
 {
   !!data.length && (
-    <table class={tableClass}>
+    <table class={tableClass} {...(calc ? { 'data-table-calc': ''}: {})}>
 
       {!!head.length && (
         <thead class={headClasses}>
@@ -43,8 +45,14 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
       )}
 
       <tbody>
-        {data.map((item: any) => (
-          <tr>
+        {data.map((item: any) => {
+          const price = calc ? Number(item.price.replace(/\D/g, '')) : 0;
+          return (
+          <tr 
+            {...(calc ? { 'data-title': item.name, 'data-price': price } : {})}
+            {...(calc ? { '@click': `$store.calcItems.toggleItem(${price}, '${item.name}', $el)` } : {})}
+            class={calc ? 'cursor-pointer hover:bg-gray-100 [&.selected]:bg-green-100' : ''}
+          >
             {Object.keys(item).map(key => (
               <td>
                 {
@@ -76,7 +84,8 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
               </td>
             ))}
           </tr>
-        ))}
+          )
+        })}
       </tbody>
 
     </table>
