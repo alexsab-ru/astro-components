@@ -10,11 +10,13 @@ import LandingGAC from '@/components/PageTypes/LandingGAC.astro';
 import LandingGEELY from '@/components/PageTypes/LandingGEELY.astro';
 import LandingHAVAL from '@/components/PageTypes/LandingHAVAL.astro';
 import ServiceKIA from '@/components/PageTypes/ServiceKIA.astro';
+import SiteGacArmada from '@/components/PageTypes/SiteGacArmada.astro';
 
 const SiteType = {
 	LANDING: 'landing',
 	LANDING_EVOLUTE: 'landing-evolute',
 	LANDING_GAC: 'landing-gac',
+	SITE_GAC_ARMADA: 'site-gac-armada',
 	LANDING_GEELY: 'landing-geely',
 	LANDING_HAVAL: 'landing-haval',
 	SITE: 'site',
@@ -50,6 +52,9 @@ switch(siteType) {
 		break;
 	case SiteType.SITE_CHINA_SAMARA_AUTO:
 		Content = SiteChinaSamaraAuto;
+		break;
+	case SiteType.SITE_GAC_ARMADA:
+		Content = SiteGacArmada;
 		break;
 	case SiteType.SITE_INFINITI_SAMAUTO:
 		Content = SiteInfinitiSamauto;
