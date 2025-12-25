@@ -23,6 +23,7 @@
   --color-accent-500: #024e6b;
 
   --logo-header-height: clamp(1rem, 2vw + 0.25rem, 1.5rem);
+  --logo-map-info-height: clamp(1rem, 2vw + 0.25rem, 1.2rem);
 
   --color-header-bg: var(--color-accent-500);
   --color-header-text: color-mix(in srgb, var(--color-white) 90%, transparent);

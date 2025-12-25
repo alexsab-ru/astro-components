@@ -39,6 +39,7 @@
   --color-accent-500: #fe7600;
 
   --logo-header-height: clamp(0.75rem, 2vw + 0.25rem, 1rem);
+  --logo-map-info-height: clamp(0.75rem, 2vw + 0.25rem, 1rem);
 
   --color-header-bg: var(--color-black);
   --color-header-text: var(--color-white);
