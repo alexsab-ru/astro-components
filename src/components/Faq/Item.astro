@@ -30,5 +30,6 @@ const { item } = Astro.props;
 		x-transition.opacity.duration.100ms
 	>
 		<Fragment set:html={item.answer} />
+		<slot />
 	</div>
 </div>
