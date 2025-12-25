@@ -35,6 +35,8 @@
   /* Fonts */
   --font-sans: Hyundai, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-heading: inherit;
+  --font-weight-heading-weight: 500;
+  --font-weight-weight-bold: 500;
 }
 
 
