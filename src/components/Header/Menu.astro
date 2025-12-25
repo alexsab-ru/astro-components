@@ -9,7 +9,7 @@ import HeaderMenuList from './MenuList.astro';
 const path = Astro.url.pathname;
 const classBottom = path != '/' ? ' border-b' : '';
 ---
-<div id="site_nav" class={'hidden lg:block border-t'+classBottom}>
+<div id="site_nav" class={'hidden lg:block border-header-border border-t'+classBottom}>
 	<div class="container">
 		<div class="h-full">
 			<HeaderMenuList links={links} />
