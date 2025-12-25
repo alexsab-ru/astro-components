@@ -39,7 +39,7 @@ const infoItems = [
 
 const cards = [
 	{ id: 'gs8-ii', title: 'GAC GS8', benefit: 'до 400 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/gs8.webp' },
-	{ id: 'new-gs8', title: 'GAC GS8 новый', benefit: 'до 400 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/new-gs8.webp' },
+	{ id: 'new-gs8', title: 'Обновленный GAC GS8', benefit: 'до 400 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/new-gs8.webp' },
 	{ id: 'gs4', title: 'GAC GS4', benefit: 'до 300 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/gs4.webp' },
 	{ id: 'gs3', title: 'GAC GS3', benefit: 'до 200 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/gs3.webp' },
 ].map((card, index) => ({
@@ -85,7 +85,7 @@ const cards = [
 									classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white no-underline text-center bg-accent-500 hover:bg-accent-600"
 									url="#common-modal" 
 									title="Получить максимальную выгоду"
-									dataTitle="Получить максимальную выгоду"
+									dataTitle={`Получить максимальную выгоду на&nbsp;${card.title}`}
 									dataFormName={`Получить максимальную выгоду. ${card.title}`}
 								/>
 								<Button 
@@ -93,7 +93,7 @@ const cards = [
 									classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white! no-underline text-center bg-black hover:bg-black/90"
 									url="#common-modal" 
 									title="Записаться на тест-драйв"
-									dataTitle="Записаться на тест-драйв"
+									dataTitle={`Записаться на тест-драйв на&nbsp;${card.title}`}
 									dataFormName={`Записаться на тест-драйв. ${card.title}`}
 								/>
 							</div>
