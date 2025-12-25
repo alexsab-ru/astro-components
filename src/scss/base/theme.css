@@ -28,6 +28,7 @@
     --color-gray-950: #030712;
 
     --color-border: var(--color-gray-200);
+    --color-header-border: var(--color-border);
 
     /* Logo sizing */
     --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
@@ -38,6 +39,8 @@
     
     --logo-footer-height: var(--logo-header-height);
     --logo-dealer-footer-height: var(--logo-footer-height);
+
+    --text-logo-header-daeler-size: clamp(0.75rem, 1.25vw, 1.5rem);
 
     /* HEADER COLORS */
     --color-header-bg: var(--color-white);
@@ -97,6 +100,7 @@
 
     --color-title-model-page: var(--color-white);
     --color-title-brand-model-page: color-mix(in srgb, var(--color-title-model-page) 100%, transparent);
+    --color-title-brand-model-item: var(--color-accent-400);
 
     /* Radii */
     --radius-btn: 0px;
