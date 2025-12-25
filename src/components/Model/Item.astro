@@ -14,11 +14,12 @@ const noPriceText = (model?.status && (model.status === 'preorder' || model.stat
 	class="mb-[4%] lg:mb-0 w-[48%] lg:w-[calc(33.33%-calc(40px/3))] xl:w-[calc(25%-calc(60px/4))] flex flex-col border p-3 sm:pt-10 sm:pb-4 sm:px-5 overflow-hidden shadow-xl transition-all duration-500 in-expo group hover:border-gray-400 hover:shadow-md no-underline!"
 >
 	<div>
-		<h2
-			class="xs:text-[10px]! leading-none text-lg! sm:text-2xl! uppercase transition-colors duration-500 group-hover:text-accent-500 m-0! p-0! before:hidden!"
+		<h3
+			class="leading-none! xs:text-xs! text-sm! sm:text-2xl! uppercase transition-colors duration-300 group-hover:text-accent-500 m-0! p-0!"
 		>
-			{model.mark_id}&nbsp;{model.name}
-		</h2>
+			<small class="block xs:text-[10px] text-xs sm:text-sm leading-none! text-title-brand-model-item">{model.mark_id}</small>
+			<span>{model.name}</span>
+		</h3>
 		{
 			model?.benefit && !isNaN(model?.benefit) && model?.benefit != 0 && model?.benefit != '' && (
 				<span class="block text-xs sm:text-lg text-black/80">
@@ -50,17 +51,17 @@ const noPriceText = (model?.status && (model.status === 'preorder' || model.stat
 			loading="lazy"
 		/>
 	</div>
-	<div class="flex flex-col items-center xs:text-base text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5">
+	<div class="flex flex-col items-center xs:text-sm text-lg sm:text-2xl md:text-3xl font-medium sm:mt-3 py-1.5">
 	{
 		model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ?  (
 			<span>
-				<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+				<span class="xs:text-xs text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
 				{/* Добавляем значок с дисклеймером для цены, если он существует */}
 				{model?.priceDisclaimer && <Fragment set:html={createDisclaimerIcon(model.priceDisclaimer)} />}
 			</span>
 		) : (
 			<span>
-				<span class="text-lg">{noPriceText}</span>
+				<span class="xs:text-sm text-lg">{noPriceText}</span>
 			</span>
 		)
 	}
