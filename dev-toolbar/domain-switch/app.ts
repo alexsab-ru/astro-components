@@ -1,0 +1,168 @@
+import { defineToolbarApp } from "astro/toolbar";
+
+const APP_ID = "domain-switch";
+
+type InitPayload = {
+  presets: string[];
+  currentDomain: string;
+  hasJSONPath: boolean;
+};
+type StatusPayload = { ok: boolean; message: string };
+
+export default defineToolbarApp({
+  init(canvas, app, server) {
+    const lsDomainsKey = `${APP_ID}:domains`;
+    const lsSelectedKey = `${APP_ID}:selected`;
+
+    let domains: string[] = [];
+
+    const loadLS = () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem(lsDomainsKey) || "[]");
+        if (Array.isArray(saved)) domains = saved.map(String).filter(Boolean);
+      } catch {}
+    };
+
+    const saveLS = () => {
+      localStorage.setItem(lsDomainsKey, JSON.stringify(domains));
+    };
+
+    const makeUI = () => {
+      const win = document.createElement("astro-dev-toolbar-window");
+
+      // Каркас
+      win.innerHTML = `
+        <style>
+          .col{display:flex;flex-direction:column;gap:10px;min-width:360px}
+          .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+          .status{font-size:12px;opacity:.9;white-space:pre-wrap}
+          code{font-size:12px}
+        </style>
+        <div class="col">
+          <div class="row">
+            <strong>Domain switcher</strong>
+            <astro-dev-toolbar-badge id="badge"></astro-dev-toolbar-badge>
+          </div>
+
+          <div class="row" id="domainRow"></div>
+
+          <div class="row">
+            <astro-dev-toolbar-button id="btn">Download settings.json</astro-dev-toolbar-button>
+            <label style="display:flex;gap:6px;align-items:center;font-size:12px;">
+              <input type="checkbox" id="reload" checked />
+              reload page
+            </label>
+          </div>
+
+          <div class="status" id="status"></div>
+
+          <div style="font-size:12px;opacity:.75;">
+            Можно задать пресеты через <code>DOMAIN_PRESETS=...</code> в .env (через запятую) и перезапустить dev.
+          </div>
+        </div>
+      `;
+
+      const badge = win.querySelector("#badge") as any;
+      const statusEl = win.querySelector("#status") as HTMLDivElement;
+      const reloadChk = win.querySelector("#reload") as HTMLInputElement;
+
+      const btn = win.querySelector("#btn") as any;
+      btn.buttonStyle = "purple";
+
+      const domainRow = win.querySelector("#domainRow") as HTMLDivElement;
+
+      const select = document.createElement("astro-dev-toolbar-select") as any;
+      select.element.style.minWidth = "260px";
+
+      const addBtn = document.createElement("astro-dev-toolbar-button") as any;
+      addBtn.textContent = "Add…";
+      addBtn.buttonStyle = "gray";
+
+      domainRow.appendChild(select);
+      domainRow.appendChild(addBtn);
+
+      const setStatus = (msg: string, ok?: boolean) => {
+        statusEl.textContent = msg;
+
+        if (ok === true) {
+          badge.textContent = "OK";
+          badge.badgeStyle = "green";
+        } else if (ok === false) {
+          badge.textContent = "ERR";
+          badge.badgeStyle = "red";
+        } else {
+          badge.textContent = "";
+          badge.badgeStyle = "gray";
+        }
+      };
+
+      const refreshOptions = (prefer?: string) => {
+        domains = Array.from(new Set(domains.map((d) => d.trim()).filter(Boolean)));
+        saveLS();
+
+        select.options = domains.map((d) => ({ label: d, value: d }));
+
+        const selected = prefer || localStorage.getItem(lsSelectedKey) || domains[0] || "";
+        select.element.value = selected;
+        localStorage.setItem(lsSelectedKey, selected);
+      };
+
+      addBtn.addEventListener("click", () => {
+        const d = prompt("Domain? (пример: changan.alexsab.ru)")?.trim();
+        if (!d) return;
+        domains.unshift(d);
+        refreshOptions(d);
+      });
+
+      select.element.addEventListener("change", () => {
+        localStorage.setItem(lsSelectedKey, select.element.value);
+      });
+
+      btn.addEventListener("click", () => {
+        const domain = String(select.element.value || "").trim();
+        if (!domain) return setStatus("Выбери домен.", false);
+
+        setStatus("Downloading…");
+        server.send(`${APP_ID}:download`, { domain, file: "settings.json" });
+      });
+
+      // сервер → клиент
+      server.on(`${APP_ID}:init`, (data: InitPayload) => {
+        if (Array.isArray(data.presets) && data.presets.length) {
+          domains = [...data.presets, ...domains];
+        }
+        if (data.currentDomain) {
+          domains = [data.currentDomain, ...domains];
+        }
+
+        loadLS();
+        refreshOptions(data.currentDomain || undefined);
+
+        if (!data.hasJSONPath) {
+          setStatus("JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.", false);
+        } else {
+          setStatus("Готово. Выбери домен и нажми Download.", undefined);
+        }
+      });
+
+      server.on(`${APP_ID}:status`, (data: StatusPayload) => {
+        setStatus(data.message, data.ok);
+      });
+
+      server.on(`${APP_ID}:reload`, () => {
+        if (reloadChk.checked) window.location.reload();
+      });
+
+      // handshake
+      server.send(`${APP_ID}:hello`, {});
+
+      return win;
+    };
+
+    // Рендерим/чистим по toggle
+    app.onToggled(({ state }) => {
+      canvas.innerHTML = "";
+      if (state) canvas.appendChild(makeUI());
+    });
+  },
+});
