@@ -86,6 +86,7 @@ export default function domainSwitchToolbar(): AstroIntegration {
             toolbar.send(`${APP_ID}:status`, {
               ok: true,
               message: `OK: скачал ${targetFile} (${buf.length} bytes) с домена ${safeDomain}`,
+              domain: safeDomain,
             });
 
           } catch (e: any) {

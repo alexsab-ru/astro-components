@@ -7,7 +7,7 @@ type InitPayload = {
   currentDomain: string;
   hasJSONPath: boolean;
 };
-type StatusPayload = { ok: boolean; message: string };
+type StatusPayload = { ok: boolean; message: string; domain?: string };
 
 export default defineToolbarApp({
   init(canvas, app, server) {
@@ -150,6 +150,9 @@ export default defineToolbarApp({
 
       server.on(`${APP_ID}:status`, (data: StatusPayload) => {
         setStatus(data.message, data.ok);
+        if (data.ok && data.domain) {
+          localStorage.setItem(lsSelectedKey, data.domain);
+        }
       });
 
       // handshake
