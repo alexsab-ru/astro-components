@@ -12,6 +12,23 @@ const exec = promisify(execCb);
 type HelloPayload = Record<string, never>;
 type DownloadPayload = { domain: string; file?: string };
 
+const domainFiles = [
+  "settings.json",
+  "banners.json",
+  "salons.json",
+  "menu.json",
+  "scripts.json",
+  "socials.json",
+  "collections.json",
+  "faq.json",
+  "federal-disclaimer.json",
+  "models-sections.yml",
+  "reviews.json",
+  "seo.json",
+  "services.json",
+  "special-services.json",
+];
+
 function getEnvVar(key: string) {
   // dev -> development, build -> production (нам для твоего кейса достаточно development)
   const mode = process.env.NODE_ENV || "development";
@@ -58,11 +75,69 @@ export default function domainSwitchToolbar(): AstroIntegration {
           });
         });
 
-        // Команда скачать файл
+        const runScript = async (cmd: string, label: string) => {
+          try {
+            const { stdout, stderr } = await exec(cmd, { cwd: process.cwd() });
+            if (stdout?.trim()) logger.info(`[${APP_ID}] ${label}: ${stdout.trim()}`);
+            if (stderr?.trim()) logger.warn(`[${APP_ID}] ${label} stderr: ${stderr.trim()}`);
+            toolbar.send(`${APP_ID}:status`, { ok: true, message: label });
+            return true;
+          } catch (err: any) {
+            logger.warn(`[${APP_ID}] ${label} error: ${err?.message ?? err}`);
+            toolbar.send(`${APP_ID}:status`, { ok: false, message: `${label} error: ${err?.message ?? err}` });
+            return false;
+          }
+        };
+
+        const downloadDomainFile = async (safeDomain: string, targetFile: string) => {
+          const url = `${jsonPath}/${safeDomain}/data/${targetFile}`;
+          const dest = path.join(process.cwd(), "src", "data", targetFile);
+
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`HTTP ${res.status} при скачивании: ${url}`);
+
+          const buf = Buffer.from(await res.arrayBuffer());
+          await fs.mkdir(path.dirname(dest), { recursive: true });
+          await fs.writeFile(dest, buf);
+
+          toolbar.send(`${APP_ID}:status`, {
+            ok: true,
+            message: `OK: скачал ${targetFile} (${buf.length} bytes) с домена ${safeDomain}`,
+            domain: safeDomain,
+          });
+
+          if (targetFile === "settings.json") {
+            await runScript("node .github/scripts/setBrand.mjs", "Обновил данные бренда (setBrand.mjs)");
+            await runScript("node .github/scripts/filterModelsByBrand.js", "Обновил модели (filterModelsByBrand)");
+          }
+          if (targetFile === "banners.json") {
+            await runScript(
+              "node .github/scripts/replacePlaceholdersAndSearchDates.js",
+              "Обновил баннеры (replacePlaceholdersAndSearchDates.js)"
+            );
+          }
+        };
+
+        // Команда скачать файл/файлы
         toolbar.on<DownloadPayload>(`${APP_ID}:download`, async ({ domain, file }) => {
           const targetFile = file || "settings.json";
           const safeDomain = String(domain || "").trim();
 
+          const isCommonModels = targetFile === "__common_models__";
+          const isCommonCars = targetFile === "__common_cars__";
+          const isDownloadAll = targetFile === "__all__";
+
+          // Общие файлы, не зависящие от домена
+          if (isCommonModels) {
+            await runScript("bash ./.github/scripts/sh/downloadCommonModelsJSON.sh", "Скачал общий models");
+            return;
+          }
+          if (isCommonCars) {
+            await runScript("bash ./.github/scripts/sh/downloadCommonCarsJSON.sh", "Скачал общий cars");
+            return;
+          }
+
+          // Всё остальное требует jsonPath и домен
           if (!jsonPath) {
             toolbar.send(`${APP_ID}:status`, {
               ok: false,
@@ -75,62 +150,18 @@ export default function domainSwitchToolbar(): AstroIntegration {
             return;
           }
 
-          const url = `${jsonPath}/${safeDomain}/data/${targetFile}`;
-          const dest = path.join(process.cwd(), "src", "data", targetFile);
+          const filesToDownload = isDownloadAll ? domainFiles : [targetFile];
 
           try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`HTTP ${res.status} при скачивании: ${url}`);
-
-            const buf = Buffer.from(await res.arrayBuffer());
-            await fs.mkdir(path.dirname(dest), { recursive: true });
-            await fs.writeFile(dest, buf);
-
-            toolbar.send(`${APP_ID}:status`, {
-              ok: true,
-              message: `OK: скачал ${targetFile} (${buf.length} bytes) с домена ${safeDomain}`,
-              domain: safeDomain,
-            });
-
-            // Пост-обработка для отдельных файлов
-            if (targetFile === "settings.json") {
-              try {
-                const { stdout, stderr } = await exec("node .github/scripts/setBrand.mjs", {
-                  cwd: process.cwd(),
-                });
-                if (stdout?.trim()) logger.info(`[${APP_ID}] setBrand: ${stdout.trim()}`);
-                if (stderr?.trim()) logger.warn(`[${APP_ID}] setBrand stderr: ${stderr.trim()}`);
-                toolbar.send(`${APP_ID}:status`, {
-                  ok: true,
-                  message: "Обновил данные бренда (setBrand.mjs)",
-                  domain: safeDomain,
-                });
-              } catch (err: any) {
-                logger.warn(`[${APP_ID}] setBrand error: ${err?.message ?? err}`);
-                toolbar.send(`${APP_ID}:status`, {
-                  ok: false,
-                  message: `setBrand.mjs error: ${err?.message ?? err}`,
-                });
-              }
-            } else if (targetFile === "banners.json") {
-              try {
-                const { stdout, stderr } = await exec("node .github/scripts/replacePlaceholdersAndSearchDates.js", {
-                  cwd: process.cwd(),
-                });
-                if (stdout?.trim()) logger.info(`[${APP_ID}] replacePlaceholders: ${stdout.trim()}`);
-                if (stderr?.trim()) logger.warn(`[${APP_ID}] replacePlaceholders stderr: ${stderr.trim()}`);
-                toolbar.send(`${APP_ID}:status`, {
-                  ok: true,
-                  message: "Обновил баннеры (replacePlaceholdersAndSearchDates.js)",
-                  domain: safeDomain,
-                });
-              } catch (err: any) {
-                logger.warn(`[${APP_ID}] replacePlaceholders error: ${err?.message ?? err}`);
-                toolbar.send(`${APP_ID}:status`, {
-                  ok: false,
-                  message: `replacePlaceholders error: ${err?.message ?? err}`,
-                });
-              }
+            for (const f of filesToDownload) {
+              await downloadDomainFile(safeDomain, f);
+            }
+            if (isDownloadAll) {
+              toolbar.send(`${APP_ID}:status`, {
+                ok: true,
+                message: `OK: скачал ${filesToDownload.length} файлов для ${safeDomain}`,
+                domain: safeDomain,
+              });
             }
           } catch (e: any) {
             logger.warn(`[${APP_ID}] ${e?.message ?? e}`);

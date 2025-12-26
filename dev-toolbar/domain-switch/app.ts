@@ -71,13 +71,18 @@ export default defineToolbarApp({
       domainRow.appendChild(select);
       domainRow.appendChild(addBtn);
 
-      const makeDownloadButton = (label: string, file: string, style: "purple" | "blue" | "gray" = "gray") => {
+      const makeDownloadButton = (
+        label: string,
+        file: string,
+        style: "purple" | "blue" | "gray" = "gray",
+        needsDomain = true
+      ) => {
         const b = document.createElement("astro-dev-toolbar-button") as any;
         b.textContent = label;
         b.buttonStyle = style;
         b.addEventListener("click", () => {
           const domain = String(select.element.value || "").trim();
-          if (!domain) return setStatus("Выбери домен.", false);
+          if (needsDomain && !domain) return setStatus("Выбери домен.", false);
           setStatus(`Downloading ${file}…`);
           server.send(`${APP_ID}:download`, { domain, file });
         });
@@ -85,12 +90,23 @@ export default defineToolbarApp({
       };
 
       // Основные действия
-      actionsRow.appendChild(makeDownloadButton("settings.json", "settings.json", "purple"));
-      actionsRow.appendChild(makeDownloadButton("banners.json", "banners.json", "blue"));
+      actionsRow.appendChild(makeDownloadButton("Скачать всё", "__all__", "purple"));
+      actionsRow.appendChild(makeDownloadButton("settings.json", "settings.json", "blue"));
+      actionsRow.appendChild(makeDownloadButton("banners.json", "banners.json"));
       actionsRow.appendChild(makeDownloadButton("salons.json", "salons.json"));
       actionsRow.appendChild(makeDownloadButton("menu.json", "menu.json"));
       actionsRow.appendChild(makeDownloadButton("scripts.json", "scripts.json"));
       actionsRow.appendChild(makeDownloadButton("socials.json", "socials.json"));
+      actionsRow.appendChild(makeDownloadButton("collections.json", "collections.json"));
+      actionsRow.appendChild(makeDownloadButton("faq.json", "faq.json"));
+      actionsRow.appendChild(makeDownloadButton("federal-disclaimer.json", "federal-disclaimer.json"));
+      actionsRow.appendChild(makeDownloadButton("models-sections.yml", "models-sections.yml"));
+      actionsRow.appendChild(makeDownloadButton("reviews.json", "reviews.json"));
+      actionsRow.appendChild(makeDownloadButton("seo.json", "seo.json"));
+      actionsRow.appendChild(makeDownloadButton("services.json", "services.json"));
+      actionsRow.appendChild(makeDownloadButton("special-services.json", "special-services.json"));
+      actionsRow.appendChild(makeDownloadButton("Скачать общий Models", "__common_models__", "gray", false));
+      actionsRow.appendChild(makeDownloadButton("Скачать общий cars", "__common_cars__", "gray", false));
 
       const setStatus = (msg: string, ok?: boolean) => {
         statusEl.textContent = msg;
