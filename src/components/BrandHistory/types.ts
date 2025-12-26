@@ -1,5 +1,5 @@
 export type TBrandHistoryItem = {
-    year: number;
+    year: number | string;
     html: string | HTMLElement;
 }
 

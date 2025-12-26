@@ -36,7 +36,7 @@ import './styles.css';
 		<div class="container">
 			<div class="flex items-center justify-between xs:py-2 xs:h-auto h-[60px] md:h-[80px]">
 				<Logo />
-				<div class="flex items-center xs:gap-2 gap-4 xl:gap-10 xs:grow xs:shrink-0 xs:justify-end">
+				<div class="flex items-center xs:gap-2 gap-4 lg:gap-10 xl:gap-10 xs:grow xs:shrink-0 xs:justify-end">
 					<div class="hidden md:flex flex-col">
 					{
 						salons.length && salons.map((salon: any, index) => {
@@ -57,7 +57,7 @@ import './styles.css';
 								>Адреса салонов</a>
 								<small class="block text-xs">{salons.length}&nbsp;{declOfNums(salons.length, ['салон', 'салона', 'салонов'])}</small>
 							</div>) : (
-							<div class="hidden lg:flex items-center gap-1 font-medium text-sm xl:text-base">
+							<div class="hidden xl:flex items-center gap-1 font-medium text-sm xl:text-base">
 								<Icon name="mdi:map-marker-outline" class="text-2xl text-header-text" />
 								<Fragment set:html={salons[0].address} />
 							</div>

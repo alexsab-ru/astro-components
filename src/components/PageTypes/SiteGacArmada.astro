@@ -1,0 +1,111 @@
+---
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import {TIMER, MARQUEE} from '@/const.js';
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
+import Timer from '@/components/Timer/Timer.astro';
+import ModelList from '@/components/Model/ModelList.astro';
+import LatestPosts from '@/components/LatestPosts/Index.astro';
+import Model from '@/components/Model/Model.astro';
+import ModelComplectations from '@/components/Model/Complectations.astro';
+import Callback from '@/components/Callback.astro';
+import Services from '@/components/Services.astro';
+import Contacts from '@/components/Contacts.astro';
+import Morquee from '@/components/Marquee/Index.astro';
+
+import modelsData from '@/data/models.json'
+const { models } = modelsData;
+import CardMedia from '@/components/CardMedia/CardMedia.astro';
+import Button from '@/components/Button/Button.astro';
+
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
+const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
+import SeoText from '@/components/Seo/Index.astro';
+
+import InfoItem from '@/components/Info/Item.astro';
+const infoItemClasses = "popup-link flex flex-col-reverse items-center justify-end gap-5 transition-all shadow-xl hover:shadow-lg font-medium xl:text-lg text-center p-4";
+const infoItems = [
+	{title: "Зимние шины в комплекте", icon: "mdi:gift", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "5 лет гарантии", icon: "mdi:shield-check", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "Кредит от 0.01%", icon: "mdi:sale", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "Выгода до 450 000 руб.", icon: "mdi:hand-coin", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "Выгода в лизинг - до 11%", icon: "mdi:sale", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+];
+
+const cards = [
+	{ id: 'gs8-ii', title: 'GAC GS8', benefit: 'до 400 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/gs8.webp' },
+	{ id: 'new-gs8', title: 'Обновленный GAC GS8', benefit: 'до 400 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/new-gs8.webp' },
+	{ id: 'gs4', title: 'GAC GS4', benefit: 'до 300 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/gs4.webp' },
+	{ id: 'gs3', title: 'GAC GS3', benefit: 'до 200 000 рублей', img: 'https://cdn.alexsab.ru/cars_images/gac-armada/gs3.webp' },
+].map((card, index) => ({
+	...card,
+	imgAlt: card.title,
+	imgPlacement: index % 2 === 1 ? 'right' : 'left',
+}));
+---
+
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
+	<Banner />
+	<section>
+		<div class="container">
+			<div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+				{infoItems.map(item => ( <InfoItem item={item} classes={infoItemClasses} data-title="Получить спецпредложение" data-form_name={`Получить спецпредложение. ${item.title.replace(/<[^>]*>/g, '')}`} /> ))}
+			</div>
+		</div>
+	</section>
+	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
+	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
+		<div class="container">
+			<PageH1 h1=`Автомобили ${brand} в&nbsp;наличии в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
+		</div>
+	</section>
+	{TIMER.show && <Timer endtime={new Date(TIMER.endtime)} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
+	<section class="py-6 lg:py-8">
+		<div class="container flex flex-col gap-8 lg:gap-16">
+			{cards.map((card) => (
+				<article>
+					<CardMedia imgPlacement={card.imgPlacement}>
+						{card.img && <img slot="card-image" class="" src={card.img} alt={card.imgAlt} loading="lazy" />}
+						<Fragment slot="card-content">
+							<h2 class="m-0! p-0! before:hidden text-2xl! lg:text-4xl!">{card.title}</h2>
+							<ul class="list-disc pl-5 text-gray-700 text-base! lg:text-lg!">
+								<li>выгода {card.benefit}</li>
+								<li>рассрочка 0.01% на 8 лет</li>
+								<li>гарантия 5 лет</li>
+								<li>в наличии все комплектации</li>
+							</ul>
+							<div class="grid gap-3 sm:grid-cols-2">
+								<Button 
+									view="popup-link"
+									classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white no-underline text-center bg-accent-500 hover:bg-accent-600"
+									url="#common-modal" 
+									title="Получить максимальную выгоду"
+									dataTitle={`Получить максимальную выгоду на&nbsp;${card.title}`}
+									dataFormName={`Получить максимальную выгоду. ${card.title}`}
+								/>
+								<Button 
+									view="popup-link"
+									classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white! no-underline text-center bg-black hover:bg-black/90"
+									url="#common-modal" 
+									title="Записаться на тест-драйв"
+									dataTitle={`Записаться на тест-драйв на&nbsp;${card.title}`}
+									dataFormName={`Записаться на тест-драйв. ${card.title}`}
+								/>
+							</div>
+						</Fragment>
+					</CardMedia>
+				</article>
+			))}
+		</div>
+	</section>
+	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" showAllButton={true} />
+	<Callback />
+	<Services />
+	<SeoText mdx="index" />
+	<Contacts />
+</Layout>

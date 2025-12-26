@@ -59,7 +59,7 @@ import Reviews from '@/components/Reviews/Index.astro';
 	<Timer endtime=`${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00` title={`Утвердите спецусловия только до ${LAST_DAY} ${MONTH_GENITIVE}!`} subtitle={TIMER.subtitle} btnName="Получить выгоду" class="bg-[url('https://cdn.alexsab.ru/models/default-model-bg.webp')] bg-cover bg-center bg-fixed text-white" />
 	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="section bg-gray-100" showAllButton={false} />
 
-	{ false && ( <ModelList /> )}
+	{ false && ( <ModelList id="models" /> )}
 
 	{ false && models.length > 0 && models.filter(m => m.show).map(model => ( <Model model={model} /> ))}
 

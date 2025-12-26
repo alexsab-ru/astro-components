@@ -29,8 +29,7 @@ const { item } = Astro.props;
 		x-show={ `activities.includes(${item.id})` }
 		x-transition.opacity.duration.100ms
 	>
-		<slot>
-			<Fragment set:html={item.answer} />
-		</slot>
+		<Fragment set:html={item.answer} />
+		<slot />
 	</div>
 </div>

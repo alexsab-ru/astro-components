@@ -15,8 +15,11 @@ module.exports = {
 				},
 			},
 			fontFamily: {
-				...baseConfig.theme.extend.fontFamily
+				'sans': ['Manrope', ...defaultTheme.fontFamily.sans],
 			},
+			borderRadius: {
+				btn: '5px'
+			}
 		},
 	},
 }

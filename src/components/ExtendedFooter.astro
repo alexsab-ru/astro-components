@@ -20,6 +20,7 @@ import DisclaimerCollapse from '@/components/DisclaimerCollapse/DisclaimerCollap
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
+import scripts from '@/data/scripts.json';
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
 [`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] : 
 salons
@@ -80,11 +81,22 @@ salons
                 ) : <Brands type="logo" />
             }
 
-            <div class="">
+            <div class="flex flex-col justify-between gap-6">
                 {Object.keys(socials.footer).length ? (
-                    <div class="text-xl mb-3 md:mb-5">Будь в курсе выгодных предложений</div>
-                    <SocialList data={socials.footer} />
+                    <div>
+                        <div class="text-xl mb-3 md:mb-5">Будь в курсе выгодных предложений</div>
+                        <SocialList data={socials.footer} />
+                    </div>
                 ) : ('')}
+                {scripts?.yandex_widget_rating_badge?.id && (
+                    <div>
+                        <iframe
+                            src={`https://yandex.ru/sprav/widget/rating-badge/${scripts.yandex_widget_rating_badge.id}?type=${scripts.yandex_widget_rating_badge.type}&theme=${scripts.yandex_widget_rating_badge.theme}`}
+                            width="150"
+                            height="50">
+                        </iframe>
+                    </div>
+                )}
             </div>
 
         </div>
