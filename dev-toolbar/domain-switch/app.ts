@@ -103,7 +103,8 @@ export default defineToolbarApp({
         });
         select.element.replaceChildren(...opts);
 
-        const selected = prefer || localStorage.getItem(lsSelectedKey) || domains[0] || "";
+        const saved = localStorage.getItem(lsSelectedKey) || "";
+        const selected = prefer || saved || domains[0] || "";
         if (selected) {
           select.element.value = selected;
           localStorage.setItem(lsSelectedKey, selected);
@@ -132,6 +133,7 @@ export default defineToolbarApp({
       // сервер → клиент
       server.on(`${APP_ID}:init`, (data: InitPayload) => {
         loadLS();
+        const savedSelected = localStorage.getItem(lsSelectedKey) || "";
         if (Array.isArray(data.presets) && data.presets.length) {
           domains = [...data.presets, ...domains];
         }
@@ -139,7 +141,8 @@ export default defineToolbarApp({
           domains = [data.currentDomain, ...domains];
         }
 
-        refreshOptions(data.currentDomain || undefined);
+        // Если есть выбранный домен в localStorage, используем его; иначе fallback на currentDomain.
+        refreshOptions(savedSelected || data.currentDomain || undefined);
 
         if (!data.hasJSONPath) {
           setStatus("JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.", false);
