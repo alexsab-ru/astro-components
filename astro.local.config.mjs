@@ -10,6 +10,7 @@ import react from '@astrojs/react';
 import { loadEnv } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
+import domainSwitchToolbar from "./dev-toolbar/domain-switch/integration";
 
 // https://astro.build/config
 //
@@ -52,6 +53,7 @@ const resolveSiteFromConfig = (fallbackUrl) => {
 const computedSite = resolveSiteFromConfig('https://alexsab-ru.github.io');
 export default defineConfig({
 	integrations: [
+		domainSwitchToolbar(),
 		sitemap(),
 		robots({
 			policy: [
