@@ -46,9 +46,7 @@ export default defineToolbarApp({
 
           <div class="row" id="domainRow"></div>
 
-          <div class="row">
-            <astro-dev-toolbar-button id="btn">Download settings.json</astro-dev-toolbar-button>
-          </div>
+          <div class="row" id="actions"></div>
 
           <div class="status" id="status"></div>
 
@@ -60,10 +58,8 @@ export default defineToolbarApp({
 
       const badge = win.querySelector("#badge") as any;
       const statusEl = win.querySelector("#status") as HTMLDivElement;
-      const btn = win.querySelector("#btn") as any;
-      btn.buttonStyle = "purple";
-
       const domainRow = win.querySelector("#domainRow") as HTMLDivElement;
+      const actionsRow = win.querySelector("#actions") as HTMLDivElement;
 
       const select = document.createElement("astro-dev-toolbar-select") as any;
       select.element.style.minWidth = "260px";
@@ -74,6 +70,27 @@ export default defineToolbarApp({
 
       domainRow.appendChild(select);
       domainRow.appendChild(addBtn);
+
+      const makeDownloadButton = (label: string, file: string, style: "purple" | "blue" | "gray" = "gray") => {
+        const b = document.createElement("astro-dev-toolbar-button") as any;
+        b.textContent = label;
+        b.buttonStyle = style;
+        b.addEventListener("click", () => {
+          const domain = String(select.element.value || "").trim();
+          if (!domain) return setStatus("Выбери домен.", false);
+          setStatus(`Downloading ${file}…`);
+          server.send(`${APP_ID}:download`, { domain, file });
+        });
+        return b;
+      };
+
+      // Основные действия
+      actionsRow.appendChild(makeDownloadButton("settings.json", "settings.json", "purple"));
+      actionsRow.appendChild(makeDownloadButton("banners.json", "banners.json", "blue"));
+      actionsRow.appendChild(makeDownloadButton("salons.json", "salons.json"));
+      actionsRow.appendChild(makeDownloadButton("menu.json", "menu.json"));
+      actionsRow.appendChild(makeDownloadButton("scripts.json", "scripts.json"));
+      actionsRow.appendChild(makeDownloadButton("socials.json", "socials.json"));
 
       const setStatus = (msg: string, ok?: boolean) => {
         statusEl.textContent = msg;
@@ -120,14 +137,6 @@ export default defineToolbarApp({
 
       select.element.addEventListener("change", () => {
         localStorage.setItem(lsSelectedKey, select.element.value);
-      });
-
-      btn.addEventListener("click", () => {
-        const domain = String(select.element.value || "").trim();
-        if (!domain) return setStatus("Выбери домен.", false);
-
-        setStatus("Downloading…");
-        server.send(`${APP_ID}:download`, { domain, file: "settings.json" });
       });
 
       // сервер → клиент

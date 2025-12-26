@@ -92,24 +92,45 @@ export default function domainSwitchToolbar(): AstroIntegration {
               domain: safeDomain,
             });
 
-            // Обновляем бренд после загрузки файла
-            try {
-              const { stdout, stderr } = await exec("node .github/scripts/setBrand.mjs", {
-                cwd: process.cwd(),
-              });
-              if (stdout?.trim()) logger.info(`[${APP_ID}] setBrand: ${stdout.trim()}`);
-              if (stderr?.trim()) logger.warn(`[${APP_ID}] setBrand stderr: ${stderr.trim()}`);
-              toolbar.send(`${APP_ID}:status`, {
-                ok: true,
-                message: "Обновил данные бренда (setBrand.mjs)",
-                domain: safeDomain,
-              });
-            } catch (err: any) {
-              logger.warn(`[${APP_ID}] setBrand error: ${err?.message ?? err}`);
-              toolbar.send(`${APP_ID}:status`, {
-                ok: false,
-                message: `setBrand.mjs error: ${err?.message ?? err}`,
-              });
+            // Пост-обработка для отдельных файлов
+            if (targetFile === "settings.json") {
+              try {
+                const { stdout, stderr } = await exec("node .github/scripts/setBrand.mjs", {
+                  cwd: process.cwd(),
+                });
+                if (stdout?.trim()) logger.info(`[${APP_ID}] setBrand: ${stdout.trim()}`);
+                if (stderr?.trim()) logger.warn(`[${APP_ID}] setBrand stderr: ${stderr.trim()}`);
+                toolbar.send(`${APP_ID}:status`, {
+                  ok: true,
+                  message: "Обновил данные бренда (setBrand.mjs)",
+                  domain: safeDomain,
+                });
+              } catch (err: any) {
+                logger.warn(`[${APP_ID}] setBrand error: ${err?.message ?? err}`);
+                toolbar.send(`${APP_ID}:status`, {
+                  ok: false,
+                  message: `setBrand.mjs error: ${err?.message ?? err}`,
+                });
+              }
+            } else if (targetFile === "banners.json") {
+              try {
+                const { stdout, stderr } = await exec("node .github/scripts/replacePlaceholdersAndSearchDates.js", {
+                  cwd: process.cwd(),
+                });
+                if (stdout?.trim()) logger.info(`[${APP_ID}] replacePlaceholders: ${stdout.trim()}`);
+                if (stderr?.trim()) logger.warn(`[${APP_ID}] replacePlaceholders stderr: ${stderr.trim()}`);
+                toolbar.send(`${APP_ID}:status`, {
+                  ok: true,
+                  message: "Обновил баннеры (replacePlaceholdersAndSearchDates.js)",
+                  domain: safeDomain,
+                });
+              } catch (err: any) {
+                logger.warn(`[${APP_ID}] replacePlaceholders error: ${err?.message ?? err}`);
+                toolbar.send(`${APP_ID}:status`, {
+                  ok: false,
+                  message: `replacePlaceholders error: ${err?.message ?? err}`,
+                });
+              }
             }
           } catch (e: any) {
             logger.warn(`[${APP_ID}] ${e?.message ?? e}`);
