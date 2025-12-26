@@ -100,11 +100,20 @@ export default defineToolbarApp({
         domains = Array.from(new Set(domains.map((d) => d.trim()).filter(Boolean)));
         saveLS();
 
-        select.options = domains.map((d) => ({ label: d, value: d }));
+        // Перерисовываем options обычного <select> внутри кастомного элемента.
+        const opts = domains.map((d) => {
+          const o = document.createElement("option");
+          o.value = d;
+          o.textContent = d;
+          return o;
+        });
+        select.element.replaceChildren(...opts);
 
         const selected = prefer || localStorage.getItem(lsSelectedKey) || domains[0] || "";
-        select.element.value = selected;
-        localStorage.setItem(lsSelectedKey, selected);
+        if (selected) {
+          select.element.value = selected;
+          localStorage.setItem(lsSelectedKey, selected);
+        }
       };
 
       addBtn.addEventListener("click", () => {
@@ -128,6 +137,7 @@ export default defineToolbarApp({
 
       // сервер → клиент
       server.on(`${APP_ID}:init`, (data: InitPayload) => {
+        loadLS();
         if (Array.isArray(data.presets) && data.presets.length) {
           domains = [...data.presets, ...domains];
         }
@@ -135,7 +145,6 @@ export default defineToolbarApp({
           domains = [data.currentDomain, ...domains];
         }
 
-        loadLS();
         refreshOptions(data.currentDomain || undefined);
 
         if (!data.hasJSONPath) {
