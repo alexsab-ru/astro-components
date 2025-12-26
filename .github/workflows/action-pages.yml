@@ -163,6 +163,8 @@ jobs:
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm downloadJSON
+          pnpm downloadCommonModelsJSON
+          pnpm downloadCommonCarsJSON
         env:
           JSON_PATH: ${{ secrets.JSON_PATH }}
           DOMAIN: ${{ vars.DOMAIN }}
