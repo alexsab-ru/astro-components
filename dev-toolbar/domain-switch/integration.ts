@@ -2,9 +2,12 @@ import { fileURLToPath } from "node:url";
 import type { AstroIntegration } from "astro";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { loadEnv } from "vite"
+import { loadEnv } from "vite";
+import { promisify } from "node:util";
+import { exec as execCb } from "node:child_process";
 
 const APP_ID = "domain-switch";
+const exec = promisify(execCb);
 
 type HelloPayload = Record<string, never>;
 type DownloadPayload = { domain: string; file?: string };
@@ -89,6 +92,25 @@ export default function domainSwitchToolbar(): AstroIntegration {
               domain: safeDomain,
             });
 
+            // Обновляем бренд после загрузки файла
+            try {
+              const { stdout, stderr } = await exec("node .github/scripts/setBrand.mjs", {
+                cwd: process.cwd(),
+              });
+              if (stdout?.trim()) logger.info(`[${APP_ID}] setBrand: ${stdout.trim()}`);
+              if (stderr?.trim()) logger.warn(`[${APP_ID}] setBrand stderr: ${stderr.trim()}`);
+              toolbar.send(`${APP_ID}:status`, {
+                ok: true,
+                message: "Обновил данные бренда (setBrand.mjs)",
+                domain: safeDomain,
+              });
+            } catch (err: any) {
+              logger.warn(`[${APP_ID}] setBrand error: ${err?.message ?? err}`);
+              toolbar.send(`${APP_ID}:status`, {
+                ok: false,
+                message: `setBrand.mjs error: ${err?.message ?? err}`,
+              });
+            }
           } catch (e: any) {
             logger.warn(`[${APP_ID}] ${e?.message ?? e}`);
             toolbar.send(`${APP_ID}:status`, {
