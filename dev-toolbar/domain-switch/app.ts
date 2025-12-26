@@ -105,8 +105,8 @@ export default defineToolbarApp({
       actionsRow.appendChild(makeDownloadButton("seo.json", "seo.json"));
       actionsRow.appendChild(makeDownloadButton("services.json", "services.json"));
       actionsRow.appendChild(makeDownloadButton("special-services.json", "special-services.json"));
-      actionsRow.appendChild(makeDownloadButton("Скачать общий Models", "__common_models__", "green", false));
-      actionsRow.appendChild(makeDownloadButton("Скачать общий Cars", "__common_cars__", "green", false));
+      actionsRow.appendChild(makeDownloadButton("Скачать общий Models", "__common_models__", "blue", false));
+      actionsRow.appendChild(makeDownloadButton("Скачать общий Cars", "__common_cars__", "blue", false));
 
       const setStatus = (msg: string, ok?: boolean) => {
         statusEl.textContent = msg;

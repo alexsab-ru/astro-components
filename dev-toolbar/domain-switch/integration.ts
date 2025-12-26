@@ -96,7 +96,8 @@ export default function domainSwitchToolbar(): AstroIntegration {
           const res = await fetch(url);
           if (!res.ok) throw new Error(`HTTP ${res.status} при скачивании: ${url}`);
 
-          const buf = Buffer.from(await res.arrayBuffer());
+          const arrayBuffer = await res.arrayBuffer();
+          const buf = new Uint8Array(arrayBuffer);
           await fs.mkdir(path.dirname(dest), { recursive: true });
           await fs.writeFile(dest, buf);
 
