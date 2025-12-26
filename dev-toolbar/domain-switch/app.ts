@@ -48,10 +48,6 @@ export default defineToolbarApp({
 
           <div class="row">
             <astro-dev-toolbar-button id="btn">Download settings.json</astro-dev-toolbar-button>
-            <label style="display:flex;gap:6px;align-items:center;font-size:12px;">
-              <input type="checkbox" id="reload" checked />
-              reload page
-            </label>
           </div>
 
           <div class="status" id="status"></div>
@@ -64,8 +60,6 @@ export default defineToolbarApp({
 
       const badge = win.querySelector("#badge") as any;
       const statusEl = win.querySelector("#status") as HTMLDivElement;
-      const reloadChk = win.querySelector("#reload") as HTMLInputElement;
-
       const btn = win.querySelector("#btn") as any;
       btn.buttonStyle = "purple";
 
@@ -156,10 +150,6 @@ export default defineToolbarApp({
 
       server.on(`${APP_ID}:status`, (data: StatusPayload) => {
         setStatus(data.message, data.ok);
-      });
-
-      server.on(`${APP_ID}:reload`, () => {
-        if (reloadChk.checked) window.location.reload();
       });
 
       // handshake

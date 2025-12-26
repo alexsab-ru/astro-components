@@ -88,8 +88,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
               message: `OK: скачал ${targetFile} (${buf.length} bytes) с домена ${safeDomain}`,
             });
 
-            // Попросим клиент при желании перезагрузить страницу
-            toolbar.send(`${APP_ID}:reload`, {});
           } catch (e: any) {
             logger.warn(`[${APP_ID}] ${e?.message ?? e}`);
             toolbar.send(`${APP_ID}:status`, {
