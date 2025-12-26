@@ -16,6 +16,7 @@ show_help() {
     echo
     echo "Available files:"
     echo "  banners.json"
+    echo "  collections.json"
     echo "  faq.json"
     echo "  federal-disclaimer.json"
     echo "  menu.json"
