@@ -92,32 +92,32 @@ if (fs.existsSync(jsonPath)) {
 
 <Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
 	<Banner />
-	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
+	{ MARQUEE.show && <Morquee marquee={ MARQUEE } /> }
 	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
 		<div class="container">
 			<PageH1 h1=`Автосервис ${brand} в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
 		</div>
 	</section>
-	{TIMER.show && <Timer endtime={TIMER.endtime} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
-	{specialServicesData && <SpecialServices items={specialServicesData} />}
-	{faqBlocks.length > 0 && (
-    <section class="faq container mt-10" id="services-faq" x-data="{activities:[]}">
-      <h2 class="mb-8 sm:mb-14">Наши услуги</h2>
-      {faqBlocks.map(({ item, rows }) => (
-        <FaqItem item={item}>
+	{ TIMER.show && <Timer endtime={TIMER.endtime} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} /> }
+	{ specialServicesData && <SpecialServices items={specialServicesData} /> }
+	{ faqBlocks.length > 0 && (
+		<section class="faq container mt-10" id="services-faq" x-data="{activities:[]}">
+			<h2 class="mb-8 sm:mb-14">Наши услуги</h2>
+			{ faqBlocks.map(({ item, rows }) => (
+				<FaqItem item={item}>
 					<div class="content">
 						<Table data={rows} calc={true} head={['Наименование', 'Цена, руб.']} tableLoyoutFixed={true} />
 					</div>
-        </FaqItem>
-      ))}
+				</FaqItem>
+			))}
 			<CalcBar />
-    </section>
-  )}
-  <LatestPosts collectionName="actions" title="Специальные предложения" id="specials" class="bg-gray-100" />
-	{servicesData && <NewServices items={servicesData} title="Услуги сервисного центра" id="new-services" show={false} />}
-	{faqData && <Faq items={faqData} title="Часто задаваемые вопросы" class="bg-gray-100" />}
+		</section>
+	)}
+	<LatestPosts collectionName="actions" title="Специальные предложения" id="specials" class="bg-gray-100" />
+	{ servicesData && <NewServices items={servicesData} title="Услуги сервисного центра" id="new-services" show={false} /> }
+	{ faqData && <Faq items={faqData} title="Часто задаваемые вопросы" class="bg-gray-100" /> }
 	<Callback bgUrl="https://cdn.alexsab.ru/b/alpha-center/img/konkurenty.webp" />
-	{reviewsData && <ReviewsSlider items={reviewsData} title="Отзывы о нас" class="bg-gray-100" />}
+	{ reviewsData && <ReviewsSlider items={reviewsData} title="Отзывы о нас" class="bg-gray-100" /> }
 	<Services />
 	<SeoText mdx="index" />
 	<Contacts />
