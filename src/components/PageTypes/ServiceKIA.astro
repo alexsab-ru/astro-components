@@ -46,7 +46,7 @@ import CalcBar from '@/components/CalcBar/CalcBar.astro';
 // Парсим JSON и готовим данные для заголовков аккордеона + таблиц
 // Получить файл с таблицей можно командой pnpm run get_table_services_json
 // Используем путь от корня проекта (работает и в dev, и в build)
-const jsonPath = path.resolve(process.cwd(), 'src/data/tables/services.json');
+const jsonPath = path.resolve(process.cwd(), 'src/data/dealer-service-price.json');
 
 // Проверяем существование файла и создаем faqBlocks
 // Если файл отсутствует - компонент работает без таблицы услуг

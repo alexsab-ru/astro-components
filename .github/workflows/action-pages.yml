@@ -20,6 +20,7 @@ on:
       - '.github/scripts/sh/getAirStorage.sh'
       - '.github/scripts/sh/getDealerCarsPrice.sh'
       - '.github/scripts/sh/getDealerPrices.sh'
+      - '.github/scripts/sh/getDealerServicePrices.sh'
       - '.github/scripts/sh/getDealerStorage.sh'
       - '.github/scripts/sh/getSortStorage.sh'
       - '.github/scripts/CarFeedProcessorCSV.py'
@@ -178,6 +179,16 @@ jobs:
           CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
           QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
           KEY_MAPPING: ${{ vars.DEALER_PRICE_KEY_MAPPING }}
+
+      - name: Get dealer Service prices
+        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_SERVICE_PRICE_CSV_URL && vars.DEALER_SERVICE_PRICE_QUERY_STRING }}
+        run: |
+          pnpm getDealerServicePrices
+        continue-on-error: true
+        env:
+          CSV_URL: ${{ vars.DEALER_SERVICE_PRICE_CSV_URL }}
+          QUERY_STRING: ${{ vars.DEALER_SERVICE_PRICE_QUERY_STRING }}
+          KEY_MAPPING: ${{ vars.DEALER_SERVICE_PRICE_KEY_MAPPING }}
 
       - name: remove dealer-models_cars_price.json
         if: ${{ steps.check_changes.outputs.changes == 'true' && vars.ONLY_FEDERAL_PRICE }}
