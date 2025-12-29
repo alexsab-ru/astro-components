@@ -104,7 +104,7 @@ if (fs.existsSync(jsonPath)) {
 		<section class="faq container mt-10" id="services-faq" x-data="{activities:[]}">
 			<h2 class="mb-8 sm:mb-14">Наши услуги</h2>
 			{ faqBlocks.map(({ item, rows }) => (
-				<FaqItem item={item}>
+				<FaqItem item={item} centerTitle={true}>
 					<div class="content">
 						<Table data={rows} calc={true} head={['Наименование', 'Цена, руб.']} tableLoyoutFixed={true} />
 					</div>
