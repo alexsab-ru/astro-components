@@ -50,7 +50,16 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
           return (
           <tr 
             {...(calc ? { 'data-title': item.name, 'data-price': price } : {})}
-            {...(calc ? { '@click': `$store.calcItems.toggleItem(${price}, '${item.name}', $el)` } : {})}
+            {/**
+              * ВАЖНО (безопасность строки):
+              * Раньше тут было что-то вроде:
+              *   @click="$store.calcItems.toggleItem(${price}, '${item.name}', $el)"
+              * Если `item.name` содержит апостроф/кавычку (например "Oil's Change"),
+              * это ломает JS-выражение Alpine (строка преждевременно закрывается).
+              * Поэтому НЕ вставляем `item.name` в JS как строковый литерал.
+              * Вместо этого читаем значения из `data-title` и `data-price` у текущей строки.
+              */}
+            {...(calc ? { '@click': '$store.calcItems.toggleRow($el)', } : {})}
             class={calc ? 'cursor-pointer hover:bg-gray-100 [&.selected]:bg-green-100' : ''}
           >
             {Object.keys(item).map(key => (

@@ -19,6 +19,28 @@ export function calcTable() {
       }
     },
     
+    /**
+     * Безопасный обработчик клика по строке таблицы.
+     *
+     * Почему так:
+     * - Раньше в разметке было `@click="toggleItem(price, 'TITLE', $el)"`.
+     * - Если TITLE содержит одинарную кавычку (например "Oil's Change"),
+     *   JS-выражение Alpine ломается (строка преждевременно закрывается).
+     *
+     * Поэтому вместо интерполяции строки в JS читаем данные из `data-*` атрибутов строки.
+     */
+    toggleRow(row) {
+      if (!row) return;
+
+      const title = row.dataset?.title ?? '';
+      const price = Number(row.dataset?.price ?? 0);
+
+      // Если данных нет — ничего не делаем (защита от неправильной разметки).
+      if (!title || !Number.isFinite(price)) return;
+
+      this.toggleItem(price, title, row);
+    },
+
     toggleItem(price, title, row) {
       const index = this.selectedItems.findIndex(item => item.title === title);
       
@@ -72,11 +94,28 @@ export function calcTable() {
 
     // Восстановление визуального состояния (подсветка выбранных строк)
     restoreUI() {
-      this.selectedItems.forEach(item => {
-        const row = document.querySelector(`tr[data-title="${item.title}"]`);
-        if (row) {
-          row.classList.add('selected');
-        }
+      /**
+       * ВАЖНО (безопасность селектора):
+       * Раньше было: `querySelector(\`tr[data-title="${item.title}"]\`)`.
+       * Это ломается, если в title есть:
+       * - двойные кавычки
+       * - обратный слэш
+       * - спецсимволы CSS-селектора
+       *
+       * Вместо сборки CSS-селектора используем dataset и сравнение строк.
+       * Так вообще не нужно экранирование (CSS.escape и т.п.).
+       */
+      const rows = document.querySelectorAll('tr[data-title]');
+      const rowsByTitle = new Map();
+
+      rows.forEach((row) => {
+        const title = row.dataset?.title;
+        if (title) rowsByTitle.set(title, row);
+      });
+
+      this.selectedItems.forEach((item) => {
+        const row = rowsByTitle.get(item.title);
+        if (row) row.classList.add('selected');
       });
     }
   });
