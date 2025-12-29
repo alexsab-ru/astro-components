@@ -98,7 +98,11 @@ if (fs.existsSync(jsonPath)) {
 			<PageH1 h1=`Автосервис ${brand} в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
 		</div>
 	</section>
-	{ TIMER.show && <Timer endtime={TIMER.endtime} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} /> }
+	{/*
+		Timer ожидает Date, а в `src/const.js` endtime хранится строкой (ISO).
+		Явно конвертируем строку в Date здесь, чтобы TypeScript не ругался и поведение было очевидным.
+	*/}
+	{ TIMER.show && <Timer endtime={new Date(TIMER.endtime)} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} /> }
 	{ specialServicesData && <SpecialServices items={specialServicesData} /> }
 	{ faqBlocks.length > 0 && (
 		<section class="faq container mt-10" id="services-faq" x-data="{activities:[]}">

@@ -85,7 +85,7 @@ const bannersSection = [
 			<PageH1 h1=`Автомобили ${brand} в&nbsp;наличии в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
 		</div>
 	</section>
-	{TIMER.show && <Timer endtime={TIMER.endtime} title="До конца акции осталось" subtitle="Подзаголовок" />}
+	{TIMER.show && <Timer endtime={new Date(TIMER.endtime)} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<Model model={iSpaceModel} />
 
 	{ sections.length > 0 && sections.map(s => 
