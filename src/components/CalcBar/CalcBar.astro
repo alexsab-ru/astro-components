@@ -20,7 +20,8 @@
       href="#common-modal"
       data-title="Запись на сервис"
       x-bind:data-subtitle="'Выбрано услуг: <b>' + $store.calcItems.selectedItems.length + '</b> на сумму <b>' + $store.calcItems.total.toLocaleString('ru-RU') + ' ₽</b>'"
-      x-bind:data-form_name="'Запись на сервис. Услуги: ' + $store.calcItems.selectedItems.map(i => i.title).join(', ') + '. Итого: ' + $store.calcItems.total + ' руб.'"
+      x-bind:data-form_name="'Запись на сервис c выбором услуг'"
+      x-bind:data-comment="'Услуги:\\n' + $store.calcItems.selectedItems.map(i => i.title + ' - ' + i.price).join(',\\n') + '.\\n\\nИтого: ' + $store.calcItems.total + ' руб.'"
       class="popup-link flex-1 sm:flex-none px-3 sm:px-4 py-1.5 text-sm bg-white text-accent-500 rounded font-medium hover:bg-gray-100 transition-colors text-center"
     >
       Оставить заявку

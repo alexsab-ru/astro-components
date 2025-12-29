@@ -41,6 +41,11 @@ document.querySelectorAll(".popup-link").forEach(
 			if (formName && formInput) {
 				formInput.value = formName;
 			}
+			const commentText = link.dataset.comment;
+			const commentInput = targetModal.querySelector('input[name="comment"]');
+			if (commentText && commentInput) {
+				commentInput.value = commentText;
+			}
 			const chooseDepartment = link.dataset.choose_department;
 			// Если выбор отдела не разрешён (choose_department !== 'true') —
 			// 1) устанавливаем по умолчанию "Отдел продаж"
