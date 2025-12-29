@@ -6,14 +6,47 @@ type InitPayload = {
   presets: string[];
   currentDomain: string;
   hasJSONPath: boolean;
+  /**
+   * Итог последнего запуска на сервере.
+   *
+   * Зачем:
+   * - UI тулбара может перезагрузиться во время/в конце операции,
+   *   и тогда часть сообщений не успеет дойти до браузера.
+   * - При повторном открытии тулбара мы всё равно покажем,
+   *   были ли ошибки, и какие именно.
+   */
+  lastRun?: {
+    opId: string;
+    ok: boolean;
+    summary: string;
+    errors: string[];
+    finishedAt: string;
+  } | null;
 };
-type StatusPayload = { ok: boolean; message: string; domain?: string };
+type StatusPayload = { ok: boolean; message: string; domain?: string; isFinal?: boolean };
+
+type LogEntry = {
+  ts: number;
+  message: string;
+  /**
+   * null => старая история (когда мы хранили лог как просто текст).
+   * Тогда подсветка невозможна, но мы всё равно показываем строки.
+   */
+  ok: boolean | null;
+  /**
+   * Финальное сообщение по операции:
+   * - ok=true => подсветим зелёным (легче визуально найти конец без ошибок)
+   */
+  isFinal?: boolean;
+};
 
 export default defineToolbarApp({
   init(canvas, app, server) {
     const lsDomainsKey = `${APP_ID}:domains`;
     const lsSelectedKey = `${APP_ID}:selected`;
     const lsLogKey = `${APP_ID}:log`;
+    const lsPreserveLogKey = `${APP_ID}:preserveLog`;
+    const lsLastRunIdKey = `${APP_ID}:lastRunId`;
 
     let domains: string[] = [];
 
@@ -36,19 +69,24 @@ export default defineToolbarApp({
         <style>
           .col{display:flex;flex-direction:column;gap:10px;min-width:360px}
           .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+          .opt{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.85;user-select:none}
+          .opt input{transform: translateY(1px)}
+          .log-line{padding:1px 0}
+          .log-line--err{color:#dc2626}
+          .log-line--final-ok{color:#16a34a}
           /*
             Astro Dev Toolbar окно имеет ограничение по высоте (~480px).
             Если лог "растёт", он начинает выталкивать остальной UI и становится неудобно.
 
-            Поэтому фиксируем высоту области лога и включаем прокрутку.
-            Значение 203px подобрано опытным путём под текущую компоновку.
+            Поэтому фиксируем максимальную высоту области лога и включаем прокрутку.
+            Значение 170px подобрано опытным путём под текущую компоновку.
           */
           .status{
             font-size:12px;
             opacity:.9;
             white-space:pre-wrap;
             overflow-y: scroll;
-            max-height: 203px;
+            max-height: 170px;
           }
           code{font-size:12px}
         </style>
@@ -59,6 +97,8 @@ export default defineToolbarApp({
           </div>
 
           <div class="row" id="domainRow"></div>
+
+          <div class="row" id="options"></div>
 
           <div class="row" id="actions"></div>
 
@@ -73,6 +113,7 @@ export default defineToolbarApp({
       const badge = win.querySelector("#badge") as any;
       const statusEl = win.querySelector("#status") as HTMLDivElement;
       const domainRow = win.querySelector("#domainRow") as HTMLDivElement;
+      const optionsRow = win.querySelector("#options") as HTMLDivElement;
       const actionsRow = win.querySelector("#actions") as HTMLDivElement;
 
       /**
@@ -87,20 +128,68 @@ export default defineToolbarApp({
        * - лог сбрасываем при каждом новом запуске (нажатии кнопки),
        *   чтобы не смешивать разные операции.
        */
-      const renderLogFromLS = () => {
-        statusEl.textContent = localStorage.getItem(lsLogKey) || "";
+      const readLogEntries = (): LogEntry[] => {
+        const raw = localStorage.getItem(lsLogKey) || "";
+        if (!raw) return [];
+
+        // Новый формат: JSON-массив записей (даёт возможность подсветки).
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            return parsed
+              .filter((x) => x && typeof x === "object")
+              .map((x: any) => ({
+                ts: typeof x.ts === "number" ? x.ts : Date.now(),
+                message: String(x.message ?? ""),
+                ok: typeof x.ok === "boolean" ? x.ok : null,
+                isFinal: Boolean(x.isFinal),
+              }))
+              .filter((x) => x.message.trim().length > 0);
+          }
+        } catch {
+          // Старый формат: простой текст.
+        }
+
+        return raw
+          .split("\n")
+          .map((line) => line.trimEnd())
+          .filter(Boolean)
+          .map((message) => ({ ts: Date.now(), message, ok: null }));
+      };
+
+      const writeLogEntries = (entries: LogEntry[]) => {
+        // Защита от бесконечного роста localStorage, если долго пользоваться тулбаром.
+        // 500 строк — обычно с большим запасом для одной операции.
+        const capped = entries.length > 500 ? entries.slice(entries.length - 500) : entries;
+        localStorage.setItem(lsLogKey, JSON.stringify(capped));
+      };
+
+      const renderLog = () => {
+        const entries = readLogEntries();
+        statusEl.innerHTML = "";
+        for (const e of entries) {
+          const div = document.createElement("div");
+          div.className = "log-line";
+          if (e.ok === false) div.classList.add("log-line--err");
+          if (e.isFinal && e.ok === true) div.classList.add("log-line--final-ok");
+          div.textContent = e.message;
+          statusEl.appendChild(div);
+        }
+
+        // UX: если лог длинный — автоматически скроллим к концу.
+        statusEl.scrollTop = statusEl.scrollHeight;
       };
 
       const clearLog = () => {
-        localStorage.setItem(lsLogKey, "");
-        renderLogFromLS();
+        writeLogEntries([]);
+        renderLog();
       };
 
-      const appendLog = (msg: string) => {
-        const prev = localStorage.getItem(lsLogKey) || "";
-        const next = prev ? `${prev}\n${msg}` : msg;
-        localStorage.setItem(lsLogKey, next);
-        renderLogFromLS();
+      const appendLog = (entry: Omit<LogEntry, "ts">) => {
+        const prev = readLogEntries();
+        prev.push({ ts: Date.now(), ...entry });
+        writeLogEntries(prev);
+        renderLog();
       };
 
       const select = document.createElement("astro-dev-toolbar-select") as any;
@@ -112,6 +201,23 @@ export default defineToolbarApp({
 
       domainRow.appendChild(select);
       domainRow.appendChild(addBtn);
+
+      /**
+       * Preserve log:
+       * - ON  => НЕ чистим UI-лог при старте и НЕ просим сервер чистить файл
+       * - OFF => чистим UI-лог при старте и просим сервер стереть файл перед выполнением
+       *
+       * Важно: настройка хранится в localStorage и переживает перезагрузку страницы.
+       */
+      const preserveLabel = document.createElement("label");
+      preserveLabel.className = "opt";
+      preserveLabel.innerHTML = `<input type="checkbox" /> Preserve log`;
+      const preserveCheckbox = preserveLabel.querySelector("input") as HTMLInputElement;
+      preserveCheckbox.checked = localStorage.getItem(lsPreserveLogKey) === "1";
+      preserveCheckbox.addEventListener("change", () => {
+        localStorage.setItem(lsPreserveLogKey, preserveCheckbox.checked ? "1" : "0");
+      });
+      optionsRow.appendChild(preserveLabel);
 
       const makeDownloadButton = (
         label: string,
@@ -125,10 +231,13 @@ export default defineToolbarApp({
         b.addEventListener("click", () => {
           const domain = String(select.element.value || "").trim();
           if (needsDomain && !domain) return setStatus("Выбери домен.", false);
-          // Новый запуск -> новый лог (и новый статус).
-          clearLog();
+          const preserveLog = preserveCheckbox.checked;
+          localStorage.setItem(lsPreserveLogKey, preserveLog ? "1" : "0");
+
+          // Новый запуск -> лог чистим только если Preserve log выключен.
+          if (!preserveLog) clearLog();
           setStatus(`Downloading ${file}…`);
-          server.send(`${APP_ID}:download`, { domain, file });
+          server.send(`${APP_ID}:download`, { domain, file, preserveLog });
         });
         return b;
       };
@@ -205,7 +314,7 @@ export default defineToolbarApp({
       server.on(`${APP_ID}:init`, (data: InitPayload) => {
         loadLS();
         // При открытии панели показываем лог, который мог сохраниться после перезагрузки страницы.
-        renderLogFromLS();
+        renderLog();
         const savedSelected = localStorage.getItem(lsSelectedKey) || "";
         if (Array.isArray(data.presets) && data.presets.length) {
           domains = [...data.presets, ...domains];
@@ -217,9 +326,34 @@ export default defineToolbarApp({
         // Если есть выбранный домен в localStorage, используем его; иначе fallback на currentDomain.
         refreshOptions(savedSelected || data.currentDomain || undefined);
 
+        /**
+         * Показываем итог последнего запуска с сервера, если:
+         * - он есть
+         * - и мы ещё не показывали именно этот opId (чтобы не дублировать при каждом открытии)
+         */
+        if (data.lastRun?.opId) {
+          const shownId = localStorage.getItem(lsLastRunIdKey) || "";
+          if (shownId !== data.lastRun.opId) {
+            appendLog({
+              ok: data.lastRun.ok,
+              isFinal: true,
+              message: `LAST RUN: ${data.lastRun.summary} (${data.lastRun.finishedAt})`,
+            });
+            if (Array.isArray(data.lastRun.errors) && data.lastRun.errors.length) {
+              for (const err of data.lastRun.errors) {
+                appendLog({ ok: false, message: `ERR: ${err}` });
+              }
+            }
+            localStorage.setItem(lsLastRunIdKey, data.lastRun.opId);
+          }
+        }
+
         if (!data.hasJSONPath) {
           setStatus("JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.", false);
-          appendLog("ERR: JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.");
+          appendLog({
+            ok: false,
+            message: "ERR: JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.",
+          });
         } else {
           setStatus("Готово. Выбери домен и нажми Download.", undefined);
           // Не добавляем это в лог, чтобы не засорять историю между реальными операциями.
@@ -228,7 +362,7 @@ export default defineToolbarApp({
 
       server.on(`${APP_ID}:status`, (data: StatusPayload) => {
         setStatus(data.message, data.ok);
-        appendLog(data.message);
+        appendLog({ ok: data.ok, message: data.message, isFinal: Boolean(data.isFinal) });
         if (data.ok && data.domain) {
           localStorage.setItem(lsSelectedKey, data.domain);
         }
