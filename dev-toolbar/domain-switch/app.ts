@@ -13,6 +13,7 @@ export default defineToolbarApp({
   init(canvas, app, server) {
     const lsDomainsKey = `${APP_ID}:domains`;
     const lsSelectedKey = `${APP_ID}:selected`;
+    const lsLogKey = `${APP_ID}:log`;
 
     let domains: string[] = [];
 
@@ -35,7 +36,20 @@ export default defineToolbarApp({
         <style>
           .col{display:flex;flex-direction:column;gap:10px;min-width:360px}
           .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-          .status{font-size:12px;opacity:.9;white-space:pre-wrap}
+          /*
+            Astro Dev Toolbar окно имеет ограничение по высоте (~480px).
+            Если лог "растёт", он начинает выталкивать остальной UI и становится неудобно.
+
+            Поэтому фиксируем высоту области лога и включаем прокрутку.
+            Значение 203px подобрано опытным путём под текущую компоновку.
+          */
+          .status{
+            font-size:12px;
+            opacity:.9;
+            white-space:pre-wrap;
+            overflow-y: scroll;
+            max-height: 203px;
+          }
           code{font-size:12px}
         </style>
         <div class="col">
@@ -61,6 +75,34 @@ export default defineToolbarApp({
       const domainRow = win.querySelector("#domainRow") as HTMLDivElement;
       const actionsRow = win.querySelector("#actions") as HTMLDivElement;
 
+      /**
+       * Лог храним в localStorage, а не в памяти страницы.
+       *
+       * Почему:
+       * - при скачивании/записи файлов dev-сервер может перезагружать страницу браузера,
+       *   и любая "история" в памяти UI теряется.
+       * - localStorage переживает перезагрузку и позволяет показать полный лог операции.
+       *
+       * Важно:
+       * - лог сбрасываем при каждом новом запуске (нажатии кнопки),
+       *   чтобы не смешивать разные операции.
+       */
+      const renderLogFromLS = () => {
+        statusEl.textContent = localStorage.getItem(lsLogKey) || "";
+      };
+
+      const clearLog = () => {
+        localStorage.setItem(lsLogKey, "");
+        renderLogFromLS();
+      };
+
+      const appendLog = (msg: string) => {
+        const prev = localStorage.getItem(lsLogKey) || "";
+        const next = prev ? `${prev}\n${msg}` : msg;
+        localStorage.setItem(lsLogKey, next);
+        renderLogFromLS();
+      };
+
       const select = document.createElement("astro-dev-toolbar-select") as any;
       select.element.style.minWidth = "260px";
 
@@ -83,6 +125,8 @@ export default defineToolbarApp({
         b.addEventListener("click", () => {
           const domain = String(select.element.value || "").trim();
           if (needsDomain && !domain) return setStatus("Выбери домен.", false);
+          // Новый запуск -> новый лог (и новый статус).
+          clearLog();
           setStatus(`Downloading ${file}…`);
           server.send(`${APP_ID}:download`, { domain, file });
         });
@@ -109,7 +153,9 @@ export default defineToolbarApp({
       actionsRow.appendChild(makeDownloadButton("Скачать общий Cars", "__common_cars__", "blue", false));
 
       const setStatus = (msg: string, ok?: boolean) => {
-        statusEl.textContent = msg;
+        // Отображаем полный лог, но текущий статус всё равно важен для бейджа.
+        // Сам текст сообщения добавляем в лог отдельной функцией.
+        // (renderLogFromLS() вызывается из appendLog/clearLog)
 
         if (ok === true) {
           badge.textContent = "OK";
@@ -158,6 +204,8 @@ export default defineToolbarApp({
       // сервер → клиент
       server.on(`${APP_ID}:init`, (data: InitPayload) => {
         loadLS();
+        // При открытии панели показываем лог, который мог сохраниться после перезагрузки страницы.
+        renderLogFromLS();
         const savedSelected = localStorage.getItem(lsSelectedKey) || "";
         if (Array.isArray(data.presets) && data.presets.length) {
           domains = [...data.presets, ...domains];
@@ -171,13 +219,16 @@ export default defineToolbarApp({
 
         if (!data.hasJSONPath) {
           setStatus("JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.", false);
+          appendLog("ERR: JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.");
         } else {
           setStatus("Готово. Выбери домен и нажми Download.", undefined);
+          // Не добавляем это в лог, чтобы не засорять историю между реальными операциями.
         }
       });
 
       server.on(`${APP_ID}:status`, (data: StatusPayload) => {
         setStatus(data.message, data.ok);
+        appendLog(data.message);
         if (data.ok && data.domain) {
           localStorage.setItem(lsSelectedKey, data.domain);
         }

@@ -66,6 +66,55 @@ export default function domainSwitchToolbar(): AstroIntegration {
 
         const jsonPath = getEnvVar("JSON_PATH").replace(/\/$/, "");
 
+        /**
+         * Серверный лог в файл (на стороне Node.js).
+         *
+         * Зачем:
+         * - UI Dev Toolbar может перезагружаться во время операций (скачивание/запись/перестройка),
+         *   и тогда сообщения "в моменте" визуально пропадают.
+         * - файл переживает перезагрузки и сохраняет ВСЮ историю выполнения наверняка.
+         *
+         * Где лежит:
+         * - по умолчанию: `tmp/dev-toolbar/domain-switch.log`
+         * - можно переопределить переменной окружения: `DOMAIN_SWITCH_LOG_FILE=/abs/path/to/log`
+         *
+         * Важно:
+         * - логгирование НЕ должно ломать работу тулбара. Поэтому любые ошибки записи в файл
+         *   просто игнорируем (best-effort).
+         */
+        const logFilePath =
+          getEnvVar("DOMAIN_SWITCH_LOG_FILE") ||
+          path.join(process.cwd(), "tmp", "dev-toolbar", "domain-switch.log");
+
+        const appendServerLog = async (level: "INFO" | "WARN", message: string) => {
+          try {
+            await fs.mkdir(path.dirname(logFilePath), { recursive: true });
+            const line = `[${new Date().toISOString()}] [${APP_ID}] [${level}] ${message}\n`;
+            await fs.appendFile(logFilePath, line, "utf8");
+          } catch {
+            // best-effort: не мешаем основному процессу
+          }
+        };
+
+        /**
+         * Единый способ "сообщить прогресс":
+         * - в UI (toolbar.send)
+         * - в консоль Astro (logger)
+         * - в файл (appendServerLog)
+         *
+         * Так мы НЕ теряем сообщения, даже если UI перезагрузился.
+         */
+        const report = async (data: { ok: boolean; message: string; domain?: string }) => {
+          toolbar.send(`${APP_ID}:status`, data);
+          if (data.ok) {
+            logger.info(`[${APP_ID}] ${data.message}`);
+            await appendServerLog("INFO", data.message);
+          } else {
+            logger.warn(`[${APP_ID}] ${data.message}`);
+            await appendServerLog("WARN", data.message);
+          }
+        };
+
         // Handshake: клиент спросил — сервер ответил начальными данными
         toolbar.on<HelloPayload>(`${APP_ID}:hello`, () => {
           toolbar.send(`${APP_ID}:init`, {
@@ -77,14 +126,18 @@ export default function domainSwitchToolbar(): AstroIntegration {
 
         const runScript = async (cmd: string, label: string) => {
           try {
+            await report({ ok: true, message: `RUN: ${label}` });
             const { stdout, stderr } = await exec(cmd, { cwd: process.cwd() });
             if (stdout?.trim()) logger.info(`[${APP_ID}] ${label}: ${stdout.trim()}`);
             if (stderr?.trim()) logger.warn(`[${APP_ID}] ${label} stderr: ${stderr.trim()}`);
+            await appendServerLog("INFO", `DONE: ${label}`);
             toolbar.send(`${APP_ID}:status`, { ok: true, message: label });
             return true;
           } catch (err: any) {
-            logger.warn(`[${APP_ID}] ${label} error: ${err?.message ?? err}`);
-            toolbar.send(`${APP_ID}:status`, { ok: false, message: `${label} error: ${err?.message ?? err}` });
+            const msg = `${label} error: ${err?.message ?? err}`;
+            logger.warn(`[${APP_ID}] ${msg}`);
+            await appendServerLog("WARN", msg);
+            toolbar.send(`${APP_ID}:status`, { ok: false, message: msg });
             return false;
           }
         };
@@ -93,6 +146,7 @@ export default function domainSwitchToolbar(): AstroIntegration {
           const url = `${jsonPath}/${safeDomain}/data/${targetFile}`;
           const dest = path.join(process.cwd(), "src", "data", targetFile);
 
+          await report({ ok: true, message: `START: скачиваю ${targetFile} с домена ${safeDomain}` });
           const res = await fetch(url);
           if (!res.ok) throw new Error(`HTTP ${res.status} при скачивании: ${url}`);
 
@@ -101,7 +155,7 @@ export default function domainSwitchToolbar(): AstroIntegration {
           await fs.mkdir(path.dirname(dest), { recursive: true });
           await fs.writeFile(dest, buf);
 
-          toolbar.send(`${APP_ID}:status`, {
+          await report({
             ok: true,
             message: `OK: скачал ${targetFile} (${buf.length} bytes) с домена ${safeDomain}`,
             domain: safeDomain,
@@ -130,45 +184,54 @@ export default function domainSwitchToolbar(): AstroIntegration {
 
           // Общие файлы, не зависящие от домена
           if (isCommonModels) {
+            await appendServerLog("INFO", "START: скачиваю общий models");
             await runScript("bash ./.github/scripts/sh/downloadCommonModelsJSON.sh", "Скачал общий models");
             return;
           }
           if (isCommonCars) {
+            await appendServerLog("INFO", "START: скачиваю общий cars");
             await runScript("bash ./.github/scripts/sh/downloadCommonCarsJSON.sh", "Скачал общий cars");
             return;
           }
 
           // Всё остальное требует jsonPath и домен
           if (!jsonPath) {
-            toolbar.send(`${APP_ID}:status`, {
+            await report({
               ok: false,
               message: "JSON_PATH пустой. Укажи JSON_PATH в .env и перезапусти pnpm dev.",
             });
             return;
           }
           if (!safeDomain) {
-            toolbar.send(`${APP_ID}:status`, { ok: false, message: "Домен не выбран." });
+            await report({ ok: false, message: "Домен не выбран." });
             return;
           }
 
           const filesToDownload = isDownloadAll ? domainFiles : [targetFile];
 
           try {
+            await report({
+              ok: true,
+              message: `START: скачивание (${filesToDownload.length} шт.) для домена ${safeDomain}`,
+              domain: safeDomain,
+            });
             for (const f of filesToDownload) {
               await downloadDomainFile(safeDomain, f);
             }
             if (isDownloadAll) {
-              toolbar.send(`${APP_ID}:status`, {
+              await report({
                 ok: true,
                 message: `OK: скачал ${filesToDownload.length} файлов для ${safeDomain}`,
                 domain: safeDomain,
               });
             }
           } catch (e: any) {
-            logger.warn(`[${APP_ID}] ${e?.message ?? e}`);
-            toolbar.send(`${APP_ID}:status`, {
+            const msg = e?.message ?? String(e);
+            logger.warn(`[${APP_ID}] ${msg}`);
+            await appendServerLog("WARN", msg);
+            await report({
               ok: false,
-              message: e?.message ?? String(e),
+              message: msg,
             });
           }
         });
