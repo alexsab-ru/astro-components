@@ -19,6 +19,8 @@ import modelsData from '@/data/models.json';
 const { models } = modelsData;
 const groupModelsByBrand = groupArrayByKey(models.filter(isModelVisible), 'mark_id');
 
+export const IS_MODEL_PREFIX_URL = Object.keys(groupModelsByBrand).length > 1;
+
 // Конфигурация для динамических меню
 const dynamicMenuConfig = {
 	models: {
