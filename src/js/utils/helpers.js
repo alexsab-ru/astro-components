@@ -47,3 +47,7 @@ export const getPair = (openURL = '') => {
 export function quoteEscaper(str) {
 	return str.replace(/"/g, '\\"').replace(/\n/g, '<br/>');
 }
+
+export function setPrefixModelUrl(model, prefix = false) {
+	return prefix ? model.mark_id.toLowerCase().replaceAll(' ', '-') + '-' + model.id : model.id;
+}
