@@ -34,6 +34,29 @@ class PlaceholderProcessor {
         this.settingsPlaceholder = {};
         this.minPriceMaxBenefitPlaceholders = {}; // Плейсхолдеры для минимальной цены и максимальной выгоды
         this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer = {}; // Без дисклеймера для seo.json
+
+        this.carsPlaceholderVariants = {
+            price: {
+                '': { prefixText: '' },
+                '-!': { prefixText: '', addExclamation: true },
+                '-space': { prefixText: '', addSpace: true },
+                '-space-!': { prefixText: '', addSpace: true, addExclamation: true },
+                '-from': { prefixText: 'от' },
+                '-from-!': { prefixText: 'от', addExclamation: true },
+                '-from-space': { prefixText: 'от', addSpace: true },
+                '-from-space-!': { prefixText: 'от', addSpace: true, addExclamation: true },
+            },
+            benefit: {
+                '': { prefixText: '' },
+                '-!': { prefixText: '', addExclamation: true },
+                '-space': { prefixText: '', addSpace: true },
+                '-space-!': { prefixText: '', addSpace: true, addExclamation: true },
+                '-to': { prefixText: 'до' },
+                '-to-!': { prefixText: 'до', addExclamation: true },
+                '-to-space': { prefixText: 'до', addSpace: true },
+                '-to-space-!': { prefixText: 'до', addSpace: true, addExclamation: true },
+            },
+        };
     }
 
     // Общая функция для чтения и валидации JSON-файла
@@ -139,104 +162,60 @@ class PlaceholderProcessor {
         return '';
     }
 
-    // Создание обычного плейсхолдера (без форматирования)
-    createPlainPlaceholder(key, carId, value, isEmpty, prefix = '', prefixText = '', addSpace = false, addExclamation = false) {
-        const placeholderKey = `{{${key}-${carId}${prefix ? `-${prefix}` : ''}${addSpace ? '-space' : ''}${addExclamation ? '-!' : ''}}}`;
-        
-        if (this.carsPlaceholder[placeholderKey] === undefined) {
-            if (isEmpty) {
-                this.carsPlaceholder[placeholderKey] = '';
-            } else {
-                const spacePrefix = addSpace ? ' ' : '';
-                const prefixPart = prefixText ? `${prefixText}&nbsp;` : '';
-                const exclamationSuffix = addExclamation ? '!' : '';
-                this.carsPlaceholder[placeholderKey] = `${spacePrefix}${prefixPart}${value}${exclamationSuffix}`;
-            }
-        }
-    }
-
-    // Создание форматированного плейсхолдера (с дисклеймером для обычных файлов)
-    createFormattedPlaceholder(key, carId, value, isEmpty, prefix = '', prefixText = '', addSpace = false, addExclamation = false) {
-        const placeholderKey = `{{${key}b-${carId}${prefix ? `-${prefix}` : ''}${addSpace ? '-space' : ''}${addExclamation ? '-!' : ''}}}`;
-        
-        if (this.carsPlaceholder[placeholderKey] === undefined) {
-            if (isEmpty) {
-                this.carsPlaceholder[placeholderKey] = '';
-            } else {
-                const spacePrefix = addSpace ? ' ' : '';
-                const prefixPart = prefixText ? `${prefixText}&nbsp;` : '';
-                const formattedValue = currencyFormat(value);
-                const disclaimer = this.getDisclaimer(carId, key);
-                const exclamationSuffix = addExclamation ? '!' : '';
-                
-                // Восклицательный знак должен быть сразу после значения, а дисклеймер после него
-                this.carsPlaceholder[placeholderKey] = `${spacePrefix}${prefixPart}${formattedValue}${exclamationSuffix}${disclaimer}`;
-            }
-        }
-    }
-
-    // Создание форматированного плейсхолдера БЕЗ дисклеймера (для seo.json)
-    createFormattedPlaceholderWithoutDisclaimer(key, carId, value, isEmpty, prefix = '', prefixText = '', addSpace = false, addExclamation = false) {
-        const placeholderKey = `{{${key}b-${carId}${prefix ? `-${prefix}` : ''}${addSpace ? '-space' : ''}${addExclamation ? '-!' : ''}}}`;
-        
-        if (this.carsPlaceholderWithoutDisclaimer[placeholderKey] === undefined) {
-            if (isEmpty) {
-                this.carsPlaceholderWithoutDisclaimer[placeholderKey] = '';
-            } else {
-                const spacePrefix = addSpace ? ' ' : '';
-                const prefixPart = prefixText ? `${prefixText}&nbsp;` : '';
-                const formattedValue = currencyFormat(value).replace(/\u00a0/g, ' '); // с заменой &nbsp;
-                const exclamationSuffix = addExclamation ? '!' : '';
-                
-                this.carsPlaceholderWithoutDisclaimer[placeholderKey] = `${spacePrefix}${prefixPart}${formattedValue}${exclamationSuffix}`;
-            }
-        }
-    }
-
     // Создание всех плейсхолдеров для одного ключа и автомобиля
     createPlaceholdersForKey(car, key) {
         if (car[key] === undefined) return;
         
         const isEmpty = this.isEmptyOrZero(car[key]);
         const value = car[key];
+        const carId = car.id;
 
-        // Вспомогательная функция для создания всех вариантов плейсхолдеров
-        const createAllVariants = (prefix = '', prefixText = '', addSpace = false, addExclamation = false) => {
-            this.createPlainPlaceholder(key, car.id, value, isEmpty, prefix, prefixText, addSpace, addExclamation);
-            this.createFormattedPlaceholder(key, car.id, value, isEmpty, prefix, prefixText, addSpace, addExclamation);
-            this.createFormattedPlaceholderWithoutDisclaimer(key, car.id, value, isEmpty, prefix, prefixText, addSpace, addExclamation);
-        };
+        const variants = key.startsWith('benefit')
+            ? this.carsPlaceholderVariants.benefit
+            : this.carsPlaceholderVariants.price;
+        const disclaimer = this.getDisclaimer(carId, key);
 
-        // Обычные плейсхолдеры (без префиксов, пробелов и восклицательного знака)
-        createAllVariants();
-        
-        // Плейсхолдеры с пробелом (-space)
-        createAllVariants('', '', true);
-        
-        // Плейсхолдеры с восклицательным знаком (-!)
-        createAllVariants('', '', false, true);
-        
-        // Плейсхолдеры с пробелом и восклицательным знаком (-space!)
-        createAllVariants('', '', true, true);
-
-        // Плейсхолдеры с префиксами -to и -from
-        const prefixes = [
-            { prefix: 'to', text: 'до' },
-            { prefix: 'from', text: 'от' }
+        const placeholderTargets = [
+            {
+                map: this.carsPlaceholder,
+                keyPrefix: key,
+                formatValue: v => v,
+                disclaimer: '',
+            },
+            {
+                map: this.carsPlaceholder,
+                keyPrefix: `${key}b`,
+                formatValue: v => currencyFormat(v),
+                disclaimer,
+            },
+            {
+                map: this.carsPlaceholderWithoutDisclaimer,
+                keyPrefix: `${key}b`,
+                formatValue: v => currencyFormat(v).replace(/\u00a0/g, ' '),
+                disclaimer: '',
+            },
         ];
 
-        prefixes.forEach(({ prefix, text }) => {
-            // С префиксом без пробела и восклицательного знака
-            createAllVariants(prefix, text);
-            
-            // С префиксом и пробелом (-space)
-            createAllVariants(prefix, text, true);
-            
-            // С префиксом и восклицательным знаком (-!)
-            createAllVariants(prefix, text, false, true);
-            
-            // С префиксом, пробелом и восклицательным знаком (-space!)
-            createAllVariants(prefix, text, true, true);
+        Object.entries(variants).forEach(([suffix, variant]) => {
+            placeholderTargets.forEach(({ map, keyPrefix, formatValue, disclaimer: disclaimerText }) => {
+                const placeholderKey = `{{${keyPrefix}-${carId}${suffix}}}`;
+
+                if (map[placeholderKey] !== undefined) return;
+
+                if (isEmpty) {
+                    map[placeholderKey] = '';
+                    return;
+                }
+
+                const spacePrefix = variant.addSpace ? ' ' : '';
+                const prefixPart = variant.prefixText ? `${variant.prefixText}&nbsp;` : '';
+                const exclamationSuffix = variant.addExclamation ? '!' : '';
+                const formattedValue = formatValue(value);
+                const valueWithPunctuation = `${formattedValue}${exclamationSuffix}`;
+                const withDisclaimer = disclaimerText ? `${valueWithPunctuation}${disclaimerText}` : valueWithPunctuation;
+
+                map[placeholderKey] = `${spacePrefix}${prefixPart}${withDisclaimer}`;
+            });
         });
     }
 
