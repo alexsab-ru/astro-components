@@ -120,44 +120,137 @@ class PlaceholderProcessor {
         }
     }
 
+    // Проверка, является ли значение пустым или нулевым
+    isEmptyOrZero(value) {
+        return value === 0 || value === null || value === '';
+    }
+
+    // Получение дисклеймера для конкретного автомобиля и ключа
+    getDisclaimer(carId, key) {
+        if (
+            Object.keys(this.disclaimerData).length &&
+            this.disclaimerData?.[carId] &&
+            this.disclaimerData[carId][key] !== ''
+        ) {
+            return quoteEscaper(
+                `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[carId][key]}">${this.infoIcon}</span>`
+            );
+        }
+        return '';
+    }
+
+    // Создание обычного плейсхолдера (без форматирования)
+    createPlainPlaceholder(key, carId, value, isEmpty, prefix = '', prefixText = '', addSpace = false, addExclamation = false) {
+        const placeholderKey = `{{${key}-${carId}${prefix ? `-${prefix}` : ''}${addSpace ? '-space' : ''}${addExclamation ? '-!' : ''}}}`;
+        
+        if (this.carsPlaceholder[placeholderKey] === undefined) {
+            if (isEmpty) {
+                this.carsPlaceholder[placeholderKey] = '';
+            } else {
+                const spacePrefix = addSpace ? ' ' : '';
+                const prefixPart = prefixText ? `${prefixText}&nbsp;` : '';
+                const exclamationSuffix = addExclamation ? '!' : '';
+                this.carsPlaceholder[placeholderKey] = `${spacePrefix}${prefixPart}${value}${exclamationSuffix}`;
+            }
+        }
+    }
+
+    // Создание форматированного плейсхолдера (с дисклеймером для обычных файлов)
+    createFormattedPlaceholder(key, carId, value, isEmpty, prefix = '', prefixText = '', addSpace = false, addExclamation = false) {
+        const placeholderKey = `{{${key}b-${carId}${prefix ? `-${prefix}` : ''}${addSpace ? '-space' : ''}${addExclamation ? '-!' : ''}}}`;
+        
+        if (this.carsPlaceholder[placeholderKey] === undefined) {
+            if (isEmpty) {
+                this.carsPlaceholder[placeholderKey] = '';
+            } else {
+                const spacePrefix = addSpace ? ' ' : '';
+                const prefixPart = prefixText ? `${prefixText}&nbsp;` : '';
+                const formattedValue = currencyFormat(value);
+                const disclaimer = this.getDisclaimer(carId, key);
+                const exclamationSuffix = addExclamation ? '!' : '';
+                
+                // Восклицательный знак должен быть сразу после значения, а дисклеймер после него
+                this.carsPlaceholder[placeholderKey] = `${spacePrefix}${prefixPart}${formattedValue}${exclamationSuffix}${disclaimer}`;
+            }
+        }
+    }
+
+    // Создание форматированного плейсхолдера БЕЗ дисклеймера (для seo.json)
+    createFormattedPlaceholderWithoutDisclaimer(key, carId, value, isEmpty, prefix = '', prefixText = '', addSpace = false, addExclamation = false) {
+        const placeholderKey = `{{${key}b-${carId}${prefix ? `-${prefix}` : ''}${addSpace ? '-space' : ''}${addExclamation ? '-!' : ''}}}`;
+        
+        if (this.carsPlaceholderWithoutDisclaimer[placeholderKey] === undefined) {
+            if (isEmpty) {
+                this.carsPlaceholderWithoutDisclaimer[placeholderKey] = '';
+            } else {
+                const spacePrefix = addSpace ? ' ' : '';
+                const prefixPart = prefixText ? `${prefixText}&nbsp;` : '';
+                const formattedValue = currencyFormat(value).replace(/\u00a0/g, ' '); // с заменой &nbsp;
+                const exclamationSuffix = addExclamation ? '!' : '';
+                
+                this.carsPlaceholderWithoutDisclaimer[placeholderKey] = `${spacePrefix}${prefixPart}${formattedValue}${exclamationSuffix}`;
+            }
+        }
+    }
+
+    // Создание всех плейсхолдеров для одного ключа и автомобиля
+    createPlaceholdersForKey(car, key) {
+        if (car[key] === undefined) return;
+        
+        const isEmpty = this.isEmptyOrZero(car[key]);
+        const value = car[key];
+
+        // Вспомогательная функция для создания всех вариантов плейсхолдеров
+        const createAllVariants = (prefix = '', prefixText = '', addSpace = false, addExclamation = false) => {
+            this.createPlainPlaceholder(key, car.id, value, isEmpty, prefix, prefixText, addSpace, addExclamation);
+            this.createFormattedPlaceholder(key, car.id, value, isEmpty, prefix, prefixText, addSpace, addExclamation);
+            this.createFormattedPlaceholderWithoutDisclaimer(key, car.id, value, isEmpty, prefix, prefixText, addSpace, addExclamation);
+        };
+
+        // Обычные плейсхолдеры (без префиксов, пробелов и восклицательного знака)
+        createAllVariants();
+        
+        // Плейсхолдеры с пробелом (-space)
+        createAllVariants('', '', true);
+        
+        // Плейсхолдеры с восклицательным знаком (-!)
+        createAllVariants('', '', false, true);
+        
+        // Плейсхолдеры с пробелом и восклицательным знаком (-space!)
+        createAllVariants('', '', true, true);
+
+        // Плейсхолдеры с префиксами -to и -from
+        const prefixes = [
+            { prefix: 'to', text: 'до' },
+            { prefix: 'from', text: 'от' }
+        ];
+
+        prefixes.forEach(({ prefix, text }) => {
+            // С префиксом без пробела и восклицательного знака
+            createAllVariants(prefix, text);
+            
+            // С префиксом и пробелом (-space)
+            createAllVariants(prefix, text, true);
+            
+            // С префиксом и восклицательным знаком (-!)
+            createAllVariants(prefix, text, false, true);
+            
+            // С префиксом, пробелом и восклицательным знаком (-space!)
+            createAllVariants(prefix, text, true, true);
+        });
+    }
+
     // Создание ценовых placeholders
     createCarsPricePlaceholders() {
         if (this.carsData.length === 0) return;
         
+        const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
+        
         this.carsData.forEach(car => {
             if (!car.id) return;
             
-            const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
-            
             numericKeys.forEach(key => {
-                if (car[key] === undefined) return;
-                
-                // Обычный плейсхолдер
-                const plainKey = `{{${key}-${car.id}}}`;
-                if (this.carsPlaceholder[plainKey] === undefined) {
-                    this.carsPlaceholder[plainKey] = car[key];
-                }
-
-                // Плейсхолдер с форматированием (с дисклеймером для обычных файлов)
-                const formattedKey = `{{${key}b-${car.id}}}`;
-                if (this.carsPlaceholder[formattedKey] === undefined) {
-                    this.carsPlaceholder[formattedKey] = currencyFormat(car[key]);
-
-                    // Добавляем дисклеймер если есть
-                    if (
-                        Object.keys(this.disclaimerData).length &&
-                        (this.disclaimerData?.[car.id] && this.disclaimerData?.[car.id]?.[key] !== '')
-                    ) {
-                        this.carsPlaceholder[formattedKey] += quoteEscaper(
-                            `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[car.id][key]}">${this.infoIcon}</span>`
-                        );
-                    }
-                }
-
-                // Плейсхолдер с форматированием БЕЗ дисклеймера (для seo.json)
-                if (this.carsPlaceholderWithoutDisclaimer[formattedKey] === undefined) {
-                    this.carsPlaceholderWithoutDisclaimer[formattedKey] = currencyFormat(car[key]).replace(/\u00a0/g, ' '); // с заменой &nbsp;
-                }
+                this.createPlaceholdersForKey(car, key);
             });
         });
     }
