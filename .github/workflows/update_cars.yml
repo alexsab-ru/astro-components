@@ -89,6 +89,8 @@ jobs:
         npm install -g pnpm
         pnpm install --no-frozen-lockfile
         pnpm downloadJSON -f settings.json
+        pnpm downloadCommonModelsJSON
+        pnpm downloadCommonCarsJSON
       env:
         JSON_PATH: ${{ secrets.JSON_PATH }}
         DOMAIN: ${{ vars.DOMAIN }}
