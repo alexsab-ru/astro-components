@@ -14,11 +14,13 @@ const seoname = 'models-'+slug;
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
+import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { IS_MODEL_PREFIX_URL } from '@/const';
 export async function getStaticPaths() {
   const { models } = modelsData;
   return models.filter(isModelVisible).map((model) => {
     return {
-      params: { slug: model.id },
+      params: { slug: setPrefixModelUrl(model, IS_MODEL_PREFIX_URL) },
       props: { model },
     };
   });
