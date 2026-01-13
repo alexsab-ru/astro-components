@@ -49,5 +49,5 @@ export function quoteEscaper(str) {
 }
 
 export function setPrefixModelUrl(model, prefix = false) {
-	return prefix ? model.mark_id.toLowerCase().replaceAll(' ', '-') + '-' + model.id : model.id;
+	return prefix ? model.mark_id.toLowerCase().replace(/ /g, '-') + '-' + model.id : model.id;
 }
