@@ -91,6 +91,7 @@ jobs:
         pnpm downloadJSON -f settings.json
         pnpm downloadCommonModelsJSON
         pnpm downloadCommonCarsJSON
+        pnpm downloadModelSectionsYML
       env:
         JSON_PATH: ${{ secrets.JSON_PATH }}
         DOMAIN: ${{ vars.DOMAIN }}
