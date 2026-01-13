@@ -25,6 +25,8 @@ import seo from '@/data/seo.json';
 import StripEmptyQuery from '../components/StripEmptyQuery.astro';
 import Tooltip from '@/components/Tooltip/Tooltip.astro';
 
+import { IS_HEADER_TRANSPARENT } from '@/const.js';
+
 const currentPath = Astro.url.pathname;
 if (seo[currentPath]) {
 	const pageSeo = seo[currentPath];
@@ -50,6 +52,8 @@ if (seo[currentPath]) {
 	}
 }
 import '../scss/app.css';
+
+const bodyClasses = currentPath != '/' && IS_HEADER_TRANSPARENT ? 'pt-[52px] sm:pt-[60px] md:pt-[80px] lg:pt-[128px]' : '';
 ---
 
 <!doctype html>
@@ -67,7 +71,7 @@ import '../scss/app.css';
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
-	<body class="antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black" x-data="complectation">
+	<body class={`antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black ${bodyClasses}`} x-data="complectation">
 		<ScriptBodyBegin />
 		<Header brand={brand} />
 		<main class="grow relative">

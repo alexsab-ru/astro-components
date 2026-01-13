@@ -6,7 +6,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 const { brand = null } = Astro.props;
 const path = Astro.url.pathname;
 
-import { LINKS_MENU as links } from '@/const.js';
+import { LINKS_MENU as links, IS_HEADER_TRANSPARENT } from '@/const.js';
 import settings from '@/data/settings.json';
 const { header_top_line } = settings;
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
@@ -23,13 +23,16 @@ import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
 
 import './styles.css';
+
+const headerParentClasses = IS_HEADER_TRANSPARENT ? 'header-transparent bg-transparent fixed w-full' : 'bg-header-bg sticky';
+const headerClasses = IS_HEADER_TRANSPARENT ? 'backdrop-blur-md bg-accent-500/40' : '';
 ---
 <div
 	x-data="header"
-	class="bg-header-bg text-header-text sticky top-0 transition-all duration-300 z-50"
+	class={`${headerParentClasses} text-header-text top-0 transition-all duration-300 z-50`}
 	:class="{'shadow-3xl': scrolling}"
 >
-	<header>
+	<header class={headerClasses}>
 		{
 			header_top_line && <HeaderTopLine content={header_top_line} />
 		}

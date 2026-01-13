@@ -35,3 +35,8 @@
 		@apply w-full block;
 	}
 }
+
+/* Dropdown "more" menu styles when header is in transparent mode */
+.header-transparent .more-menu {
+	@apply backdrop-blur-md bg-accent-500/50;
+}

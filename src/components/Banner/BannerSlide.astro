@@ -11,6 +11,9 @@ import BannerTitle from './Title.astro';
 import BannerDescription from './Description.astro';
 import BannerVideo from './Video.astro';
 import BannerImage from './Image.astro';
+import { IS_HEADER_TRANSPARENT } from '@/const';
+
+const containerClasses = IS_HEADER_TRANSPARENT ? ' pt-[100px] pb-10 md:pt-[150px] lg:pt-[200px] lg:pb-20 ' : ' py-10 lg:py-20 ';
 
 // Определяем цвет кнопки с fallback на белый
 const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
@@ -34,7 +37,7 @@ const linkAttrs = hasBannerUrl ? {
 ---
 
 <div class={`swiper-slide banner-slide ${banner?.gradient === false ? '' : 'gradient'}`} data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
-	<div class="container h-full relative z-2 py-10 lg:py-20">
+	<div class={`container h-full relative z-2 ${containerClasses}`}>
 		<div class="h-full flex flex-col justify-between">
 			<div class="mb-10">
 				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
