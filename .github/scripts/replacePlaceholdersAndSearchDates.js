@@ -181,23 +181,32 @@ class PlaceholderProcessor {
                 keyPrefix: key,
                 formatValue: v => v,
                 disclaimer: '',
+                // Для обычных плейсхолдеров (в контенте/HTML) сохраняем неразрывный пробел как HTML entity.
+                // Это помогает избегать переноса "от/до" на отдельную строку.
+                useHtmlNbspInPrefix: true,
             },
             {
                 map: this.carsPlaceholder,
                 keyPrefix: `${key}b`,
                 formatValue: v => currencyFormat(v),
                 disclaimer,
+                // Здесь итоговая строка используется в HTML (с возможным дисклеймером), поэтому `&nbsp;` допустим и желателен.
+                useHtmlNbspInPrefix: true,
             },
             {
                 map: this.carsPlaceholderWithoutDisclaimer,
                 keyPrefix: `${key}b`,
                 formatValue: v => currencyFormat(v).replace(/\u00a0/g, ' '),
                 disclaimer: '',
+                // ВАЖНО (SEO): этот набор плейсхолдеров пишет значения в `seo.json`.
+                // В SEO-строках нам нужен "чистый текст" без HTML entity (`&nbsp;`).
+                // Поэтому префикс "от/до" должен отделяться обычным пробелом.
+                useHtmlNbspInPrefix: false,
             },
         ];
 
         Object.entries(variants).forEach(([suffix, variant]) => {
-            placeholderTargets.forEach(({ map, keyPrefix, formatValue, disclaimer: disclaimerText }) => {
+            placeholderTargets.forEach(({ map, keyPrefix, formatValue, disclaimer: disclaimerText, useHtmlNbspInPrefix }) => {
                 const placeholderKey = `{{${keyPrefix}-${carId}${suffix}}}`;
 
                 if (map[placeholderKey] !== undefined) return;
@@ -208,7 +217,10 @@ class PlaceholderProcessor {
                 }
 
                 const spacePrefix = variant.addSpace ? ' ' : '';
-                const prefixPart = variant.prefixText ? `${variant.prefixText}&nbsp;` : '';
+                // Для SEO-нужно заменить HTML entity на обычный пробел, иначе получаем "от&nbsp;2 849 000 ₽".
+                // Для HTML-контента оставляем `&nbsp;`, чтобы "от/до" не отрывались от числа при переносе строк.
+                const prefixSeparator = useHtmlNbspInPrefix ? '&nbsp;' : ' ';
+                const prefixPart = variant.prefixText ? `${variant.prefixText}${prefixSeparator}` : '';
                 const exclamationSuffix = variant.addExclamation ? '!' : '';
                 const formattedValue = formatValue(value);
                 const valueWithPunctuation = `${formattedValue}${exclamationSuffix}`;
