@@ -5,10 +5,12 @@ interface Props {
 }
 import BannerSlide from './BannerSlide.astro';
 import bannersData from '@/data/banners.json';
-import { IS_HEADER_TRANSPARENT } from '@/const';
 const { banners = bannersData } = Astro.props;
 
-const bannerClasses = IS_HEADER_TRANSPARENT ? 'h-[100dvh]' : '';
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+
+const bannerClasses = is_header_transparent ? 'h-[100dvh]' : '';
 ---
 
 {

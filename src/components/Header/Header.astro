@@ -6,9 +6,9 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 const { brand = null } = Astro.props;
 const path = Astro.url.pathname;
 
-import { LINKS_MENU as links, IS_HEADER_TRANSPARENT } from '@/const.js';
+import { LINKS_MENU as links } from '@/const.js';
 import settings from '@/data/settings.json';
-const { header_top_line } = settings;
+const { header_top_line, is_header_transparent } = settings;
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
 import { Icon } from 'astro-icon/components';
@@ -24,12 +24,12 @@ import socials from '@/data/socials.json';
 
 import './styles.css';
 
-const headerGlobalClasses = IS_HEADER_TRANSPARENT ? 'header-transparent fixed w-full' : 'sticky w-full';
-const headerBgClasses = IS_HEADER_TRANSPARENT ? 'bg-header-transparent-bg backdrop-blur-header' : 'bg-header-bg';
-const headerBgSubmenuClasses = IS_HEADER_TRANSPARENT ? 'bg-submenu-transparent-bg' : 'bg-header-bg';
-const colorText = IS_HEADER_TRANSPARENT ? 'text-header-transparent-text' : 'text-header-text';
-const colorHoverText = IS_HEADER_TRANSPARENT ? 'hover:text-header-transparent-text/80' : 'hover:text-header-text/80';
-const iconColor = IS_HEADER_TRANSPARENT ? 'text-header-transparent-text' : 'text-header-text';
+const headerGlobalClasses = is_header_transparent ? 'header-transparent fixed w-full' : 'sticky w-full';
+const headerBgClasses = is_header_transparent ? 'bg-header-transparent-bg backdrop-blur-header' : 'bg-header-bg';
+const headerBgSubmenuClasses = is_header_transparent ? 'bg-submenu-transparent-bg' : 'bg-header-bg';
+const colorText = is_header_transparent ? 'text-header-transparent-text' : 'text-header-text';
+const colorHoverText = is_header_transparent ? 'hover:text-header-transparent-text/80' : 'hover:text-header-text/80';
+const iconColor = is_header_transparent ? 'text-header-transparent-text' : 'text-header-text';
 ---
 <div
 	x-data="header"

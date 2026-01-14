@@ -3,11 +3,9 @@ interface Props {
 	links: any;
 }
 const { links } = Astro.props;
-import { IS_HEADER_TRANSPARENT } from '@/const';
-const listClasses = IS_HEADER_TRANSPARENT ? 'z-20' : '';
 import MenuListItem from './MenuListItem.astro';
 ---
-<ul class={`${listClasses} overflow-hidden flex flex-col lg:flex-row border-b lg:border-b-0`}>
+<ul class={`overflow-hidden flex flex-col lg:flex-row border-b lg:border-b-0`}>
 	{
 		links.map(link => (
 			<MenuListItem link={link} />

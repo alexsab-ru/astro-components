@@ -10,7 +10,7 @@ interface Props {
 let {title, h1, description, image, keywords, brand = null} = Astro.props;
 
 import settings from '@/data/settings.json';
-const { site_name, site_description } = settings;
+const { site_name, site_description, is_header_transparent } = settings;
 
 import Head from '@/components/Head.astro';
 import ScriptHead from '@/components/Scripts/Head.astro';
@@ -24,8 +24,6 @@ import Cookie from '@/components/Cookie/Cookie.astro';
 import seo from '@/data/seo.json';
 import StripEmptyQuery from '../components/StripEmptyQuery.astro';
 import Tooltip from '@/components/Tooltip/Tooltip.astro';
-
-import { IS_HEADER_TRANSPARENT } from '@/const.js';
 
 const currentPath = Astro.url.pathname;
 if (seo[currentPath]) {
@@ -53,7 +51,7 @@ if (seo[currentPath]) {
 }
 import '../scss/app.css';
 
-const bodyClasses = currentPath != '/' && IS_HEADER_TRANSPARENT ? 'pt-[52px] sm:pt-[60px] md:pt-[80px] lg:pt-[128px]' : '';
+const bodyClasses = currentPath != '/' && is_header_transparent ? 'pt-[52px] sm:pt-[60px] md:pt-[80px] lg:pt-[128px]' : '';
 ---
 
 <!doctype html>

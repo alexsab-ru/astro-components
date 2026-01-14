@@ -11,9 +11,11 @@ import BannerTitle from './Title.astro';
 import BannerDescription from './Description.astro';
 import BannerVideo from './Video.astro';
 import BannerImage from './Image.astro';
-import { IS_HEADER_TRANSPARENT } from '@/const';
 
-const containerClasses = IS_HEADER_TRANSPARENT ? ' pt-[100px] pb-10 md:pt-[150px] lg:pt-[200px] lg:pb-20 ' : ' py-10 lg:py-20 ';
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+
+const containerClasses = is_header_transparent ? ' pt-[100px] pb-10 md:pt-[150px] lg:pt-[200px] lg:pb-20 ' : ' py-10 lg:py-20 ';
 
 // Определяем цвет кнопки с fallback на белый
 const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
