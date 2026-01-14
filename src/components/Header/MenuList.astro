@@ -4,7 +4,7 @@ interface Props {
 }
 const { links } = Astro.props;
 import { IS_HEADER_TRANSPARENT } from '@/const';
-const listClasses = IS_HEADER_TRANSPARENT ? 'relative z-20' : '';
+const listClasses = IS_HEADER_TRANSPARENT ? 'z-20' : '';
 import MenuListItem from './MenuListItem.astro';
 ---
 <ul class={`${listClasses} overflow-hidden flex flex-col lg:flex-row border-b lg:border-b-0`}>
