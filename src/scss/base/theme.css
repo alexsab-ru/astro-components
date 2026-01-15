@@ -54,7 +54,7 @@
     --color-header-transparent-bg: color-mix(in srgb, var(--color-gray-800) var(--bg-opacity), transparent);
     --color-submenu-transparent-bg: var(--color-gray-800);
     --color-header-transparent-text: var(--color-white);
-    --color-transparent-submenu-text: var(--color-white);
+    --color-submenu-transparent-text: var(--color-white);
     --color-header-border-transparent: var(--color-gray-700);
     
     /* BUTTON COLORS */
