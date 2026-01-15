@@ -53,9 +53,10 @@
     --color-submenu-text: var(--color-black);
 
     /* HEADER TRANSPARENT COLORS */
-    --bg-opacity: 58%;
-    --blur-header: 12px;
-    --color-header-transparent-bg: color-mix(in srgb, var(--color-gray-800) var(--bg-opacity), transparent);
+    --transparent-bg-color: rgb(28, 28, 40);
+    --transparent-bg-hover-color: var(--color-accent-500);
+    --blur-header: 30px;
+    --color-header-transparent-bg: color-mix(in srgb, var(--transparent-bg-color) 88%, transparent);
     --color-submenu-transparent-bg: var(--color-gray-800);
     --color-header-transparent-text: var(--color-white);
     --color-submenu-transparent-text: var(--color-white);
@@ -76,7 +77,7 @@
 
     /* HEADER LINK MENU BG HOVER COLOR */
     --color-header-menu-link-bg-hover: var(--color-accent-500);
-    --color-header-transparent-menu-link-bg-hover: color-mix(in srgb, var(--color-gray-900) var(--bg-opacity), transparent);
+    --color-header-transparent-menu-link-bg-hover: color-mix(in srgb, var(--transparent-bg-hover-color) 100%, transparent);
 
     /* DEFAULT SHADOW FOR HEADER MOBILE BTN'S */
     --shadow-header-btn: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
