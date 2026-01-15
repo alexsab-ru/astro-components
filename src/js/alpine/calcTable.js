@@ -116,8 +116,38 @@ export function calcTable() {
         const data = localStorage.getItem(STORAGE_KEY);
         if (data) {
           const parsed = JSON.parse(data);
-          this.total = parsed.total || 0;
-          this.selectedItems = parsed.selectedItems || [];
+          /**
+           * ВАЖНО (защита от “порчи” localStorage):
+           * Раньше было: `this.total = parsed.total || 0`.
+           *
+           * Проблема:
+           * - Если `total` по ошибке попал строкой (например "100"), то `this.total` станет строкой.
+           * - Тогда дальнейшая арифметика сломается:
+           *   this.total += 50  // => "100" + 50 = "10050" (конкатенация), а не 150.
+           *
+           * Решение:
+           * - Приводим к числу через Number(...)
+           * - И явно проверяем Number.isFinite, чтобы NaN/Infinity не попадали в состояние.
+           */
+          const loadedTotal = Number(parsed?.total);
+          this.total = Number.isFinite(loadedTotal) ? loadedTotal : 0;
+
+          /**
+           * Аналогично “санитаризируем” selectedItems:
+           * - localStorage мог быть изменён вручную, расширением, старой версией кода и т.п.
+           * - Нам важно, чтобы price всегда был числом, иначе:
+           *   - подсчёт total может ломаться
+           *   - restoreUI может работать непредсказуемо
+           */
+          const loadedItems = Array.isArray(parsed?.selectedItems) ? parsed.selectedItems : [];
+          this.selectedItems = loadedItems
+            .map((item) => {
+              const title = String(item?.title ?? '');
+              const price = Number(item?.price ?? 0);
+              if (!title || !Number.isFinite(price)) return null;
+              return { title, price };
+            })
+            .filter(Boolean);
         }
       } catch (e) {
         console.warn('Не удалось загрузить из localStorage:', e);
