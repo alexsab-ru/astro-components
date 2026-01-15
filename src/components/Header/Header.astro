@@ -24,7 +24,7 @@ import socials from '@/data/socials.json';
 
 import './styles.css';
 
-const headerGlobalClasses = is_header_transparent ? 'header-transparent fixed w-full' : 'sticky w-full';
+const headerGlobalClasses = is_header_transparent ? 'header-transparent fixed' : 'sticky';
 const headerBgClasses = is_header_transparent ? 'bg-header-transparent-bg backdrop-blur-header' : 'bg-header-bg';
 const headerBgSubmenuClasses = is_header_transparent ? 'bg-submenu-transparent-bg' : 'bg-header-bg';
 const colorText = is_header_transparent ? 'text-header-transparent-text' : 'text-header-text';
@@ -34,7 +34,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 ---
 <div
 	x-data="header"
-	class={`${headerGlobalClasses} ${headerBgClasses} ${colorText} top-0 transition-all duration-300 z-50`}
+	class={`${headerGlobalClasses} ${headerBgClasses} ${colorText} w-full top-0 left-0 transition-all duration-300 z-50`}
 	:class="{'shadow-3xl': scrolling}"
 >
 	<header>
