@@ -32,12 +32,26 @@
 		@apply w-full block;
 	}
 }
-
+/* .header-transparent{
+	z-index:;
+} */
 /* Dropdown "more" menu styles when header is in transparent mode */
 .header-transparent .more-menu {
-	@apply backdrop-blur-header bg-submenu-transparent-bg border-header-border-transparent;
+	@apply backdrop-blur-header bg-header-transparent-bg border-header-border-transparent;
 }
 
 .header-transparent .menu-more-btn{
 	@apply text-header-transparent-text;
+}
+
+.submenu-transparent::after,
+.header-transparent::after{
+	@apply backdrop-blur-header;
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
 }
