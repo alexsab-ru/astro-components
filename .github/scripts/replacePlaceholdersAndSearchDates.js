@@ -34,6 +34,29 @@ class PlaceholderProcessor {
         this.settingsPlaceholder = {};
         this.minPriceMaxBenefitPlaceholders = {}; // Плейсхолдеры для минимальной цены и максимальной выгоды
         this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer = {}; // Без дисклеймера для seo.json
+
+        this.carsPlaceholderVariants = {
+            price: {
+                '': { prefixText: '' },
+                '-!': { prefixText: '', addExclamation: true },
+                '-space': { prefixText: '', addSpace: true },
+                '-space-!': { prefixText: '', addSpace: true, addExclamation: true },
+                '-from': { prefixText: 'от' },
+                '-from-!': { prefixText: 'от', addExclamation: true },
+                '-from-space': { prefixText: 'от', addSpace: true },
+                '-from-space-!': { prefixText: 'от', addSpace: true, addExclamation: true },
+            },
+            benefit: {
+                '': { prefixText: '' },
+                '-!': { prefixText: '', addExclamation: true },
+                '-space': { prefixText: '', addSpace: true },
+                '-space-!': { prefixText: '', addSpace: true, addExclamation: true },
+                '-to': { prefixText: 'до' },
+                '-to-!': { prefixText: 'до', addExclamation: true },
+                '-to-space': { prefixText: 'до', addSpace: true },
+                '-to-space-!': { prefixText: 'до', addSpace: true, addExclamation: true },
+            },
+        };
     }
 
     // Общая функция для чтения и валидации JSON-файла
@@ -120,44 +143,105 @@ class PlaceholderProcessor {
         }
     }
 
+    // Проверка, является ли значение пустым или нулевым
+    isEmptyOrZero(value) {
+        return value === 0 || value === null || value === '';
+    }
+
+    // Получение дисклеймера для конкретного автомобиля и ключа
+    getDisclaimer(carId, key) {
+        if (
+            Object.keys(this.disclaimerData).length &&
+            this.disclaimerData?.[carId] &&
+            this.disclaimerData[carId][key] !== ''
+        ) {
+            return quoteEscaper(
+                `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[carId][key]}">${this.infoIcon}</span>`
+            );
+        }
+        return '';
+    }
+
+    // Создание всех плейсхолдеров для одного ключа и автомобиля
+    createPlaceholdersForKey(car, key) {
+        if (car[key] === undefined) return;
+        
+        const isEmpty = this.isEmptyOrZero(car[key]);
+        const value = car[key];
+        const carId = car.id;
+
+        const variants = key.startsWith('benefit')
+            ? this.carsPlaceholderVariants.benefit
+            : this.carsPlaceholderVariants.price;
+        const disclaimer = this.getDisclaimer(carId, key);
+
+        const placeholderTargets = [
+            {
+                map: this.carsPlaceholder,
+                keyPrefix: key,
+                formatValue: v => v,
+                disclaimer: '',
+                // Для обычных плейсхолдеров (в контенте/HTML) сохраняем неразрывный пробел как HTML entity.
+                // Это помогает избегать переноса "от/до" на отдельную строку.
+                useHtmlNbspInPrefix: true,
+            },
+            {
+                map: this.carsPlaceholder,
+                keyPrefix: `${key}b`,
+                formatValue: v => currencyFormat(v),
+                disclaimer,
+                // Здесь итоговая строка используется в HTML (с возможным дисклеймером), поэтому `&nbsp;` допустим и желателен.
+                useHtmlNbspInPrefix: true,
+            },
+            {
+                map: this.carsPlaceholderWithoutDisclaimer,
+                keyPrefix: `${key}b`,
+                formatValue: v => currencyFormat(v).replace(/\u00a0/g, ' '),
+                disclaimer: '',
+                // ВАЖНО (SEO): этот набор плейсхолдеров пишет значения в `seo.json`.
+                // В SEO-строках нам нужен "чистый текст" без HTML entity (`&nbsp;`).
+                // Поэтому префикс "от/до" должен отделяться обычным пробелом.
+                useHtmlNbspInPrefix: false,
+            },
+        ];
+
+        Object.entries(variants).forEach(([suffix, variant]) => {
+            placeholderTargets.forEach(({ map, keyPrefix, formatValue, disclaimer: disclaimerText, useHtmlNbspInPrefix }) => {
+                const placeholderKey = `{{${keyPrefix}-${carId}${suffix}}}`;
+
+                if (map[placeholderKey] !== undefined) return;
+
+                if (isEmpty) {
+                    map[placeholderKey] = '';
+                    return;
+                }
+
+                const spacePrefix = variant.addSpace ? ' ' : '';
+                // Для SEO-нужно заменить HTML entity на обычный пробел, иначе получаем "от&nbsp;2 849 000 ₽".
+                // Для HTML-контента оставляем `&nbsp;`, чтобы "от/до" не отрывались от числа при переносе строк.
+                const prefixSeparator = useHtmlNbspInPrefix ? '&nbsp;' : ' ';
+                const prefixPart = variant.prefixText ? `${variant.prefixText}${prefixSeparator}` : '';
+                const exclamationSuffix = variant.addExclamation ? '!' : '';
+                const formattedValue = formatValue(value);
+                const valueWithPunctuation = `${formattedValue}${exclamationSuffix}`;
+                const withDisclaimer = disclaimerText ? `${valueWithPunctuation}${disclaimerText}` : valueWithPunctuation;
+
+                map[placeholderKey] = `${spacePrefix}${prefixPart}${withDisclaimer}`;
+            });
+        });
+    }
+
     // Создание ценовых placeholders
     createCarsPricePlaceholders() {
         if (this.carsData.length === 0) return;
         
+        const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
+        
         this.carsData.forEach(car => {
             if (!car.id) return;
             
-            const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
-            
             numericKeys.forEach(key => {
-                if (car[key] === undefined) return;
-                
-                // Обычный плейсхолдер
-                const plainKey = `{{${key}-${car.id}}}`;
-                if (this.carsPlaceholder[plainKey] === undefined) {
-                    this.carsPlaceholder[plainKey] = car[key];
-                }
-
-                // Плейсхолдер с форматированием (с дисклеймером для обычных файлов)
-                const formattedKey = `{{${key}b-${car.id}}}`;
-                if (this.carsPlaceholder[formattedKey] === undefined) {
-                    this.carsPlaceholder[formattedKey] = currencyFormat(car[key]);
-
-                    // Добавляем дисклеймер если есть
-                    if (
-                        Object.keys(this.disclaimerData).length &&
-                        (this.disclaimerData?.[car.id] && this.disclaimerData?.[car.id]?.[key] !== '')
-                    ) {
-                        this.carsPlaceholder[formattedKey] += quoteEscaper(
-                            `<span>&nbsp;</span><span class="tooltip-icon" data-text="${this.disclaimerData[car.id][key]}">${this.infoIcon}</span>`
-                        );
-                    }
-                }
-
-                // Плейсхолдер с форматированием БЕЗ дисклеймера (для seo.json)
-                if (this.carsPlaceholderWithoutDisclaimer[formattedKey] === undefined) {
-                    this.carsPlaceholderWithoutDisclaimer[formattedKey] = currencyFormat(car[key]).replace(/\u00a0/g, ' '); // с заменой &nbsp;
-                }
+                this.createPlaceholdersForKey(car, key);
             });
         });
     }
