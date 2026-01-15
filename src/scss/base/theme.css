@@ -27,8 +27,12 @@
     --color-gray-900: #111827;
     --color-gray-950: #030712;
 
+    /* BORDER & DIVIDES */
     --color-border: var(--color-gray-200);
     --color-header-border: var(--color-border);
+    --color-header-divide: var(--color-border);
+    --color-map-info-divide: var(--color-black);
+    --color-footer-divide: var(--color-white);
 
     /* Logo sizing */
     --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
@@ -56,6 +60,7 @@
     --color-header-transparent-text: var(--color-white);
     --color-submenu-transparent-text: var(--color-white);
     --color-header-border-transparent: var(--color-gray-700);
+    --color-header-transparent-divide: var(--color-gray-700);
     
     /* BUTTON COLORS */
     --color-button-bg: var(--color-accent-500);
