@@ -1,12 +1,13 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name, logo_header, logo_dealer_header } = settings;
+const { site_name, logo_header, logo_dealer_header, is_header_transparent } = settings;
 const path = Astro.url.pathname;
 const logoHeaderSize = "h-[var(--logo-header-height)] w-auto";
 const dealerLogoSize = "h-[var(--logo-dealer-header-height)] w-auto";
+const colorDivide = is_header_transparent ? 'divide-header-transparent-divide' : 'divide-header-divide';
 ---
 {path === '/' ? (
-<div class="flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 sm:divide-x text-center sm:text-left cursor-pointer" x-data="scrollTop" x-on:click="onClick">
+<div class={`flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left cursor-pointer`} x-data="scrollTop" x-on:click="onClick">
     <img src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} loading="eager" width="200" height="40" />
     {logo_dealer_header ? (
         <img src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} loading="eager" width="200" height="40" />
@@ -15,7 +16,7 @@ const dealerLogoSize = "h-[var(--logo-dealer-header-height)] w-auto";
     ) }    
 </div>
 ) : (
-<a href="/" class="flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 sm:divide-x text-center sm:text-left">
+<a href="/" class={`flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left`}>
     <img src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} loading="eager" width="200" height="40" />
     {logo_dealer_header ? (
         <img src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} loading="eager" width="200" height="40" />
