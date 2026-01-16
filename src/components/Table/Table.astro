@@ -13,6 +13,15 @@ interface Props {
   lightbox?: boolean;
   lightboxId?: string;
   calc?: boolean;
+  /**
+   * Опциональный "контекст" для строк таблицы в режиме calc.
+   *
+   * Зачем:
+   * - Одинаковые услуги (название + цена) могут встречаться в разных категориях.
+   * - store считает выбранность по ключу (group + title + price).
+   * - Поэтому передаём `calcGroup`, чтобы данные были уникальными.
+   */
+  calcGroup?: string;
 }
 
 const { 
@@ -27,6 +36,7 @@ const {
   lightbox = false,
   lightboxId = 'gallery-id',
   calc = false,
+  calcGroup = '',
 } = Astro.props;
 const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
 ---
@@ -47,9 +57,11 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
       <tbody>
         {data.map((item: any) => {
           const price = calc ? Number(item.price.replace(/\D/g, '')) : 0;
+          // Группа используется только для режима calc, чтобы не смешивать одинаковые услуги из разных блоков.
+          const group = calc ? String(calcGroup ?? '') : '';
           return (
           <tr 
-            {...(calc ? { 'data-title': item.name, 'data-price': price } : {})}
+            {...(calc ? { 'data-title': item.name, 'data-price': price, 'data-group': group } : {})}
             {/**
               * ВАЖНО (безопасность строки):
               * Раньше тут было что-то вроде:
@@ -57,7 +69,7 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
               * Если `item.name` содержит апостроф/кавычку (например "Oil's Change"),
               * это ломает JS-выражение Alpine (строка преждевременно закрывается).
               * Поэтому НЕ вставляем `item.name` в JS как строковый литерал.
-              * Вместо этого читаем значения из `data-title` и `data-price` у текущей строки.
+              * Вместо этого читаем значения из `data-title` / `data-price` / `data-group` у строки.
               */}
             {...(calc ? { '@click': '$store.calcItems.toggleRow($el)', } : {})}
             class={calc ? 'cursor-pointer hover:bg-gray-100 [&.selected]:bg-green-100' : ''}

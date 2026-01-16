@@ -155,7 +155,17 @@ try {
 			{ faqBlocks.map(({ item, rows }) => (
 				<FaqItem item={item} centerTitle={true}>
 					<div class="content">
-						<Table data={rows} calc={true} head={['Наименование', 'Цена, руб.']} tableLoyoutFixed={true} />
+						{/*
+							Передаём `calcGroup`, чтобы одинаковые услуги из разных аккордеонов
+							не конфликтовали в хранилище (ключ строится по group+title+price).
+						*/}
+						<Table
+							data={rows}
+							calc={true}
+							calcGroup={item.question}
+							head={['Наименование', 'Цена, руб.']}
+							tableLoyoutFixed={true}
+						/>
 					</div>
 				</FaqItem>
 			))}

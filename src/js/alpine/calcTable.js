@@ -12,18 +12,24 @@ export function calcTable() {
      * Делаем стабильный ключ для строки таблицы.
      *
      * Зачем:
-     * - Раньше мы определяли выбранность только по `title`.
-     * - Если существуют 2 услуги с одинаковым названием, но с разной ценой,
-     *   то клик по второй "находил" первую (findIndex по title) и удалял НЕ ТО.
-     * - Плюс при удалении вычиталась переданная цена, а не сохранённая,
-     *   из-за чего `total` рассинхронизировался (вплоть до отрицательных значений).
+     * - Раньше мы определяли выбранность только по `title` или (title + price).
+     * - Но одинаковые услуги могут встречаться в РАЗНЫХ категориях
+     *   (например "Замена масла" 5000 ₽ в "Диагностика" и "ТО").
+     * - Если ключ не учитывает категорию, клики начинают конфликтовать:
+     *   - клик по второй строке удаляет первую,
+     *   - визуальная подсветка и состояние расходятся.
      *
-     * Поэтому считаем элемент уникальным по паре (title + price).
-     * Это минимальный и понятный фикс под описанный кейс.
+     * Поэтому считаем элемент уникальным по тройке:
+     * (group + title + price).
+     * Это простой, но корректный ключ для всех таблиц.
      */
-    makeKey(title, price) {
+    makeKey(group, title, price) {
       // JSON.stringify даёт однозначную строку и не требует ручного экранирования.
-      return JSON.stringify([String(title ?? ''), Number(price ?? 0)]);
+      return JSON.stringify([
+        String(group ?? ''),
+        String(title ?? ''),
+        Number(price ?? 0),
+      ]);
     },
 
     // Инициализация - загружаем данные из localStorage
@@ -52,27 +58,32 @@ export function calcTable() {
 
       const title = row.dataset?.title ?? '';
       const price = Number(row.dataset?.price ?? 0);
+      // Группа (категория) нужна, чтобы различать одинаковые услуги в разных блоках.
+      const group = row.dataset?.group ?? '';
 
       // Если данных нет — ничего не делаем (защита от неправильной разметки).
       if (!title || !Number.isFinite(price)) return;
 
-      this.toggleItem(price, title, row);
+      this.toggleItem(price, title, row, group);
     },
 
-    toggleItem(price, title, row) {
+    toggleItem(price, title, row, group = '') {
       /**
        * ВАЖНО:
-       * Ищем по (title + price), а не только по title.
-       * Иначе две одинаковые услуги с разной ценой конфликтуют.
+       * Ищем по (group + title + price), а не только по title/price.
+       * Иначе одинаковые услуги в разных категориях конфликтуют.
        */
       const index = this.selectedItems.findIndex(
-        (item) => item.title === title && item.price === price
+        (item) =>
+          item.title === title &&
+          item.price === price &&
+          (item.group ?? '') === (group ?? '')
       );
       
       if (index === -1) {
         // Добавляем
         this.total += price;
-        this.selectedItems.push({ title, price });
+        this.selectedItems.push({ group: String(group ?? ''), title, price });
         row.classList.add('selected');
       } else {
         // Убираем
@@ -142,10 +153,12 @@ export function calcTable() {
           const loadedItems = Array.isArray(parsed?.selectedItems) ? parsed.selectedItems : [];
           this.selectedItems = loadedItems
             .map((item) => {
+              // group мог отсутствовать в старой версии localStorage — нормализуем в строку.
+              const group = String(item?.group ?? '');
               const title = String(item?.title ?? '');
               const price = Number(item?.price ?? 0);
               if (!title || !Number.isFinite(price)) return null;
-              return { title, price };
+              return { group, title, price };
             })
             .filter(Boolean);
         }
@@ -181,7 +194,7 @@ export function calcTable() {
        * - В заявке (data-comment) улетают услуги, которых уже нет на странице.
        *
        * Решение:
-       * - Собираем все текущие строки в Map по ключу (title+price).
+       * - Собираем все текущие строки в Map по ключу (group+title+price).
        * - Фильтруем selectedItems: оставляем только те, что реально есть в DOM.
        * - Пересчитываем total как сумму price от отфильтрованных элементов.
        * - Сохраняем обновлённое состояние обратно в localStorage.
@@ -192,8 +205,9 @@ export function calcTable() {
       rows.forEach((row) => {
         const title = row.dataset?.title;
         const price = Number(row.dataset?.price ?? 0);
+        const group = row.dataset?.group ?? '';
         if (!title || !Number.isFinite(price)) return;
-        rowsByKey.set(this.makeKey(title, price), row);
+        rowsByKey.set(this.makeKey(group, title, price), row);
       });
 
       // На всякий случай сначала сбрасываем подсветку на всех текущих строках,
@@ -208,7 +222,8 @@ export function calcTable() {
       let recalculatedTotal = 0;
 
       this.selectedItems.forEach((item) => {
-        const key = this.makeKey(item.title, item.price);
+        // group может отсутствовать в старых данных localStorage — считаем это ''.
+        const key = this.makeKey(item.group ?? '', item.title, item.price);
         const row = rowsByKey.get(key);
 
         // Если строки нет — элемент считается устаревшим и выкидывается.
