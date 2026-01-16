@@ -39,21 +39,22 @@ import SeoText from '@/components/Seo/Index.astro';
 import FaqItem from '@/components/Faq/Item.astro';
 import { type TFaqItem } from '@/components/Faq/types';
 import Table from '@/components/Table/Table.astro';
-import fs from 'node:fs';
-import path from 'node:path';
+import CalcBar from '@/components/CalcBar/CalcBar.astro';
 
-// Парсим JSON и готовим данные для заголовков аккордеона + таблиц
-// Получить файл с таблицей можно командой pnpm run get_table_services_json
-// Используем путь от корня проекта (работает и в dev, и в build)
-const jsonPath = path.resolve(process.cwd(), 'src/data/tables/services.json');
-
-// Проверяем существование файла и создаем faqBlocks
-// Если файл отсутствует - компонент работает без таблицы услуг
+// Парсим JSON и готовим данные для заголовков аккордеона + таблиц.
+//
+// ВАЖНО:
+// Раньше тут было чтение через `node:fs` + `node:path` и проверка existsSync.
+// Это работало в рантайме, но без `@types/node` TypeScript ругался на импорты `node:*`.
+// Чтобы не упираться в установку зависимостей (и не ломать окружения), читаем JSON через dynamic import.
+// Если файла нет — просто показываем блок без таблицы услуг (fallback на пустой массив).
 let faqBlocks = [];
 
-if (fs.existsSync(jsonPath)) {
-	// Читаем JSON файл с услугами
-	const servicesJsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+try {
+	// Читаем JSON файл с услугами как модуль (Vite/Astro умеют JSON-import).
+	// Если файла нет/не собрался — сработает catch ниже.
+	const servicesJsonModule = await import('@/data/dealer-service-price.json');
+	const servicesJsonData = (servicesJsonModule as any)?.default ?? servicesJsonModule;
 
 	// Группируем услуги по типу
 	const servicesGrouped: Record<string, any[]> = {};
@@ -76,48 +77,106 @@ if (fs.existsSync(jsonPath)) {
 		};
 		
 		// Создаем rows для Table (данные таблицы)
-		// Фильтруем услуги: показываем только те, у которых есть цена
+		// Фильтруем услуги: показываем только те, у которых есть цена.
+		//
+		// ВАЖНО (почему тут нельзя `service['цена от'] !== null`):
+		// - В JSON цена может быть:
+		//   - null (явно нет цены)
+		//   - undefined (поля нет вообще / другое название ключа)
+		// - Проверка `!== null` НЕ отсекает undefined.
+		//   Тогда дальше падаем на `undefined.toLocaleString(...)`.
+		// - Из-за внешнего try/catch ошибка “прячется”, и `faqBlocks` становится пустым,
+		//   а секция "Наши услуги" пропадает целиком.
+		//
+		// Поэтому:
+		// - Берём цену из нескольких возможных ключей.
+		// - Используем `!= null`, чтобы отсеять и null, и undefined.
+		// - Дополнительно проверяем, что это конечное число (иначе просто исключаем строку).
 		const rows = services
-			.filter(service => service['цена от'] !== null)  // Исключаем услуги без цены
-			.map(service => ({
-				name: service['Работы'],  // Наименование работы
-				price: service['цена от'].toLocaleString('ru-RU')  // Форматируем цену по российским стандартам (456 000)
-		}));
+			.map((service) => {
+				// Поддерживаем несколько вариантов ключа цены (данные приходят не всегда идеально).
+				const rawPrice =
+					service?.['цена от'] ??
+					service?.['Цена от'] ??
+					service?.['Цена'] ??
+					undefined;
+
+				// Отсекаем null и undefined одной проверкой.
+				if (rawPrice == null) return null;
+
+				// Приводим цену к числу безопасно:
+				// - Если это число — берём как есть.
+				// - Если это строка — вытаскиваем цифры (на случай "6 000", "6000 руб." и т.п.).
+				const priceNumber =
+					typeof rawPrice === 'number'
+						? rawPrice
+						: typeof rawPrice === 'string'
+							? Number(rawPrice.replace(/\D/g, ''))
+							: Number(rawPrice);
+
+				// Если цена не число — выкидываем строку.
+				if (!Number.isFinite(priceNumber)) return null;
+
+				return {
+					name: service?.['Работы'] ?? '', // Наименование работы
+					// Форматируем цену по российским стандартам (например: 456 000)
+					price: priceNumber.toLocaleString('ru-RU'),
+				};
+			})
+			.filter(Boolean);
 		
 		return { item, rows };
 	})
 	.filter(({ rows }) => rows.length > 0);  // Исключаем группы без услуг с ценами
+} catch (e) {
+	// Файл `src/data/dealer-service-price.json` опциональный (может не быть в окружении).
+	// В этом случае `faqBlocks` останется пустым, и секция "Наши услуги" с таблицами не отрисуется.
+	faqBlocks = [];
 }
-
 ---
 
 <Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
 	<Banner />
-	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
+	{ MARQUEE.show && <Morquee marquee={ MARQUEE } /> }
 	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
 		<div class="container">
 			<PageH1 h1=`Автосервис ${brand} в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
 		</div>
 	</section>
-	{TIMER.show && <Timer endtime={TIMER.endtime} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
-	{specialServicesData && <SpecialServices items={specialServicesData} />}
-	{faqBlocks.length > 0 && (
-    <section class="faq container mt-10" id="services-faq" x-data="{activities:[]}">
-      <h2 class="mb-8 sm:mb-14">Наши услуги</h2>
-      {faqBlocks.map(({ item, rows }) => (
-        <FaqItem item={item}>
+	{/*
+		Timer ожидает Date, а в `src/const.js` endtime хранится строкой (ISO).
+		Явно конвертируем строку в Date здесь, чтобы TypeScript не ругался и поведение было очевидным.
+	*/}
+	{ TIMER.show && <Timer endtime={new Date(TIMER.endtime)} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} /> }
+	{ specialServicesData && <SpecialServices items={specialServicesData} /> }
+	{ faqBlocks.length > 0 && (
+		<section class="faq container mt-10" id="services-faq" x-data="{activities:[]}">
+			<h2 class="mb-8 sm:mb-14">Наши услуги</h2>
+			{ faqBlocks.map(({ item, rows }) => (
+				<FaqItem item={item} centerTitle={true}>
 					<div class="content">
-						<Table data={rows} head={['Наименование', 'Цена, руб.']} popupText="Заявка на услугу<br />" tableLoyoutFixed={true} />
+						{/*
+							Передаём `calcGroup`, чтобы одинаковые услуги из разных аккордеонов
+							не конфликтовали в хранилище (ключ строится по group+title+price).
+						*/}
+						<Table
+							data={rows}
+							calc={true}
+							calcGroup={item.question}
+							head={['Наименование', 'Цена, руб.']}
+							tableLoyoutFixed={true}
+						/>
 					</div>
-        </FaqItem>
-      ))}
-    </section>
-  )}
-  <LatestPosts collectionName="actions" title="Специальные предложения" id="specials" class="bg-gray-100" />
-	{servicesData && <NewServices items={servicesData} title="Услуги сервисного центра" id="new-services" show={false} />}
-	{faqData && <Faq items={faqData} title="Часто задаваемые вопросы" class="bg-gray-100" />}
+				</FaqItem>
+			))}
+			<CalcBar />
+		</section>
+	)}
+	<LatestPosts collectionName="actions" title="Специальные предложения" id="specials" class="bg-gray-100" />
+	{ servicesData && <NewServices items={servicesData} title="Услуги сервисного центра" id="new-services" show={false} /> }
+	{ faqData && <Faq items={faqData} title="Часто задаваемые вопросы" class="bg-gray-100" /> }
 	<Callback bgUrl="https://cdn.alexsab.ru/b/alpha-center/img/konkurenty.webp" />
-	{reviewsData && <ReviewsSlider items={reviewsData} title="Отзывы о нас" class="bg-gray-100" />}
+	{ reviewsData && <ReviewsSlider items={reviewsData} title="Отзывы о нас" class="bg-gray-100" /> }
 	<Services />
 	<SeoText mdx="index" />
 	<Contacts />

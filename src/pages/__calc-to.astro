@@ -1,0 +1,20 @@
+---
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import Contacts from '@/components/Contacts.astro';
+import CalcTO from '@/components/CalcTO/CalcTO.astro';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
+---
+
+<Layout title=`Рассчитать стоимость ТО у официального дилера ${site_name}` description=``>
+	<Banner />
+	<CalcTO />
+	<section>
+		<div class="container">
+			<FeedbackForm title="Оставить заявку" dataFormName=`Сервис Kia. Рассчитать стоимость ТО у официального дилера ${site_name}` subtitle="Мы сформируем для Вас персональное предложение" />
+		</div>
+	</section>
+	<Contacts />
+</Layout>

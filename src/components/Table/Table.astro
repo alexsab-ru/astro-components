@@ -12,6 +12,16 @@ interface Props {
   tableLoyoutFixed?: boolean;
   lightbox?: boolean;
   lightboxId?: string;
+  calc?: boolean;
+  /**
+   * Опциональный "контекст" для строк таблицы в режиме calc.
+   *
+   * Зачем:
+   * - Одинаковые услуги (название + цена) могут встречаться в разных категориях.
+   * - store считает выбранность по ключу (group + title + price).
+   * - Поэтому передаём `calcGroup`, чтобы данные были уникальными.
+   */
+  calcGroup?: string;
 }
 
 const { 
@@ -25,12 +35,14 @@ const {
   tableLoyoutFixed = false,
   lightbox = false,
   lightboxId = 'gallery-id',
+  calc = false,
+  calcGroup = '',
 } = Astro.props;
 const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
 ---
 {
   !!data.length && (
-    <table class={tableClass}>
+    <table class={tableClass} {...(calc ? { 'data-table-calc': ''}: {})}>
 
       {!!head.length && (
         <thead class={headClasses}>
@@ -43,8 +55,25 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
       )}
 
       <tbody>
-        {data.map((item: any) => (
-          <tr>
+        {data.map((item: any) => {
+          const price = calc ? Number(item.price.replace(/\D/g, '')) : 0;
+          // Группа используется только для режима calc, чтобы не смешивать одинаковые услуги из разных блоков.
+          const group = calc ? String(calcGroup ?? '') : '';
+          return (
+          <tr 
+            {...(calc ? { 'data-title': item.name, 'data-price': price, 'data-group': group } : {})}
+            {/**
+              * ВАЖНО (безопасность строки):
+              * Раньше тут было что-то вроде:
+              *   @click="$store.calcItems.toggleItem(${price}, '${item.name}', $el)"
+              * Если `item.name` содержит апостроф/кавычку (например "Oil's Change"),
+              * это ломает JS-выражение Alpine (строка преждевременно закрывается).
+              * Поэтому НЕ вставляем `item.name` в JS как строковый литерал.
+              * Вместо этого читаем значения из `data-title` / `data-price` / `data-group` у строки.
+              */}
+            {...(calc ? { '@click': '$store.calcItems.toggleRow($el)', } : {})}
+            class={calc ? 'cursor-pointer hover:bg-gray-100 [&.selected]:bg-green-100' : ''}
+          >
             {Object.keys(item).map(key => (
               <td>
                 {
@@ -76,7 +105,8 @@ const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
               </td>
             ))}
           </tr>
-        ))}
+          )
+        })}
       </tbody>
 
     </table>
