@@ -44,18 +44,15 @@ import CalcBar from '@/components/CalcBar/CalcBar.astro';
 // Парсим JSON и готовим данные для заголовков аккордеона + таблиц.
 //
 // ВАЖНО:
-// Раньше тут было чтение через `node:fs` + `node:path` и проверка existsSync.
-// Это работало в рантайме, но без `@types/node` TypeScript ругался на импорты `node:*`.
-// Чтобы не упираться в установку зависимостей (и не ломать окружения), читаем JSON через dynamic import.
-// Если файла нет — просто показываем блок без таблицы услуг (fallback на пустой массив).
+// - Файл `src/data/dealer-service-price.json` опциональный.
+// - Прямой `import` упадет в сборке, если файла нет.
+// - Через `import.meta.glob` получаем модуль, только если файл реально есть.
+const servicesModules = import.meta.glob('/src/data/dealer-service-price.json', { eager: true });
+const servicesJsonData = (Object.values(servicesModules)[0] as any)?.default ?? [];
+
 let faqBlocks = [];
 
-try {
-	// Читаем JSON файл с услугами как модуль (Vite/Astro умеют JSON-import).
-	// Если файла нет/не собрался — сработает catch ниже.
-	const servicesJsonModule = await import('@/data/dealer-service-price.json');
-	const servicesJsonData = (servicesJsonModule as any)?.default ?? servicesJsonModule;
-
+if (Array.isArray(servicesJsonData)) {
 	// Группируем услуги по типу
 	const servicesGrouped: Record<string, any[]> = {};
 	servicesJsonData.forEach((service: any) => {
@@ -128,10 +125,6 @@ try {
 		return { item, rows };
 	})
 	.filter(({ rows }) => rows.length > 0);  // Исключаем группы без услуг с ценами
-} catch (e) {
-	// Файл `src/data/dealer-service-price.json` опциональный (может не быть в окружении).
-	// В этом случае `faqBlocks` останется пустым, и секция "Наши услуги" с таблицами не отрисуется.
-	faqBlocks = [];
 }
 ---
 
