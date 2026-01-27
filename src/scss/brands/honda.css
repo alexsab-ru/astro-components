@@ -22,7 +22,8 @@
   --color-accent-400: #ff3849;
   --color-accent-500: #e40521;
 
-  --color-border: var(--color-black);
+  --logo-header-height: clamp(2rem, 2.5vw, 3rem);
+  --logo-map-info-height: clamp(2rem, 2.5vw, 3rem);
 
   /* Fonts */
   --font-sans: "HeliosCondWeb", ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
