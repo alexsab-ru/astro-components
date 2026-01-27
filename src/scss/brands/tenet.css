@@ -8,7 +8,7 @@
 }
 
 @font-face {
-    font-family: "TENET Sans - SemiExpandedBold";
+    font-family: "TENET Sans";
     src: url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-SemiExpandedBold.otf) format("opentype");
     font-weight: 700;
     font-style: normal;
@@ -42,5 +42,6 @@
 
     /* Fonts */
     --font-sans: "TENET Sans", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --font-heading: "TENET Sans - SemiExpandedBold", Arial, Helvetica, sans-serif;
+    --font-heading: inherit;
+    --font-weight-heading-weight: 700;
 }
