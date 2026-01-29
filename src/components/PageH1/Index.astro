@@ -15,4 +15,4 @@ if (seo[currentPath]) {
 }
 ---
 
-{h1.length ? (<h1 class={classes}>{h1}</h1>) : null}
+{h1.length ? (<h1 class={classes} set:html={h1}></h1>) : null}
