@@ -4,7 +4,6 @@ Color_Off='\033[0m'
 BGYELLOW='\033[30;43m'
 BGGREEN='\033[30;42m'
 BGRED='\033[30;41m'
-TEXTRED='\033[30;31m'
 
 # Функция для отображения справки
 show_help() {
@@ -87,96 +86,183 @@ normalize_brand() {
 }
 
 
+# Функция для извлечения репозитория из GitHub Pages URL
+# Преобразует https://user.github.io/repo в user/repo
+extract_github_repo() {
+    local url=$1
+    # Убираем протокол
+    url=$(echo "$url" | sed 's|^https\?://||')
+    # Извлекаем имя пользователя (часть до .github.io)
+    local user=$(echo "$url" | sed 's|\.github\.io.*||')
+    # Извлекаем имя репозитория (часть после .github.io/)
+    local repo=$(echo "$url" | sed 's|.*\.github\.io/||' | sed 's|/.*||')
+    
+    if [ -n "$user" ] && [ -n "$repo" ]; then
+        echo "${user}/${repo}"
+    else
+        echo ""
+    fi
+}
+
 # Функция для скачивания всех YML файлов из директории бренда
+# Использует уже клонированный репозиторий через git sparse-checkout
+# temp_repo_dir и project_root должны быть переданы как параметры
 download_brand_yml_files() {
     local brand=$1
+    local temp_repo_dir=$2
+    local project_root=$3
     local normalized_brand=$(normalize_brand "$brand")
-    local remote_path="$JSON_PATH/model-sections/$normalized_brand"
     local local_dir="src/data/model-sections/$normalized_brand"
     
     printf "\n${BGYELLOW}Обрабатываем бренд: $brand (нормализован: $normalized_brand)${Color_Off}\n"
     
-    # Создаем локальную директорию
-    mkdir -p "$local_dir"
+    # Вычисляем абсолютный путь к локальной директории
+    local abs_local_dir="$(cd "$project_root" && mkdir -p "$local_dir" && cd "$local_dir" && pwd)"
     
-    # Проверяем существование удаленной директории
-    # Пытаемся получить список файлов через curl
-    # Если сервер поддерживает directory listing, получим HTML
-    # Если нет, получим ошибку 404 или 403
+    # Переходим в клонированный репозиторий
+    cd "$temp_repo_dir"
     
-    # Сначала проверяем, доступна ли директория
-    # Пытаемся получить индекс директории или любой файл
-    if ! curl --output /dev/null --silent --fail -r 0-0 "$remote_path/"; then
-        printf "${BGRED}Директория $remote_path не найдена, пропускаем...${Color_Off}\n"
+    # Обновляем sparse-checkout для нужной директории
+    printf "  Настраиваем sparse-checkout для директории model-sections/$normalized_brand...\n"
+    git sparse-checkout set "src/model-sections/$normalized_brand" 2>/dev/null
+    
+    # Проверяем, существует ли директория с файлами
+    local source_dir="src/model-sections/$normalized_brand"
+    
+    if [ ! -d "$source_dir" ]; then
+        printf "${BGRED}Директория $source_dir не найдена в репозитории${Color_Off}\n"
+        cd "$project_root"
+        return 1
+    fi
+    
+    # Проверяем, есть ли файлы в директории
+    local yml_count=$(find "$source_dir" -name "*.yml" -type f 2>/dev/null | wc -l | tr -d ' ')
+    printf "  Найдено YML файлов в исходной директории: $yml_count\n"
+    
+    if [ "$yml_count" -eq 0 ]; then
+        printf "${BGYELLOW}⚠ В директории $source_dir нет YML файлов${Color_Off}\n"
+        cd "$project_root"
         return 0
     fi
     
-    # Пытаемся получить список файлов
-    # Вариант 1: если сервер возвращает directory listing
-    # Вариант 2: пробуем скачать известные имена файлов
-    # Вариант 3: используем API если доступно
+    # Показываем список файлов, которые будем копировать
+    printf "  Файлы для копирования:\n"
+    find "$source_dir" -name "*.yml" -type f -exec basename {} \; | while read -r file; do
+        printf "    - $file\n"
+    done
     
-    # Пробуем получить HTML листинг директории
-    temp_listing=$(mktemp)
-    curl -s "$remote_path/" -o "$temp_listing" 2>/dev/null
+    # Копируем файлы через rsync (как в примере пользователя)
+    # Используем абсолютные пути для надежности
+    local abs_source_dir="$(cd "$source_dir" && pwd)"
     
-    # Проверяем, получили ли мы HTML с листингом или ошибку
-    if grep -q '<!DOCTYPE html\|<html' "$temp_listing" 2>/dev/null; then
-        # Парсим HTML листинг и извлекаем ссылки на .yml файлы
-        # Ищем ссылки вида <a href="filename.yml">
-        yml_files=$(grep -oE 'href="[^"]*\.yml"' "$temp_listing" | sed 's/href="\([^"]*\)"/\1/' | sort -u)
-        
-        if [ -z "$yml_files" ]; then
-            printf "${BGRED}YML файлы не найдены в директории $remote_path${Color_Off}\n"
-            rm -f "$temp_listing"
-            return 0
-        fi
-        
-        # Скачиваем каждый YML файл
-        downloaded_count=0
-        for yml_file in $yml_files; do
-            # Убираем лишние символы из имени файла
-            yml_file=$(echo "$yml_file" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
-            
-            if [ -n "$yml_file" ]; then
-                local_file="$local_dir/$yml_file"
-                remote_file="$remote_path/$yml_file"
-                
-                printf "  Скачиваем: $yml_file...\n"
-                if curl -s --fail "$remote_file" -o "$local_file"; then
-                    printf "  ${BGGREEN}✓ Успешно скачан: $yml_file${Color_Off}\n"
-                    ((downloaded_count++))
-                else
-                    printf "  ${BGRED}✗ Ошибка при скачивании: $yml_file${Color_Off}\n"
-                fi
-            fi
-        done
-        
-        printf "${BGGREEN}Скачано файлов для бренда $brand: $downloaded_count${Color_Off}\n"
+    printf "  Копируем из: $abs_source_dir\n"
+    printf "  Копируем в: $abs_local_dir\n"
+    
+    # Создаем целевую директорию, если её нет
+    mkdir -p "$abs_local_dir"
+    
+    if rsync -av "$abs_source_dir/" "$abs_local_dir/" 2>&1 | grep -v "^sending\|^total size"; then
+        # Подсчитываем количество скопированных файлов
+        local file_count=$(find "$abs_local_dir" -name "*.yml" -type f 2>/dev/null | wc -l | tr -d ' ')
+        printf "  ${BGGREEN}✓ Успешно скопировано файлов: $file_count${Color_Off}\n"
     else
-        # Если не получили HTML листинг, пробуем альтернативный метод
-        # Можно попробовать скачать файлы с известными именами
-        # Или использовать другой API endpoint
-        printf "${BGYELLOW}Не удалось получить список файлов для $remote_path${Color_Off}\n"
-        printf "${BGYELLOW}Попробуйте проверить доступность директории вручную${Color_Off}\n"
+        # rsync может вывести информацию, но это не ошибка
+        local file_count=$(find "$abs_local_dir" -name "*.yml" -type f 2>/dev/null | wc -l | tr -d ' ')
+        if [ "$file_count" -gt 0 ]; then
+            printf "  ${BGGREEN}✓ Успешно скопировано файлов: $file_count${Color_Off}\n"
+        else
+            printf "${BGRED}Ошибка при копировании файлов${Color_Off}\n"
+            printf "  Попробуем альтернативный метод через cp...\n"
+            
+            # Альтернативный метод: используем cp
+            if cp -r "$abs_source_dir"/*.yml "$abs_local_dir/" 2>/dev/null; then
+                local file_count=$(find "$abs_local_dir" -name "*.yml" -type f 2>/dev/null | wc -l | tr -d ' ')
+                printf "  ${BGGREEN}✓ Успешно скопировано файлов через cp: $file_count${Color_Off}\n"
+            else
+                printf "${BGRED}Ошибка при копировании файлов через cp${Color_Off}\n"
+                cd "$project_root"
+                return 1
+            fi
+        fi
     fi
     
-    rm -f "$temp_listing"
+    cd "$project_root"
+    printf "${BGGREEN}Готово для бренда $brand${Color_Off}\n"
 }
+
+# Извлекаем репозиторий из JSON_PATH (один раз для всех брендов)
+github_repo=$(extract_github_repo "$JSON_PATH")
+
+if [ -z "$github_repo" ]; then
+    printf "${BGRED}Ошибка: не удалось извлечь репозиторий из JSON_PATH${Color_Off}\n"
+    exit 1
+fi
+
+printf "Репозиторий: $github_repo\n"
+
+# Сохраняем корневую директорию проекта (откуда запущен скрипт)
+project_root="$(pwd)"
+
+# Создаем временную директорию для клонирования
+temp_repo_dir="tmp/astro-json-$$"
+mkdir -p "$(dirname "$temp_repo_dir")"
+
+# Убеждаемся, что временная директория будет удалена даже при ошибке
+trap "rm -rf $temp_repo_dir" EXIT INT TERM
+
+printf "\n${BGYELLOW}Клонируем репозиторий (это может занять некоторое время)...${Color_Off}\n"
+
+# Клонируем репозиторий с минимальными данными (один раз для всех брендов)
+if ! git clone --filter=blob:none --depth=1 --single-branch --no-checkout "https://github.com/${github_repo}.git" "$temp_repo_dir" 2>/dev/null; then
+    printf "${BGRED}Ошибка: не удалось клонировать репозиторий${Color_Off}\n"
+    exit 1
+fi
+
+cd "$temp_repo_dir"
+
+# Инициализируем sparse-checkout
+git sparse-checkout init --no-cone 2>/dev/null
+
+# Пробуем разные ветки
+branches=("main" "master" "gh-pages")
+checkout_success=0
+
+for branch in "${branches[@]}"; do
+    printf "Пробуем ветку: $branch...\n"
+    if git checkout "$branch" 2>/dev/null; then
+        checkout_success=1
+        printf "${BGGREEN}✓ Переключились на ветку: $branch${Color_Off}\n"
+        break
+    fi
+done
+
+if [ $checkout_success -eq 0 ]; then
+    printf "${BGRED}Ошибка: не удалось переключиться ни на одну ветку${Color_Off}\n"
+    cd "$project_root"
+    rm -rf "$temp_repo_dir"
+    exit 1
+fi
+
+cd "$project_root"
 
 # Разделяем бренды по запятой и обрабатываем каждый
 # Удаляем пробелы вокруг запятых и разделяем
 IFS=',' read -ra BRAND_ARRAY <<< "$BRANDS_STRING"
 
-# Обрабатываем каждый бренд
+# Обрабатываем каждый бренд (используя уже клонированный репозиторий)
 for brand in "${BRAND_ARRAY[@]}"; do
     # Удаляем пробелы в начале и конце
     brand=$(echo "$brand" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
     
     if [ -n "$brand" ]; then
-        download_brand_yml_files "$brand"
+        download_brand_yml_files "$brand" "$temp_repo_dir" "$project_root"
     fi
 done
+
+# Удаляем временную директорию после обработки всех брендов
+printf "\n${BGYELLOW}Удаляем временный репозиторий...${Color_Off}\n"
+rm -rf "$temp_repo_dir"
+trap - EXIT INT TERM
 
 # Показываем результат
 printf "\n${BGGREEN}Скачанные YML файлы:${Color_Off}\n"
