@@ -8,7 +8,6 @@ import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import SeoText from '@/components/Seo/Index.astro';
 import PageH1 from '@/components/PageH1/Index.astro';
 const { slug } = Astro.params;
-console.log(slug);
 
 const seoname = 'models-'+slug;
 
@@ -16,7 +15,7 @@ const seoname = 'models-'+slug;
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
-import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelSectionsYML, setPrefixModelUrl } from '@/js/utils/helpers';
 import { IS_MODEL_PREFIX_URL } from '@/const';
 export async function getStaticPaths() {
   const { models } = modelsData;
@@ -66,18 +65,7 @@ import type { TStatus } from '@/types/TStatus';
 const status: TStatus = (model?.status && STATUS.includes(model.status as TStatus)) ? model.status : 'enable';
 
 // Загружаем YML файл модели из директории model-sections 
-let sections = [];
-const normalized_brand_name = model.mark_id.toLowerCase().replace(/ /g, '-');
-
-const sectionsModules = import.meta.glob('@/data/model-sections/**/*.yml');
-const sectionsPath = `/src/data/model-sections/${normalized_brand_name}/${model.id}.yml`;
-if (sectionsModules[sectionsPath]) {
-  const module = await sectionsModules[sectionsPath]();  
-  sections = module.default ?? module;
-} else {
-  console.warn(`${sectionsPath} not found, using default empty sections`);
-  sections = [];
-}
+let sections = await getModelSectionsYML(model);
 ---
 <Layout 
   title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${legal_city_where}`} 
