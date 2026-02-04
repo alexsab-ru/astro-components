@@ -76,7 +76,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: var(--color-pagination-contrast);
+	color: var(--color-pagination-bg);
 	@apply text-xs sm:text-base w-10 h-10 sm:w-12 sm:h-12;
 }
 
@@ -89,7 +89,7 @@
 	width: 100%;
 	height: 100%;
 	stroke-width: 2px;
-	stroke: var(--color-pagination-contrast);
+	stroke: var(--color-pagination-bg);
 	fill: none;
 	stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
 	stroke-dasharray: 125.6;

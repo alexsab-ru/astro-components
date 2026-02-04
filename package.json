@@ -13,6 +13,7 @@
     "getAirStorage": "bash ./.github/scripts/sh/getAirStorage.sh",
     "getDealerCarsPrice": "bash ./.github/scripts/sh/getDealerCarsPrice.sh",
     "getDealerPrices": "bash ./.github/scripts/sh/getDealerPrices.sh",
+    "getDealerServicePrices": "bash ./.github/scripts/sh/getDealerServicePrices.sh",
     "getDealerStorage": "bash ./.github/scripts/sh/getDealerStorage.sh",
     "getSortStorage": "bash ./.github/scripts/sh/getSortStorage.sh",
     "cars": "bash ./.github/scripts/sh/process_xml.sh",

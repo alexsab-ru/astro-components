@@ -1,0 +1,34 @@
+/* HONDA theme - uses base Tailwind v4 configuration without overrides */
+
+@font-face {
+  font-family: "HeliosCondWeb";
+  src: url(https://cdn.alexsab.ru/fonts/honda/HLS57__W.woff2) format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap
+}
+
+@font-face {
+  font-family: "HeliosCondWeb";
+  src: url(https://cdn.alexsab.ru/fonts/honda/HLS77__W.woff2) format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap
+}
+
+@theme {
+  /* Colors */
+  --color-black: #3d3d3d;
+  --color-accent-400: #ff3849;
+  --color-accent-500: #e40521;
+
+  --logo-header-height: clamp(2rem, 2.5vw, 3rem);
+  --logo-map-info-height: clamp(2rem, 2.5vw, 3rem);
+
+  /* Fonts */
+  --font-sans: "HeliosCondWeb", ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+  --font-weight-heading-weight: 700;
+}
+
+

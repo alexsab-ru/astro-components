@@ -1,0 +1,47 @@
+/* TENET theme - uses base Tailwind v4 configuration without overrides */
+@font-face {
+    font-family: "TENET Sans";
+    src: url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-Regular.otf) format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap
+}
+
+@font-face {
+    font-family: "TENET Sans";
+    src: url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-SemiExpandedBold.otf) format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap
+}
+
+@theme {
+    /* Colors */
+    --color-black: #3e3a39;
+    --color-accent-400: #a6192e;
+    --color-accent-500: #c30d23;
+    --color-brown-100: #f7f0eb;
+    --color-brown-200: #d8cec5;
+    --color-brown-300: #998e83;
+    --color-brown-400: #80756b;
+    --color-brown-500: var(--color-black);
+
+    /* FOOTER COLORS */
+    --footer-bg: var(--color-brown-500);
+    --color-footer-text-color: var(--color-brown-200);
+
+     /* Logo sizing */
+    --logo-header-height: clamp(0.75rem, 1.04vw, 1.25rem);
+    --logo-dealer-header-height: var(--logo-header-height);
+
+    --logo-map-info-height: clamp(0.75rem, 0.83vw, 1rem);
+    --logo-dealer-map-info-height: var(--logo-map-info-height);
+
+    --logo-footer-height: var(--logo-header-height);
+    --logo-dealer-footer-height: var(--logo-footer-height);
+
+    /* Fonts */
+    --font-sans: "TENET Sans", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-heading: inherit;
+    --font-weight-heading-weight: 700;
+}

@@ -3,8 +3,20 @@ import { type TFaqItem } from './types';
 import { Icon } from 'astro-icon/components'
 interface Props {
 	item: TFaqItem;
+	/**
+	 * Если true — заголовок аккордеона (item.question) будет выровнен по центру по горизонтали.
+	 *
+	 * Почему это отдельный проп:
+	 * - В обычном режиме справа есть иконка раскрытия, и из-за неё "наивное" text-center
+	 *   визуально смещает заголовок влево.
+	 * - Поэтому при centerTitle мы переключаем шапку на grid из 3 колонок:
+	 *   [левая заглушка][заголовок][иконка].
+	 *   Левая заглушка занимает то же место, что и иконка справа — так заголовок
+	 *   действительно оказывается по центру.
+	 */
+	centerTitle?: boolean;
 }
-const { item } = Astro.props;
+const { item, centerTitle = false } = Astro.props;
 ---
 
 <div
@@ -12,17 +24,35 @@ const { item } = Astro.props;
 	:class={ `activities.includes(${item.id}) ? 'bg-gray-200' : 'bg-gray-100'` }
 	x-init={ `${item.open} && activities.push(${item.id})` }
 >
+	{/* В обычном режиме оставляем flex как было.
+		В режиме centerTitle используем grid, чтобы заголовок был по центру независимо от иконки. */}
 	<div
-		class="flex items-center justify-between cursor-pointer"
+		class:list={[
+			'items-center cursor-pointer',
+			centerTitle ? 'grid grid-cols-[1.25rem_1fr_1.25rem]' : 'flex justify-between',
+		]}
 		@click={ `activities.includes(${item.id}) ? activities = activities.filter(id => id != ${item.id}) : activities.push(${item.id})` }
 	>
-		<div class="font-weight-bold text-sm md:text-lg">{item.question}</div>
+		{/* Невидимая "заглушка" слева — занимает место, равное иконке справа.
+			Нужна только для идеального визуального центрирования заголовка. */}
+		{centerTitle && (
+			<span class="text-xl shrink-0 opacity-0">
+				<Icon name="mdi:keyboard-arrow-down" />
+			</span>
+		)}
 
-		<Icon 
-			name="mdi:keyboard-arrow-down" 
+		<div class:list={['font-weight-bold text-sm md:text-lg', centerTitle && 'text-center']}>
+			{item.question}
+		</div>
+
+		<span
 			class="text-xl transition-transform origin-center shrink-0"
-			:class={ `{'-rotate-180': activities.includes(${item.id}) }` } 
-		/>
+			:class={ `{'-rotate-180': activities.includes(${item.id}) }` }
+		>
+			{/* Иконке не передаём class напрямую, чтобы TypeScript не ругался на проп `class`.
+				Управляем внешним видом через wrapper-элемент. */}
+			<Icon name="mdi:keyboard-arrow-down" />
+		</span>
 	</div>
 	<div
 		class="mt-3 text-xs md:text-base"

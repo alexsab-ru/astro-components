@@ -1,0 +1,20 @@
+---
+import ModelItem from './ModelItem.astro';
+import modelsData from '@/data/models.json'
+const { models } = modelsData;
+---
+
+{ models.length > 0 && (
+	<section>
+		<div class="container">
+			<h2 class="text-center text-xl sm:text-4xl font-medium mb-14 before:hidden mx-0">Расчет стоимости ТО</h2>
+			<div class="flex flex-wrap mb-10 lg:mb-20 last:mb-0 lg:gap-5 text-xs 2xl:text-base justify-between lg:justify-center">
+				{
+					models.map(model => <ModelItem brand={model.mark_id} name={model.name} image={model.thumb} />)
+				}
+			</div>
+		</div>
+	</section>
+)}
+
+
