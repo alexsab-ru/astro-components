@@ -1,10 +1,43 @@
 ---
+type TImage = {
+  imageUrl: string;
+  thumbUrl?: string;
+}
+
+interface Props {
+  imgPlacement?: string;
+  images?: TImage[];
+}
+
 const {
-     imgPlacement = 'left',
+  imgPlacement = 'left',
+  images = []
+
 } = Astro.props;
 ---
 
 <article class=`flex flex-col ${imgPlacement === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row'} bg-zinc-50 rounded-2xl overflow-hidden`>
+  {images.length > 0 && (
+    <div class="swiper model-gallery-slider w-full lg:w-1/2">
+      <div class="swiper-wrapper">
+      {images.map(img => (
+          <div class="swiper-slide">
+            {img.thumbUrl ? (
+              <a href={img.imageUrl} class="glightbox cursor-zoom-in select-none" data-gallery={images[0].imageUrl}>
+                <img src={img.thumbUrl} class="w-full h-auto object-contain object-center" loading="lazy" />
+              </a>
+            ) : (
+              <img src={img.imageUrl} loading="lazy" />
+            )}
+          </div>
+        )
+      )}
+      </div>
+      <div class="swiper-pagination simple-slider-pagination bottom-0"></div>
+      <div class="swiper-button-prev model-gallery-slider-button-prev hidden! sm:flex! bg-white/80!"></div>
+      <div class="swiper-button-next model-gallery-slider-button-next hidden! sm:flex! bg-white/80!"></div>
+    </div>
+  )}
   <div><slot name="card-image" /></div>
   <div class="flex shrink-0 lg:w-1/2 flex-col justify-center gap-6 lg:gap-12 px-6 py-12 lg:px-12">
     <slot name="card-content" />
