@@ -15,6 +15,7 @@ show_help() {
     echo "  -h, --help              Show this help message"
     echo "  -f, --file FILE         Specify file(s) to copy from data directory"
     echo "                          Can be used multiple times or comma-separated"
+    echo "  -d, --skip-dealer-files    Skip copying model-sections directory"
     echo "  -s, --skip-model-sections  Skip copying model-sections directory"
     echo "  -m, --skip-models       Skip copying models.json"
     echo "  -c, --skip-cars         Skip copying cars.json"
@@ -33,6 +34,7 @@ show_help() {
 
 # Обработка параметров командной строки
 SPECIFIC_FILES=()
+SKIP_DEALER_FILES=false
 SKIP_MODEL_SECTIONS=false
 SKIP_MODELS=false
 SKIP_CARS=false
@@ -49,6 +51,10 @@ while [[ $# -gt 0 ]]; do
                 SPECIFIC_FILES+=("$(echo "$file" | xargs)")  # Убираем пробелы
             done
             shift 2
+            ;;
+        -d|--skip-dealer-files)
+            SKIP_DEALER_FILES=true
+            shift
             ;;
         -s|--skip-model-sections)
             SKIP_MODEL_SECTIONS=true
@@ -175,9 +181,11 @@ if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
   done
 else
   # Копируем все файлы из папки data
-  rsync -a \
-    "$TMP_DIR/$REMOTE_DATA_PATH/" \
-    "$LOCAL_DATA_DIR/"
+  if [ "$SKIP_DEALER_FILES" = false ]; then
+    rsync -a \
+        "$TMP_DIR/$REMOTE_DATA_PATH/" \
+        "$LOCAL_DATA_DIR/"
+  fi
 fi
 
 # ==================================================
