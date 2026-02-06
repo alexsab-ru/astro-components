@@ -52,6 +52,10 @@ const RETRY_CONFIG = {
   timeout: 10000, // 10 секунд
 };
 
+const Codes = {
+  RATE_LIMIT: 429, // Rate limiting - не ошибка ссылки, а защита от ботов
+}
+
 /**
  * Gets domain from environment variable or .env file
  * @returns {string} The domain to check
@@ -223,15 +227,20 @@ async function retryBrokenLinks(brokenLinks) {
       
       const linkResult = result.links[0];
       if (linkResult && linkResult.state === 'BROKEN') {
-        retryResults.push({
-          url: link.url, // Сохраняем оригинальную ссылку в отчете
-          parent: link.parent,
-          status: linkResult.status,
-          retryAttempts: RETRY_CONFIG.maxRetries + 1,
-          transformedUrl: isVkEmbed ? transformedUrl : undefined,
-          error: extractFailureReason(linkResult.failureDetails),
-        });
-        console.log(`❌ Ссылка действительно битая: ${transformedUrl} (статус: ${linkResult.status})`);
+        // Исключаем 429 (Rate Limiting) - это не битая ссылка, а защита от ботов
+        if (linkResult.status === Codes.RATE_LIMIT) {
+          console.log(`⏭️ Пропускаю ${transformedUrl} - статус 429 (Rate Limiting). Сервер работает, но ограничивает частоту запросов`);
+        } else {
+          retryResults.push({
+            url: link.url, // Сохраняем оригинальную ссылку в отчете
+            parent: link.parent,
+            status: linkResult.status,
+            retryAttempts: RETRY_CONFIG.maxRetries + 1,
+            transformedUrl: isVkEmbed ? transformedUrl : undefined,
+            error: extractFailureReason(linkResult.failureDetails),
+          });
+          console.log(`❌ Ссылка действительно битая: ${transformedUrl} (статус: ${linkResult.status})`);
+        }
       } else {
         console.log(`✅ Ссылка работает после повторной проверки: ${transformedUrl}`);
       }
@@ -293,6 +302,14 @@ async function checkLinks() {
 
   const brokenLinks = result.links
     .filter(x => x.state === 'BROKEN')
+    .filter(x => {
+      // Исключаем 429 (Rate Limiting) - это не битая ссылка, а временная блокировка
+      if (x.status === Codes.RATE_LIMIT) {
+        console.log(`⏭️ Пропускаю ${x.url} - статус 429 (Rate Limiting), сервер работает`);
+        return false;
+      }
+      return true;
+    })
     .map((item) => {
       return {
         url: item.url,
