@@ -7,15 +7,22 @@ const { link = {}, sublink = false, ...rest } = Astro.props;
 const path = Astro.url.pathname;
 const badge = link?.badge || null;
 const badgeImage = badge && badge?.horisontal || badge?.img || badge?.vertical || null;
+
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+
+const transparentClasses = is_header_transparent ? 'text-header-transparent-text hover:text-header-transparent-text/80 hover:bg-header-transparent-menu-link-bg-hover' : 'text-header-text hover:bg-header-menu-link-bg-hover hover:text-button-text';
+const childTransparentClasses = is_header_transparent ? 'text-submenu-transparent-text hover:text-submenu-transparent-text/80 hover:bg-header-transparent-menu-link-bg-hover' : 'text-submenu-text hover:text-submenu-text/80';
+const activeTransparentClasses = is_header_transparent ? 'bg-gray-700 lg:bg-header-transparent-menu-link-bg-hover text-header-transparent-text/80' : 'bg-header-menu-link-bg-hover text-button-text';
 ---
 <a
 	href={link.url}
 	class:list={[
 		{
-			'scroll-link': link.url.includes('#'),
-			'header-link': !link.url.includes('#'),
-			'header-child-link': sublink,
-			'active': path.replace(/\//g, '') === link.url.replace(/\//g, '')
+			[`scroll-link ${transparentClasses}`]: link.url.includes('#'),
+			[`header-link ${transparentClasses}`]: !link.url.includes('#'),
+			[`header-child-link ${childTransparentClasses}`]: sublink,
+			[`active ${activeTransparentClasses}`]: path.replace(/\//g, '') === link.url.replace(/\//g, '')
 		}
 	]}
 	{...rest}

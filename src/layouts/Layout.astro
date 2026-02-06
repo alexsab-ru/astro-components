@@ -10,7 +10,7 @@ interface Props {
 let {title, h1, description, image, keywords, brand = null} = Astro.props;
 
 import settings from '@/data/settings.json';
-const { site_name, site_description } = settings;
+const { site_name, site_description, is_header_transparent } = settings;
 
 import Head from '@/components/Head.astro';
 import ScriptHead from '@/components/Scripts/Head.astro';
@@ -50,6 +50,8 @@ if (seo[currentPath]) {
 	}
 }
 import '../scss/app.css';
+
+const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] pt-[60px] md:pt-[80px] lg:pt-[130px]' : '';
 ---
 
 <!doctype html>
@@ -67,7 +69,7 @@ import '../scss/app.css';
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
 	</head>
-	<body class="antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black" x-data="complectation">
+	<body class={`antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black ${bodyClasses}`} x-data="complectation">
 		<ScriptBodyBegin />
 		<Header brand={brand} />
 		<main class="grow relative">
