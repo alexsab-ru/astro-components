@@ -29,6 +29,7 @@ show_help() {
     echo "  settings.json"
     echo "  socials.json"
     echo "  special-services.json"
+    echo "  quiz.json"
     echo
     echo "Examples:"
     echo "  $0                   # Download all files"
@@ -52,6 +53,7 @@ FILES=(
     "settings.json"
     "socials.json"
     "special-services.json"
+    "quiz.json"
 )
 
 # Обработка параметров командной строки
