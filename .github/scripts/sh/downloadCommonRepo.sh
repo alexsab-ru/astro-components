@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -o pipefail
 
 Color_Off='\033[0m'
 BGYELLOW='\033[30;43m'
@@ -122,6 +123,14 @@ extract_git_url() {
   echo "$url"
 }
 
+cleanup() {
+  local code=$?
+  if [ "${KEEP_TMP:-false}" = false ] && [ -n "${TMP_DIR:-}" ] && [ -d "${TMP_DIR:-}" ]; then
+    rm -rf "$TMP_DIR"
+  fi
+  return $code
+}
+
 # ==================================================
 # Подготовка env
 # ==================================================
@@ -156,11 +165,14 @@ TMP_DIR="tmp/$REPO_NAME"
 REMOTE_DATA_PATH="src/$DOMAIN/data"
 LOCAL_DATA_DIR="src/data"
 
+trap cleanup EXIT INT TERM
+
 # ==================================================
 # Клонирование (sparse checkout)
 # ==================================================
 echo "▶ Git repo: $GIT_REPO_URL"
 
+mkdir -p tmp
 rm -rf "$TMP_DIR"
 
 git clone \
@@ -173,14 +185,19 @@ git clone \
 
 cd "$TMP_DIR"
 
-git sparse-checkout init --cone
+git sparse-checkout init --no-cone
 git sparse-checkout set \
   "src/$DOMAIN/data" \
   "src/model-sections" \
   "src/models.json" \
   "src/cars.json"
 
-git checkout main
+DEFAULT_BRANCH=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@')
+if [ -z "$DEFAULT_BRANCH" ]; then
+  DEFAULT_BRANCH="main"
+fi
+
+git checkout "$DEFAULT_BRANCH"
 
 cd ../..
 
@@ -202,7 +219,6 @@ if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
       echo "  ✔ Copied: $file"
     else
       echo "❌ Error: File '$file' not found in $REMOTE_DATA_PATH"
-      rm -rf "$TMP_DIR"
       exit 1
     fi
   done
@@ -314,9 +330,10 @@ else
   echo -e "\n${BGYELLOW}Пропускаем копирование cars.json (--skip-cars flag set)${Color_Off}"
 fi
 
-# Удаляем временную директорию после обработки всех брендов
-printf "\n${BGYELLOW}Удаляем временный репозиторий...${Color_Off}\n"
-# rm -rf "$TMP_DIR"
-trap - EXIT INT TERM
+if [ "$KEEP_TMP" = true ]; then
+  printf "\n${BGYELLOW}Сохраняем временный репозиторий: $TMP_DIR${Color_Off}\n"
+else
+  printf "\n${BGYELLOW}Удаляем временный репозиторий...${Color_Off}\n"
+fi
 
 echo "✅ Done"
