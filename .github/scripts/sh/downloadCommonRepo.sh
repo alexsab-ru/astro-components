@@ -20,6 +20,8 @@ Options:
   -s, --skip-model-sections  Skip copying model-sections directory
   -m, --skip-models          Skip copying models.json
   -c, --skip-cars            Skip copying cars.json
+  -k, --keep-tmp             Keep cloned repo in tmp/
+  -cd, --clean-data          Remove all files from src/data and restore tracked files
 
 Env:
   JSON_PATH                  Git repo URL or GitHub Pages URL
@@ -28,6 +30,7 @@ Env:
 
 Examples:
   ./downloadCommonRepo.sh
+  ./downloadCommonRepo.sh -cd
   ./downloadCommonRepo.sh -f settings.json
   ./downloadCommonRepo.sh -f settings.json -f faq.json
   ./downloadCommonRepo.sh -f settings.json,faq.json
@@ -35,6 +38,9 @@ Examples:
   ./downloadCommonRepo.sh --skip-model-sections --skip-models --skip-cars
   JSON_PATH=https://github.com/org/repo.git DOMAIN=site.com ./downloadCommonRepo.sh
   JSON_PATH=https://org.github.io/repo DOMAIN=site.com ./downloadCommonRepo.sh
+
+Warning:
+  --clean-data removes all files in src/data and discards local changes there.
 EOF
 }
 
@@ -44,6 +50,8 @@ SKIP_DEALER_FILES=false
 SKIP_MODEL_SECTIONS=false
 SKIP_MODELS=false
 SKIP_CARS=false
+KEEP_TMP=false
+CLEAN_DATA=false
 while [[ $# -gt 0 ]]; do
     case $1 in
         -h|--help)
@@ -51,6 +59,11 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         -f|--file)
+            if [ -z "${2-}" ] || [[ "$2" == -* ]]; then
+                echo "❌ Error: --file requires an argument"
+                show_help
+                exit 1
+            fi
             # Поддерживаем несколько файлов через запятую
             IFS=',' read -ra FILES <<< "$2"
             for file in "${FILES[@]}"; do
@@ -72,6 +85,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         -c|--skip-cars)
             SKIP_CARS=true
+            shift
+            ;;
+        -k|--keep-tmp)
+            KEEP_TMP=true
+            shift
+            ;;
+        -cd|--clean-data|--clear-data)
+            CLEAN_DATA=true
             shift
             ;;
         *)
