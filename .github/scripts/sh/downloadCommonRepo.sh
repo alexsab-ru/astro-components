@@ -123,12 +123,86 @@ extract_git_url() {
   echo "$url"
 }
 
+extract_brands() {
+  local settings_file="$1"
+
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.. | .brand? // empty' "$settings_file" \
+      | awk 'NF && !seen[$0]++'
+    return
+  fi
+
+  if ! command -v node >/dev/null 2>&1; then
+    echo "❌ Error: node is required to parse settings.json when jq is unavailable"
+    exit 1
+  fi
+
+  node - "$settings_file" <<'NODE'
+const fs = require("fs");
+
+const file = process.argv[2];
+const text = fs.readFileSync(file, "utf8");
+const data = JSON.parse(text);
+const seen = new Set();
+const out = [];
+
+function walk(value) {
+  if (Array.isArray(value)) {
+    value.forEach(walk);
+    return;
+  }
+  if (value && typeof value === "object") {
+    if (typeof value.brand === "string" && !seen.has(value.brand)) {
+      seen.add(value.brand);
+      out.push(value.brand);
+    }
+    Object.values(value).forEach(walk);
+  }
+}
+
+walk(data);
+process.stdout.write(out.join("\n"));
+NODE
+}
+
 cleanup() {
   local code=$?
   if [ "${KEEP_TMP:-false}" = false ] && [ -n "${TMP_DIR:-}" ] && [ -d "${TMP_DIR:-}" ]; then
     rm -rf "$TMP_DIR"
   fi
   return $code
+}
+
+clean_data_dir() {
+  if [ -z "${LOCAL_DATA_DIR:-}" ]; then
+    echo "❌ Error: LOCAL_DATA_DIR is not set"
+    exit 1
+  fi
+
+  echo "⚠ WARNING: this will delete all files in $LOCAL_DATA_DIR and discard local changes there."
+
+  if [ "$LOCAL_DATA_DIR" = "/" ] || [ "$LOCAL_DATA_DIR" = "." ]; then
+    echo "❌ Error: refusing to clean unsafe path: $LOCAL_DATA_DIR"
+    exit 1
+  fi
+
+  mkdir -p "$LOCAL_DATA_DIR"
+
+  find "$LOCAL_DATA_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    if [ -n "$(git ls-files -- "$LOCAL_DATA_DIR")" ]; then
+      if git restore --help >/dev/null 2>&1; then
+        git restore --source=HEAD --worktree -- "$LOCAL_DATA_DIR"
+      else
+        git checkout -- "$LOCAL_DATA_DIR"
+      fi
+    else
+      echo "▶ No tracked files to restore in $LOCAL_DATA_DIR"
+    fi
+  else
+    echo "⚠ Warning: not a git repo, cannot restore tracked files"
+  fi
 }
 
 # ==================================================
@@ -206,6 +280,11 @@ cd ../..
 # ==================================================
 echo "▶ Sync JSON data…"
 
+if [ "$CLEAN_DATA" = true ]; then
+  echo "▶ Cleaning local data directory..."
+  clean_data_dir
+fi
+
 mkdir -p "$LOCAL_DATA_DIR"
 
 # Если указаны конкретные файлы, копируем только их
@@ -256,18 +335,29 @@ if [ "$SKIP_MODEL_SECTIONS" = false ]; then
 fi
 
 if [ "$SHOULD_COPY_MODEL_SECTIONS" = true ]; then
-  SETTINGS_FILE="$LOCAL_DATA_DIR/settings.json"
+  SETTINGS_FILE_LOCAL="$LOCAL_DATA_DIR/settings.json"
+  SETTINGS_FILE_REMOTE="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
 
-  if [ ! -f "$SETTINGS_FILE" ]; then
+  if [ -f "$SETTINGS_FILE_LOCAL" ]; then
+    SETTINGS_FILE="$SETTINGS_FILE_LOCAL"
+  elif [ -f "$SETTINGS_FILE_REMOTE" ]; then
+    SETTINGS_FILE="$SETTINGS_FILE_REMOTE"
+  else
     echo "❌ Error: settings.json not found"
-    rm -rf "$TMP_DIR"
     exit 1
   fi
 
-  BRANDS_RAW=$(grep -o '"brand"[[:space:]]*:[[:space:]]*"[^"]*"' "$SETTINGS_FILE" \
-    | sed 's/.*"brand"[[:space:]]*:[[:space:]]*"//; s/"$//')
+  BRANDS_RAW=$(extract_brands "$SETTINGS_FILE")
+  if [ -z "$BRANDS_RAW" ]; then
+    echo "❌ Error: no brands found in settings.json"
+    exit 1
+  fi
 
-  IFS=',' read -ra BRANDS <<< "$BRANDS_RAW"
+  BRANDS=()
+  while IFS= read -r line; do
+    [ -z "$line" ] && continue
+    BRANDS+=("$line")
+  done <<< "$BRANDS_RAW"
 
   # ==================================================
   # Копирование model-sections по брендам
