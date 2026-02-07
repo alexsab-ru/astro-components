@@ -9,27 +9,33 @@ TEXTRED='\033[30;31m'
 
 # Функция для отображения справки
 show_help() {
-    echo "Usage: $0 [OPTIONS]"
-    echo
-    echo "Options:"
-    echo "  -h, --help              Show this help message"
-    echo "  -f, --file FILE         Specify file(s) to copy from data directory"
-    echo "                          Can be used multiple times or comma-separated"
-    echo "  -d, --skip-dealer-files    Skip copying model-sections directory"
-    echo "  -s, --skip-model-sections  Skip copying model-sections directory"
-    echo "  -m, --skip-models       Skip copying models.json"
-    echo "  -c, --skip-cars         Skip copying cars.json"
-    echo
-    echo "Examples:"
-    echo "  $0                                    # Copy all files from data directory"
-    echo "  $0 -f settings.json                  # Copy only settings.json"
-    echo "  $0 -f settings.json -f faq.json      # Copy settings.json and faq.json"
-    echo "  $0 -f settings.json,faq.json         # Copy settings.json and faq.json (comma-separated)"
-    echo "  $0 --skip-model-sections             # Copy all files but skip model-sections"
-    echo "  $0 -f settings.json -s               # Copy only settings.json and skip model-sections"
-    echo "  $0 --skip-models                     # Copy all files but skip models.json"
-    echo "  $0 --skip-cars                       # Copy all files but skip cars.json"
-    echo "  $0 -f settings.json -m -c            # Copy only settings.json, skip models.json and cars.json"
+    cat <<'EOF'
+Usage: downloadCommonRepo.sh [OPTIONS]
+
+Options:
+  -h, --help                 Show this help message
+  -f, --file FILE            Specify file(s) to copy from data directory
+                             Can be used multiple times or comma-separated
+  -d, --skip-dealer-files    Skip copying dealer data files from src/$DOMAIN/data
+  -s, --skip-model-sections  Skip copying model-sections directory
+  -m, --skip-models          Skip copying models.json
+  -c, --skip-cars            Skip copying cars.json
+
+Env:
+  JSON_PATH                  Git repo URL or GitHub Pages URL
+  DOMAIN                     Domain folder under src/
+  (If .env exists, JSON_PATH and DOMAIN are read from it.)
+
+Examples:
+  ./downloadCommonRepo.sh
+  ./downloadCommonRepo.sh -f settings.json
+  ./downloadCommonRepo.sh -f settings.json -f faq.json
+  ./downloadCommonRepo.sh -f settings.json,faq.json
+  ./downloadCommonRepo.sh --skip-dealer-files
+  ./downloadCommonRepo.sh --skip-model-sections --skip-models --skip-cars
+  JSON_PATH=https://github.com/org/repo.git DOMAIN=site.com ./downloadCommonRepo.sh
+  JSON_PATH=https://org.github.io/repo DOMAIN=site.com ./downloadCommonRepo.sh
+EOF
 }
 
 # Обработка параметров командной строки
