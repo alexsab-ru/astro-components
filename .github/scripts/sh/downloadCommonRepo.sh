@@ -25,9 +25,9 @@ Options:
   -cd, --clean-data          Remove all files from src/data and restore tracked files
 
 Env:
-  JSON_PATH                  Git repo URL or GitHub Pages URL
+  JSON_REPO                  Git repository URL (without .git)
   DOMAIN                     Domain folder under src/
-  (If .env exists, JSON_PATH and DOMAIN are read from it.)
+  (If .env exists, JSON_REPO and DOMAIN are read from it.)
 
 Examples:
   ./downloadCommonRepo.sh
@@ -37,8 +37,7 @@ Examples:
   ./downloadCommonRepo.sh -f settings.json,faq.json
   ./downloadCommonRepo.sh --skip-dealer-files
   ./downloadCommonRepo.sh --skip-model-sections --skip-models --skip-cars
-  JSON_PATH=https://github.com/org/repo.git DOMAIN=site.com ./downloadCommonRepo.sh
-  JSON_PATH=https://org.github.io/repo DOMAIN=site.com ./downloadCommonRepo.sh
+  JSON_REPO=https://github.com/org/repo DOMAIN=site.com ./downloadCommonRepo.sh
 
 Warning:
   --clean-data removes all files in src/data and discards local changes there.
@@ -104,30 +103,33 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-extract_git_url() {
-  local url="$1"
+build_git_clone_url() {
+  local repo_url="$1"
+  repo_url="${repo_url%/}"
 
-  # https://user.github.io/repo[/] → https://github.com/user/repo.git
-  if [[ "$url" =~ ^https://([^.]+)\.github\.io/([^/]+)/?$ ]]; then
-    echo "https://github.com/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}.git"
-    return
+  if [[ "$repo_url" =~ \.git$ ]]; then
+    echo "$repo_url"
+  else
+    echo "${repo_url}.git"
   fi
-
-  # если уже git-репозиторий — вернуть как есть
-  if [[ "$url" =~ \.git$ ]]; then
-    echo "$url"
-    return
-  fi
-
-  # fallback
-  echo "$url"
 }
 
 extract_brands() {
   local settings_file="$1"
 
   if command -v jq >/dev/null 2>&1; then
-    jq -r '.. | .brand? // empty' "$settings_file" \
+    jq -r '
+      .. | .brand? | select(. != null) |
+      if type == "string" then
+        split(",")[]
+      elif type == "array" then
+        .[] | select(type == "string") | split(",")[]
+      else
+        empty
+      end |
+      gsub("^\\s+|\\s+$"; "") |
+      select(length > 0)
+    ' "$settings_file" \
       | awk 'NF && !seen[$0]++'
     return
   fi
@@ -152,9 +154,25 @@ function walk(value) {
     return;
   }
   if (value && typeof value === "object") {
-    if (typeof value.brand === "string" && !seen.has(value.brand)) {
-      seen.add(value.brand);
-      out.push(value.brand);
+    const pushBrand = (brandValue) => {
+      if (typeof brandValue !== "string") return;
+      brandValue
+        .split(",")
+        .map(v => v.trim())
+        .filter(Boolean)
+        .forEach((brand) => {
+          const key = brand.toLowerCase();
+          if (!seen.has(key)) {
+            seen.add(key);
+            out.push(brand);
+          }
+        });
+    };
+
+    if (typeof value.brand === "string") {
+      pushBrand(value.brand);
+    } else if (Array.isArray(value.brand)) {
+      value.brand.forEach(pushBrand);
     }
     Object.values(value).forEach(walk);
   }
@@ -171,6 +189,23 @@ cleanup() {
     rm -rf "$TMP_DIR"
   fi
   return $code
+}
+
+ensure_local_settings_for_models() {
+  local local_settings="$LOCAL_DATA_DIR/settings.json"
+  local remote_settings="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
+
+  if [ -f "$local_settings" ]; then
+    return 0
+  fi
+
+  if [ -f "$remote_settings" ]; then
+    cp "$remote_settings" "$local_settings"
+    echo "▶ settings.json copied from remote for models filtering"
+    return 0
+  fi
+
+  return 1
 }
 
 clean_data_dir() {
@@ -208,16 +243,16 @@ clean_data_dir() {
 # ==================================================
 # Подготовка env
 # ==================================================
-if [ -z "${JSON_PATH:-}" ] && [ -f .env ]; then
-  export JSON_PATH=$(grep '^JSON_PATH=' .env | awk -F= '{print $2}' | sed 's/^"//; s/"$//')
+if [ -z "${JSON_REPO:-}" ] && [ -f .env ]; then
+  export JSON_REPO=$(grep '^JSON_REPO=' .env | awk -F= '{print $2}' | sed 's/^"//; s/"$//')
 fi
 
 if [ -z "${DOMAIN:-}" ] && [ -f .env ]; then
   export DOMAIN=$(grep '^DOMAIN=' .env | awk -F= '{print $2}' | sed 's/^"//; s/"$//')
 fi
 
-if [ -z "${JSON_PATH:-}" ]; then
-  echo "❌ Error: JSON_PATH is not set"
+if [ -z "${JSON_REPO:-}" ]; then
+  echo "❌ Error: JSON_REPO is not set"
   exit 1
 fi
 
@@ -226,13 +261,13 @@ if [ -z "${DOMAIN:-}" ]; then
   exit 1
 fi
 
-echo "▶ JSON_PATH: $JSON_PATH"
+echo "▶ JSON_REPO: $JSON_REPO"
 echo "▶ DOMAIN:    $DOMAIN"
 
 # ==================================================
 # Переменные
 # ==================================================
-GIT_REPO_URL=$(extract_git_url "$JSON_PATH")
+GIT_REPO_URL=$(build_git_clone_url "$JSON_REPO")
 REPO_NAME=$(basename "$GIT_REPO_URL" .git)
 TMP_DIR="tmp/$REPO_NAME"
 
@@ -369,7 +404,7 @@ if [ "$SHOULD_COPY_MODEL_SECTIONS" = true ]; then
 
     NORMALIZED_BRAND=$(echo "$RAW_BRAND" \
       | tr '[:upper:]' '[:lower:]' \
-      | sed 's/[^a-z0-9 ]//g; s/[[:space:]]\+/-/g')
+      | sed -E 's/[^a-z0-9 ]//g; s/[[:space:]]+/-/g; s/^-+|-+$//g')
 
     SRC_DIR="$TMP_DIR/src/model-sections/$NORMALIZED_BRAND"
     DEST_DIR="$LOCAL_DATA_DIR/model-sections/$NORMALIZED_BRAND"
@@ -394,6 +429,11 @@ fi
 if [ "$SKIP_MODELS" = false ]; then
   echo -e "\n${BGGREEN}Копируем общий models.json...${Color_Off}"
   rsync -a "$TMP_DIR/src/models.json" "$LOCAL_DATA_DIR/all-models.json"
+
+  if ! ensure_local_settings_for_models; then
+      printf "${BGRED}Внимание: settings.json не найден, невозможно отфильтровать models.json${Color_Off}\n"
+      exit 1
+  fi
 
   # Проверяем, что файл скачался
   if [ ! -s "$LOCAL_DATA_DIR/all-models.json" ]; then
