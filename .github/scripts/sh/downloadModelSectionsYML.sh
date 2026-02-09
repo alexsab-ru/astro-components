@@ -14,7 +14,7 @@ show_help() {
     echo
     echo "Description:"
     echo "  Скачивает YML файлы для каждой модели из settings.json"
-    echo "  Бренды читаются из ключа 'brand' в settings.json"
+    echo "  Бренды читаются из ключа 'brand' в settings.json (строка или массив)"
     echo "  Для каждого бренда скачиваются все .yml файлы из model-sections/{brand}/"
     echo
     echo "Examples:"
@@ -55,22 +55,90 @@ if [ ! -f "src/data/settings.json" ]; then
     exit 1
 fi
 
+extract_brands_from_settings() {
+    local settings_file="$1"
+
+    if command -v jq &> /dev/null; then
+        jq -r '
+            .. | .brand? | select(. != null) |
+            if type == "string" then
+                split(",")[]
+            elif type == "array" then
+                .[] | select(type == "string") | split(",")[]
+            else
+                empty
+            end |
+            gsub("^\\s+|\\s+$"; "") |
+            select(length > 0)
+        ' "$settings_file" | awk 'NF && !seen[$0]++'
+        return 0
+    fi
+
+    if ! command -v node &> /dev/null; then
+        printf "${BGRED}Error: jq or node is required to parse brands from settings.json${Color_Off}\n"
+        return 1
+    fi
+
+    node - "$settings_file" <<'NODE'
+const fs = require("fs");
+
+const file = process.argv[2];
+const text = fs.readFileSync(file, "utf8");
+const data = JSON.parse(text);
+const seen = new Set();
+const out = [];
+
+function pushBrand(brandValue) {
+  if (typeof brandValue !== "string") return;
+
+  brandValue
+    .split(",")
+    .map(v => v.trim())
+    .filter(Boolean)
+    .forEach((brand) => {
+      const key = brand.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        out.push(brand);
+      }
+    });
+}
+
+function walk(value) {
+  if (Array.isArray(value)) {
+    value.forEach(walk);
+    return;
+  }
+
+  if (value && typeof value === "object") {
+    if (typeof value.brand === "string") {
+      pushBrand(value.brand);
+    } else if (Array.isArray(value.brand)) {
+      value.brand.forEach(pushBrand);
+    }
+    Object.values(value).forEach(walk);
+  }
+}
+
+walk(data);
+process.stdout.write(out.join("\n"));
+NODE
+}
+
 # Читаем brand из settings.json
-# Используем jq если доступен, иначе используем простой парсинг
-if command -v jq &> /dev/null; then
-    BRANDS_STRING=$(jq -r '.brand' src/data/settings.json)
-else
-    # Простой парсинг JSON без jq
-    BRANDS_STRING=$(grep -o '"brand"[[:space:]]*:[[:space:]]*"[^"]*"' src/data/settings.json | sed 's/.*"brand"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
-fi
+BRANDS_RAW=$(extract_brands_from_settings src/data/settings.json)
 
 # Проверяем, что brand найден
-if [ -z "$BRANDS_STRING" ] || [ "$BRANDS_STRING" == "null" ]; then
+if [ -z "$BRANDS_RAW" ]; then
     printf "${BGRED}Error: brand not found in settings.json${Color_Off}\n"
     exit 1
 fi
 
-echo "Found brands: $BRANDS_STRING"
+echo "Found brands:"
+while IFS= read -r brand; do
+    [ -z "$brand" ] && continue
+    echo "  - $brand"
+done <<< "$BRANDS_RAW"
 
 # Функция для нормализации имени бренда
 # Приводит к нижнему регистру и заменяет пробелы на дефис
@@ -245,18 +313,21 @@ fi
 
 cd "$project_root"
 
-# Разделяем бренды по запятой и обрабатываем каждый
-# Удаляем пробелы вокруг запятых и разделяем
-IFS=',' read -ra BRAND_ARRAY <<< "$BRANDS_STRING"
+BRAND_ARRAY=()
+while IFS= read -r brand; do
+    brand=$(echo "$brand" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+    [ -z "$brand" ] && continue
+    BRAND_ARRAY+=("$brand")
+done <<< "$BRANDS_RAW"
+
+if [ ${#BRAND_ARRAY[@]} -eq 0 ]; then
+    printf "${BGRED}Error: no valid brands found in settings.json${Color_Off}\n"
+    exit 1
+fi
 
 # Обрабатываем каждый бренд (используя уже клонированный репозиторий)
 for brand in "${BRAND_ARRAY[@]}"; do
-    # Удаляем пробелы в начале и конце
-    brand=$(echo "$brand" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
-    
-    if [ -n "$brand" ]; then
-        download_brand_yml_files "$brand" "$temp_repo_dir" "$project_root"
-    fi
+    download_brand_yml_files "$brand" "$temp_repo_dir" "$project_root"
 done
 
 # Удаляем временную директорию после обработки всех брендов
