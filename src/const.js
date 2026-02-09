@@ -15,9 +15,12 @@ const { phone_common } = settings;
 // Ссылки под хедером
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import { isModelVisible } from '@/js/utils/modelVisibility';
+import { setPrefixModelUrl } from '@/js/utils/helpers';
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
 const groupModelsByBrand = groupArrayByKey(models.filter(isModelVisible), 'mark_id');
+
+export const IS_MODEL_PREFIX_URL = Object.keys(groupModelsByBrand).length > 1;
 
 // Конфигурация для динамических меню
 const dynamicMenuConfig = {
@@ -25,7 +28,7 @@ const dynamicMenuConfig = {
 		baseUrl: '/models/',
 		dataSource: groupModelsByBrand,
 		transform: (model) => ({
-			url: `/models/${model.id}/`,
+			url: `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`,
 			name: model.name.toUpperCase(),
 			thumb: model.thumb,
 			status: model?.status || null,

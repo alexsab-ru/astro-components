@@ -69,6 +69,25 @@ blockquote{
 	}
 }
 
+pre{
+	padding: 20px 15px;
+	border-radius: 5px;
+	margin-bottom: 15px;
+	font-size: 14px;
+	code{
+		@apply bg-transparent p-0 rounded-none;
+	}
+}
+
+code{
+	@apply bg-gray-200 p-1 rounded;
+}
+
+html, body{
+	scroll-behavior: smooth;
+	scroll-padding-top: 80px;
+}
+
 /* Утилитарные классы для плашек с наклонными краями */
 .substrate-skew {
 	@apply relative overflow-hidden w-fit px-4 sm:px-5 md:px-7 py-1.5 lg:py-2;

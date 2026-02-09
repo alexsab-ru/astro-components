@@ -20,7 +20,6 @@ show_help() {
     echo "  faq.json"
     echo "  federal-disclaimer.json"
     echo "  menu.json"
-    echo "  models-sections.yml"
     echo "  models.json"
     echo "  reviews.json"
     echo "  salons.json"
@@ -30,6 +29,7 @@ show_help() {
     echo "  settings.json"
     echo "  socials.json"
     echo "  special-services.json"
+    echo "  quiz.json"
     echo
     echo "Examples:"
     echo "  $0                   # Download all files"
@@ -44,7 +44,6 @@ FILES=(
     "faq.json"
     "federal-disclaimer.json"
     "menu.json"
-    "models-sections.yml"
     "models.json"
     "reviews.json"
     "salons.json"
@@ -54,6 +53,7 @@ FILES=(
     "settings.json"
     "socials.json"
     "special-services.json"
+    "quiz.json"
 )
 
 # Обработка параметров командной строки

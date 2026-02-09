@@ -47,3 +47,23 @@ export const getPair = (openURL = '') => {
 export function quoteEscaper(str) {
 	return str.replace(/"/g, '\\"').replace(/\n/g, '<br/>');
 }
+
+export function setPrefixModelUrl(model, prefix = false) {
+	return prefix ? model.mark_id.toLowerCase().replace(/ /g, '-') + '-' + model.id : model.id;
+}
+
+export async function getModelSectionsYML(model = null) {
+	if(!model) return [];
+	let sections = [];
+	const normalized_brand_name = model.mark_id.toLowerCase().replace(/ /g, '-');
+	const sectionsModules = import.meta.glob('@/data/model-sections/**/*.yml');
+	const sectionsPath = `/src/data/model-sections/${normalized_brand_name}/${model.id}.yml`;
+	if (sectionsModules[sectionsPath]) {
+		const module = await sectionsModules[sectionsPath]();  
+		sections = module.default ?? module;
+	} else {
+		console.warn(`${sectionsPath} not found, using default empty sections`);
+		sections = [];
+	}
+	return sections;
+}
