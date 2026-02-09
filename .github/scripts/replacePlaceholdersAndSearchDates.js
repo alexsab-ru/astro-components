@@ -8,6 +8,11 @@ import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+const ReportFile = {
+    SPECIAL_OFFERS: './special-offers-dates.txt',
+    SPECIAL_OFFERS_MARKETING: './special-offers-dates-marketing.txt'
+};
+
 class PlaceholderProcessor {
     constructor() {
         // Пути к директориям
@@ -541,6 +546,20 @@ class PlaceholderProcessor {
         }
     }
 
+    // Очищаем старые отчеты по датам перед запуском
+    clearSpecialOffersReports() {
+        const reportFiles = [
+            ReportFile.SPECIAL_OFFERS,
+            ReportFile.SPECIAL_OFFERS_MARKETING
+        ];
+
+        reportFiles.forEach(filePath => {
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        });
+    }
+
     // Вывод информации о приближающихся датах
     outputUpcomingDates() {
         if (this.filesWithUpcomingDates.length === 0) return;
@@ -571,15 +590,18 @@ class PlaceholderProcessor {
             )
             .join('\n\n');
 
-        const outputPath = './special-offers-dates.txt';
+        const outputPath = ReportFile.SPECIAL_OFFERS;
         fs.writeFileSync(outputPath, htmlOutput, 'utf8');
-        const outputPathMarketing = './special-offers-dates-marketing.txt';
+        const outputPathMarketing = ReportFile.SPECIAL_OFFERS_MARKETING;
         fs.writeFileSync(outputPathMarketing, htmlOutputMarketing, 'utf8');
         console.log(`\nРезультаты сохранены в файл: ${outputPath}, ${outputPathMarketing}`);
     }
 
     // Главная функция запуска всей обработки
     run() {
+        // 0. Удаляем старые отчеты о спецпредложениях
+        this.clearSpecialOffersReports();
+
         // 1. Загружаем все данные
         this.loadData();
         
