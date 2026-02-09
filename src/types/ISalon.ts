@@ -11,6 +11,7 @@ export interface ISalon {
 	type?: string;
 	address?: string;
 	phone?: string;
+	email?: string;
 	work_hours?: string;
 	legal_entity?: string;
 	legal_inn?: number;
