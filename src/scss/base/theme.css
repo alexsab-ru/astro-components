@@ -58,11 +58,10 @@
     --transparent-bg-hover-color: var(--color-accent-500);
     --blur-header: 30px;
     --color-header-transparent-bg: color-mix(in srgb, var(--transparent-bg-color) 88%, transparent);
-    --color-submenu-transparent-bg: var(--color-gray-800);
     --color-header-transparent-text: var(--color-white);
     --color-submenu-transparent-text: var(--color-white);
-    --color-header-border-transparent: var(--color-gray-700);
-    --color-header-transparent-divide: var(--color-gray-700);
+    --color-header-border-transparent: color-mix(in srgb, var(--transparent-bg-color) 95%, white);
+    --color-header-transparent-divide: color-mix(in srgb, var(--transparent-bg-color) 95%, white);
     
     /* BUTTON COLORS */
     --color-button-bg: var(--color-accent-500);
