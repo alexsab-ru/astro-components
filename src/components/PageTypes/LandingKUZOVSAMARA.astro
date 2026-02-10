@@ -1,0 +1,96 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import Contacts from '@/components/Contacts.astro';
+import OnlineCalculation from '@/components/OnlineCalculation/OnlineCalculation.astro';
+import SeoText from '@/components/Seo/Index.astro';
+import Button from '@/components/Button/Button.astro';
+import InfoItem from '@/components/Info/Item.astro';
+
+const infoItemClasses = "flex flex-col-reverse items-center justify-end gap-5 transition-all shadow-xl hover:shadow-lg font-medium xl:text-lg text-center p-4 popup-link";
+const infoItems = [
+	{ icon: "warranty", url: "#common-modal", title: "Гарантия на все виды выполненных кузовных работ" },
+	{ icon: "coffee-cup", url: "#common-modal", title: "Для всех клиентов комфортный отдых и уютное кафе" },
+	{ icon: "children", url: "#common-modal", title: "В клиентской зоне оборудована детская комната" },
+	{ icon: "certified", url: "#common-modal", title: "Сертифицированные специалисты" },
+	{ icon: "technical-support", url: "#common-modal", title: "Всегда можно присутствовать при ремонте авто" },
+	{ icon: "quality-control", url: "#common-modal", title: "100% оригинальные запчасти" },
+	{ icon: "repair", url: "#common-modal", title: "Все работы выполняются на самом современном оборудовании" },
+	{ icon: "stock", url: "#common-modal", title: "Четкое объяснение стоимости работ" },
+	{ icon: "taxi", url: "#common-modal", title: "Бесплатное такси" },
+];
+
+const services = [
+	{
+		title: "Кузовные работы",
+		items: [
+			{ name: "Выпрямление вмятин без покраски", price: 2000, priceFrom: true },
+			{ name: "Полная покраска элемента", price: 9500, priceFrom: true },
+			{ name: "Полировка", price: 10000, priceFrom: true },
+			{ name: "Керамика", price: 10000, priceFrom: true },
+			{ name: "Стекло (покрытие)", price: 8000, priceFrom: true },
+			{ name: "Полировка фар", price: 1500, priceFrom: true },
+		],
+	},
+];
+
+---
+
+<Layout title=`Кузовные работы в Самаре` description=`Первый официальный кузовной по&nbsp;автомобилям из&nbsp;Китая`>
+	<Banner />
+	<OnlineCalculation />
+
+	<section id="advantages">
+		<div class="container">
+			<h2 class="mb-8">Выгоднее, чем в гараже!</h2>
+			<p class="uppercase text-xl text-center mb-14">Преимущества нашего сервисного центра:</p>
+
+			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				{infoItems.map(item => ( <InfoItem item={item} classes={infoItemClasses} data-title="Получить спецпредложение" data-form_name={`Получить спецпредложение. ${item.title.replace(/<[^>]*>/g, '')}`} /> ))}
+			</div>
+		</div>
+	</section>
+
+	{
+		services.length ? (
+			<section class="section bg-gray-100 relative z-10" id="services" >
+				<div class="container">
+					<h2 class="mb-14">Все услуги</h2>
+					
+				{services.map((service) => 
+					service.items.length ? (
+					<h3 class="mb-6 text-2xl text-center">{service.title}</h3>
+					<div class="grid md:grid-cols-2 max-[500px]:gap-4 gap-5">
+						{service.items.map((item) => 
+						<div class="shadow-xl p-4 bg-white flex max-[500px]:flex-col max-md:flex-row max-lg:flex-col items-center max-[500px]:gap-4 gap-5">
+							<h4 class="grow font-extrabold lg:font-light xl:text-lg">{item.name}</h4>
+							<div class="flex items-center flex-nowrap max-[500px]:flex-col max-[500px]:gap-3 gap-4 xl:gap-8">
+								<div class="text-red-500 flex items-end gap-1.5">
+									{item.priceFrom ? (
+										<small class="text-base leading-none! mb-0.5 sm:mb-1">от</small>
+									) : ("")}
+									<span class="text-2xl sm:text-3xl font-bold leading-none!">{item.price.toLocaleString("ru-RU", { style: "currency", currency: "RUB", maximumSignificantDigits: 3 })}</span>
+								</div>
+								<Button 
+									classes="popup-link max-[500px]:text-sm max-[500px]:!px-2 max-[500px]:!py-1 !px-4 !py-2" 
+									url="#common-modal" 
+									title="Записаться"
+									dataTitle={`Запись на <span class="lowercase">${service.title}</span><div class="text-xl font-extrabold">${item.name}</div>`}
+									dataFormName={`Запись на ${service.title} - ${item.name}`}
+								/>
+							</div>
+						</div>
+						)}
+					</div>
+					) : ("")
+				)}
+				</div>
+			</section>
+		) : ("")
+	}
+
+	<SeoText mdx="index" />
+
+	<Contacts mapImg="https://cdn.alexsab.ru/maps/map-bg.webp" title="Наши контакты" />
+
+</Layout>
