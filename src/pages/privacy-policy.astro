@@ -23,11 +23,12 @@ salons
 const contact_text = salons
     .filter(salon => (salon?.name && salon?.name !== '' || salon?.legal_entity && salon?.legal_entity !== ''))
     .map(s => `<p class="not-last:border-b not-last:pb-4">` +
-        `${s?.legal_entity || s?.name || legal_entity ? `- Наименование организации: <b>${s?.legal_entity || s?.name || legal_entity}</b><br />` : ''}` +
-        `${s?.legal_inn || legal_inn ? `- ИНН: <b>${s?.legal_inn || legal_inn}</b><br />` : ''}` +
-        `${s?.address ? `- Юридический адрес: <b>${s?.address}</b><br />` : ''}` +
-        `${s?.phone ? `- Телефон: <b>${s?.phone}</b><br />` : ''}` +
-        `${s?.email ? `- Электронная почта: <b>${s?.email}</b>` : ''}` +
+        `${s?.name ? `<strong>${s?.name}</strong><br />` : ''}` +
+        `${s?.legal_entity || legal_entity ? `- Юридическое лицо: <strong>${s?.legal_entity || legal_entity}</strong><br />` : ''}` +
+        `${s?.legal_inn || legal_inn ? `- ИНН: <strong>${s?.legal_inn || legal_inn}</strong><br />` : ''}` +
+        `${s?.address ? `- Юридический адрес: <strong>${s?.address}</strong><br />` : ''}` +
+        `${s?.phone ? `- Телефон: <strong>${s?.phone}</strong><br />` : ''}` +
+        `${s?.email ? `- Электронная почта: <strong>${s?.email}</strong>` : ''}` +
     `</p>`).join('');
 ---
 
