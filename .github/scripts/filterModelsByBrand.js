@@ -85,13 +85,18 @@ try {
     logWarning('Ни одна модель не прошла фильтрацию. models.json будет заполнен случайным брендом: ' + settings.brand);
   }
   let brands = parseList(settings.brand);
+  const hasBrandFilter = brands.length > 0;
+  if (!hasBrandFilter) {
+    logWarning('brand не указан в settings.json: фильтруем models.json по всем брендам');
+  }
+
   const modelIDs = normalizeArray(settings.modelIDs);
   const testDriveIDs = normalizeArray(settings.testDriveIDs);
   const serviceIDs = normalizeArray(settings.serviceIDs);
 
   // Универсальная фильтрация по бренду и ID
   const filterBy = (targetIDs) => (m) => {
-    const markMatch = m.mark_id && brands.includes(String(m.mark_id).toLowerCase());
+    const markMatch = !hasBrandFilter || (m.mark_id && brands.includes(String(m.mark_id).toLowerCase()));
     const idMatch = m.id && targetIDs.includes(String(m.id).toLowerCase());
     // Модель видна, если: (status существует и не 'disable' и не 'hide') ИЛИ show === true
     const isVisible = (m?.status && m.status !== 'disable' && m.status !== 'hide') || m?.show;

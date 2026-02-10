@@ -128,10 +128,20 @@ NODE
 # Читаем brand из settings.json
 BRANDS_RAW=$(extract_brands_from_settings src/data/settings.json)
 
+SITE_BRAND_STYLE=""
+if command -v jq &> /dev/null; then
+    SITE_BRAND_STYLE=$(jq -r '.site_brand_style // empty' src/data/settings.json 2>/dev/null || true)
+else
+    SITE_BRAND_STYLE=$(grep -o '"site_brand_style"[[:space:]]*:[[:space:]]*"[^"]*"' src/data/settings.json | sed 's/.*"site_brand_style"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || true)
+fi
+
 # Проверяем, что brand найден
 if [ -z "$BRANDS_RAW" ]; then
-    printf "${BGRED}Error: brand not found in settings.json${Color_Off}\n"
-    exit 1
+    printf "${BGYELLOW}No brands found in settings.json. Skipping model-sections download (service mode).${Color_Off}\n"
+    if [ -n "$SITE_BRAND_STYLE" ]; then
+        printf "${BGYELLOW}site_brand_style: $SITE_BRAND_STYLE${Color_Off}\n"
+    fi
+    exit 0
 fi
 
 echo "Found brands:"
@@ -321,8 +331,11 @@ while IFS= read -r brand; do
 done <<< "$BRANDS_RAW"
 
 if [ ${#BRAND_ARRAY[@]} -eq 0 ]; then
-    printf "${BGRED}Error: no valid brands found in settings.json${Color_Off}\n"
-    exit 1
+    printf "${BGYELLOW}No valid brands found in settings.json. Skipping model-sections download (service mode).${Color_Off}\n"
+    if [ -n "$SITE_BRAND_STYLE" ]; then
+        printf "${BGYELLOW}site_brand_style: $SITE_BRAND_STYLE${Color_Off}\n"
+    fi
+    exit 0
 fi
 
 # Обрабатываем каждый бренд (используя уже клонированный репозиторий)

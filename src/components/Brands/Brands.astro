@@ -23,7 +23,16 @@ const brandCounts = filePaths.reduce((acc, path) => {
   return acc;
 }, {} as Record<string, number>);
 
-const brands = settingsData.brand.split(',').map((brand) => brand.trim().toLowerCase());
+const rawBrands = settingsData?.brand;
+const brands = (
+  Array.isArray(rawBrands)
+    ? rawBrands.flatMap((brand) => (typeof brand === 'string' ? brand.split(',') : []))
+    : typeof rawBrands === 'string'
+      ? rawBrands.split(',')
+      : []
+)
+  .map((brand) => brand.trim().toLowerCase())
+  .filter(Boolean);
 
 const { type = ViewType.LOGO } = Astro.props;
 ---

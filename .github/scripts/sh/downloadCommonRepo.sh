@@ -384,39 +384,38 @@ if [ "$SHOULD_COPY_MODEL_SECTIONS" = true ]; then
 
   BRANDS_RAW=$(extract_brands "$SETTINGS_FILE")
   if [ -z "$BRANDS_RAW" ]; then
-    echo "❌ Error: no brands found in settings.json"
-    exit 1
+    echo "▶ Skipping model-sections (brand is not set in settings.json; service mode uses site_brand_style for styles)"
+  else
+    BRANDS=()
+    while IFS= read -r line; do
+      [ -z "$line" ] && continue
+      BRANDS+=("$line")
+    done <<< "$BRANDS_RAW"
+
+    # ==================================================
+    # Копирование model-sections по брендам
+    # ==================================================
+    echo "▶ Sync model-sections…"
+
+    for BRAND in "${BRANDS[@]}"; do
+      RAW_BRAND=$(echo "$BRAND" | xargs)
+
+      NORMALIZED_BRAND=$(echo "$RAW_BRAND" \
+        | tr '[:upper:]' '[:lower:]' \
+        | sed -E 's/[^a-z0-9 ]//g; s/[[:space:]]+/-/g; s/^-+|-+$//g')
+
+      SRC_DIR="$TMP_DIR/src/model-sections/$NORMALIZED_BRAND"
+      DEST_DIR="$LOCAL_DATA_DIR/model-sections/$NORMALIZED_BRAND"
+
+      if [ -d "$SRC_DIR" ]; then
+        mkdir -p "$DEST_DIR"
+        rsync -a "$SRC_DIR/" "$DEST_DIR/"
+        echo "  ✔ $RAW_BRAND → $NORMALIZED_BRAND"
+      else
+        echo "  ⚠ model-sections not found for brand: $RAW_BRAND ($NORMALIZED_BRAND)"
+      fi
+    done
   fi
-
-  BRANDS=()
-  while IFS= read -r line; do
-    [ -z "$line" ] && continue
-    BRANDS+=("$line")
-  done <<< "$BRANDS_RAW"
-
-  # ==================================================
-  # Копирование model-sections по брендам
-  # ==================================================
-  echo "▶ Sync model-sections…"
-
-  for BRAND in "${BRANDS[@]}"; do
-    RAW_BRAND=$(echo "$BRAND" | xargs)
-
-    NORMALIZED_BRAND=$(echo "$RAW_BRAND" \
-      | tr '[:upper:]' '[:lower:]' \
-      | sed -E 's/[^a-z0-9 ]//g; s/[[:space:]]+/-/g; s/^-+|-+$//g')
-
-    SRC_DIR="$TMP_DIR/src/model-sections/$NORMALIZED_BRAND"
-    DEST_DIR="$LOCAL_DATA_DIR/model-sections/$NORMALIZED_BRAND"
-
-    if [ -d "$SRC_DIR" ]; then
-      mkdir -p "$DEST_DIR"
-      rsync -a "$SRC_DIR/" "$DEST_DIR/"
-      echo "  ✔ $RAW_BRAND → $NORMALIZED_BRAND"
-    else
-      echo "  ⚠ model-sections not found for brand: $RAW_BRAND ($NORMALIZED_BRAND)"
-    fi
-  done
 else
   if [ "$SKIP_MODEL_SECTIONS" = true ]; then
     echo "▶ Skipping model-sections (--skip-model-sections flag set)"
