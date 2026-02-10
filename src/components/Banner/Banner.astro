@@ -10,7 +10,7 @@ const { banners = bannersData } = Astro.props;
 import settings from '@/data/settings.json';
 const { is_header_transparent } = settings;
 
-const bannerClasses = is_header_transparent ? 'pb-[177.78%] md:pb-[100%] lg:pb-[56.25%]' : 'pb-[135%] md:pb-[100%] lg:pb-[56.25%] 2xl:pb-[40%]';
+const bannerClasses = is_header_transparent ? 'pb-[160%] md:pb-[100%] lg:pb-0 lg:min-h-[850px] lg:h-dvh' : 'pb-[135%] md:pb-[100%] lg:pb-[56.25%] 2xl:pb-[40%]';
 ---
 
 {
