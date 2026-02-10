@@ -15,7 +15,7 @@ const {content, classes = is_header_transparent ? defaultClasses : 'bg-accent-50
 		<Fragment set:html={content}>
 		{closeBtn && (
 			<button 
-				class="text-base absolute h-8 sm:h-full w-8 sm:w-10 right-0 top-0 z-10"
+				class="text-base absolute h-8 sm:h-full w-8 sm:w-10 right-0 top-0 z-10 close-header-top-line-btn"
 				@click="hideTopLine"
 			>
 				<Icon name="mdi:close" class="text-lg text-white/80 hover:text-white transition-colors" />
