@@ -3,6 +3,7 @@ import './modules/scroll';
 import './modules/modals';
 import './modules/latest.posts';
 import './modules/stock-slider';
+import './modules/dropzone';
 
 import ResponsiveMenu from './modules/ResponsiveMenu';
 
