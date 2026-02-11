@@ -173,6 +173,7 @@ jobs:
           # JSON_PATH: ${{ secrets.JSON_PATH }}
           JSON_REPO: ${{ secrets.JSON_REPO }}
           DOMAIN: ${{ vars.DOMAIN }}
+          FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
 
       - name: Get dealer prices
         if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN && !vars.ONLY_FEDERAL_PRICE }}

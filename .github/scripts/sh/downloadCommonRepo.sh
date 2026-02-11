@@ -27,6 +27,7 @@ Options:
 Env:
   JSON_REPO                  Git repository URL (without .git)
   DOMAIN                     Domain folder under src/
+  FINE_GRAINED_PAT           Optional GitHub PAT for private repos
   (If .env exists, JSON_REPO and DOMAIN are read from it.)
 
 Examples:
@@ -114,6 +115,26 @@ build_git_clone_url() {
   fi
 }
 
+apply_pat_to_url() {
+  local url="$1"
+
+  if [ -z "${FINE_GRAINED_PAT:-}" ]; then
+    echo "$url"
+    return
+  fi
+
+  if [[ "$url" =~ ^https?:// ]]; then
+    local proto="${url%%://*}"
+    local rest="${url#*://}"
+    if [[ "$rest" =~ ^[^@]+@ ]]; then
+      echo "$url"
+    else
+      echo "${proto}://x-access-token:${FINE_GRAINED_PAT}@${rest}"
+    fi
+  else
+    echo "$url"
+  fi
+}
 extract_brands() {
   local settings_file="$1"
 
@@ -268,6 +289,7 @@ echo "▶ DOMAIN:    $DOMAIN"
 # Переменные
 # ==================================================
 GIT_REPO_URL=$(build_git_clone_url "$JSON_REPO")
+CLONE_URL=$(apply_pat_to_url "$GIT_REPO_URL")
 REPO_NAME=$(basename "$GIT_REPO_URL" .git)
 TMP_DIR="tmp/$REPO_NAME"
 
@@ -289,7 +311,7 @@ git clone \
   --depth=1 \
   --single-branch \
   --no-checkout \
-  "$GIT_REPO_URL" \
+  "$CLONE_URL" \
   "$TMP_DIR"
 
 cd "$TMP_DIR"

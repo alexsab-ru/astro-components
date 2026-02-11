@@ -17,6 +17,10 @@ show_help() {
     echo "  Бренды читаются из ключа 'brand' в settings.json (строка или массив)"
     echo "  Для каждого бренда скачиваются все .yml файлы из model-sections/{brand}/"
     echo
+    echo "Env:"
+    echo "  JSON_PATH         GitHub Pages URL (https://user.github.io/repo) or repo URL"
+    echo "  FINE_GRAINED_PAT  Optional GitHub PAT for private repos"
+    echo
     echo "Examples:"
     echo "  $0             # Download all YML files for brands from settings.json"
 }
@@ -182,6 +186,27 @@ extract_github_repo() {
     fi
 }
 
+apply_pat_to_url() {
+    local url="$1"
+
+    if [ -z "${FINE_GRAINED_PAT:-}" ]; then
+        echo "$url"
+        return
+    fi
+
+    if [[ "$url" =~ ^https?:// ]]; then
+        local proto="${url%%://*}"
+        local rest="${url#*://}"
+        if [[ "$rest" =~ ^[^@]+@ ]]; then
+            echo "$url"
+        else
+            echo "${proto}://x-access-token:${FINE_GRAINED_PAT}@${rest}"
+        fi
+    else
+        echo "$url"
+    fi
+}
+
 # Функция для скачивания всех YML файлов из директории бренда
 # Использует уже клонированный репозиторий через git sparse-checkout
 # temp_repo_dir и project_root должны быть переданы как параметры
@@ -278,6 +303,9 @@ fi
 
 printf "Репозиторий: $github_repo\n"
 
+GIT_REPO_URL="https://github.com/${github_repo}.git"
+CLONE_URL=$(apply_pat_to_url "$GIT_REPO_URL")
+
 # Сохраняем корневую директорию проекта (откуда запущен скрипт)
 project_root="$(pwd)"
 
@@ -291,7 +319,7 @@ trap "rm -rf $temp_repo_dir" EXIT INT TERM
 printf "\n${BGYELLOW}Клонируем репозиторий (это может занять некоторое время)...${Color_Off}\n"
 
 # Клонируем репозиторий с минимальными данными (один раз для всех брендов)
-if ! git clone --filter=blob:none --depth=1 --single-branch --no-checkout "https://github.com/${github_repo}.git" "$temp_repo_dir" 2>/dev/null; then
+if ! git clone --filter=blob:none --depth=1 --single-branch --no-checkout "$CLONE_URL" "$temp_repo_dir" 2>/dev/null; then
     printf "${BGRED}Ошибка: не удалось клонировать репозиторий${Color_Off}\n"
     exit 1
 fi

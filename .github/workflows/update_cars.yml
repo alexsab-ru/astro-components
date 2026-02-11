@@ -98,6 +98,7 @@ jobs:
         # JSON_PATH: ${{ secrets.JSON_PATH }}
         JSON_REPO: ${{ secrets.JSON_REPO }}
         DOMAIN: ${{ vars.DOMAIN }}
+        FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
     
     - name: Set up Python
       uses: actions/setup-python@v5
