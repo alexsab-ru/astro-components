@@ -15,6 +15,7 @@ if (fileUploads.length) {
 		window.dropzones[idx] = new Dropzone(fileUpload, {
 			url: connectforms_link,
 			addRemoveLinks: true,
+			autoProcessQueue: false,
 			parallelUploads: 10,
 			acceptedFiles: ".jpg,.jpeg,.png",
 			maxFiles: 10,
@@ -73,13 +74,48 @@ if (fileUploads.length) {
 }
 
 Dropzone.confirm = function (question, accepted, rejected) {
-	const confirmModal = document.getElementById('confirm-modal');
-	const acceptBtn = document.getElementById('accept-confirm');
-	confirmModal.querySelector('.message').innerText = question
+	const confirmModal = document.getElementById('dropzone-confirm-modal');
+	const acceptBtn = document.getElementById('dropzone-accept');
+	const cancelBtn = document.getElementById('dropzone-cancel');
+	const closeBtn = confirmModal.querySelector('[data-close]');
+	
+	// Устанавливаем текст вопроса
+	confirmModal.querySelector('.message').innerText = question;
 	confirmModal.classList.remove('hidden');
-	acceptBtn.addEventListener('click', e => {
+	
+	// Обработчик удаления
+	const handleAccept = (e) => {
 		e.preventDefault();
-		confirmModal.classList.add('hidden');
+		closeModal();
 		accepted();
-	})
+	};
+	
+	// Обработчик отмены
+	const handleReject = (e) => {
+		e.preventDefault();
+		closeModal();
+		if (rejected) rejected();
+	};
+	
+	// Функция закрытия и очистки слушателей
+	const closeModal = () => {
+		confirmModal.classList.add('hidden');
+		acceptBtn.removeEventListener('click', handleAccept);
+		cancelBtn.removeEventListener('click', handleReject);
+		closeBtn.removeEventListener('click', handleReject);
+		confirmModal.removeEventListener('click', handleOverlayClick);
+	};
+	
+	// Закрытие по клику на overlay
+	const handleOverlayClick = (e) => {
+		if (e.target === confirmModal) {
+			handleReject(e);
+		}
+	};
+	
+	// Добавляем слушатели
+	acceptBtn.addEventListener('click', handleAccept);
+	cancelBtn.addEventListener('click', handleReject);
+	closeBtn.addEventListener('click', handleReject);
+	confirmModal.addEventListener('click', handleOverlayClick);
 };
