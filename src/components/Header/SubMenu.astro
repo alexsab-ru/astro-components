@@ -5,13 +5,18 @@ interface Props {
 const { children } = Astro.props;
 import MenuLink from './MenuLink.astro';
 import { Icon } from 'astro-icon/components';
-let classes = 'left-0 lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible lg:-translate-y-1 transition-all bg-submenu-bg text-submenu-text group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 lg:shadow-2xl z-1000 lg:border-t border-header-border lg:max-h-[calc(100vh-129px)] lg:overflow-y-auto';
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+
+const commonClasses = 'left-0 lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible lg:-translate-y-1 transition-all group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 lg:shadow-2xl lg:border-t lg:max-h-[calc(100vh-129px)] lg:overflow-y-auto z-50';
+
+let classes = is_header_transparent ? 'submenu-transparent lg:bg-header-transparent-bg text-header-transparent-text border-header-border-transparent' : 'bg-submenu-bg text-submenu-text border-header-border';
 classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes + ' ' : classes;
 ---
 {children && (
-	<div class={classes}>
+	<div class={`${classes} ${commonClasses}`}>
 		{!Array.isArray(children) && Object.keys(children).length > 0 ? Object.keys(children).map( key => (
-			<div class={`lg:grid lg:grid-cols-5 ${Object.keys(children).length > 1 ? 'lg:border-b' : ''}`} x-data="{isOpenSubMenu: false}">
+			<div class={`lg:grid lg:grid-cols-5 pb-[14px] ${Object.keys(children).length > 1 ? 'lg:border-b' : ''} ${is_header_transparent ? 'lg:border-header-border-transparent' : ''}`} x-data="{isOpenSubMenu: false}">
 				<div class="relative lg:flex lg:items-center">
 					{ Object.keys(children).length > 1 ? (
 						<div 

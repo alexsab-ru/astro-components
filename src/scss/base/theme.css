@@ -27,8 +27,12 @@
     --color-gray-900: #111827;
     --color-gray-950: #030712;
 
+    /* BORDER & DIVIDES */
     --color-border: var(--color-gray-200);
     --color-header-border: var(--color-border);
+    --color-header-divide: var(--color-border);
+    --color-map-info-divide: var(--color-black);
+    --color-footer-divide: var(--color-white);
 
     /* Logo sizing */
     --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
@@ -47,6 +51,17 @@
     --color-header-text: var(--color-black);
     --color-submenu-bg: var(--color-white);
     --color-submenu-text: var(--color-black);
+
+    /* HEADER TRANSPARENT COLORS */
+    /* --transparent-bg-color: rgb(35, 35, 35); */
+    --transparent-bg-color: rgb(28, 28, 40);
+    --transparent-bg-hover-color: var(--color-accent-500);
+    --blur-header: 30px;
+    --color-header-transparent-bg: color-mix(in srgb, var(--transparent-bg-color) 88%, transparent);
+    --color-header-transparent-text: var(--color-white);
+    --color-submenu-transparent-text: var(--color-white);
+    --color-header-border-transparent: color-mix(in srgb, var(--transparent-bg-color) 95%, white);
+    --color-header-transparent-divide: color-mix(in srgb, var(--transparent-bg-color) 95%, white);
     
     /* BUTTON COLORS */
     --color-button-bg: var(--color-accent-500);
@@ -62,6 +77,7 @@
 
     /* HEADER LINK MENU BG HOVER COLOR */
     --color-header-menu-link-bg-hover: var(--color-accent-500);
+    --color-header-transparent-menu-link-bg-hover: color-mix(in srgb, var(--transparent-bg-hover-color) 100%, transparent);
 
     /* DEFAULT SHADOW FOR HEADER MOBILE BTN'S */
     --shadow-header-btn: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));

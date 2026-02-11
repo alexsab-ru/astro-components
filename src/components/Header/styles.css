@@ -1,13 +1,10 @@
 @reference "../../scss/app.css";
 
 .scroll-link, .header-link, .header-child-link{
-	@apply block lg:inline-block py-3 px-5 transition-colors duration-300 text-header-text hover:bg-header-menu-link-bg-hover hover:text-button-text whitespace-nowrap;
-	&.active{
-		@apply bg-header-menu-link-bg-hover text-button-text;
-	}
+	@apply block lg:inline-block py-3 px-5 transition duration-150 whitespace-nowrap;
 }
 .header-child-link{
-	@apply lg:!block text-submenu-text pl-8 lg:pl-5;
+	@apply lg:!block pl-8 lg:pl-5;
 }
 .cols-0 {
 	@apply columns-auto;
@@ -34,4 +31,27 @@
 	li, a {
 		@apply w-full block;
 	}
+}
+/* .header-transparent{
+	z-index:;
+} */
+/* Dropdown "more" menu styles when header is in transparent mode */
+.header-transparent .more-menu {
+	@apply backdrop-blur-header bg-header-transparent-bg border-header-border-transparent;
+}
+
+.header-transparent .menu-more-btn{
+	@apply text-header-transparent-text;
+}
+
+.submenu-transparent::after,
+.header-transparent::after{
+	@apply backdrop-blur-header;
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
 }

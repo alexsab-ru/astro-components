@@ -4,13 +4,18 @@ interface Props {
 	banners?: TBanner[]
 }
 import BannerSlide from './BannerSlide.astro';
-import bannersData from '@/data/banners.json'
+import bannersData from '@/data/banners.json';
 const { banners = bannersData } = Astro.props;
+
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+
+const bannerClasses = is_header_transparent ? 'pb-[177.78%] md:pb-[100%] lg:pb-[56.25%]' : 'pb-[135%] md:pb-[100%] lg:pb-[56.25%] 2xl:pb-[40%]';
 ---
 
 {
 	banners && (
-		<div class="banner relative pb-[135%] md:pb-[100%] lg:pb-[56.25%] 2xl:pb-[40%]">
+		<div class={`banner relative ${bannerClasses}`}>
 			<div class="absolute inset-0">
 				<div class="swiper banner-slider h-full text-white">
 					<div class="swiper-wrapper">

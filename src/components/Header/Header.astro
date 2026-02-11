@@ -8,7 +8,7 @@ const path = Astro.url.pathname;
 
 import { LINKS_MENU as links } from '@/const.js';
 import settings from '@/data/settings.json';
-const { header_top_line } = settings;
+const { header_top_line, is_header_transparent } = settings;
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
 import { Icon } from 'astro-icon/components';
@@ -23,10 +23,18 @@ import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
 
 import './styles.css';
+
+const headerGlobalClasses = is_header_transparent ? 'header-transparent fixed' : 'sticky';
+const headerBgClasses = is_header_transparent ? 'bg-header-transparent-bg' : 'bg-header-bg';
+const headerBgSubmenuClasses = is_header_transparent ? 'bg-header-transparent-bg' : 'bg-header-bg';
+const colorText = is_header_transparent ? 'text-header-transparent-text' : 'text-header-text';
+const colorHoverText = is_header_transparent ? 'hover:text-header-transparent-text/80' : 'hover:text-header-text/80';
+const iconColor = is_header_transparent ? 'text-header-transparent-text' : 'text-header-text';
+const borderColor = is_header_transparent ? 'border-header-border-transparent' : 'border-header-border';
 ---
 <div
 	x-data="header"
-	class="bg-header-bg text-header-text sticky top-0 transition-all duration-300 z-50"
+	class={`${headerGlobalClasses} ${headerBgClasses} ${colorText} w-full top-0 left-0 transition-all duration-300 z-50`}
 	:class="{'shadow-3xl': scrolling}"
 >
 	<header>
@@ -41,7 +49,7 @@ import './styles.css';
 					{
 						salons.length && salons.map((salon: any, index) => {
 							return index < 2 && (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="whitespace-nowrap font-weight-bold text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors text-header-text hover:text-header-text/80 *:transition-colors *:text-header-text hover:*:text-header-text/80" title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class={`whitespace-nowrap font-weight-bold text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors ${colorText} ${colorHoverText}`} title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
 							)
 						})
 					}
@@ -58,7 +66,7 @@ import './styles.css';
 								<small class="block text-xs">{salons.length}&nbsp;{declOfNums(salons.length, ['салон', 'салона', 'салонов'])}</small>
 							</div>) : (
 							<div class="hidden xl:flex items-center gap-1 font-medium text-sm xl:text-base">
-								<Icon name="mdi:map-marker-outline" class="text-2xl text-header-text" />
+								<Icon name="mdi:map-marker-outline" class={`text-2xl ${colorText}`} />
 								<Fragment set:html={salons[0].address} />
 							</div>
 						)
@@ -83,7 +91,7 @@ import './styles.css';
 							data-choose_department={true}
 							{...salons.length > 1 ? {'data-sorting': true} : {}}
 						>
-							<Icon name="mdi:phone-incoming" class="text-3xl text-header-text" />
+							<Icon name="mdi:phone-incoming" class={`text-3xl ${iconColor}`} />
 						</a>
 						{Object.keys(socials.header).length ? (
 							<SocialList data={socials.header} />
@@ -96,7 +104,7 @@ import './styles.css';
 						aria-label="Mobile menu"
 						@click.prevent="open = !open"
 					>
-						<Icon name="mdi:hamburger-menu" class="text-2xl text-header-text" />
+						<Icon name="mdi:hamburger-menu" class={`text-2xl ${iconColor}`} />
 					</button>
 				</div>
 			</div>
@@ -108,14 +116,14 @@ import './styles.css';
 
 	<div
 		x-cloak
-		class="fixed inset-0 bg-black/40 z-35 transition-opacity duration-500"
+		class="fixed inset-0 bg-black/30 z-35 transition-opacity duration-500 h-screen"
 		:class="open ? 'visible opacity-100' : 'invisible opacity-0'"
 		@click="open = false"
 	></div>
 
 	<div
 		x-cloak
-		class="fixed top-0 bottom-0 right-0 z-40 bg-header-bg text-header-text py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full"
+		class={`fixed top-0 bottom-0 right-0 z-40 py-10 shadow-2xl transition-transform duration-500 max-w-[500px] w-full h-screen ${headerBgSubmenuClasses} ${colorText}`}
 		:class="open ? 'translate-x-0' : 'translate-x-[110%]'"
 	>
 		<button class="w-10 h-10 absolute right-0 top-0 text-2xl font-mono transition-opacity opacity-60 hover:opacity-100" @click.prevent="open = false">&times;</button>
@@ -125,10 +133,10 @@ import './styles.css';
 				{links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
 				<div>
 				{salons.length && salons.map(salon => (
-					<div class="flex flex-col gap-3 py-5 px-5 border-t first:border-0">
+					<div class={`flex flex-col gap-3 py-5 px-5 ${borderColor} border-t first:border-0`}>
 						<div class="font-medium text-lg">{salon.name}</div>
-						<a href="#contacts" class="text-xl flex items-center gap-1 flex-nowrap text-header-text hover:text-header-text"><Icon name="mdi:map-marker-outline" class="text-2xl shrink-0 text-header-text" /><Fragment set:html={salon.address} /></a>
-						<a href={`tel:${phoneFormat(salon.phone)}`} class="text-2xl font-weight-bold text-header-text flex items-center gap-1 flex-nowrap transition-colors hover:text-header-text" title={salon.name}><Icon name="mdi:cellphone" class="text-xl text-header-text" /> {salon.phone}</a>
+						<a href="#contacts" class={`text-xl flex items-center gap-1 flex-nowrap ${colorText} ${colorHoverText}`}><Icon name="mdi:map-marker-outline" class={`text-2xl shrink-0 ${colorText}`} /><Fragment set:html={salon.address} /></a>
+						<a href={`tel:${phoneFormat(salon.phone)}`} class={`text-2xl font-weight-bold flex items-center gap-1 flex-nowrap transition-colors ${colorText} ${colorHoverText}`} title={salon.name}><Icon name="mdi:cellphone" class={`text-xl ${colorText}`} /> {salon.phone}</a>
 					</div>
 				))}
 				</div>

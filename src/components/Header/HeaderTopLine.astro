@@ -5,9 +5,12 @@ interface Props{
 	closeBtn?: boolean;
 }
 import { Icon } from 'astro-icon/components';
-const {content, classes = 'bg-accent-500 px-8 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative', closeBtn = true} = Astro.props
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+const defaultClasses = 'px-12 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative';
+const {content, classes = is_header_transparent ? defaultClasses : 'bg-accent-500 ' + defaultClasses, closeBtn = true} = Astro.props
 ---
-<div x-show="showTopLine === 1" x-cloak>
+<div x-show="showTopLine === 1" x-cloak class="border-header-border-transparent border-b">
 	<div class={classes}>
 		<Fragment set:html={content}>
 		{closeBtn && (

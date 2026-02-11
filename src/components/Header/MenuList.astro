@@ -4,8 +4,11 @@ interface Props {
 }
 const { links } = Astro.props;
 import MenuListItem from './MenuListItem.astro';
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+const borderColor = is_header_transparent ? 'border-header-border-transparent' : 'border-header-border';
 ---
-<ul class="overflow-hidden flex flex-col lg:flex-row border-b lg:border-b-0">
+<ul class={`overflow-hidden flex flex-col lg:flex-row ${borderColor} border-b lg:border-b-0`}>
 	{
 		links.map(link => (
 			<MenuListItem link={link} />

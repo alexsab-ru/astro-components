@@ -5,11 +5,14 @@ interface Props {
 const { links } = Astro.props;
 
 import HeaderMenuList from './MenuList.astro';
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
 
 const path = Astro.url.pathname;
 const classBottom = path != '/' ? ' border-b' : '';
+const siteNavClasses = is_header_transparent ? 'border-header-border-transparent' : 'border-header-border';
 ---
-<div id="site_nav" class={'hidden lg:block border-header-border border-t'+classBottom}>
+<div id="site_nav" class={`hidden lg:block ${siteNavClasses} border-t ${classBottom}`}>
 	<div class="container">
 		<div class="h-full">
 			<HeaderMenuList links={links} />
