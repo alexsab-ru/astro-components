@@ -58,7 +58,7 @@ const services = [
 				<div class="grid grid-cols-1 min-[600px]:grid-cols-2 gap-5">
 	
 					<Input name="name" classes='border-transparent' placeholder="Ваше имя" />
-					<Input type="tel" name="phone" classes='border-transparent' placeholder="+7 (999) 999-99-99*" required errorClasses='text-yellow-300' />
+					<Input type="tel" name="phone" classes='border-transparent' placeholder="+7 (999) 999-99-99*" required errorClasses='text-red-500' />
 					<FormSelect name="salon" placeholder="Выберите салон" options={options} />
 					<Input name="vin" classes='border-transparent' placeholder="VIN" />
 	
@@ -66,7 +66,7 @@ const services = [
 						<FileUpload />
 					</div>
 					<div class="min-[600px]:col-span-2">
-						<Checkbox name='agree' label={AGREE_LABEL} required errorClasses='text-yellow-300 w-full' errorText='Чтобы продолжить, установите флажок' />
+						<Checkbox name='agree' label={AGREE_LABEL} required errorClasses='text-red-50 w-full' errorText='Чтобы продолжить, установите флажок' />
 						<input type="checkbox" name="subscribe" class="absolute w-0 h-0 opacity-0 invisible">
 						<Button view="form-button" classes="white mt-5" title="Отправить" />
 					</div>
