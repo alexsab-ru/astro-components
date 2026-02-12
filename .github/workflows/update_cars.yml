@@ -90,12 +90,7 @@ jobs:
         npm install -g pnpm
         pnpm install --no-frozen-lockfile
         pnpm downloadCommonRepo -f settings.json --skip-model-sections
-        # pnpm downloadJSON -f settings.json
-        # pnpm downloadCommonModelsJSON
-        # pnpm downloadCommonCarsJSON
-        # pnpm downloadModelSectionsYML
       env:
-        # JSON_PATH: ${{ secrets.JSON_PATH }}
         JSON_REPO: ${{ secrets.JSON_REPO }}
         DOMAIN: ${{ vars.DOMAIN }}
         FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
