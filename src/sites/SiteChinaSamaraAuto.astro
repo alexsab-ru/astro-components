@@ -24,7 +24,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import SeoText from '@/components/Seo/Index.astro';
-import Brands from '../Brands/Brands.astro';
+import Brands from '@/components/Brands/Brands.astro';
 ---
 
 <Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
