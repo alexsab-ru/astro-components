@@ -11,7 +11,7 @@ TEXTRED='\033[30;31m'
 # Функция для отображения справки
 show_help() {
     cat <<'EOF'
-Usage: downloadCommonRepo.sh [OPTIONS]
+Usage: pnpm downloadCommonRepo [OPTIONS]
 
 Options:
   -h, --help                 Show this help message
@@ -31,14 +31,14 @@ Env:
   (If .env exists, JSON_REPO and DOMAIN are read from it.)
 
 Examples:
-  ./downloadCommonRepo.sh
-  ./downloadCommonRepo.sh -cd
-  ./downloadCommonRepo.sh -f settings.json
-  ./downloadCommonRepo.sh -f settings.json -f faq.json
-  ./downloadCommonRepo.sh -f settings.json,faq.json
-  ./downloadCommonRepo.sh --skip-dealer-files
-  ./downloadCommonRepo.sh --skip-model-sections --skip-models --skip-cars
-  JSON_REPO=https://github.com/org/repo DOMAIN=site.com ./downloadCommonRepo.sh
+  pnpm downloadCommonRepo
+  pnpm downloadCommonRepo -cd
+  pnpm downloadCommonRepo -f settings.json
+  pnpm downloadCommonRepo -f settings.json -f faq.json
+  pnpm downloadCommonRepo -f settings.json,faq.json
+  pnpm downloadCommonRepo --skip-dealer-files
+  pnpm downloadCommonRepo --skip-model-sections --skip-models --skip-cars
+  JSON_REPO=https://github.com/org/repo DOMAIN=site.com pnpm downloadCommonRepo
 
 Warning:
   --clean-data removes all files in src/data and discards local changes there.

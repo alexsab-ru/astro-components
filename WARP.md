@@ -31,9 +31,9 @@ Most data for pages is pulled from remote JSON and XML feeds via scripts in `.gi
 
 Common workflows:
 
-- Download JSON data into `src/data`:
-  - macOS/Linux: `pnpm downloadJSON`
-  - Windows: `pnpm downloadJSON_win`
+- Download JSON data into `src/data` (requires `JSON_REPO` and `DOMAIN` in `.env`):
+  - `pnpm downloadCommonRepo` — clones repo and copies data from `src/$DOMAIN/data`, model-sections, models.json, cars.json
+  - Windows: use WSL or Git Bash; `pnpm downloadCommonRepo` runs via bash
 - Full data refresh for dealer feeds + prices (new + used cars, photos, air storage):
   - `pnpm getAll`
 - Individual feed downloads (examples):
@@ -48,8 +48,8 @@ Common workflows:
 
 A combined "download JSON + XML + prices and start dev" flow exists:
 
-- macOS/Linux: `pnpm dd`
-- Windows: `pnpm ddw`
+- macOS/Linux: `pnpm dd` — runs `downloadCommonRepo` plus dealer prices, merge, placeholders, then starts dev
+- Windows: use WSL or Git Bash to run `pnpm dd`
 
 ### Link checking & Lighthouse
 
@@ -184,4 +184,4 @@ Future changes should generally follow this feature-based component organization
 
 - Use `pnpm dev` with `astro.local.config.mjs` during local development; production builds use the default `astro.config.mjs`.
 - When working on navigation or catalog pages, prefer to modify `src/data/*` and `src/const.js` rather than hardcoding values inside page components.
-- Before relying on data-driven pages, ensure `src/data` has been populated via the appropriate `pnpm downloadJSON` / `pnpm getAll` / Python flows, otherwise some pages may render empty states.
+- Before relying on data-driven pages, ensure `src/data` has been populated via the appropriate `pnpm downloadCommonRepo` / `pnpm getAll` / Python flows, otherwise some pages may render empty states.

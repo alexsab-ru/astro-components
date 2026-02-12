@@ -150,7 +150,6 @@ jobs:
           touch .env
           echo PUBLIC_YANDEX_SITE_VERIFICATION=${{ vars.PUBLIC_YANDEX_SITE_VERIFICATION }} >> .env
           echo PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }} >> .env
-          # echo JSON_PATH=${{ secrets.JSON_PATH }} >> .env
           echo JSON_REPO=${{ secrets.JSON_REPO }} >> .env
           echo DOMAIN=${{ vars.DOMAIN }} >> .env
           cat .env
@@ -165,12 +164,7 @@ jobs:
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm downloadCommonRepo
-          # pnpm downloadJSON
-          # pnpm downloadCommonModelsJSON
-          # pnpm downloadCommonCarsJSON
-          # pnpm downloadModelSectionsYML
         env:
-          # JSON_PATH: ${{ secrets.JSON_PATH }}
           JSON_REPO: ${{ secrets.JSON_REPO }}
           DOMAIN: ${{ vars.DOMAIN }}
           FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}

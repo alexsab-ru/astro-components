@@ -5,7 +5,7 @@ const APP_ID = "domain-switch";
 type InitPayload = {
   presets: string[];
   currentDomain: string;
-  hasJSONPath: boolean;
+  hasJSONRepo: boolean;
   /**
    * Итог последнего запуска на сервере.
    *
@@ -245,15 +245,15 @@ export default defineToolbarApp({
       // Основные действия
       actionsRow.appendChild(makeDownloadButton("Скачать всё", "__all__", "purple"));
       actionsRow.appendChild(makeDownloadButton("settings.json", "settings.json", "blue"));
+      actionsRow.appendChild(makeDownloadButton("scripts.json", "scripts.json"));
+      actionsRow.appendChild(makeDownloadButton("env.json", "env.json"));
       actionsRow.appendChild(makeDownloadButton("banners.json", "banners.json"));
       actionsRow.appendChild(makeDownloadButton("salons.json", "salons.json"));
       actionsRow.appendChild(makeDownloadButton("menu.json", "menu.json"));
-      actionsRow.appendChild(makeDownloadButton("scripts.json", "scripts.json"));
       actionsRow.appendChild(makeDownloadButton("socials.json", "socials.json"));
       actionsRow.appendChild(makeDownloadButton("collections.json", "collections.json"));
       actionsRow.appendChild(makeDownloadButton("faq.json", "faq.json"));
       actionsRow.appendChild(makeDownloadButton("federal-disclaimer.json", "federal-disclaimer.json"));
-      actionsRow.appendChild(makeDownloadButton("models-sections.yml", "models-sections.yml"));
       actionsRow.appendChild(makeDownloadButton("reviews.json", "reviews.json"));
       actionsRow.appendChild(makeDownloadButton("seo.json", "seo.json"));
       actionsRow.appendChild(makeDownloadButton("services.json", "services.json"));
@@ -348,14 +348,14 @@ export default defineToolbarApp({
           }
         }
 
-        if (!data.hasJSONPath) {
-          setStatus("JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.", false);
+        if (!data.hasJSONRepo) {
+          setStatus("JSON_REPO не задан на сервере. Добавь JSON_REPO в .env и перезапусти pnpm dev.", false);
           appendLog({
             ok: false,
-            message: "ERR: JSON_PATH не задан на сервере. Добавь JSON_PATH в .env и перезапусти pnpm dev.",
+            message: "ERR: JSON_REPO не задан на сервере. Добавь JSON_REPO в .env и перезапусти pnpm dev.",
           });
         } else {
-          setStatus("Готово. Выбери домен и нажми Download.", undefined);
+          setStatus("Готово. Выбери домен и нажми нужную кнопку скачивания.", undefined);
           // Не добавляем это в лог, чтобы не засорять историю между реальными операциями.
         }
       });
