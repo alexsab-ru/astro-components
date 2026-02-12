@@ -4,10 +4,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { loadEnv } from "vite";
 import { promisify } from "node:util";
-import { exec as execCb } from "node:child_process";
+import { execFile as execFileCb } from "node:child_process";
 
 const APP_ID = "domain-switch";
-const exec = promisify(execCb);
+const execFile = promisify(execFileCb);
+const DOWNLOAD_SCRIPT = "./.github/scripts/sh/downloadCommonRepo.sh";
 
 type HelloPayload = Record<string, never>;
 type DownloadPayload = { domain: string; file?: string; preserveLog?: boolean };
@@ -15,14 +16,14 @@ type DownloadPayload = { domain: string; file?: string; preserveLog?: boolean };
 const domainFiles = [
   "settings.json",
   "banners.json",
+  "scripts.json",
+  "env.json",
   "salons.json",
   "menu.json",
-  "scripts.json",
   "socials.json",
   "collections.json",
   "faq.json",
   "federal-disclaimer.json",
-  "models-sections.yml",
   "reviews.json",
   "seo.json",
   "services.json",
@@ -64,7 +65,7 @@ export default function domainSwitchToolbar(): AstroIntegration {
           .map((s) => s.trim())
           .filter(Boolean);
 
-        const jsonPath = getEnvVar("JSON_PATH").replace(/\/$/, "");
+        const jsonRepo = getEnvVar("JSON_REPO").trim();
 
         /**
          * Сводка последнего запуска.
@@ -159,27 +160,45 @@ export default function domainSwitchToolbar(): AstroIntegration {
           toolbar.send(`${APP_ID}:init`, {
             presets,
             currentDomain: currentDomain ?? "",
-            hasJSONPath: Boolean(jsonPath),
+            hasJSONRepo: Boolean(jsonRepo),
             lastRun,
           });
         });
 
+        const toText = (value: string | Buffer | undefined) => {
+          if (typeof value === "string") return value.trim();
+          if (value) return value.toString("utf8").trim();
+          return "";
+        };
+
         const runScript = async (
-          cmd: string,
+          command: string,
+          args: string[],
           label: string,
           opId?: string,
-          onError?: (message: string) => void
+          onError?: (message: string) => void,
+          extraEnv?: Record<string, string>
         ) => {
           try {
             await report({ ok: true, message: `RUN: ${label}` }, opId);
-            const { stdout, stderr } = await exec(cmd, { cwd: process.cwd() });
-            if (stdout?.trim()) logger.info(`[${APP_ID}] ${label}: ${stdout.trim()}`);
-            if (stderr?.trim()) logger.warn(`[${APP_ID}] ${label} stderr: ${stderr.trim()}`);
+            const { stdout, stderr } = await execFile(command, args, {
+              cwd: process.cwd(),
+              env: { ...process.env, ...extraEnv },
+            });
+            const out = toText(stdout);
+            const errOut = toText(stderr);
+            if (out) logger.info(`[${APP_ID}] ${label}: ${out}`);
+            if (errOut) logger.warn(`[${APP_ID}] ${label} stderr: ${errOut}`);
             await appendServerLog("INFO", `DONE: ${label}`, opId);
             await report({ ok: true, message: label }, opId);
             return true;
           } catch (err: any) {
-            const msg = `${label} error: ${err?.message ?? err}`;
+            const errOut = toText(err?.stderr);
+            const out = toText(err?.stdout);
+            const details = [errOut, out].filter(Boolean).join("\n");
+            const msg = details
+              ? `${label} error: ${err?.message ?? err}\n${details}`
+              : `${label} error: ${err?.message ?? err}`;
             logger.warn(`[${APP_ID}] ${msg}`);
             await appendServerLog("WARN", msg, opId);
             await report({ ok: false, message: msg }, opId);
@@ -189,51 +208,83 @@ export default function domainSwitchToolbar(): AstroIntegration {
           }
         };
 
-        const downloadDomainFile = async (
+        const runDownloadCommonRepo = async (
           safeDomain: string,
-          targetFile: string,
+          files: string[] | null,
+          label: string,
+          opId?: string,
+          onError?: (message: string) => void,
+          options?: {
+            skipDealerFiles?: boolean;
+            skipModelSections?: boolean;
+            skipModels?: boolean;
+            skipCars?: boolean;
+          }
+        ) => {
+          const args = [DOWNLOAD_SCRIPT];
+          if (files && files.length) {
+            args.push("-f", files.join(","));
+          }
+
+          if (options?.skipDealerFiles) args.push("--skip-dealer-files");
+          if (options?.skipModelSections) args.push("--skip-model-sections");
+          if (options?.skipModels) args.push("--skip-models");
+          if (options?.skipCars) args.push("--skip-cars");
+
+          return runScript("bash", args, label, opId, onError, {
+            DOMAIN: safeDomain,
+            JSON_REPO: jsonRepo,
+          });
+        };
+
+        const runPostScriptsForFiles = async (
+          files: string[],
           opId?: string,
           onError?: (message: string) => void
         ) => {
-          const url = `${jsonPath}/${safeDomain}/data/${targetFile}`;
-          const dest = path.join(process.cwd(), "src", "data", targetFile);
+          const hasDataFile = async (fileName: string) => {
+            const filePath = path.join(process.cwd(), "src", "data", fileName);
+            try {
+              await fs.access(filePath);
+              return true;
+            } catch {
+              return false;
+            }
+          };
 
-          await report({ ok: true, message: `START: скачиваю ${targetFile} с домена ${safeDomain}` }, opId);
-          const res = await fetch(url);
-          if (!res.ok) throw new Error(`HTTP ${res.status} при скачивании: ${url}`);
-
-          const arrayBuffer = await res.arrayBuffer();
-          const buf = new Uint8Array(arrayBuffer);
-          await fs.mkdir(path.dirname(dest), { recursive: true });
-          await fs.writeFile(dest, buf);
-
-          await report({
-            ok: true,
-            message: `OK: скачал ${targetFile} (${buf.length} bytes) с домена ${safeDomain}`,
-            domain: safeDomain,
-          }, opId);
-
-          if (targetFile === "settings.json") {
-            await runScript(
-              "node .github/scripts/setBrand.mjs",
-              "Обновил данные бренда (setBrand.mjs)",
-              opId,
-              onError
-            );
-            await runScript(
-              "node .github/scripts/filterModelsByBrand.js",
-              "Обновил модели (filterModelsByBrand)",
-              opId,
-              onError
-            );
+          if (files.includes("settings.json")) {
+            if (await hasDataFile("settings.json")) {
+              await runScript(
+                "node",
+                [".github/scripts/setBrand.mjs"],
+                "Обновил данные бренда (setBrand.mjs)",
+                opId,
+                onError
+              );
+              await runScript(
+                "node",
+                [".github/scripts/filterModelsByBrand.js"],
+                "Обновил модели (filterModelsByBrand)",
+                opId,
+                onError
+              );
+            } else {
+              await report({ ok: true, message: "SKIP: settings.json не найден, post-скрипты пропущены." }, opId);
+            }
           }
-          if (targetFile === "banners.json") {
-            await runScript(
-              "node .github/scripts/replacePlaceholdersAndSearchDates.js",
-              "Обновил баннеры (replacePlaceholdersAndSearchDates.js)",
-              opId,
-              onError
-            );
+
+          if (files.includes("banners.json")) {
+            if (await hasDataFile("banners.json")) {
+              await runScript(
+                "node",
+                [".github/scripts/replacePlaceholdersAndSearchDates.js"],
+                "Обновил баннеры (replacePlaceholdersAndSearchDates.js)",
+                opId,
+                onError
+              );
+            } else {
+              await report({ ok: true, message: "SKIP: banners.json не найден, post-скрипт пропущен." }, opId);
+            }
           }
         };
 
@@ -294,16 +345,44 @@ export default function domainSwitchToolbar(): AstroIntegration {
           const isCommonModels = targetFile === "__common_models__";
           const isCommonCars = targetFile === "__common_cars__";
           const isDownloadAll = targetFile === "__all__";
+          const isKnownDomainFile = domainFiles.includes(targetFile);
 
-          // Общие файлы, не зависящие от домена
+          if (!jsonRepo) {
+            await reportRun({
+              ok: false,
+              message: "JSON_REPO пустой. Укажи JSON_REPO в .env и перезапусти pnpm dev.",
+            });
+            await appendServerLog("INFO", "OP_END", opId);
+            await finalizeRun("Ошибка конфигурации JSON_REPO");
+            return;
+          }
+
+          // Общие файлы скачиваем через тот же скрипт с нужными флагами.
           if (isCommonModels) {
+            const commonDomain = safeDomain || String(currentDomain || "").trim();
+            if (!commonDomain) {
+              await reportRun({
+                ok: false,
+                message: "Для общего models нужен DOMAIN: выбери домен в тулбаре или задай DOMAIN в .env.",
+              });
+              await appendServerLog("INFO", "OP_END", opId);
+              await finalizeRun("Ошибка: DOMAIN не задан");
+              return;
+            }
             try {
               await reportRun({ ok: true, message: "START: скачиваю общий models" });
               await runScript(
-                "bash ./.github/scripts/sh/downloadCommonModelsJSON.sh",
+                "bash",
+                [
+                  DOWNLOAD_SCRIPT,
+                  "--skip-dealer-files",
+                  "--skip-model-sections",
+                  "--skip-cars",
+                ],
                 "Скачал общий models",
                 opId,
-                (msg) => errors.push(msg)
+                (msg) => errors.push(msg),
+                { DOMAIN: commonDomain, JSON_REPO: jsonRepo }
               );
             } catch (e: any) {
               await reportRun({ ok: false, message: e?.message ?? String(e) });
@@ -314,13 +393,30 @@ export default function domainSwitchToolbar(): AstroIntegration {
             return;
           }
           if (isCommonCars) {
+            const commonDomain = safeDomain || String(currentDomain || "").trim();
+            if (!commonDomain) {
+              await reportRun({
+                ok: false,
+                message: "Для общего cars нужен DOMAIN: выбери домен в тулбаре или задай DOMAIN в .env.",
+              });
+              await appendServerLog("INFO", "OP_END", opId);
+              await finalizeRun("Ошибка: DOMAIN не задан");
+              return;
+            }
             try {
               await reportRun({ ok: true, message: "START: скачиваю общий cars" });
               await runScript(
-                "bash ./.github/scripts/sh/downloadCommonCarsJSON.sh",
+                "bash",
+                [
+                  DOWNLOAD_SCRIPT,
+                  "--skip-dealer-files",
+                  "--skip-model-sections",
+                  "--skip-models",
+                ],
                 "Скачал общий cars",
                 opId,
-                (msg) => errors.push(msg)
+                (msg) => errors.push(msg),
+                { DOMAIN: commonDomain, JSON_REPO: jsonRepo }
               );
             } catch (e: any) {
               await reportRun({ ok: false, message: e?.message ?? String(e) });
@@ -331,14 +427,11 @@ export default function domainSwitchToolbar(): AstroIntegration {
             return;
           }
 
-          // Всё остальное требует jsonPath и домен
-          if (!jsonPath) {
-            await reportRun({
-              ok: false,
-              message: "JSON_PATH пустой. Укажи JSON_PATH в .env и перезапусти pnpm dev.",
-            });
+          // Всё остальное требует корректный targetFile из списка и выбранный домен.
+          if (!isDownloadAll && !isKnownDomainFile) {
+            await reportRun({ ok: false, message: `Неизвестный файл: ${targetFile}` });
             await appendServerLog("INFO", "OP_END", opId);
-            await finalizeRun("Ошибка конфигурации JSON_PATH");
+            await finalizeRun("Ошибка: неизвестный файл");
             return;
           }
           if (!safeDomain) {
@@ -349,19 +442,37 @@ export default function domainSwitchToolbar(): AstroIntegration {
           }
 
           const filesToDownload = isDownloadAll ? domainFiles : [targetFile];
+          const filesForDownloadCommand = isDownloadAll ? null : filesToDownload;
+          const filesForPostScripts = isDownloadAll ? ["settings.json", "banners.json"] : filesToDownload;
 
           try {
             await reportRun({
               ok: true,
-              message: `START: скачивание (${filesToDownload.length} шт.) для домена ${safeDomain}`,
+              message: isDownloadAll
+                ? `START: скачивание всех файлов из src/${safeDomain}/data`
+                : `START: скачивание (${filesToDownload.length} шт.) для домена ${safeDomain}`,
               domain: safeDomain,
             });
-            for (const f of filesToDownload) {
-              await downloadDomainFile(safeDomain, f, opId, (msg) => errors.push(msg));
+
+            const downloaded = await runDownloadCommonRepo(
+              safeDomain,
+              filesForDownloadCommand,
+              isDownloadAll
+                ? `Скачал все файлы из src/${safeDomain}/data`
+                : `Скачал ${targetFile} для ${safeDomain}`,
+              opId,
+              (msg) => errors.push(msg),
+              {
+                skipModelSections: true,
+                skipModels: true,
+                skipCars: true,
+              }
+            );
+
+            if (downloaded) {
+              await runPostScriptsForFiles(filesForPostScripts, opId, (msg) => errors.push(msg));
             }
-            if (isDownloadAll) {
-              await reportRun({ ok: true, message: `OK: скачал ${filesToDownload.length} файлов для ${safeDomain}`, domain: safeDomain });
-            }
+
             await appendServerLog("INFO", "OP_END", opId);
             await finalizeRun(isDownloadAll ? `Скачал все файлы для ${safeDomain}` : `Скачал ${targetFile} для ${safeDomain}`);
           } catch (e: any) {
