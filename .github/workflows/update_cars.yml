@@ -124,7 +124,6 @@ jobs:
       if: ${{ vars.DEALER_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage_new_cars_xml
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.DEALER_STORAGE_CSV_URL }}
@@ -136,7 +135,6 @@ jobs:
       if: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage_used_cars_xml
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.USED_CARS_STORAGE_CSV_URL }}
@@ -148,7 +146,6 @@ jobs:
       if: ${{ vars.AVITO_DEALER_STORAGE_CSV_URL }}
       run: |
         pnpm run getDealerStorage_avito_xml
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CSV_URL: ${{ vars.AVITO_DEALER_STORAGE_CSV_URL }}
@@ -170,7 +167,6 @@ jobs:
       if: ${{ vars.XML_URL_DATA_CARS_CAR }}
       run: |
         pnpm getOne_XML_URL_DATA_CARS_CAR
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_DATA_CARS_CAR }}
@@ -180,7 +176,6 @@ jobs:
       if: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
       run: |
         pnpm getOne_XML_URL_CATALOG_VEHICLES_VEHICLE
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_CATALOG_VEHICLES_VEHICLE }}
@@ -190,7 +185,6 @@ jobs:
       if: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
       run: |
         pnpm getOne_XML_URL_VEHICLES_VEHICLE
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_VEHICLES_VEHICLE }}
@@ -200,7 +194,6 @@ jobs:
       if: ${{ vars.XML_URL_ADS_AD }}
       run: |
         pnpm getOne_XML_URL_ADS_AD
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_ADS_AD }}
@@ -210,7 +203,6 @@ jobs:
       if: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
       run: |
         pnpm getOne_XML_URL_CARCOPY_OFFERS_OFFER
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.XML_URL_CARCOPY_OFFERS_OFFER }}
@@ -220,7 +212,6 @@ jobs:
       if: ${{ vars.USED_CARS_DATA_CARS_CAR }}
       run: |
         pnpm getOne_USED_CARS_DATA_CARS_CAR
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_DATA_CARS_CAR }}
@@ -230,7 +221,6 @@ jobs:
       if: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
       run: |
         pnpm getOne_USED_CARS_CATALOG_VEHICLES_VEHICLE
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_CATALOG_VEHICLES_VEHICLE }}
@@ -240,7 +230,6 @@ jobs:
       if: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
       run: |
         pnpm getOne_USED_CARS_VEHICLES_VEHICLE
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_VEHICLES_VEHICLE }}
@@ -250,7 +239,6 @@ jobs:
       if: ${{ vars.USED_CARS_ADS_AD }}
       run: |
         pnpm getOne_USED_CARS_ADS_AD
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_ADS_AD }}
@@ -260,7 +248,6 @@ jobs:
       if: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
       run: |
         pnpm getOne_USED_CARS_CARCOPY_OFFERS_OFFER
-      continue-on-error: true
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ vars.USED_CARS_CARCOPY_OFFERS_OFFER }}
@@ -286,7 +273,6 @@ jobs:
       if: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
       run: |
         pnpm run getDealerCarsPrice
-      continue-on-error: true
       env:
         CSV_URL: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
         DEALER_CARS_PRICE_CSV_URL: ${{ vars.DEALER_CARS_PRICE_CSV_URL }}
