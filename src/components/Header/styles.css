@@ -7,11 +7,6 @@
 	@apply lg:!block pl-8 lg:pl-5;
 }
 
-.header-link.active,
-.scroll-link.active {
-	@apply bg-header-menu-link-bg-hover text-button-text;
-}
-
 .cols-0 {
 	@apply columns-auto;
 }
