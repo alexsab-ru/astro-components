@@ -1,44 +1,29 @@
 ---
 import settings from '@/data/settings.json';
 const { site_name, brand, legal_city_where } = settings;
-import {TIMER, MARQUEE} from '@/const.js';
+
 import Layout from '@/layouts/Layout.astro';
-import Banner from '@/components/Banner/Banner.astro';
-import PageH1 from '@/components/PageH1/Index.astro';
-import Timer from '@/components/Timer/Timer.astro';
-import ModelList from '@/components/Model/ModelList.astro';
-import LatestPosts from '@/components/LatestPosts/Index.astro';
-import Model from '@/components/Model/Model.astro';
-import ModelComplectations from '@/components/Model/Complectations.astro';
-import Callback from '@/components/Callback.astro';
-import Services from '@/components/Services.astro';
-import Contacts from '@/components/Contacts.astro';
-import Morquee from '@/components/Marquee/Index.astro';
 
-import modelsData from '@/data/models.json'
-const { models } = modelsData;
+import page from '@/data/pages/home.json';
+const { title, description, image, h1, blocks } = page;
+const registry = import.meta.glob('@/components/**/*.astro', { eager: true });
 
-import salonsData from '@/data/salons.json';
-import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
-const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
-const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-import SeoText from '@/components/Seo/Index.astro';
+function resolveComponent(name) {
+	const path = `/src/components/${name}.astro`;
+	return registry[path]?.default ?? null;
+}
+
+const sections = blocks.filter(block => block.show);
+
+const pageBlocks = sections.map(block => ({
+	...block,
+	Component: resolveComponent(block.component)
+}));
 ---
 
-<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
-	<Banner />
-	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
-	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
-		<div class="container">
-			<PageH1 h1=`Автомобили ${brand} в&nbsp;наличии в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
-		</div>
-	</section>
-	{TIMER.show && <Timer endtime={new Date(TIMER.endtime)} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
-	<ModelList />
-	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" showAllButton={true} />
-	<Callback />
-	<Services />
-	<SeoText mdx="index" />
-	<Contacts />
+<Layout title={title} description={description} image={image} h1={h1}>	
+	{pageBlocks.map(block => {
+		const Component = block.Component;
+		return Component && <Component {...block.props} />;
+	})}
 </Layout>
