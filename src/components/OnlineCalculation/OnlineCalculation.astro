@@ -1,0 +1,40 @@
+---
+import FormSelect from '@/components/FormSelect.astro';
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('online_modal'));
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import { AGREE_LABEL } from '@/const';
+import FileUpload from '@/components/FileUpload/FileUpload.astro';
+const options = salons.map((salon, idx) => ({ id: idx, name: salon.address }));
+---
+
+<section class="section text-white z-1" style="background-image: url('https://cdn.alexsab.ru/blocks/kuzovsamara/online-bg.webp');" id="online-calc">
+	<div class="absolute inset-0 bg-sky-900/90 z-[-1]"></div>
+	<div class="container">
+		<h2 class="text-center mb-8">Онлайн расчет</h2>
+		<p class="uppercase text-xl text-center mb-10">От локальной покраски до кузовных работ</p>
+		<form class="max-w-2xl w-full mx-auto">
+			<input type="hidden" name="form" value="Онлайн расчет">
+			<input type="email" tabindex="-1" name="email" class="h-0 opacity-0 absolute -z-100" placeholder="mail@example.com">
+			<div class="grid grid-cols-1 min-[600px]:grid-cols-2 gap-5">
+
+				<Input name="name" classes='border-transparent' placeholder="Ваше имя" />
+				<Input type="tel" name="phone" classes='border-transparent' placeholder="+7 (999) 999-99-99*" required errorClasses='text-red-500' />
+				<FormSelect name="salon" placeholder="Выберите салон" options={options} />
+				<Input name="vin" classes='border-transparent' placeholder="VIN" />
+
+				<div class="min-[600px]:col-span-2">
+					<FileUpload />
+				</div>
+				<div class="min-[600px]:col-span-2">
+					<Checkbox name='agree' label={AGREE_LABEL} required errorClasses='text-red-50 w-full' errorText='Чтобы продолжить, установите флажок' />
+					<input type="checkbox" name="subscribe" class="absolute w-0 h-0 opacity-0 invisible">
+					<Button view="form-button" classes="white mt-5" title="Отправить" />
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
