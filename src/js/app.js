@@ -1,5 +1,6 @@
 import './data.alpine';
 import './modules/scroll';
+import './modules/dropzone';
 import './modules/modals';
 import './modules/latest.posts';
 import './modules/stock-slider';
