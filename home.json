@@ -1,0 +1,33 @@
+{
+    "title": "Home Page",
+    "description": "This is the home page of the website.",
+    "image": "/images/home.jpg",
+    "h1": "Welcome to the Home Page",
+    "blocks": [
+        {
+            "component": "Banner/Banner",
+            "show": true,
+            "data": []
+        },
+        {
+            "component": "Model/ModelList",
+            "show": true,
+            "data": []
+        },
+        {
+            "component": "Callback",
+            "show": true,
+            "data": []
+        },
+        {
+            "component": "Services",
+            "show": false,
+            "data": []
+        },
+        {
+            "component": "Contacts",
+            "show": true,
+            "data": []
+        }
+    ]
+}
