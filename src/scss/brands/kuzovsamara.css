@@ -1,0 +1,30 @@
+@font-face {
+  font-family: "Gilroy";
+  src: url("https://cdn.alexsab.ru/fonts/gilroy/gilroy-light.woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("https://cdn.alexsab.ru/fonts/gilroy/gilroy-extrabold.woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Colors */
+  --color-accent-400: #23d3ee;
+  --color-accent-500: #06b6d4;
+  --color-bgcolor-500: #E5E5E5;
+  --color-textlight-500: #F9FAFB;
+  --color-red-500: #D90429;
+  --color-orange-500: #F59E0B;
+
+  /* Fonts */
+  --font-sans: Gilroy, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-heading: inherit;
+  --font-weight-heading-weight: 800;
+}

@@ -1,0 +1,131 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import Contacts from '@/components/Contacts.astro';
+import SeoText from '@/components/Seo/Index.astro';
+import Button from '@/components/Button/Button.astro';
+import InfoItem from '@/components/Info/Item.astro';
+import FormSelect from '@/components/FormSelect.astro';
+import salons from '@/data/salons.json';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import { AGREE_LABEL } from '@/const';
+import FileUpload from '@/components/FileUpload/FileUpload.astro';
+const options = salons.map((salon, idx) => ({ id: idx, name: salon.address }));
+
+const infoItemClasses = "flex flex-col-reverse items-center justify-end gap-5 transition-all shadow-xl hover:shadow-lg font-medium xl:text-lg text-center p-4 popup-link";
+const infoItems = [
+	{ icon: "warranty", url: "#common-modal", title: "Гарантия на все виды выполненных кузовных работ" },
+	{ icon: "coffee-cup", url: "#common-modal", title: "Для всех клиентов комфортный отдых и уютное кафе" },
+	{ icon: "children", url: "#common-modal", title: "В клиентской зоне оборудована детская комната" },
+	{ icon: "certified", url: "#common-modal", title: "Сертифицированные специалисты" },
+	{ icon: "technical-support", url: "#common-modal", title: "Всегда можно присутствовать при ремонте авто" },
+	{ icon: "quality-control", url: "#common-modal", title: "100% оригинальные запчасти" },
+	{ icon: "repair", url: "#common-modal", title: "Все работы выполняются на самом современном оборудовании" },
+	{ icon: "stock", url: "#common-modal", title: "Четкое объяснение стоимости работ" },
+	{ icon: "taxi", url: "#common-modal", title: "Бесплатное такси" },
+];
+
+const services = [
+	{
+		title: "Кузовные работы",
+		items: [
+			{ name: "Выпрямление вмятин без покраски", price: 4000, priceFrom: true },
+			{ name: "Полировка кузова", price: 16000, priceFrom: true },
+			{ name: "Замена лобового стекла", price: 6000, priceFrom: true },
+			{ name: "Окраска среднего элемента кузова (бампер, крыло, дверь)", price: 16000, priceFrom: true },
+			{ name: "Покрытие керамикой", price: 20000, priceFrom: true },
+			{ name: "Полировка фар", price: 2000, priceFrom: true },
+			{ name: "Восстановление геометрии кузова", price: 20000, priceFrom: true },
+			{ name: "Локальная окраска элемента кузова", price: 6000, priceFrom: true },
+		],
+	},
+];
+
+---
+
+<Layout title=`Кузовные работы в Самаре` description=`Первый официальный кузовной по&nbsp;автомобилям из&nbsp;Китая`>
+	<Banner />
+	
+	<section class="section text-white z-1" style="background-image: url('https://cdn.alexsab.ru/blocks/kuzovsamara/online-bg.webp');" id="online-calc">
+		<div class="absolute inset-0 bg-sky-900/90 z-[-1]"></div>
+		<div class="container">
+			<h2 class="text-center mb-8">Онлайн расчет</h2>
+			<p class="uppercase text-xl text-center mb-10">От локальной покраски до кузовных работ</p>
+			<form class="max-w-2xl w-full mx-auto">
+				<input type="hidden" name="form" value="Онлайн расчет">
+				<input type="email" tabindex="-1" name="email" class="h-0 opacity-0 absolute -z-100" placeholder="mail@example.com">
+				<div class="grid grid-cols-1 min-[600px]:grid-cols-2 gap-5">
+	
+					<Input name="name" classes='border-transparent' placeholder="Ваше имя" />
+					<Input type="tel" name="phone" classes='border-transparent' placeholder="+7 (999) 999-99-99*" required errorClasses='text-red-500' />
+					<FormSelect name="salon" placeholder="Выберите салон" options={options} />
+					<Input name="vin" classes='border-transparent' placeholder="VIN" />
+	
+					<div class="min-[600px]:col-span-2">
+						<FileUpload />
+					</div>
+					<div class="min-[600px]:col-span-2">
+						<Checkbox name='agree' label={AGREE_LABEL} required errorClasses='text-red-50 w-full' errorText='Чтобы продолжить, установите флажок' />
+						<input type="checkbox" name="subscribe" class="absolute w-0 h-0 opacity-0 invisible">
+						<Button view="form-button" classes="white mt-5" title="Отправить" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
+
+	<section id="advantages">
+		<div class="container">
+			<h2 class="mb-8">Выгоднее, чем в гараже!</h2>
+			<p class="uppercase text-xl text-center mb-14">Преимущества нашего сервисного центра:</p>
+
+			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				{infoItems.map(item => ( <InfoItem item={item} classes={infoItemClasses} data-title="Получить спецпредложение" data-form_name={`Получить спецпредложение. ${item.title.replace(/<[^>]*>/g, '')}`} /> ))}
+			</div>
+		</div>
+	</section>
+
+	{
+		services.length ? (
+			<section class="section bg-gray-100 relative z-10" id="services" >
+				<div class="container">
+					<h2 class="mb-14">Все услуги</h2>
+					
+				{services.map((service) => 
+					service.items.length ? (
+					<h3 class="mb-6 text-2xl text-center">{service.title}</h3>
+					<div class="grid md:grid-cols-2 max-[500px]:gap-4 gap-5">
+						{service.items.map((item) => 
+						<div class="shadow-xl p-4 bg-white flex max-[500px]:flex-col max-md:flex-row max-lg:flex-col items-center max-[500px]:gap-4 gap-5">
+							<h4 class="grow font-extrabold lg:font-light xl:text-lg">{item.name}</h4>
+							<div class="flex items-center flex-nowrap max-[500px]:flex-col max-[500px]:gap-3 gap-4 xl:gap-8">
+								<div class="text-red-500 flex items-end gap-1.5">
+									{item.priceFrom ? (
+										<small class="text-base leading-none! mb-0.5 sm:mb-1">от</small>
+									) : ("")}
+									<span class="text-2xl sm:text-3xl font-bold leading-none!">{item.price.toLocaleString("ru-RU", { style: "currency", currency: "RUB", maximumSignificantDigits: 3 })}</span>
+								</div>
+								<Button 
+									classes="popup-link max-[500px]:text-sm max-[500px]:!px-2 max-[500px]:!py-1 !px-4 !py-2" 
+									url="#common-modal" 
+									title="Записаться"
+									dataTitle={`Запись на <span class="lowercase">${service.title}</span><div class="text-xl font-extrabold">${item.name}</div>`}
+									dataFormName={`Запись на ${service.title} - ${item.name}`}
+								/>
+							</div>
+						</div>
+						)}
+					</div>
+					) : ("")
+				)}
+				</div>
+			</section>
+		) : ("")
+	}
+
+	<SeoText mdx="index" />
+
+	<Contacts mapImg="https://cdn.alexsab.ru/maps/map-bg.webp" title="Наши контакты" />
+
+</Layout>
