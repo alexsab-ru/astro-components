@@ -9,6 +9,7 @@ const quizSlider = new Swiper(".quiz-slider", {
 	loop: false,
 	allowTouchMove: false,
 	autoHeight: true,
+	simulateTouch: false,
 	on: {
 		init(slider){
 			setTimeout(() => {
