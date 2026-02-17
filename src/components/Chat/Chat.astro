@@ -1,0 +1,211 @@
+---
+import type { TStep } from '../QuizSlider/types';
+import './chat.css';
+
+import Button from '@/components/Button/Button.astro';
+import Input from '@/components/Input.astro';
+import Checkbox from '@/components/Checkbox/Checkbox.astro';
+import { AGREE_LABEL } from '@/const';
+
+import settings from '@/data/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+
+interface Props {
+    quizSteps?: TStep[];
+    managerName?: string;
+    managerAvatar?: string;
+    greeting?: string;
+    questionsIntro?: string;
+    formName?: string;
+}
+
+let quizData: TStep[] = [];
+
+// Загружаем данные из quiz.json, если quizSteps не передан
+if (!Astro.props.quizSteps || Astro.props.quizSteps.length === 0) {
+    try {
+        const { default: data } = await import('@/data/quiz.json');
+        quizData = data || [];
+    } catch (err) {
+        console.warn('Failed to load quiz.json:', err);
+        quizData = [];
+    }
+}
+
+const { 
+    quizSteps = quizData, 
+    managerName = "Александр", 
+    managerAvatar = "https://cdn.alexsab.ru/people/user-691x691.webp", 
+    greeting = `Здравствуйте! Меня зовут ${managerName}, руководитель отдела продаж официального дилера ${brand} в ${legal_city_where}!`,
+    questionsIntro = `Ответьте на несколько вопросов, и я смогу подобрать для Вас наиболее выгодное персональное предложение.`,
+    formName = "Чат Квиз" 
+} = Astro.props;
+
+// Получаем вопросы из quiz.json
+const questions = quizSteps.filter(step => step.id && step.type);
+const lastStep = quizSteps[quizSteps.length - 1];
+---
+{!!questions.length && (
+    <form class="chat-container" id="chat-container">
+        <input type="hidden" name="form" value={formName} />
+        <input type="email" tabindex="-1" name="email" class="h-0 opacity-0 absolute -z-100" placeholder="mail@example.com" />
+        <div class="chat-header">
+            <div class="chat-manager-info">
+                <img src={managerAvatar} alt={managerName} class="chat-manager-avatar" />
+                <div class="chat-manager-details">
+                    <span class="chat-manager-name">{managerName}</span>
+                    <span class="chat-manager-status">Online</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            {greeting && (
+                <>
+                    <!-- Приветственное сообщение -->
+                    <div class="chat-message chat-message-manager" data-message="greeting">
+                        <img src={managerAvatar} alt={managerName} class="chat-message-avatar" />
+                        <div class="chat-message-content">
+                            <div class="chat-message-text" set:html={greeting}></div>
+                            <div class="chat-message-time" data-time></div>
+                        </div>
+                    </div>
+
+                    <!-- Статус печати после приветствия -->
+                    <div class="chat-message chat-message-system typing-indicator hidden" data-typing="after-greeting">
+                        <span class="chat-typing-indicator">{managerName} печатает ...</span>
+                    </div>
+                </>
+            )}
+
+            {questionsIntro && (
+                <>
+                    <!-- Сообщение о вопросах -->
+                    <div class="chat-message chat-message-manager hidden" data-message="questions-intro">
+                        <img src={managerAvatar} alt={managerName} class="chat-message-avatar" />
+                        <div class="chat-message-content">
+                            <div class="chat-message-text" set:html={questionsIntro}></div>
+                            <div class="chat-message-time" data-time></div>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            <!-- Статус печати перед первым вопросом -->
+            <div class="chat-message chat-message-system typing-indicator hidden" data-typing="before-first-question">
+                <span class="chat-typing-indicator">{managerName} печатает ...</span>
+            </div>
+
+
+            <!-- Вопросы -->
+            {questions.map((step, index) => (
+                <>
+                    <div class="chat-message chat-message-manager hidden" data-message={`question-${index}`} data-question-index={index}>
+                        <img src={managerAvatar} alt={managerName} class="chat-message-avatar" />
+                        <div class="chat-message-content">
+                            <div class="chat-message-text">{step.title}</div>
+                            <div class="chat-message-time" data-time></div>
+                        </div>
+                    </div>
+
+                    {/* Варианты ответов */}
+                    <div class="chat-message chat-message-user hidden" data-message={`answers-${index}`} data-question-index={index}>
+                        <div class="chat-message-content">
+                            <div class="chat-message-text">
+                                <div class="chat-answer-options" data-question-id={step.id}>
+                                    {step.answerOptions?.map((option, idx) => (
+                                        <label class="chat-answer-option">
+                                            <input 
+                                                type={step.type === 'checkbox' ? 'checkbox' : 'radio'} 
+                                                name={step.id} 
+                                                value={option}
+                                                class="chat-answer-input"
+                                                data-question-id={step.id}
+                                                data-question-index={index}
+                                            />
+                                            <span class="chat-answer-label">{option}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Статус печати перед следующим вопросом (если не последний) */}
+                    {index < questions.length - 1 && (
+                        <div class="chat-message chat-message-system typing-indicator hidden" data-typing={`before-question-${index + 1}`} data-question-index={index}>
+                            <span class="chat-typing-indicator">{managerName} печатает ...</span>
+                        </div>
+                    )}
+                </>
+            ))}
+
+            <!-- Последний шаг - форма с полями -->
+            {lastStep && (
+                <>
+                    <!-- Статус печати перед финальным сообщением -->
+                    <div class="chat-message chat-message-system typing-indicator hidden" data-typing="before-final">
+                        <span class="chat-typing-indicator">{managerName} печатает ...</span>
+                    </div>
+
+                    <div class="chat-message chat-message-manager hidden" data-message="final-message">
+                        <img src={managerAvatar} alt={managerName} class="chat-message-avatar" />
+                        <div class="chat-message-content">
+                            <div class="chat-message-text">{lastStep.title}</div>
+                            <div class="chat-message-time" data-time></div>
+                        </div>
+                    </div>
+
+                    {/* Поля ввода */}
+                    <div class="chat-message chat-message-user hidden" data-message="final-form">
+                        <div class="chat-message-content">
+                            <div class="chat-message-text">
+                                <div class="chat-form-fields">
+                                    {lastStep.description && (
+                                        <div class="chat-form-description">
+                                            <Fragment set:html={lastStep.description} />
+                                        </div>
+                                    )}
+                                    <div class="chat-form-inputs">
+                                        <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+
+                                        <Input
+                                            type="tel"
+                                            name="phone"
+                                            classes="border-gray-100"
+                                            placeholder="+7 (999) 999-99-99*"
+                                            required
+                                            errorClasses="text-red-500"
+                                        />
+
+                                        <Checkbox
+                                            name="agree"
+                                            label={AGREE_LABEL}
+                                            color="black"
+                                            required
+                                            classes='*:text-sm!'
+                                            errorClasses="text-red-500 w-full text-sm"
+                                            errorText="Чтобы продолжить, установите флажок"
+                                        />
+
+                                        <input
+                                            type="checkbox"
+                                            name="subscribe"
+                                            class="absolute w-0 h-0 opacity-0 invisible"
+                                        />
+
+                                        <Button view="form-button" classes="w-full" title="Отправить" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+        </div>
+    </form>
+)}
+
+<script>
+    import './chat';
+</script>
