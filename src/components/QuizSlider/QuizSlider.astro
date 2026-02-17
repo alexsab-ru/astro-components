@@ -1,6 +1,7 @@
 ---
 import type { TStep } from './types';
 import QuizSlide from './QuizSlide.astro';
+import './quiz.css';
 
 let quizData = [];
 
@@ -27,8 +28,6 @@ interface Props {
 
 
 const { quizSteps = quizData, formName = 'Квиз' } = Astro.props;
-
-// import './quiz.css';
 ---
 
 {
@@ -49,8 +48,4 @@ const { quizSteps = quizData, formName = 'Квиз' } = Astro.props;
     <script>
         import './quiz';
     </script>
-
-    <style>
-        @import './quiz.css';
-    </style>
 }
