@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const message = document.querySelector(selector);
                 if (message) {
-                    message.classList.remove('hidden');
+                    message.classList.remove('hide');
                     setMessageTime(message);
                     scrollToBottom();
                     resolve();
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const indicator = document.querySelector(selector);
                 if (indicator) {
-                    indicator.classList.remove('hidden');
+                    indicator.classList.remove('hide');
                     indicator.style.display = 'flex';
                     scrollToBottom();
                     resolve();
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hideTypingIndicator = (selector) => {
         const indicator = document.querySelector(selector);
         if (indicator) {
-            indicator.classList.add('hidden');
+            indicator.classList.add('hide');
             indicator.style.display = 'none';
         }
     };
