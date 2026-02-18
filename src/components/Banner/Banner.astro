@@ -33,8 +33,10 @@ const bannerClasses = is_header_transparent ? 'pb-[177.78%] md:pb-[100%] lg:pb-[
 						<span />
 					</div>
 
-					<div class="swiper-button-prev banner-button-prev hidden! md:flex!" />
-					<div class="swiper-button-next banner-button-next hidden! md:flex!" />
+					{banners.length > 1 && (
+						<div class="swiper-button-prev banner-button-prev hidden! md:flex!" />
+						<div class="swiper-button-next banner-button-next hidden! md:flex!" />
+					)}
 				</div>
 			</div>
 		</div>
