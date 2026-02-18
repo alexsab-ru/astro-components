@@ -5,19 +5,19 @@ import Contacts from '@/components/Contacts.astro';
 import OnlineCalculation from '@/components/OnlineCalculation/OnlineCalculation.astro';
 import SeoText from '@/components/Seo/Index.astro';
 import Button from '@/components/Button/Button.astro';
-import InfoItem from '@/components/Info/Item.astro';
+import AdvantagesItem from '@/components/Advantages/Item.astro';
 
-const infoItemClasses = "flex flex-col-reverse items-center justify-end gap-5 transition-all shadow-xl hover:shadow-lg font-medium xl:text-lg text-center p-4 popup-link";
 const infoItems = [
-	{ icon: "warranty", url: "#common-modal", title: "Гарантия на все виды выполненных кузовных работ" },
-	{ icon: "coffee-cup", url: "#common-modal", title: "Для всех клиентов комфортный отдых и уютное кафе" },
-	{ icon: "children", url: "#common-modal", title: "В клиентской зоне оборудована детская комната" },
-	{ icon: "certified", url: "#common-modal", title: "Сертифицированные специалисты" },
-	{ icon: "technical-support", url: "#common-modal", title: "Всегда можно присутствовать при ремонте авто" },
-	{ icon: "quality-control", url: "#common-modal", title: "100% оригинальные запчасти" },
-	{ icon: "repair", url: "#common-modal", title: "Все работы выполняются на самом современном оборудовании" },
-	{ icon: "stock", url: "#common-modal", title: "Четкое объяснение стоимости работ" },
-	{ icon: "taxi", url: "#common-modal", title: "Бесплатное такси" },
+	// Эти SVG используют fill="currentColor", поэтому для цвета нужен text-* (свойство color), а не fill-*.
+	{ iconName: "warranty", url: "#common-modal", title: "Гарантия на все виды выполненных кузовных работ", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "coffee-cup", url: "#common-modal", title: "Для всех клиентов комфортный отдых и уютное кафе", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "children", url: "#common-modal", title: "В клиентской зоне оборудована детская комната", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "certified", url: "#common-modal", title: "Сертифицированные специалисты", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "technical-support", url: "#common-modal", title: "Всегда можно присутствовать при ремонте авто", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "quality-control", url: "#common-modal", title: "100% оригинальные запчасти", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "repair", url: "#common-modal", title: "Все работы выполняются на самом современном оборудовании", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "stock", url: "#common-modal", title: "Четкое объяснение стоимости работ", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
+	{ iconName: "taxi", url: "#common-modal", title: "Бесплатное такси", iconClass: "text-accent-500 w-20 h-auto max-w-[400px]:w-14", titleClass: "max-w-[400px]:text-xs text-center" },
 ];
 
 const services = [
@@ -47,8 +47,16 @@ const services = [
 			<h2 class="mb-8">Выгоднее, чем в гараже!</h2>
 			<p class="uppercase text-xl text-center mb-14">Преимущества нашего сервисного центра:</p>
 
-			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-				{infoItems.map(item => ( <InfoItem item={item} classes={infoItemClasses} data-title="Получить спецпредложение" data-form_name={`Получить спецпредложение. ${item.title.replace(/<[^>]*>/g, '')}`} /> ))}
+			<div class="flex justify-center flex-wrap gap-y-10">
+				{infoItems.map(item => ( 
+						<AdvantagesItem 
+							item={item}
+							classes="max-w-[550px]:w-1/2 w-1/3 md:w-1/4 lg:w-1/5 flex flex-col gap-5 max-w-[400px]:gap-2 items-center max-w-[400px]:px-2 px-3 xl:px-5"
+							data-title="Получить спецпредложение"
+							data-form_name={`Получить спецпредложение. ${item.title.replace(/<[^>]*>/g, '')}`}
+						/> 
+					)
+				)}
 			</div>
 		</div>
 	</section>
