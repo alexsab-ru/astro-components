@@ -130,7 +130,14 @@ with open('src/data/model_mapping.json', 'w', encoding='utf-8') as f:
 
 
 
-def get_model_info(brand: str, model: str, property: str = None, color: str = None, vin: str = None) -> str | dict | None:
+def get_model_info(
+    brand: str,
+    model: str,
+    property: str = None,
+    color: str = None,
+    vin: str = None,
+    log_errors: bool = True
+) -> str | dict | None:
     """
     Получение информации о модели автомобиля на основе нового мэпинга.
 
@@ -147,6 +154,7 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
         property: Запрашиваемое свойство ('mark_id', 'id' или 'color_id' при указании color)
         color: Цвет автомобиля (для поиска carImage или id цвета)
         vin: VIN автомобиля (для удобства логирования)
+        log_errors: Писать ли ошибки в output.txt через print_message
 
     Returns:
         str | dict | None: Значение свойства, словарь модели или None, если не найдено
@@ -167,7 +175,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     
     if not brand_key:
         errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден бренд</b> <code>{brand}</code> в models.json (модель {normalized_model})"
-        print_message(errorText, 'error')
+        if log_errors:
+            print_message(errorText, 'error')
         return None
     
     # Найдем модель независимо от регистра
@@ -178,7 +187,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
     
     if not model_key:
         errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в \"feed_names\" бренда <code>{brand}</code> в models.json (ищем {property or color})"
-        print_message(errorText, 'error')
+        if log_errors:
+            print_message(errorText, 'error')
         return None
     
     model_ref = model_mapping[brand_key][model_key]
@@ -204,7 +214,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
             f"\nvin: <code>{vin}</code>\n"
             f"<b>Не найдены данные модели</b> <code>{model}</code> бренда <code>{brand}</code> в models.json"
         )
-        print_message(errorText, 'error')
+        if log_errors:
+            print_message(errorText, 'error')
         return None
     
     # Поиск информации о цвете по списку colors[].names / id / name
@@ -240,7 +251,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
             f"\nvin: <code>{vin}</code>\n"
             f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в models.json"
         )
-        print_message(errorText, 'error')
+        if log_errors:
+            print_message(errorText, 'error')
         return None
     
     # Если запрашивается конкретное свойство
@@ -257,7 +269,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
                 f"\nvin: <code>{vin}</code>\n"
                 f"<b>Для получения color_id необходимо указать цвет</b> для модели <code>{model}</code> бренда <code>{brand}</code>"
             )
-            print_message(errorText, 'error')
+            if log_errors:
+                print_message(errorText, 'error')
             return None
         if normalized_property == 'cyrillic':
             value = model_obj.get('cyrillic')
@@ -267,7 +280,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
                 f"\nvin: <code>{vin}</code>\n"
                 f"<b>Не найдено кириллическое имя</b> для модели <code>{model}</code> бренда <code>{brand}</code>"
             )
-            print_message(errorText, 'error')
+            if log_errors:
+                print_message(errorText, 'error')
             return None
         if normalized_property == 'name':
             value = model_obj.get('name')
@@ -277,7 +291,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
                 f"\nvin: <code>{vin}</code>\n"
                 f"<b>Не найдено поле name</b> для модели <code>{model}</code> бренда <code>{brand}</code>"
             )
-            print_message(errorText, 'error')
+            if log_errors:
+                print_message(errorText, 'error')
             return None
 
         errorText = (
@@ -285,7 +300,8 @@ def get_model_info(brand: str, model: str, property: str = None, color: str = No
             f"<b>Неизвестное свойство</b> <code>{property}</code> для модели <code>{model}</code> бренда <code>{brand}</code>. "
             f"Поддерживаются: <code>mark_id</code>, <code>id</code>, <code>folder</code>, <code>cyrillic</code>, <code>name</code>."
         )
-        print_message(errorText, 'error')
+        if log_errors:
+            print_message(errorText, 'error')
         return None
     
     # Возвращаем полезный минимум, если не указаны property и color
@@ -307,12 +323,12 @@ def get_cyrillic(brand: str, model: str, vin: str = None) -> str | None:
     return get_model_info(brand, model, 'cyrillic', vin=vin)
 
 
-def get_color_filename(brand: str, model: str, color: str, vin: str = None) -> str | None:
+def get_color_filename(brand: str, model: str, color: str, vin: str = None, log_errors: bool = True) -> str | None:
     """Получение URL изображения для указанного цвета модели.
 
     Возвращает поле carImage из подходящего элемента colors.
     """
-    return get_model_info(brand, model, color=color, vin=vin)
+    return get_model_info(brand, model, color=color, vin=vin, log_errors=log_errors)
 
 
 # ВНИМАНИЕ: get_available_colors удалена — используем точечный поиск через color

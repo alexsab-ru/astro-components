@@ -69,6 +69,11 @@ class CarProcessor:
             'mark_id',  # бренды часто приходят в разном регистре — выравниваем сразу
         ]
 
+        # Отложенные ошибки "не найден цвет" по итоговому файлу (friendly_url).
+        # Нужны, чтобы не писать ложные ошибки, если позже в эту же карточку пришли фото.
+        self.pending_color_errors: Dict[str, str] = {}
+        self.friendly_url_has_images: Dict[str, bool] = {}
+
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
         configs = {
@@ -460,7 +465,8 @@ class CarProcessor:
                     model_for_color,
                     property='color',
                     color=raw_color,
-                    vin=car_data.get('vin')
+                    vin=car_data.get('vin'),
+                    log_errors=False
                 )
                 if isinstance(color_entry, dict):
                     color_eng = color_entry.get('id') or color_eng
@@ -733,6 +739,60 @@ class CarProcessor:
 
         return car_data
 
+    def _car_has_images(self, car_data: Dict[str, any]) -> bool:
+        """Проверяет, есть ли у машины изображения в feed или в dealer photos."""
+        images = car_data.get('images') or []
+        if images:
+            return True
+
+        vin = car_data.get('vin')
+        if vin and vin in self.dealer_photos_for_cars_avito:
+            dealer_images = self.dealer_photos_for_cars_avito[vin].get('images') or []
+            if dealer_images:
+                return True
+
+        return False
+
+    def register_deferred_color_error(self, car_data: Dict[str, any], group_key: str, friendly_url: str) -> None:
+        """
+        Отложенно фиксирует ошибку цвета для заглушки:
+        - если в группе уже есть фото, ошибку удаляем;
+        - если фото нет и цвет не найден, запоминаем ошибку;
+        - запись в output.txt делаем только в конце обработки.
+        """
+        if self._car_has_images(car_data):
+            self.friendly_url_has_images[group_key] = True
+            self.pending_color_errors.pop(group_key, None)
+            return
+
+        if self.friendly_url_has_images.get(group_key):
+            return
+
+        brand = car_data.get('mark_id')
+        model = car_data.get('folder_id')
+        vin = car_data.get('vin')
+        raw_color = car_data.get('color')
+        if not brand or not model or not raw_color:
+            return
+        color = str(raw_color).capitalize()
+
+        # Тихая проверка цвета: не пишем ошибку сразу, решаем в конце по всей группе friendly_url.
+        color_image = get_color_filename(brand, model, color, vin, log_errors=False)
+        if color_image:
+            return
+
+        self.pending_color_errors[group_key] = (
+            f"\nvin: <code>{vin}</code>\n"
+            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в models.json\n"
+            f"<code>{friendly_url}</code>"
+        )
+
+    def flush_deferred_color_errors(self) -> None:
+        """Пишет накопленные ошибки цвета в output.txt после полной обработки всех машин."""
+        for error_text in self.pending_color_errors.values():
+            print_message(error_text, 'error')
+        self.pending_color_errors.clear()
+
     def calculate_max_discount(self, car_data: Dict[str, any]) -> int:
         """Расчёт максимальной скидки в зависимости от типа источника"""
         if self.source_type in ['catalog_vehicles_vehicle', 'vehicles_vehicle', 'data_cars_car']:
@@ -894,6 +954,9 @@ class CarProcessor:
         # Обработка файла
         file_name = f"{friendly_url}.mdx"
         file_path = os.path.join(config['temp_cars_dir'], file_name)
+
+        # Проверяем ошибку "не найден цвет для заглушки" отложенно на уровне friendly_url.
+        self.register_deferred_color_error(car_data, file_path, friendly_url)
 
         # Обновляем цены и скидки на основе car_data
         update_car_prices(car_data, self.prices_data)
@@ -1421,6 +1484,8 @@ def main():
         else:
             print(f"⚠️ Временная папка {temp_cars_dir} пуста или не существует")
     
+    processor.flush_deferred_color_errors()
+
     if os.path.exists('output.txt') and os.path.getsize('output.txt') > 0:
         print("❌ Найдены ошибки 404")
 

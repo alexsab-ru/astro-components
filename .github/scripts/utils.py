@@ -561,7 +561,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
         thumb = images[0]
     elif not config['skip_check_thumb']:
         # Своих превью нет - ищем заглушку по цвету модели на CDN
-        color_image = get_color_filename(brand, model, color, vin)
+        color_image = get_color_filename(brand, model, color, vin, log_errors=False)
         
         if color_image:
             cdn_path = f"{color_image}"
