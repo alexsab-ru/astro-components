@@ -7,59 +7,79 @@ const isProd = import.meta.env.PROD;
 <script>
 import { reachGoal } from '@alexsab-ru/scripts';
 function runCALLTOUCH(calltouch) {
-    // console.log("runCALLTOUCH", calltouch);
-    var script = document.createElement('script');
-    script.src = `https://mod.calltouch.ru/init.js?id=${calltouch.mod_id}`;
-    script.async = true;
-    
-    // Добавляем обработчик события загрузки скрипта
-    script.onload = function() {
-        console.log("Calltouch script loaded");
-        // Устанавливаем параметры после загрузки скрипта
-        window.calltouch_params = {
-            mod_id: calltouch.mod_id,
-            site_id: calltouch.site_id
-        };
-        
-        // Проверяем наличие функции ct и вызываем ее только после загрузки скрипта
-        if (typeof window.ct === 'function') {
-            window.ct('modules','widgets','subscribeToEvent',[
-                {
-                    object: 'form',
-                    action: 'show',
-                    callback: function(event){
-                        reachGoal("calltouch-form_open");
-                    }
-                },
-                {
-                    object: 'form',
-                    action: 'close',
-                    callback: function(event){
-                        reachGoal("calltouch-form_close");
-                    }
-                },
-                {
-                    object: 'request',
-                    action: 'create',
-                    callback: function(event){
+    if (!calltouch || !calltouch.mod_id) return;
 
-                        reachGoal("calltouch-form_success");
-                    }
-                },
-                {
-                    object: 'request',
-                    action: 'fail',
-                    callback: function(event){
-                        reachGoal("calltouch-form_error");
-                    }
-                }
-            ]);
-        } else {
-            console.error("Calltouch ct function not available");
-        }
+    var counterIds = Array.isArray(calltouch.mod_id) ? calltouch.mod_id : [calltouch.mod_id];
+    var hasArrayFind = typeof Array.prototype.find === 'function';
+    var initFileName = hasArrayFind ? 'init-min.js' : 'init.js';
+
+    window.CalltouchDataObject = 'ct';
+    window.ct = window.ct || function() {
+        window.ct.callbacks.push(arguments);
     };
-    
-    document.head.appendChild(script);
+    if (!window.ct.callbacks) {
+        window.ct.callbacks = [];
+    }
+    window.ct.loaded = false;
+    window.ct.counters = counterIds;
+
+    window.calltouch_params = {
+        mod_id: calltouch.mod_id,
+        site_id: calltouch.site_id
+    };
+
+    if (!window.__ctWidgetsSubscribed) {
+        window.ct('modules','widgets','subscribeToEvent',[
+            {
+                object: 'form',
+                action: 'show',
+                callback: function() {
+                    reachGoal("calltouch-form_open");
+                }
+            },
+            {
+                object: 'form',
+                action: 'close',
+                callback: function() {
+                    reachGoal("calltouch-form_close");
+                }
+            },
+            {
+                object: 'request',
+                action: 'create',
+                callback: function() {
+                    reachGoal("calltouch-form_success");
+                }
+            },
+            {
+                object: 'request',
+                action: 'fail',
+                callback: function() {
+                    reachGoal("calltouch-form_error");
+                }
+            }
+        ]);
+        window.__ctWidgetsSubscribed = true;
+    }
+
+    counterIds.forEach(function(counterId) {
+        var scriptSrc = `https://mod.calltouch.ru/${initFileName}?id=${counterId}`;
+        if (document.querySelector(`script[src="${scriptSrc}"]`)) return;
+
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = scriptSrc;
+        script.onerror = function() {
+            console.error("Calltouch script failed to load", scriptSrc);
+        };
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        if (firstScript && firstScript.parentNode) {
+            firstScript.parentNode.insertBefore(script, firstScript);
+        } else {
+            document.head.appendChild(script);
+        }
+    });
 }
 window._ct = runCALLTOUCH;
 </script>
