@@ -1,0 +1,65 @@
+---
+import settings from '@/data/settings.json';
+const { site_name, legal_city, legal_inn, brand } = settings;
+import { FOOTER_INFO } from '@/const';
+import { YEAR } from '@/js/utils/date';
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${site_name}`;
+
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+    classes?: string;
+    position?: string;
+    buttonCollapseLabel?: string;
+    data?: string; 
+}
+const {
+    classes='',
+    position = 'left',
+    buttonCollapseLabel = 'Юридическая информация',
+    data = null,
+} = Astro.props;
+const footerClasses = [
+    'bg-white border-t xl:border-none xl:bg-transparent fixed left-0 xl:left-5 xl:bottom-5 bottom-0 xl:text-left text-center text-xs xl:w-[150px] w-full text-gray-800 z-50',
+    ...classes
+];
+---
+
+<footer 
+    class={`${footerClasses}`} 
+    x-data="{open: false}"
+    x-init="
+        window.addEventListener('scroll', () => open = false);
+        document.getElementById('chat') && document.getElementById('chat').addEventListener('scroll', () => open = false);
+    "
+>
+    <div 
+        class="flex xl:hidden items-center justify-center flex-nowrap text-sm text-gray-700 px-4 py-4 border-b"
+        @click="open = !open"
+    >
+        <span class="font-medium">{buttonCollapseLabel}</span>
+        <Icon name="mdi:chevron-down" class="transition-transform duration-200 text-[1.2em] origin-center" :class="{'-rotate-180': open}" />
+    </div>
+    <div 
+        x-show="open"
+        x-transition:enter="transition duration-200"
+        x-transition:enter-start="opacity-0 h-0"
+        x-transition:enter-end="opacity-100 h-auto"
+        x-transition:leave="transition duration-200"
+        x-transition:leave-start="opacity-100 h-auto"
+        x-transition:leave-end="opacity-0 h-0"
+        class="py-4 xl:py-0 xl:block!"
+    >
+        {data ? (
+            <div set:html={data}></div>
+        ) : (
+            <div>
+                {site_name && (<p set:html={site_name}></p>)}
+                {legal_city && (<p set:html={legal_city}></p>)}
+                {legal_inn && (<p set:html={legal_inn}></p>)}
+                <a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика обработки персональных данных</a><br/>
+                <a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика конфиденциальности</a>
+            </div>
+        )}
+    </div>
+</footer>
