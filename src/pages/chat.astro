@@ -1,0 +1,77 @@
+---
+import Layout from '@/layouts/Layout.astro';
+// import { ChatWidget } from '@/components/React/ChatWidget/ChatWidget';
+import { ChatWidget } from '@/components/React/ChatWidget/ChatWidget-v2';
+import { USPSection } from '@/components/React/USPSection';
+import Banner from '@/components/Banner/Banner.astro'
+import answers from '@/data/quiz.json';
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
+const banners = [
+    {
+        "id": 1,
+        "show": true,
+        "type": "video",
+        "view": "popup-link",
+        "video": {
+            "desktop": "https://alexsab.ru/video/jetour-dashing-compress.mp4"
+        },
+        "image": {
+            "desktop": "https://cdn.alexsab.ru/models/default-model-bg.webp"
+        },
+        "title": "Заголовок баннера до 31.08.2024",
+        "descr": "Подзаголовок баннера может быть длиннее или короче за 1 234 567 ₽",
+        "btn": "Онлайн запись",
+        "btnUrl": "#common-modal",
+        "dataTitle": "Онлайн запись",
+        "dataFormName": "Онлайн запись. Баннер",
+        "badge": {
+            "autoname": "Jetour Dashing",
+            "title": "Ежегодная национальная премия",
+            "descr": "Победитель номинации <br>«новинка в&nbsp;массовом сегменте»",
+            "image": "https://jetour-alpha.ru/img/badge-4x4-2024.png"
+        },
+        "autoplay": 6000
+    },
+];
+const quizConfig = answers.map(answer => {
+    if (answer?.id !== 'model') return answer;
+    
+    const newOptions = answer.answerOptions.reduce((acc, a) => {        
+        const model = models.find(m => m.name === a);        
+        if (model) {
+            acc.push({
+                label: model.name,
+                value: model.name,
+                description: model.slogan,
+                image: model.thumb,
+            });
+        }
+        return acc;
+    }, []);
+
+    return {
+        ...answer,
+        answerOptions: newOptions
+    };
+});
+---
+
+<Layout
+    h1="Чат квиз"
+    title="Чат квиз"
+    description={`Чат квиз`}
+    footerVersion="3"
+>
+
+<!-- <Banner banners={banners} /> -->
+
+<section class="pb-20!">
+    <div class="container">
+        <USPSection client:visible />
+    </div>
+    <ChatWidget client:visible={{rootMargin: "-200px"}} config={quizConfig} />
+</section>
+
+
+</Layout>
