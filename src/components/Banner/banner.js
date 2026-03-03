@@ -24,6 +24,7 @@ const slides = document.querySelectorAll(".banner-slide");
 const headerEl = document.querySelector('.header-wrapper');
 const closeHeaderTopLineBtn = document.querySelector('.close-header-top-line-btn');
 function setPaddingTop(){
+	if(!headerEl) return;
 	const headerElHeight = headerEl.clientHeight;
 	Array.from(slides).map(s => {
 		const container = s.querySelector('.banner-slide-container');
@@ -37,7 +38,7 @@ document.addEventListener('alpine:init', () => {
 			window.addEventListener('resize', setPaddingTop);
 			if(closeHeaderTopLineBtn){				
 				closeHeaderTopLineBtn.addEventListener('click', () => {
-					setTimeout(setPaddingTop, 0);
+					requestAnimationFrame(setPaddingTop);
 				});
 			}
 		}	

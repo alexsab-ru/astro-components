@@ -15,9 +15,10 @@ import BannerImage from './Image.astro';
 import settings from '@/data/settings.json';
 const { is_header_transparent, header_top_line } = settings;
 
-const containerClasses = is_header_transparent 
-	? 'pt-[80px] md:pt-[100px] lg:pt-[149px]' 
-	: is_header_transparent && header_top_line ? 'pt-[117px] md:pt-[141px] lg:pt-[190px]'
+const containerClasses = is_header_transparent && header_top_line
+	? 'pt-[117px] md:pt-[141px] lg:pt-[190px]'
+	: is_header_transparent
+	? 'pt-[80px] md:pt-[100px] lg:pt-[149px]'
 	: 'pt-5 sm:pt-10 lg:py-10';
 
 // Определяем цвет кнопки с fallback на белый
