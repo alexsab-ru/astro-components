@@ -8,7 +8,12 @@ interface Props {
 	modalData?: boolean;
 	errorMessage?: string;
 	errorClasses?: string;
-	options?: {id: string | number; name: string;}[];
+	options?: {
+		id: string | number;
+		name: string;
+		ctModId?: string;
+		ctRouteKey?: string;
+	}[];
 }
 const {
 	name, 
@@ -33,6 +38,15 @@ import { Icon } from 'astro-icon/components';
 		disabled: ${disabled},
 		value: null,
 		currentOption: {},
+		setDealerCalltouchData() {
+			// Значения храним прямо в data-атрибутах скрытого input.
+			// Это простой способ отдать routeKey/mod_id в submitForm без доп. полей формы.
+			if (!this.$refs.dealerInput) return;
+			const currentModId = this.currentOption && this.currentOption.ctModId ? this.currentOption.ctModId : '';
+			const currentRouteKey = this.currentOption && this.currentOption.ctRouteKey ? this.currentOption.ctRouteKey : '';
+			this.$refs.dealerInput.dataset.ctModId = currentModId;
+			this.$refs.dealerInput.dataset.ctRouteKey = currentRouteKey;
+		},
 		openSelect() {
 			if (!this.disabled) {
 				this.open = !this.open;
@@ -41,6 +55,7 @@ import { Icon } from 'astro-icon/components';
 		select(id){
 			this.currentOption = this.options.find(o => o.id === id);
 			this.value = this.currentOption.name || null;
+			this.setDealerCalltouchData();
 			this.open = false;
 			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
 		},
@@ -51,6 +66,9 @@ import { Icon } from 'astro-icon/components';
 		resetSelect(){
 			this.value = null;
 			this.currentOption = {};
+			// При сбросе селекта обязательно очищаем data-атрибуты,
+			// чтобы submitForm не взял routeKey/mod_id от прошлого выбора.
+			this.setDealerCalltouchData();
 			this.disabled = false;
 		},
 		effect(){
@@ -85,6 +103,7 @@ import { Icon } from 'astro-icon/components';
 		type="text" 
 		class="sr-only" 
 		name={name} 
+		x-ref="dealerInput"
 		:value="value" 
 		{...(required ? { required: true } : {})} 
 		{...(disabled ? { disabled: true } : {})} 
