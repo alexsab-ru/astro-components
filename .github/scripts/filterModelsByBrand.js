@@ -150,7 +150,7 @@ try {
     .filter(filterBy(testDriveIDs))
     .map(m => {
       const modelWithDisclaimers = addDisclaimersToModel(m);
-      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'thumb', 'globalChars', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
+      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'caption', 'thumb', 'globalChars', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
     });
 
   // Обработка моделей для сервисов - фильтруем и добавляем дисклеймеры
@@ -159,7 +159,7 @@ try {
     .filter(filterBy(serviceIDs))
     .map(m => {
       const modelWithDisclaimers = addDisclaimersToModel(m);
-      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
+      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'caption', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
     });
 
   if (
