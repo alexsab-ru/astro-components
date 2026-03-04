@@ -49,6 +49,7 @@ export function useTranslit(word) {
 		year: "Год выпуска",
 		color_rus: "Цвет кузова",
 		color_simple: "Цвет кузова",
+		caption: "Название",
 	};
 	
 	return translations[word] || word;

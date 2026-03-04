@@ -30,7 +30,7 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 					<span 
 						class="compl_name"
 						:class="{'active': c.name === currentModelComplectation.name}"
-						x-text="c.caption"
+						x-text="c.caption || c.name"
 						@click="selectedModelComplectation(c.name)"
 					></span>
 				</template>
@@ -42,7 +42,7 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 				<div class="absolute -top-5 sm:top-0 left-0">
 					<!-- В динамическом блоке тоже используем caption с fallback на name -->
 					<div class="text-xl sm:text-3xl font-weight-bold uppercase leading-none!" x-html={`'${brand}&nbsp;' + (currentModel.caption || currentModel.name)`}></div>
-					<div class="sm:text-xl" x-text="currentModelComplectation.name"></div>
+					<div class="sm:text-xl" x-text="currentModelComplectation.caption || currentModelComplectation.name"></div>
 						<!-- Показываем цену только если она валидна (не пустая, не null, не NaN). 
 						Используем currencyFormat как валидатор: при невалидной цене он вернёт undefined,
 						и блок не отрендерится. Это предотвращает вывод 'от undefined' или пустого значения. -->
