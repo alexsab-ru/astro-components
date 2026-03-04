@@ -24,8 +24,8 @@ const { testDrive } = modelsData;
 
 		<div class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-1" style="background-image: url('https://cdn.alexsab.ru/models/default-model-bg.webp')" x-cloak>
 			<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
-			<h2 class="p-5 sm:p-10 text-2xl text-white" x-text="current?.name"></h2>
-			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.name" width="533" height="300" loading="lazy" />
+			<h2 class="p-5 sm:p-10 text-2xl text-white" x-text="current?.caption || current?.name"></h2>
+			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.caption || current?.name" width="533" height="300" loading="lazy" />
 			<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white xl:text-black">
 				<template x-for="char in current?.globalChars">
 					<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow-sm xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
@@ -52,7 +52,7 @@ const { testDrive } = modelsData;
 						<button
 							class="text-sm sm:text-base py-3 px-2 sm:px-4 rounded relative cursor-pointer"
 							:class="model?.id === current?.id ? 'bg-accent-500 text-white!' : 'bg-gray-200'"
-							x-html="`${model?.name} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] leading-none! text-gray-500'>${model?.mark_id}</small>`"
+							x-html="`${model?.caption || model?.name} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] leading-none! text-gray-500'>${model?.mark_id}</small>`"
 							@click="currentModel(model.id)"
 						></button>
 					</div>
@@ -60,7 +60,7 @@ const { testDrive } = modelsData;
 			</div>
 			</template>
 			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
-				<input type="hidden" name="form" :value="current?.name ? `Запись на тест-драйв. ${current.name}` : 'Запись на тест-драйв'" />
+				<input type="hidden" name="form" :value="(current?.caption || current?.name) ? `Запись на тест-драйв. ${current.caption || current.name}` : 'Запись на тест-драйв'" />
 				<input
 					type="email"
 					tabindex="-1"

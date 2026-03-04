@@ -22,11 +22,15 @@ const {
 
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
-const options = testDrive ? models.filter(m => {
-	if(m?.testDrive){
-		return {id: m.id, name: m.name}
-	}
-}) : [];
+const options = testDrive
+	? models
+		.filter((m: any) => m?.testDrive)
+		.map((m: any) => ({
+			...m,
+			// В селекте тест-драйва показываем caption, чтобы названия совпадали с витриной.
+			name: m.caption || m.name,
+		}))
+	: [];
 ---
 
 <div class={`modal fixed max-w-[700px] w-full max-h-full overflow-y-auto overflow-x-hidden bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">

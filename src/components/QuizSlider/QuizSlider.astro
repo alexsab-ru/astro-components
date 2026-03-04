@@ -11,7 +11,8 @@ try {
     quizData = data;
     let modelStep = quizData.find(el => el.id === 'model');
     if (modelStep && (!Array.isArray(modelStep.answerOptions) || !modelStep.answerOptions.length)) {
-        const models = modelsData.models.map(el => `${el.mark_id} ${el.name}`).filter(Boolean);
+        // Для ответов в квизе используем caption, чтобы пользователь видел корректное название.
+        const models = modelsData.models.map(el => `${el.mark_id} ${el.caption || el.name}`).filter(Boolean);
         if (!models.length) throw new Error('Не найдено моделей для выбора ни в файле quiz.json, ни в файле models.json');
         modelStep.answerOptions = models;
     }
