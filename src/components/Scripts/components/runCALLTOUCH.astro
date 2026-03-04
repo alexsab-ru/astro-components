@@ -1,15 +1,66 @@
 ---
 import scripts_json from '@/data/scripts.json';
+import salons_json from '@/data/salons.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
+
+// Собираем пары mod_id/site_id из салонов, если в них явно описан calltouch.
+// Это основной сценарий для multi-project (каждый салон -> свой проект Calltouch).
+const salonCalltouchPairs = salons_json
+	.map((salon) => salon?.scripts?.calltouch)
+	.filter((calltouch) => calltouch?.mod_id && calltouch?.site_id)
+	.map((calltouch) => ({
+		mod_id: String(calltouch.mod_id).trim(),
+		site_id: String(calltouch.site_id).trim(),
+	}))
+	.filter((pair) => pair.mod_id !== '' && pair.site_id !== '');
+
+// Если в salons.json нет calltouch-ключей, используем прежний источник из scripts.json.
+// Так сохраняется полная обратная совместимость старого конфига.
+const fallbackCalltouchValue = scripts_json?.calltouch?.value || {};
+const normalizedCalltouchValue =
+	salonCalltouchPairs.length > 0
+		? {
+				mod_id: salonCalltouchPairs.map((pair) => pair.mod_id),
+				site_id: salonCalltouchPairs.map((pair) => pair.site_id),
+			}
+		: {
+				mod_id: Array.isArray(fallbackCalltouchValue.mod_id)
+					? fallbackCalltouchValue.mod_id
+					: fallbackCalltouchValue.mod_id
+						? [fallbackCalltouchValue.mod_id]
+						: [],
+				site_id: Array.isArray(fallbackCalltouchValue.site_id)
+					? fallbackCalltouchValue.site_id
+					: fallbackCalltouchValue.site_id
+						? [fallbackCalltouchValue.site_id]
+						: [],
+			};
 ---
-{ isProd && scripts_json.calltouch.value.mod_id && scripts_json.calltouch.value.mod_id != "" && (
+{ normalizedCalltouchValue.mod_id.length > 0 && (
 <script>
 import { reachGoal } from '@alexsab-ru/scripts';
 function runCALLTOUCH(calltouch) {
     if (!calltouch || !calltouch.mod_id) return;
 
-    var counterIds = Array.isArray(calltouch.mod_id) ? calltouch.mod_id : [calltouch.mod_id];
+    // Нормализуем массивы и оставляем только валидные пары mod_id/site_id.
+    // Это исключает разъезд индексов и пропускает пустые значения.
+    var rawCounterIds = Array.isArray(calltouch.mod_id) ? calltouch.mod_id : [calltouch.mod_id];
+    var rawSiteIds = Array.isArray(calltouch.site_id) ? calltouch.site_id : [calltouch.site_id];
+    var counterPairs = rawCounterIds
+        .map(function(counterId, idx) {
+            return {
+                mod_id: String(counterId || '').trim(),
+                site_id: String(rawSiteIds[idx] || '').trim()
+            };
+        })
+        .filter(function(pair) {
+            return pair.mod_id !== '' && pair.site_id !== '';
+        });
+
+    var counterIds = counterPairs.map(function(pair) { return pair.mod_id; });
+    var siteIds = counterPairs.map(function(pair) { return pair.site_id; });
+    if (!counterIds.length) return;
     var hasArrayFind = typeof Array.prototype.find === 'function';
     var initFileName = hasArrayFind ? 'init-min.js' : 'init.js';
 
@@ -24,8 +75,8 @@ function runCALLTOUCH(calltouch) {
     window.ct.counters = counterIds;
 
     window.calltouch_params = {
-        mod_id: calltouch.mod_id,
-        site_id: calltouch.site_id
+        mod_id: counterIds,
+        site_id: siteIds
     };
 
     if (!window.__ctWidgetsSubscribed) {
