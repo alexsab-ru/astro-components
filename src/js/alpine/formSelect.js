@@ -24,14 +24,14 @@ export function formSelect() {
 			}
 			return '';
 		},
-		setDealerCalltouchData() {
+		setCalltouchData() {
 			// Значения храним прямо в data-атрибутах скрытого input.
 			// Это простой способ отдать routeKey/mod_id в submitForm без доп. полей формы.
-			if (!this.$refs.dealerInput) return;
+			if (!this.$refs.selectInput) return;
 			const currentModId = this.getCurrentOptionCalltouchValue('mod_id');
 			const currentRouteKey = this.getCurrentOptionCalltouchValue('routeKey');
-			this.$refs.dealerInput.dataset.ctModId = currentModId;
-			this.$refs.dealerInput.dataset.ctRouteKey = currentRouteKey;
+			this.$refs.selectInput.dataset.ctModId = currentModId;
+			this.$refs.selectInput.dataset.ctRouteKey = currentRouteKey;
 		},
 		openSelect() {
 			if (!this.disabled) {
@@ -41,7 +41,7 @@ export function formSelect() {
 		select(id) {
 			this.currentOption = this.options.find((o) => o.id === id) || {};
 			this.value = this.currentOption.name || null;
-			this.setDealerCalltouchData();
+			this.setCalltouchData();
 			this.open = false;
 			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
 		},
@@ -54,7 +54,7 @@ export function formSelect() {
 			this.currentOption = {};
 			// При сбросе селекта обязательно очищаем data-атрибуты,
 			// чтобы submitForm не взял routeKey/mod_id от прошлого выбора.
-			this.setDealerCalltouchData();
+			this.setCalltouchData();
 			this.disabled = false;
 		},
 		effect() {

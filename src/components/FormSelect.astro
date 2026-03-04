@@ -28,6 +28,7 @@ const {
 } = Astro.props
 import { Icon } from 'astro-icon/components';
 const formSelectConfig = JSON.stringify({
+	name,
 	options,
 	placeholder,
 	disabled,
@@ -45,7 +46,7 @@ const formSelectConfig = JSON.stringify({
 		type="text" 
 		class="sr-only" 
 		name={name} 
-		x-ref="dealerInput"
+		x-ref="selectInput"
 		:value="value" 
 		{...(required ? { required: true } : {})} 
 		{...(disabled ? { disabled: true } : {})} 
