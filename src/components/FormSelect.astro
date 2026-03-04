@@ -38,12 +38,25 @@ import { Icon } from 'astro-icon/components';
 		disabled: ${disabled},
 		value: null,
 		currentOption: {},
+		getCurrentOptionCalltouchValue(field) {
+			// Поддерживаем два формата опции:
+			// 1) Плоский: ctModId / ctRouteKey (из ChoosingDealerSelect)
+			// 2) Вложенный: scripts.calltouch.mod_id / routeKey (из $store.salonsStore)
+			if (!this.currentOption) return '';
+			if (field === 'mod_id') {
+				return this.currentOption.ctModId || (this.currentOption.scripts && this.currentOption.scripts.calltouch ? this.currentOption.scripts.calltouch.mod_id : '') || '';
+			}
+			if (field === 'routeKey') {
+				return this.currentOption.ctRouteKey || (this.currentOption.scripts && this.currentOption.scripts.calltouch ? this.currentOption.scripts.calltouch.routeKey : '') || '';
+			}
+			return '';
+		},
 		setDealerCalltouchData() {
 			// Значения храним прямо в data-атрибутах скрытого input.
 			// Это простой способ отдать routeKey/mod_id в submitForm без доп. полей формы.
 			if (!this.$refs.dealerInput) return;
-			const currentModId = this.currentOption && this.currentOption.ctModId ? this.currentOption.ctModId : '';
-			const currentRouteKey = this.currentOption && this.currentOption.ctRouteKey ? this.currentOption.ctRouteKey : '';
+			const currentModId = this.getCurrentOptionCalltouchValue('mod_id');
+			const currentRouteKey = this.getCurrentOptionCalltouchValue('routeKey');
 			this.$refs.dealerInput.dataset.ctModId = currentModId;
 			this.$refs.dealerInput.dataset.ctRouteKey = currentRouteKey;
 		},

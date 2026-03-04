@@ -42,7 +42,7 @@ const normalizedCalltouchValue =
 						: [],
 			};
 ---
-{ normalizedCalltouchValue.mod_id.length > 0 && (
+{ isProd && normalizedCalltouchValue.mod_id.length > 0 && (
 <script>
 import { reachGoal } from '@alexsab-ru/scripts';
 function runCALLTOUCH(calltouch) {
