@@ -52,7 +52,7 @@ const { testDrive } = modelsData;
 						<button
 							class="text-sm sm:text-base py-3 px-2 sm:px-4 rounded relative cursor-pointer"
 							:class="model?.id === current?.id ? 'bg-accent-500 text-white!' : 'bg-gray-200'"
-							x-html="`${model?.caption} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] leading-none! text-gray-500'>${model?.mark_id}</small>`"
+							x-html="`${model?.caption || model?.name} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] leading-none! text-gray-500'>${model?.mark_id}</small>`"
 							@click="currentModel(model.id)"
 						></button>
 					</div>
