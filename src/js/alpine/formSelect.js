@@ -19,6 +19,9 @@ export function formSelect() {
 			if (field === 'mod_id') {
 				return this.currentOption.ctModId || (this.currentOption.scripts && this.currentOption.scripts.calltouch ? this.currentOption.scripts.calltouch.mod_id : '') || '';
 			}
+			if (field === 'site_id') {
+				return this.currentOption.ctSiteId || (this.currentOption.scripts && this.currentOption.scripts.calltouch ? this.currentOption.scripts.calltouch.site_id : '') || '';
+			}
 			if (field === 'routeKey') {
 				return this.currentOption.ctRouteKey || (this.currentOption.scripts && this.currentOption.scripts.calltouch ? this.currentOption.scripts.calltouch.routeKey : '') || '';
 			}
@@ -29,8 +32,10 @@ export function formSelect() {
 			// Это простой способ отдать routeKey/mod_id в submitForm без доп. полей формы.
 			if (!this.$refs.selectInput) return;
 			const currentModId = this.getCurrentOptionCalltouchValue('mod_id');
+			const currentSiteId = this.getCurrentOptionCalltouchValue('site_id');
 			const currentRouteKey = this.getCurrentOptionCalltouchValue('routeKey');
 			this.$refs.selectInput.dataset.ctModId = currentModId;
+			this.$refs.selectInput.dataset.ctSiteId = currentSiteId;
 			this.$refs.selectInput.dataset.ctRouteKey = currentRouteKey;
 		},
 		openSelect() {

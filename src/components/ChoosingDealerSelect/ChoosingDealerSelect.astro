@@ -16,6 +16,7 @@ const options = salons.map((salon, idx) => ({
 	id: idx,
 	name: salon.name,
 	ctModId: salon?.scripts?.calltouch?.mod_id || '',
+	ctSiteId: salon?.scripts?.calltouch?.site_id || '',
 	ctRouteKey: salon?.scripts?.calltouch?.routeKey || '',
 }));
 ---
