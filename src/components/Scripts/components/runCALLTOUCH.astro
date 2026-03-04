@@ -4,6 +4,11 @@ import salons_json from '@/data/salons.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 
+type TCalltouchValue = {
+	mod_id?: string | string[];
+	site_id?: string | string[];
+};
+
 // Собираем пары mod_id/site_id из салонов, если в них явно описан calltouch.
 // Это основной сценарий для multi-project (каждый салон -> свой проект Calltouch).
 const salonCalltouchPairs = salons_json
@@ -17,7 +22,7 @@ const salonCalltouchPairs = salons_json
 
 // Если в salons.json нет calltouch-ключей, используем прежний источник из scripts.json.
 // Так сохраняется полная обратная совместимость старого конфига.
-const fallbackCalltouchValue = scripts_json?.calltouch?.value || {};
+const fallbackCalltouchValue = (scripts_json?.calltouch?.value || {}) as TCalltouchValue;
 const normalizedCalltouchValue =
 	salonCalltouchPairs.length > 0
 		? {
@@ -42,6 +47,7 @@ const normalizedCalltouchValue =
 import { reachGoal } from '@alexsab-ru/scripts';
 function runCALLTOUCH(calltouch) {
     if (!calltouch || !calltouch.mod_id) return;
+    var w = window as any;
 
     // Нормализуем массивы и оставляем только валидные пары mod_id/site_id.
     // Это исключает разъезд индексов и пропускает пустые значения.
@@ -64,23 +70,23 @@ function runCALLTOUCH(calltouch) {
     var hasArrayFind = typeof Array.prototype.find === 'function';
     var initFileName = hasArrayFind ? 'init-min.js' : 'init.js';
 
-    window.CalltouchDataObject = 'ct';
-    window.ct = window.ct || function() {
-        window.ct.callbacks.push(arguments);
+    w.CalltouchDataObject = 'ct';
+    w.ct = w.ct || function() {
+        w.ct.callbacks.push(arguments);
     };
-    if (!window.ct.callbacks) {
-        window.ct.callbacks = [];
+    if (!w.ct.callbacks) {
+        w.ct.callbacks = [];
     }
-    window.ct.loaded = false;
-    window.ct.counters = counterIds;
+    w.ct.loaded = false;
+    w.ct.counters = counterIds;
 
-    window.calltouch_params = {
+    w.calltouch_params = {
         mod_id: counterIds,
         site_id: siteIds
     };
 
-    if (!window.__ctWidgetsSubscribed) {
-        window.ct('modules','widgets','subscribeToEvent',[
+    if (!w.__ctWidgetsSubscribed) {
+        w.ct('modules','widgets','subscribeToEvent',[
             {
                 object: 'form',
                 action: 'show',
@@ -110,7 +116,7 @@ function runCALLTOUCH(calltouch) {
                 }
             }
         ]);
-        window.__ctWidgetsSubscribed = true;
+        w.__ctWidgetsSubscribed = true;
     }
 
     counterIds.forEach(function(counterId) {
@@ -132,6 +138,6 @@ function runCALLTOUCH(calltouch) {
         }
     });
 }
-window._ct = runCALLTOUCH;
+(window as any)._ct = runCALLTOUCH;
 </script>
 )}
