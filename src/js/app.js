@@ -16,8 +16,6 @@ import FormsValidation from './modules/FormsValidation';
 
 import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
 
-import { initFormsWithFiles } from './modules/forms-with-files';
-
 const confirmModalText = 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!';
 
 startNoBounce();
@@ -28,10 +26,6 @@ cookiecook();
 const waitForDp = setInterval(() => {
 	if (window._dp && window._dp.connectforms_link) {
 		clearInterval(waitForDp);
-		initFormsWithFiles(window._dp.connectforms_link, {
-			confirmModalText: confirmModalText,
-			validation: FormsValidation,
-		});
 		connectForms(window._dp.connectforms_link, {
 			confirmModalText: confirmModalText,
 			validation: FormsValidation
