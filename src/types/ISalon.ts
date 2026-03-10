@@ -26,5 +26,6 @@ export interface ISalon {
 	legal_entity?: string;
 	legal_inn?: number;
 	map?: TSalonMap;
+	hidden_in?: string[];
 	scripts?: TSalonScripts;
 }
