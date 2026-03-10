@@ -8,7 +8,13 @@ interface Props {
 	modalData?: boolean;
 	errorMessage?: string;
 	errorClasses?: string;
-	options?: {id: string | number; name: string;}[];
+	options?: {
+		id: string | number;
+		name: string;
+		ctModId?: string;
+		ctSiteId?: string;
+		ctRouteKey?: string;
+	}[];
 }
 const {
 	name, 
@@ -22,69 +28,26 @@ const {
 	options = []
 } = Astro.props
 import { Icon } from 'astro-icon/components';
+const formSelectConfig = JSON.stringify({
+	name,
+	options,
+	placeholder,
+	disabled,
+	pageData,
+	modalData
+});
 ---
 <div
 	class="relative custom-select"
 	:class="{'opacity-70': disabled}"
-	x-data={ `{
-		open: false, 
-		options: ${JSON.stringify(options)},
-		placeholder: '${placeholder}',
-		disabled: ${disabled},
-		value: null,
-		currentOption: {},
-		openSelect() {
-			if (!this.disabled) {
-				this.open = !this.open;
-			}
-		},
-		select(id){
-			this.currentOption = this.options.find(o => o.id === id);
-			this.value = this.currentOption.name || null;
-			this.open = false;
-			this.$refs.error ? this.$refs.error.classList.add('hidden') : null;
-		},
-		selectOneOption(id){
-			this.select(id);
-			this.disabled = true;
-		},
-		resetSelect(){
-			this.value = null;
-			this.currentOption = {};
-			this.disabled = false;
-		},
-		effect(){
-			this.options = ${modalData ? '$store.salonsStore.filteredData' : pageData ? '$store.salonsStore.pageFilteredData' : 'this.options'};
-			${pageData ? `
-			if ($store.salonsStore.pageFilteredData.length === 1) {
-				this.resetSelect();
-				this.selectOneOption($store.salonsStore.pageFilteredData[0].id);
-			} else if ($store.salonsStore.pageFilteredData.length > 1 && this.disabled) {
-				this.resetSelect();
-				this.disabled = false;
-			}
-			` : modalData ? `
-			if ($store.salonsStore.shouldResetModalSelect) {
-				this.resetSelect();
-			} else if ($store.salonsStore.filteredData.length === 1) {
-				this.selectOneOption($store.salonsStore.filteredData[0].id);
-			} else if ($store.salonsStore.filteredData.length > 1 && this.disabled) {
-			 	this.resetSelect();
-				this.disabled = false;
-			}
-			` : `
-			if (this.options.length === 1 && !this.value) {
-				this.select(this.options[0].id);
-			}
-			`}
-		},
-	}` }
+	x-data={`formSelectComponent(${formSelectConfig})`}
 	x-effect="effect()"
 	x-cloak>
 	<input 
 		type="text" 
 		class="sr-only" 
 		name={name} 
+		x-ref="selectInput"
 		:value="value" 
 		{...(required ? { required: true } : {})} 
 		{...(disabled ? { disabled: true } : {})} 

@@ -110,7 +110,7 @@ let sections = await getModelSectionsYML(model);
     <section>
       <div class="container">
         <FeedbackForm 
-          title="Забронировать новый JAC RF8"
+          title={`Забронировать новый ${model.mark_id} ${model.name}`}
         />
       </div>
     </section>
