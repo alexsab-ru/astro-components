@@ -322,7 +322,8 @@ git sparse-checkout set \
   "src/model-sections" \
   "src/models.json" \
   "src/cars.json" \
-  "src/avito-colors.json"
+  "src/avito-colors.json" \
+  "src/translations.json"
 
 DEFAULT_BRANCH=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@')
 if [ -z "$DEFAULT_BRANCH" ]; then
@@ -493,6 +494,19 @@ if [ -f "$TMP_DIR/src/avito-colors.json" ]; then
   fi
 else
   echo -e "${BGYELLOW}Пропускаем копирование avito-colors.json: файла нет в JSON_REPO${Color_Off}"
+fi
+
+# Копирование translations.json (всегда, если есть в общем репозитории)
+echo -e "\n${BGGREEN}Копируем общий translations.json...${Color_Off}"
+if [ -f "$TMP_DIR/src/translations.json" ]; then
+  rsync -a "$TMP_DIR/src/translations.json" "$LOCAL_DATA_DIR/all-translations.json"
+  if [ ! -s "$LOCAL_DATA_DIR/all-translations.json" ]; then
+      printf "${BGRED}Внимание: общий файл translations.json не найден или получен некорректный файл!${Color_Off}\n"
+  else
+      printf "${BGGREEN}Общий файл translations.json успешно скопирован${Color_Off}\n"
+  fi
+else
+  echo -e "${BGYELLOW}Пропускаем копирование translations.json: файла нет в JSON_REPO${Color_Off}"
 fi
 
 if [ "$KEEP_TMP" = true ]; then
