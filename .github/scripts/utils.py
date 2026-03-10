@@ -13,6 +13,7 @@ from io import BytesIO
 import urllib.parse
 from pathlib import Path
 from typing import Dict, Any
+from functools import lru_cache
 from config import *
 from bs4 import BeautifulSoup
 
@@ -281,55 +282,99 @@ def convert_to_string(element):
         convert_to_string(child)
 
 
-def avitoColor(color):
-    # Обязательно приводим к нижнему регистру, чтобы не было ошибок при сравнении
-    mapping = {
-        '058/11': 'белый',
-        '070/20 белый перламутр': 'белый',
-        '089/20 белый перламутр': 'белый',
-        '1k0/20 серый': 'серый',
-        '1l1/20': 'серый',
-        '1l1/21 серый хром металл': 'серый',
-        '218/20 черный металлик': 'черный',
-        '218/41 черный': 'черный',
-        'бежевый': 'бежевый',
-        'белый': 'белый',
-        'белый/песочный': 'белый',
-        'белый/черный': 'белый',
-        'бордовый': 'бордовый',
-        'голубой': 'голубой',
-        'желтый': 'желтый',
-        'зеленый': 'зеленый',
-        'зелёный': 'зеленый',
-        'золотой': 'золотой',
-        'коричневый': 'коричневый',
-        'красный': 'красный',
-        'оранжевый': 'оранжевый',
-        'платиновый графит': 'серый',
-        'пурпурный': 'пурпурный',
-        'розовый': 'розовый',
-        'серебристый': 'серебряный',
-        'серебряный': 'серебряный',
-        'серо-голубой': 'голубой',
-        'серо-фиолетовый': 'серо-фиолетовый',
-        'серый': 'серый',
-        'серый/черный': 'серый',
-        'синий': 'синий',
-        'темно-серый': 'серый',
-        'темно-синий': 'синий',
-        'фиолетовый': 'фиолетовый',
-        'черный': 'черный',
-        'чёрный': 'черный',
-        'черный/черно-зеленый': 'черный',
-        'черный/черный': 'черный',
-        'черный/светлый': 'черный',
-        'ярко-алый': 'красный',
-        'белый с черной крышей': 'белый',
-        'белый с черной крышей/ т': 'белый',
-    }
+_AVITO_COLOR_MAPPING_FALLBACK: Dict[str, str] = {
+    'бежевый': 'бежевый',
+    'белый': 'белый',
+    'бордовый': 'бордовый',
+    'голубой': 'голубой',
+    'желтый': 'желтый',
+    'зеленый': 'зеленый',
+    'зелёный': 'зеленый',
+    'золотой': 'золотой',
+    'коричневый': 'коричневый',
+    'красный': 'красный',
+    'оранжевый': 'оранжевый',
+    'пурпурный': 'пурпурный',
+    'розовый': 'розовый',
+    'серебристый': 'серебряный',
+    'серебряный': 'серебряный',
+    'серо-фиолетовый': 'серо-фиолетовый',
+    'серый': 'серый',
+    'синий': 'синий',
+    'фиолетовый': 'фиолетовый',
+    'черный': 'черный',
+    'чёрный': 'черный',
+}
 
-    # Приводим ключ к нижнему регистру для проверки
-    normalized_color = color.lower()
+
+@lru_cache(maxsize=1)
+def load_avito_color_mapping() -> Dict[str, str]:
+    """
+    Загружает мэпинг цветов для Avito из общего JSON.
+
+    Приоритет источников:
+    1) AVITO_COLOR_MAPPING_PATH (env)
+    2) src/data/all-avito-colors.json
+    3) src/data/avito-colors.json
+    4) ../astro-json/src/avito-colors.json (локальная разработка в mono-workspace)
+    5) Встроенный fallback-словарь
+    """
+    repo_root = Path(__file__).resolve().parents[2]
+    env_path = os.getenv('AVITO_COLOR_MAPPING_PATH')
+
+    candidates = []
+    if env_path:
+        candidates.append(Path(env_path))
+
+    candidates.extend([
+        repo_root / 'src/data/all-avito-colors.json',
+        repo_root / 'src/data/avito-colors.json',
+        repo_root.parent / 'astro-json/src/avito-colors.json',
+        Path('./src/data/all-avito-colors.json'),
+        Path('./src/data/avito-colors.json'),
+    ])
+
+    seen_paths = set()
+    for candidate in candidates:
+        normalized_path = str(candidate.expanduser())
+        if normalized_path in seen_paths:
+            continue
+        seen_paths.add(normalized_path)
+
+        if not os.path.exists(normalized_path):
+            continue
+
+        try:
+            with open(normalized_path, 'r', encoding='utf-8') as file:
+                file_data = json.load(file)
+        except Exception as e:
+            print_message(f"Ошибка при загрузке файла цветов Avito ({normalized_path}): {e}", 'warning')
+            continue
+
+        if not isinstance(file_data, dict):
+            print_message(f"Некорректный формат файла цветов Avito ({normalized_path}): ожидался объект", 'warning')
+            continue
+
+        mapping = {}
+        for source_color, avito_color in file_data.items():
+            if isinstance(source_color, str) and isinstance(avito_color, str):
+                mapping[source_color.lower().strip()] = avito_color.lower().strip()
+
+        if mapping:
+            return mapping
+
+        print_message(f"Файл цветов Avito пустой или содержит некорректные значения: {normalized_path}", 'warning')
+
+    return _AVITO_COLOR_MAPPING_FALLBACK
+
+
+def avitoColor(color):
+    if not color:
+        return color
+
+    # Обязательно приводим к нижнему регистру, чтобы не было ошибок при сравнении.
+    mapping = load_avito_color_mapping()
+    normalized_color = color.lower().strip()
     if normalized_color in mapping:
         return mapping[normalized_color].capitalize()
     else:
