@@ -319,7 +319,7 @@ cd "$TMP_DIR"
 git sparse-checkout init --no-cone
 git sparse-checkout set \
   "src/$DOMAIN/data" \
-  "src/model-sections" \
+  "src/_model-sections" \
   "src/models.json" \
   "src/cars.json" \
   "src/avito-colors.json" \
@@ -428,7 +428,7 @@ if [ "$SHOULD_COPY_MODEL_SECTIONS" = true ]; then
         | tr '[:upper:]' '[:lower:]' \
         | sed -E 's/[^a-z0-9 ]//g; s/[[:space:]]+/-/g; s/^-+|-+$//g')
 
-      SRC_DIR="$TMP_DIR/src/model-sections/$NORMALIZED_BRAND"
+      SRC_DIR="$TMP_DIR/src/_model-sections/$NORMALIZED_BRAND"
       DEST_DIR="$LOCAL_DATA_DIR/model-sections/$NORMALIZED_BRAND"
 
       if [ -d "$SRC_DIR" ]; then
