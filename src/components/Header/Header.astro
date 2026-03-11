@@ -24,6 +24,12 @@ import socials from '@/data/socials.json';
 
 import './styles.css';
 
+interface Props {
+	showMenu?: boolean;
+}
+
+const { showMenu = true } = Astro.props;
+
 const headerGlobalClasses = is_header_transparent ? 'header-transparent fixed' : 'sticky';
 const headerBgClasses = is_header_transparent ? 'bg-header-transparent-bg' : 'bg-header-bg';
 const headerBgSubmenuClasses = is_header_transparent ? 'bg-header-transparent-bg' : 'bg-header-bg';
@@ -112,7 +118,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 	</header>
 
 
-	{links.length > 0 && ( <HeaderMenu links={links} /> )}
+	{showMenu && links.length > 0 && ( <HeaderMenu links={links} /> )}
 
 	<div
 		x-cloak
@@ -130,7 +136,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
-				{links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
+				{showMenu && links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
 				<div>
 				{salons.length && salons.map(salon => (
 					<div class={`flex flex-col gap-3 py-5 px-5 ${borderColor} border-t first:border-0`}>
