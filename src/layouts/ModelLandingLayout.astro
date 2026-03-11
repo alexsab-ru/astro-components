@@ -1,0 +1,26 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+
+interface Props {
+	title?: string;
+	h1?: string;
+	description?: string;
+	image?: string;
+	keywords?: string;
+	brand?: string;
+  showHeaderMenu?: boolean;
+}
+const {title, h1, description, image, keywords, brand, showHeaderMenu = false} = Astro.props;
+---
+
+<Layout title={title || h1} description={description} image={image} keywords={keywords} brand={brand?.toLowerCase() || null} showHeaderMenu={showHeaderMenu}>
+  <Banner onlyView={true} />
+	<section class="content">
+		<div class="container">
+			
+			<slot />
+
+		</div>
+	</section>
+</Layout>
