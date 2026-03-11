@@ -3,8 +3,9 @@ import type { TBanner } from './types';
 interface Props {
 	banner: TBanner;
 	index?: number;
+	onlyView?: boolean;
 }
-const {banner, index} = Astro.props;
+const {banner, index, onlyView} = Astro.props;
 import Button from '../Button/Button.astro';
 import Badge from './Badge.astro';
 import BannerTitle from './Title.astro';
@@ -49,7 +50,7 @@ const linkAttrs = hasBannerUrl ? {
 				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
 				{ banner?.descr && ( <BannerDescription description={banner.descr} /> ) }
 				{
-					banner?.btn && (
+					!onlyView && banner?.btn && (
 						<div data-swiper-parallax="-55%">
 							<Button
 								classes={`btn inline-block py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
@@ -85,7 +86,7 @@ const linkAttrs = hasBannerUrl ? {
 		- Если есть `bannerUrl`, оборачиваем в ссылку, иначе выводим как есть
 	*/}
 	{
-		hasBannerUrl ? (
+		hasBannerUrl && !onlyView ? (
 			<a {...linkAttrs}>
 				<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
 			</a>
