@@ -59,11 +59,12 @@ export function useAnswerHandler({
 
       // Персонализация для шага ввода имени
       if (currentStep === "name") {
-        const final = config[config.length - 1] as any;
+        const finalStep = config[config.length - 1];
+        const finalTitle = 'title' in finalStep ? String(finalStep.title) : '';
         addBotMessages(
           [
             `${value}, приятно познакомиться! 😊`,
-            final.title,
+            finalTitle,
           ],
           () => setShowOptions(true),
         );
