@@ -31,7 +31,7 @@ const {
     data = null,
 } = Astro.props;
 const footerClasses = [
-    'bg-white border-t xl:border-none xl:bg-transparent fixed left-0 xl:left-5 xl:bottom-5 bottom-0 xl:text-left text-center text-xs xl:w-[150px] w-full text-gray-800 z-50',
+    'bg-white border-t xl:border-none xl:bg-transparent fixed xl:relative left-0 xl:left-5 xl:bottom-5 bottom-0 xl:text-left text-center text-xs w-full text-gray-800 z-50',
     classes
 ];
 ---
@@ -59,8 +59,9 @@ const footerClasses = [
         x-transition:leave="transition duration-200"
         x-transition:leave-start="opacity-100 h-auto"
         x-transition:leave-end="opacity-0 h-0"
-        class="py-4 xl:py-0 xl:block!"
+        class="py-4 xl:py-0 px-2 xl:flex! xl:flex-col xl:items-start xl:w-full xl:px-0"
     >
+        <div class="legal-info xl:absolute xl:bottom-20 xl:left-0 py-2 xl:w-[150px] xl:mb-2 text-gray-500">
         {data ? (
             <div set:html={data}></div>
         ) : (
@@ -68,28 +69,22 @@ const footerClasses = [
                 {site_name && (<p set:html={site_name}></p>)}
                 {legal_city && (<p set:html={legal_city}></p>)}
                 {legal_inn && (<p set:html={legal_inn}></p>)}
-                <a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика обработки персональных данных</a><br/>
-                <a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика конфиденциальности</a>
-                <a href="/cookie-policy/" class="underline hover:no-underline" target="_blank">Правила использования cookie</a>
+                <p><a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика конфиденциальности</a></p>
+                <p><a href="/cookie-policy/" class="underline hover:no-underline" target="_blank">Правила использования cookie</a></p>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-200 xl:border-gray-400/30">
+                <span>&copy; {YEAR}</span>
+                {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
+            </div>
+            <div class="mt-4 ">
+                Разработка <a href={url} class="underline hover:no-underline" target="_blank">alexsab.ru</a>
             </div>
         )}
-        <div class="mt-3 pt-3 border-t border-gray-200 xl:border-gray-400/30">
-            <span>&copy; {YEAR}</span>
-            {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
-        </div>
-        <div class="mt-2">
-            Разработка <a href={url} class="underline hover:no-underline" target="_blank">alexsab.ru</a>
         </div>
         {FOOTER_INFO && (
-            <div class="xl:hidden mt-3 pt-3 border-t border-gray-200 text-gray-500">
+            <div class="mt-3 xl:mt-0 pt-3 xl:pt-2 border-t xl:border-t border-gray-200 text-gray-500 xl:w-full xl:bg-white/90 xl:backdrop-blur-sm xl:text-[10px]">
                 <Fragment set:html={FOOTER_INFO} />
             </div>
         )}
     </div>
 </footer>
-
-{FOOTER_INFO && (
-    <div class="hidden xl:block fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-sm border-t border-gray-200 px-5 py-2 text-[10px] text-gray-500 z-40 text-center">
-        <Fragment set:html={FOOTER_INFO} />
-    </div>
-)}
