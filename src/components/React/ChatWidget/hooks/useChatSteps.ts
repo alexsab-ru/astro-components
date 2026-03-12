@@ -71,7 +71,7 @@ export function useChatSteps({
 
       map[q.id] = {
         botMessages: [q.title],
-        options: q.answerOptions.map((opt) => {
+        options: q.answerOptions.map((opt): AnswerOption => {
           // Если опция - строка, преобразуем в объект AnswerOption
           if (typeof opt === 'string') {
             return {
