@@ -1,6 +1,14 @@
 ---
 type SectionImage = { url: string; title?: string; description?: string };
 
+interface Props {
+  sections: {
+    id: string;
+    title: string;
+    images?: SectionImage[];
+  }[];
+}
+
 const { sections } = Astro.props;
 const filteredSections = sections
   .filter((section) => section.images?.length)
