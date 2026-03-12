@@ -53,11 +53,11 @@ export function OptionsList({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="aspect-video w-full overflow-hidden bg-gray-100 relative">
+              <div className="aspect-video w-full overflow-hidden bg-gray-100 flex items-center justify-center p-1">
                 <img
                   src={opt.image}
                   alt={opt.label}
-                  className="absolute inset-0 w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
               <div className="p-2 sm:p-3 text-center">
