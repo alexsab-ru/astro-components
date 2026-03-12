@@ -16,7 +16,7 @@ export function useChatMessages(
   setShowOptions: (value: boolean) => void
 ) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(true);
   const idCounter = useRef(0);
   const nextId = (prefix: string) => `${prefix}-${Date.now()}-${++idCounter.current}`;
 
@@ -76,7 +76,7 @@ export function useChatMessages(
           ]);
           scroll();
           next();
-        }, 500 + text.length * 6);
+        }, 1000 + text.length * 10);
       };
 
       next();

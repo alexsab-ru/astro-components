@@ -121,9 +121,10 @@ export function ChatWidget({
   });
 
   // Автоскролл при изменении сообщений или опций
-  useEffect(() => {
-    scroll();
-  }, [messages, showOptions, scroll]);
+  // TODO: временно отключён — на мобилках прокручивает приветствие до того, как пользователь успел его прочитать
+  // useEffect(() => {
+  //   scroll();
+  // }, [messages, showOptions, scroll]);
 
   const cfg = steps[currentStep];
 

@@ -15,13 +15,14 @@ export function useChatScroll() {
    * Прокручивает контейнер вниз с небольшой задержкой
    * для корректной работы с анимациями
    */
+  // TODO: временно отключён — прокручивает приветствие до того, как пользователь успел его прочитать
   const scroll = useCallback(() => {
-    setTimeout(() => {
-      scrollRef.current?.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }, 80);
+    // setTimeout(() => {
+    //   scrollRef.current?.scrollTo({
+    //     top: scrollRef.current.scrollHeight,
+    //     behavior: "smooth",
+    //   });
+    // }, 80);
   }, []);
 
   return {

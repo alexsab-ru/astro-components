@@ -52,6 +52,7 @@ const footerClasses = [
         <Icon name="mdi:chevron-down" class="transition-transform duration-200 text-[1.2em] origin-center" :class="{'-rotate-180': open}" />
     </div>
     <div
+        x-cloak
         x-show="open"
         x-transition:enter="transition duration-200"
         x-transition:enter-start="opacity-0 h-0"
