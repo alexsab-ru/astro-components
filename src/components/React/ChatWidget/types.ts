@@ -61,12 +61,29 @@ export interface ChatMessages {
 }
 
 /**
+ * Цвет модели из models.json
+ */
+export interface ModelColor {
+  id: string;
+  name: string;
+}
+
+/**
+ * Данные модели для динамических опций (цвета и т.д.)
+ */
+export interface ModelData {
+  name: string;
+  colors?: ModelColor[];
+}
+
+/**
  * Конфигурация чата из chat-landing.json
  */
 export interface ChatLandingConfig {
   settings?: ChatSettings;
   messages?: ChatMessages;
   questions: QuizQuestion[];
+  models?: ModelData[];
 }
 
 /**

@@ -5,7 +5,8 @@ import type {
   ChatLandingConfig,
   StepConfig,
   QuizQuestion,
-  AnswerOption
+  AnswerOption,
+  ModelData
 } from '../types';
 
 /**
@@ -13,6 +14,32 @@ import type {
  */
 function interpolate(template: string, vars: Record<string, string>): string {
   return template.replace(/\{(\w+)\}/g, (_, key) => vars[key] || '');
+}
+
+/**
+ * Собирает уникальные цвета выбранных моделей + кнопку "Ещё не определился"
+ * Поддерживает множественный выбор (через запятую)
+ */
+function getColorOptions(modelAnswer: string | undefined, models: ModelData[]): AnswerOption[] {
+  if (!modelAnswer) return [{ label: 'Ещё выбираю', value: 'Ещё выбираю' }];
+
+  const selectedNames = modelAnswer.split(',').map(s => s.trim());
+  const seen = new Set<string>();
+  const options: AnswerOption[] = [];
+
+  for (const name of selectedNames) {
+    const model = models.find(m => m.name === name);
+    if (!model?.colors) continue;
+    for (const color of model.colors) {
+      if (!seen.has(color.name)) {
+        seen.add(color.name);
+        options.push({ label: color.name, value: color.name });
+      }
+    }
+  }
+
+  options.push({ label: 'Ещё выбираю', value: 'Ещё выбираю' });
+  return options;
 }
 
 export function useChatSteps(config: ChatLandingConfig) {
@@ -24,9 +51,9 @@ export function useChatSteps(config: ChatLandingConfig) {
     const { settings = {}, messages = {}, questions } = config;
     const managerName = settings.managerName || 'Менеджер';
     const managerPosition = settings.managerPosition || '';
-    const brand = settings.brand || 'CHERY';
-    const dealer = settings.dealer || 'Официальный дилер';
-    const legalCityWhere = settings.legalCityWhere || 'Самаре';
+    const brand = settings.brand || 'БРЕНД';
+    const dealer = settings.dealer || 'НАЗВАНИЕ ДИЛЕРА';
+    const legalCityWhere = settings.legalCityWhere || 'Городе';
 
     const vars: Record<string, string> = {
       managerName,
@@ -57,9 +84,12 @@ export function useChatSteps(config: ChatLandingConfig) {
           ? "name"
           : questions[index + 1].id;
 
-      map[q.id] = {
-        botMessages: [q.title],
-        options: q.answerOptions.map((opt): AnswerOption => {
+      // Динамические цвета: если id=color и answerOptions пуст — берём из выбранной модели
+      let options: AnswerOption[];
+      if (q.id === 'color' && q.answerOptions.length === 0 && config.models) {
+        options = getColorOptions(answers.model, config.models);
+      } else {
+        options = q.answerOptions.map((opt): AnswerOption => {
           if (typeof opt === 'string') {
             return { label: opt, value: opt, image: '', description: '' };
           }
@@ -69,7 +99,12 @@ export function useChatSteps(config: ChatLandingConfig) {
             image: opt.image || '',
             description: opt.description || '',
           };
-        }),
+        });
+      }
+
+      map[q.id] = {
+        botMessages: [q.title],
+        options,
         multiple: q.type === "checkbox",
         nextStep: () => next,
       };

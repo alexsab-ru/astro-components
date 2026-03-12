@@ -4,6 +4,7 @@ import { ChatWidget } from '@/components/React/ChatWidget/ChatWidget-v2';
 import { USPSection } from '@/components/React/USPSection';
 import Banner from '@/components/Banner/Banner.astro'
 import chatConfig from '@/data/chat-landing.json';
+import siteSettings from '@/data/settings.json';
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
 const banners = [
@@ -33,14 +34,32 @@ const banners = [
         "autoplay": 6000
     },
 ];
-// Обогащаем вопрос о модели данными из models.json (картинки, описания)
+// Fallback: берём brand/dealer/legalCityWhere из settings.json если не заданы в chat-landing.json
+const chatSettings = chatConfig.settings || {};
+const mergedSettings = {
+    ...chatSettings,
+    brand: chatSettings.brand || siteSettings.brand || '',
+    dealer: chatSettings.dealer || siteSettings.site_name || '',
+    legalCityWhere: chatSettings.legalCityWhere || siteSettings.legal_city_where || '',
+};
+
+// Обогащаем вопросы данными из models.json
 const config = {
     ...chatConfig,
+    settings: mergedSettings,
+    // Данные моделей для динамических опций (цвета по выбранной модели)
+    models: models.map((m: any) => ({
+        name: m.name,
+        colors: (m.colors || []).map((c: any) => ({ id: c.id, name: c.name })),
+    })),
     questions: chatConfig.questions.map(q => {
         if (q.id !== 'model') return q;
-        const newOptions = q.answerOptions.reduce((acc: any[], a: any) => {
-            const name = typeof a === 'string' ? a : a;
-            const model = models.find(m => m.name === name);
+        // Если answerOptions пуст — показываем все модели, иначе только указанные
+        const sourceNames = q.answerOptions.length === 0
+            ? models.map((m: any) => m.name)
+            : q.answerOptions.map((a: any) => typeof a === 'string' ? a : a);
+        const newOptions = sourceNames.reduce((acc: any[], name: string) => {
+            const model = models.find((m: any) => m.name === name);
             if (model) {
                 acc.push({
                     label: model.name,
