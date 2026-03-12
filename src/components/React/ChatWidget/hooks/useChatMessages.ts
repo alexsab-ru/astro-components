@@ -1,6 +1,6 @@
 // ──────────────── Хук для управления сообщениями чата ────────────────
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import type { ChatMessage } from '../types';
 
 /**
@@ -17,6 +17,8 @@ export function useChatMessages(
 ) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const idCounter = useRef(0);
+  const nextId = (prefix: string) => `${prefix}-${Date.now()}-${++idCounter.current}`;
 
   /**
    * Добавляет сообщение пользователя в чат
@@ -26,7 +28,7 @@ export function useChatMessages(
   const addUserMessage = useCallback((text: string) => {
     setMessages((prev) => [
       ...prev,
-      { id: `user-${Date.now()}`, type: "user", text },
+      { id: nextId("user"), type: "user", text },
     ]);
     scroll();
   }, [scroll]);
@@ -39,7 +41,7 @@ export function useChatMessages(
   const addBotMessage = useCallback((text: string) => {
     setMessages((prev) => [
       ...prev,
-      { id: `bot-${Date.now()}`, type: "bot", text },
+      { id: nextId("bot"), type: "bot", text },
     ]);
     scroll();
   }, [scroll]);
@@ -70,7 +72,7 @@ export function useChatMessages(
         setTimeout(() => {
           setMessages((prev) => [
             ...prev,
-            { id: `bot-${Date.now()}-${i}`, type: "bot", text },
+            { id: nextId("bot"), type: "bot", text },
           ]);
           scroll();
           next();
