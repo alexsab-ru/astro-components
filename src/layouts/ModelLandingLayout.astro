@@ -16,11 +16,7 @@ const {title, h1, description, image, keywords, brand, showHeaderMenu = false} =
 
 <Layout title={title || h1} description={description} image={image} keywords={keywords} brand={brand?.toLowerCase() || null} showHeaderMenu={showHeaderMenu}>
   <Banner onlyView={true} />
-	<section class="content">
-		<div class="container">
-			
+		<div class="px-2 md:px-4">
 			<slot />
-
 		</div>
-	</section>
 </Layout>
