@@ -33,7 +33,7 @@ export function useChatSteps({
   dealer,
   legalCityWhere,
 }: UseChatStepsParams) {
-  const [currentStep, setCurrentStep] = useState("welcome");
+  const [currentStep, setCurrentStep] = useState("intro");
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [showOptions, setShowOptions] = useState(false);
 
