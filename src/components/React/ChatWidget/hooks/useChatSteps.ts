@@ -111,11 +111,9 @@ export function useChatSteps({
     };
 
     // ───── шаг ввода телефона ─────
+    // botMessages пустой — персонализированные сообщения формируются в useAnswerHandler
     map.phone = {
-      botMessages: [
-        "Приятно познакомиться! 😊",
-        final.title,
-      ],
+      botMessages: [],
       inputField: {
         placeholder: "+7 (___) ___-__-__",
         type: "tel",
