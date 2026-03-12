@@ -1,0 +1,73 @@
+---
+type SectionImage = { url: string; title?: string; description?: string };
+
+const { sections } = Astro.props;
+const filteredSections = sections
+  .filter((section) => section.images?.length)
+  .map((section) => {
+    const images = section.images as SectionImage[];
+    const isOdd = images.length > 1 && images.length % 2 !== 0;
+    return {
+      ...section,
+      images,
+      gridImages: isOdd ? images.slice(0, -1) : images,
+      lastImage: isOdd ? images[images.length - 1] : null,
+    };
+  });
+---
+
+{filteredSections.map((section) => (
+  <section>
+    <h2 class="text-3xl font-bold mb-6">{section.title}</h2>
+    {section.images.length === 1 ? (
+      <a
+        href={section.images[0].url}
+        class="glightbox block"
+        data-title={section.images[0].title}
+        data-description={section.images[0].description}
+        data-gallery={`gallery-${section.id}`}
+      >
+        <img
+          src={section.images[0].url}
+          alt={section.images[0].title ?? section.title}
+          class="h-auto w-full rounded md:rounded-xl cursor-pointer"
+        />
+      </a>
+    ) : (
+      <>
+        <div class="grid grid-cols-2 gap-2 md:gap-4 items-stretch">
+          {section.gridImages.map((img) => (
+            <a
+              href={img.url}
+              class="glightbox flex flex-col m-0!"
+              data-title={img.title}
+              data-description={img.description}
+              data-gallery={`gallery-${section.id}`}
+            >
+              <img
+                src={img.url}
+                alt={img.title ?? section.title}
+                class="w-full flex-1 rounded md:rounded-xl object-cover aspect-video cursor-pointer"
+              />
+            </a>
+          ))}
+        </div>
+        {section.lastImage && (
+          <a
+            href={section.lastImage.url}
+            class="glightbox block mt-4"
+            data-title={section.lastImage.title}
+            data-description={section.lastImage.description}
+            data-gallery={`gallery-${section.id}`}
+          >
+            <img
+              src={section.lastImage.url}
+              alt={section.lastImage.title ?? section.title}
+              class="h-auto w-full rounded md:rounded-xl cursor-pointer"
+            />
+          </a>
+        )}
+      </>
+    )}
+  </section>
+))}
