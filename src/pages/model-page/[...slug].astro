@@ -6,6 +6,7 @@ import settings from '@/data/settings.json';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import SimpleGalleryGrid from '@/components/SimpleGalleryGrid/SimpleGalleryGrid.astro';
 import ImageGalleryGrid from '@/components/ImageGalleryGrid/ImageGalleryGrid.astro';
+import { setPrefixModelUrl } from '@/js/utils/helpers';
 
 const allSections = import.meta.glob('/src/data/model-sections/**/*.yml', { eager: true });
 
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
   return modelsData.models
     .filter((m) => m.show)
     .map((model) => ({
-      params: { slug: `${model.mark_id.toLowerCase()}-${model.id}` },
+      params: { slug: setPrefixModelUrl(model, true) },
       props: { model },
     }));
 }

@@ -3,6 +3,7 @@ interface Props {
 	models?: any[];
 	title?: string;
 	classes?: string;
+	getModelPath?: (model: any) => string;
 }
 import ModelItem from './Item.astro';
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
@@ -12,10 +13,10 @@ import { IS_MODEL_PREFIX_URL } from '@/const';
 
 import modelsData from '@/data/models.json';
 const { models: modelsArr } = modelsData;
-const {models = modelsArr, title = 'Модельный ряд', classes, ...rest} = Astro.props;
+const defaultGetModelPath = (model: any) => `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
+const {models = modelsArr, title = 'Модельный ряд', classes, getModelPath = defaultGetModelPath, ...rest} = Astro.props;
 const filteredModels = models.filter(isModelVisible);
 const groupModelsByBrand = groupArrayByKey(filteredModels, 'mark_id');
-const getModelPath = (model: any) => `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
 ---
 
 {
