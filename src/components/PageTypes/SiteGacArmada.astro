@@ -33,18 +33,30 @@ const infoItems = [
 	{title: "Зимние шины в комплекте", icon: "mdi:gift", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
 	{title: "5 лет гарантии", icon: "mdi:shield-check", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
 	{title: "Кредит от 0.01%", icon: "mdi:sale", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
-	{title: "Выгода до 400 000 руб.", icon: "mdi:hand-coin", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
+	{title: "Выгода до 700 000 руб.", icon: "mdi:hand-coin", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
 	{title: "Выгода в лизинг - до 11%", icon: "mdi:sale", url: "#common-modal", iconClasses: "text-accent-500 size-16"},
 ];
 
 const cards = [
+	{ id: 's7', title: 'GAC S7', benefit: '', images: [
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_2.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_2.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_1.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_1.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_3.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_3.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_4.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_4.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_5.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_5.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_6.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_6.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_7.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_7.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_8.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_8.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_9.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_9.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/original_10.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/s7/gallery/thumb_10.webp'},
+	] },	
 	{ id: 'gs8-ii', title: 'GAC GS8', benefit: 'до 400 000 рублей', images: [
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/1.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_1.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/2.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_2.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/3.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_3.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/4.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_4.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/5.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_5.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/6.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_6.webp'},
+		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/4.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_4.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/7.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_7.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/8.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_8.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/9.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs8-ii/gallery/thumb_9.webp'},
@@ -72,20 +84,20 @@ const cards = [
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs4/gallery/8.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs4/gallery/thumb_8.webp'},
 		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs4/gallery/9.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs4/gallery/thumb_9.webp'},
 	] },
-	{ id: 'gs3', title: 'GAC GS3', benefit: 'до 200 000 рублей', images: [
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/1.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_1.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/2.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_2.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/3.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_3.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/4.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_4.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/5.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_5.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/6.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_6.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/7.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_7.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/8.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_8.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/9.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_9.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/10.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_10.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/11.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_11.webp'},
-		{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/12.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_12.webp'},
-	] },
+	// { id: 'gs3', title: 'GAC GS3', benefit: '{{benefitb-gac-gs3-to}}', images: [
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/1.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_1.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/2.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_2.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/3.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_3.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/4.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_4.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/5.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_5.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/6.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_6.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/7.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_7.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/8.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_8.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/9.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_9.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/10.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_10.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/11.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_11.webp'},
+	// 	{imageUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/12.webp', thumbUrl: 'https://cdn.alexsab.ru/models/gac/gs3/gallery/thumb_12.webp'},
+	// ] },
 ].map((card, index) => ({
 	...card,
 	imgAlt: card.title,
@@ -116,29 +128,51 @@ const cards = [
 					{card.img && <img slot="card-image" class="" src={card.img} alt={card.imgAlt} loading="lazy" />}
 					<Fragment slot="card-content">
 						<h2 class="m-0! p-0! before:hidden text-2xl! lg:text-4xl!">{card.title}</h2>
-						<ul class="list-disc pl-5 text-gray-700 text-base! lg:text-lg!">
-							<li>выгода {card.benefit}</li>
-							<li>рассрочка 0.01% на 8 лет</li>
-							<li>гарантия 5 лет</li>
-							<li>в наличии все комплектации</li>
-						</ul>
-						<div class="grid gap-3 sm:grid-cols-2">
-							<Button 
-								view="popup-link"
-								classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white no-underline text-center bg-accent-500 hover:bg-accent-600"
-								url="#common-modal" 
-								title="Получить максимальную выгоду"
-								dataTitle={`Получить максимальную выгоду на&nbsp;${card.title}`}
-								dataFormName={`Получить максимальную выгоду. ${card.title}`}
-							/>
-							<Button 
-								view="popup-link"
-								classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white! no-underline text-center bg-black hover:bg-black/90"
-								url="#common-modal" 
-								title="Записаться на тест-драйв"
-								dataTitle={`Записаться на тест-драйв на&nbsp;${card.title}`}
-								dataFormName={`Записаться на тест-драйв. ${card.title}`}
-							/>
+						{card.title === 'GAC S7' ? (
+							<ul class="list-disc pl-5 text-gray-700 text-base! lg:text-lg!">
+								<li>премиальный гибридный кроссовер</li>
+								<li>полный привод</li>
+								<li>максимальная мощность 340 л.с., и мощность для транспортного налога - 122 л.с.</li>
+								<li>153 км.- запас хода на электротяге</li>
+							</ul>
+						) : (
+							<ul class="list-disc pl-5 text-gray-700 text-base! lg:text-lg!">
+								<li>выгода {card.benefit}</li>
+								<li>рассрочка 0.01% на 8 лет</li>
+								<li>гарантия 5 лет</li>
+								<li>в наличии все комплектации</li>
+							</ul>
+						)}
+						
+						<div class={`grid gap-3 ${card.title === 'GAC S7' ? '' : 'sm:grid-cols-2'}`}>
+							{card.title === 'GAC S7' ? (
+								<Button 
+									view="popup-link"
+									classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white! no-underline text-center bg-accent-500 hover:bg-accent-600"
+									url="#common-modal" 
+									title="Записаться на персональный тест-драйв"
+									dataTitle={`Записаться на тест-драйв на&nbsp;${card.title}`}
+									dataFormName={`Записаться на тест-драйв. ${card.title}`}
+								/>
+							) : (
+								<Button 
+									view="popup-link"
+									classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white no-underline text-center bg-accent-500 hover:bg-accent-600"
+									url="#common-modal" 
+									title="Получить максимальную выгоду"
+									dataTitle={`Получить максимальную выгоду на&nbsp;${card.title}`}
+									dataFormName={`Получить максимальную выгоду. ${card.title}`}
+								/>
+								<Button 
+									view="popup-link"
+									classes="w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white! no-underline text-center bg-black hover:bg-black/90"
+									url="#common-modal" 
+									title="Записаться на тест-драйв"
+									dataTitle={`Записаться на тест-драйв на&nbsp;${card.title}`}
+									dataFormName={`Записаться на тест-драйв. ${card.title}`}
+								/>
+							)}
+							
 						</div>
 					</Fragment>
 				</CardMedia>
