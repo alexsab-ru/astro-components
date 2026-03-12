@@ -55,7 +55,9 @@ export function useFormSubmission({
     data.agree = 'on';
     data.page_url = window.location.origin + window.location.pathname;
 
-    console.log(data);
+    if (window.location.hostname === "localhost") {
+      console.log(data);
+    }
 
     const options = {
       method: "POST",
