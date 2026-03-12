@@ -41,22 +41,25 @@ export function useFormSubmission({
    */
   const sendLead = useCallback(async (data: Record<string, any>) => {
     setIsTyping(true);
-    
+
+    // Создаём копию, чтобы не мутировать исходный объект (state)
+    const payload: Record<string, any> = { ...data };
+
     // Получаем дополнительные пары ключ-значение
     const pairs = getPair();
     if (Object.keys(pairs).length > 0) {
       Object.entries(pairs).forEach(function(pair) {
-        data[pair[0]] = pair[1];
+        payload[pair[0]] = pair[1];
       });
     }
 
     // Добавляем обязательные поля формы
-    data.form = formName;
-    data.agree = 'on';
-    data.page_url = window.location.origin + window.location.pathname;
+    payload.form = formName;
+    payload.agree = 'on';
+    payload.page_url = window.location.origin + window.location.pathname;
 
     if (window.location.hostname === "localhost") {
-      console.log(data);
+      console.log(payload);
     }
 
     const options = {
@@ -65,7 +68,7 @@ export function useFormSubmission({
       cache: "no-cache",
       credentials: "same-origin",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      data: data,
+      data: payload,
       url: connectforms_link,
     };
 
