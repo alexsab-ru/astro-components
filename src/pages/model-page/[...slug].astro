@@ -29,8 +29,8 @@ const sectionsModule = allSections[`/src/data/model-sections/${brandFolder}/${mo
 const rawSections = sectionsModule?.default ?? [];
 ---
 
-<Layout title={name} description={slogan} brand={brand?.toLowerCase() || null} showHeaderMenu={false} showFooterLinks={false}>
-  <Banner onlyView={true} />
+<Layout title={name} description={slogan} brand={brand?.toLowerCase() || null} showHeaderMenu={false} showFooterLinks={false} logoNoLink={true}>
+  <Banner onlyModal={true} />
   <div class="px-2 md:px-4 mt-6 xl:mt-12">
     <section>
       <PageH1 classes="text-center text-4xl! md:text-6xl!" h1={`${brand} ${name}`} />
