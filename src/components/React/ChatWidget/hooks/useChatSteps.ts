@@ -1,13 +1,12 @@
 // ──────────────── Хук для управления шагами чата ────────────────
 
 import { useState, useMemo } from 'react';
-import type { 
-  QuizConfig, 
-  StepConfig, 
-  QuizIntro, 
-  QuizQuestion, 
-  QuizFinal,
-  AnswerOption 
+import type {
+  QuizConfig,
+  StepConfig,
+  QuizIntro,
+  QuizQuestion,
+  AnswerOption
 } from '../types';
 
 interface UseChatStepsParams {
@@ -45,7 +44,6 @@ export function useChatSteps({
   const steps = useMemo(() => {
     const intro = config[0] as QuizIntro;
     const questions = config.filter((q) => "id" in q) as QuizQuestion[];
-    const final = config[config.length - 1] as QuizFinal;
 
     const map: Record<string, StepConfig> = {};
 
