@@ -29,7 +29,7 @@ const sectionsModule = allSections[`/src/data/model-sections/${brandFolder}/${mo
 const rawSections = sectionsModule?.default ?? [];
 ---
 
-<Layout title={name} description={slogan} brand={brand?.toLowerCase() || null} showHeaderMenu={false}>
+<Layout title={name} description={slogan} brand={brand?.toLowerCase() || null} showHeaderMenu={false} showFooterLinks={false}>
   <Banner onlyView={true} />
   <div class="px-2 md:px-4 mt-6 xl:mt-12">
     <section>
@@ -48,9 +48,18 @@ const rawSections = sectionsModule?.default ?? [];
       }
     </section>
 
-    <Sections sections={rawSections} variant="grid" />
+    <div class="text-center my-12">
+      <a
+        href="#feedback"
+        class="btn inline-block py-3 px-8 text-lg bg-accent-500 text-white rounded-lg transition hover:bg-accent-600"
+      >
+        Узнать подробности
+      </a>
+    </div>
 
-    <section class="bg-gray-50">
+    <Sections sections={rawSections} variant="grid" ctaHref="#feedback" ctaText="Узнать подробности" />
+
+    <section id="feedback" class="bg-gray-50">
       <FeedbackForm
         title="Остались вопросы?"
         subtitle="Оставьте заявку и мы свяжемся с вами"

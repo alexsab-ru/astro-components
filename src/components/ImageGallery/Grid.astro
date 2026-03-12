@@ -13,6 +13,7 @@ type GridItem = {
   colSpan: number;
   rowSpan?: number;
   stretch?: boolean;
+  contain?: boolean;
 };
 
 // Маппинг colspan → класс (явные строки для Tailwind)
@@ -39,7 +40,7 @@ const sixBlock = (imgs: SectionImage[]): GridItem[] => [
 const specificBlock = (imgs: SectionImage[]): GridItem[] => {
   const n = imgs.length;
   if (n === 1) return [
-    { image: imgs[0], colSpan: 12 },
+    { image: imgs[0], colSpan: 12, contain: true },
   ];
   if (n === 2) return [
     { image: imgs[0], colSpan: 6 },
@@ -107,7 +108,7 @@ while (remaining.length > 0) {
         <img
           src={item.image.url}
           alt={item.image.title ?? ''}
-          class="absolute inset-0 w-full h-full object-cover"
+          class:list={['absolute inset-0 w-full h-full', item.contain ? 'object-contain' : 'object-cover']}
         />
       </a>
     ))}

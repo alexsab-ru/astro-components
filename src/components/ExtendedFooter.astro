@@ -17,6 +17,11 @@ const salons = salonsData.filter((salon: ISalon) => {
 });
 const path = Astro.url.pathname;
 import DisclaimerCollapse from '@/components/DisclaimerCollapse/DisclaimerCollapse.astro';
+
+interface Props {
+	showSiteLinks?: boolean;
+}
+const { showSiteLinks = true } = Astro.props;
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
@@ -45,6 +50,7 @@ salons
                     )}
                 </div>
             </div>
+            {showSiteLinks && (
             <div class="">
                 <div class="text-xl mb-3 md:mb-5">Разделы сайта</div>
                 <ul class="space-y-2">
@@ -57,6 +63,7 @@ salons
                 }
                 </ul>
             </div>
+            )}
             {
                 salons.length ? (
                     <div class="">
