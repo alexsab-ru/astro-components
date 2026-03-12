@@ -1,6 +1,6 @@
 // ──────────────── Хук для автоскролла чата ────────────────
 
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback } from 'react';
 
 /**
  * Хук для управления автоскроллом контейнера с сообщениями
