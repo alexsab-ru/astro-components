@@ -1,7 +1,7 @@
 // ──────────────── Хук для обработки ответов пользователя ────────────────
 
 import { useCallback } from 'react';
-import type { QuizConfig, StepConfig } from '../types';
+import type { ChatLandingConfig, StepConfig } from '../types';
 
 interface UseAnswerHandlerParams {
   currentStep: string;
@@ -12,7 +12,8 @@ interface UseAnswerHandlerParams {
   setShowOptions: (show: boolean) => void;
   addUserMessage: (text: string) => void;
   addBotMessages: (texts: string[], onDone?: () => void) => void;
-  config: QuizConfig;
+  config: ChatLandingConfig;
+  onFirstAnswer?: () => void;
 }
 
 /**
@@ -32,6 +33,7 @@ export function useAnswerHandler({
   addUserMessage,
   addBotMessages,
   config,
+  onFirstAnswer,
 }: UseAnswerHandlerParams) {
   /**
    * Обрабатывает ответ пользователя
@@ -44,7 +46,9 @@ export function useAnswerHandler({
       // Добавляем сообщение пользователя
       addUserMessage(value);
 
-      // Сохраняем ответ пользователя
+      // Включаем автоскролл после первого ответа пользователя
+      onFirstAnswer?.();
+
       if (currentStep !== "intro") {
         const updatedAnswers = {
           ...answers,
@@ -53,25 +57,22 @@ export function useAnswerHandler({
         setAnswers(updatedAnswers);
       }
 
-      // Переходим к следующему шагу
       const nextKey = steps[currentStep].nextStep();
       setCurrentStep(nextKey);
 
       // Персонализация для шага ввода имени
       if (currentStep === "name") {
-        const finalStep = config[config.length - 1];
-        const finalTitle = 'title' in finalStep ? String(finalStep.title) : '';
+        const messages = config.messages || {};
+        const afterName = (messages.afterName || "{name}, приятно познакомиться! 😊")
+          .replace(/\{name\}/g, value);
+        const askPhone = messages.askPhone || "Оставьте номер вашего телефона.";
         addBotMessages(
-          [
-            `${value}, приятно познакомиться! 😊`,
-            finalTitle,
-          ],
+          [afterName, askPhone],
           () => setShowOptions(true),
         );
         return;
       }
 
-      // Показываем сообщения следующего шага
       const nextCfg = steps[nextKey];
       if (nextCfg?.botMessages?.length) {
         addBotMessages(nextCfg.botMessages, () => {
@@ -89,6 +90,7 @@ export function useAnswerHandler({
       addUserMessage,
       addBotMessages,
       config,
+      onFirstAnswer,
     ],
   );
 

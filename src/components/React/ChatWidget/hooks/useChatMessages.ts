@@ -11,10 +11,19 @@ import type { ChatMessage } from '../types';
  * @param setShowOptions - функция для управления видимостью опций
  * @returns объект с состоянием и функциями для работы с сообщениями
  */
-export function useChatMessages(
-  scroll: () => void,
-  setShowOptions: (value: boolean) => void
-) {
+interface UseChatMessagesParams {
+  scroll: () => void;
+  setShowOptions: (value: boolean) => void;
+  messageDelayBase?: number;
+  messageDelayPerChar?: number;
+}
+
+export function useChatMessages({
+  scroll,
+  setShowOptions,
+  messageDelayBase = 1000,
+  messageDelayPerChar = 10,
+}: UseChatMessagesParams) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(true);
   const idCounter = useRef(0);
@@ -76,7 +85,7 @@ export function useChatMessages(
           ]);
           scroll();
           next();
-        }, 1000 + text.length * 10);
+        }, messageDelayBase + text.length * messageDelayPerChar);
       };
 
       next();

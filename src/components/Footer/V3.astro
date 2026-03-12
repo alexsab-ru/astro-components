@@ -31,7 +31,7 @@ const {
     data = null,
 } = Astro.props;
 const footerClasses = [
-    'bg-white border-t xl:border-none xl:bg-transparent fixed xl:relative left-0 xl:left-5 xl:bottom-5 bottom-0 xl:text-left text-center text-xs w-full text-gray-800 z-50',
+    'bg-white border-t xl:border-none xl:bg-transparent fixed xl:relative px-5 xl:bottom-5 bottom-0 xl:text-left text-center text-xs w-full text-gray-800 z-50',
     classes
 ];
 ---
@@ -62,7 +62,7 @@ const footerClasses = [
         x-transition:leave-end="opacity-0 h-0"
         class="py-4 xl:py-0 px-2 xl:flex! xl:flex-col xl:items-start xl:w-full xl:px-0"
     >
-        <div class="legal-info xl:absolute xl:bottom-20 xl:left-0 py-2 xl:w-[150px] xl:mb-2 text-gray-500">
+        <div class="legal-info xl:absolute xl:bottom-20 py-2 xl:w-[150px] xl:mb-2 text-gray-500">
         {data ? (
             <div set:html={data}></div>
         ) : (

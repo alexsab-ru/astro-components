@@ -2,68 +2,56 @@
 
 import { useState, useMemo } from 'react';
 import type {
-  QuizConfig,
+  ChatLandingConfig,
   StepConfig,
-  QuizIntro,
   QuizQuestion,
   AnswerOption
 } from '../types';
 
-interface UseChatStepsParams {
-  config: QuizConfig;
-  managerName: string;
-  managerPosition: string;
-  brand: string;
-  dealer: string;
-  legalCityWhere: string;
+/**
+ * Подставляет переменные в шаблон строки
+ */
+function interpolate(template: string, vars: Record<string, string>): string {
+  return template.replace(/\{(\w+)\}/g, (_, key) => vars[key] || '');
 }
 
-/**
- * Хук для управления шагами квиза
- * Строит карту шагов из конфигурации и управляет навигацией между ними
- * 
- * @param params - параметры для построения шагов
- * @returns объект с состоянием шагов и функциями для работы с ними
- */
-export function useChatSteps({
-  config,
-  managerName,
-  managerPosition,
-  brand,
-  dealer,
-  legalCityWhere,
-}: UseChatStepsParams) {
+export function useChatSteps(config: ChatLandingConfig) {
   const [currentStep, setCurrentStep] = useState("intro");
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [showOptions, setShowOptions] = useState(false);
 
-  /**
-   * Строит карту шагов из конфигурации квиза
-   * Включает: введение, вопросы, ввод имени, ввод телефона, финал
-   */
   const steps = useMemo(() => {
-    const intro = config[0] as QuizIntro;
-    const questions = config.filter((q) => "id" in q) as QuizQuestion[];
+    const { settings = {}, messages = {}, questions } = config;
+    const managerName = settings.managerName || 'Менеджер';
+    const managerPosition = settings.managerPosition || '';
+    const brand = settings.brand || 'CHERY';
+    const dealer = settings.dealer || 'Официальный дилер';
+    const legalCityWhere = settings.legalCityWhere || 'Самаре';
+
+    const vars: Record<string, string> = {
+      managerName,
+      managerPosition,
+      brand,
+      dealer,
+      legalCityWhere,
+      name: answers.name || '',
+    };
 
     const map: Record<string, StepConfig> = {};
 
-    // Формируем вступительные сообщения бота
-    const botIntroMessages = 
-      Array.isArray(intro.title) ? intro.title : typeof intro.title === "string" ? [
-        "Здравствуйте! 👋",
-        `Меня зовут ${managerName}, ${managerPosition} официального дилера ${dealer} в ${legalCityWhere}!`,
-        `Ответьте на несколько вопросов, и я смогу подобрать для Вас наиболее выгодное персональное предложение на новый ${brand}`,
-        intro.title,
-      ] : [];
-
     // ───── введение ─────
+    const introMessages: string[] = [];
+    if (messages.greeting) introMessages.push(interpolate(messages.greeting, vars));
+    if (messages.intro) introMessages.push(interpolate(messages.intro, vars));
+    if (messages.callToAction) introMessages.push(interpolate(messages.callToAction, vars));
+
     map.intro = {
-      botMessages: botIntroMessages,
+      botMessages: introMessages,
       nextStep: () => questions[0]?.id || "done",
     };
 
     // ───── вопросы квиза ─────
-    questions.forEach((q, index) => {
+    questions.forEach((q: QuizQuestion, index: number) => {
       const next =
         index === questions.length - 1
           ? "name"
@@ -72,16 +60,9 @@ export function useChatSteps({
       map[q.id] = {
         botMessages: [q.title],
         options: q.answerOptions.map((opt): AnswerOption => {
-          // Если опция - строка, преобразуем в объект AnswerOption
           if (typeof opt === 'string') {
-            return {
-              label: opt,
-              value: opt,
-              image: '',
-              description: '',
-            };
+            return { label: opt, value: opt, image: '', description: '' };
           }
-          // Если опция - объект AnswerOption, используем его свойства
           return {
             label: opt.label || opt.value || '',
             value: opt.value || opt.label || '',
@@ -95,13 +76,14 @@ export function useChatSteps({
     });
 
     // ───── шаг ввода имени ─────
+    const nameMessages: string[] = [];
+    if (messages.beforeName) nameMessages.push(interpolate(messages.beforeName, vars));
+    if (messages.askName) nameMessages.push(interpolate(messages.askName, vars));
+
     map.name = {
-      botMessages: [
-        "Отлично 👍",
-        "Как я могу к вам обращаться?",
-      ],
+      botMessages: nameMessages,
       inputField: {
-        placeholder: "Введите ваше имя",
+        placeholder: messages.namePlaceholder || "Введите ваше имя",
         type: "text",
         name: "name"
       },
@@ -113,7 +95,7 @@ export function useChatSteps({
     map.phone = {
       botMessages: [],
       inputField: {
-        placeholder: "+7 (___) ___-__-__",
+        placeholder: messages.phonePlaceholder || "+7 (___) ___-__-__",
         type: "tel",
         name: "phone"
       },
@@ -123,13 +105,13 @@ export function useChatSteps({
     // ───── финальный шаг ─────
     map.done = {
       botMessages: [
-        `Спасибо, ${answers.name || ''}! Ваша заявка принята ✅`,
+        interpolate(messages.success || "Спасибо, {name}! Ваша заявка принята ✅", vars),
       ],
       nextStep: () => "done",
     };
 
     return map;
-  }, [config, answers, managerName, managerPosition, brand, dealer, legalCityWhere]);
+  }, [config, answers]);
 
   return {
     currentStep,
