@@ -23,7 +23,7 @@ export function Header({ managerName, managerPhoto = '', dealer }: HeaderProps) 
         <img
           src={managerPhoto}
           alt={managerName}
-          className="size-10 object-cover object-center oveflow-hidden rounded-full"
+          className="size-10 object-cover object-center overflow-hidden rounded-full"
         />
       ) : (
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
