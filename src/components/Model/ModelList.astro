@@ -3,14 +3,18 @@ interface Props {
 	models?: any[];
 	title?: string;
 	classes?: string;
+	getModelPath?: (model: any) => string;
 }
 import ModelItem from './Item.astro';
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import { isModelVisible } from '@/js/utils/modelVisibility';
+import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { IS_MODEL_PREFIX_URL } from '@/const';
 
 import modelsData from '@/data/models.json';
 const { models: modelsArr } = modelsData;
-const {models = modelsArr, title = 'Модельный ряд', classes, ...rest} = Astro.props;
+const defaultGetModelPath = (model: any) => `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
+const {models = modelsArr, title = 'Модельный ряд', classes, getModelPath = defaultGetModelPath, ...rest} = Astro.props;
 const filteredModels = models.filter(isModelVisible);
 const groupModelsByBrand = groupArrayByKey(filteredModels, 'mark_id');
 ---
@@ -28,7 +32,7 @@ const groupModelsByBrand = groupArrayByKey(filteredModels, 'mark_id');
 						<div class={`flex flex-wrap mb-10 lg:mb-20 last:mb-0 lg:gap-5 text-xs 2xl:text-base justify-between ${Object.keys(groupModelsByBrand).length > 1 ? 'lg:justify-start' : 'lg:justify-center'}`}>
 							{groupModelsByBrand[key].map((model: any, idx: number) => (
 
-								<ModelItem model={model} />
+								<ModelItem model={model} modelPath={getModelPath(model)} />
 								
 							))}
 						</div>

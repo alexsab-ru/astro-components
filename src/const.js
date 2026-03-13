@@ -29,7 +29,8 @@ const dynamicMenuConfig = {
 		dataSource: groupModelsByBrand,
 		transform: (model) => ({
 			url: `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`,
-			name: model.name.toUpperCase(),
+			// Для пунктов меню показываем caption, а name используем как fallback для старых данных.
+			name: (model.caption || model.name).toUpperCase(),
 			thumb: model.thumb,
 			status: model?.status || null,
 			badge: model?.badge || null,

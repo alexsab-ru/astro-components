@@ -840,45 +840,17 @@ class CarProcessor:
         Returns:
             str: Локализованное значение
         """
-        translations = {
-            # engineType
-            "hybrid": "Гибрид",
-            "petrol": "Бензин",
-            "diesel": "Дизель",
-            "petrol_and_gas": "Бензин и газ",
-            "electric": "Электро",
-            # driveType
-            "full_4wd": "Постоянный полный",
-            "optional_4wd": "Подключаемый полный",
-            "front": "Передний",
-            "rear": "Задний",
-            # gearboxType
-            "robotized": "Робот",
-            "variator": "Вариатор",
-            "manual": "Механика",
-            "automatic": "Автомат",
-            # bodyType
-            "suv": "SUV",
-            "left": "Левый",
-            "right": "Правый",
-            "L": "Левый",
-            "R": "Правый",
-            "bodytype": "Кузов",
-            "body_type": "Кузов",
-            "engine": "Объем двигателя",
-            "engine_volume": "Объем двигателя",
-            "gear_rus": "Трансмиссия",
-            "gear_box": "Коробка передач",
-            "engine_power": "Мощность",
-            "drive": "Привод",
-            "fuel": "Тип топлива",
-            "engine_type": "Тип топлива",
-            "year": "Год выпуска",
-            "color_rus": "Цвет кузова",
-            "color_simple": "Цвет кузова",
-        }
-        
-        return translations.get(value, value)
+        if value is None:
+            return value
+        if not isinstance(value, str):
+            return value
+
+        normalized_value = value.strip()
+        translations = load_localized_value_translations()
+        return translations.get(
+            normalized_value,
+            translations.get(normalized_value.lower(), normalized_value)
+        )
 
     def join_car_data_from_dict(self, car_data: Dict[str, any], *fields: str) -> str:
         """

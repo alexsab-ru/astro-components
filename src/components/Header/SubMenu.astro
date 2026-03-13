@@ -9,20 +9,21 @@ import settings from '@/data/settings.json';
 const { is_header_transparent } = settings;
 
 const commonClasses = 'left-0 lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible lg:-translate-y-1 transition-all group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 lg:shadow-2xl lg:border-t lg:max-h-[calc(100vh-129px)] lg:overflow-y-auto z-50';
+const groupedChildrenCount = !Array.isArray(children) ? Object.keys(children).length : 0;
+const hasMultipleChildGroups = groupedChildrenCount > 1;
 
 let classes = is_header_transparent ? 'submenu-transparent lg:bg-header-transparent-bg text-header-transparent-text border-header-border-transparent' : 'bg-submenu-bg text-submenu-text border-header-border';
-classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes + ' ' : classes;
+classes = !Array.isArray(children) && hasMultipleChildGroups ? classes + ' ' : classes;
 ---
 {children && (
 	<div class={`${classes} ${commonClasses}`}>
-		{!Array.isArray(children) && Object.keys(children).length > 0 ? Object.keys(children).map( key => (
-			<div class={`lg:grid lg:grid-cols-5 pb-[14px] ${Object.keys(children).length > 1 ? 'lg:border-b' : ''} ${is_header_transparent ? 'lg:border-header-border-transparent' : ''}`} x-data="{isOpenSubMenu: false}">
+		{!Array.isArray(children) && groupedChildrenCount > 0 ? Object.keys(children).map( key => (
+			<!-- Для множества групп делаем нижнюю границу и контролируем расстояние через gap. -->
+			<div class={`lg:grid lg:grid-cols-5 ${hasMultipleChildGroups ? 'pb-[14px] lg:border-b' : ''} ${is_header_transparent ? 'lg:border-header-border-transparent' : ''}`} x-data="{isOpenSubMenu: false}">
 				<div class="relative lg:flex lg:items-center">
-					{ Object.keys(children).length > 1 ? (
-						<div 
-							class="relative flex items-center justify-between font-weight-bold pr-5 lg:text-3xl py-2.5 pl-8 lg:pl-5"
-							@click="isOpenSubMenu = !isOpenSubMenu"
-						>
+					{ hasMultipleChildGroups ? (
+						<!-- Разрешаем перенос длинных названий, чтобы текст не ломал сетку. -->
+						<div class="relative flex items-center justify-between font-weight-bold pr-5 lg:text-3xl py-2.5 pl-8 lg:pl-5 whitespace-normal wrap-break-word leading-tight" @click="isOpenSubMenu = !isOpenSubMenu">
 							{key}
 							<div 
 								class="absolute right-0 top-0 h-full aspect-square flex items-center justify-center origin-center transition-transform lg:hidden"
@@ -33,7 +34,7 @@ classes = !Array.isArray(children) && Object.keys(children).length > 1 ? classes
 						</div>
 					) : '' }
 				</div>
-				<div class={`${Object.keys(children).length > 1 ? 'lg:col-span-4' : 'lg:col-span-full'} ${Object.keys(children).length == 1 ? 'block! lg:grid!' : 'lg:grid'} lg:grid-cols-4 xl:grid-cols-5 lg:text-center pl-4 lg:pl-0`} :class="{'hidden': !isOpenSubMenu }">
+				<div class={`${hasMultipleChildGroups ? 'lg:col-span-4' : 'lg:col-span-full'} ${groupedChildrenCount === 1 ? 'block! lg:grid!' : 'lg:grid'} lg:grid-cols-4 xl:grid-cols-5 lg:text-center pl-4 lg:pl-0 gap-y-1 lg:gap-y-2`} :class="{'hidden': !isOpenSubMenu }">
 					{ children[key].map(child => (<MenuLink link={child} sublink={true} />)) }
 				</div>
 			</div>

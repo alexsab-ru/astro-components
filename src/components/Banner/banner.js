@@ -1,6 +1,9 @@
 import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay, Parallax, Keyboard } from "swiper/modules";
 
+import settings from '@/data/settings.json';
+const { is_header_transparent } = settings;
+
 const progressCircle = document.querySelector(".autoplay-progress svg");
 const progressContent = document.querySelector(".autoplay-progress span");
 let bannerSlider;
@@ -17,6 +20,30 @@ if (progressCircle) {
 }
 
 const slides = document.querySelectorAll(".banner-slide");
+
+const headerEl = document.querySelector('.header-wrapper');
+const closeHeaderTopLineBtn = document.querySelector('.close-header-top-line-btn');
+function setPaddingTop(){
+	if(!headerEl) return;
+	const headerElHeight = headerEl.clientHeight;
+	Array.from(slides).map(s => {
+		const container = s.querySelector('.banner-slide-container');
+		container.style.paddingTop = `${headerElHeight+20}px`;
+	});
+}
+document.addEventListener('alpine:init', () => {
+	setTimeout(() => {	
+		if(slides.length > 0 && is_header_transparent){
+			setPaddingTop();
+			window.addEventListener('resize', setPaddingTop);
+			if(closeHeaderTopLineBtn){				
+				closeHeaderTopLineBtn.addEventListener('click', () => {
+					requestAnimationFrame(setPaddingTop);
+				});
+			}
+		}	
+	}, 0);
+});
 
 const initSlider = () => {
 	bannerSlider = new Swiper(".banner-slider", {

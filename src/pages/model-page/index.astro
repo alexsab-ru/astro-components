@@ -1,0 +1,31 @@
+---
+import settings from '@/data/settings.json';
+const { brand, legal_city_where } = settings;
+import Layout from '@/layouts/Layout.astro';
+import ModelList from '@/components/Model/ModelList.astro';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
+import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { IS_MODEL_PREFIX_URL } from '@/const';
+export const breadcrumb = { name: `Модели`, href: "/models/" };
+import SeoText from '@/components/Seo/Index.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
+const getModelPath = (model: any) => `/model-page/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
+
+if (import.meta.env.PROD) {
+	return new Response();
+	// return Astro.redirect('/');
+}
+---
+<Layout
+	title={`Модельный ряд ${brand} – Официальный дилер ${brand} в ${legal_city_where}`}
+	description={`Информация о моделях ${brand} 2024-2025 на сайте официального дилера в ${legal_city_where}: обзор, цены, комплектации, технические характеристики.`}
+>
+	<section class="content">
+		<div class="container">
+			<Breadcrumbs breadcrumb={[breadcrumb]} />
+			<PageH1 h1={`Модели ${brand}`} />
+		</div>
+	</section>
+	<SeoText mdx="models" />
+	<ModelList title="" classes="pt-0! pb-10" getModelPath={getModelPath} />
+</Layout>

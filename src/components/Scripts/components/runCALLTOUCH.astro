@@ -1,66 +1,142 @@
 ---
 import scripts_json from '@/data/scripts.json';
-const isModeProd = import.meta.env.MODE === 'production';
+import salons_json from '@/data/salons.json';
 const isProd = import.meta.env.PROD;
+
+type TCalltouchValue = {
+	mod_id?: string | string[];
+	site_id?: string | string[];
+};
+
+// Собираем пары mod_id/site_id из салонов, если в них явно описан calltouch.
+// Это основной сценарий для multi-project (каждый салон -> свой проект Calltouch).
+const salonCalltouchPairs = salons_json
+	.map((salon) => salon?.scripts?.calltouch)
+	.filter((calltouch) => calltouch?.mod_id && calltouch?.site_id)
+	.map((calltouch) => ({
+		mod_id: String(calltouch.mod_id).trim(),
+		site_id: String(calltouch.site_id).trim(),
+	}))
+	.filter((pair) => pair.mod_id !== '' && pair.site_id !== '');
+
+// Если в salons.json нет calltouch-ключей, используем прежний источник из scripts.json.
+// Так сохраняется полная обратная совместимость старого конфига.
+const fallbackCalltouchValue = (scripts_json?.calltouch?.value || {}) as TCalltouchValue;
+const normalizedCalltouchValue =
+	salonCalltouchPairs.length > 0
+		? {
+				mod_id: salonCalltouchPairs.map((pair) => pair.mod_id),
+				site_id: salonCalltouchPairs.map((pair) => pair.site_id),
+			}
+		: {
+				mod_id: Array.isArray(fallbackCalltouchValue.mod_id)
+					? fallbackCalltouchValue.mod_id
+					: fallbackCalltouchValue.mod_id
+						? [fallbackCalltouchValue.mod_id]
+						: [],
+				site_id: Array.isArray(fallbackCalltouchValue.site_id)
+					? fallbackCalltouchValue.site_id
+					: fallbackCalltouchValue.site_id
+						? [fallbackCalltouchValue.site_id]
+						: [],
+			};
 ---
-{ isProd && scripts_json.calltouch.value.mod_id && scripts_json.calltouch.value.mod_id != "" && (
+{ isProd && normalizedCalltouchValue.mod_id.length > 0 && (
 <script>
 import { reachGoal } from '@alexsab-ru/scripts';
 function runCALLTOUCH(calltouch) {
-    // console.log("runCALLTOUCH", calltouch);
-    var script = document.createElement('script');
-    script.src = `https://mod.calltouch.ru/init.js?id=${calltouch.mod_id}`;
-    script.async = true;
-    
-    // Добавляем обработчик события загрузки скрипта
-    script.onload = function() {
-        console.log("Calltouch script loaded");
-        // Устанавливаем параметры после загрузки скрипта
-        window.calltouch_params = {
-            mod_id: calltouch.mod_id,
-            site_id: calltouch.site_id
-        };
-        
-        // Проверяем наличие функции ct и вызываем ее только после загрузки скрипта
-        if (typeof window.ct === 'function') {
-            window.ct('modules','widgets','subscribeToEvent',[
-                {
-                    object: 'form',
-                    action: 'show',
-                    callback: function(event){
-                        reachGoal("calltouch-form_open");
-                    }
-                },
-                {
-                    object: 'form',
-                    action: 'close',
-                    callback: function(event){
-                        reachGoal("calltouch-form_close");
-                    }
-                },
-                {
-                    object: 'request',
-                    action: 'create',
-                    callback: function(event){
+    if (!calltouch || !calltouch.mod_id) return;
+    var w = window as any;
 
-                        reachGoal("calltouch-form_success");
-                    }
-                },
-                {
-                    object: 'request',
-                    action: 'fail',
-                    callback: function(event){
-                        reachGoal("calltouch-form_error");
-                    }
-                }
-            ]);
-        } else {
-            console.error("Calltouch ct function not available");
-        }
+    // Нормализуем массивы и оставляем только валидные пары mod_id/site_id.
+    // Это исключает разъезд индексов и пропускает пустые значения.
+    var rawCounterIds = Array.isArray(calltouch.mod_id) ? calltouch.mod_id : [calltouch.mod_id];
+    var rawSiteIds = Array.isArray(calltouch.site_id) ? calltouch.site_id : [calltouch.site_id];
+    var counterPairs = rawCounterIds
+        .map(function(counterId, idx) {
+            return {
+                mod_id: String(counterId || '').trim(),
+                site_id: String(rawSiteIds[idx] || '').trim()
+            };
+        })
+        .filter(function(pair) {
+            return pair.mod_id !== '' && pair.site_id !== '';
+        });
+
+    var counterIds = counterPairs.map(function(pair) { return pair.mod_id; });
+    var siteIds = counterPairs.map(function(pair) { return pair.site_id; });
+    if (!counterIds.length) return;
+    var hasArrayFind = typeof Array.prototype.find === 'function';
+    var initFileName = hasArrayFind ? 'init-min.js' : 'init.js';
+
+    w.CalltouchDataObject = 'ct';
+    w.ct = w.ct || function() {
+        w.ct.callbacks.push(arguments);
     };
-    
-    document.head.appendChild(script);
+    if (!w.ct.callbacks) {
+        w.ct.callbacks = [];
+    }
+    w.ct.loaded = false;
+    w.ct.counters = counterIds;
+
+    w.calltouch_params = {
+        mod_id: counterIds,
+        site_id: siteIds
+    };
+
+    if (!w.__ctWidgetsSubscribed) {
+        w.ct('modules','widgets','subscribeToEvent',[
+            {
+                object: 'form',
+                action: 'show',
+                callback: function() {
+                    reachGoal("calltouch-form_open");
+                }
+            },
+            {
+                object: 'form',
+                action: 'close',
+                callback: function() {
+                    reachGoal("calltouch-form_close");
+                }
+            },
+            {
+                object: 'request',
+                action: 'create',
+                callback: function() {
+                    reachGoal("calltouch-form_success");
+                }
+            },
+            {
+                object: 'request',
+                action: 'fail',
+                callback: function() {
+                    reachGoal("calltouch-form_error");
+                }
+            }
+        ]);
+        w.__ctWidgetsSubscribed = true;
+    }
+
+    counterIds.forEach(function(counterId) {
+        var scriptSrc = `https://mod.calltouch.ru/${initFileName}?id=${counterId}`;
+        if (document.querySelector(`script[src="${scriptSrc}"]`)) return;
+
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = scriptSrc;
+        script.onerror = function() {
+            console.error("Calltouch script failed to load", scriptSrc);
+        };
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        if (firstScript && firstScript.parentNode) {
+            firstScript.parentNode.insertBefore(script, firstScript);
+        } else {
+            document.head.appendChild(script);
+        }
+    });
 }
-window._ct = runCALLTOUCH;
+(window as any)._ct = runCALLTOUCH;
 </script>
 )}

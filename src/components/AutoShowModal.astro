@@ -25,7 +25,11 @@ const { models } = modelsData;
 const options = testDrive
 	? models
 		.filter((m: any) => m?.testDrive)
-		.map((m: any) => ({ ...m, name: m.caption || m.name }))
+		.map((m: any) => ({
+			...m,
+			// В селекте тест-драйва показываем caption, чтобы названия совпадали с витриной.
+			name: m.caption || m.name,
+		}))
 	: [];
 ---
 

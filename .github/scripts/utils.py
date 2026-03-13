@@ -13,6 +13,7 @@ from io import BytesIO
 import urllib.parse
 from pathlib import Path
 from typing import Dict, Any
+from functools import lru_cache
 from config import *
 from bs4 import BeautifulSoup
 
@@ -281,53 +282,99 @@ def convert_to_string(element):
         convert_to_string(child)
 
 
-def avitoColor(color):
-    # Обязательно приводим к нижнему регистру, чтобы не было ошибок при сравнении
-    mapping = {
-        '058/11': 'белый',
-        '070/20 белый перламутр': 'белый',
-        '089/20 белый перламутр': 'белый',
-        '1k0/20 серый': 'серый',
-        '1l1/20': 'серый',
-        '1l1/21 серый хром металл': 'серый',
-        '218/20 черный металлик': 'черный',
-        '218/41 черный': 'черный',
-        'бежевый': 'бежевый',
-        'белый': 'белый',
-        'белый/песочный': 'белый',
-        'белый/черный': 'белый',
-        'бордовый': 'бордовый',
-        'голубой': 'голубой',
-        'желтый': 'желтый',
-        'зеленый': 'зеленый',
-        'зелёный': 'зеленый',
-        'золотой': 'золотой',
-        'коричневый': 'коричневый',
-        'красный': 'красный',
-        'оранжевый': 'оранжевый',
-        'платиновый графит': 'серый',
-        'пурпурный': 'пурпурный',
-        'розовый': 'розовый',
-        'серебристый': 'серебряный',
-        'серебряный': 'серебряный',
-        'серо-голубой': 'голубой',
-        'серо-фиолетовый': 'серо-фиолетовый',
-        'серый': 'серый',
-        'серый/черный': 'серый',
-        'синий': 'синий',
-        'темно-серый': 'серый',
-        'темно-синий': 'синий',
-        'фиолетовый': 'фиолетовый',
-        'черный': 'черный',
-        'чёрный': 'черный',
-        'черный/черно-зеленый': 'черный',
-        'черный/черный': 'черный',
-        'черный/светлый': 'черный',
-        'ярко-алый': 'красный',
-    }
+_AVITO_COLOR_MAPPING_FALLBACK: Dict[str, str] = {
+    'бежевый': 'бежевый',
+    'белый': 'белый',
+    'бордовый': 'бордовый',
+    'голубой': 'голубой',
+    'желтый': 'желтый',
+    'зеленый': 'зеленый',
+    'зелёный': 'зеленый',
+    'золотой': 'золотой',
+    'коричневый': 'коричневый',
+    'красный': 'красный',
+    'оранжевый': 'оранжевый',
+    'пурпурный': 'пурпурный',
+    'розовый': 'розовый',
+    'серебристый': 'серебряный',
+    'серебряный': 'серебряный',
+    'серо-фиолетовый': 'серо-фиолетовый',
+    'серый': 'серый',
+    'синий': 'синий',
+    'фиолетовый': 'фиолетовый',
+    'черный': 'черный',
+    'чёрный': 'черный',
+}
 
-    # Приводим ключ к нижнему регистру для проверки
-    normalized_color = color.lower()
+
+@lru_cache(maxsize=1)
+def load_avito_color_mapping() -> Dict[str, str]:
+    """
+    Загружает мэпинг цветов для Avito из общего JSON.
+
+    Приоритет источников:
+    1) AVITO_COLOR_MAPPING_PATH (env)
+    2) src/data/all-avito-colors.json
+    3) src/data/avito-colors.json
+    4) ../astro-json/src/avito-colors.json (локальная разработка в mono-workspace)
+    5) Встроенный fallback-словарь
+    """
+    repo_root = Path(__file__).resolve().parents[2]
+    env_path = os.getenv('AVITO_COLOR_MAPPING_PATH')
+
+    candidates = []
+    if env_path:
+        candidates.append(Path(env_path))
+
+    candidates.extend([
+        repo_root / 'src/data/all-avito-colors.json',
+        repo_root / 'src/data/avito-colors.json',
+        repo_root.parent / 'astro-json/src/avito-colors.json',
+        Path('./src/data/all-avito-colors.json'),
+        Path('./src/data/avito-colors.json'),
+    ])
+
+    seen_paths = set()
+    for candidate in candidates:
+        normalized_path = str(candidate.expanduser())
+        if normalized_path in seen_paths:
+            continue
+        seen_paths.add(normalized_path)
+
+        if not os.path.exists(normalized_path):
+            continue
+
+        try:
+            with open(normalized_path, 'r', encoding='utf-8') as file:
+                file_data = json.load(file)
+        except Exception as e:
+            print_message(f"Ошибка при загрузке файла цветов Avito ({normalized_path}): {e}", 'warning')
+            continue
+
+        if not isinstance(file_data, dict):
+            print_message(f"Некорректный формат файла цветов Avito ({normalized_path}): ожидался объект", 'warning')
+            continue
+
+        mapping = {}
+        for source_color, avito_color in file_data.items():
+            if isinstance(source_color, str) and isinstance(avito_color, str):
+                mapping[source_color.lower().strip()] = avito_color.lower().strip()
+
+        if mapping:
+            return mapping
+
+        print_message(f"Файл цветов Avito пустой или содержит некорректные значения: {normalized_path}", 'warning')
+
+    return _AVITO_COLOR_MAPPING_FALLBACK
+
+
+def avitoColor(color):
+    if not color:
+        return color
+
+    # Обязательно приводим к нижнему регистру, чтобы не было ошибок при сравнении.
+    mapping = load_avito_color_mapping()
+    normalized_color = color.lower().strip()
     if normalized_color in mapping:
         return mapping[normalized_color].capitalize()
     else:
@@ -336,6 +383,128 @@ def avitoColor(color):
         with open('output.txt', 'a') as file:
             file.write(f"{error_text}\n")
         return color  # Возвращаем оригинальный ключ, если он не найден
+
+
+_LOCALIZED_VALUE_TRANSLATIONS_FALLBACK: Dict[str, str] = {
+    'hybrid': 'Гибрид',
+    'petrol': 'Бензин',
+    'diesel': 'Дизель',
+    'petrol_and_gas': 'Бензин и газ',
+    'electric': 'Электро',
+    'full_4wd': 'Постоянный полный',
+    'optional_4wd': 'Подключаемый полный',
+    'front': 'Передний',
+    'rear': 'Задний',
+    'robotized': 'Робот',
+    'variator': 'Вариатор',
+    'manual': 'Механика',
+    'automatic': 'Автомат',
+    'rt': 'Робот',
+    'dct': 'Робот',
+    'cvt': 'Вариатор',
+    'mt': 'Механика',
+    'at': 'Автомат',
+    'duplicate': 'Дубликат',
+    'original': 'Оригинал',
+    'electronic': 'Электронный',
+    'black': 'Черный',
+    'white': 'Белый',
+    'blue': 'Синий',
+    'gray': 'Серый',
+    'silver': 'Серебристый',
+    'brown': 'Коричневый',
+    'red': 'Красный',
+    'suv': 'SUV',
+    'left': 'Левый',
+    'right': 'Правый',
+    'l': 'Левый',
+    'r': 'Правый',
+    'bodytype': 'Кузов',
+    'body_type': 'Кузов',
+    'engine': 'Объем двигателя',
+    'engine_volume': 'Объем двигателя',
+    'gear_rus': 'Трансмиссия',
+    'gear_box': 'Коробка передач',
+    'engine_power': 'Мощность',
+    'drive': 'Привод',
+    'fuel': 'Тип топлива',
+    'engine_type': 'Тип топлива',
+    'year': 'Год выпуска',
+    'color_rus': 'Цвет кузова',
+    'color_simple': 'Цвет кузова',
+    'caption': 'Название',
+}
+
+
+@lru_cache(maxsize=1)
+def load_localized_value_translations() -> Dict[str, str]:
+    """
+    Загружает общий словарь локализации значений для Python/JS.
+
+    Приоритет источников:
+    1) LOCALIZED_VALUE_TRANSLATIONS_PATH / TRANSLATIONS_MAPPING_PATH (env)
+    2) src/data/all-translations.json
+    3) src/data/translations.json
+    4) ../astro-json/src/translations.json (локальная разработка в mono-workspace)
+    5) Встроенный fallback-словарь
+    """
+    repo_root = Path(__file__).resolve().parents[2]
+    env_path = os.getenv('LOCALIZED_VALUE_TRANSLATIONS_PATH') or os.getenv('TRANSLATIONS_MAPPING_PATH')
+
+    candidates = []
+    if env_path:
+        candidates.append(Path(env_path))
+
+    candidates.extend([
+        repo_root / 'src/data/all-translations.json',
+        repo_root / 'src/data/translations.json',
+        repo_root.parent / 'astro-json/src/translations.json',
+        Path('./src/data/all-translations.json'),
+        Path('./src/data/translations.json'),
+    ])
+
+    seen_paths = set()
+    for candidate in candidates:
+        normalized_path = str(candidate.expanduser())
+        if normalized_path in seen_paths:
+            continue
+        seen_paths.add(normalized_path)
+
+        if not os.path.exists(normalized_path):
+            continue
+
+        try:
+            with open(normalized_path, 'r', encoding='utf-8') as file:
+                file_data = json.load(file)
+        except Exception as e:
+            print_message(f"Ошибка при загрузке файла переводов ({normalized_path}): {e}", 'warning')
+            continue
+
+        if not isinstance(file_data, dict):
+            print_message(f"Некорректный формат файла переводов ({normalized_path}): ожидался объект", 'warning')
+            continue
+
+        mapping = {}
+        for source_key, translated_value in file_data.items():
+            if not isinstance(source_key, str) or not isinstance(translated_value, str):
+                continue
+
+            clean_key = source_key.strip()
+            clean_value = translated_value.strip()
+            if not clean_key:
+                continue
+
+            mapping[clean_key] = clean_value
+            normalized_key = clean_key.lower()
+            if normalized_key not in mapping:
+                mapping[normalized_key] = clean_value
+
+        if mapping:
+            return mapping
+
+        print_message(f"Файл переводов пустой или содержит некорректные значения: {normalized_path}", 'warning')
+
+    return _LOCALIZED_VALUE_TRANSLATIONS_FALLBACK
 
 
 def load_price_data(file_path: str = "./src/data/dealer-cars_price.json") -> Dict[str, Dict[str, int]]:

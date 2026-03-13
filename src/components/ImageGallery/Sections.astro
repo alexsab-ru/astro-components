@@ -1,0 +1,52 @@
+---
+import Grid from './Grid.astro';
+import SimpleGrid from './SimpleGrid.astro';
+
+type SectionImage = { url: string; title?: string; description?: string };
+
+interface Props {
+  sections: {
+    id: string;
+    title: string;
+    images?: SectionImage[];
+  }[];
+  variant?: 'grid' | 'simple';
+  ctaHref?: string;
+  ctaText?: string;
+}
+
+const { sections, variant = 'grid', ctaHref, ctaText = 'Узнать подробности' } = Astro.props;
+
+const filteredSections = sections.filter((section) => section.images?.length);
+const ctaAfterIndex = Math.floor(filteredSections.length / 2) - 1;
+---
+
+{filteredSections.map((section, index) => (
+  <>
+    <section class="">
+      <h2 class="text-2xl sm:text-4xl font-bold mb-6">{section.title}</h2>
+      {variant === 'simple' ? (
+        <SimpleGrid
+          images={section.images as SectionImage[]}
+          gallery={`gallery-${section.id}`}
+          title={section.title}
+        />
+      ) : (
+        <Grid
+          images={section.images as SectionImage[]}
+          gallery={`gallery-${section.id}`}
+        />
+      )}
+    </section>
+    {ctaHref && index === ctaAfterIndex && (
+      <div class="text-center my-12">
+        <a
+          href={ctaHref}
+          class="btn inline-block py-3 px-8 text-lg bg-accent-500 text-white rounded-lg transition hover:bg-accent-600"
+        >
+          {ctaText}
+        </a>
+      </div>
+    )}
+  </>
+))}

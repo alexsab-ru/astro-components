@@ -33,6 +33,9 @@ const { legal_city_where } = settings;
 import { getRandomInt } from '@/js/utils/numbers.format';
 import { breadcrumb } from './index.astro';
 const { model } = Astro.props;
+// Используем caption для отображения названия модели на странице.
+// Fallback на name нужен для моделей, где caption ещё не добавлен.
+const modelTitle = model?.caption || model?.name;
 
 // Данные для сохранения "последней просмотренной модели" в Alpine store
 const lastViewedModelForStore = {
@@ -68,19 +71,19 @@ const status: TStatus = (model?.status && STATUS.includes(model.status as TStatu
 let sections = await getModelSectionsYML(model);
 ---
 <Layout 
-  title={`${model.mark_id} ${model.name} – фото, цены, комплектации и характеристики ${model.mark_id} ${model.name} в ${legal_city_where}`} 
-  description={`${model.mark_id} ${model.name} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
+  title={`${model.mark_id} ${modelTitle} – фото, цены, комплектации и характеристики ${model.mark_id} ${modelTitle} в ${legal_city_where}`} 
+  description={`${model.mark_id} ${modelTitle} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={(model as any).image ?? (model as any).thumb}
   brand={model.mark_id}
 >
   <div x-init={`$store.lastViewedModel.setModel(${lastViewedModelJSON})`} class="hidden"></div>
-  <PageH1 h1={`Автомобиль ${model?.mark_id} ${model.name} в ${legal_city_where}`} classes="sr-only" />
-  <Model model={model} status={status} breadcrumb={[breadcrumb, {name: model.name, href: Astro.url.pathname}]} />
+  <PageH1 h1={`Автомобиль ${model?.mark_id} ${modelTitle} в ${legal_city_where}`} classes="sr-only" />
+  <Model model={model} status={status} breadcrumb={[breadcrumb, {name: modelTitle, href: Astro.url.pathname}]} />
   {
     !!sections.length && sections.map(s => ( <UniversalSection section={s} /> ))
   }
   {
-    ((model as any)?.complectations && (model as any).complectations !== undefined && !!(model as any).complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${model.name}`} model={model} brand={model?.mark_id} />
+    ((model as any)?.complectations && (model as any).complectations !== undefined && !!(model as any).complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${model?.mark_id} ${modelTitle}`} model={model} brand={model?.mark_id} />
   }
   <SeoText mdx={seoname} sectionPaddingBlock />
 
@@ -107,7 +110,7 @@ let sections = await getModelSectionsYML(model);
     <section>
       <div class="container">
         <FeedbackForm 
-          title="Забронировать новый JAC RF8"
+          title={`Забронировать новый ${model.mark_id} ${model.name}`}
         />
       </div>
     </section>
@@ -116,7 +119,7 @@ let sections = await getModelSectionsYML(model);
   {!!cars.length && (
     <section class="odd:bg-gray-100">
       <div class="container">
-        <h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${model.name} в наличии в ${legal_city_where}`} /></h2>
+        <h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${model.mark_id}&nbsp;${modelTitle} в наличии в ${legal_city_where}`} /></h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
           {cars.map((car) => ( <CarItem car={car} /> ))}
         </div>

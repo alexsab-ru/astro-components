@@ -14,67 +14,24 @@ import LandingKUZOVSAMARA from '@/components/PageTypes/LandingKUZOVSAMARA.astro'
 import ServiceKIA from '@/components/PageTypes/ServiceKIA.astro';
 import SiteGacArmada from '@/components/PageTypes/SiteGacArmada.astro';
 
-const SiteType = {
-	LANDING: 'landing',
-	LANDING_EVOLUTE: 'landing-evolute',
-	LANDING_GAC: 'landing-gac',
-	LANDING_GEELY: 'landing-geely',
-	LANDING_HAVAL: 'landing-haval',
-	LANDING_HONDA: 'landing-honda',
-	LANDING_KUZOVSAMARA: 'landing-kuzovsamara',
-	SITE: 'site',
-	SITE_ALPHA_CENTER: 'site-alpha-center',
-	SITE_CHINA_SAMARA_AUTO: 'site-china-samara-auto',
-	SITE_GAC_ARMADA: 'site-gac-armada',
-	SITE_INFINITI_SAMAUTO: 'site-infiniti-samauto',
-	SERVICE_KIA: 'service-kia'
+const PAGE_TYPES = {
+	'landing': Landing,
+	'landing-evolute': LandingEVOLUTE,
+	'landing-gac': LandingGAC,
+	'landing-geely': LandingGEELY,
+	'landing-haval': LandingHAVAL,
+	'landing-honda': LandingHONDA,
+	'landing-kuzovsamara': LandingKUZOVSAMARA,
+	'site': Site,
+	'site-alpha-center': SiteAlphaCenter,
+	'site-china-samara-auto': SiteChinaSamaraAuto,
+	'site-gac-armada': SiteGacArmada,
+	'site-infiniti-samauto': SiteInfinitiSamauto,
+	'service-kia': ServiceKIA,
 };
-const { siteType } = settings;
-let Content: typeof Site | typeof Landing;
 
-switch(siteType) {
-	case SiteType.LANDING:
-		Content = Landing;
-		break;
-	case SiteType.LANDING_EVOLUTE:
-		Content = LandingEVOLUTE;
-		break;
-	case SiteType.LANDING_GAC:
-		Content = LandingGAC;
-		break;
-	case SiteType.LANDING_GEELY:
-		Content = LandingGEELY;
-		break;
-	case SiteType.LANDING_HAVAL:
-		Content = LandingHAVAL;
-		break;
-	case SiteType.LANDING_HONDA:
-		Content = LandingHONDA;
-		break;
-	case SiteType.LANDING_KUZOVSAMARA:
-		Content = LandingKUZOVSAMARA;
-		break;
-	case SiteType.SITE:
-		Content = Site;
-		break;
-	case SiteType.SITE_ALPHA_CENTER:
-		Content = SiteAlphaCenter;
-		break;
-	case SiteType.SITE_CHINA_SAMARA_AUTO:
-		Content = SiteChinaSamaraAuto;
-		break;
-	case SiteType.SITE_GAC_ARMADA:
-		Content = SiteGacArmada;
-		break;
-	case SiteType.SITE_INFINITI_SAMAUTO:
-		Content = SiteInfinitiSamauto;
-		break;
-	case SiteType.SERVICE_KIA:
-		Content = ServiceKIA;
-		break;
-	default:
-		Content = Site;
-}
+const { siteType = 'site' } = settings;
+const Content = PAGE_TYPES[String(siteType)] || Site;
 ---
 
 <Content />

@@ -7,7 +7,7 @@
     "start_win": "copy .env.example .env",
     "python": "echo \"Copy and run:\" && echo \"\\033[30;43mpython3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt\\033[0m\n\"",
     "get_report": "git log --since='2024-04-01' --until='2024-10-31' --pretty=format:'%h\t%ad\t%an\t%s' --first-parent --date=format:'%Y-%m-%d %H:%M:%S' > commit_report.csv",
-    "pull_without_merge": "NEW_BRANCH=$(new-branch-for-pull-without-merge) && MAIN_BRANCH=$(git rev-parse --abbrev-ref HEAD) && COUNT=$(git rev-list --count origin/$MAIN_BRANCH..$MAIN_BRANCH) && git checkout -b $NEW_BRANCH && git checkout $MAIN_BRANCH && git reset --hard HEAD~$COUNT && git pull origin $MAIN_BRANCH && git checkout $NEW_BRANCH && git rebase $MAIN_BRANCH && git checkout $MAIN_BRANCH && git merge $NEW_BRANCH && git branch -D $NEW_BRANCH",
+    "pull_without_merge": "NEW_BRANCH=\"new-branch-for-pull-without-merge\" && MAIN_BRANCH=$(git rev-parse --abbrev-ref HEAD) && COUNT=$(git rev-list --count origin/$MAIN_BRANCH..$MAIN_BRANCH) && git checkout -b $NEW_BRANCH && git checkout $MAIN_BRANCH && git reset --hard HEAD~$COUNT && git pull origin $MAIN_BRANCH && git checkout $NEW_BRANCH && git rebase $MAIN_BRANCH && git checkout $MAIN_BRANCH && git merge $NEW_BRANCH && git branch -D $NEW_BRANCH",
     "\n# Get data commands:": "",
     "CarFeedProcessorCSV": "CSV_URL=$(grep '^CSV_URL=' .env | awk -F'=' '{print substr($0, index($0,$2))}' | sed 's/^\"//; s/\"$//') && curl $CSV_URL -o data.csv && python3 .github/scripts/CarFeedProcessorCSV.py",
     "getAirStorage": "bash ./.github/scripts/sh/getAirStorage.sh",
@@ -80,7 +80,8 @@
     "test_USED_CARS_carcopy_offers_offer": "pnpm cars test used_cars_carcopy_offers_offer --dev",
     "\n# Dev and Build commands:": "",
     "predev": "node .github/scripts/setBrand.mjs",
-    "dev": "astro dev --open --host --config astro.local.config.mjs",
+    "dev": "astro dev --open --host",
+    "dev_local": "astro dev --open --host --config astro.local.config.mjs",
     "dev:toyota": "ASTRO_ACTIVE_BRAND=toyota node .github/scripts/setBrand.mjs && astro dev --open --host --config astro.local.config.mjs",
     "dd": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
     "test_links_local": "astro dev --port 4343 & sleep 10 && export DOMAIN=localhost:4343 && node .github/scripts/checkLinks/checkLinks.js && pkill -f 'astro dev'",
@@ -102,7 +103,7 @@
     "\n# https://alexsab.ru": ""
   },
   "dependencies": {
-    "@alexsab-ru/scripts": "^0.15.3",
+    "@alexsab-ru/scripts": "^0.16.2",
     "@astrojs/alpinejs": "^0.4.9",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/react": "^4.4.2",

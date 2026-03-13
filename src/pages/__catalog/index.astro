@@ -20,6 +20,9 @@ export async function getReadyCars(legal_city_where, models) {
     const cars = [];
     models.filter(isModelVisible).forEach(model => {
         const id = model.id;
+        // В витрине и SEO каталога показываем caption модели.
+        // name сохраняем для технических полей (например folder_id) и совместимости.
+        const modelTitle = model.caption || model.name;
         const benefit = Number(model?.benefit);
 
         // Если у модели нет комплектаций, создаём базовую карточку
@@ -44,10 +47,10 @@ export async function getReadyCars(legal_city_where, models) {
                         modification_id: 'Н/Д',
                         body_type: 'Н/Д',
                         complectation_name: 'Н/Д',
-                        breadcrumb: `${model.mark_id} ${model.name}`,
-                        h1: `${model.mark_id} ${model.name}`,
-                        title: `Купить ${model.mark_id} ${model.name} у официального дилера в ${legal_city_where}`,
-                        description: `Купить автомобиль ${model.mark_id} ${model.name}, цвет - ${color.name} у официального дилера в ${legal_city_where}`,
+                        breadcrumb: `${model.mark_id} ${modelTitle}`,
+                        h1: `${model.mark_id} ${modelTitle}`,
+                        title: `Купить ${model.mark_id} ${modelTitle} у официального дилера в ${legal_city_where}`,
+                        description: `Купить автомобиль ${model.mark_id} ${modelTitle}, цвет - ${color.name} у официального дилера в ${legal_city_where}`,
                         total: 1
                     }
                 });
@@ -75,10 +78,10 @@ export async function getReadyCars(legal_city_where, models) {
                             modification_id: `${compl.engine} (${compl.engine_power} л.с.)`,
                             body_type: compl.bodytype,
                             complectation_name: compl.name,
-                            breadcrumb: `${model.mark_id} ${model.name} ${compl.name}`,
-                            h1: `${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.)`,
-                            title: `Купить ${model.mark_id} ${model.name} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}`,
-                            description: `Купить автомобиль ${model.mark_id} ${model.name}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}. Стоимость данного автомобиля ${model.mark_id} ${model.name} – ${Number(compl.price)}`,
+                            breadcrumb: `${model.mark_id} ${modelTitle} ${compl.name}`,
+                            h1: `${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.)`,
+                            title: `Купить ${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}`,
+                            description: `Купить автомобиль ${model.mark_id} ${modelTitle}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}. Стоимость данного автомобиля ${model.mark_id} ${modelTitle} – ${Number(compl.price)}`,
                             total: 1
                         }
                     });
@@ -129,7 +132,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 						<div class="flex flex-col gap-2">
 							<h3 class="mb-0!">Модель</h3>
 							{models.map((model) => (
-								<Checkbox value={model.name.toLocaleLowerCase()} id={model.id} color="black" label={model.name} @change={`toggleFilter('Models', '${model.name.toLocaleLowerCase()}')`} />
+								<Checkbox value={model.name.toLocaleLowerCase()} id={model.id} color="black" label={model.caption || model.name} @change={`toggleFilter('Models', '${model.name.toLocaleLowerCase()}')`} />
 							))}
 						</div>
 						<div class="flex flex-col gap-2">

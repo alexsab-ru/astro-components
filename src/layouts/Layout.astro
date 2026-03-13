@@ -7,8 +7,11 @@ interface Props {
 	keywords?: string;
 	brand?: string;
 	footerVersion?: string | number;
+	showHeaderMenu?: boolean;
+	showFooterLinks?: boolean;
+	logoNoLink?: boolean;
 }
-let {title, h1, description, image, keywords, brand = null, footerVersion = '2'} = Astro.props;
+let {title, h1, description, image, keywords, brand = null, footerVersion = '2', showHeaderMenu = true, showFooterLinks = true, logoNoLink = false} = Astro.props;
 
 import settings from '@/data/settings.json';
 const { site_name, site_description, is_header_transparent } = settings;
@@ -81,11 +84,11 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 	</head>
 	<body class={`antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black ${bodyClasses}`} x-data="complectation">
 		<ScriptBodyBegin />
-		<Header brand={brand} />
+		<Header brand={brand} showMenu={showHeaderMenu} logoNoLink={logoNoLink} />
 		<main class="grow relative">
 			<slot />
 		</main>
-		<Footer />
+		<Footer showSiteLinks={showFooterLinks} logoNoLink={logoNoLink} />
 		<Modals />
 		<UpBtn />
 		<Cookie />

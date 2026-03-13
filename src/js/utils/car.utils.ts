@@ -30,7 +30,7 @@ export function getModelBadgeData(carData: any) {
   if (!badge) {
     return {
       image: null,
-      alt: model?.name || '',
+      alt: model?.caption || model?.name || '',
     };
   }
 
@@ -38,14 +38,14 @@ export function getModelBadgeData(carData: any) {
   if (typeof badge === 'string') {
     return {
       image: badge,
-      alt: model?.name || '',
+      alt: model?.caption || model?.name || '',
     };
   }
 
   // Для объектного badge отдаем vertical вариант и alt из данных, подстрахуемся именем.
   return {
     image: badge.vertical || null,
-    alt: badge.alt || model?.name || '',
+    alt: badge.alt || model?.caption || model?.name || '',
   };
 }
 
