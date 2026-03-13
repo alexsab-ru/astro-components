@@ -55,6 +55,7 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     setIsTyping,
     addUserMessage,
     addBotMessage,
+    addErrorMessage,
     addBotMessages,
   } = useChatMessages({
     scroll: scrollIfEnabled,
@@ -102,6 +103,7 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     setAnswers,
     addUserMessage,
     addBotMessage,
+    addErrorMessage,
     sendLead,
     handleAnswer,
   });

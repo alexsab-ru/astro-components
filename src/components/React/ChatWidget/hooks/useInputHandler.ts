@@ -9,6 +9,7 @@ interface UseInputHandlerParams {
   setAnswers: (answers: Record<string, any>) => void;
   addUserMessage: (text: string) => void;
   addBotMessage: (text: string) => void;
+  addErrorMessage: (text: string) => void;
   sendLead: (data: Record<string, any>) => Promise<void>;
   handleAnswer: (value: string) => void;
 }
@@ -26,6 +27,7 @@ export function useInputHandler({
   setAnswers,
   addUserMessage,
   addBotMessage,
+  addErrorMessage,
   sendLead,
   handleAnswer,
 }: UseInputHandlerParams) {
@@ -89,7 +91,7 @@ export function useInputHandler({
 
         await sendLead(updatedAnswers); // отправляем письмо
       } catch (err: any) {
-        addBotMessage(err.message);
+        addErrorMessage(err.message);
       }
 
       return;
@@ -106,6 +108,7 @@ export function useInputHandler({
     setAnswers,
     addUserMessage,
     addBotMessage,
+    addErrorMessage,
     sendLead,
     handleAnswer,
   ]);

@@ -55,6 +55,14 @@ export function useChatMessages({
     scroll();
   }, [scroll]);
 
+  const addErrorMessage = useCallback((text: string) => {
+    setMessages((prev) => [
+      ...prev,
+      { id: nextId("error"), type: "error", text },
+    ]);
+    scroll();
+  }, [scroll]);
+
   /**
    * Добавляет несколько сообщений бота последовательно с анимацией печати
    * Каждое сообщение появляется с задержкой, зависящей от длины текста
@@ -100,6 +108,7 @@ export function useChatMessages({
     setIsTyping,
     addUserMessage,
     addBotMessage,
+    addErrorMessage,
     addBotMessages,
   };
 }

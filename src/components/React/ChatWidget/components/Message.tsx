@@ -26,10 +26,12 @@ export function Message({ message }: MessageProps) {
       }`}
     >
       <div
-        className={`max-w-[80%] px-4 py-2.5 text-xs sm:text-sm shadow-sm ${
+        className={`max-w-[80%] px-4 py-2.5 text-xs sm:text-sm shadow-sm rounded-2xl ${
           message.type === "user"
-            ? "text-white rounded-2xl rounded-br-md bg-accent-500"
-            : "bg-white text-black rounded-2xl rounded-bl-md border"
+            ? "text-white rounded-br-md bg-accent-500"
+            : message.type === "error"
+              ? "text-red-800 rounded-bl-md border border-red-200 bg-red-50"
+              : "bg-white text-black rounded-bl-md border"
         }`}
         dangerouslySetInnerHTML={{ __html: message.text }}
       />

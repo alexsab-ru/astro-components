@@ -5,7 +5,7 @@
  */
 export interface ChatMessage {
   id: string;
-  type: "bot" | "user";
+  type: "bot" | "user" | "error";
   text: string;
 }
 
