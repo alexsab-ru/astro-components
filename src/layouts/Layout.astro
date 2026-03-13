@@ -6,11 +6,12 @@ interface Props {
 	image?: string;
 	keywords?: string;
 	brand?: string;
+	footerVersion?: string | number;
 	showHeaderMenu?: boolean;
 	showFooterLinks?: boolean;
 	logoNoLink?: boolean;
 }
-let {title, h1, description, image, keywords, brand = null, showHeaderMenu = true, showFooterLinks = true, logoNoLink = false} = Astro.props;
+let {title, h1, description, image, keywords, brand = null, footerVersion = '2', showHeaderMenu = true, showFooterLinks = true, logoNoLink = false} = Astro.props;
 
 import settings from '@/data/settings.json';
 const { site_name, site_description, is_header_transparent } = settings;
@@ -20,13 +21,22 @@ import ScriptHead from '@/components/Scripts/Head.astro';
 import ScriptBodyBegin from '@/components/Scripts/BodyBegin.astro';
 import ScriptBodyEnd from '@/components/Scripts/BodyEnd.astro';
 import Header from '@/components/Header/Header.astro';
-import Footer from '@/components/ExtendedFooter.astro';
 import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
 import seo from '@/data/seo.json';
 import StripEmptyQuery from '../components/StripEmptyQuery.astro';
 import Tooltip from '@/components/Tooltip/Tooltip.astro';
+
+import FooterV1 from '@/components/Footer/V1.astro';
+import FooterV2 from '@/components/Footer/V2.astro';
+import FooterV3 from '@/components/Footer/V3.astro';
+const FOOTER_MAP = {
+	'1': FooterV1,
+	'2': FooterV2,
+	'3': FooterV3, // Резерв для V3
+};
+const Footer = FOOTER_MAP[String(footerVersion)] || FooterV2;
 
 const currentPath = Astro.url.pathname;
 if (seo[currentPath]) {

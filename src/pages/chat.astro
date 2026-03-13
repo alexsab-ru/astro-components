@@ -1,0 +1,98 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { ChatWidget } from '@/components/React/ChatWidget/ChatWidget-v2';
+import { USPSection } from '@/components/React/USPSection';
+import Banner from '@/components/Banner/Banner.astro'
+import chatConfig from '@/data/chat-landing.json';
+import siteSettings from '@/data/settings.json';
+import modelsData from '@/data/models.json';
+const { models } = modelsData;
+const banners = [
+    {
+        "id": 1,
+        "show": true,
+        "type": "video",
+        "view": "popup-link",
+        "video": {
+            "desktop": "https://alexsab.ru/video/jetour-dashing-compress.mp4"
+        },
+        "image": {
+            "desktop": "https://cdn.alexsab.ru/models/default-model-bg.webp"
+        },
+        "title": "Заголовок баннера до 31.08.2024",
+        "descr": "Подзаголовок баннера может быть длиннее или короче за 1 234 567 ₽",
+        "btn": "Онлайн запись",
+        "btnUrl": "#common-modal",
+        "dataTitle": "Онлайн запись",
+        "dataFormName": "Онлайн запись. Баннер",
+        "badge": {
+            "autoname": "Jetour Dashing",
+            "title": "Ежегодная национальная премия",
+            "descr": "Победитель номинации <br>«новинка в&nbsp;массовом сегменте»",
+            "image": "https://jetour-alpha.ru/img/badge-4x4-2024.png"
+        },
+        "autoplay": 6000
+    },
+];
+// Fallback: берём brand/dealer/legalCityWhere из settings.json если не заданы в chat-landing.json
+const chatSettings = chatConfig.settings || {};
+const mergedSettings = {
+    ...chatSettings,
+    brand: chatSettings.brand || siteSettings.brand || '',
+    dealer: chatSettings.dealer || siteSettings.site_name || '',
+    legalCityWhere: chatSettings.legalCityWhere || siteSettings.legal_city_where || '',
+};
+
+// Обогащаем вопросы данными из models.json
+const config = {
+    ...chatConfig,
+    settings: mergedSettings,
+    // Данные моделей для динамических опций (цвета по выбранной модели)
+    models: models.map((m: any) => ({
+        name: m.name,
+        colors: (m.colors || []).map((c: any) => ({ id: c.id, name: c.name })),
+    })),
+    questions: chatConfig.questions.map(q => {
+        if (q.id !== 'model') return q;
+        // Если answerOptions пуст — показываем все модели, иначе только указанные
+        const sourceNames = q.answerOptions.length === 0
+            ? models.map((m: any) => m.name)
+            : q.answerOptions.map((a: any) => typeof a === 'string' ? a : a);
+        const newOptions = sourceNames.reduce((acc: any[], name: string) => {
+            const model = models.find((m: any) => m.name === name);
+            if (model) {
+                acc.push({
+                    label: model.name,
+                    value: model.name,
+                    description: model.slogan,
+                    image: model.thumb,
+                });
+            }
+            return acc;
+        }, []);
+        return { ...q, answerOptions: newOptions };
+    }),
+};
+---
+
+<Layout
+    h1="Чат квиз"
+    title="Чат квиз"
+    description={`Чат квиз`}
+    footerVersion="3"
+    showHeaderMenu={false}
+    showFooterLinks={false}
+    logoNoLink={true}
+>
+
+<!-- <Banner banners={banners} /> -->
+
+<section class="pb-14!">
+    <div class="container">
+        <USPSection client:visible />
+    </div>
+    <ChatWidget client:visible={{rootMargin: "-210px"}} config={config} />
+</section>
+
+
+</Layout>

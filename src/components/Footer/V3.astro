@@ -1,0 +1,91 @@
+---
+import settings from '@/data/settings.json';
+const { site_name, legal_city, legal_inn, legal_entity, brand } = settings;
+import { FOOTER_INFO } from '@/const';
+import { YEAR } from '@/js/utils/date';
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_campaign=${site_name}`;
+
+import { Icon } from 'astro-icon/components'
+
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => {
+    if (salon?.hidden_in?.includes('footer')) return false;
+    if (salon?.type && salon.type.length) return salon.type.includes('footer');
+    return true;
+});
+const LEGAL_SALONS_INFO = legal_entity && legal_inn ?
+[`<span>${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] :
+salons
+    .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
+    .map(s => `<p>${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
+
+interface Props {
+    classes?: string;
+    buttonCollapseLabel?: string;
+    data?: string;
+}
+const {
+    classes='',
+    buttonCollapseLabel = 'Юридическая информация',
+    data = null,
+} = Astro.props;
+const footerClasses = [
+    'bg-white border-t xl:border-none xl:bg-transparent fixed xl:relative px-5 xl:bottom-5 bottom-0 xl:text-left text-center text-xs w-full text-gray-800 z-50',
+    classes
+];
+---
+
+<footer
+    class={`${footerClasses}`}
+    x-data="{open: false}"
+    x-init="
+        window.addEventListener('scroll', () => open = false);
+        document.getElementById('chat') && document.getElementById('chat').addEventListener('scroll', () => open = false);
+    "
+>
+    <div
+        class="flex xl:hidden items-center justify-center flex-nowrap text-sm text-gray-700 px-4 py-4 border-b"
+        @click="open = !open"
+    >
+        <span class="font-medium">{buttonCollapseLabel}</span>
+        <Icon name="mdi:chevron-down" class="transition-transform duration-200 text-[1.2em] origin-center" :class="{'-rotate-180': open}" />
+    </div>
+    <div
+        x-cloak
+        x-show="open"
+        x-transition:enter="transition duration-200"
+        x-transition:enter-start="opacity-0 h-0"
+        x-transition:enter-end="opacity-100 h-auto"
+        x-transition:leave="transition duration-200"
+        x-transition:leave-start="opacity-100 h-auto"
+        x-transition:leave-end="opacity-0 h-0"
+        class="py-4 xl:py-0 px-2 xl:flex! xl:flex-col xl:items-start xl:w-full xl:px-0"
+    >
+        <div class="legal-info xl:absolute xl:bottom-20 py-2 xl:w-[150px] xl:mb-2 text-gray-500">
+        {data ? (
+            <div set:html={data}></div>
+        ) : (
+            <div>
+                {site_name && site_name != legal_city && (<p set:html={site_name}></p>)}
+                {legal_city && (<p set:html={legal_city}></p>)}
+                {legal_inn && (<p set:html={legal_inn}></p>)}
+                <p><a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика конфиденциальности</a></p>
+                <p><a href="/cookie-policy/" class="underline hover:no-underline" target="_blank">Правила использования cookie</a></p>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-200 xl:border-gray-400/30">
+                <span>&copy; {YEAR}</span>
+                {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
+            </div>
+            <div class="mt-4 ">
+                Разработка <a href={url} class="underline hover:no-underline" target="_blank">alexsab.ru</a>
+            </div>
+        )}
+        </div>
+        {FOOTER_INFO && (
+            <div class="mt-3 xl:mt-0 pt-3 xl:pt-2 border-t xl:border-t border-gray-200 text-gray-500 xl:w-full xl:bg-white/90 xl:backdrop-blur-sm xl:text-[10px]">
+                <Fragment set:html={FOOTER_INFO} />
+            </div>
+        )}
+    </div>
+</footer>

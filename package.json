@@ -124,6 +124,8 @@
     "dropzone": "6.0.0-beta.2",
     "glightbox": "^3.3.1",
     "linkinator": "^6.1.4",
+    "lucide-react": "^0.577.0",
+    "motion": "^12.35.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.68.0",

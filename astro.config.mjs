@@ -53,7 +53,7 @@ const computedSite = resolveSiteFromConfig('https://example.com');
 export default defineConfig({
 	integrations: [
 		sitemap({
-			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/')
+			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/') && !page.includes('/chat/')
 		}),
 		robots({
 			policy: [
