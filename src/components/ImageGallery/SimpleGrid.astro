@@ -1,0 +1,66 @@
+---
+type SectionImage = { url: string; title?: string; description?: string };
+
+interface Props {
+  images: SectionImage[];
+  gallery?: string;
+  title?: string;
+}
+
+const { images, gallery = 'gallery', title } = Astro.props;
+
+const isOdd = images.length > 1 && images.length % 2 !== 0;
+const gridImages = isOdd ? images.slice(0, -1) : images;
+const lastImage = isOdd ? images[images.length - 1] : null;
+---
+
+{images.length === 1 ? (
+  <a
+    href={images[0].url}
+    class="glightbox block"
+    data-title={images[0].title}
+    data-description={images[0].description}
+    data-gallery={gallery}
+  >
+    <img
+      src={images[0].url}
+      alt={images[0].title ?? title ?? ''}
+      class="h-auto w-full rounded md:rounded-xl cursor-pointer"
+    />
+  </a>
+) : (
+  <>
+    <div class="grid grid-cols-2 gap-2 md:gap-4 items-stretch">
+      {gridImages.map((img) => (
+        <a
+          href={img.url}
+          class="glightbox flex flex-col m-0!"
+          data-title={img.title}
+          data-description={img.description}
+          data-gallery={gallery}
+        >
+          <img
+            src={img.url}
+            alt={img.title ?? title ?? ''}
+            class="w-full flex-1 rounded md:rounded-xl object-cover aspect-video cursor-pointer"
+          />
+        </a>
+      ))}
+    </div>
+    {lastImage && (
+      <a
+        href={lastImage.url}
+        class="glightbox block mt-4"
+        data-title={lastImage.title}
+        data-description={lastImage.description}
+        data-gallery={gallery}
+      >
+        <img
+          src={lastImage.url}
+          alt={lastImage.title ?? title ?? ''}
+          class="h-auto w-full rounded md:rounded-xl cursor-pointer"
+        />
+      </a>
+    )}
+  </>
+)}

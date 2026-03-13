@@ -2,10 +2,12 @@
 import type { TBanner } from './types';
 interface Props {
 	banners?: TBanner[]
+	onlyView?: boolean;
+	onlyModal?: boolean;
 }
 import BannerSlide from './BannerSlide.astro';
 import bannersData from '@/data/banners.json';
-const { banners = bannersData } = Astro.props;
+const { banners = bannersData, onlyView = false, onlyModal = false } = Astro.props;
 
 import settings from '@/data/settings.json';
 const { is_header_transparent } = settings;
@@ -20,7 +22,7 @@ const bannerClasses = is_header_transparent ? 'pb-[160%] md:pb-[100%] lg:pb-0 lg
 				<div class="swiper banner-slider h-full text-white">
 					<div class="swiper-wrapper">
 						{banners.map((banner: any, index: number) => (
-							banner.show && <BannerSlide banner={banner} index={index} />
+							banner.show && <BannerSlide banner={banner} index={index} onlyView={onlyView} onlyModal={onlyModal} />
 						))}
 					</div>
 

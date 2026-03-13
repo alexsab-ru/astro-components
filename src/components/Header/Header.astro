@@ -24,6 +24,13 @@ import socials from '@/data/socials.json';
 
 import './styles.css';
 
+interface Props {
+	showMenu?: boolean;
+	logoNoLink?: boolean;
+}
+
+const { showMenu = true, logoNoLink = false } = Astro.props;
+
 const headerGlobalClasses = is_header_transparent ? 'header-transparent fixed' : 'sticky';
 const headerBgClasses = is_header_transparent ? 'bg-header-transparent-bg' : 'bg-header-bg';
 const headerBgSubmenuClasses = is_header_transparent ? 'bg-header-transparent-bg' : 'bg-header-bg';
@@ -43,7 +50,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 		}
 		<div class="container">
 			<div class="flex items-center justify-between xs:py-2 xs:h-auto h-[60px] md:h-[80px]">
-				<Logo />
+				<Logo noLink={logoNoLink} />
 				<div class="flex items-center xs:gap-2 gap-4 lg:gap-10 xl:gap-10 xs:grow xs:shrink-0 xs:justify-end">
 					<div class="hidden md:flex flex-col">
 					{
@@ -112,7 +119,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 	</header>
 
 
-	{links.length > 0 && ( <HeaderMenu links={links} /> )}
+	{showMenu && links.length > 0 && ( <HeaderMenu links={links} /> )}
 
 	<div
 		x-cloak
@@ -130,7 +137,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
-				{links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
+				{showMenu && links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
 				<div>
 				{salons.length && salons.map(salon => (
 					<div class={`flex flex-col gap-3 py-5 px-5 ${borderColor} border-t first:border-0`}>

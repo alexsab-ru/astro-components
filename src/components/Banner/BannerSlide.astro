@@ -3,8 +3,10 @@ import type { TBanner } from './types';
 interface Props {
 	banner: TBanner;
 	index?: number;
+	onlyView?: boolean;
+	onlyModal?: boolean;
 }
-const {banner, index} = Astro.props;
+const {banner, index, onlyView, onlyModal} = Astro.props;
 import Button from '../Button/Button.astro';
 import Badge from './Badge.astro';
 import BannerTitle from './Title.astro';
@@ -27,18 +29,21 @@ const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 // Определяем тип контента и наличие ссылки
 // Делаем код проще и читаемее
 const isVideo = banner?.type === 'video';
-const hasBannerUrl = !!banner?.bannerUrl;
+const resolvedBannerUrl = onlyModal && banner?.bannerUrl ? '#common-modal' : banner?.bannerUrl;
+const resolvedBtnUrl = onlyModal && banner?.btnUrl ? '#common-modal' : banner?.btnUrl;
+const resolvedView = onlyModal ? 'popup-link' : banner?.view;
+const hasBannerUrl = !!resolvedBannerUrl;
 
 // Выбираем компонент медиа один раз
 const BannerType = isVideo ? BannerVideo : BannerImage;
 
 // Готовим атрибуты ссылки один раз (только если есть URL)
 const linkAttrs = hasBannerUrl ? {
-	href: banner.bannerUrl as string,
-	class: `absolute inset-0 h-full w-full z-10 block ${banner?.view === 'popup-link' ? 'popup-link' : ''}`,
+	href: resolvedBannerUrl as string,
+	class: `absolute inset-0 h-full w-full z-10 block ${resolvedView === 'popup-link' ? 'popup-link' : ''}`,
 	...(banner?.dataTitle ? {'data-title': banner.dataTitle} : {}),
 	...(banner?.dataFormName ? {'data-form_name': banner.dataFormName} : {}),
-	...(banner?.target ? {target: banner.target} : {}),
+	...(banner?.target && !onlyModal ? {target: banner.target} : {}),
 } : null;
 ---
 
@@ -49,12 +54,12 @@ const linkAttrs = hasBannerUrl ? {
 				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
 				{ banner?.descr && ( <BannerDescription description={banner.descr} /> ) }
 				{
-					banner?.btn && (
+					(!onlyView || onlyModal) && banner?.btn && (
 						<div data-swiper-parallax="-55%">
 							<Button
 								classes={`btn inline-block py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
-								view={banner?.view}
-								url={banner?.btnUrl}
+								view={resolvedView}
+								url={resolvedBtnUrl}
 								title={banner?.btn}
 								dataTitle={banner?.dataTitle}
 								dataFormName={banner?.dataFormName}
@@ -85,7 +90,7 @@ const linkAttrs = hasBannerUrl ? {
 		- Если есть `bannerUrl`, оборачиваем в ссылку, иначе выводим как есть
 	*/}
 	{
-		hasBannerUrl ? (
+		hasBannerUrl && (!onlyView || onlyModal) ? (
 			<a {...linkAttrs}>
 				<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
 			</a>

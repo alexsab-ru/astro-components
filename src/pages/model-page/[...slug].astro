@@ -1,0 +1,70 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/components/Banner/Banner.astro';
+import PageH1 from '@/components/PageH1/Index.astro';
+import modelsData from '@/data/models.json';
+import settings from '@/data/settings.json';
+import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
+import Sections from '@/components/ImageGallery/Sections.astro';
+import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { IS_MODEL_PREFIX_URL } from '@/const';
+
+const allSections = import.meta.glob('/src/data/model-sections/**/*.yml', { eager: true });
+
+export async function getStaticPaths() {
+  return modelsData.models
+    .filter((m) => m.show)
+    .map((model) => ({
+      params: { slug: setPrefixModelUrl(model, IS_MODEL_PREFIX_URL) },
+      props: { model },
+    }));
+}
+
+const { model } = Astro.props;
+const { brand } = settings;
+const { name, slogan, image } = model;
+
+const brandFolder = model.mark_id.toLowerCase();
+const sectionsModule = allSections[`/src/data/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
+const rawSections = sectionsModule?.default ?? [];
+---
+
+<Layout title={name} description={slogan} brand={brand?.toLowerCase() || null} showHeaderMenu={false} showFooterLinks={false} logoNoLink={true}>
+  <Banner onlyModal={true} />
+  <div class="px-2 md:px-4 mt-6 xl:mt-12">
+    <section>
+      <PageH1 classes="text-center text-4xl! md:text-6xl!" h1={`${brand} ${name}`} />
+      <div class="text-center text-4xl">{`${slogan}`}</div>
+      {
+        image && (
+          <div class="mt-6">
+            <img
+              src={image}
+              alt={name}
+              class="w-full rounded-xl object-cover"
+            />
+          </div>
+        )
+      }
+    </section>
+
+    <div class="text-center my-12">
+      <a
+        href="#feedback"
+        class="btn inline-block py-3 px-8 text-lg bg-accent-500 text-white rounded-lg transition hover:bg-accent-600"
+      >
+        Узнать подробности
+      </a>
+    </div>
+
+    <Sections sections={rawSections} variant="grid" ctaHref="#feedback" ctaText="Узнать подробности" />
+
+    <section id="feedback" class="bg-gray-50">
+      <FeedbackForm
+        title="Остались вопросы?"
+        subtitle="Оставьте заявку и мы свяжемся с вами"
+        dataFormName={`Заявка на ${brand} ${name}`}
+      />
+    </section>
+  </div>
+</Layout>

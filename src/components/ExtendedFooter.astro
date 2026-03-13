@@ -17,6 +17,12 @@ const salons = salonsData.filter((salon: ISalon) => {
 });
 const path = Astro.url.pathname;
 import DisclaimerCollapse from '@/components/DisclaimerCollapse/DisclaimerCollapse.astro';
+
+interface Props {
+	showSiteLinks?: boolean;
+	logoNoLink?: boolean;
+}
+const { showSiteLinks = true, logoNoLink = false } = Astro.props;
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/socials.json';
@@ -40,11 +46,14 @@ salons
                 <div>
                     {logo_dealer ? (
                         <img src={logo_dealer} class="h-[var(--logo-dealer-footer-height)] w-auto" alt={site_name} loading="lazy" width="200" height="40" />
+                    ) : logoNoLink ? (
+                        <span class="uppercase text-2xl inline-block">{site_name}</span>
                     ) : (
                         <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70">{site_name}</a>
                     )}
                 </div>
             </div>
+            {showSiteLinks && (
             <div class="">
                 <div class="text-xl mb-3 md:mb-5">Разделы сайта</div>
                 <ul class="space-y-2">
@@ -57,6 +66,7 @@ salons
                 }
                 </ul>
             </div>
+            )}
             {
                 salons.length ? (
                     <div class="">
