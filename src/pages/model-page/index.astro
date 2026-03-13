@@ -12,8 +12,8 @@ import PageH1 from '@/components/PageH1/Index.astro';
 const getModelPath = (model: any) => `/model-page/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
 
 if (import.meta.env.PROD) {
-	// return new Response();
-	return Astro.redirect('/');
+	return new Response();
+	// return Astro.redirect('/');
 }
 ---
 <Layout
