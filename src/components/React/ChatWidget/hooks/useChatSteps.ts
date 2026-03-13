@@ -31,7 +31,7 @@ function getColorOptions(modelAnswer: string | undefined, models: ModelData[]): 
     const model = models.find(m => m.name === name);
     if (!model?.colors) continue;
     for (const color of model.colors) {
-      if (!seen.has(color.name)) {
+      if (color.name && !seen.has(color.name)) {
         seen.add(color.name);
         options.push({ label: color.name, value: color.name });
       }
