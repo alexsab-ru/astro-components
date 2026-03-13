@@ -67,7 +67,7 @@ const footerClasses = [
             <div set:html={data}></div>
         ) : (
             <div>
-                {site_name && (<p set:html={site_name}></p>)}
+                {site_name && site_name != legal_city && (<p set:html={site_name}></p>)}
                 {legal_city && (<p set:html={legal_city}></p>)}
                 {legal_inn && (<p set:html={legal_inn}></p>)}
                 <p><a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика конфиденциальности</a></p>
