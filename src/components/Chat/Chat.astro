@@ -21,15 +21,10 @@ interface Props {
 
 let quizData: TStep[] = [];
 
-// Загружаем данные из quiz.json, если quizSteps не передан
+// import.meta.glob — Vite-нативный optional import (не падает если файла нет)
 if (!Astro.props.quizSteps || Astro.props.quizSteps.length === 0) {
-    try {
-        const { default: data } = await import('@/data/quiz.json');
-        quizData = data || [];
-    } catch (err) {
-        console.warn('Failed to load quiz.json:', err);
-        quizData = [];
-    }
+    const quizFiles = import.meta.glob('/src/data/quiz.json', { eager: true });
+    quizData = (Object.values(quizFiles)[0] as any)?.default || [];
 }
 
 const { 

@@ -3,15 +3,12 @@ import Layout from '@/layouts/Layout.astro';
 import { ChatWidget } from '@/components/React/ChatWidget/ChatWidget-v2';
 import { USPSection } from '@/components/React/USPSection';
 import Banner from '@/components/Banner/Banner.astro'
-import fs from 'node:fs';
 import siteSettings from '@/data/settings.json';
 import modelsData from '@/data/models.json';
 
-let chatConfig: any = { settings: {}, questions: [] };
-const chatConfigPath = new URL('../data/chat-landing.json', import.meta.url);
-if (fs.existsSync(chatConfigPath)) {
-    chatConfig = JSON.parse(fs.readFileSync(chatConfigPath, 'utf-8'));
-}
+// import.meta.glob — Vite-нативный optional import (не падает если файла нет)
+const chatFiles = import.meta.glob('/src/data/chat-landing.json', { eager: true });
+const chatConfig: any = (Object.values(chatFiles)[0] as any)?.default || { settings: {}, questions: [] };
 
 const { models } = modelsData;
 const banners = [

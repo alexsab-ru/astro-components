@@ -3,23 +3,21 @@ import type { TStep } from './types';
 import QuizSlide from './QuizSlide.astro';
 import './quiz.css';
 
-let quizData = [];
+// import.meta.glob — Vite-нативный optional import (не падает если файла нет)
+const quizFiles = import.meta.glob('/src/data/quiz.json', { eager: true });
+const modelsFiles = import.meta.glob('/src/data/models.json', { eager: true });
 
-try {
-    const { default: data } = await import('@/data/quiz.json');
-    const { default: modelsData } = await import('@/data/models.json');
-    quizData = data;
-    let modelStep = quizData.find(el => el.id === 'model');
-    if (modelStep && (!Array.isArray(modelStep.answerOptions) || !modelStep.answerOptions.length)) {
-        // Для ответов в квизе используем caption, чтобы пользователь видел корректное название.
-        const models = modelsData.models.map(el => `${el.mark_id} ${el.caption || el.name}`).filter(Boolean);
-        if (!models.length) throw new Error('Не найдено моделей для выбора ни в файле quiz.json, ни в файле models.json');
-        modelStep.answerOptions = models;
+let quizData = (Object.values(quizFiles)[0] as any)?.default || null;
+
+if (quizData) {
+    const modelsData = (Object.values(modelsFiles)[0] as any)?.default;
+    if (modelsData) {
+        let modelStep = quizData.find(el => el.id === 'model');
+        if (modelStep && (!Array.isArray(modelStep.answerOptions) || !modelStep.answerOptions.length)) {
+            const models = modelsData.models.map(el => `${el.mark_id} ${el.caption || el.name}`).filter(Boolean);
+            modelStep.answerOptions = models;
+        }
     }
-    
-} catch (err) {
-	console.warn(`Блок с Квизом отображаться не будет: ${err}`);
-	quizData = null;
 }
 
 interface Props {
