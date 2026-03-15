@@ -121,12 +121,19 @@ jobs:
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
+          # Формируем сообщение через heredoc.
+          # Это защищает вызов функции от поломки аргументов,
+          # если в тексте есть двойные кавычки и другие спецсимволы.
+          message=$(cat <<'__TELEGRAM_MESSAGE_CREATE__'
+          *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
+
+          added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})
+          __TELEGRAM_MESSAGE_CREATE__
+          )
           send_telegram_message \
           "${{ secrets.TELEGRAM_TOKEN }}" \
           "${{ secrets.TELEGRAM_TO_CREATE }}" \
-          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
-
-          added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})" \
+          "$message" \
           "${{ inputs.parse-mode || 'Markdown' }}"
 
   pull_request:
@@ -140,15 +147,22 @@ jobs:
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
-          send_telegram_message \
-          "${{ secrets.TELEGRAM_TOKEN }}" \
-          "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
-          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by **[${{ github.actor }}](https://github.com/${{ github.actor }})**:
+          # Формируем сообщение через heredoc.
+          # Это защищает вызов функции от поломки аргументов,
+          # если в тексте есть двойные кавычки и другие спецсимволы.
+          message=$(cat <<'__TELEGRAM_MESSAGE_PR__'
+          *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by **[${{ github.actor }}](https://github.com/${{ github.actor }})**:
 
           [pull request #${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
           \`\`\`
           ${{ github.event.pull_request.body }}
-          \`\`\`" \
+          \`\`\`
+          __TELEGRAM_MESSAGE_PR__
+          )
+          send_telegram_message \
+          "${{ secrets.TELEGRAM_TOKEN }}" \
+          "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
+          "$message" \
           "${{ inputs.parse-mode || 'Markdown' }}"
 
   delete:
@@ -162,12 +176,19 @@ jobs:
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
+          # Формируем сообщение через heredoc.
+          # Это защищает вызов функции от поломки аргументов,
+          # если в тексте есть двойные кавычки и другие спецсимволы.
+          message=$(cat <<'__TELEGRAM_MESSAGE_DELETE__'
+          *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
+
+          branch '\`${{ github.event.ref }}\`' is deleted
+          __TELEGRAM_MESSAGE_DELETE__
+          )
           send_telegram_message \
           "${{ secrets.TELEGRAM_TOKEN }}" \
           "${{ secrets.TELEGRAM_TO_DELETE }}" \
-          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
-
-          branch '\`${{ github.event.ref }}\`' is deleted" \
+          "$message" \
           "${{ inputs.parse-mode || 'Markdown' }}"
 
   issues:
@@ -181,12 +202,19 @@ jobs:
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
+          # Формируем сообщение через heredoc.
+          # Это защищает вызов функции от поломки аргументов,
+          # если в тексте есть двойные кавычки и другие спецсимволы.
+          message=$(cat <<'__TELEGRAM_MESSAGE_ISSUE__'
+          *[${{ github.event.repository.name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
+
+          issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}
+          __TELEGRAM_MESSAGE_ISSUE__
+          )
           send_telegram_message \
           "${{ secrets.TELEGRAM_TOKEN }}" \
           "${{ secrets.TELEGRAM_TO_ISSUES }}" \
-          "*[${{ github.event.repository.name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
-
-          issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}" \
+          "$message" \
           "${{ inputs.parse-mode || 'Markdown' }}"
 
   get_last_commit:
