@@ -68,7 +68,13 @@ send_telegram_messages() {
             
             # Формируем базовый URL запроса
             local request_url="https://api.telegram.org/bot${token}/sendMessage"
-            local request_data="chat_id=${chat_id}&parse_mode=${parse_mode}&text=${MESSAGE}&disable_web_page_preview=true"
+            # Формируем тело запроса.
+            # parse_mode добавляем только когда он реально задан.
+            # Это позволяет легко сделать fallback без parse_mode.
+            local request_data="chat_id=${chat_id}&text=${MESSAGE}&disable_web_page_preview=true"
+            if [ -n "$parse_mode" ]; then
+                request_data="${request_data}&parse_mode=${parse_mode}"
+            fi
             
             # Добавляем message_thread_id, если он есть
             if [ ! -z "$message_thread_id" ]; then
@@ -76,6 +82,22 @@ send_telegram_messages() {
             fi
             
             RESPONSE=$(curl -s -X POST "$request_url" -d "$request_data")
+
+            # Защита от частых ошибок Telegram при разборе Markdown/HTML.
+            # Если в тексте есть "сломанная" сущность, Telegram возвращает:
+            # "can't parse entities".
+            # В этом случае повторяем отправку как plain text (без parse_mode),
+            # чтобы сообщение не терялось из-за одного спецсимвола.
+            if ! echo "$RESPONSE" | grep -q '"ok":true' && \
+               echo "$RESPONSE" | grep -q "can't parse entities" && \
+               [ -n "$parse_mode" ]; then
+                echo "Warning: Telegram parse error for chat $chat_id, retrying without parse_mode" >&2
+                local fallback_request_data="chat_id=${chat_id}&text=${MESSAGE}&disable_web_page_preview=true"
+                if [ ! -z "$message_thread_id" ]; then
+                    fallback_request_data="${fallback_request_data}&message_thread_id=${message_thread_id}"
+                fi
+                RESPONSE=$(curl -s -X POST "$request_url" -d "$fallback_request_data")
+            fi
 
             if ! echo "$RESPONSE" | grep -q '"ok":true'; then
                 echo "Error sending message part $i to chat $chat_id: $RESPONSE" >&2
@@ -140,7 +162,13 @@ send_telegram_message() {
         
         # Формируем базовый URL запроса
         local request_url="https://api.telegram.org/bot${token}/sendMessage"
-        local request_data="chat_id=${chat_id}&parse_mode=${parse_mode}&text=${message}&disable_web_page_preview=true"
+        # Формируем тело запроса.
+        # parse_mode добавляем только когда он реально задан.
+        # Это позволяет легко сделать fallback без parse_mode.
+        local request_data="chat_id=${chat_id}&text=${message}&disable_web_page_preview=true"
+        if [ -n "$parse_mode" ]; then
+            request_data="${request_data}&parse_mode=${parse_mode}"
+        fi
         
         # Добавляем message_thread_id, если он есть
         if [ ! -z "$message_thread_id" ]; then
@@ -148,6 +176,22 @@ send_telegram_message() {
         fi
         
         RESPONSE=$(curl -s -X POST "$request_url" -d "$request_data")
+
+        # Защита от частых ошибок Telegram при разборе Markdown/HTML.
+        # Если в тексте есть "сломанная" сущность, Telegram возвращает:
+        # "can't parse entities".
+        # В этом случае повторяем отправку как plain text (без parse_mode),
+        # чтобы сообщение не терялось из-за одного спецсимвола.
+        if ! echo "$RESPONSE" | grep -q '"ok":true' && \
+           echo "$RESPONSE" | grep -q "can't parse entities" && \
+           [ -n "$parse_mode" ]; then
+            echo "Warning: Telegram parse error for chat $chat_id, retrying without parse_mode" >&2
+            local fallback_request_data="chat_id=${chat_id}&text=${message}&disable_web_page_preview=true"
+            if [ ! -z "$message_thread_id" ]; then
+                fallback_request_data="${fallback_request_data}&message_thread_id=${message_thread_id}"
+            fi
+            RESPONSE=$(curl -s -X POST "$request_url" -d "$fallback_request_data")
+        fi
 
         if ! echo "$RESPONSE" | grep -q '"ok":true'; then
             echo "Error sending message to chat $chat_id: $RESPONSE" >&2
