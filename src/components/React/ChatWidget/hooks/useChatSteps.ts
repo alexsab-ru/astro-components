@@ -49,6 +49,7 @@ export function useChatSteps(config: ChatLandingConfig) {
 
   const steps = useMemo(() => {
     const { settings = {}, messages = {}, questions } = config;
+    const isOnline = Array.isArray(questions) && questions.length > 0;
     const managerName = settings.managerName || 'Менеджер';
     const managerPosition = settings.managerPosition || '';
     const brand = settings.brand || 'БРЕНД';
@@ -65,6 +66,19 @@ export function useChatSteps(config: ChatLandingConfig) {
     };
 
     const map: Record<string, StepConfig> = {};
+
+    // ───── если конфиг пуст — сразу на done ─────
+    if (!isOnline) {
+      map.intro = {
+        botMessages: [],
+        nextStep: () => "done",
+      };
+      map.done = {
+        botMessages: ['Временно недоступно, оставьте сообщение через кнопку "Заказать звонок" в верху страницы'],
+        nextStep: () => "done",
+      };
+      return map;
+    }
 
     // ───── введение ─────
     const introMessages: string[] = [];

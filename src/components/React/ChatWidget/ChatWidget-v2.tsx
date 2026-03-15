@@ -22,6 +22,7 @@ import { useChatInit } from './hooks/useChatInit';
 
 export function ChatWidget({ config }: ChatWidgetProps) {
   const settings = config.settings || {};
+  const isOnline = Array.isArray(config.questions) && config.questions.length > 0;
   const managerName = settings.managerName || 'Менеджер';
   const formName = settings.formName || 'Квиз чат';
   const dealer = settings.dealer || 'Официальный дилер';
@@ -126,7 +127,7 @@ export function ChatWidget({ config }: ChatWidgetProps) {
   return (
     <div className="w-full max-w-5xl 2xl:max-w-7xl mx-auto px-0 md:px-5">
       <div className="flex flex-col rounded-xl md:rounded-2xl overflow-hidden border shadow-xl min-h-[500px] h-[70vh]">
-        <Header managerName={managerName} managerPhoto={settings.managerPhoto} dealer={dealer} />
+        <Header managerName={managerName} managerPhoto={settings.managerPhoto} dealer={dealer} isOnline={isOnline} />
 
         {/* Messages */}
         <div

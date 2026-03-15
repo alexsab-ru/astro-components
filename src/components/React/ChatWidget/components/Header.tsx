@@ -6,6 +6,7 @@ interface HeaderProps {
   managerName: string;
   managerPhoto?: string;
   dealer: string;
+  isOnline?: boolean;
 }
 
 /**
@@ -16,7 +17,7 @@ interface HeaderProps {
  * @param managerPhoto - фото менеджера (опционально)
  * @param dealer - название дилера
  */
-export function Header({ managerName, managerPhoto = '', dealer }: HeaderProps) {
+export function Header({ managerName, managerPhoto = '', dealer, isOnline = true }: HeaderProps) {
   return (
     <div className="text-white px-5 py-4 flex items-center gap-3 shrink-0 bg-linear-[var(--brand-gradient)]">
       {managerPhoto ? (
@@ -32,9 +33,9 @@ export function Header({ managerName, managerPhoto = '', dealer }: HeaderProps) 
       )}
       <div className="flex-1 min-w-0">
         <div className="text-base font-heading">{managerName}</div>
-        <div className="flex items-center gap-1.5 text-xs">
-          <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />
-          Онлайн
+        <div className={`flex items-center gap-1.5 text-xs ${!isOnline ? 'opacity-60' : ''}`}>
+          <span className={`w-2 h-2 rounded-full inline-block ${isOnline ? 'bg-green-400' : 'bg-gray-400'}`} />
+          {isOnline ? 'Онлайн' : 'Оффлайн'}
         </div>
       </div>
       <div className="px-3 py-1 rounded-full bg-white/15 hidden sm:block text-xs">
