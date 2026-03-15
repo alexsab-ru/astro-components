@@ -14,6 +14,23 @@ send_telegram_messages() {
     local total_parts=$(trim_quotes "$3")
     local parse_mode=$(trim_quotes "$4")
 
+    # Защита от "невидимых" символов из CI/YAML:
+    # - убираем carriage return (\r), который часто попадает из CRLF
+    # - убираем переносы строк
+    # - обрезаем пробелы по краям
+    # Это нужно, чтобы "Markdown", "Markdown\r" и " Markdown " обрабатывались одинаково.
+    parse_mode="${parse_mode//$'\r'/}"
+    parse_mode="${parse_mode//$'\n'/}"
+    parse_mode="$(echo "$parse_mode" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
+    # Нормализуем регистр для удобства и стабильности.
+    # Так мы поддерживаем варианты вида markdown / MARKDOWN / markdownv2.
+    case "$parse_mode" in
+        html|HTML|Html) parse_mode="HTML" ;;
+        markdown|MARKDOWN|Markdown) parse_mode="Markdown" ;;
+        markdownv2|MARKDOWNV2|MarkdownV2|Markdownv2) parse_mode="MarkdownV2" ;;
+    esac
+
     # Устанавливаем HTML как значение по умолчанию, если parse_mode не указан
     if [ -z "$parse_mode" ]; then
         parse_mode="HTML"
@@ -28,6 +45,9 @@ send_telegram_messages() {
     # Проверяем, что parse_mode имеет допустимое значение
     if [[ ! "$parse_mode" =~ ^(HTML|Markdown|MarkdownV2)$ ]]; then
         echo "Error: Invalid parse_mode. Must be one of: HTML, Markdown, MarkdownV2" >&2
+        # Диагностика для CI: выводим "сырое" значение в безопасном виде (%q)
+        # и длину строки. Это помогает быстро увидеть скрытые символы.
+        printf 'Error: Received parse_mode=%q (length=%d)\n' "$parse_mode" "${#parse_mode}" >&2
         return 1
     fi
 
@@ -74,6 +94,23 @@ send_telegram_message() {
     local message=$(trim_quotes "$3")
     local parse_mode=$(trim_quotes "$4")
 
+    # Защита от "невидимых" символов из CI/YAML:
+    # - убираем carriage return (\r), который часто попадает из CRLF
+    # - убираем переносы строк
+    # - обрезаем пробелы по краям
+    # Это нужно, чтобы "Markdown", "Markdown\r" и " Markdown " обрабатывались одинаково.
+    parse_mode="${parse_mode//$'\r'/}"
+    parse_mode="${parse_mode//$'\n'/}"
+    parse_mode="$(echo "$parse_mode" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
+    # Нормализуем регистр для удобства и стабильности.
+    # Так мы поддерживаем варианты вида markdown / MARKDOWN / markdownv2.
+    case "$parse_mode" in
+        html|HTML|Html) parse_mode="HTML" ;;
+        markdown|MARKDOWN|Markdown) parse_mode="Markdown" ;;
+        markdownv2|MARKDOWNV2|MarkdownV2|Markdownv2) parse_mode="MarkdownV2" ;;
+    esac
+
     # Устанавливаем HTML как значение по умолчанию, если parse_mode не указан
     if [ -z "$parse_mode" ]; then
         parse_mode="HTML"
@@ -88,6 +125,9 @@ send_telegram_message() {
     # Проверяем, что parse_mode имеет допустимое значение
     if [[ ! "$parse_mode" =~ ^(HTML|Markdown|MarkdownV2)$ ]]; then
         echo "Error: Invalid parse_mode. Must be one of: HTML, Markdown, MarkdownV2" >&2
+        # Диагностика для CI: выводим "сырое" значение в безопасном виде (%q)
+        # и длину строки. Это помогает быстро увидеть скрытые символы.
+        printf 'Error: Received parse_mode=%q (length=%d)\n' "$parse_mode" "${#parse_mode}" >&2
         return 1
     fi
 
