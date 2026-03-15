@@ -58,6 +58,16 @@ const normalizeId = (id) => {
   return id.toLowerCase().replace(/[-_]/g, '');
 };
 
+// Конструирование id из mark_id и model id:
+// - пробелы в id заменяем на дефис ("uni-k idd" → "uni-k-idd")
+// - если id уже начинается с бренда, не дублируем ("wey-05" при mark_id=WEY → "wey-05", не "wey-wey-05")
+const constructId = (markId, modelId) => {
+  const brand = markId.toLowerCase();
+  const id = modelId.toLowerCase().replace(/\s+/g, '-');
+  if (id.startsWith(brand + '-')) return id;
+  return `${brand}-${id}`;
+};
+
 // Проверка совпадения имён моделей:
 // - точное совпадение (case-insensitive, с нормализацией)
 // - дилерская модель начинается с известного имени + пробел (для вариантов типа "DASHING AWD")
@@ -183,7 +193,7 @@ allModels.forEach(model => {
   if (!model.mark_id || !model.id) return;
 
   const brand = model.mark_id.toLowerCase();
-  const ourId = `${brand}-${model.id}`;
+  const ourId = constructId(model.mark_id, model.id);
   const knownNames = getKnownNames(model);
 
   // Поиск федеральных данных
