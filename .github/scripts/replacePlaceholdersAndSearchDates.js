@@ -240,7 +240,7 @@ class PlaceholderProcessor {
     createCarsPricePlaceholders() {
         if (this.carsData.length === 0) return;
         
-        const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial'];
+        const numericKeys = ['price', 'benefit', 'priceFederal', 'benefitFederal', 'priceDealer', 'benefitDealer', 'priceOfficial', 'priceDealerAVN', 'benefitDealerAVN'];
         
         this.carsData.forEach(car => {
             if (!car.id) return;
