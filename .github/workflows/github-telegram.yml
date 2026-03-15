@@ -147,23 +147,39 @@ jobs:
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
-          # Формируем сообщение через heredoc.
-          # Это защищает вызов функции от поломки аргументов,
-          # если в тексте есть двойные кавычки и другие спецсимволы.
-          message=$(cat <<'__TELEGRAM_MESSAGE_PR__'
-          *[${{ github.event.repository.name }}:${{ github.ref_name }}]* by **[${{ github.actor }}](https://github.com/${{ github.actor }})**:
+          # Для pull_request используем MarkdownV2 + явное экранирование
+          # динамических полей. Это снижает риск ошибок "can't parse entities".
+          repo_name_escaped="$(escape_markdown_v2 "${{ github.event.repository.name }}")"
+          ref_name_escaped="$(escape_markdown_v2 "${{ github.ref_name }}")"
+          actor_escaped="$(escape_markdown_v2 "${{ github.actor }}")"
+          pr_number_escaped="$(escape_markdown_v2 "${{ github.event.pull_request.number }}")"
+          head_ref_escaped="$(escape_markdown_v2 "${{ github.event.pull_request.head.ref }}")"
+          base_ref_escaped="$(escape_markdown_v2 "${{ github.event.pull_request.base.ref }}")"
 
-          [pull request #${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
-          \`\`\`
-          ${{ github.event.pull_request.body }}
-          \`\`\`
+          # Берем тело PR отдельно, затем экранируем под MarkdownV2.
+          # Такой способ устойчив к кавычкам, спецсимволам и переводам строк.
+          pr_body_raw=$(cat <<'__PR_BODY_RAW__'
+          ${{ github.event.pull_request.body || '' }}
+          __PR_BODY_RAW__
+          )
+          pr_body_escaped="$(escape_markdown_v2 "$pr_body_raw")"
+
+          # В сообщении оставляем минимально-необходимую разметку.
+          # Динамические части уже экранированы функцией выше.
+          message=$(cat <<__TELEGRAM_MESSAGE_PR__
+          *[${repo_name_escaped}:${ref_name_escaped}]* by *${actor_escaped}*:
+
+          [pull request #${pr_number_escaped}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }})
+          from *${head_ref_escaped}* to *${base_ref_escaped}*
+          with comment:
+          ${pr_body_escaped}
           __TELEGRAM_MESSAGE_PR__
           )
           send_telegram_message \
           "${{ secrets.TELEGRAM_TOKEN }}" \
           "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
           "$message" \
-          "${{ inputs.parse-mode || 'Markdown' }}"
+          "${{ inputs.parse-mode || 'MarkdownV2' }}"
 
   delete:
     if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null }}
