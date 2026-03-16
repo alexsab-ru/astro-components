@@ -30,14 +30,15 @@ const brandFolder = model.mark_id.toLowerCase();
 const sectionsModule = allSections[`/src/data/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
 const rawSections = sectionsModule?.default ?? [];
 
+const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const urlSegment = `/${id.toLowerCase()}/`;
+const nameRegex = new RegExp(`(?<![\\w+])${escapeRegex(name)}(?![\\w+])`, 'i');
 const sortedBanners = [...bannersData as TBanner[]].sort((a, b) => {
   const isRelated = (banner: TBanner) => {
-    const modelId = id.toLowerCase();
-    const modelName = name.toLowerCase();
-    if (banner.btnUrl?.toLowerCase().includes(modelId)) return true;
-    if (banner.bannerUrl?.toLowerCase().includes(modelId)) return true;
+    if (banner.btnUrl?.toLowerCase().includes(urlSegment)) return true;
+    if (banner.bannerUrl?.toLowerCase().includes(urlSegment)) return true;
     return [banner.title, banner.descr, banner.dataTitle]
-      .some(f => f?.toLowerCase().includes(modelName));
+      .some(f => f ? nameRegex.test(f) : false);
   };
   return isRelated(b) ? 1 : isRelated(a) ? -1 : 0;
 });
