@@ -42,9 +42,9 @@ const cyrillicToLatin = (str) => str.replace(/[авсекмнорту]/g, ch => 
 
 // Нормализация имени модели для сравнения
 const normalize = (name) => {
-  if (!name) return '';
+  if (!name && name !== 0) return '';
   return cyrillicToLatin(
-    name
+    String(name)
       .toLowerCase()
       .replace(/\b(новая|новый|new)\b/gi, '')
       .trim()
