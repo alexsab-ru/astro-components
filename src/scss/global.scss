@@ -105,3 +105,25 @@ html, body{
 	clip-path: polygon(1rem 0, 100% 0, calc(100% - 1rem) 100%, 0 100%);
 }
 
+.glightbox-clean .gslide-title,
+.glightbox-mobile .glightbox-container .gslide-title {
+	font-size: 1.5rem;
+}
+
+.glightbox-clean .gslide-desc {
+	font-size: 1.3rem;
+}
+
+@media screen and (max-width: 375px) {
+	.glightbox-clean .gslide-title,
+	.glightbox-mobile .glightbox-container .gslide-title {
+		font-size: 1.3rem;
+	}
+	.glightbox-clean .gslide-desc {
+		font-size: 1.1rem;
+	}
+	.desc-bottom .gslide-media, .desc-top .gslide-media {
+		position: absolute;
+		top: 0;
+	}
+}
