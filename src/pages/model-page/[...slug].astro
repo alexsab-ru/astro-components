@@ -1,6 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
+import bannersData from '@/data/banners.json';
+import type { TBanner } from '@/components/Banner/types';
 import PageH1 from '@/components/PageH1/Index.astro';
 import modelsData from '@/data/models.json';
 import settings from '@/data/settings.json';
@@ -22,15 +24,28 @@ export async function getStaticPaths() {
 
 const { model } = Astro.props;
 const { brand } = settings;
-const { name, slogan, image } = model;
+const { name, slogan, image, id } = model;
 
 const brandFolder = model.mark_id.toLowerCase();
 const sectionsModule = allSections[`/src/data/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
 const rawSections = sectionsModule?.default ?? [];
+
+const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const urlSegment = `/${id.toLowerCase()}/`;
+const nameRegex = new RegExp(`(?<![\\w+])${escapeRegex(name)}(?![\\w+])`, 'i');
+const sortedBanners = [...bannersData as TBanner[]].sort((a, b) => {
+  const isRelated = (banner: TBanner) => {
+    if (banner.btnUrl?.toLowerCase().includes(urlSegment)) return true;
+    if (banner.bannerUrl?.toLowerCase().includes(urlSegment)) return true;
+    return [banner.title, banner.descr, banner.dataTitle]
+      .some(f => f ? nameRegex.test(f) : false);
+  };
+  return isRelated(b) ? 1 : isRelated(a) ? -1 : 0;
+});
 ---
 
 <Layout title={name} description={slogan} brand={brand?.toLowerCase() || null} showHeaderMenu={false} showFooterLinks={false} logoNoLink={true}>
-  <Banner onlyModal={true} />
+  <Banner banners={sortedBanners} onlyModal={true} />
   <div class="px-2 md:px-4 mt-6 xl:mt-12">
     <section>
       <PageH1 classes="text-center text-4xl! md:text-6xl!" h1={`${brand} ${name}`} />
