@@ -7,6 +7,10 @@
 # Keys that are JSON objects (e.g. *_KEY_MAPPING) are serialised
 # to a single-line JSON string.
 #
+# On each run, keys injected by the previous run are removed first
+# (tracked via .env.json.keys), so switching domains in dev mode
+# does not leak stale keys from the old domain.
+#
 # Requires: node (used for reliable JSON parsing).
 #
 # Usage:
@@ -23,9 +27,20 @@ if [ ! -f "$ENV_JSON" ]; then
 fi
 
 DOTENV="${DOTENV_PATH:-.env}"
+KEYS_FILE="${DOTENV}.json.keys"
 
 # Ensure .env exists
 touch "$DOTENV"
+
+# --- Clean up keys from the previous env.json ----------------
+if [ -f "$KEYS_FILE" ]; then
+  while IFS= read -r old_key; do
+    [ -z "$old_key" ] && continue
+    grep -v "^${old_key}=" "$DOTENV" > "$DOTENV.tmp" || true
+    mv "$DOTENV.tmp" "$DOTENV"
+  done < "$KEYS_FILE"
+  rm -f "$KEYS_FILE"
+fi
 
 # --- Generate KEY=VALUE pairs from env.json via Node.js ------
 PAIRS=$(node -e '
@@ -51,14 +66,18 @@ if [ -z "$PAIRS" ]; then
   exit 0
 fi
 
-# --- Merge into .env -----------------------------------------
+# --- Merge into .env and record injected keys -----------------
+NEW_KEYS=""
 while IFS='=' read -r key rest; do
   [ -z "$key" ] && continue
   # Remove existing line (if any) and append new one
-  # Use a temp file for portability (BSD sed -i requires extension arg)
   grep -v "^${key}=" "$DOTENV" > "$DOTENV.tmp" || true
   mv "$DOTENV.tmp" "$DOTENV"
   echo "${key}=${rest}" >> "$DOTENV"
+  NEW_KEYS="${NEW_KEYS}${key}\n"
 done <<< "$PAIRS"
+
+# Save injected keys for cleanup on next run
+printf "%b" "$NEW_KEYS" > "$KEYS_FILE"
 
 echo "✅ Merged env.json → .env ($(echo "$PAIRS" | wc -l | tr -d ' ') keys)"
