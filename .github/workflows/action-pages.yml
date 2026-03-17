@@ -144,6 +144,11 @@ jobs:
         if: steps.check_changes.outputs.changes == 'true'
         uses: actions/configure-pages@v4
 
+      - name: Init output.txt
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          > output.txt
+
       - name: Create env file
         if: steps.check_changes.outputs.changes == 'true'
         run: |
@@ -216,6 +221,15 @@ jobs:
         run: |
           pnpm build --outDir ./_site
 
+      - name: Set output
+        id: set_output
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          if [ -s output.txt ]; then
+            encoded_output=$(base64 -w 0 output.txt)
+            echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
+          fi
+
       - name: Check specials
         id: check_specials
         run: |
@@ -247,6 +261,7 @@ jobs:
 
     outputs:
       changes: ${{ steps.check_changes.outputs.changes }}
+      script_output: ${{ steps.set_output.outputs.script_output }}
       specials: ${{ steps.check_specials.outputs.specials }}
       specials_marketing: ${{ steps.check_specials.outputs.specials_marketing }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
@@ -263,6 +278,17 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  notify_telegram_error:
+    needs: build
+    if: ${{ needs.build.outputs.script_output != '' }}
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      additional-text: |
+        ${{ needs.build.outputs.script_output }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_ERROR }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   notify_telegram_after_deploy:
     needs: [build, deploy]

@@ -85,6 +85,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-
 
+    - name: Init output.txt
+      run: |
+        > output.txt
+
     - name: Install dependencies
       run: |
         npm install -g pnpm

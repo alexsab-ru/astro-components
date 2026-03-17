@@ -1206,8 +1206,7 @@ def main():
         # Группируем обработанные автомобили по категориям
         processed_cars_by_category = {'new': [], 'used': []}
         
-        with open('output.txt', 'w') as file:
-            file.write("")
+        # output.txt is initialized by the workflow step
 
         # Обрабатываем каждый файл
         for xml_file_path, folder_name, category_type in all_xml_files:
@@ -1398,8 +1397,7 @@ def main():
             shutil.rmtree(config['temp_cars_dir'])
             os.makedirs(config['temp_cars_dir'])
         
-        with open('output.txt', 'w') as file:
-            file.write("")
+        # output.txt is initialized by the workflow step
 
         processed_cars = []
         
