@@ -33,10 +33,16 @@ const fs = require("fs");
 const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
 for (const [key, value] of Object.entries(data)) {
   if (key === "DOMAIN") continue;                // DOMAIN lives in .env only
-  const str = typeof value === "object" ? JSON.stringify(value) : String(value);
-  // Wrap in double quotes; escape inner double-quotes and backslashes
-  const escaped = str.replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
-  process.stdout.write(key + "=\"" + escaped + "\"\n");
+  if (typeof value === "object") {
+    // JSON objects (_KEY_MAPPING etc.) — write as-is, no outer quotes
+    // so shell scripts and GSheetFetcher receive valid JSON
+    process.stdout.write(key + "=" + JSON.stringify(value) + "\n");
+  } else {
+    const str = String(value);
+    // Wrap in double quotes; escape inner double-quotes and backslashes
+    const escaped = str.replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+    process.stdout.write(key + "=\"" + escaped + "\"\n");
+  }
 }
 ' "$ENV_JSON")
 
