@@ -38,7 +38,8 @@ const linksToSkip = [
   'https://shop.vsk.ru/',
   'https://www.vsk.ru/klientam',
   'https://www.cbr.ru/statistics/insurance/ssd_stat/',
-  'https://sovcombank.ru/'
+  'https://sovcombank.ru/',
+  /_astro\//
 ];
 
 dotenv.config();
