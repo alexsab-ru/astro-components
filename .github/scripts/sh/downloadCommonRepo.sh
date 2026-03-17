@@ -509,6 +509,15 @@ else
   echo -e "${BGYELLOW}Пропускаем копирование translations.json: файла нет в JSON_REPO${Color_Off}"
 fi
 
+# ==================================================
+# Merge env.json → .env
+# ==================================================
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$SCRIPT_DIR/envJsonToDotenv.sh" ]; then
+  echo ""
+  bash "$SCRIPT_DIR/envJsonToDotenv.sh"
+fi
+
 if [ "$KEEP_TMP" = true ]; then
   printf "\n${BGYELLOW}Сохраняем временный репозиторий: $TMP_DIR${Color_Off}\n"
 else
