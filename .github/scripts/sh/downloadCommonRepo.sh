@@ -17,7 +17,7 @@ Options:
   -h, --help                 Show this help message
   -f, --file FILE            Specify file(s) to copy from data directory
                              Can be used multiple times or comma-separated
-  -d, --skip-dealer-files    Skip copying dealer data files from src/$DOMAIN/data
+  -d, --skip-dealer-files    Skip copying dealer data files from src/$DOMAIN
   -s, --skip-model-sections  Skip copying model-sections directory
   -m, --skip-models          Skip copying models.json
   -c, --skip-cars            Skip copying cars.json
@@ -293,7 +293,7 @@ CLONE_URL=$(apply_pat_to_url "$GIT_REPO_URL")
 REPO_NAME=$(basename "$GIT_REPO_URL" .git)
 TMP_DIR="tmp/$REPO_NAME"
 
-REMOTE_DATA_PATH="src/$DOMAIN/data"
+REMOTE_DATA_PATH="src/$DOMAIN"
 LOCAL_DATA_DIR="src/data"
 
 trap cleanup EXIT INT TERM
@@ -318,7 +318,7 @@ cd "$TMP_DIR"
 
 git sparse-checkout init --no-cone
 git sparse-checkout set \
-  "src/$DOMAIN/data" \
+  "src/$DOMAIN" \
   "src/_model-sections" \
   "src/models.json" \
   "src/cars.json" \
