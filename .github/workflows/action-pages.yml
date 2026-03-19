@@ -153,8 +153,6 @@ jobs:
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           touch .env
-          echo PUBLIC_YANDEX_SITE_VERIFICATION=${{ vars.PUBLIC_YANDEX_SITE_VERIFICATION }} >> .env
-          echo PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }} >> .env
           echo JSON_REPO=${{ secrets.JSON_REPO }} >> .env
           echo DOMAIN=${{ vars.DOMAIN }} >> .env
           cat .env
@@ -174,28 +172,44 @@ jobs:
           DOMAIN: ${{ vars.DOMAIN }}
           FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
 
+      - name: Load env.json into environment
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          if [ -f src/data/env.json ]; then
+            node -e '
+              const data = JSON.parse(require("fs").readFileSync("src/data/env.json","utf8"));
+              for (const [k,v] of Object.entries(data)) {
+                if (typeof v === "object") console.log(k+"="+JSON.stringify(v));
+                else console.log(k+"="+v);
+              }
+            ' >> $GITHUB_ENV
+            echo "✅ env.json loaded into environment"
+          else
+            echo "⚠ src/data/env.json not found — skipping"
+          fi
+
       - name: Get dealer prices
-        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_PRICE_CSV_URL && vars.DEALER_PRICE_CSV_COLUMN && !vars.ONLY_FEDERAL_PRICE }}
+        if: ${{ steps.check_changes.outputs.changes == 'true' && env.DEALER_PRICE_CSV_URL && env.DEALER_PRICE_CSV_COLUMN && !env.ONLY_FEDERAL_PRICE }}
         run: |
           pnpm getDealerPrices
         continue-on-error: true
         env:
-          CSV_URL: ${{ vars.DEALER_PRICE_CSV_URL }}
-          QUERY_STRING: ${{ vars.DEALER_PRICE_CSV_COLUMN }}
-          KEY_MAPPING: ${{ vars.DEALER_PRICE_KEY_MAPPING }}
+          CSV_URL: ${{ env.DEALER_PRICE_CSV_URL }}
+          QUERY_STRING: ${{ env.DEALER_PRICE_CSV_COLUMN }}
+          KEY_MAPPING: ${{ env.DEALER_PRICE_KEY_MAPPING }}
 
       - name: Get dealer Service prices
-        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.DEALER_SERVICE_PRICE_CSV_URL && vars.DEALER_SERVICE_PRICE_QUERY_STRING }}
+        if: ${{ steps.check_changes.outputs.changes == 'true' && env.DEALER_SERVICE_PRICE_CSV_URL && env.DEALER_SERVICE_PRICE_QUERY_STRING }}
         run: |
           pnpm getDealerServicePrices
         continue-on-error: true
         env:
-          CSV_URL: ${{ vars.DEALER_SERVICE_PRICE_CSV_URL }}
-          QUERY_STRING: ${{ vars.DEALER_SERVICE_PRICE_QUERY_STRING }}
-          KEY_MAPPING: ${{ vars.DEALER_SERVICE_PRICE_KEY_MAPPING }}
+          CSV_URL: ${{ env.DEALER_SERVICE_PRICE_CSV_URL }}
+          QUERY_STRING: ${{ env.DEALER_SERVICE_PRICE_QUERY_STRING }}
+          KEY_MAPPING: ${{ env.DEALER_SERVICE_PRICE_KEY_MAPPING }}
 
       - name: remove dealer-models_cars_price.json
-        if: ${{ steps.check_changes.outputs.changes == 'true' && vars.ONLY_FEDERAL_PRICE }}
+        if: ${{ steps.check_changes.outputs.changes == 'true' && env.ONLY_FEDERAL_PRICE }}
         run: |
           rm src/data/dealer-models_cars_price.json
         continue-on-error: true
