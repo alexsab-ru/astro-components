@@ -92,7 +92,7 @@ def main():
     parser.add_argument('--source_type', choices=['autoru', 'avito'], required=True, help='Source type')
     parser.add_argument('--config_source', 
                     choices=['env', 'file', 'github'], 
-                    default='file',
+                    default='env',
                     help='Config source type (file, env, or github)')
     parser.add_argument('--config_path', default='./.github/scripts/config_air_storage.json', help='Path to configuration file')
     parser.add_argument('--github_repo', help='GitHub repository in format owner/repo')
