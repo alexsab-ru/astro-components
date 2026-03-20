@@ -4,7 +4,7 @@ import { getReadyCars, breadcrumb } from './index.astro';
 
 export async function getStaticPaths() {
 	const settingsModule = await import('@/data/settings.json');
-	const isDisabled = settingsModule.disabled_routes?.some(r => '/catalog/'.startsWith(r));
+	const isDisabled = settingsModule.disabled_routes?.some(r => breadcrumb.href.startsWith(r));
   if (import.meta.env.PROD && isDisabled) {
     return [];
   }

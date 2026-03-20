@@ -7,34 +7,33 @@ import UniversalSection from '@/components/Model/sections/universal.astro';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import SeoText from '@/components/Seo/Index.astro';
 import PageH1 from '@/components/PageH1/Index.astro';
-const { slug } = Astro.params;
-
-const seoname = 'models-'+slug;
-
-
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
 import { getModelSectionsYML, setPrefixModelUrl } from '@/js/utils/helpers';
 import { IS_MODEL_PREFIX_URL } from '@/const';
 import settings from '@/data/settings.json';
-
-const { legal_city_where } = settings;
 import { getRandomInt } from '@/js/utils/numbers.format';
 import { breadcrumb } from './index.astro';
+import { getCollection, type DataEntryMap } from "astro:content";
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+import {STATUS} from '@/const';
+import type { TStatus } from '@/types/TStatus';
+
+const { slug } = Astro.params;
+const seoname = 'models-'+slug;
+const { legal_city_where } = settings;
 const { model } = Astro.props;
 // Используем caption для отображения названия модели на странице.
 // Fallback на name нужен для моделей, где caption ещё не добавлен.
 const modelTitle = model?.caption || model?.name;
-
 // Данные для сохранения "последней просмотренной модели" в Alpine store
 const lastViewedModelForStore = {
   idNormalized: normalizeModelId(model.id),
   markId: model.mark_id,
 };
 const lastViewedModelJSON = JSON.stringify(lastViewedModelForStore);
-
-import { getCollection, type DataEntryMap } from "astro:content";
 const rawCars = await getCollection("cars" as keyof DataEntryMap);
 const cars = rawCars && rawCars.length ? rawCars
   .filter(car => !(typeof car.id === 'string' && car.id.startsWith('__')))
@@ -47,21 +46,16 @@ const cars = rawCars && rawCars.length ? rawCars
     return carMark === modelMark && (carFolder === modelId || feedNames.includes(car.data.folder_id));
   })
 : [];
-import salonsData from '@/data/salons.json';
-import type { ISalon } from '@/types/ISalon';
+
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-
-import {STATUS} from '@/const';
-import type { TStatus } from '@/types/TStatus';
-
 const status: TStatus = (model?.status && STATUS.includes(model.status as TStatus)) ? model.status : 'enable';
 
 // Загружаем YML файл модели из директории model-sections 
 let sections = await getModelSectionsYML(model);
 
 export async function getStaticPaths() {
-  const isDisabled = settings.disabled_routes?.some(r => '/models/'.startsWith(r));
+  const isDisabled = settings.disabled_routes?.some(r => breadcrumb.href.startsWith(r));
   if (import.meta.env.PROD && isDisabled) {
     return [];
   }

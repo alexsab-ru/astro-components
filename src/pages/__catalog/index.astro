@@ -1,11 +1,6 @@
 ---
 import settings from '@/data/settings.json';
-const { site_name, brand, legal_city_where } = settings;
-const isDisabled = settings.disabled_routes?.some(r => '/catalog/'.startsWith(r));
-
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
-const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
-
 import PageLayout from "@/layouts/PageLayout.astro";
 import CarItem from "@/components/Cars/Item.astro";
 import SortSelect from "@/components/Cars/SortSelect.astro";
@@ -13,88 +8,95 @@ import Checkbox from "@/components/Checkbox/Checkbox.astro";
 import SeoText from '@/components/Seo/Index.astro';
 import {Icon} from 'astro-icon/components';
 import { isModelVisible } from '@/js/utils/modelVisibility';
-
 import modelsData from '@/data/models.json';
+
+export const breadcrumb = { name: "Каталог", href: "/catalog/" };
+
+const isDisabled = settings.disabled_routes?.some(r => breadcrumb.href.startsWith(r));
+
 if (import.meta.env.PROD && isDisabled) {
   return new Response();
 }
+
+const { site_name, brand, legal_city_where } = settings;
+const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
 const { models } = modelsData;
 let image = '';
 
 export async function getReadyCars(legal_city_where, models) {
-    const cars = [];
-    models.filter(isModelVisible).forEach(model => {
-        const id = model.id;
-        // В витрине и SEO каталога показываем caption модели.
-        // name сохраняем для технических полей (например folder_id) и совместимости.
-        const modelTitle = model.caption || model.name;
-        const benefit = Number(model?.benefit);
+  const cars = [];
+  models.filter(isModelVisible).forEach(model => {
+    const id = model.id;
+    // В витрине и SEO каталога показываем caption модели.
+    // name сохраняем для технических полей (например folder_id) и совместимости.
+    const modelTitle = model.caption || model.name;
+    const benefit = Number(model?.benefit);
 
-        // Если у модели нет комплектаций, создаём базовую карточку
-        if (!model.complectations || model.complectations.length === 0) {
-            model.colors.forEach(color => {
-                cars.push({
-                    id,
-                    slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' / ', '-').replace(/ \//g, '-').replace(/ /g, '-')}`,
-                    color: color.name,
-                    data: {
-                        mark_id: model.mark_id,
-                        folder_id: model.name,
-                        price: 0, // или другое значение по умолчанию
-                        priceWithDiscount: 0,
-                        max_discount: benefit,
-                        color: color.name,
-                        image: color.carImage,
-                        engine: 'Н/Д',
-                        enginePower: 'Н/Д',
-                        drive: 'Н/Д',
-                        fuel: 'Н/Д',
-                        modification_id: 'Н/Д',
-                        body_type: 'Н/Д',
-                        complectation_name: 'Н/Д',
-                        breadcrumb: `${model.mark_id} ${modelTitle}`,
-                        h1: `${model.mark_id} ${modelTitle}`,
-                        title: `Купить ${model.mark_id} ${modelTitle} у официального дилера в ${legal_city_where}`,
-                        description: `Купить автомобиль ${model.mark_id} ${modelTitle}, цвет - ${color.name} у официального дилера в ${legal_city_where}`,
-                        total: 1
-                    }
-                });
-            });
-        } else {
-            // Стандартная обработка при наличии комплектаций
-            model.colors.forEach(color => {
-                model.complectations.forEach(compl => {
-                    cars.push({
-                        id,
-                        slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}-${compl.engine.toLowerCase().replace(' ', '-')}-${compl.name.toLowerCase().replace(' ', '-')}`,
-                        color: color.name,
-                        data: {
-                            mark_id: model.mark_id,
-                            folder_id: model.name,
-                            price: Number(compl.price),
-                            priceWithDiscount: Number(compl.price),
-                            max_discount: benefit,
-                            color: color.name,
-                            image: color.carImage,
-                            engine: compl.engine,
-                            enginePower: compl.engine_power,
-                            drive: compl.drive,
-                            fuel: compl.fuel,
-                            modification_id: `${compl.engine} (${compl.engine_power} л.с.)`,
-                            body_type: compl.bodytype,
-                            complectation_name: compl.name,
-                            breadcrumb: `${model.mark_id} ${modelTitle} ${compl.name}`,
-                            h1: `${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.)`,
-                            title: `Купить ${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}`,
-                            description: `Купить автомобиль ${model.mark_id} ${modelTitle}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}. Стоимость данного автомобиля ${model.mark_id} ${modelTitle} – ${Number(compl.price)}`,
-                            total: 1
-                        }
-                    });
-                });
-            });
-        }
-    });
-    return cars;
+    // Если у модели нет комплектаций, создаём базовую карточку
+    if (!model.complectations || model.complectations.length === 0) {
+      model.colors.forEach(color => {
+        cars.push({
+          id,
+          slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' / ', '-').replace(/ \//g, '-').replace(/ /g, '-')}`,
+          color: color.name,
+          data: {
+            mark_id: model.mark_id,
+            folder_id: model.name,
+            price: 0, // или другое значение по умолчанию
+            priceWithDiscount: 0,
+            max_discount: benefit,
+            color: color.name,
+            image: color.carImage,
+            engine: 'Н/Д',
+            enginePower: 'Н/Д',
+            drive: 'Н/Д',
+            fuel: 'Н/Д',
+            modification_id: 'Н/Д',
+            body_type: 'Н/Д',
+            complectation_name: 'Н/Д',
+            breadcrumb: `${model.mark_id} ${modelTitle}`,
+            h1: `${model.mark_id} ${modelTitle}`,
+            title: `Купить ${model.mark_id} ${modelTitle} у официального дилера в ${legal_city_where}`,
+            description: `Купить автомобиль ${model.mark_id} ${modelTitle}, цвет - ${color.name} у официального дилера в ${legal_city_where}`,
+            total: 1
+          }
+        });
+      });
+    } else {
+      // Стандартная обработка при наличии комплектаций
+      model.colors.forEach(color => {
+        model.complectations.forEach(compl => {
+          cars.push({
+            id,
+            slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}-${compl.engine.toLowerCase().replace(' ', '-')}-${compl.name.toLowerCase().replace(' ', '-')}`,
+            color: color.name,
+            data: {
+              mark_id: model.mark_id,
+              folder_id: model.name,
+              price: Number(compl.price),
+              priceWithDiscount: Number(compl.price),
+              max_discount: benefit,
+              color: color.name,
+              image: color.carImage,
+              engine: compl.engine,
+              enginePower: compl.engine_power,
+              drive: compl.drive,
+              fuel: compl.fuel,
+              modification_id: `${compl.engine} (${compl.engine_power} л.с.)`,
+              body_type: compl.bodytype,
+              complectation_name: compl.name,
+              breadcrumb: `${model.mark_id} ${modelTitle} ${compl.name}`,
+              h1: `${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.)`,
+              title: `Купить ${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}`,
+              description: `Купить автомобиль ${model.mark_id} ${modelTitle}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}. Стоимость данного автомобиля ${model.mark_id} ${modelTitle} – ${Number(compl.price)}`,
+              total: 1
+            }
+          });
+        });
+      });
+    }
+  });
+  return cars;
 }
 let colors = [];
 let complectations = [];
@@ -108,7 +110,6 @@ cars.map(car => {
 	if(!engines.includes(engine)) engines.push(engine);
 	if(!drives.includes(car.data.drive)) drives.push(car.data.drive);
 });
-export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 ---
 
 <PageLayout

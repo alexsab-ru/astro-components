@@ -2,9 +2,10 @@
 import { getCollection, render } from 'astro:content';
 import CarPageLayout from '../../layouts/CarPageLayout.astro';
 import settings from '@/data/settings.json';
+import { breadcrumb } from './index.astro';
 
 export async function getStaticPaths() {
-	const isDisabled = settings.disabled_routes?.some(r => '/used_cars/'.startsWith(r));
+	const isDisabled = settings.disabled_routes?.some(r => breadcrumb.href.startsWith(r));
   if (import.meta.env.PROD && isDisabled) {
     return [];
   }
@@ -25,7 +26,6 @@ export async function getStaticPaths() {
 }
 const car: any = Astro.props;
 const { Content } = await render(car as any);
-import { breadcrumb } from './index.astro';
 ---
 
 <CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]} backLink={true}>

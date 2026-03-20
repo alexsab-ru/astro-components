@@ -24,7 +24,7 @@ export interface ISalon {
 	email?: string;
 	work_hours?: string;
 	legal_entity?: string;
-	legal_inn?: number;
+	legal_inn?: number | string;
 	map?: TSalonMap;
 	hidden_in?: string[];
 	scripts?: TSalonScripts;

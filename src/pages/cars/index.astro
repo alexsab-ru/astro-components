@@ -2,15 +2,22 @@
 import PageLayout from "@/layouts/PageLayout.astro";
 import { getCollection } from "astro:content";
 import settings from '@/data/settings.json';
-const { site_name, brand, legal_city_where } = settings;
-const isDisabled = settings.disabled_routes?.some(r => '/cars/'.startsWith(r));
 import CarsList from '@/components/Cars/List.astro';
-const rawCars = await (getCollection as any)("cars");
-let cars: any, image: string;
 import { getRandomInt } from "@/js/utils/numbers.format";
+
+export const breadcrumb = { name: "Авто в наличии", href: "/cars/" };
+
+const { site_name, brand, legal_city_where } = settings;
+const isDisabled = settings.disabled_routes?.some(r => breadcrumb.href.startsWith(r));
+
 if (import.meta.env.PROD && isDisabled) {
   return new Response();
 }
+
+const rawCars = await (getCollection as any)("cars");
+
+let cars: any, image: string;
+
 if (rawCars && rawCars.length > 0) {
 	// Исключаем скрытые файлы
 	cars = rawCars.filter((car) => !(typeof car?.id === 'string' && car.id.startsWith('__')));
@@ -23,7 +30,6 @@ if (rawCars && rawCars.length > 0) {
 } else {
 	image = "";
 }
-export const breadcrumb = { name: "Авто в наличии", href: "/cars/" };
 ---
 
 <PageLayout
