@@ -11,6 +11,10 @@ import { loadEnv } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
 
+// читаем disabled_routes из settings.json
+const settingsJson = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'src/data/settings.json'), 'utf-8'));
+const disabledRoutes = settingsJson.disabled_routes || [];
+
 // https://astro.build/config
 //
 // Определяем значение site из src/data/scripts.json.
@@ -53,7 +57,7 @@ const computedSite = resolveSiteFromConfig('https://example.com');
 export default defineConfig({
 	integrations: [
 		sitemap({
-			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/') && !page.includes('/chat/')
+			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/') && !page.includes('/chat/') && disabledRoutes.every(route => !page.includes(route))
 		}),
 		robots({
 			policy: [
