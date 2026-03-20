@@ -1,9 +1,14 @@
 ---
 import { getCollection, render } from 'astro:content';
 import CarPageLayout from '../../layouts/CarPageLayout.astro';
+import settings from '@/data/settings.json';
 
 export async function getStaticPaths() {
-const cars = await (getCollection as any)('used_cars');
+	const isDisabled = settings.disabled_routes?.some(r => '/used_cars/'.startsWith(r));
+  if (import.meta.env.PROD && isDisabled) {
+    return [];
+  }
+	const cars = await (getCollection as any)('used_cars');
 
 	// Проверяем, что массив cars не пустой перед обработкой
 	if (cars && cars.length > 0) {

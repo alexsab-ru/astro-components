@@ -1,12 +1,16 @@
 ---
 import settings from '@/data/settings.json';
 const { brand, legal_city_where } = settings;
+const isDisabled = settings.disabled_routes?.some(r => '/models/'.startsWith(r));
 import Layout from '@/layouts/Layout.astro';
 import ModelList from '@/components/Model/ModelList.astro';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 export const breadcrumb = { name: `Модели`, href: "/models/" };
 import SeoText from '@/components/Seo/Index.astro';
 import PageH1 from '@/components/PageH1/Index.astro';
+if (import.meta.env.PROD && isDisabled) {
+  return new Response();
+}
 ---
 <Layout 
 	title={`Модельный ряд ${brand} – Официальный дилер ${brand} в ${legal_city_where}`} 

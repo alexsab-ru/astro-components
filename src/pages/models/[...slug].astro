@@ -17,18 +17,8 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
 import { getModelSectionsYML, setPrefixModelUrl } from '@/js/utils/helpers';
 import { IS_MODEL_PREFIX_URL } from '@/const';
-export async function getStaticPaths() {
-  const { models } = modelsData;
-  return models.filter(isModelVisible).map((model) => {
-    return {
-      params: { slug: setPrefixModelUrl(model, IS_MODEL_PREFIX_URL) },
-      props: { model },
-    };
-  });
-}
-
-
 import settings from '@/data/settings.json';
+
 const { legal_city_where } = settings;
 import { getRandomInt } from '@/js/utils/numbers.format';
 import { breadcrumb } from './index.astro';
@@ -69,6 +59,20 @@ const status: TStatus = (model?.status && STATUS.includes(model.status as TStatu
 
 // Загружаем YML файл модели из директории model-sections 
 let sections = await getModelSectionsYML(model);
+
+export async function getStaticPaths() {
+  const isDisabled = settings.disabled_routes?.some(r => '/models/'.startsWith(r));
+  if (import.meta.env.PROD && isDisabled) {
+    return [];
+  }
+  const { models } = modelsData;
+  return models.filter(isModelVisible).map((model) => {
+    return {
+      params: { slug: setPrefixModelUrl(model, IS_MODEL_PREFIX_URL) },
+      props: { model },
+    };
+  });
+}
 ---
 <Layout 
   title={`${model.mark_id} ${modelTitle} – фото, цены, комплектации и характеристики ${model.mark_id} ${modelTitle} в ${legal_city_where}`} 

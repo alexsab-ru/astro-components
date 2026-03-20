@@ -3,9 +3,15 @@ import { getCollection, render } from 'astro:content';
 import CarPageLayout from '@/layouts/CarPageLayout.astro';
 import { findModelByCarData } from '@/js/utils/car.utils';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
+import { breadcrumb } from './index.astro';
 
 export async function getStaticPaths() {
-const cars = await (getCollection as any)('cars');
+	const settingsModule = await import('@/data/settings.json');
+	const isDisabled = settingsModule.disabled_routes?.some(r => '/cars/'.startsWith(r));
+	if (import.meta.env.PROD && isDisabled) {
+		return [];
+	}
+	const cars = await (getCollection as any)('cars');
 
 	// Проверяем, что массив cars не пустой перед обработкой
 	if (cars && cars.length > 0) {
@@ -22,7 +28,6 @@ const cars = await (getCollection as any)('cars');
 }
 const car: any = Astro.props;
 const { Content } = await render(car as any);
-import { breadcrumb } from './index.astro';
 
 // Данные для сохранения "последней просмотренной модели" в Alpine store
 const lastViewedModelForStore = car?.data
