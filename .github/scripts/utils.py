@@ -1027,18 +1027,40 @@ def duplicate_car(car, config, n, status="в пути", offset=0):
     
     return duplicates
 
+def _load_env_json() -> Dict[str, Any]:
+    """
+    Загружает env.json как фолбек для переменных окружения.
+    Ищет файл в нескольких местах.
+    """
+    repo_root = Path(__file__).resolve().parents[2]
+    candidates = [
+        repo_root / 'src/data/env.json',
+        Path('./src/data/env.json'),
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            try:
+                with open(candidate, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except Exception:
+                pass
+    return {}
+
+
 def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
     """
-    Загружает конфигурацию из переменных окружения.
+    Загружает конфигурацию из переменных окружения или env.json (фолбек).
     Формат переменных:
     CARS_[SOURCE_TYPE]_[PARAM_NAME] = value
-    
+
     Например:
     CARS_AUTORU_REMOVE_MARK_IDS = '["mark1", "mark2"]'
     CARS_AVITO_ELEMENTS_TO_LOCALIZE = '["elem1", "elem2"]'
+
+    Приоритет: os.environ > src/data/env.json > default_config
     """
     prefix = f"CARS_{source_type.upper()}_"
-    
+
     # Маппинг переменных окружения на ключи конфигурации
     env_mapping = {
         f"{prefix}MOVE_VIN_ID_UP": "move_vin_id_up",
@@ -1050,16 +1072,31 @@ def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
         f"{prefix}REMOVE_MARK_IDS": "remove_mark_ids",
         f"{prefix}REMOVE_FOLDER_IDS": "remove_folder_ids"
     }
-    
+
+    env_json_data = _load_env_json()
+
     for env_var, config_key in env_mapping.items():
+        raw_value = None
+
         if env_var in os.environ:
-            try:
-                value = json.loads(os.environ[env_var])
+            raw_value = os.environ[env_var]
+        elif env_var in env_json_data:
+            raw_value = env_json_data[env_var]
+
+        if raw_value is None:
+            continue
+
+        try:
+            if isinstance(raw_value, (list, dict)):
+                # Уже распарсено (из env.json напрямую)
+                default_config[config_key] = raw_value
+            else:
+                value = json.loads(raw_value)
                 default_config[config_key] = value
-            except json.JSONDecodeError:
-                print(f"Ошибка при парсинге значения переменной {env_var}")
-                # Оставляем значение по умолчанию
-    
+        except json.JSONDecodeError:
+            print(f"Ошибка при парсинге значения переменной {env_var}")
+            # Оставляем значение по умолчанию
+
     return default_config
 
 def load_github_config(source_type: str, github_config: Dict[str, str], default_config) -> Dict[str, Any]:
