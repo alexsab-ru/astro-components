@@ -105,15 +105,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '18'
 
       - name: Cache pnpm dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.pnpm-store
@@ -142,7 +142,7 @@ jobs:
       - name: Setup Pages
         id: pages
         if: steps.check_changes.outputs.changes == 'true'
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Init output.txt
         if: steps.check_changes.outputs.changes == 'true'
@@ -265,7 +265,7 @@ jobs:
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
         # Automatically uploads an artifact from the './_site' directory by default
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
 
       - name: Create After_deploy text
         if: steps.check_changes.outputs.changes == 'true'
