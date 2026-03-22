@@ -11,7 +11,7 @@ const desktopVideoUrl = banner?.videoUrl ?? banner?.video?.desktop ?? null;
 const tabletVideoUrl  = banner?.video?.tablet ?? '';
 const mobileVideoUrl  = banner?.mobileVideoUrl ?? banner?.video?.mobile ?? null;
 
-const pos = getObjectPosition(banner);
+const posClass = getObjectPosition(banner);
 ---
 <div class="lazy absolute inset-0">
 	<video
@@ -20,8 +20,7 @@ const pos = getObjectPosition(banner);
 		autoplay
 		playsinline
 		poster={poster}
-		{...pos.style ? {style: pos.style} : {}}
-		class={`absolute inset-0 h-full w-full object-cover ${pos.className}`}>
+		class={`absolute inset-0 h-full w-full object-cover ${posClass}`}>
 		{ mobileVideoUrl && <source data-src={desktopVideoUrl} type="video/mp4" media="(min-width: 1024px)" />}
 		{ tabletVideoUrl && <source data-src={tabletVideoUrl} type="video/mp4" media="(min-width: 767px)" /> }
 		<source data-src={mobileVideoUrl || desktopVideoUrl} type="video/mp4" />

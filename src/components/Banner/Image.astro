@@ -13,15 +13,14 @@ const desktopImage = banner?.imageUrl ?? banner?.image?.desktop ?? null;
 const tabletImage  = banner?.tabletImageUrl ?? banner?.image?.tablet ?? null;
 const mobileImage  = banner?.mobileImageUrl ?? banner?.image?.mobile ?? null;
 
-const pos = getObjectPosition(banner);
+const posClass = getObjectPosition(banner);
 ---
 <picture>
 	{mobileImage && <source media="(min-width: 1024px)" srcset={desktopImage} />}
 	{tabletImage && <source media="(min-width: 768px)" srcset={tabletImage} />}
 	<img
 		src={mobileImage || desktopImage}
-		class={`absolute inset-0 h-full w-full object-cover ${pos.className}`}
-		{...pos.style ? {style: pos.style} : {}}
+		class={`absolute inset-0 h-full w-full object-cover ${posClass}`}
 		{...banner?.title ? {alt: banner.title.replace(/<[^>]*>/g, '')} : {alt: `${site_name} ${site_description} в ${legal_city_where}`} }
 		{...index === 0 ? {fetchpriority: 'high'} : {}}
 		loading="lazy"
