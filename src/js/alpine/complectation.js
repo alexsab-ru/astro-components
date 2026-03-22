@@ -3,17 +3,14 @@ import Alpine from 'alpinejs';
 import modelsData from '@/data/models.json';
 const { models } = modelsData;
 import settingsData from '@/data/settings.json';
-const settingsComplectations = settingsData.complectations ?? [];
+const settingsComplectations = settingsData.complectations ?? {};
 import { useTranslit } from '@/js/utils/translit';
 import { currencyFormat } from '@/js/utils/numbers.format';
 
 function applyComplectationSettings(model) {
-	if (!model?.complectations?.length || !settingsComplectations.length) return model;
+	if (!model?.complectations?.length || !Object.keys(settingsComplectations).length) return model;
 
-	const modelEntry = settingsComplectations.find(entry => entry[model.id]);
-	if (!modelEntry) return model;
-
-	const modelSettingsComplectations = modelEntry[model.id];
+	const modelSettingsComplectations = settingsComplectations[model.id];
 	if (!modelSettingsComplectations?.length) return model;
 
 	const filtered = modelSettingsComplectations
