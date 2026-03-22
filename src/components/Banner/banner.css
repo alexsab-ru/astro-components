@@ -8,6 +8,16 @@
 	@apply xs:text-sm text-base sm:text-xl md:text-3xl relative z-10;
 }
 
+.banner-pos {
+	object-position: var(--pos, 50% 50%);
+}
+@media (min-width: 768px) {
+	.banner-pos { object-position: var(--pos-md, var(--pos, 50% 50%)); }
+}
+@media (min-width: 1024px) {
+	.banner-pos { object-position: var(--pos-lg, var(--pos-md, var(--pos, 50% 50%))); }
+}
+
 .banner .swiper-slide.gradient::before{
 	content: "";
 	position: absolute;
