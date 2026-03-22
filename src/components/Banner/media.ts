@@ -1,32 +1,28 @@
 import type { TBanner } from "./types";
 
 /**
- * Конвертирует значение позиции в Tailwind-класс object-position.
- * Поддерживает: 'top', 'center', 'bottom' и проценты: '70%', '40% 60%'.
- * Проценты преобразуются в Tailwind 4 формат: object-[X_Y].
+ * Конвертирует значение позиции в CSS object-position.
+ * 'top' → '50% 0%', 'center' → '50% 50%', 'bottom' → '50% 100%'
+ * '70%' → '50% 70%', '40% 60%' → '40% 60%'
  */
-function toObjectClass(value: string, prefix = ''): string {
+function toPosition(value: string): string {
 	const v = value.trim();
-
+	if (v === 'top') return '50% 0%';
+	if (v === 'bottom') return '50% 100%';
+	if (v === 'center') return '50% 50%';
 	if (/%/.test(v)) {
 		const parts = v.split(/\s+/);
-		const x = parts.length === 2 ? parts[0] : '50%';
-		const y = parts.length === 2 ? parts[1] : parts[0];
-		return `${prefix}object-[${x}_${y}]`;
+		return parts.length === 2 ? `${parts[0]} ${parts[1]}` : `50% ${parts[0]}`;
 	}
-
-	const keyword = v === 'top' ? 'object-top' : v === 'bottom' ? 'object-bottom' : 'object-center';
-	return `${prefix}${keyword}`;
+	return '50% 50%';
 }
 
-export function getObjectPosition(banner?: TBanner): string {
+export function getObjectPosition(banner?: TBanner): { className: string; style: string } {
 	const mobileRaw  = banner?.position?.mobile  ?? banner?.imagePosition ?? 'center';
 	const tabletRaw  = banner?.position?.tablet  ?? banner?.imagePosition ?? 'center';
 	const desktopRaw = banner?.position?.desktop ?? banner?.imagePosition ?? 'center';
 
-	const mobileClass  = toObjectClass(mobileRaw);
-	const tabletClass  = toObjectClass(tabletRaw, 'md:');
-	const desktopClass = toObjectClass(desktopRaw, 'lg:');
+	const style = `--pos: ${toPosition(mobileRaw)}; --pos-md: ${toPosition(tabletRaw)}; --pos-lg: ${toPosition(desktopRaw)};`;
 
-	return `${mobileClass} ${tabletClass} ${desktopClass}`;
+	return { className: 'banner-pos', style };
 }
