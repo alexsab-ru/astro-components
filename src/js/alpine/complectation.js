@@ -10,7 +10,13 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 function applyComplectationSettings(model) {
 	if (!model?.complectations?.length || !settingsComplectations.length) return model;
 
-	const filtered = settingsComplectations
+	const modelEntry = settingsComplectations.find(entry => entry[model.id]);
+	if (!modelEntry) return model;
+
+	const modelSettingsComplectations = modelEntry[model.id];
+	if (!modelSettingsComplectations?.length) return model;
+
+	const filtered = modelSettingsComplectations
 		.map(sc => {
 			const base = model.complectations.find(c => c.name === sc.name);
 			if (!base) return null;
@@ -24,6 +30,8 @@ function applyComplectationSettings(model) {
 			};
 		})
 		.filter(Boolean);
+
+	if (!filtered.length) return model;
 
 	return { ...model, complectations: filtered };
 }
