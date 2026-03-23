@@ -8,10 +8,16 @@ import { useTranslit } from '@/js/utils/translit';
 import { currencyFormat } from '@/js/utils/numbers.format';
 
 function applyComplectationSettings(model) {
-	if (!model?.complectations?.length || !Object.keys(settingsComplectations).length) return model;
+	if (!Object.keys(settingsComplectations).length) return model;
 
-	const modelSettingsComplectations = settingsComplectations[model.id];
-	if (!modelSettingsComplectations?.length) return model;
+	const brandSettings = settingsComplectations[model.mark_id];
+	if (!brandSettings) return model;
+
+	if (!(model.id in brandSettings)) return model;
+
+	const modelSettingsComplectations = brandSettings[model.id];
+
+	if (!modelSettingsComplectations.length) return { ...model, complectations: [] };
 
 	const filtered = modelSettingsComplectations
 		.map(sc => {
