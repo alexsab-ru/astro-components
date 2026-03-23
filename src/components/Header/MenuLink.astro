@@ -22,6 +22,7 @@ const activeTransparentClasses = is_header_transparent ? 'bg-gray-700 lg:bg-head
 			[`scroll-link ${transparentClasses}`]: link.url.includes('#'),
 			[`header-link ${transparentClasses}`]: !link.url.includes('#'),
 			[`header-child-link ${childTransparentClasses}`]: sublink,
+			'lg:whitespace-nowrap!': sublink && !link?.thumb,
 			[`active ${activeTransparentClasses}`]: path.replace(/\//g, '') === link.url.replace(/\//g, '')
 		}
 	]}
