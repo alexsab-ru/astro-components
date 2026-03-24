@@ -50,38 +50,115 @@ const resolveSiteFromConfig = (fallbackUrl) => {
 };
 
 const computedSite = resolveSiteFromConfig('https://example.com');
+
+// --- robots.json ---
+// Читаем настройки robots из src/data/robots.json.
+// При отсутствии файла или ошибках парсинга используем минимальный безопасный конфиг.
+const resolveRobotsConfig = () => {
+	const robotsJsonPath = path.resolve(process.cwd(), 'src/data/robots.json');
+	try {
+		const raw = JSON.parse(fs.readFileSync(robotsJsonPath, 'utf-8'));
+		const warn = (msg) => console.warn(`[astro.config] robots.json: ${msg}`);
+
+		// --- Валидация policy ---
+		if (!Array.isArray(raw?.policy) || raw.policy.length === 0) {
+			warn('policy должен быть непустым массивом. Используется конфиг по умолчанию.');
+			return undefined;
+		}
+		for (const rule of raw.policy) {
+			if (!rule.userAgent) {
+				warn('каждый элемент policy должен содержать userAgent. Используется конфиг по умолчанию.');
+				return undefined;
+			}
+			// Плагин требует хотя бы allow или disallow в каждом правиле.
+			if (!rule.allow && !rule.disallow) {
+				warn(`правило для "${rule.userAgent}" не содержит allow/disallow. Используется конфиг по умолчанию.`);
+				return undefined;
+			}
+			// crawlDelay: 0.1–60 (если указан).
+			if (rule.crawlDelay !== undefined) {
+				const cd = Number(rule.crawlDelay);
+				if (Number.isNaN(cd) || cd < 0.1 || cd > 60) {
+					warn(`crawlDelay для "${rule.userAgent}" должен быть числом от 0.1 до 60. Используется конфиг по умолчанию.`);
+					return undefined;
+				}
+			}
+		}
+
+		// --- Валидация sitemap (если указан) ---
+		if (raw.sitemap !== undefined && raw.sitemap !== true && raw.sitemap !== false) {
+			const sitemapUrls = Array.isArray(raw.sitemap) ? raw.sitemap : [raw.sitemap];
+			const sitemapRe = /^https?:\/\/[^\s/$.\?#]\.[^\s]*\.(xml|xml\.gz|txt|txt\.gz|json|xhtml)$/i;
+			for (const url of sitemapUrls) {
+				if (typeof url !== 'string' || !sitemapRe.test(url)) {
+					warn(`невалидный sitemap URL "${url}". Ожидается полный URL оканчивающийся на .xml/.xml.gz/.txt/.json/.xhtml.`);
+					return undefined;
+				}
+			}
+		}
+
+		// --- Валидация host (если указан) ---
+		if (raw.host !== undefined && raw.host !== null) {
+			if (typeof raw.host !== 'string' || !/^[a-zA-Z0-9]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(raw.host)) {
+				warn(`невалидный host "${raw.host}". Ожидается доменное имя без протокола.`);
+				return undefined;
+			}
+		}
+
+		return raw;
+	} catch (_) {
+		// Файл может отсутствовать — robots будет работать без параметров.
+		return undefined;
+	}
+};
+const robotsConfig = resolveRobotsConfig();
+
+// --- redirects.json ---
+// Читаем редиректы из src/data/redirects.json.
+// Формат: { "/from": "/to" } или { "/from": { "status": 302, "destination": "/to" } }
+// При ошибках возвращаем пустой объект — сайт соберётся без редиректов.
+const resolveRedirectsConfig = () => {
+	const redirectsJsonPath = path.resolve(process.cwd(), 'src/data/redirects.json');
+	try {
+		const raw = JSON.parse(fs.readFileSync(redirectsJsonPath, 'utf-8'));
+		if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
+			console.warn('[astro.config] redirects.json: ожидается объект. Редиректы отключены.');
+			return {};
+		}
+		const validated = {};
+		for (const [from, to] of Object.entries(raw)) {
+			// Ключ (from) должен начинаться с /
+			if (typeof from !== 'string' || !from.startsWith('/')) {
+				console.warn(`[astro.config] redirects.json: пропущен ключ "${from}" — должен начинаться с "/".`);
+				continue;
+			}
+			// Значение: строка (путь/URL) или объект { status, destination }
+			if (typeof to === 'string') {
+				validated[from] = to;
+			} else if (typeof to === 'object' && to !== null && typeof to.destination === 'string') {
+				const status = Number(to.status);
+				if (status && [301, 302, 303, 307, 308].includes(status)) {
+					validated[from] = { status, destination: to.destination };
+				} else {
+					console.warn(`[astro.config] redirects.json: пропущен "${from}" — недопустимый status ${to.status}. Допустимы: 301, 302, 303, 307, 308.`);
+				}
+			} else {
+				console.warn(`[astro.config] redirects.json: пропущен "${from}" — значение должно быть строкой или объектом с destination.`);
+			}
+		}
+		return validated;
+	} catch (_) {
+		return {};
+	}
+};
+const redirectsConfig = resolveRedirectsConfig();
+
 export default defineConfig({
 	integrations: [
 		sitemap({
 			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/') && !page.includes('/chat/')
 		}),
-		robots({
-			policy: [
-				{
-					userAgent: "Yandex",
-					allow: ["/"],
-					disallow: ["/?*"],
-					cleanParam: [
-						"_ym_debug&_ym_lang&_ym_status-check&yadclid&yadordid&yandex_ad_client_id&yandex-source&yclid&yhid&ymclid&yhic&ychyd&ycilyd&ycylid&ypppel&yqppel", 
-						"_ga&_gac&ga&gclid&gcmes&gcmlg&utm_sourcegoogle", 
-						"utm_&utm_bn_id&utm_bn_system_id&utm_branch&utm_c&utm_campai&utm_campaign&utm_content&utm_from&utm_hclid&utm_me&utm_mediu&utm_medium&utm_orderpage&utm_partner_id&utm_placement&utm_position&utm_redirect&utm_referer&utm_referrer&utm_source&utm_startpage&utm_term&utm_type&_openstat&_source_stat_&gtm_debug", 
-						"adid&admitad_uid&adrclid&adv&aid&baobab_event_id&bxajaxid&calltouch_tm&clid&dclid&erid&etext&fbclid&from&frommarket&height&int_campaign&lang&length&mindbox&mindbox_nocache&mindbox-click-id&mindbox-message-key&mobileApp&msclkid&msisdn&mt_click_id&noredirect&openstat&order&ORDER_BY", 
-						"pay&payment&q&s&rb_clickid&ref&referrer&roistat_visit&sa&set_filter&source&tag&tags&target&text&token&twclid&type&types&userDataToken&USERID&uuid&ved&vendor&wbraid&width&action&register&cid&k50id&search&cm_id&ivid&hl&tpclid", 
-						"region&region_name&utm_ya_campaign&utm_candidate&block&model&color&drive&complects&editionuid"
-					],
-				},
-				{
-					userAgent: "Googlebot",
-					allow: ["/"],
-					disallow: ["/?*"],
-				},
-				{
-					userAgent: ["*"],
-					allow: ["/"],
-					disallow: ["/?*"],
-				},
-			],
-		}),
+		robots(robotsConfig ?? {}),
 		alpinejs(),
 		mdx(),
 		icon(),
@@ -100,6 +177,7 @@ export default defineConfig({
 			},
 		},
 	},
-    site: computedSite,
+	redirects: redirectsConfig,
+	site: computedSite,
 	base: "/"
 });
