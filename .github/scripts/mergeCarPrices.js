@@ -47,7 +47,7 @@ const normalize = (name) => {
     String(name)
       .toLowerCase()
       .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, '-')
-      .replace(/\b(новая|новый|new)\b/gi, '')
+      // .replace(/\b(новая|новый|new)\b/gi, '')
       .trim()
       .replace(/\s+/g, ' ')
   );
