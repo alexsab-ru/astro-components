@@ -100,7 +100,16 @@ class PlaceholderProcessor {
     createSettingsPlaceholders() {
         if (Object.keys(this.settingsData).length === 0) return;
         
-        const settingsKeys = ['brand', 'site_name', 'site_description', 'legal_city', 'legal_city_where', 'phone_common'];
+        const settingsKeys = [
+            'brand',
+            'site_name',
+            'site_description',
+            'legal_entity',
+            'legal_inn',
+            'legal_city',
+            'legal_city_where',
+            'phone_common'
+        ];
 
         Object.keys(this.settingsData).forEach(sKey => {
             if (settingsKeys.includes(sKey)) {
