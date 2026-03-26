@@ -326,22 +326,49 @@ class PlaceholderProcessor {
         setPlaceholders('max-benefit', maxBenefit, maxBenefitModel, 'benefit', 'до', '-to');
     }
 
-    // Функция для замены плейсхолдеров в содержимом файла
-    replacePlaceholders(content, filePath = '') {
-        // Определяем, является ли файл seo.json - для него используем плейсхолдеры без дисклеймера
+    // Собирает и кеширует полный объект плейсхолдеров
+    // Для seo.json используются плейсхолдеры без дисклеймера, для остальных — с дисклеймером (кешируется)
+    getAllPlaceholders(filePath = '') {
         const isSeoFile = filePath && path.basename(filePath) === 'seo.json';
-        
-        // Выбираем набор ценовых плейсхолдеров в зависимости от файла
-        const carsPlaceholdersToUse = isSeoFile 
-            ? this.carsPlaceholderWithoutDisclaimer 
-            : this.carsPlaceholder;
-        
-        // Выбираем набор плейсхолдеров для минимальной цены и максимальной выгоды
-        const minMaxPlaceholdersToUse = isSeoFile
-            ? this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer
-            : this.minPriceMaxBenefitPlaceholders;
-        
-        const placeholders = {
+
+        // До вызова buildBasePlaceholders() (ранние этапы) собираем на лету
+        if (!this._basePlaceholders) {
+            return {
+                '{{firstDay}}': FIRST_DAY,
+                '{{lastDay}}': LAST_DAY,
+                '{{month}}': MONTH,
+                '{{monthNominative}}': MONTH_NOMINATIVE,
+                '{{monthGenitive}}': MONTH_GENITIVE,
+                '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
+                '{{year}}': YEAR,
+                ...this.settingsPlaceholder,
+                ...this.carsPlaceholder,
+                ...this.minPriceMaxBenefitPlaceholders,
+            };
+        }
+
+        if (isSeoFile) {
+            return {
+                ...this._basePlaceholders,
+                ...this.carsPlaceholderWithoutDisclaimer,
+                ...this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer,
+            };
+        }
+
+        if (!this._cachedPlaceholders) {
+            this._cachedPlaceholders = {
+                ...this._basePlaceholders,
+                ...this.carsPlaceholder,
+                ...this.minPriceMaxBenefitPlaceholders,
+            };
+        }
+
+        return this._cachedPlaceholders;
+    }
+
+    // Формирует базовые (общие) плейсхолдеры — вызывается один раз после создания всех данных
+    buildBasePlaceholders() {
+        this._basePlaceholders = {
             '{{firstDay}}': FIRST_DAY,
             '{{lastDay}}': LAST_DAY,
             '{{month}}': MONTH,
@@ -350,9 +377,13 @@ class PlaceholderProcessor {
             '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
             '{{year}}': YEAR,
             ...this.settingsPlaceholder,
-            ...carsPlaceholdersToUse,
-            ...minMaxPlaceholdersToUse,
         };
+        this._cachedPlaceholders = null;
+    }
+
+    // Функция для замены плейсхолдеров в содержимом файла
+    replacePlaceholders(content, filePath = '') {
+        const placeholders = this.getAllPlaceholders(filePath);
 
         let hasChanges = false;
         let updatedContent = content;
@@ -597,6 +628,84 @@ class PlaceholderProcessor {
         console.log(`\nРезультаты сохранены в файл: ${outputPath}, ${outputPathMarketing}`);
     }
 
+    // Экспорт всех доступных плейсхолдеров в TSV файл в папку tmp
+    exportPlaceholdersTSV() {
+        const tmpDir = path.join(process.cwd(), 'tmp');
+        if (!fs.existsSync(tmpDir)) {
+            fs.mkdirSync(tmpDir, { recursive: true });
+        }
+
+        const allPlaceholders = this.getAllPlaceholders();
+        const lines = ['placeholder\tvalue'];
+        let count = 0;
+
+        for (const [key, value] of Object.entries(allPlaceholders)) {
+            if (value === '' || value === null || value === undefined) continue;
+            const safeValue = String(value).replace(/\t/g, ' ').replace(/\n/g, ' ');
+            lines.push(`${key}\t${safeValue}`);
+            count++;
+        }
+
+        const tsvPath = path.join(tmpDir, 'placeholders.tsv');
+        fs.writeFileSync(tsvPath, lines.join('\n'), 'utf-8');
+        console.log(`\nСписок плейсхолдеров (${count} шт.) сохранён в ${tsvPath}`);
+    }
+
+    // Поиск незаменённых плейсхолдеров {{...}} в обработанных файлах
+    checkUnreplacedPlaceholders() {
+        const unreplaced = [];
+        const placeholderRegex = /\{\{[a-zA-Z0-9_\-]+\}\}/g;
+
+        const checkFile = (filePath) => {
+            try {
+                const content = fs.readFileSync(filePath, 'utf-8');
+                const matches = content.match(placeholderRegex);
+                if (matches) {
+                    const unique = [...new Set(matches)];
+                    unreplaced.push({ filePath, placeholders: unique });
+                }
+            } catch (error) {
+                // ignore read errors
+            }
+        };
+
+        const walkDirectory = (directory, fileExtensions) => {
+            if (!fs.existsSync(directory)) return;
+            const files = fs.readdirSync(directory);
+            files.forEach(file => {
+                const filePath = path.join(directory, file);
+                const stat = fs.statSync(filePath);
+                if (stat.isDirectory()) {
+                    walkDirectory(filePath, fileExtensions);
+                } else if (fileExtensions.includes(path.extname(filePath))) {
+                    checkFile(filePath);
+                }
+            });
+        };
+
+        walkDirectory(this.dataDirectory, ['.json']);
+        walkDirectory(this.contentDirectory, ['.mdx']);
+        walkDirectory(this.pagesDirectory, ['.astro']);
+
+        if (unreplaced.length > 0) {
+            console.log('\n⚠️ Найдены незаменённые плейсхолдеры:');
+            const outputLines = [];
+
+            unreplaced.forEach(({ filePath, placeholders }) => {
+                const relativePath = path.relative(process.cwd(), filePath);
+                const msg = `Незаменённые плейсхолдеры в ${relativePath}: ${placeholders.join(', ')}`;
+                console.log(`  ${msg}`);
+                outputLines.push(msg);
+            });
+
+            // Дописываем в output.txt
+            const outputTxtPath = path.join(process.cwd(), 'output.txt');
+            const header = '⚠️ Незаменённые плейсхолдеры после обработки:\n';
+            fs.appendFileSync(outputTxtPath, header + outputLines.join('\n') + '\n', 'utf-8');
+            console.log(`\nОшибки записаны в output.txt`);
+        }
+    }
+
     // Главная функция запуска всей обработки
     run() {
         // 0. Удаляем старые отчеты о спецпредложениях
@@ -625,14 +734,23 @@ class PlaceholderProcessor {
         
         // 4.3. Создаем плейсхолдеры для минимальной цены и максимальной выгоды
         this.createMinPriceMaxBenefitPlaceholders();
-        
-        // 5. Обрабатываем все директории
+
+        // 4.4. Собираем и кешируем итоговый объект плейсхолдеров
+        this.buildBasePlaceholders();
+
+        // 5. Экспортируем список всех плейсхолдеров в tmp/placeholders.tsv
+        this.exportPlaceholdersTSV();
+
+        // 6. Обрабатываем все директории
         this.processAllDirectories();
-        
-        // 6. Выводим результаты
+
+        // 7. Проверяем незаменённые плейсхолдеры
+        this.checkUnreplacedPlaceholders();
+
+        // 8. Выводим результаты
         this.outputResults();
-        
-        // 7. Выводим информацию о приближающихся датах
+
+        // 9. Выводим информацию о приближающихся датах
         this.outputUpcomingDates();
     }
 }
