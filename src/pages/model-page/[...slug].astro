@@ -10,6 +10,11 @@ import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import Sections from '@/components/ImageGallery/Sections.astro';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
 import { IS_MODEL_PREFIX_URL } from '@/const';
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 
 const allSections = import.meta.glob('/src/data/model-sections/**/*.yml', { eager: true });
 
@@ -23,47 +28,59 @@ export async function getStaticPaths() {
 }
 
 const { model } = Astro.props;
-const { brand } = settings;
-const { name, slogan, image, id } = model;
+const { legal_city_where } = settings;
+const { name, caption, slogan, homeImg, id, thumb, mark_id } = model;
+const modelTitle = caption ?? name ?? '';
 
-const brandFolder = model.mark_id.toLowerCase();
+const brandFolder = mark_id.toLowerCase();
 const sectionsModule = allSections[`/src/data/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
 const rawSections = sectionsModule?.default ?? [];
 
 const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const urlSegment = `/${id.toLowerCase()}/`;
 const nameRegex = new RegExp(`(?<![\\w+])${escapeRegex(name)}(?![\\w+])`, 'i');
-const sortedBanners = [...bannersData as TBanner[]].sort((a, b) => {
-  const isRelated = (banner: TBanner) => {
-    if (banner.btnUrl?.toLowerCase().includes(urlSegment)) return true;
-    if (banner.bannerUrl?.toLowerCase().includes(urlSegment)) return true;
-    return [banner.title, banner.descr, banner.dataTitle]
-      .some(f => f ? nameRegex.test(f) : false);
-  };
-  return isRelated(b) ? 1 : isRelated(a) ? -1 : 0;
-});
+const isRelated = (banner: TBanner) => {
+  if (banner.btnUrl?.toLowerCase().includes(urlSegment)) return true;
+  if (banner.bannerUrl?.toLowerCase().includes(urlSegment)) return true;
+  return [banner.title, banner.descr, banner.dataTitle].some((f) => (f ? nameRegex.test(f) : false));
+};
+
+let relatedSlidesCount = 0;
+const relatedBanners: TBanner[] = [];
+const otherBanners: TBanner[] = [];
+
+for (const banner of bannersData as TBanner[]) {
+  if (isRelated(banner)) {
+    relatedSlidesCount += 1;
+    relatedBanners.push(banner);
+  } else {
+    otherBanners.push(banner);
+  }
+}
+
+const sortedBanners = relatedSlidesCount > 0 ? [...relatedBanners, ...otherBanners] : [];
 ---
 
-<Layout title={name} description={slogan} brand={brand?.toLowerCase() || null} showHeaderMenu={false} showFooterLinks={false} logoNoLink={true}>
-  <Banner banners={sortedBanners} onlyModal={true} />
+<Layout
+  title={`${mark_id} ${modelTitle} – фото ${mark_id} ${modelTitle} в ${legal_city_where}`} 
+  description={`${mark_id} ${modelTitle} купить в ${legal_city_where}. Кредит, авторассрочка, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
+  brand={mark_id}
+  image={homeImg ?? thumb ?? ''}
+  showHeaderMenu={false}
+  showFooterLinks={false}
+  logoNoLink={true}>
+  {relatedSlidesCount > 0 && <Banner banners={sortedBanners} onlyModal={true} />}
   <div class="px-2 md:px-4 mt-6 xl:mt-12">
     <section>
-      <PageH1 classes="text-center text-4xl! md:text-6xl!" h1={`${brand} ${name}`} />
-      <div class="text-center text-4xl">{`${slogan}`}</div>
+      <PageH1 classes="text-center text-4xl! md:text-6xl!" h1={`${mark_id} ${name}`} />
       {
-        image && (
-          <div class="mt-6">
-            <img
-              src={image}
-              alt={name}
-              class="w-full rounded-xl object-cover"
-            />
-          </div>
+        slogan && (
+          <div class="text-center text-4xl">{`${slogan}`}</div>
         )
       }
     </section>
 
-    <div class="text-center my-12">
+    <div class="text-center">
       <a
         href="#feedback"
         class="btn inline-block py-3 px-8 text-lg bg-accent-500 text-white rounded-lg transition hover:bg-accent-600"
@@ -78,7 +95,7 @@ const sortedBanners = [...bannersData as TBanner[]].sort((a, b) => {
       <FeedbackForm
         title="Остались вопросы?"
         subtitle="Оставьте заявку и мы свяжемся с вами"
-        dataFormName={`Заявка на ${brand} ${name}`}
+        dataFormName={`Заявка на ${mark_id} ${name}`}
       />
     </section>
   </div>
