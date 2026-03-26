@@ -48,14 +48,21 @@ send_telegram_messages() {
             
             # Формируем базовый URL запроса
             local request_url="https://api.telegram.org/bot${token}/sendMessage"
-            local request_data="chat_id=${chat_id}&parse_mode=${parse_mode}&text=${MESSAGE}&disable_web_page_preview=true"
-            
+
+            # Формируем аргументы curl
+            local curl_args=(-s -X POST "$request_url"
+                --data-urlencode "chat_id=${chat_id}"
+                --data-urlencode "parse_mode=${parse_mode}"
+                --data-urlencode "text=${MESSAGE}"
+                --data-urlencode "disable_web_page_preview=true"
+            )
+
             # Добавляем message_thread_id, если он есть
             if [ ! -z "$message_thread_id" ]; then
-                request_data="${request_data}&message_thread_id=${message_thread_id}"
+                curl_args+=(--data-urlencode "message_thread_id=${message_thread_id}")
             fi
-            
-            RESPONSE=$(curl -s -X POST "$request_url" -d "$request_data")
+
+            RESPONSE=$(curl "${curl_args[@]}")
 
             if ! echo "$RESPONSE" | grep -q '"ok":true'; then
                 echo "Error sending message part $i to chat $chat_id: $RESPONSE" >&2
@@ -100,14 +107,21 @@ send_telegram_message() {
         
         # Формируем базовый URL запроса
         local request_url="https://api.telegram.org/bot${token}/sendMessage"
-        local request_data="chat_id=${chat_id}&parse_mode=${parse_mode}&text=${message}&disable_web_page_preview=true"
-        
+
+        # Формируем аргументы curl
+        local curl_args=(-s -X POST "$request_url"
+            --data-urlencode "chat_id=${chat_id}"
+            --data-urlencode "parse_mode=${parse_mode}"
+            --data-urlencode "text=${message}"
+            --data-urlencode "disable_web_page_preview=true"
+        )
+
         # Добавляем message_thread_id, если он есть
         if [ ! -z "$message_thread_id" ]; then
-            request_data="${request_data}&message_thread_id=${message_thread_id}"
+            curl_args+=(--data-urlencode "message_thread_id=${message_thread_id}")
         fi
-        
-        RESPONSE=$(curl -s -X POST "$request_url" -d "$request_data")
+
+        RESPONSE=$(curl "${curl_args[@]}")
 
         if ! echo "$RESPONSE" | grep -q '"ok":true'; then
             echo "Error sending message to chat $chat_id: $RESPONSE" >&2
