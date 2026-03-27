@@ -26,20 +26,26 @@ const containerClasses = is_header_transparent && header_top_line
 // Определяем цвет кнопки с fallback на белый
 const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 
-// Определяем тип контента и наличие ссылки
-// Делаем код проще и читаемее
 const isVideo = banner?.type === 'video';
-const resolvedBannerUrl = onlyModal && banner?.bannerUrl ? '#common-modal' : banner?.bannerUrl;
-const resolvedBtnUrl = onlyModal && banner?.btnUrl ? '#common-modal' : banner?.btnUrl;
 const resolvedView = onlyModal ? 'popup-link' : banner?.view;
-const hasBannerUrl = !!resolvedBannerUrl;
 
-// Выбираем компонент медиа один раз
+// Единый URL для всего баннера: bannerUrl → url → btnUrl (приоритет от специфичного к общему)
+const resolvedUrl = onlyModal && (banner?.bannerUrl || banner?.url || banner?.btnUrl)
+	? '#common-modal'
+	: banner?.bannerUrl || banner?.url || banner?.btnUrl;
+
+// URL для кнопки: btnUrl → url
+const resolvedBtnUrl = onlyModal && (banner?.btnUrl || banner?.url)
+	? '#common-modal'
+	: banner?.btnUrl || banner?.url;
+
+const hasBannerUrl = !!resolvedUrl;
+
 const BannerType = isVideo ? BannerVideo : BannerImage;
 
-// Готовим атрибуты ссылки один раз (только если есть URL)
+// Атрибуты прозрачного оверлея-ссылки поверх всего баннера
 const linkAttrs = hasBannerUrl ? {
-	href: resolvedBannerUrl as string,
+	href: resolvedUrl as string,
 	class: `absolute inset-0 h-full w-full z-10 block ${resolvedView === 'popup-link' ? 'popup-link' : ''}`,
 	...(banner?.dataTitle ? {'data-title': banner.dataTitle} : {}),
 	...(banner?.dataFormName ? {'data-form_name': banner.dataFormName} : {}),
@@ -48,14 +54,18 @@ const linkAttrs = hasBannerUrl ? {
 ---
 
 <div class={`swiper-slide banner-slide ${banner?.gradient === false ? '' : 'gradient'}`} data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
-	<div class={`h-full relative z-2 px-5 sm:px-10 md:px-20 pb-5 banner-slide-container ${containerClasses}`}>
+	{/* Медиа первым в DOM — естественно под текстом без z-index */}
+	<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
+
+	{/* Текст: relative без z-index — выше картинки по DOM-порядку */}
+	<div class={`h-full relative px-5 sm:px-10 md:px-20 pb-5 banner-slide-container ${containerClasses}`}>
 		<div class="h-full flex flex-col justify-between">
 			<div class="">
-				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
-				{ banner?.descr && ( <BannerDescription description={banner.descr} /> ) }
+				{ banner?.title && ( <div class="relative z-1"><BannerTitle title={banner.title} /></div> ) }
+				{ banner?.descr && ( <div class="relative z-1"><BannerDescription description={banner.descr} /></div> ) }
 				{
 					(!onlyView || onlyModal) && banner?.btn && (
-						<div data-swiper-parallax="-55%">
+						<div data-swiper-parallax="-55%" class="relative z-20">
 							<Button
 								classes={`btn inline-block py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
 								view={resolvedView}
@@ -83,19 +93,7 @@ const linkAttrs = hasBannerUrl ? {
 			}
 		</div>
 	</div>
-	
-	{/* 
-		Простой и читаемый рендер медиа:
-		- `BannerType` выбирается один раз
-		- Если есть `bannerUrl`, оборачиваем в ссылку, иначе выводим как есть
-	*/}
-	{
-		hasBannerUrl && (!onlyView || onlyModal) ? (
-			<a {...linkAttrs}>
-				<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
-			</a>
-		) : (
-			<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
-		)
-	}
+
+	{/* Оверлей-ссылка z-10: выше текста (z-auto), но ниже кнопки (z-20) */}
+	{ hasBannerUrl && (!onlyView || onlyModal) && <a {...linkAttrs} /> }
 </div>

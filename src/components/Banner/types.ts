@@ -10,7 +10,7 @@ export type TBadge = {
 }
 export type TMediaKeys = {
 	desktop: string
-	tablet: string
+	tablet?: string
 	mobile: string
 }
 export type TBanner = {
@@ -29,12 +29,15 @@ export type TBanner = {
 	tabletImageUrl?: string
 	mobileImageUrl?: string
 	imagePosition?: string
+	url?: string
+	/** @deprecated Используй поле 'url'   **/
 	bannerUrl?: string
 	target?: string
 	gradient?: boolean
 	title?: string
 	descr?: string
 	btn?: string
+	/** @deprecated Используй поле 'url'   **/
 	btnUrl?: string
 	btnColor?: string
 	dataTitle?: string

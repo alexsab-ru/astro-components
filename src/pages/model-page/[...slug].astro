@@ -40,6 +40,7 @@ const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const urlSegment = `/${id.toLowerCase()}/`;
 const nameRegex = new RegExp(`(?<![\\w+])${escapeRegex(name)}(?![\\w+])`, 'i');
 const isRelated = (banner: TBanner) => {
+  if (banner.url?.toLowerCase().includes(urlSegment)) return true;
   if (banner.btnUrl?.toLowerCase().includes(urlSegment)) return true;
   if (banner.bannerUrl?.toLowerCase().includes(urlSegment)) return true;
   return [banner.title, banner.descr, banner.dataTitle].some((f) => (f ? nameRegex.test(f) : false));
