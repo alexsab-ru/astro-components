@@ -5,7 +5,10 @@ import { USPSection } from '@/components/React/USPSection';
 import Banner from '@/components/Banner/Banner.astro'
 import siteSettings from '@/data/settings.json';
 import modelsData from '@/data/models.json';
-
+import salonsData from '@/data/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 // import.meta.glob — Vite-нативный optional import (не падает если файла нет)
 const chatFiles = import.meta.glob('/src/data/chat-landing.json', { eager: true });
 const chatConfig: any = (Object.values(chatFiles)[0] as any)?.default || { settings: {}, questions: [] };
@@ -66,7 +69,7 @@ const config = {
             const model = models.find((m: any) => m.name === name);
             if (model) {
                 acc.push({
-                    label: model.name,
+                    label: model.mark_id + ' ' + model.name,
                     value: model.name,
                     description: model.slogan,
                     image: model.thumb,
@@ -80,9 +83,9 @@ const config = {
 ---
 
 <Layout
-    h1="Чат квиз"
-    title="Чат квиз"
-    description={`Чат квиз`}
+    h1=`Купить ${mergedSettings.brand} у официального дилера ${siteSettings.site_name}`
+    title=`Купить ${mergedSettings.brand} у официального дилера ${siteSettings.site_name}`
+    description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${mergedSettings.brand} в ${mergedSettings.legal_city_where}! ☎️ ${salonsPhone}`
     footerVersion="3"
     showHeaderMenu={false}
     showFooterLinks={false}
