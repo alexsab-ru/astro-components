@@ -327,7 +327,7 @@ jobs:
 
   notify_telegram_about_special:
     needs: [build]
-    if: ${{ needs.build.outputs.specials != '' && github.event_name == 'schedule' }}
+    if: ${{ needs.build.outputs.specials != '' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'special-offers'
@@ -348,14 +348,16 @@ jobs:
         id: check
         run: |
           if [ -n "${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}" ]; then
+            echo "TELEGRAM_TO_SPECIAL_MARKETING exists"
             echo "exists=true" >> $GITHUB_OUTPUT
           else
+            echo "TELEGRAM_TO_SPECIAL_MARKETING does not exist"
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
   notify_telegram_about_special_marketing:
     needs: [build, check_marketing_secret]
-    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && github.event_name == 'schedule' }}
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'special-marketing'
