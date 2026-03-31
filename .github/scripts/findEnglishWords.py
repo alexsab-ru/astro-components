@@ -20,8 +20,13 @@ from bs4 import BeautifulSoup
 from collections import defaultdict
 
 
-# Латинские слова длиной 2+ символа, с возможными дефисами внутри (Wi-Fi, e-mail)
-ENGLISH_WORD_RE = re.compile(r'\b[a-zA-Z][a-zA-Z\-]*[a-zA-Z]\b|\b[a-zA-Z]{2,}\b')
+# Латинские слова:
+#   - с дефисами/точками внутри (Wi-Fi, e-mail, cdn.alexsab.ru)
+#   - обычные слова 2+ букв
+ENGLISH_WORD_RE = re.compile(
+    r'(?<!\w)[a-zA-Z][a-zA-Z0-9]*(?:[-\.][a-zA-Z][a-zA-Z0-9]*)+(?!\w)'  # Wi-Fi, alexsab.ru
+    r'|\b[a-zA-Z]{2,}\b'  # обычные слова
+)
 
 # Теги, содержимое которых не нужно анализировать
 SKIP_TAGS = {'script', 'style', 'noscript', 'head'}
@@ -60,14 +65,14 @@ def find_english_words(text: str) -> set:
 
 
 def load_skip_words(settings_path: Path) -> set:
-    """Загрузить список игнорируемых слов из settings.json."""
+    """Загрузить список игнорируемых слов из settings-common.json."""
     if not settings_path.exists():
         return set()
     try:
         data = json.loads(settings_path.read_text(encoding='utf-8'))
         return {w.lower() for w in data.get('skip_english_words', [])}
     except Exception as e:
-        print(f"[WARN] Не удалось прочитать skip_english_words из settings.json: {e}", file=sys.stderr)
+        print(f"[WARN] Не удалось прочитать skip_english_words из {settings_path}: {e}", file=sys.stderr)
         return set()
 
 
@@ -75,7 +80,7 @@ def main():
     site_dir = Path(os.environ.get('SITE_DIR', '_site')).resolve()
     domain = os.environ.get('DOMAIN', '').strip().rstrip('/')
 
-    settings_path = Path('src/data/settings.json')
+    settings_path = Path('src/data/settings-common.json')
     skip_words = load_skip_words(settings_path)
     if skip_words:
         print(f"[INFO] Игнорируем слова: {', '.join(sorted(skip_words))}", file=sys.stderr)

@@ -323,6 +323,7 @@ git sparse-checkout set \
   "src/models.json" \
   "src/cars.json" \
   "src/avito-colors.json" \
+  "src/settings-common.json" \
   "src/translations.json"
 
 DEFAULT_BRANCH=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@')
@@ -507,6 +508,19 @@ if [ -f "$TMP_DIR/src/translations.json" ]; then
   fi
 else
   echo -e "${BGYELLOW}Пропускаем копирование translations.json: файла нет в JSON_REPO${Color_Off}"
+fi
+
+# Копирование settings-common.json (всегда, если есть в общем репозитории)
+echo -e "\n${BGGREEN}Копируем общий settings-common.json...${Color_Off}"
+if [ -f "$TMP_DIR/src/settings-common.json" ]; then
+  rsync -a "$TMP_DIR/src/settings-common.json" "$LOCAL_DATA_DIR/settings-common.json"
+  if [ ! -s "$LOCAL_DATA_DIR/settings-common.json" ]; then
+      printf "${BGRED}Внимание: settings-common.json не найден или получен некорректный файл!${Color_Off}\n"
+  else
+      printf "${BGGREEN}Общий файл settings-common.json успешно скопирован${Color_Off}\n"
+  fi
+else
+  echo -e "${BGYELLOW}Пропускаем копирование settings-common.json: файла нет в JSON_REPO${Color_Off}"
 fi
 
 # ==================================================
