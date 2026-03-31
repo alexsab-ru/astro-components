@@ -52,6 +52,13 @@ def file_path_to_url(html_file: Path, site_dir: Path, domain: str) -> str:
     return slug
 
 
+def is_redirect_page(html: str) -> bool:
+    """Проверить, является ли страница редиректом (title начинается с 'Redirecting to:')."""
+    soup = BeautifulSoup(html, 'html.parser')
+    title = soup.find('title')
+    return title is not None and title.get_text().startswith('Redirecting to:')
+
+
 def extract_visible_text(html: str) -> str:
     """Извлечь видимый текст из HTML."""
     soup = BeautifulSoup(html, 'html.parser')
@@ -126,6 +133,10 @@ def main():
             html = html_file.read_text(encoding='utf-8', errors='ignore')
         except Exception as e:
             print(f"[ERR] Не удалось прочитать {html_file}: {e}", file=sys.stderr)
+            continue
+
+        if is_redirect_page(html):
+            print(f"  → пропускаем (redirect)", file=sys.stderr)
             continue
 
         text = extract_visible_text(html)
