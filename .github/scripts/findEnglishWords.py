@@ -11,6 +11,7 @@
     слово [TAB] url1, url2, ...
 """
 
+import json
 import os
 import re
 import sys
@@ -19,8 +20,8 @@ from bs4 import BeautifulSoup
 from collections import defaultdict
 
 
-# Латинские слова длиной 2+ символа
-ENGLISH_WORD_RE = re.compile(r'\b[a-zA-Z]{2,}\b')
+# Латинские слова длиной 2+ символа, с возможными дефисами внутри (Wi-Fi, e-mail)
+ENGLISH_WORD_RE = re.compile(r'\b[a-zA-Z][a-zA-Z\-]*[a-zA-Z]\b|\b[a-zA-Z]{2,}\b')
 
 # Теги, содержимое которых не нужно анализировать
 SKIP_TAGS = {'script', 'style', 'noscript', 'head'}
@@ -58,9 +59,26 @@ def find_english_words(text: str) -> set:
     return {w.lower() for w in ENGLISH_WORD_RE.findall(text)}
 
 
+def load_skip_words(settings_path: Path) -> set:
+    """Загрузить список игнорируемых слов из settings.json."""
+    if not settings_path.exists():
+        return set()
+    try:
+        data = json.loads(settings_path.read_text(encoding='utf-8'))
+        return {w.lower() for w in data.get('skip_english_words', [])}
+    except Exception as e:
+        print(f"[WARN] Не удалось прочитать skip_english_words из settings.json: {e}", file=sys.stderr)
+        return set()
+
+
 def main():
     site_dir = Path(os.environ.get('SITE_DIR', '_site')).resolve()
     domain = os.environ.get('DOMAIN', '').strip().rstrip('/')
+
+    settings_path = Path('src/data/settings.json')
+    skip_words = load_skip_words(settings_path)
+    if skip_words:
+        print(f"[INFO] Игнорируем слова: {', '.join(sorted(skip_words))}", file=sys.stderr)
 
     if not site_dir.is_dir():
         print(f"[ERR] Директория не найдена: {site_dir}", file=sys.stderr)
@@ -89,7 +107,8 @@ def main():
 
         text = extract_visible_text(html)
         for word in find_english_words(text):
-            word_urls[word].add(url)
+            if word not in skip_words:
+                word_urls[word].add(url)
 
     if not word_urls:
         print("[INFO] Английские слова не найдены", file=sys.stderr)
