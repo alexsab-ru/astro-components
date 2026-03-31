@@ -10,7 +10,6 @@ import './cars.css'
 ---
 <div class="w-full relative mb-2.5">
 	<div class="flex-full lg:flex-none relative flex group" x-data="usedPreviewGallery">
-
 		{
 			car.data.thumbs && car.data.thumbs.length > 0 ? (
 			<div class="overflow-x-auto flex gap-[5px] lg:gap-0 snap-x snap-mandatory w-full scroll-smooth no-scrollbar" x-ref="wrapper">
@@ -28,9 +27,8 @@ import './cars.css'
 					)
 				))
 			}
-		</div>
-
-		<div class="absolute hover-unavail:hidden opacity-0 group-hover:opacity-100 flex justify-between top-0 left-0 w-full h-full gap-1 pb-1.5 z-20" x-on:mouseleave="showSlideAt(0)">
+			</div>
+			<div class="absolute hover-unavail:hidden opacity-0 group-hover:opacity-100 flex justify-between top-0 left-0 w-full h-full gap-1 pb-1.5 z-20" x-on:mouseleave="showSlideAt(0)">
 			{
 				car.data.thumbs.map((img:string, idx:number) => (
 					idx < 5 && (
@@ -40,13 +38,12 @@ import './cars.css'
 					)
 				))
 			}
-		</div>
+			</div>
 			) : (
 			<a href={url} class="lazy relative snap-always snap-start shrink-0 w-full aspect-4/3 mb-0!" title="Подробнее">
 				<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt={`Купить ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.color} ${car.data?.modification_id} от ${car.data?.priceWithDiscount} ₽. в ${legal_city_where}`} width="359" />
 			</a>
 			)
 		}
-
 	</div>
 </div>

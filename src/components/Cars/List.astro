@@ -6,9 +6,9 @@ import FilterItemBtn from '@/components/Filter/ItemBtn.astro'
 import { groupArrayByKey } from "@/js/utils/groupArrayByKey";
 
 interface Props {
-    cars?: any[];
-    path?: string;
-    collection?: string;
+	cars?: any[];
+	path?: string;
+	collection?: string;
 }
 
 const { cars: inputCars, collection = 'cars', path = '/cars/' } = Astro.props;
@@ -46,47 +46,47 @@ if (rawCars && rawCars.length > 0) {
 }
 ---
 <div x-data="sorting" x-cloak>
-    <p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
-    <hr class="my-5" />
-    <SortSelect />
-    <hr class="my-5" />
-    {Object.keys(groupCars).length > 1 && (
-        <div class="flex flex-wrap gap-2 sm:gap-4">
-            {Object.keys(groupCars).map(brand => (
-                <FilterItemBtn name={brand} value={brand.toLocaleLowerCase().replace(',', '')} id={brand.toLocaleLowerCase()} filterType="Brands" data-filter-type="brand" />
-            ))}
-        </div>
-        <hr class="my-5" />
-    )}
-    {Object.keys(models).length && (
-        <div class="flex flex-wrap gap-2 sm:gap-4">
-            {Object.keys(models).map((key) => (
-                models[key].map(model => (
-                    <FilterItemBtn name={model} value={model.toLocaleLowerCase().replace(',', '')} id={model.toLocaleLowerCase()} filterType="Models" data-filter-type="model" data-filter-brand={key.toLocaleLowerCase()} />
-                ))
-            ))}
-        </div>
-    )}
-    {Object.keys(years).length && (
-        <hr class="my-5" />
-        <div class="flex flex-wrap gap-2 sm:gap-4">
-            {Object.keys(years).map(key => (
-                <FilterItemBtn name={key} id={key} filterType="Years" data-filter-type="year" data-filter-brand={years[key].brands.join(';')} data-filter-model={years[key].models.join(';')} />
-            ))}
-        </div>
-    )}
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
-        {cars.map((car) => (
-            <CarItem car={car} path={path} />
-        ))}
-    </div>
-    <div x-show="loading" class="text-center py-8" x-cloak>
-        <p class="text-gray-500">Загрузка...</p>
-    </div>
+	<p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
+	<hr class="my-5" />
+	<SortSelect />
+	<hr class="my-5" />
+	{Object.keys(groupCars).length > 1 && (
+		<div class="flex flex-wrap gap-2 sm:gap-4">
+			{Object.keys(groupCars).map(brand => (
+				<FilterItemBtn name={brand} value={brand.toLocaleLowerCase().replace(',', '')} id={brand.toLocaleLowerCase()} filterType="Brands" data-filter-type="brand" />
+			))}
+		</div>
+		<hr class="my-5" />
+	)}
+	{Object.keys(models).length && (
+		<div class="flex flex-wrap gap-2 sm:gap-4">
+			{Object.keys(models).map((key) => (
+				models[key].map(model => (
+					<FilterItemBtn name={model} value={model.toLocaleLowerCase().replace(',', '')} id={model.toLocaleLowerCase()} filterType="Models" data-filter-type="model" data-filter-brand={key.toLocaleLowerCase()} />
+				))
+			))}
+		</div>
+	)}
+	{Object.keys(years).length && (
+		<hr class="my-5" />
+		<div class="flex flex-wrap gap-2 sm:gap-4">
+			{Object.keys(years).map(key => (
+				<FilterItemBtn name={key} id={key} filterType="Years" data-filter-type="year" data-filter-brand={years[key].brands.join(';')} data-filter-model={years[key].models.join(';')} />
+			))}
+		</div>
+	)}
+	<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+		{cars.map((car) => (
+			<CarItem car={car} path={path} />
+		))}
+	</div>
+	<div x-show="loading" class="text-center py-8" x-cloak>
+		<p class="text-gray-500">Загрузка...</p>
+	</div>
 </div>
 
 <style>
-    .car-item[data-lazy-hidden="true"] {
-        display: none !important;
-    }
+	.car-item[data-lazy-hidden="true"] {
+		display: none !important;
+	}
 </style>

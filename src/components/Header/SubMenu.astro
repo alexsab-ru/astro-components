@@ -18,7 +18,7 @@ classes = !Array.isArray(children) && hasMultipleChildGroups ? classes + ' ' : c
 {children && (
 	<div class={`${classes} ${commonClasses}`}>
 		{!Array.isArray(children) && groupedChildrenCount > 0 ? Object.keys(children).map( key => (
-			<!-- Для множества групп делаем нижнюю границу и контролируем расстояние через gap. -->
+			// Для множества групп делаем нижнюю границу и контролируем расстояние через gap.
 			<div class={`lg:grid lg:grid-cols-5 ${hasMultipleChildGroups ? 'pb-[14px] lg:border-b' : ''} ${is_header_transparent ? 'lg:border-header-border-transparent' : ''}`} x-data="{isOpenSubMenu: false}">
 				<div class="relative lg:flex lg:items-center">
 					{ hasMultipleChildGroups ? (
