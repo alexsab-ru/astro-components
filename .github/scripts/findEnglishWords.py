@@ -97,10 +97,14 @@ def main():
 
     sorted_words = sorted(word_urls.keys())
 
-    print("слово\turl")
+    print("|------|------|")
+    print("| слово | url |")
+    print("|------|------|")
     for word in sorted_words:
         urls_str = ", ".join(sorted(word_urls[word]))
-        print(f"{word}\t{urls_str}")
+        print(f"| {word} | {urls_str} |")
+
+    print("|------|------|")
 
     print(f"\n[INFO] Всего уникальных английских слов: {len(sorted_words)}", file=sys.stderr)
 

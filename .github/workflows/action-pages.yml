@@ -234,6 +234,7 @@ jobs:
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm build --outDir ./_site
+          cp ./_site/sitemap-0.xml ./_site/sitemap.xml
 
       - name: Find English Words
         if: steps.check_changes.outputs.changes == 'true'
