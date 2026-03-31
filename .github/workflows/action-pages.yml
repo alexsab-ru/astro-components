@@ -235,6 +235,14 @@ jobs:
         run: |
           pnpm build --outDir ./_site
 
+      - name: Find English Words
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          pip install beautifulsoup4 --quiet
+          python3 .github/scripts/findEnglishWords.py
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
+
       - name: Set output
         id: set_output
         if: steps.check_changes.outputs.changes == 'true'
