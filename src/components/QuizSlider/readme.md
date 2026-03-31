@@ -28,7 +28,7 @@ import QuizSlider from '@/components/QuizSlider/QuizSlider.astro';
 [
   {
     "title": "Подберите <b>АВТО</b> с&nbsp;максимальной выгодой от&nbsp;официального дилера в&nbsp;<b>ГОРОДЕ!</b>",
-    "description": "<ul><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Подарки при покупке</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Авторассрочка 0.01%</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Выгодный Trade-In</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Авто в наличии</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Официальный дилер</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Пишем здесь все, что угодно</li></ul>",
+    "description": "<ul><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Подарки при покупке</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Автокредит 0.01%</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Выгодный Trade-In</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Авто в наличии</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Официальный дилер</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Пишем здесь все, что угодно</li></ul>",
     "backgroundImageUrl": "https://cdn.alexsab.ru/b/jetour/img/models/x90plus/sections/1.webp",
     "backgroundPosition": "center",
     "startButtonText": "Начать подбор авто"
@@ -104,7 +104,7 @@ import QuizSlider from '@/components/QuizSlider/QuizSlider.astro';
   },
   {
     "title": "Спасибо! Оставьте номер вашего телефона, чтобы получить подробную консультацию по выбранному автомобилю.",
-    "description": "<ul><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Честная авторассрочка</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Переплата 0%</li></ul>",
+    "description": "<ul><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Честный автокредит</li><li><span class=\"text-red-500 text-lg\">✓</span>&nbsp;Переплата 0%</li></ul>",
     "backgroundImageUrl": "https://cdn.alexsab.ru/b/jetour/img/models/t2/sections/1.webp",
     "backgroundPosition": "center"
   }
