@@ -253,22 +253,17 @@ jobs:
             echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
           fi
 
-      - name: Check specials
+      - name: Check notifications
         id: check_specials
         run: |
-          if [ -s special-offers-dates.txt ]; then
-            echo "$(cat special-offers-dates.txt)" > output_wrapped.txt
-            # Кодируем содержимое файла в base64
-            encoded_output=$(base64 -w 0 output_wrapped.txt)
-            # Передаем закодированное значение
-            echo "specials=$encoded_output" >> $GITHUB_OUTPUT
+          if [ -s notifications/dates.txt ]; then
+            echo "specials=$(base64 -w 0 notifications/dates.txt)" >> $GITHUB_OUTPUT
           fi
-          if [ -s special-offers-dates-marketing.txt ]; then
-            echo "$(cat special-offers-dates-marketing.txt)" > output_wrapped_marketing.txt
-            # Кодируем содержимое файла в base64
-            encoded_output_marketing=$(base64 -w 0 output_wrapped_marketing.txt)
-            # Передаем закодированное значение
-            echo "specials_marketing=$encoded_output_marketing" >> $GITHUB_OUTPUT
+          if [ -s notifications/dates-marketing.txt ]; then
+            echo "specials_marketing=$(base64 -w 0 notifications/dates-marketing.txt)" >> $GITHUB_OUTPUT
+          fi
+          if [ -s notifications/rassrochka.txt ]; then
+            echo "specials_rassrochka=$(base64 -w 0 notifications/rassrochka.txt)" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload artifact
@@ -287,6 +282,7 @@ jobs:
       script_output: ${{ steps.set_output.outputs.script_output }}
       specials: ${{ steps.check_specials.outputs.specials }}
       specials_marketing: ${{ steps.check_specials.outputs.specials_marketing }}
+      specials_rassrochka: ${{ steps.check_specials.outputs.specials_rassrochka }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
 
   # Deployment job
@@ -339,7 +335,7 @@ jobs:
 
   check_marketing_secret:
     needs: [build]
-    if: needs.build.outputs.specials_marketing != ''
+    if: needs.build.outputs.specials_marketing != '' || needs.build.outputs.specials_rassrochka != ''
     runs-on: ubuntu-latest
     outputs:
       secret_exists: ${{ steps.check.outputs.exists }}
@@ -364,6 +360,19 @@ jobs:
       include-header: false
       additional-text: |
         ${{ needs.build.outputs.specials_marketing }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  notify_telegram_about_rassrochka:
+    needs: [build, check_marketing_secret]
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka != '' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      caller-id: 'rassrochka'
+      include-header: false
+      additional-text: |
+        ${{ needs.build.outputs.specials_rassrochka }}
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}

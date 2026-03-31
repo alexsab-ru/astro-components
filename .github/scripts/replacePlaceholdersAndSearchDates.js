@@ -8,9 +8,12 @@ import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+const NOTIFICATIONS_DIR = './notifications';
+
 const ReportFile = {
-    SPECIAL_OFFERS: './special-offers-dates.txt',
-    SPECIAL_OFFERS_MARKETING: './special-offers-dates-marketing.txt'
+    DATES: `${NOTIFICATIONS_DIR}/dates.txt`,
+    DATES_MARKETING: `${NOTIFICATIONS_DIR}/dates-marketing.txt`,
+    RASSROCHKA: `${NOTIFICATIONS_DIR}/rassrochka.txt`,
 };
 
 class PlaceholderProcessor {
@@ -597,18 +600,15 @@ class PlaceholderProcessor {
         }
     }
 
-    // Очищаем старые отчеты по датам перед запуском
-    clearSpecialOffersReports() {
-        const reportFiles = [
-            ReportFile.SPECIAL_OFFERS,
-            ReportFile.SPECIAL_OFFERS_MARKETING
-        ];
-
-        reportFiles.forEach(filePath => {
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
-        });
+    // Очищаем папку с уведомлениями перед запуском
+    clearNotifications() {
+        if (fs.existsSync(NOTIFICATIONS_DIR)) {
+            fs.readdirSync(NOTIFICATIONS_DIR).forEach(file => {
+                fs.unlinkSync(path.join(NOTIFICATIONS_DIR, file));
+            });
+        } else {
+            fs.mkdirSync(NOTIFICATIONS_DIR, { recursive: true });
+        }
     }
 
     // Вывод информации о приближающихся датах
@@ -641,11 +641,9 @@ class PlaceholderProcessor {
             )
             .join('\n\n');
 
-        const outputPath = ReportFile.SPECIAL_OFFERS;
-        fs.writeFileSync(outputPath, htmlOutput, 'utf8');
-        const outputPathMarketing = ReportFile.SPECIAL_OFFERS_MARKETING;
-        fs.writeFileSync(outputPathMarketing, htmlOutputMarketing, 'utf8');
-        console.log(`\nРезультаты сохранены в файл: ${outputPath}, ${outputPathMarketing}`);
+        fs.writeFileSync(ReportFile.DATES, htmlOutput, 'utf8');
+        fs.writeFileSync(ReportFile.DATES_MARKETING, htmlOutputMarketing, 'utf8');
+        console.log(`\nРезультаты сохранены в: ${ReportFile.DATES}, ${ReportFile.DATES_MARKETING}`);
     }
 
     // Вывод информации о файлах, содержащих слово "Рассрочка"
@@ -665,30 +663,15 @@ class PlaceholderProcessor {
             console.log(`\nФайл: \`${relativePath}\`\nURL: ${url}`);
         });
 
-        const htmlHeader = '\n\n<b>⚠️ Найдено слово "Рассрочка":</b>\n\n';
-        const htmlSection = htmlHeader + parsedFiles
-            .map(({ relativePath, url }) =>
-                `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>`
-            )
-            .join('\n\n');
-
-        const htmlSectionMarketing = htmlHeader + parsedFiles
+        const htmlHeader = '<b>⚠️ Найдено слово "Рассрочка":</b>\n\n';
+        const htmlContent = htmlHeader + parsedFiles
             .map(({ url }) =>
                 `<strong>URL:</strong> <a href="${url}">${url}</a>`
             )
             .join('\n\n');
 
-        const writeOrAppend = (filePath, content) => {
-            if (fs.existsSync(filePath)) {
-                fs.appendFileSync(filePath, content, 'utf8');
-            } else {
-                fs.writeFileSync(filePath, content.trimStart(), 'utf8');
-            }
-        };
-
-        writeOrAppend(ReportFile.SPECIAL_OFFERS, htmlSection);
-        writeOrAppend(ReportFile.SPECIAL_OFFERS_MARKETING, htmlSectionMarketing);
-        console.log(`\nИнформация о "Рассрочке" дописана в файлы: ${ReportFile.SPECIAL_OFFERS}, ${ReportFile.SPECIAL_OFFERS_MARKETING}`);
+        fs.writeFileSync(ReportFile.RASSROCHKA, htmlContent, 'utf8');
+        console.log(`\nИнформация о "Рассрочке" сохранена в: ${ReportFile.RASSROCHKA}`);
     }
 
     // Экспорт всех доступных плейсхолдеров в TSV файл в папку tmp
@@ -771,8 +754,8 @@ class PlaceholderProcessor {
 
     // Главная функция запуска всей обработки
     run() {
-        // 0. Удаляем старые отчеты о спецпредложениях
-        this.clearSpecialOffersReports();
+        // 0. Очищаем папку уведомлений
+        this.clearNotifications();
 
         // 1. Загружаем все данные
         this.loadData();
