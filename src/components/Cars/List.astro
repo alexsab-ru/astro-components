@@ -51,12 +51,11 @@ if (rawCars && rawCars.length > 0) {
 	<SortSelect />
 	<hr class="my-5" />
 	{Object.keys(groupCars).length > 1 && (
-		<div class="flex flex-wrap gap-2 sm:gap-4">
+		<Fragment><div class="flex flex-wrap gap-2 sm:gap-4">
 			{Object.keys(groupCars).map(brand => (
 				<FilterItemBtn name={brand} value={brand.toLocaleLowerCase().replace(',', '')} id={brand.toLocaleLowerCase()} filterType="Brands" data-filter-type="brand" />
 			))}
-		</div>
-		<hr class="my-5" />
+		</div><hr class="my-5" /></Fragment>
 	)}
 	{Object.keys(models).length && (
 		<div class="flex flex-wrap gap-2 sm:gap-4">
@@ -68,12 +67,11 @@ if (rawCars && rawCars.length > 0) {
 		</div>
 	)}
 	{Object.keys(years).length && (
-		<hr class="my-5" />
-		<div class="flex flex-wrap gap-2 sm:gap-4">
+		<Fragment><hr class="my-5" /><div class="flex flex-wrap gap-2 sm:gap-4">
 			{Object.keys(years).map(key => (
 				<FilterItemBtn name={key} id={key} filterType="Years" data-filter-type="year" data-filter-brand={years[key].brands.join(';')} data-filter-model={years[key].models.join(';')} />
 			))}
-		</div>
+		</div></Fragment>
 	)}
 	<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
 		{cars.map((car) => (
