@@ -76,9 +76,27 @@ def load_skip_words(settings_path: Path) -> set:
         return set()
 
 
+def load_dotenv(env_path: Path = Path('.env')) -> dict:
+    """Прочитать переменные из .env файла."""
+    if not env_path.exists():
+        return {}
+    result = {}
+    for line in env_path.read_text(encoding='utf-8').splitlines():
+        line = line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, _, val = line.partition('=')
+        result[key.strip()] = val.strip().strip('"').strip("'")
+    return result
+
+
 def main():
     site_dir = Path(os.environ.get('SITE_DIR', '_site')).resolve()
     domain = os.environ.get('DOMAIN', '').strip().rstrip('/')
+    if not domain:
+        domain = load_dotenv().get('DOMAIN', '').strip().rstrip('/')
+    if domain:
+        print(f"[INFO] Домен: {domain}", file=sys.stderr)
 
     settings_path = Path('src/data/settings-common.json')
     skip_words = load_skip_words(settings_path)
@@ -122,11 +140,11 @@ def main():
     sorted_words = sorted(word_urls.keys())
 
     print("\n")
-    print("| слово | url |")
-    print("|------|------|")
+    print("| слово | кол-во | url |")
+    print("|-------|--------|-----|")
     for word in sorted_words:
-        urls_str = ", ".join(sorted(word_urls[word]))
-        print(f"| {word} | {urls_str} |")
+        urls = sorted(word_urls[word])
+        print(f"| {word} | {len(urls)} | {', '.join(urls)} |")
 
     print("\n")
 
