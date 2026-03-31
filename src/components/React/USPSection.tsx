@@ -6,8 +6,8 @@ const ACCENT = "#d40221";
 const usps = [
   {
     icon: <ShieldCheck className="w-6 h-6" />,
-    title: "Гарантия 5 лет",
-    desc: "Официальная гарантия от производителя. Бесплатное ТО первый год.",
+    title: "Гарантия",
+    desc: "Официальная гарантия от производителя.",
   },
   {
     icon: <Percent className="w-6 h-6" />,
@@ -16,7 +16,7 @@ const usps = [
   },
   {
     icon: <Truck className="w-6 h-6" />,
-    title: "Trade-In с выгодой",
+    title: "Трейд-ин с выгодой",
     desc: "Оценим ваш авто по максимальной стоимости. Обмен за 1 день.",
   },
 ];
