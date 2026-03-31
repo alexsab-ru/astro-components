@@ -217,8 +217,8 @@ def main():
         for url in urls:
             warning_msg += f"\n{url}"
         print(warning_msg)
-        with open('output.txt', 'a', encoding='utf-8') as file:
-            file.write(f"{warning_msg}\n")
+        # with open('output.txt', 'a', encoding='utf-8') as file:
+        #     file.write(f"{warning_msg}\n")
 
     merged_tree = etree.ElementTree(deduplicated_root)
     # Создаём директории для output_path, если их нет
