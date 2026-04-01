@@ -48,7 +48,12 @@ on:
         type: boolean
         default: false
       send_rassrochka:
-        description: 'Отправить уведомление о Рассрочке (TELEGRAM_TO_SPECIAL_MARKETING)'
+        description: 'Отправить уведомление о Рассрочке с путями к файлам (TELEGRAM_TO_SPECIAL)'
+        required: false
+        type: boolean
+        default: false
+      send_rassrochka_marketing:
+        description: 'Отправить уведомление о Рассрочке — маркетинг (TELEGRAM_TO_SPECIAL_MARKETING)'
         required: false
         type: boolean
         default: false
@@ -408,11 +413,23 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   notify_telegram_about_rassrochka:
-    needs: [build, check_marketing_secret]
-    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka_marketing != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka == 'true')) }}
+    needs: [build]
+    if: ${{ needs.build.outputs.specials_rassrochka != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka == 'true')) }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'rassrochka'
+      additional-text: |
+        ${{ needs.build.outputs.specials_rassrochka }}
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  notify_telegram_about_rassrochka_marketing:
+    needs: [build, check_marketing_secret]
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka_marketing != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka_marketing == 'true')) }}
+    uses: ./.github/workflows/github-telegram.yml
+    with:
+      caller-id: 'rassrochka-marketing'
       include-header: false
       additional-text: |
         ${{ needs.build.outputs.specials_rassrochka_marketing }}
