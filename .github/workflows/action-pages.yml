@@ -37,13 +37,28 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      send_english_words:
-        description: 'Отправить отчёт по английским словам в Telegram (TELEGRAM_TO_SPECIAL)'
+      send_specials:
+        description: 'Отправить уведомление о датах окончания акций (TELEGRAM_TO_SPECIAL)'
+        required: false
+        type: boolean
+        default: false
+      send_specials_marketing:
+        description: 'Отправить уведомление о датах окончания акций — маркетинг (TELEGRAM_TO_SPECIAL_MARKETING)'
         required: false
         type: boolean
         default: false
       send_rassrochka:
-        description: 'Отправить уведомление о Рассрочке в Telegram (TELEGRAM_TO_SPECIAL_MARKETING)'
+        description: 'Отправить уведомление о Рассрочке (TELEGRAM_TO_SPECIAL_MARKETING)'
+        required: false
+        type: boolean
+        default: false
+      send_english_words:
+        description: 'Отправить отчёт по английским словам (TELEGRAM_TO_SPECIAL)'
+        required: false
+        type: boolean
+        default: false
+      run_linkinator:
+        description: 'Запустить проверку ссылок (linkinator)'
         required: false
         type: boolean
         default: false
@@ -262,7 +277,8 @@ jobs:
           source .github/scripts/sh/send_telegram.sh
           TSV_FILE=$(ls notifications/english-words-*.tsv 2>/dev/null | head -1)
           if [ -n "$TSV_FILE" ]; then
-            send_telegram_file "${{ secrets.TELEGRAM_TOKEN }}" "${{ secrets.TELEGRAM_TO_SPECIAL }}" "$TSV_FILE"
+            CAPTION="Английские слова на сайте ${{ vars.DOMAIN }}"
+            send_telegram_file "${{ secrets.TELEGRAM_TOKEN }}" "${{ secrets.TELEGRAM_TO_SPECIAL }}" "$TSV_FILE" "$CAPTION"
           else
             echo "TSV-файл не найден, пропускаем отправку"
           fi
@@ -350,7 +366,7 @@ jobs:
 
   notify_telegram_about_special:
     needs: [build]
-    if: ${{ needs.build.outputs.specials != '' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+    if: ${{ needs.build.outputs.specials != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_specials == 'true')) }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'special-offers'
@@ -380,7 +396,7 @@ jobs:
 
   notify_telegram_about_special_marketing:
     needs: [build, check_marketing_secret]
-    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_marketing != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_specials_marketing == 'true')) }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'special-marketing'
@@ -406,6 +422,6 @@ jobs:
 
   check_links:
     needs: [build, deploy]
-    if: ${{ github.event_name == 'schedule' }}
+    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.run_linkinator == 'true') }}
     uses: ./.github/workflows/linkinator.yml
     secrets: inherit
