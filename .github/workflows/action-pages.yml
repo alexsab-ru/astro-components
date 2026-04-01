@@ -265,6 +265,9 @@ jobs:
           if [ -s notifications/rassrochka.txt ]; then
             echo "specials_rassrochka=$(base64 -w 0 notifications/rassrochka.txt)" >> $GITHUB_OUTPUT
           fi
+          if [ -s notifications/rassrochka-marketing.txt ]; then
+            echo "specials_rassrochka_marketing=$(base64 -w 0 notifications/rassrochka-marketing.txt)" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload artifact
         if: steps.check_changes.outputs.changes == 'true'
@@ -283,6 +286,7 @@ jobs:
       specials: ${{ steps.check_specials.outputs.specials }}
       specials_marketing: ${{ steps.check_specials.outputs.specials_marketing }}
       specials_rassrochka: ${{ steps.check_specials.outputs.specials_rassrochka }}
+      specials_rassrochka_marketing: ${{ steps.check_specials.outputs.specials_rassrochka_marketing }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
 
   # Deployment job
@@ -335,7 +339,7 @@ jobs:
 
   check_marketing_secret:
     needs: [build]
-    if: needs.build.outputs.specials_marketing != '' || needs.build.outputs.specials_rassrochka != ''
+    if: needs.build.outputs.specials_marketing != '' || needs.build.outputs.specials_rassrochka_marketing != ''
     runs-on: ubuntu-latest
     outputs:
       secret_exists: ${{ steps.check.outputs.exists }}
@@ -366,13 +370,13 @@ jobs:
 
   notify_telegram_about_rassrochka:
     needs: [build, check_marketing_secret]
-    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka != '' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka_marketing != '' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'rassrochka'
       include-header: false
       additional-text: |
-        ${{ needs.build.outputs.specials_rassrochka }}
+        ${{ needs.build.outputs.specials_rassrochka_marketing }}
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}

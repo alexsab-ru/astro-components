@@ -14,6 +14,7 @@ const ReportFile = {
     DATES: `${NOTIFICATIONS_DIR}/dates.txt`,
     DATES_MARKETING: `${NOTIFICATIONS_DIR}/dates-marketing.txt`,
     RASSROCHKA: `${NOTIFICATIONS_DIR}/rassrochka.txt`,
+    RASSROCHKA_MARKETING: `${NOTIFICATIONS_DIR}/rassrochka-marketing.txt`,
 };
 
 class PlaceholderProcessor {
@@ -665,13 +666,20 @@ class PlaceholderProcessor {
 
         const htmlHeader = '<b>⚠️ Найдено слово "Рассрочка":</b>\n\n';
         const htmlContent = htmlHeader + parsedFiles
+            .map(({ relativePath, url }) =>
+                `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>`
+            )
+            .join('\n\n');
+
+        const htmlContentMarketing = htmlHeader + parsedFiles
             .map(({ url }) =>
                 `<strong>URL:</strong> <a href="${url}">${url}</a>`
             )
             .join('\n\n');
 
         fs.writeFileSync(ReportFile.RASSROCHKA, htmlContent, 'utf8');
-        console.log(`\nИнформация о "Рассрочке" сохранена в: ${ReportFile.RASSROCHKA}`);
+        fs.writeFileSync(ReportFile.RASSROCHKA_MARKETING, htmlContentMarketing, 'utf8');
+        console.log(`\nИнформация о "Рассрочке" сохранена в: ${ReportFile.RASSROCHKA}, ${ReportFile.RASSROCHKA_MARKETING}`);
     }
 
     // Экспорт всех доступных плейсхолдеров в TSV файл в папку tmp
