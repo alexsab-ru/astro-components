@@ -42,6 +42,11 @@ on:
         required: false
         type: boolean
         default: false
+      send_rassrochka:
+        description: 'Отправить уведомление о Рассрочке в Telegram (TELEGRAM_TO_SPECIAL_MARKETING)'
+        required: false
+        type: boolean
+        default: false
   # Allows this workflow to be called by other workflows
   workflow_call:
 
@@ -388,7 +393,7 @@ jobs:
 
   notify_telegram_about_rassrochka:
     needs: [build, check_marketing_secret]
-    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka_marketing != '' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka_marketing != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka == 'true')) }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'rassrochka'
