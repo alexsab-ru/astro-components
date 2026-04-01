@@ -890,7 +890,10 @@ class CarProcessor:
         # Создание URL
         friendly_url = process_friendly_url(
             self.join_car_data_from_dict(car_data, 'mark_id', 'folder_id', 'generation', 'modification_id',
-                                 'complectation_name', 'color_eng', 'year')
+                                 'complectation_name', 'color_eng', 'year'),
+            mark_id=car_data.get('mark_id'),
+            folder_id=car_data.get('folder_id'),
+            vin=car_data.get('vin'),
         )
         print(f"\n\n🆔 Уникальный идентификатор: {friendly_url}")
         

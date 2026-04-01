@@ -18,7 +18,188 @@ from config import *
 from bs4 import BeautifulSoup
 
 
-def process_friendly_url(friendly_url, replace = "-"):
+## ── Транслитерация и перевод кириллицы для URL ────────────────────────────
+
+CYRILLIC_TO_LATIN = {
+    'а': 'a',  'б': 'b',  'в': 'v',  'г': 'g',  'д': 'd',  'е': 'e',  'ё': 'yo',
+    'ж': 'zh', 'з': 'z',  'и': 'i',  'й': 'y',  'к': 'k',  'л': 'l',  'м': 'm',
+    'н': 'n',  'о': 'o',  'п': 'p',  'р': 'r',  'с': 's',  'т': 't',  'у': 'u',
+    'ф': 'f',  'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch',
+    'ъ': '',   'ы': 'y',  'ь': '',   'э': 'e',  'ю': 'yu', 'я': 'ya',
+}
+
+
+def _load_settings_common():
+    """Загружает settings-common.json и возвращает словари переводов."""
+    settings_path = Path('./src/data/settings-common.json')
+    try:
+        with open(settings_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except Exception:
+        data = {}
+    return (
+        data.get('url_translations', {}),
+        data.get('url_translations_by_brand', {}),
+    )
+
+
+def _build_complectation_translation_map():
+    """Строит словарь {русское_название_lower: английское_название}
+    из complectations в all-models.json (уже загружен в config.py)."""
+    trans = {}
+    for model in all_models_data:
+        for comp in model.get('complectations', []):
+            caption = comp.get('caption', '')
+            name = comp.get('name', '')
+            if not caption or not name:
+                continue
+            # caption формата "Русское / English" или "Русское - English"
+            for sep in (' / ', ' - '):
+                if sep in caption:
+                    rus_part = caption.split(sep, 1)[0].strip()
+                    if rus_part and re.search(r'[а-яёА-ЯЁ]', rus_part):
+                        trans[rus_part.lower()] = name
+                    break
+    return trans
+
+
+# Загружаем один раз при старте
+_url_translations, _url_translations_by_brand = _load_settings_common()
+_complectation_map = _build_complectation_translation_map()
+# Сортируем по длине (самые длинные первые) для корректной замены
+_complectation_sorted = sorted(_complectation_map.items(), key=lambda x: len(x[0]), reverse=True)
+
+
+def _has_cyrillic(text):
+    return bool(re.search(r'[а-яёА-ЯЁ]', text))
+
+
+def _transliterate(text):
+    """Транслитерация кириллицы в латиницу."""
+    result = []
+    for ch in text:
+        lower = ch.lower()
+        if lower in CYRILLIC_TO_LATIN:
+            mapped = CYRILLIC_TO_LATIN[lower]
+            result.append(mapped.upper() if ch.isupper() else mapped)
+        else:
+            result.append(ch)
+    return ''.join(result)
+
+
+def _get_brand_model_overrides(mark_id, folder_id):
+    """Собирает переопределения для конкретного бренда/модели.
+
+    Структура url_translations_by_brand:
+    {
+        "BrandName": {
+            "слово": "translation",        ← для всех моделей бренда
+            "model_id": {                   ← переопределения конкретной модели
+                "слово": "translation"
+            }
+        }
+    }
+
+    Приоритет: модель > бренд (модельные переопределения перезаписывают брендовые).
+    """
+    if not mark_id or not _url_translations_by_brand:
+        return {}
+
+    brand_key = mark_id.lower()
+    overrides = {}
+
+    for cfg_brand, cfg_value in _url_translations_by_brand.items():
+        if cfg_brand.lower() != brand_key or not isinstance(cfg_value, dict):
+            continue
+        # Собираем строковые значения — это брендовые переводы
+        for k, v in cfg_value.items():
+            if isinstance(v, str):
+                overrides[k.lower()] = v
+        # Если есть модельные переопределения — они перезаписывают
+        if folder_id:
+            model_key = folder_id.lower()
+            for k, v in cfg_value.items():
+                if isinstance(v, dict) and k.lower() == model_key:
+                    for mk, mv in v.items():
+                        overrides[mk.lower()] = mv
+        break
+
+    return overrides
+
+
+def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None):
+    """Переводит русские слова в строке для URL на английский.
+
+    Порядок:
+    1. Замена «Nх» на «Nx» (например, «4х4» → «4x4», «2х4» → «2x4»)
+    1.1. Замена «л.с.» → «h.p.» (точки потом удалятся → hp)
+    2. Бренд/модель-специфичные переопределения из settings-common.json
+    3. Комплектации из all-models.json
+    4. Аббревиатуры из url_translations (settings-common.json)
+    5. Логирование непереведённых слов
+    6. Транслитерация оставшейся кириллицы
+    """
+    if not _has_cyrillic(text):
+        return text
+
+    # 1. Паттерн «цифраХцифра» — русская Х → латинская x
+    text = re.sub(r'(\d)[хХ](\d)', r'\1x\2', text)
+
+    # 1.1. «л.с.» → «h.p.» (точки потом удалятся → hp)
+    text = re.sub(r'л\.с\.', 'h.p.', text, flags=re.IGNORECASE)
+
+    # 2. Бренд/модель переопределения (высший приоритет)
+    brand_overrides = _get_brand_model_overrides(mark_id, folder_id)
+    if brand_overrides:
+        brand_sorted = sorted(brand_overrides.items(), key=lambda x: len(x[0]), reverse=True)
+        text_lower = text.lower()
+        for rus, eng in brand_sorted:
+            idx = text_lower.find(rus)
+            if idx != -1:
+                text = text[:idx] + eng + text[idx + len(rus):]
+                text_lower = text.lower()
+
+    # 3. Комплектации из all-models.json (базовый словарь, для оставшейся кириллицы)
+    if _has_cyrillic(text):
+        text_lower = text.lower()
+        for rus, eng in _complectation_sorted:
+            idx = text_lower.find(rus)
+            if idx != -1:
+                text = text[:idx] + eng + text[idx + len(rus):]
+                text_lower = text.lower()
+
+    # 4. Пословная замена аббревиатур из settings-common.json
+    if _has_cyrillic(text):
+        words = text.split()
+        for i, word in enumerate(words):
+            w_lower = word.lower()
+            if w_lower in _url_translations:
+                words[i] = _url_translations[w_lower]
+        text = ' '.join(words)
+
+    # 5. Логируем, если после всех замен остались кириллические слова
+    if _has_cyrillic(text):
+        cyrillic_words = [w for w in text.split() if _has_cyrillic(w)]
+        vin_label = process_vin_hidden(vin) if vin else "?"
+        brand_label = f"{mark_id}/{folder_id}" if mark_id else "?"
+        print_message(
+            f"\nvin: <code>{vin_label}</code>\n"
+            f"<b>Не найден перевод для URL</b>: <code>{', '.join(cyrillic_words)}</code> "
+            f"модели <code>{folder_id or '?'}</code> бренда <code>{mark_id or '?'}</code>",
+            'warning',
+        )
+
+    # 6. Транслитерация оставшейся кириллицы
+    if _has_cyrillic(text):
+        text = _transliterate(text)
+
+    return text
+
+
+def process_friendly_url(friendly_url, replace="-", mark_id=None, folder_id=None, vin=None):
+    # Перевод кириллицы на английский / латиницу
+    friendly_url = _translate_russian_in_url(friendly_url, mark_id, folder_id, vin)
+
     # Удаление специальных символов
     processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', friendly_url)
 
