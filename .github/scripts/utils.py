@@ -132,7 +132,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None):
 
     Порядок:
     1. Замена «Nх» на «Nx» (например, «4х4» → «4x4», «2х4» → «2x4»)
-    1.1. Замена «л.с.» → «h.p.» (точки потом удалятся → hp)
+    1.1. Замена «л.с.» / «л.с)» → «h.p.» / «h.p.)» (потом удалятся → hp)
     2. Бренд/модель-специфичные переопределения из settings-common.json
     3. Комплектации из all-models.json
     4. Аббревиатуры из url_translations (settings-common.json)
@@ -145,8 +145,8 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None):
     # 1. Паттерн «цифраХцифра» — русская Х → латинская x
     text = re.sub(r'(\d)[хХ](\d)', r'\1x\2', text)
 
-    # 1.1. «л.с.» → «h.p.» (точки потом удалятся → hp)
-    text = re.sub(r'л\.с\.', 'h.p.', text, flags=re.IGNORECASE)
+    # 1.1. «л.с.» / «л.с)» → «h.p.» / «h.p.)» (точки/скобки потом удалятся → hp)
+    text = re.sub(r'л\.с([.)])', r'h.p\1', text, flags=re.IGNORECASE)
 
     # 2. Бренд/модель переопределения (высший приоритет)
     brand_overrides = _get_brand_model_overrides(mark_id, folder_id)
@@ -183,7 +183,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None):
         vin_label = process_vin_hidden(vin) if vin else "?"
         brand_label = f"{mark_id}/{folder_id}" if mark_id else "?"
         print_message(
-            f"\nvin: <code>{vin_label}</code>\n"
+            f"\nvin: <code>{vin}</code>\n"
             f"<b>Не найден перевод для URL</b>: <code>{', '.join(cyrillic_words)}</code> "
             f"модели <code>{folder_id or '?'}</code> бренда <code>{mark_id or '?'}</code>",
             'warning',
