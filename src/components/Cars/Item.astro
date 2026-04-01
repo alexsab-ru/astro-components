@@ -37,6 +37,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 	data-year={ car.data?.year } 
 	data-total={ car.data.total }
 	data-max-discount={ car.data?.max_discount }
+	data-model-id={ car.data?.model_id }
 	{...rest}
 >
 	<PreviewSlider car={car} url={url} />

@@ -1090,6 +1090,11 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
         except ValueError:
             pass
 
+    # Добавляем model_id и model_name, если их нет в файле, но есть в car_data
+    for field in ('model_id', 'model_name'):
+        if field not in data and field in car_data:
+            data[field] = car_data[field]
+
     if 'order' not in data:
         if vin in sort_storage_data:
             order = sort_storage_data[vin]

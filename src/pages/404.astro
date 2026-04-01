@@ -9,7 +9,8 @@ const h1 = '404. Такая страница не найдена';
 import { getCollection } from 'astro:content';
 // Фильтруем записи коллекций на 404, чтобы исключить тестовые/черновые/просроченные
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
-const cars = await getCollection('cars');
+const rawCars = await (getCollection as any)('cars');
+const cars = rawCars?.filter((car: any) => !(typeof car?.id === 'string' && car.id.startsWith('__'))) || [];
 // Получаем все записи спецпредложений и применяем единую фильтрацию
 const specialAll = await getCollection('special-offers');
 const special = sortingAndFilteringPosts(specialAll);
@@ -31,7 +32,6 @@ const special = sortingAndFilteringPosts(specialAll);
 		</div>
 		<img src="https://cdn.alexsab.ru/errors/404wt.webp" class="max-w-xl w-full mx-auto mt-10" alt="not found" width="576" height="384" loading="lazy" />
 	</section>
-	{false && (
 	<section class="relative pb-10 hidden" id="more">
 		<div class="container">
 			<h2 class="mb-10">Смотрите также:</h2>
@@ -47,7 +47,6 @@ const special = sortingAndFilteringPosts(specialAll);
 			)}
 		</div>
 	</section>
-	)}
 </Layout>
 
 <script>
@@ -59,10 +58,37 @@ const special = sortingAndFilteringPosts(specialAll);
 			const elem = document.getElementById(item+'_more');
 			if(elem){
 				elem.classList.remove('hidden');
-				parent.classList.remove('hidden');
+				parent?.classList.remove('hidden');
 			}
 		}
 	});
+
+	// Сортировка машин: сначала той же модели, что в URL
+	(function sortCarsByModel() {
+		const path = window.location.pathname;
+		if (!path.startsWith('/cars/')) return;
+		const slug = path.replace(/^\/cars\//, '').replace(/\/$/, '');
+		if (!slug) return;
+		const grid = document.getElementById('cars_more');
+		if (!grid) return;
+		const cards = Array.from(grid.children);
+		// Извлекаем модель из 404 URL: берём slug до первой цифры-дефис-цифры (начало ДВС/модификации)
+		// belgee-x50-plus-15-amt → belgee-x50-plus
+		const modelMatch = slug.match(/^(.+?)-\d+[\d-]/);
+		if (!modelMatch) return;
+		const urlModel = modelMatch[1]; // например "belgee-x50-plus"
+		const matched = cards.filter(c => {
+			// Берём slug из ссылки карточки
+			const link = c.querySelector('a[href^="/cars/"]');
+			if (!link) return false;
+			const carSlug = link.getAttribute('href')!.replace(/^\/cars\//, '').replace(/\/$/, '');
+			const carMatch = carSlug.match(/^(.+?)-\d+[\d-]/);
+			return carMatch && carMatch[1] === urlModel;
+		});
+		for (let i = matched.length - 1; i >= 0; i--) {
+			grid.prepend(matched[i]);
+		}
+	})();
 
 	// Подставляем ссылку "Назад" на раздел выше: /models/1111 -> /models/
     function setBackHref() {
