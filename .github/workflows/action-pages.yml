@@ -275,17 +275,17 @@ jobs:
         env:
           DOMAIN: ${{ vars.DOMAIN }}
 
-      - name: Send English Words TSV to Telegram
+      - name: Send English Words CSV to Telegram
         if: ${{ github.event.inputs.send_english_words == 'true' }}
         run: |
           source .github/scripts/sh/utils.sh
           source .github/scripts/sh/send_telegram.sh
-          TSV_FILE=$(ls notifications/english-words-*.tsv 2>/dev/null | head -1)
-          if [ -n "$TSV_FILE" ]; then
+          CSV_FILE=$(ls notifications/english-words-*.csv 2>/dev/null | head -1)
+          if [ -n "$CSV_FILE" ]; then
             CAPTION="Английские слова на сайте ${{ vars.DOMAIN }}"
-            send_telegram_file "${{ secrets.TELEGRAM_TOKEN }}" "${{ secrets.TELEGRAM_TO_SPECIAL }}" "$TSV_FILE" "$CAPTION"
+            send_telegram_file "${{ secrets.TELEGRAM_TOKEN }}" "${{ secrets.TELEGRAM_TO_SPECIAL }}" "$CSV_FILE" "$CAPTION"
           else
-            echo "TSV-файл не найден, пропускаем отправку"
+            echo "CSV-файл не найден, пропускаем отправку"
           fi
 
       - name: Set output

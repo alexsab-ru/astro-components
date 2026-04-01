@@ -159,17 +159,28 @@ def main():
         print(f"| {word} | {len(urls)} | {', '.join(urls)} |")
     print("\n")
 
-    # TSV-файл в notifications/
     notifications_dir = Path('notifications')
     notifications_dir.mkdir(exist_ok=True)
-    tsv_name = f"english-words-{domain}.tsv" if domain else "english-words.tsv"
-    tsv_path = notifications_dir / tsv_name
+    stem = f"english-words-{domain}" if domain else "english-words"
+
+    # TSV — удобен для локального просмотра
+    tsv_path = notifications_dir / f"{stem}.tsv"
     with tsv_path.open('w', encoding='utf-8') as f:
         f.write("слово\tкол-во\turl\n")
         for word in sorted_words:
             urls = sorted(word_urls[word])
             f.write(f"{word}\t{len(urls)}\t{', '.join(urls)}\n")
     print(f"[INFO] TSV сохранён: {tsv_path}", file=sys.stderr)
+
+    # CSV — отправляется в Telegram
+    csv_path = notifications_dir / f"{stem}.csv"
+    with csv_path.open('w', encoding='utf-8') as f:
+        f.write("слово,кол-во,url\n")
+        for word in sorted_words:
+            urls = sorted(word_urls[word])
+            urls_cell = '; '.join(urls)
+            f.write(f"{word},{len(urls)},{urls_cell}\n")
+    print(f"[INFO] CSV сохранён: {csv_path}", file=sys.stderr)
 
     print(f"[INFO] Всего уникальных английских слов: {len(sorted_words)}", file=sys.stderr)
 
