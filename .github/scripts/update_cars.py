@@ -868,10 +868,13 @@ class CarProcessor:
         Returns:
             str: Объединенная строка
         """
+        mark_id = car_data.get('mark_id')
+        folder_id = car_data.get('folder_id')
         parts = []
         for field in fields:
             if field in car_data and car_data[field]:
                 value = str(car_data[field]).strip()
+                value = translate_field_for_url(value, field, mark_id, folder_id)
                 parts.append(value)
         return " ".join(parts)
 
