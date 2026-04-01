@@ -482,7 +482,11 @@ class CarProcessor:
                 color_rus = self.localize_value(raw_color)
 
             if not color_eng:
-                color_eng = process_friendly_url(str(raw_color).strip())
+                color_eng = process_friendly_url(str(raw_color).strip(),
+                    mark_id=car_data.get('mark_id'),
+                    folder_id=car_data.get('folder_id'),
+                    vin=car_data.get('vin'),
+                )
 
             car_data['color_rus'] = color_rus
             car_data['color_eng'] = color_eng
