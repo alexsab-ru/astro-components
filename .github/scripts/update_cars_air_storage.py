@@ -12,7 +12,12 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
     """
     if config.get('generate_friendly_url', False):
         friendly_url = f"{join_car_data(car, 'mark_id', 'folder_id', 'modification_id', 'complectation_name', 'color', 'year')}"
-        friendly_url = f"{process_friendly_url(friendly_url)}"
+        friendly_url = f"{process_friendly_url(friendly_url,
+            mark_id=car.find('mark_id').text,
+            folder_id=car.find('folder_id').text,
+            vin=car.find('vin').text,
+            log_warnings=config.get('category_type') != 'used',
+        )}"
         print(f"Уникальный идентификатор: {friendly_url}")
         create_child_element(car, 'url', f"https://{config['domain']}/cars/{friendly_url}/")
 

@@ -127,7 +127,7 @@ def _get_brand_model_overrides(mark_id, folder_id):
     return overrides
 
 
-def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None):
+def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_warnings=True):
     """Переводит русские слова в строке для URL на английский.
 
     Порядок:
@@ -178,10 +178,8 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None):
         text = ' '.join(words)
 
     # 5. Логируем, если после всех замен остались кириллические слова
-    if _has_cyrillic(text):
+    if log_warnings and _has_cyrillic(text):
         cyrillic_words = [w for w in text.split() if _has_cyrillic(w)]
-        vin_label = process_vin_hidden(vin) if vin else "?"
-        brand_label = f"{mark_id}/{folder_id}" if mark_id else "?"
         print_message(
             f"\nvin: <code>{vin}</code>\n"
             f"<b>Не найден перевод для URL</b>: <code>{', '.join(cyrillic_words)}</code> "
@@ -196,9 +194,9 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None):
     return text
 
 
-def process_friendly_url(friendly_url, replace="-", mark_id=None, folder_id=None, vin=None):
+def process_friendly_url(friendly_url, replace="-", mark_id=None, folder_id=None, vin=None, log_warnings=True):
     # Перевод кириллицы на английский / латиницу
-    friendly_url = _translate_russian_in_url(friendly_url, mark_id, folder_id, vin)
+    friendly_url = _translate_russian_in_url(friendly_url, mark_id, folder_id, vin, log_warnings)
 
     # Удаление специальных символов
     processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', friendly_url)
