@@ -280,7 +280,7 @@ jobs:
         run: |
           source .github/scripts/sh/utils.sh
           source .github/scripts/sh/send_telegram.sh
-          CSV_FILE=$(ls notifications/english-words-*.csv 2>/dev/null | head -1)
+          CSV_FILE=$(ls tmp/notifications/english-words-*.csv 2>/dev/null | head -1)
           if [ -n "$CSV_FILE" ]; then
             CAPTION="Английские слова на сайте ${{ vars.DOMAIN }}"
             send_telegram_file "${{ secrets.TELEGRAM_TOKEN }}" "${{ secrets.TELEGRAM_TO_SPECIAL }}" "$CSV_FILE" "$CAPTION"
@@ -300,17 +300,17 @@ jobs:
       - name: Check notifications
         id: check_specials
         run: |
-          if [ -s notifications/dates.txt ]; then
-            echo "specials=$(base64 -w 0 notifications/dates.txt)" >> $GITHUB_OUTPUT
+          if [ -s tmp/notifications/dates.txt ]; then
+            echo "specials=$(base64 -w 0 tmp/notifications/dates.txt)" >> $GITHUB_OUTPUT
           fi
-          if [ -s notifications/dates-marketing.txt ]; then
-            echo "specials_marketing=$(base64 -w 0 notifications/dates-marketing.txt)" >> $GITHUB_OUTPUT
+          if [ -s tmp/notifications/dates-marketing.txt ]; then
+            echo "specials_marketing=$(base64 -w 0 tmp/notifications/dates-marketing.txt)" >> $GITHUB_OUTPUT
           fi
-          if [ -s notifications/rassrochka.txt ]; then
-            echo "specials_rassrochka=$(base64 -w 0 notifications/rassrochka.txt)" >> $GITHUB_OUTPUT
+          if [ -s tmp/notifications/rassrochka.txt ]; then
+            echo "specials_rassrochka=$(base64 -w 0 tmp/notifications/rassrochka.txt)" >> $GITHUB_OUTPUT
           fi
-          if [ -s notifications/rassrochka-marketing.txt ]; then
-            echo "specials_rassrochka_marketing=$(base64 -w 0 notifications/rassrochka-marketing.txt)" >> $GITHUB_OUTPUT
+          if [ -s tmp/notifications/rassrochka-marketing.txt ]; then
+            echo "specials_rassrochka_marketing=$(base64 -w 0 tmp/notifications/rassrochka-marketing.txt)" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload artifact

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 
 dotenv.config();
 
-const NOTIFICATIONS_DIR = './notifications';
+const NOTIFICATIONS_DIR = './tmp/notifications';
 
 const ReportFile = {
     DATES: `${NOTIFICATIONS_DIR}/dates.txt`,

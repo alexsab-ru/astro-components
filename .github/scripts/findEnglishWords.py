@@ -159,8 +159,8 @@ def main():
         print(f"| {word} | {len(urls)} | {', '.join(urls)} |")
     print("\n")
 
-    notifications_dir = Path('notifications')
-    notifications_dir.mkdir(exist_ok=True)
+    notifications_dir = Path('tmp/notifications')
+    notifications_dir.mkdir(parents=True, exist_ok=True)
     stem = f"english-words-{domain}" if domain else "english-words"
 
     # TSV — удобен для локального просмотра
