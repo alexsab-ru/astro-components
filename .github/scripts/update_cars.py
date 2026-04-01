@@ -870,11 +870,13 @@ class CarProcessor:
         """
         mark_id = car_data.get('mark_id')
         folder_id = car_data.get('folder_id')
+        vin = car_data.get('vin')
+        log_warnings = self.config.get('category_type') != 'used'
         parts = []
         for field in fields:
             if field in car_data and car_data[field]:
                 value = str(car_data[field]).strip()
-                value = translate_field_for_url(value, field, mark_id, folder_id)
+                value = translate_field_for_url(value, field, mark_id, folder_id, vin, log_warnings)
                 parts.append(value)
         return " ".join(parts)
 

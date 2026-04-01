@@ -104,7 +104,7 @@ def _lookup_complectation_name(value, mark_id=None, folder_id=None):
     return _complectation_map.get(value_lower)
 
 
-def translate_field_for_url(value, field_name, mark_id=None, folder_id=None):
+def translate_field_for_url(value, field_name, mark_id=None, folder_id=None, vin=None, log_warnings=True):
     """Переводит значение отдельного поля для использования в URL.
 
     Для complectation_name — точный поиск в справочнике комплектаций.
@@ -121,7 +121,7 @@ def translate_field_for_url(value, field_name, mark_id=None, folder_id=None):
         if result:
             return result
 
-    return _translate_russian_in_url(value, mark_id, folder_id)
+    return _translate_russian_in_url(value, mark_id, folder_id, vin, log_warnings)
 
 
 def _transliterate(text):
@@ -246,7 +246,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
 
 def process_friendly_url(friendly_url, replace="-", mark_id=None, folder_id=None, vin=None, log_warnings=True):
     # Перевод кириллицы на английский / латиницу
-    friendly_url = _translate_russian_in_url(friendly_url, mark_id, folder_id, vin, log_warnings)
+    # friendly_url = _translate_russian_in_url(friendly_url, mark_id, folder_id, vin, log_warnings)
 
     # Удаление специальных символов
     processed_id = re.sub(r'[\/\\?%*:|"<>.,;\'\[\]()&]', '', friendly_url)
@@ -498,13 +498,15 @@ def join_car_data(car, *elements):
     folder_id_el = car.find('folder_id')
     mark_id = mark_id_el.text.strip() if mark_id_el is not None and mark_id_el.text else None
     folder_id = folder_id_el.text.strip() if folder_id_el is not None and folder_id_el.text else None
+    vin = car.find('vin').text.strip() if car.find('vin') is not None and car.find('vin').text else None
+    log_warnings = True
 
     car_parts = []
     for element_name in elements:
         element = car.find(element_name)
         if element is not None and element.text is not None:
             value = element.text.strip()
-            value = translate_field_for_url(value, element_name, mark_id, folder_id)
+            value = translate_field_for_url(value, element_name, mark_id, folder_id, vin, log_warnings)
             car_parts.append(value)
 
     return " ".join(car_parts)
