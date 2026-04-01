@@ -36,6 +36,12 @@ on:
       - '.github/workflows/update_cars.yml'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      send_english_words:
+        description: 'Отправить отчёт по английским словам в Telegram (TELEGRAM_TO_SPECIAL)'
+        required: false
+        type: boolean
+        default: false
   # Allows this workflow to be called by other workflows
   workflow_call:
 
@@ -243,6 +249,18 @@ jobs:
           python3 .github/scripts/findEnglishWords.py
         env:
           DOMAIN: ${{ vars.DOMAIN }}
+
+      - name: Send English Words TSV to Telegram
+        if: ${{ github.event.inputs.send_english_words == 'true' }}
+        run: |
+          source .github/scripts/sh/utils.sh
+          source .github/scripts/sh/send_telegram.sh
+          TSV_FILE=$(ls notifications/english-words-*.tsv 2>/dev/null | head -1)
+          if [ -n "$TSV_FILE" ]; then
+            send_telegram_file "${{ secrets.TELEGRAM_TOKEN }}" "${{ secrets.TELEGRAM_TO_SPECIAL }}" "$TSV_FILE"
+          else
+            echo "TSV-файл не найден, пропускаем отправку"
+          fi
 
       - name: Set output
         id: set_output

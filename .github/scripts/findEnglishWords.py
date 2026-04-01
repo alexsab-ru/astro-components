@@ -150,16 +150,28 @@ def main():
 
     sorted_words = sorted(word_urls.keys())
 
+    # Markdown-таблица в консоль
     print("\n")
     print("| слово | кол-во | url |")
     print("|-------|--------|-----|")
     for word in sorted_words:
         urls = sorted(word_urls[word])
         print(f"| {word} | {len(urls)} | {', '.join(urls)} |")
-
     print("\n")
 
-    print(f"\n[INFO] Всего уникальных английских слов: {len(sorted_words)}", file=sys.stderr)
+    # TSV-файл в notifications/
+    notifications_dir = Path('notifications')
+    notifications_dir.mkdir(exist_ok=True)
+    tsv_name = f"english-words-{domain}.tsv" if domain else "english-words.tsv"
+    tsv_path = notifications_dir / tsv_name
+    with tsv_path.open('w', encoding='utf-8') as f:
+        f.write("слово\tкол-во\turl\n")
+        for word in sorted_words:
+            urls = sorted(word_urls[word])
+            f.write(f"{word}\t{len(urls)}\t{', '.join(urls)}\n")
+    print(f"[INFO] TSV сохранён: {tsv_path}", file=sys.stderr)
+
+    print(f"[INFO] Всего уникальных английских слов: {len(sorted_words)}", file=sys.stderr)
 
 
 if __name__ == '__main__':
