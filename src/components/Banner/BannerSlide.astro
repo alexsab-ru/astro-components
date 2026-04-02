@@ -42,6 +42,9 @@ const isModalHref = (href?: string) => !!href && href.toLowerCase().includes('#c
 const isPopupBannerLink = isModalHref(resolvedUrl);
 const buttonView = isModalHref(resolvedBtnUrl) ? 'popup-link' : 'link';
 const hasBannerUrl = !!resolvedUrl;
+const stripHtml = (value?: string) => (value ? value.replace(/<[^>]*>/g, '').trim() : '');
+const resolvedDataTitle = banner?.dataTitle || stripHtml(banner?.title) || 'Обратная связь';
+const resolvedDataFormName = banner?.dataFormName || `${resolvedDataTitle}. Баннер`;
 
 const BannerType = isVideo ? BannerVideo : BannerImage;
 
@@ -49,8 +52,8 @@ const BannerType = isVideo ? BannerVideo : BannerImage;
 const linkAttrs = hasBannerUrl ? {
 	href: resolvedUrl as string,
 	class: `absolute inset-0 h-full w-full z-10 block ${isPopupBannerLink ? 'popup-link' : ''}`,
-	...(banner?.dataTitle ? {'data-title': banner.dataTitle} : {}),
-	...(banner?.dataFormName ? {'data-form_name': banner.dataFormName} : {}),
+	'data-title': resolvedDataTitle,
+	'data-form_name': resolvedDataFormName,
 	...(banner?.target && !isPopupBannerLink ? {target: banner.target} : {}),
 } : null;
 ---
@@ -73,8 +76,8 @@ const linkAttrs = hasBannerUrl ? {
 								view={buttonView}
 								url={resolvedBtnUrl}
 								title={banner?.btn}
-								dataTitle={banner?.dataTitle}
-								dataFormName={banner?.dataFormName}
+								dataTitle={resolvedDataTitle}
+								dataFormName={resolvedDataFormName}
 							/>
 						</div>
 					)
