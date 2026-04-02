@@ -152,7 +152,7 @@ def main():
 
     # Markdown-таблица в консоль
     print("\n")
-    print("| слово | кол-во | url |")
+    print("| word | count | url |")
     print("|-------|--------|-----|")
     for word in sorted_words:
         urls = sorted(word_urls[word])
@@ -166,7 +166,7 @@ def main():
     # TSV — удобен для локального просмотра
     tsv_path = notifications_dir / f"{stem}.tsv"
     with tsv_path.open('w', encoding='utf-8') as f:
-        f.write("слово\tкол-во\turl\n")
+        f.write("word\tcount\turl\n")
         for word in sorted_words:
             urls = sorted(word_urls[word])
             f.write(f"{word}\t{len(urls)}\t{', '.join(urls)}\n")
@@ -175,7 +175,7 @@ def main():
     # CSV — отправляется в Telegram
     csv_path = notifications_dir / f"{stem}.csv"
     with csv_path.open('w', encoding='utf-8') as f:
-        f.write("слово,кол-во,url\n")
+        f.write("word,count,url\n")
         for word in sorted_words:
             urls = sorted(word_urls[word])
             urls_cell = '; '.join(urls)

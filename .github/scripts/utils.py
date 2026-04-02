@@ -220,12 +220,10 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
 
     # 4. Пословная замена аббревиатур из settings-common.json
     if _has_cyrillic(text):
-        words = text.split()
-        for i, word in enumerate(words):
-            w_lower = word.lower()
-            if w_lower in _url_translations:
-                words[i] = _url_translations[w_lower]
-        text = ' '.join(words)
+        def _replace_abbrev(m):
+            w_lower = m.group(0).lower()
+            return _url_translations.get(w_lower, m.group(0))
+        text = re.sub(r'[а-яёА-ЯЁ]+', _replace_abbrev, text)
 
     # 5. Логируем, если после всех замен остались кириллические слова
     if log_warnings and _has_cyrillic(text):
