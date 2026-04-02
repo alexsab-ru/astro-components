@@ -2,6 +2,7 @@
 src/scss/brand.css
 # build output
 dist/
+_site/
 # generated types
 .astro/
 
