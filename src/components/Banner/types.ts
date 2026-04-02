@@ -17,7 +17,6 @@ export type TBanner = {
 	id?: number
 	show?: boolean
 	type?: string
-	view?: string
 
 	image?: TMediaKeys
 	video?: TMediaKeys

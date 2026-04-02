@@ -27,7 +27,6 @@ const containerClasses = is_header_transparent && header_top_line
 const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
 
 const isVideo = banner?.type === 'video';
-const resolvedView = onlyModal ? 'popup-link' : banner?.view;
 
 // Единый URL для всего баннера: bannerUrl → url → btnUrl (приоритет от специфичного к общему)
 const resolvedUrl = onlyModal && (banner?.bannerUrl || banner?.url || banner?.btnUrl)
@@ -39,6 +38,9 @@ const resolvedBtnUrl = onlyModal && (banner?.btnUrl || banner?.url)
 	? '#common-modal'
 	: banner?.btnUrl || banner?.url;
 
+const isModalHref = (href?: string) => !!href && href.toLowerCase().includes('#common-modal');
+const isPopupBannerLink = isModalHref(resolvedUrl);
+const buttonView = isModalHref(resolvedBtnUrl) ? 'popup-link' : 'link';
 const hasBannerUrl = !!resolvedUrl;
 
 const BannerType = isVideo ? BannerVideo : BannerImage;
@@ -46,10 +48,10 @@ const BannerType = isVideo ? BannerVideo : BannerImage;
 // Атрибуты прозрачного оверлея-ссылки поверх всего баннера
 const linkAttrs = hasBannerUrl ? {
 	href: resolvedUrl as string,
-	class: `absolute inset-0 h-full w-full z-10 block ${resolvedView === 'popup-link' ? 'popup-link' : ''}`,
+	class: `absolute inset-0 h-full w-full z-10 block ${isPopupBannerLink ? 'popup-link' : ''}`,
 	...(banner?.dataTitle ? {'data-title': banner.dataTitle} : {}),
 	...(banner?.dataFormName ? {'data-form_name': banner.dataFormName} : {}),
-	...(banner?.target && !onlyModal ? {target: banner.target} : {}),
+	...(banner?.target && !isPopupBannerLink ? {target: banner.target} : {}),
 } : null;
 ---
 
@@ -65,10 +67,10 @@ const linkAttrs = hasBannerUrl ? {
 				{ banner?.descr && ( <div class="relative z-1"><BannerDescription description={banner.descr} /></div> ) }
 				{
 					(!onlyView || onlyModal) && banner?.btn && (
-						<div data-swiper-parallax="-55%" class="relative z-20">
+						<div data-swiper-parallax="-55%" class="relative z-20 inline-block mt-8 sm:mt-10">
 							<Button
-								classes={`btn inline-block py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
-								view={resolvedView}
+								classes={`btn inline-block py-2! sm:py-3 text-sm sm:text-base ${btnColor}`}
+								view={buttonView}
 								url={resolvedBtnUrl}
 								title={banner?.btn}
 								dataTitle={banner?.dataTitle}
