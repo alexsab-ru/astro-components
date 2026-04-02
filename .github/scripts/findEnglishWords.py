@@ -29,7 +29,7 @@ ENGLISH_WORD_RE = re.compile(
 )
 
 # Теги, содержимое которых не нужно анализировать
-SKIP_TAGS = {'script', 'style', 'noscript', 'head'}
+SKIP_TAGS = {'script', 'style', 'noscript', 'head', 'a'}
 
 
 def file_path_to_url(html_file: Path, site_dir: Path, domain: str) -> str:
