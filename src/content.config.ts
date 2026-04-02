@@ -69,7 +69,7 @@ export const collections = {
             priceWithDiscount: z.number(),
             sale_price: z.number(),
             max_discount: z.number(),
-            model_id: z.string(),
+            model_id: z.string().optional(),
             // Скидки встречаются не во всех карточках (исторические записи) — делаем их опциональными
             credit_discount: z.number().default(0).optional(),
             insurance_discount: z.number().default(0).optional(),

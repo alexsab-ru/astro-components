@@ -972,6 +972,11 @@ class CarProcessor:
                 }
         # --- конец блока ---
 
+        # Фоллбэк: если model_id не установлен (модель не найдена в models.json),
+        # генерируем его из folder_id через process_friendly_url
+        if 'model_id' not in car_data:
+            car_data['model_id'] = process_friendly_url(model_full)
+
         # get info from ./src/data/settings.json
         settings = {
             'legal_city': 'Город',
