@@ -1,11 +1,12 @@
 ---
 import type { TBadge } from './types'; 
 interface Props extends TBadge {}
-const {autoname, title, descr, image, position = 'center', colorText = 'white', bg = false} = Astro.props;
+const {autoname, title, description, descr, image, position = 'center', colorText = 'white', bg = false} = Astro.props;
 const classPosition = position === 'right' ? 'mx-auto md:mx-0 md:ml-auto pr-0' : position === 'left' ? 'mx-auto md:mx-0 pl-0' : 'mx-auto';
 const textColor = colorText === 'black' ? 'text-black' : 'text-white';
 const background = bg ? 'bg-white/30' : '';
 const images = image ? image.split(',') : [];
+const resolvedDescription = description ?? descr;
 ---
 
 <div class={`px-5 py-3 w-fit inline-flex flex-col items-center justify-center ${classPosition} ${textColor} ${background}`}>
@@ -18,5 +19,5 @@ const images = image ? image.split(',') : [];
         </div>
     )}
     { title && (<p class="xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4"><Fragment set:html={title}></p>) }
-    { descr && (<p class="xs:text-xs sm:text-lg font-medium text-center uppercase"><Fragment set:html={descr}></p>) }
+    { resolvedDescription && (<p class="xs:text-xs sm:text-lg font-medium text-center uppercase"><Fragment set:html={resolvedDescription}></p>) }
 </div>

@@ -43,7 +43,7 @@ const isRelated = (banner: TBanner) => {
   if (banner.url?.toLowerCase().includes(urlSegment)) return true;
   if (banner.btnUrl?.toLowerCase().includes(urlSegment)) return true;
   if (banner.bannerUrl?.toLowerCase().includes(urlSegment)) return true;
-  return [banner.title, banner.descr, banner.dataTitle].some((f) => (f ? nameRegex.test(f) : false));
+  return [banner.title, banner.description, banner.descr, banner.dataTitle].some((f) => (f ? nameRegex.test(f) : false));
 };
 
 let relatedSlidesCount = 0;

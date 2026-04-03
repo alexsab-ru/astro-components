@@ -2,6 +2,8 @@ export type Viewport = 'mobile' | 'tablet' | 'desktop';
 export type TBadge = {
 	autoname?: string
 	title?: string
+	description?: string
+	/** @deprecated Используй поле 'description' **/
 	descr?: string
 	image?: string
 	position?: string
@@ -33,6 +35,8 @@ export type TBanner = {
 	target?: string
 	gradient?: boolean
 	title?: string
+	description?: string
+	/** @deprecated Используй поле 'description' **/
 	descr?: string
 	disclaimer?: string
 	btn?: string

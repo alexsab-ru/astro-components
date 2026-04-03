@@ -74,7 +74,7 @@ const linkAttrs = hasBannerUrl ? {
 		<div class="h-full flex flex-col justify-between">
 			<div class="">
 				{ banner?.title && ( <div class="relative z-1"><BannerTitle title={banner.title} /></div> ) }
-				{ banner?.descr && ( <div class="relative z-1"><BannerDescription description={banner.descr} /></div> ) }
+				{ (banner?.description || banner?.descr) && ( <div class="relative z-1"><BannerDescription description={banner?.description || banner?.descr} /></div> ) }
 				{
 					(!onlyView || onlyModal) && banner?.btn && (
 						<div data-swiper-parallax="-55%" class="relative z-20 inline-block mt-8 sm:mt-10">
@@ -98,7 +98,7 @@ const linkAttrs = hasBannerUrl ? {
 								<Badge
 									autoname={banner.badge?.autoname}
 									title={banner.badge?.title}
-									descr={banner.badge?.descr}
+									description={banner.badge?.description || banner.badge?.descr}
 									image={banner.badge?.image}
 									position={banner.badge?.position}
 									colorText={banner.badge?.colorText}
