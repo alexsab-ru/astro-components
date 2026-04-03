@@ -1,0 +1,18 @@
+---
+let schema: Record<string, unknown | unknown[]> = {};
+
+try {
+  const mod = await import('@/data/schema.json');
+  schema = mod.default ?? mod;
+} catch {
+  // schema.json не существует — просто не рендерим разметку
+}
+
+const currentPath = Astro.url.pathname;
+const raw = schema[currentPath];
+const schemas = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
+---
+
+{schemas.length > 0 && (
+  <script type="application/ld+json" set:html={JSON.stringify(schemas)} />
+)}
