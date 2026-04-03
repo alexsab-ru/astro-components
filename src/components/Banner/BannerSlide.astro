@@ -91,16 +91,29 @@ const linkAttrs = hasBannerUrl ? {
 				}
 			</div>
 			{
-				banner?.badge && (
-					<Badge
-						autoname={banner.badge?.autoname}
-						title={banner.badge?.title}
-						descr={banner.badge?.descr}
-						image={banner.badge?.image}
-						position={banner.badge?.position}
-						colorText={banner.badge?.colorText}
-						bg={banner.badge?.bg}
-					/>
+				(banner?.badge || banner?.disclaimer) && (
+					<div class="relative z-1">
+						{
+							banner?.badge && (
+								<Badge
+									autoname={banner.badge?.autoname}
+									title={banner.badge?.title}
+									descr={banner.badge?.descr}
+									image={banner.badge?.image}
+									position={banner.badge?.position}
+									colorText={banner.badge?.colorText}
+									bg={banner.badge?.bg}
+								/>
+							)
+						}
+						{
+							banner?.disclaimer && (
+								<div class="mt-4 text-xs sm:text-sm text-white/90 relative z-10">
+									<Fragment set:html={banner.disclaimer} />
+								</div>
+							)
+						}
+					</div>
 				)
 			}
 		</div>

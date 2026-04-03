@@ -34,6 +34,7 @@ export type TBanner = {
 	gradient?: boolean
 	title?: string
 	descr?: string
+	disclaimer?: string
 	btn?: string
 	/** @deprecated Используй поле 'url'   **/
 	btnUrl?: string
