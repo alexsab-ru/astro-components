@@ -32,6 +32,8 @@ export type TBanner = {
 	url?: string
 	/** @deprecated Используй поле 'url'   **/
 	bannerUrl?: string
+	openInNewTab?: boolean
+	/** @deprecated Используй поле 'openInNewTab' **/
 	target?: string
 	gradient?: boolean
 	title?: string

@@ -49,6 +49,7 @@ const isModalHref = (href?: string) => !!href && href.toLowerCase().includes('#c
 const isPopupBannerLink = isModalHref(resolvedUrl);
 const buttonView = isModalHref(resolvedBtnUrl) ? 'popup-link' : 'link';
 const hasBannerUrl = !!resolvedUrl;
+const openInNewTab = banner?.openInNewTab ?? banner?.target === '_blank';
 const stripHtml = (value?: string) => (value ? value.replace(/<[^>]*>/g, '').trim() : '');
 const resolvedDataTitle = banner?.dataTitle || stripHtml(banner?.title) || 'Обратная связь';
 const resolvedDataFormName = banner?.dataFormName || `${resolvedDataTitle}. Баннер`;
@@ -61,7 +62,7 @@ const linkAttrs = hasBannerUrl ? {
 	class: `absolute inset-0 h-full w-full z-10 block ${isPopupBannerLink ? 'popup-link' : ''}`,
 	'data-title': resolvedDataTitle,
 	'data-form_name': resolvedDataFormName,
-	...(banner?.target && !isPopupBannerLink ? {target: banner.target} : {}),
+	...(openInNewTab && !isPopupBannerLink ? {target: '_blank', rel: 'noopener noreferrer'} : {}),
 } : null;
 ---
 
