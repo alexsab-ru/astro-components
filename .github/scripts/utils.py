@@ -121,6 +121,13 @@ def translate_field_for_url(value, field_name, mark_id=None, folder_id=None, vin
         if result:
             return result
 
+    if field_name == 'color' and mark_id and folder_id:
+        color_entry = get_model_info(mark_id, folder_id, property='color', color=value, vin=vin, log_errors=False)
+        if isinstance(color_entry, dict) and color_entry.get('id'):
+            return color_entry['id']
+        # Цвет не найден в конфиге — транслитерируем без предупреждения (предупреждение отдельно)
+        return _translate_russian_in_url(value, mark_id, folder_id, vin, log_warnings=False)
+
     return _translate_russian_in_url(value, mark_id, folder_id, vin, log_warnings)
 
 
