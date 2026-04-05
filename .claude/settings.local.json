@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(cat:*)",
-      "Bash(git add:*)"
-    ]
-  },
-  "enableAllProjectMcpServers": false
-}
