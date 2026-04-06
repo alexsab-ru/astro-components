@@ -20,7 +20,7 @@ const raw = schema[currentPath];
 const schemas = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
 
 const siteUrl = Astro.site?.href.replace(/\/$/, '') ?? '';
-const breadcrumbListSchema = breadcrumbs && breadcrumbs.length > 0
+const breadcrumbListSchema = breadcrumbs && breadcrumbs.length > 0 && schemas.length > 0
   ? {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
