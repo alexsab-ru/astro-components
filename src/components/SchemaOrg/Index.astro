@@ -9,8 +9,8 @@ const { breadcrumbs } = Astro.props;
 let schema: Record<string, unknown | unknown[]> = {};
 
 try {
-  const mod = await import('@/data/schema.json');
-  schema = mod.default ?? mod;
+  const mod = import.meta.glob('/src/data/schema.json', { eager: true });
+  schema = (Object.values(mod)[0] as any)?.default || [];
 } catch {
   // schema.json не существует — просто не рендерим разметку
 }
