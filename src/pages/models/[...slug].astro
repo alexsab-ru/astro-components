@@ -75,6 +75,7 @@ let sections = await getModelSectionsYML(model);
   description={`${model.mark_id} ${modelTitle} купить в ${legal_city_where}. Кредит, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={(model as any).image ?? (model as any).thumb}
   brand={model.mark_id}
+  breadcrumb={[breadcrumb, { name: modelTitle, href: Astro.url.pathname }]}
 >
   <div x-init={`$store.lastViewedModel.setModel(${lastViewedModelJSON})`} class="hidden"></div>
   <PageH1 h1={`Автомобиль ${model?.mark_id} ${modelTitle} в ${legal_city_where}`} classes="sr-only" />

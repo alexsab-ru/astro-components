@@ -19,6 +19,7 @@ const { testDrive } = modelsData;
 	title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} 
 	description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`} 
 	{...salons.length > 1 ? {'brand': testDrive[0]?.mark_id} : {} }
+	breadcrumb={[{ name: 'Тест-драйв', href: '/test-drive/' }]}
 >
 	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data="testDrive">
 

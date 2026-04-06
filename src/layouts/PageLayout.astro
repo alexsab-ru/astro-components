@@ -17,7 +17,7 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import BackLink from '@/components/BackLink.astro';
 ---
 
-<Layout title={title || h1} description={description} image={image} keywords={keywords} brand={brand?.toLowerCase() || null}>
+<Layout title={title || h1} description={description} image={image} keywords={keywords} brand={brand?.toLowerCase() || null} breadcrumb={breadcrumb}>
 	<section class="content">
 		<div class="container">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}

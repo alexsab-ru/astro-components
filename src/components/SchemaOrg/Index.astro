@@ -1,0 +1,44 @@
+---
+import type { TBreadcrumb } from '@/components/Breadcrumbs/types';
+interface Props {
+  breadcrumbs?: TBreadcrumb[];
+}
+
+const { breadcrumbs } = Astro.props;
+
+let schema: Record<string, unknown | unknown[]> = {};
+
+try {
+  const mod = import.meta.glob('/src/data/schema.json', { eager: true });
+  schema = (Object.values(mod)[0] as any)?.default || [];
+} catch {
+  // schema.json не существует — просто не рендерим разметку
+}
+
+const currentPath = Astro.url.pathname;
+const raw = schema[currentPath];
+const schemas = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
+
+const siteUrl = Astro.site?.href.replace(/\/$/, '') ?? '';
+const breadcrumbListSchema = breadcrumbs && breadcrumbs.length > 0 && schemas.length > 0
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Главная", "item": siteUrl + "/" },
+        ...breadcrumbs.map((crumb, i) => ({
+          "@type": "ListItem",
+          "position": i + 2,
+          "name": crumb.name,
+          "item": siteUrl + crumb.href,
+        }))
+      ]
+    }
+  : null;
+
+const allSchemas = [...schemas, ...(breadcrumbListSchema ? [breadcrumbListSchema] : [])];
+---
+
+{allSchemas.length > 0 && (
+  <script type="application/ld+json" set:html={JSON.stringify(allSchemas)} />
+)}

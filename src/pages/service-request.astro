@@ -6,7 +6,7 @@ import PageH1 from '@/components/PageH1/Index.astro';
 const { brand, legal_city_where } = settings;
 ---
 
-<Layout title={`Запись на сервис ${brand}`} description={`Запись на сервис автомобилей ${brand} в ${legal_city_where}`}>
+<Layout title={`Запись на сервис ${brand}`} description={`Запись на сервис автомобилей ${brand} в ${legal_city_where}`} breadcrumb={[{ name: 'Запись на сервис', href: '/service-request/' }]}>
 	<div class="container py-10 space-y-10">
 		<div>
 			<PageH1 h1={`Записаться на сервис ${brand}`} classes="text-3xl sm:text-4xl text-center" />
