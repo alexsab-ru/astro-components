@@ -24,7 +24,7 @@ export function ChatWidget({ config }: ChatWidgetProps) {
   const settings = config.settings || {};
   const isOnline = Array.isArray(config.questions) && config.questions.length > 0;
   const managerName = settings.managerName || 'Менеджер';
-  const formName = settings.formName || 'Квиз чат';
+  const formName = settings.formName || 'Страница чат-лендинга';
   const dealer = settings.dealer || 'Официальный дилер';
 
   // Автоскролл: отключён до первого ответа пользователя
