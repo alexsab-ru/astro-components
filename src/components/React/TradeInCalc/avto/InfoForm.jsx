@@ -4,7 +4,6 @@ import { useTranslit } from '@/js/utils/translit';
 import { scroll } from '@/js/modules/scroll';
 import { maskphone } from '@alexsab-ru/scripts';
 import { calcMinPrice, getPair } from '@/js/utils/helpers';
-import { reachGoal, setCookie, deleteCookie, createRequest } from '@alexsab-ru/scripts';
 import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
@@ -132,6 +131,8 @@ function AvtoInfoForm({ ct_routeKey = '' } = {}) {
 	const onSubmit = async (data, e) => {
 		const isFormCorrect = await trigger();
 		if (!isFormCorrect) return;
+		// Динамический импорт: модуль содержит browser-only код (window.*), SSR его не должен трогать
+		const { reachGoal, setCookie, deleteCookie, createRequest } = await import('@alexsab-ru/scripts');
 		reachGoal("form_submit");
 		showLoader();
 		const info = JSON.parse(JSON.stringify(avtoInfo));

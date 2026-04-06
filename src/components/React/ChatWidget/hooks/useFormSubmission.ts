@@ -3,7 +3,6 @@
 import { useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { getPair } from '@/js/utils/helpers';
-import { reachGoal, setCookie, deleteCookie, createRequest } from '@alexsab-ru/scripts';
 import settings from '@/data/settings.json';
 
 const { connectforms_link } = settings;
@@ -46,6 +45,9 @@ export function useFormSubmission({
    */
   const sendLead = useCallback(async (data: Record<string, any>) => {
     setIsTyping(true);
+
+    // Динамический импорт: модуль содержит browser-only код (window.*), SSR его не должен трогать
+    const { reachGoal, setCookie, deleteCookie, createRequest } = await import('@alexsab-ru/scripts');
 
     // Отправляем цель «форма отправлена»
     reachGoal("form_submit");
