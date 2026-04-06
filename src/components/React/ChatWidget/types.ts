@@ -37,6 +37,7 @@ export interface ChatSettings {
   managerPosition?: string;
   managerPhoto?: string;
   formName?: string;
+  ct_routeKey?: string;
   brand?: string;
   dealer?: string;
   legalCityWhere?: string;
