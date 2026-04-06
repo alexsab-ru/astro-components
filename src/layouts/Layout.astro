@@ -6,12 +6,13 @@ interface Props {
 	image?: string;
 	keywords?: string;
 	brand?: string;
+	breadcrumb?: TBreadcrumb[]; 
 	footerVersion?: string | number;
 	showHeaderMenu?: boolean;
 	showFooterLinks?: boolean;
 	logoNoLink?: boolean;
 }
-let {title, h1, description, image, keywords, brand = null, footerVersion = '2', showHeaderMenu = true, showFooterLinks = true, logoNoLink = false} = Astro.props;
+let {title, h1, description, image, keywords, brand = null, breadcrumb, footerVersion = '2', showHeaderMenu = true, showFooterLinks = true, logoNoLink = false} = Astro.props;
 
 import settings from '@/data/settings.json';
 const { site_name, site_description, is_header_transparent } = settings;
@@ -28,6 +29,7 @@ import seo from '@/data/seo.json';
 import StripEmptyQuery from '../components/StripEmptyQuery.astro';
 import Tooltip from '@/components/Tooltip/Tooltip.astro';
 import SchemaOrg from '@/components/SchemaOrg/Index.astro';
+import type { TBreadcrumb } from '@/components/Breadcrumbs/types';
 
 import FooterV1 from '@/components/Footer/V1.astro';
 import FooterV2 from '@/components/Footer/V2.astro';
@@ -82,7 +84,7 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 		<StripEmptyQuery />
 		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
 		<ScriptHead />
-		<SchemaOrg /> 
+		<SchemaOrg breadcrumbs={breadcrumb} /> 
 	</head>
 	<body class={`antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black ${bodyClasses}`} x-data="complectation">
 		<ScriptBodyBegin />

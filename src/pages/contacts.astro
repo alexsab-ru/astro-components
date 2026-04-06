@@ -23,7 +23,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
     .map(s => `${s?.address}`).join(', ')}`;
 ---
 
-<Layout title={`Контакты автосалона ${site_name}`} description={`${description}`}>
+<Layout title={`Контакты автосалона ${site_name}`} description={`${description}`} breadcrumb={[{ name: 'Контакты', href: '/contacts/' }]}>
 	<div class="h-full relative">
 		<div class="container">
 			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
