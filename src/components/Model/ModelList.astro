@@ -22,7 +22,7 @@ const multipleBrands = brandCount > 1;
 // Если title есть (h2), то бренды — h3, иначе бренды — h2
 const BrandTag = title ? 'h3' : 'h2';
 // Если несколько брендов — карточка h3, если один — h2
-const cardHeadingLevel: 'h2' | 'h3' = multipleBrands ? 'h3' : 'h2';
+const cardHeadingLevel: 'h2' | 'h3' = (multipleBrands || !!title) ? 'h3' : 'h2';
 ---
 
 {
