@@ -1,5 +1,7 @@
 ---
 import type { TBreadcrumb } from '@/components/Breadcrumbs/types';
+import { LINKS_MENU } from '@/const.js';
+
 interface Props {
   breadcrumbs?: TBreadcrumb[];
 }
@@ -20,6 +22,7 @@ const raw = schema[currentPath];
 const schemas = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
 
 const siteUrl = Astro.site?.href.replace(/\/$/, '') ?? '';
+
 const breadcrumbListSchema = breadcrumbs && breadcrumbs.length > 0 && schemas.length > 0
   ? {
       "@context": "https://schema.org",
@@ -36,7 +39,57 @@ const breadcrumbListSchema = breadcrumbs && breadcrumbs.length > 0 && schemas.le
     }
   : null;
 
-const allSchemas = [...schemas, ...(breadcrumbListSchema ? [breadcrumbListSchema] : [])];
+const isValidUrl = (url: unknown): url is string =>
+  typeof url === 'string' &&
+  !url.startsWith('/#') &&
+  !url.startsWith('javascript:');
+
+const flatNavLinks: { name: string; url: string }[] = [];
+const pushNavLink = (name: unknown, url: unknown) => {
+  if (typeof name === 'string' && isValidUrl(url)) {
+    flatNavLinks.push({ name, url: siteUrl + url });
+  }
+};
+
+for (const link of LINKS_MENU as any[]) {
+  pushNavLink(link?.name, link?.url);
+
+  if (Array.isArray(link.children)) {
+    for (const child of link.children) {
+      pushNavLink(child?.name, child?.url);
+    }
+  } else if (link.children && typeof link.children === 'object') {
+    for (const brandItems of Object.values(link.children as Record<string, unknown>)) {
+      if (!Array.isArray(brandItems)) continue;
+
+      for (const child of brandItems) {
+        pushNavLink((child as { name?: unknown })?.name, (child as { url?: unknown })?.url);
+      }
+    }
+  }
+}
+
+const navItems = flatNavLinks.map((link, i) => ({
+  "@type": "SiteNavigationElement",
+  "position": i + 1,
+  "name": link.name,
+  "url": link.url,
+}));
+
+const navSchema = navItems.length > 0
+  ? {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Главное меню",
+      "itemListElement": navItems,
+    }
+  : null;
+
+const allSchemas = [
+  ...schemas,
+  ...(breadcrumbListSchema ? [breadcrumbListSchema] : []),
+  ...(navSchema ? [navSchema] : []),
+];
 ---
 
 {allSchemas.length > 0 && (
