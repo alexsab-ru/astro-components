@@ -20,7 +20,23 @@ export function sortingAndFilteringPosts(posts) {
 	return posts
 		// Исключаем файлы начинающиеся с '__'
 		.filter(post => !(typeof post?.id === 'string' && post.id.startsWith('__')))
-		.sort((a, b) => a.data.pubDate && b.data.pubDate ? b.data.pubDate.valueOf() - a.data.pubDate.valueOf() : getFileNumber(a) - getFileNumber(b))
+		// Сначала порядок по префиксу в имени файла (getFileNumber: без цифры = 0, идут первыми).
+		// Внутри одной «группы» номера — по дате публикации, новее выше.
+		.sort((a, b) => {
+			const byNumber = getFileNumber(a) - getFileNumber(b);
+			if (byNumber !== 0) return byNumber;
+
+			const dateA = a.data?.pubDate;
+			const dateB = b.data?.pubDate;
+			// Оба с датой — сравниваем по убыванию (свежие сверху).
+			if (dateA && dateB) {
+				return dateB.valueOf() - dateA.valueOf();
+			}
+			// У кого даты нет — в конец подгруппы с тем же номером файла.
+			if (dateA && !dateB) return -1;
+			if (!dateA && dateB) return 1;
+			return 0;
+		})
 		.filter(post => !post.data.draft)
 		.filter(post => {
 			if (post.data?.toDate && typeof post.data?.toDate === 'object') {
