@@ -1,8 +1,9 @@
 ---
+import scripts_json from '@/data/scripts.json';
 import settings from '@/data/settings.json';
 const { site_name, legal_entity, brand } = settings;
 import { FOOTER_INFO } from '@/const'
-const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${site_name}`;
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
 ---
 
 <footer class="bg-black text-white py-8" x-data="footer">

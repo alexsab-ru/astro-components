@@ -1,4 +1,5 @@
 ---
+import scripts_json from '@/data/scripts.json';
 import settings from '@/data/settings.json';
 const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
@@ -7,7 +8,7 @@ import Brands from '@/components/Brands/Brands.astro';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
-const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${site_name}`;
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => {
