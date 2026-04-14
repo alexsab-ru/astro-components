@@ -22,10 +22,17 @@ const {
 
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
-const options = modelsData.services.filter(isModelVisible).map(({ id, name, mark_id }) => ({ 
-	id: `${mark_id}-${id}`.toLowerCase(), 
-	name: `${mark_id} ${name}` 
-}));
+const options = modelsData.services.filter(isModelVisible).map(({ id, mark_id, name, caption }) => {
+	// Используем отдельную переменную, чтобы не менять исходные данные модели.
+	// Для Livan показываем более понятное локализованное название бренда.
+	const normalizedMarkId = mark_id === 'Livan' ? 'ЛИВЭН (LIVAN)' : mark_id;
+
+	return {
+		id: `${normalizedMarkId}-${id}`.toLowerCase(),
+		name: `${normalizedMarkId} ${name}`,
+		caption: `${normalizedMarkId} ${caption}`
+	};
+});
 ---
 
 <form class="flex flex-col gap-4 max-w-[500px] mx-auto">

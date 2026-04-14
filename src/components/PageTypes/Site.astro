@@ -1,6 +1,7 @@
 ---
 import settings from '@/data/settings.json';
 const { site_name, brand, legal_city_where } = settings;
+if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 import {TIMER, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';

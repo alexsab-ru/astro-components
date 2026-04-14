@@ -2,6 +2,7 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import PrivacyPolicy from '@/content/privacy-policy.mdx';
 import settings from '@/data/settings.json';
+if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { site_name, brand, legal_entity, legal_inn, legal_city, phone_common, email_common } = settings;
 import scripts from '@/data/scripts.json';
 const { site } = scripts;

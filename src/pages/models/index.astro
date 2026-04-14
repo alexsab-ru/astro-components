@@ -1,5 +1,6 @@
 ---
 import settings from '@/data/settings.json';
+if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { brand, legal_city_where } = settings;
 import Layout from '@/layouts/Layout.astro';
 import ModelList from '@/components/Model/ModelList.astro';

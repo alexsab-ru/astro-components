@@ -9,7 +9,8 @@ import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
 import { IS_MODEL_PREFIX_URL } from '@/const';
-const { model, modelPath, headingLevel = 'h3' } = Astro.props;
+let { model, modelPath, headingLevel = 'h3' } = Astro.props;
+if(model.mark_id === 'Livan') { model.mark_id = 'ЛИВЭН (LIVAN)'; }
 const HeadingTag = headingLevel;
 const noPriceText = (model?.status && (model.status === 'preorder' || model.status === 'comminsoon')) ? 'cкоро в продаже' : 'по запросу';
 // В UI показываем человекочитаемое имя модели из caption.

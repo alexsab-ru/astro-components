@@ -4,6 +4,7 @@ import { ChatWidget } from '@/components/React/ChatWidget/ChatWidget-v2';
 import { USPSection } from '@/components/React/USPSection';
 import Banner from '@/components/Banner/Banner.astro'
 import siteSettings from '@/data/settings.json';
+if(siteSettings.brand === 'Livan') { siteSettings.brand = 'ЛИВЭН (LIVAN)'; }
 import modelsData from '@/data/models.json';
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
