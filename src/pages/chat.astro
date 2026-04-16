@@ -97,7 +97,7 @@ const config = {
 
 <section class="pb-14!">
     <div class="container">
-        <USPSection client:visible />
+        <USPSection client:visible usps={chatConfig.usps} />
     </div>
     <ChatWidget client:visible={{rootMargin: "-210px"}} config={config} />
 </section>
