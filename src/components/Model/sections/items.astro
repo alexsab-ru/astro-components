@@ -14,9 +14,9 @@ const { items = [] } = Astro.props;
 ---
 
 {!!items.length && (
-	<div class="xs:flex-col flex justify-center gap-4 flex-wrap">
+	<div class="xs:flex-col xs:content-center flex justify-center gap-4 flex-wrap">
 		{items.map((item) => (
-			<div class="flex-1 flex flex-col items-center justify-start gap-4 px-4">
+			<div class="flex-1 flex xs:flex-row flex-col items-center justify-start gap-4 px-4">
 				<Icon name={item.icon} class="text-accent-500 text-5xl sm:text-7xl" />
 				<p class="font-medium text-center text-xs sm:text-sm md:text-base">
 					<Fragment set:html={item.text} />
