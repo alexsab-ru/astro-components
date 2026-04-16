@@ -1,0 +1,13 @@
+---
+interface Props {
+	value?: string;
+}
+
+const { value = '' } = Astro.props;
+---
+
+{value && (
+	<span class="text-sm font-weight-bold text-accent-500 mb-8">
+		<Fragment set:html={value} />
+	</span>
+)}

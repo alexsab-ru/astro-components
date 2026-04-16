@@ -1,0 +1,13 @@
+---
+interface Props {
+	value?: string;
+}
+
+const { value = '' } = Astro.props;
+---
+
+{value && (
+	<div class="flex justify-center">
+		<Fragment set:html={value} />
+	</div>
+)}
