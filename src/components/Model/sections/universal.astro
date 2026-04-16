@@ -19,7 +19,7 @@ interface Props {
 		suptitle?: string;
 		title?: string;
 		text?: string;
-		more?: boolean | string;
+		more?: string;
 		images?: TImage[];
 		button?: string;
 		alternatingMedia?: {
@@ -64,8 +64,6 @@ import ButtonSection from './button.astro';
 import AlternatingMediaSection from './alternating-media.astro';
 import AdvantagesSection from './advantages.astro';
 import FeedbackFormSection from './feedback-form.astro';
-
-const isMore = Boolean(section?.more) || section?.id === 'more';
 ---
 
 <section class:list={['sm:py-20 py-10 font-light model-section odd:bg-gray-100', section?.sectionClass]} id={section?.id} {...rest}>
@@ -77,9 +75,9 @@ const isMore = Boolean(section?.more) || section?.id === 'more';
 				case 'title':
 					return <TitleSection value={section?.title} />;
 				case 'text':
-					return isMore ? <MoreSection value={section?.text} /> : <TextSection value={section?.text} />;
+					return <TextSection value={section?.text} />;
 				case 'more':
-					return section?.text ? null : <MoreSection value={typeof section?.more === 'string' ? section.more : ''} />;
+					return <MoreSection value={section.more} />;
 				case 'items':
 					return <ItemsSection items={section?.items} />;
 				case 'images':

@@ -7,7 +7,7 @@ const { value = '' } = Astro.props;
 ---
 
 {value && (
-	<div class="mb-8">
+	<div class="space-y-4 my-8">
 		<Fragment set:html={value} />
 	</div>
 )}

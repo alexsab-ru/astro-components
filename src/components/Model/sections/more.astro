@@ -9,8 +9,8 @@ const { value = '' } = Astro.props;
 {value && (
 	<div x-data="{showMore: false}" x-cloak>
 		<div
-			class="space-y-4 overflow-hidden mb-5"
-			:class="{'h-[90px]': !showMore}"
+			class="space-y-4 overflow-hidden my-8"
+			:class="{'h-[90px]! lg:h-[55px]! seo-content': !showMore}"
 		>
 			<Fragment set:html={value} />
 		</div>
