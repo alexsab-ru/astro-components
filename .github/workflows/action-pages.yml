@@ -220,7 +220,7 @@ jobs:
           fi
 
       - name: Get dealer prices
-        if: ${{ steps.check_changes.outputs.changes == 'true' && env.DEALER_PRICE_CSV_URL && env.DEALER_PRICE_CSV_COLUMN && !env.ONLY_FEDERAL_PRICE }}
+        if: ${{ steps.check_changes.outputs.changes == 'true' && env.DEALER_PRICE_CSV_URL && env.DEALER_PRICE_CSV_COLUMN }}
         run: |
           pnpm getDealerPrices
         continue-on-error: true
@@ -238,12 +238,6 @@ jobs:
           CSV_URL: ${{ env.DEALER_SERVICE_PRICE_CSV_URL }}
           QUERY_STRING: ${{ env.DEALER_SERVICE_PRICE_QUERY_STRING }}
           KEY_MAPPING: ${{ env.DEALER_SERVICE_PRICE_KEY_MAPPING }}
-
-      - name: remove dealer-models_cars_price.json
-        if: ${{ steps.check_changes.outputs.changes == 'true' && env.ONLY_FEDERAL_PRICE }}
-        run: |
-          rm src/data/dealer-models_cars_price.json
-        continue-on-error: true
 
       - name: ls files
         run: |

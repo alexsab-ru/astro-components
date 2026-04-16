@@ -13,6 +13,11 @@ const Message = {
   ERROR_NO_MODELS: 'Ошибка: Файл all-models.json не найден',
 };
 
+const DISABLE_FEED_PRICE    = process.env.DISABLE_FEED_PRICE === 'true';
+const DISABLE_FEED_BENEFIT  = process.env.DISABLE_FEED_BENEFIT === 'true';
+const DISABLE_GSHEET_PRICE  = process.env.DISABLE_GSHEET_PRICE === 'true';
+const DISABLE_GSHEET_BENEFIT = process.env.DISABLE_GSHEET_BENEFIT === 'true';
+
 const Key = {
   PRICE: 'Конечная цена',
   BENEFIT: 'Скидка',
@@ -208,10 +213,10 @@ allModels.forEach(model => {
   const priceFederal = federal ? parseNumber(federal.price) : 0;
   const benefitFederal = federal ? parseNumber(federal.benefit) : 0;
   const priceOfficial = aggregateMin(dealerMatches, 'priceOfficial');
-  const priceDealer = aggregateMin(dealerMatches, 'price');
-  const benefitDealer = aggregateMax(dealerMatches, 'benefit');
-  const priceDealerAVN = aggregateMin(dealerCarsMatches, 'price');
-  const benefitDealerAVN = aggregateMax(dealerCarsMatches, 'benefit');
+  const priceDealer = DISABLE_GSHEET_PRICE ? 0 : aggregateMin(dealerMatches, 'price');
+  const benefitDealer = DISABLE_GSHEET_BENEFIT ? 0 : aggregateMax(dealerMatches, 'benefit');
+  const priceDealerAVN = DISABLE_FEED_PRICE ? 0 : aggregateMin(dealerCarsMatches, 'price');
+  const benefitDealerAVN = DISABLE_FEED_BENEFIT ? 0 : aggregateMax(dealerCarsMatches, 'benefit');
 
   const prices = [priceFederal, priceDealer, priceDealerAVN].filter(p => p > 0);
   const benefits = [benefitFederal, benefitDealer, benefitDealerAVN];

@@ -99,7 +99,7 @@
     "preview:toyota": "ASTRO_ACTIVE_BRAND=toyota node .github/scripts/setBrand.mjs && astro preview --open --host",
     "downloadCommonRepo": "bash ./.github/scripts/sh/downloadCommonRepo.sh",
     "filterModelsByBrand": "node .github/scripts/filterModelsByBrand.js",
-    "mergeCarPrices": "node .github/scripts/mergeCarPrices.js",
+    "mergeCarPrices": "bash ./.github/scripts/sh/mergeCarPrices.sh",
     "replacePlaceholdersAndSearchDates": "node .github/scripts/replacePlaceholdersAndSearchDates.js",
     "astro": "astro",
     "\n# https://alexsab.ru": ""
