@@ -8,6 +8,7 @@ import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelBadgeData } from '@/js/utils/modelBadge.utils';
 import { IS_MODEL_PREFIX_URL } from '@/const';
 let { model, modelPath, headingLevel = 'h3' } = Astro.props;
 if(model.mark_id === 'Livan') { model.mark_id = 'ЛИВЭН (LIVAN)'; }
@@ -17,8 +18,7 @@ const noPriceText = (model?.status && (model.status === 'preorder' || model.stat
 // Если caption не заполнен, оставляем старое поведение через name.
 const modelTitle = model?.caption || model?.name;
 const resolvedModelPath = modelPath || `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
-const badgeImage = model?.badge?.model_list || null;
-const badgeAlt = model?.badge?.alt || modelTitle || '';
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_list', modelTitle || '');
 ---
 
 <a

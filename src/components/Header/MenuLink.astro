@@ -5,9 +5,9 @@ interface Props {
 }
 const { link = {}, sublink = false, ...rest } = Astro.props;
 const path = Astro.url.pathname;
-const badge = link?.badge || null;
-const badgeImage = badge?.menu || null;
-const badgeAlt = badge?.alt || link.name || '';
+
+import { getModelBadgeData } from '@/js/utils/modelBadge.utils';
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(link, 'menu', link.name || '');
 
 import settings from '@/data/settings.json';
 const { is_header_transparent } = settings;

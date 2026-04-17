@@ -1,7 +1,5 @@
 import modelsData from '@/data/models.json';
 
-export type ModelBadgePlacement = 'car_list' | 'car_page';
-
 /**
  * Находит модель автомобиля по folder_id
  * @param carData - данные автомобиля
@@ -15,50 +13,6 @@ export function findModelByCarData(carData: any) {
     model.id.toLowerCase() === carData.folder_id.toLowerCase() || 
     (model?.feed_names?.length && model.feed_names.includes(carData.folder_id))
   ) || null;
-}
-
-/**
- * Собирает данные бейджа модели одним проходом.
- * @param carData - данные автомобиля
- * @param placement - место вывода бейджа
- * @returns объект с изображением бейджа и alt текстом
- */
-export function getModelBadgeData(carData: any, placement: ModelBadgePlacement = 'car_list') {
-  const model = findModelByCarData(carData);
-  const badge = model?.badge;
-  const badgeData = badge && typeof badge === 'object' ? badge : null;
-  const alt = badgeData?.alt || model?.caption || model?.name || '';
-
-  if (!badgeData) {
-    return {
-      image: null,
-      alt,
-    };
-  }
-
-  return {
-    image: badgeData?.[placement] || null,
-    alt,
-  };
-}
-
-/**
- * Обертка, чтобы старый код мог получать только изображение через новый общий расчёт.
- * @param carData - данные автомобиля
- * @param placement - место вывода бейджа
- * @returns URL изображения бейджа или null
- */
-export function getModelBadgeImage(carData: any, placement: ModelBadgePlacement = 'car_list') {
-  return getModelBadgeData(carData, placement).image;
-}
-
-/**
- * Обертка, чтобы старый код мог получать только alt через новый общий расчёт.
- * @param carData - данные автомобиля
- * @returns alt текст или название модели
- */
-export function getModelBadgeAlt(carData: any) {
-  return getModelBadgeData(carData).alt;
 }
 
 /**
