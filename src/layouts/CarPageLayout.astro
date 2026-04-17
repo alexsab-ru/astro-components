@@ -40,7 +40,7 @@ import BackLink from '@/components/BackLink.astro';
 
 				<div class="col-span-12 lg:col-span-6 relative">
 
-				{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 xs:h-12 h-16 lg:h-20 xl:h-24 w-auto" alt={badgeAlt} />)}
+				{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 xs:h-12 h-16 lg:h-20 xl:h-24 w-auto xs:max-w-[60px] max-w-[100px] xl:max-w-[200px]" alt={badgeAlt} />)}
 
 				{ data.images && data.images.length > 0 ? (
 					<CarImageSlider data={data} />
