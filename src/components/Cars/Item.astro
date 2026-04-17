@@ -55,7 +55,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			{car.data.run ? <Fragment set:html={`&nbsp;/&nbsp;${car.data.run}&nbsp;км`} /> : ''}
 		</div></noindex>
 		{(car.data.total && totalShow) && (<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>)}
-		{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 xs:h-12 h-16 lg:h-20 xl:h-24 w-auto max-w-[50px]! xl:max-w-[90px]!" alt={badgeAlt} />)}
+		{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 xs:h-12 h-16 lg:h-20 xl:h-24 w-auto max-w-[50px]! xl:max-w-[90px]! object-contain" alt={badgeAlt} />)}
 	</div>
 	<div class="px-3 xl:px-4 flex flex-wrap justify-between gap-y-2 sm:gap-y-3">
 		<Button 

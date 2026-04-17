@@ -9,10 +9,18 @@ export function findModelByCarData(carData: any) {
   if (!carData?.folder_id) return null;
   
   const { models } = modelsData;
-  return models.find(model => 
-    model.id.toLowerCase() === carData.folder_id.toLowerCase() || 
-    (model?.feed_names?.length && model.feed_names.includes(carData.folder_id))
-  ) || null;
+  // Приводим folder_id один раз к нижнему регистру, чтобы не дергать toLowerCase в каждом сравнении.
+  const normalizedFolderId = String(carData.folder_id).toLowerCase();
+
+  return models.find(model => {
+    // Нормализуем feed_names в нижний регистр, чтобы поиск не зависел от регистра значений в данных модели.
+    const normalizedFeedNames = model?.feed_names?.map((feedName: string) => String(feedName).toLowerCase()) || [];
+
+    return (
+      model.id.toLowerCase() === normalizedFolderId ||
+      normalizedFeedNames.includes(normalizedFolderId)
+    );
+  }) || null;
 }
 
 /**
