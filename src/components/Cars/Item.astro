@@ -12,7 +12,7 @@ const url = slug ? slug : `${path}${car.id}/`;
 import { calculateCarPrice, getModelBadgeData } from '@/js/utils/car.utils';
 // Подсказка: при необходимости можно отдельно получить модель через findModelByCarData(car.data).
 // Теперь мы тянем сразу картинку и alt в одном месте, чтобы не повторять поиск модели.
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(car.data);
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(car.data, 'car_list');
 const price = calculateCarPrice(car.data);
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';

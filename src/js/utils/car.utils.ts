@@ -1,5 +1,7 @@
 import modelsData from '@/data/models.json';
 
+export type ModelBadgePlacement = 'car_list' | 'car_page';
+
 /**
  * Находит модель автомобиля по folder_id
  * @param carData - данные автомобиля
@@ -17,45 +19,37 @@ export function findModelByCarData(carData: any) {
 
 /**
  * Собирает данные бейджа модели одним проходом.
- * Раньше мы возвращали только изображение, теперь сразу отдаем и картинку, и alt.
- * Это избавляет нас от повторных вызовов findModelByCarData в разных вспомогательных функциях.
  * @param carData - данные автомобиля
+ * @param placement - место вывода бейджа
  * @returns объект с изображением бейджа и alt текстом
  */
-export function getModelBadgeData(carData: any) {
+export function getModelBadgeData(carData: any, placement: ModelBadgePlacement = 'car_list') {
   const model = findModelByCarData(carData);
   const badge = model?.badge;
+  const badgeData = badge && typeof badge === 'object' ? badge : null;
+  const alt = badgeData?.alt || model?.caption || model?.name || '';
 
-  // Если бейджа нет, все равно возвращаем alt с названием модели, чтобы было что показать.
-  if (!badge) {
+  if (!badgeData) {
     return {
       image: null,
-      alt: model?.caption || model?.name || '',
+      alt,
     };
   }
 
-  // Когда badge строка, это готовый URL. Alt берем из имени модели.
-  if (typeof badge === 'string') {
-    return {
-      image: badge,
-      alt: model?.caption || model?.name || '',
-    };
-  }
-
-  // Для объектного badge отдаем vertical вариант и alt из данных, подстрахуемся именем.
   return {
-    image: badge.vertical || null,
-    alt: badge.alt || model?.caption || model?.name || '',
+    image: badgeData?.[placement] || null,
+    alt,
   };
 }
 
 /**
  * Обертка, чтобы старый код мог получать только изображение через новый общий расчёт.
  * @param carData - данные автомобиля
+ * @param placement - место вывода бейджа
  * @returns URL изображения бейджа или null
  */
-export function getModelBadgeImage(carData: any) {
-  return getModelBadgeData(carData).image;
+export function getModelBadgeImage(carData: any, placement: ModelBadgePlacement = 'car_list') {
+  return getModelBadgeData(carData, placement).image;
 }
 
 /**

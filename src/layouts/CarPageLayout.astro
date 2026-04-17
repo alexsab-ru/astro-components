@@ -15,7 +15,7 @@ const thumb = getCarThumbnail(data);
 const price = calculateCarPrice(data);
 // При желании можно отдельно получить модель через findModelByCarData(data).
 // Мы сразу берем картинку и alt из одного расчёта, чтобы не повторять одинаковую работу.
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(data);
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(data, 'car_page');
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import Layout from '@/layouts/Layout.astro';

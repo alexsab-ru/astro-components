@@ -17,6 +17,8 @@ const noPriceText = (model?.status && (model.status === 'preorder' || model.stat
 // Если caption не заполнен, оставляем старое поведение через name.
 const modelTitle = model?.caption || model?.name;
 const resolvedModelPath = modelPath || `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
+const badgeImage = model?.badge?.model_list || null;
+const badgeAlt = model?.badge?.alt || modelTitle || '';
 ---
 
 <a
@@ -45,10 +47,10 @@ const resolvedModelPath = modelPath || `/models/${setPrefixModelUrl(model, IS_MO
 		class="relative grow flex items-center aspect-4/3 justify-center lazy"
 	>
 		{
-			model?.badge && (
+			badgeImage && (
 				<img
-					data-src={model.badge?.horisontal || model.badge?.img }
-					alt={model.badge?.alt}
+					data-src={badgeImage}
+					alt={badgeAlt}
 					class="opacity-0 absolute right-0 top-0 xs:h-7 h-8 sm:h-14 w-auto z-10"
 				/>
 			)
