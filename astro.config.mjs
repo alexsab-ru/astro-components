@@ -156,7 +156,7 @@ const redirectsConfig = resolveRedirectsConfig();
 export default defineConfig({
 	integrations: [
 		sitemap({
-			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/') && !page.includes('/chat/')
+			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('max-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/') && !page.includes('/chat/')
 		}),
 		robots(robotsConfig ?? {}),
 		alpinejs(),
