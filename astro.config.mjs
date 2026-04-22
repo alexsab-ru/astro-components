@@ -11,6 +11,7 @@ import { loadEnv } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pathMatchesRouteRules } from './src/js/utils/pathMatchesRouteRules.js';
 
 // https://astro.build/config
 //
@@ -114,20 +115,7 @@ const resolveRobotsConfig = () => {
 };
 const robotsConfig = resolveRobotsConfig();
 
-// --- Сопоставление пути с правилами (точное совпадение или префикс, если правило оканчивается на /)
-const pathMatchesRouteRulesForConfig = (pathname, rules) => {
-	if (!Array.isArray(rules) || rules.length === 0) return false;
-	const p = pathname.startsWith('/') ? pathname : `/${pathname}`;
-	const pDir = p === '/' || p.endsWith('/') ? p : `${p}/`;
-	for (const raw of rules) {
-		if (typeof raw !== 'string') continue;
-		const r = raw.startsWith('/') ? raw : `/${raw}`;
-		if (p === r || pDir === r) return true;
-		if (r.endsWith('/') && (p.startsWith(r) || pDir.startsWith(r))) return true;
-		if (!r.endsWith('/') && (p === r || pDir === r || p.startsWith(`${r}/`))) return true;
-	}
-	return false;
-};
+// Сопоставление путей: disabled_routes / sitemap_ignore — см. src/js/utils/pathMatchesRouteRules.js
 
 // --- routes.json (раньше редиректы лежали в отдельном redirects.json) ---
 // Формат: { "disabled_routes": [], "sitemap_ignore": [], "redirects": { "/from": "/to" | { status, destination } } }
@@ -225,8 +213,8 @@ export default defineConfig({
 					pathname = page.startsWith('/') ? page : `/${page}`;
 				}
 				// Полное отключение и отдельное исключение только из карты сайта
-				if (pathMatchesRouteRulesForConfig(pathname, disabledRoutesForBuild)) return false;
-				if (pathMatchesRouteRulesForConfig(pathname, sitemapIgnoreRoutes)) return false;
+				if (pathMatchesRouteRules(pathname, disabledRoutesForBuild)) return false;
+				if (pathMatchesRouteRules(pathname, sitemapIgnoreRoutes)) return false;
 				return (
 					!page.endsWith('telegram-bot/') &&
 					!page.endsWith('max-bot/') &&
