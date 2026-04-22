@@ -1,4 +1,8 @@
 ---
+import { isRouteDisabled } from '@/js/utils/siteRoutes';
+if (isRouteDisabled('/trade-in/')) {
+	return Astro.redirect('/');
+}
 import PageLayout from '@/layouts/PageLayout.astro';
 import settings from '@/data/settings.json';
 const { legal_entity, legal_inn } = settings;

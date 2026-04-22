@@ -10,6 +10,7 @@ import react from '@astrojs/react';
 import { loadEnv } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // https://astro.build/config
 //
@@ -113,56 +114,133 @@ const resolveRobotsConfig = () => {
 };
 const robotsConfig = resolveRobotsConfig();
 
-// --- redirects.json ---
-// Читаем редиректы из src/data/redirects.json.
-// Формат: { "/from": "/to" } или { "/from": { "status": 302, "destination": "/to" } }
-// При ошибках возвращаем пустой объект — сайт соберётся без редиректов.
-const resolveRedirectsConfig = () => {
-	const redirectsJsonPath = path.resolve(process.cwd(), 'src/data/redirects.json');
+// --- Сопоставление пути с правилами (точное совпадение или префикс, если правило оканчивается на /)
+const pathMatchesRouteRulesForConfig = (pathname, rules) => {
+	if (!Array.isArray(rules) || rules.length === 0) return false;
+	const p = pathname.startsWith('/') ? pathname : `/${pathname}`;
+	for (const raw of rules) {
+		if (typeof raw !== 'string') continue;
+		const r = raw.startsWith('/') ? raw : `/${raw}`;
+		if (p === r) return true;
+		if (r.endsWith('/') && p.startsWith(r)) return true;
+		if (!r.endsWith('/') && (p === r || p.startsWith(`${r}/`))) return true;
+	}
+	return false;
+};
+
+// --- routes.json (раньше редиректы лежали в отдельном redirects.json) ---
+// Формат: { "disabled_routes": [], "sitemap_ignore": [], "redirects": { "/from": "/to" | { status, destination } } }
+// Резерв: если routes.json нет, читаем legacy redirects.json как объект редиректов.
+const loadSiteRoutesFromData = () => {
+	const routesJsonPath = path.resolve(process.cwd(), 'src/data/routes.json');
+	const legacyRedirectsPath = path.resolve(process.cwd(), 'src/data/redirects.json');
+	const empty = { disabled_routes: [], sitemap_ignore: [], redirects: {} };
 	try {
-		const raw = JSON.parse(fs.readFileSync(redirectsJsonPath, 'utf-8'));
-		if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
-			console.warn('[astro.config] redirects.json: ожидается объект. Редиректы отключены.');
-			return {};
+		const raw = JSON.parse(fs.readFileSync(routesJsonPath, 'utf-8'));
+		return {
+			disabled_routes: Array.isArray(raw.disabled_routes) ? raw.disabled_routes : [],
+			sitemap_ignore: Array.isArray(raw.sitemap_ignore) ? raw.sitemap_ignore : [],
+			redirects:
+				raw.redirects && typeof raw.redirects === 'object' && !Array.isArray(raw.redirects) ? raw.redirects : {},
+		};
+	} catch {
+		try {
+			const raw = JSON.parse(fs.readFileSync(legacyRedirectsPath, 'utf-8'));
+			return {
+				...empty,
+				redirects: typeof raw === 'object' && raw !== null && !Array.isArray(raw) ? raw : {},
+			};
+		} catch {
+			return empty;
 		}
-		const validated = {};
-		for (const [from, to] of Object.entries(raw)) {
-			// Ключ (from) должен начинаться с /
-			if (typeof from !== 'string' || !from.startsWith('/')) {
-				console.warn(`[astro.config] redirects.json: пропущен ключ "${from}" — должен начинаться с "/".`);
-				continue;
-			}
-			// Значение: строка (путь/URL) или объект { status, destination }
-			if (typeof to === 'string') {
-				validated[from] = to;
-			} else if (typeof to === 'object' && to !== null && typeof to.destination === 'string') {
-				const status = Number(to.status);
-				if (status && [301, 302, 303, 307, 308].includes(status)) {
-					validated[from] = { status, destination: to.destination };
-				} else {
-					console.warn(`[astro.config] redirects.json: пропущен "${from}" — недопустимый status ${to.status}. Допустимы: 301, 302, 303, 307, 308.`);
-				}
-			} else {
-				console.warn(`[astro.config] redirects.json: пропущен "${from}" — значение должно быть строкой или объектом с destination.`);
-			}
-		}
-		return validated;
-	} catch (_) {
-		return {};
 	}
 };
-const redirectsConfig = resolveRedirectsConfig();
+
+const validateRedirectEntries = (raw) => {
+	if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
+		console.warn('[astro.config] routes.json: ключ "redirects" должен быть объектом. Редиректы отключены.');
+		return {};
+	}
+	const validated = {};
+	for (const [from, to] of Object.entries(raw)) {
+		if (typeof from !== 'string' || !from.startsWith('/')) {
+			console.warn(`[astro.config] routes.json redirects: пропущен ключ "${from}" — должен начинаться с "/".`);
+			continue;
+		}
+		if (typeof to === 'string') {
+			validated[from] = to;
+		} else if (typeof to === 'object' && to !== null && typeof to.destination === 'string') {
+			const status = Number(to.status);
+			if (status && [301, 302, 303, 307, 308].includes(status)) {
+				validated[from] = { status, destination: to.destination };
+			} else {
+				console.warn(`[astro.config] routes.json: пропущен "${from}" — недопустимый status ${to.status}. Допустимы: 301, 302, 303, 307, 308.`);
+			}
+		} else {
+			console.warn(`[astro.config] routes.json: пропущен "${from}" — значение должно быть строкой или объектом с destination.`);
+		}
+	}
+	return validated;
+};
+
+const siteRoutes = loadSiteRoutesFromData();
+const redirectsConfig = validateRedirectEntries(siteRoutes.redirects);
+const disabledRoutesForBuild = siteRoutes.disabled_routes;
+const sitemapIgnoreRoutes = siteRoutes.sitemap_ignore;
+
+// Удаляет из dist папки целых разделов (например catalog), если соответствующий путь в disabled_routes.
+// Дублирует логику «не собирать» для статических index.astro без getStaticPaths.
+const stripDisabledRoutesIntegration = (disabledRules) => ({
+	name: 'strip-disabled-route-dirs',
+	hooks: {
+		'astro:build:done': ({ dir }) => {
+			if (!disabledRules.length) return;
+			const outDir = dir instanceof URL ? fileURLToPath(dir) : String(dir);
+			for (const rule of disabledRules) {
+				const seg = String(rule).replace(/^\/+/u, '').replace(/\/+$/u, '');
+				if (!seg) continue;
+				const target = path.join(outDir, seg);
+				try {
+					if (fs.existsSync(target)) {
+						fs.rmSync(target, { recursive: true, force: true });
+						console.log(`[strip-disabled-route-dirs] удалено: ${target}`);
+					}
+				} catch (e) {
+					console.warn(`[strip-disabled-route-dirs] не удалось удалить ${target}:`, e);
+				}
+			}
+		},
+	},
+});
 
 export default defineConfig({
 	integrations: [
 		sitemap({
-			filter: (page) => !page.endsWith('telegram-bot/') && !page.endsWith('max-bot/') && !page.endsWith('redirect/') && !page.includes('/model-page/') && !page.includes('/chat/')
+			filter: (page) => {
+				let pathname = '';
+				try {
+					pathname = new URL(page).pathname;
+				} catch {
+					pathname = page.startsWith('/') ? page : `/${page}`;
+				}
+				// Полное отключение и отдельное исключение только из карты сайта
+				if (pathMatchesRouteRulesForConfig(pathname, disabledRoutesForBuild)) return false;
+				if (pathMatchesRouteRulesForConfig(pathname, sitemapIgnoreRoutes)) return false;
+				return (
+					!page.endsWith('telegram-bot/') &&
+					!page.endsWith('max-bot/') &&
+					!page.endsWith('redirect/') &&
+					!page.includes('/model-page/') &&
+					!page.includes('/chat/')
+				);
+			},
 		}),
 		robots(robotsConfig ?? {}),
 		alpinejs(),
 		mdx(),
 		icon(),
 		react(),
+		stripDisabledRoutesIntegration(disabledRoutesForBuild),
 	],
 	vite: {
 		plugins: [

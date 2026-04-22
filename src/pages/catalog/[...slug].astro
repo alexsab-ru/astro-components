@@ -1,8 +1,10 @@
 ---
 import CarPageLayout from '@/layouts/CarPageLayout.astro';
+import { isRouteDisabled } from '@/js/utils/siteRoutes';
 import { getReadyCars, breadcrumb } from './index.astro';
 
 export async function getStaticPaths() {
+	if (isRouteDisabled('/catalog/')) return [];
 	const settingsModule = await import('@/data/settings.json');
 	const settings = (settingsModule as any).default || settingsModule;
 	const legal_city_where = settings.legal_city_where;

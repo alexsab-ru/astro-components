@@ -1,4 +1,8 @@
 ---
+import { isRouteDisabled } from '@/js/utils/siteRoutes';
+if (isRouteDisabled('/import/')) {
+	return Astro.redirect('/');
+}
 import PageLayout from '@/layouts/PageLayout.astro';
 import Button from '@/components/Button/Button.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
@@ -6,7 +10,7 @@ import Input from '@/components/Input.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import {AGREE_LABEL} from '@/const';
 import settings from '@/data/settings.json';
-const { site_name, brand } = settings;
+const { brand } = settings;
 import salonsData from '@/data/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('import'));

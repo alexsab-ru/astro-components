@@ -1,4 +1,9 @@
 ---
+// Если каталог отключён в routes.json — редирект; карточки режутся в getStaticPaths.
+import { isRouteDisabled } from '@/js/utils/siteRoutes';
+if (isRouteDisabled('/catalog/')) {
+	return Astro.redirect('/');
+}
 import settings from '@/data/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
