@@ -5,7 +5,7 @@ import { isRouteDisabled } from '@/js/utils/siteRoutes';
 
 export async function getStaticPaths() {
 	if (isRouteDisabled('/used_cars/')) return [];
-const cars = await (getCollection as any)('used_cars');
+	const cars = await (getCollection as any)('used_cars');
 
 	// Проверяем, что массив cars не пустой перед обработкой
 	if (cars && cars.length > 0) {

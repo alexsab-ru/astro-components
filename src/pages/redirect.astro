@@ -1,5 +1,9 @@
 ---
 import RedirectPage from '@/layouts/RedirectPage.astro';
+import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
+if (isRouteDisabled('/redirect/')) {
+	return Astro.rewrite(SITE_NOT_FOUND_PATH);
+}
 ---
 <RedirectPage
     title="Выгодное предложение месяца"

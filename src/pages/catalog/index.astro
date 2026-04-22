@@ -1,8 +1,8 @@
 ---
-// Если каталог отключён в routes.json — редирект; карточки режутся в getStaticPaths.
-import { isRouteDisabled } from '@/js/utils/siteRoutes';
+// Если каталог отключён — рендер 404.astro (URL не меняется); карточки режутся в getStaticPaths.
+import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 if (isRouteDisabled('/catalog/')) {
-	return Astro.redirect('/');
+	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
 import settings from '@/data/settings.json';
 const { site_name, brand, legal_city_where } = settings;

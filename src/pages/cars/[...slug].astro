@@ -3,9 +3,11 @@ import { getCollection, render } from 'astro:content';
 import CarPageLayout from '@/layouts/CarPageLayout.astro';
 import { findModelByCarData } from '@/js/utils/car.utils';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
+import { isRouteDisabled } from '@/js/utils/siteRoutes';
 
 export async function getStaticPaths() {
-const cars = await (getCollection as any)('cars');
+	if (isRouteDisabled('/cars/')) return [];
+	const cars = await (getCollection as any)('cars');
 
 	// Проверяем, что массив cars не пустой перед обработкой
 	if (cars && cars.length > 0) {

@@ -1,5 +1,6 @@
 ---
-import type { TDataCollection, TCollection } from '@/types/TCollection';
+import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
+import type { TCollection } from '@/types/TCollection';
 import { getCollection, type DataEntryMap } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
 import collectionsData from '@/data/collections.json';
@@ -11,13 +12,18 @@ import { getRandomInt } from '@/js/utils/numbers.format';
 import SeoText from '@/components/Seo/Index.astro';
 
 export async function getStaticPaths() {
-  return collectionsData.map((collection) => ({ 
+  return collectionsData
+		.filter((c) => !isRouteDisabled(`/${c.name}/`))
+		.map((collection) => ({ 
 		params: { collection: collection.name },
 		props: { title: collection.title, description: collection.description }
 	}));
 }
 
 const { collection } = Astro.params;
+if (typeof collection === 'string' && isRouteDisabled(`/${collection}/`)) {
+	return Astro.rewrite(SITE_NOT_FOUND_PATH);
+}
 const { title, description } = Astro.props;
 const entries = await getCollection(collection as keyof DataEntryMap);
 let posts: TCollection[], image = '';

@@ -118,12 +118,13 @@ const robotsConfig = resolveRobotsConfig();
 const pathMatchesRouteRulesForConfig = (pathname, rules) => {
 	if (!Array.isArray(rules) || rules.length === 0) return false;
 	const p = pathname.startsWith('/') ? pathname : `/${pathname}`;
+	const pDir = p === '/' || p.endsWith('/') ? p : `${p}/`;
 	for (const raw of rules) {
 		if (typeof raw !== 'string') continue;
 		const r = raw.startsWith('/') ? raw : `/${raw}`;
-		if (p === r) return true;
-		if (r.endsWith('/') && p.startsWith(r)) return true;
-		if (!r.endsWith('/') && (p === r || p.startsWith(`${r}/`))) return true;
+		if (p === r || pDir === r) return true;
+		if (r.endsWith('/') && (p.startsWith(r) || pDir.startsWith(r))) return true;
+		if (!r.endsWith('/') && (p === r || pDir === r || p.startsWith(`${r}/`))) return true;
 	}
 	return false;
 };

@@ -1,4 +1,5 @@
 ---
+import { isRouteDisabled } from '@/js/utils/siteRoutes';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
 import bannersData from '@/data/banners.json';
@@ -19,6 +20,7 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
 const allSections = import.meta.glob('/src/data/model-sections/**/*.yml', { eager: true });
 
 export async function getStaticPaths() {
+  if (isRouteDisabled('/model-page/')) return [];
   return modelsData.models
     .filter((m) => m.show)
     .map((model) => ({

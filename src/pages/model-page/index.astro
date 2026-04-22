@@ -1,4 +1,8 @@
 ---
+import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
+if (isRouteDisabled('/model-page/')) {
+	return Astro.rewrite(SITE_NOT_FOUND_PATH);
+}
 import settings from '@/data/settings.json';
 if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { brand, legal_city_where } = settings;
@@ -13,8 +17,7 @@ import PageH1 from '@/components/PageH1/Index.astro';
 const getModelPath = (model: any) => `/model-page/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
 
 if (import.meta.env.PROD) {
-	return new Response();
-	// return Astro.redirect('/');
+	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
 ---
 <Layout

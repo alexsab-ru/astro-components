@@ -1,7 +1,7 @@
 ---
-import { isRouteDisabled } from '@/js/utils/siteRoutes';
+import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 if (isRouteDisabled('/trade-in/')) {
-	return Astro.redirect('/');
+	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
 import PageLayout from '@/layouts/PageLayout.astro';
 import settings from '@/data/settings.json';

@@ -4,11 +4,13 @@ import { type CollectionEntry, type DataEntryMap, getCollection, render } from "
 import collectionsData from '@/data/collections.json';
 import PageLayout from '@/layouts/PageLayout.astro';
 import SeoText from '@/components/Seo/Index.astro';
+import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 
 export async function getStaticPaths() {
   const paths = [];
 
   for (const collection of collectionsData) {
+    if (isRouteDisabled(`/${collection.name}/`)) continue;
     const entries = await getCollection(collection.name as keyof DataEntryMap);
     for (const entry of entries) {
       // Исключаем файлы начинающиеся с '__'
@@ -29,6 +31,9 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<any>;
 
 const { collection, slug } = Astro.params;
+if (typeof collection === 'string' && isRouteDisabled(`/${collection}/`)) {
+	return Astro.rewrite(SITE_NOT_FOUND_PATH);
+}
 const post = Astro.props as Props;
 
 // Находим заголовок коллекции по имени коллекции
