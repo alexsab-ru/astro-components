@@ -9,6 +9,7 @@ import settings from '@/data/settings.json';
 if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { site_name, brand, legal_city_where } = settings;
 import CarsList from '@/components/Cars/List.astro';
+import SeoText from '@/components/Seo/Index.astro';
 const rawCars = await (getCollection as any)("cars");
 let cars: any, image: string;
 import { getRandomInt } from "@/js/utils/numbers.format";
@@ -42,4 +43,5 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 			<p>Скоро здесь появится список новых автомобилей.</p>
 		)
 	}
+	<SeoText mdx="cars" noPadding />
 </PageLayout>

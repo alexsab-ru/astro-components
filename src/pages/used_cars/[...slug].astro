@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import CarPageLayout from '../../layouts/CarPageLayout.astro';
+import SeoText from '@/components/Seo/Index.astro';
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
 
 export async function getStaticPaths() {
@@ -27,4 +28,5 @@ import { breadcrumb } from './index.astro';
 
 <CarPageLayout car={car} breadcrumb={[breadcrumb, {name: car.data.breadcrumb, href: Astro.url.pathname}]} backLink={true}>
 	<Content />
+	<SeoText mdx={seoname} sectionPaddingBlock />
 </CarPageLayout>

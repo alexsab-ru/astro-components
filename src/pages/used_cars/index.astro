@@ -8,6 +8,7 @@ import { getCollection } from "astro:content";
 import settings from '@/data/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import CarsList from '@/components/Cars/List.astro';
+import SeoText from '@/components/Seo/Index.astro';
 const rawCars = await getCollection("used_cars");
 let cars: any, image: string;
 import { getRandomInt } from "@/js/utils/numbers.format";
@@ -41,4 +42,5 @@ export const breadcrumb = { name: "Авто с пробегом", href: "/used_c
 			<p>Скоро здесь появится список автомобилей с пробегом.</p>
 		)
 	}
+	<SeoText mdx="used_cars" noPadding />
 </PageLayout>
