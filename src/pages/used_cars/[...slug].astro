@@ -3,6 +3,8 @@ import { getCollection, render } from 'astro:content';
 import CarPageLayout from '../../layouts/CarPageLayout.astro';
 import SeoText from '@/components/Seo/Index.astro';
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
+const { slug } = Astro.params;
+const seoname = 'used_cars-'+slug;
 
 export async function getStaticPaths() {
 	if (isRouteDisabled('/used_cars/')) return [];

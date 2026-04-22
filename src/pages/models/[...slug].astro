@@ -9,9 +9,7 @@ import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import SeoText from '@/components/Seo/Index.astro';
 import PageH1 from '@/components/PageH1/Index.astro';
 const { slug } = Astro.params;
-
 const seoname = 'models-'+slug;
-
 
 import modelsData from '@/data/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
