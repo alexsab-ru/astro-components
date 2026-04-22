@@ -929,6 +929,8 @@ class CarProcessor:
         if 'sale_price' not in car_data:
             car_data['sale_price'] = sale_price
 
+        car_data['currency'] = "RUR"
+
         # Локализация элементов
         for elem_name in self.config['elements_to_localize']:
             if elem_name in car_data and car_data[elem_name]:
