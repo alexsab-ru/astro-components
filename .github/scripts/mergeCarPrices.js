@@ -90,10 +90,11 @@ const loadDealerData = (filePath) => {
   const raw = readJSON(filePath);
   if (!raw) return [];
 
-  // Формат объекта: { "Model": { "Конечная цена": ..., "Скидка": ..., "РРЦ": ... } }
+  // Формат объекта: { "Model": { "Конечная цена": ..., "Скидка": ..., "РРЦ": ..., "id": ... } }
   if (!Array.isArray(raw)) {
     return Object.entries(raw).map(([model, data]) => ({
       model,
+      id: data.id || '',
       price: data[Key.PRICE],
       benefit: data[Key.BENEFIT],
       priceOfficial: data[Key.PRICE_OFFICIAL],
@@ -105,6 +106,7 @@ const loadDealerData = (filePath) => {
   if (raw.length && raw[0] && Object.prototype.hasOwnProperty.call(raw[0], 'Скидка')) {
     return raw.filter(item => item?.['Модель']).map(item => ({
       model: item['Модель'],
+      id: item.id || '',
       price: item[Key.PRICE],
       benefit: item[Key.BENEFIT],
       priceOfficial: item[Key.PRICE_OFFICIAL],
@@ -157,11 +159,17 @@ const findFederalMatch = (federalData, ourId, brand, knownNames) => {
 
 // --- Поиск дилерских данных ---
 
-const findDealerMatches = (dealerData, brand, knownNames) => {
-  if (!dealerData.length || !knownNames.length) return [];
+const findDealerMatches = (dealerData, ourId, brand, knownNames) => {
+  if (!dealerData.length) return [];
   const brandLower = brand.toLowerCase();
+  const normalizedOurId = normalizeId(ourId);
 
   return dealerData.filter(d => {
+    // Приоритет — сопоставление по id (устойчиво к разночтениям в названии модели)
+    if (d.id) return normalizeId(d.id) === normalizedOurId;
+
+    // Fallback — по brand + name, если id в строке не проставлен
+    if (!knownNames.length) return false;
     const dealerBrand = (d.brand || '').toLowerCase();
     if (dealerBrand && dealerBrand !== brandLower) return false;
     return knownNames.some(name => isNameMatch(d.model, name));
@@ -207,8 +215,8 @@ allModels.forEach(model => {
   if (federal) unmatchedFederal.delete(federal.id);
 
   // Поиск дилерских данных
-  const dealerMatches = findDealerMatches(dealerData, brand, knownNames);
-  const dealerCarsMatches = findDealerMatches(dealerCarsData, brand, knownNames);
+  const dealerMatches = findDealerMatches(dealerData, ourId, brand, knownNames);
+  const dealerCarsMatches = findDealerMatches(dealerCarsData, ourId, brand, knownNames);
 
   const priceFederal = federal ? parseNumber(federal.price) : 0;
   const benefitFederal = federal ? parseNumber(federal.benefit) : 0;
