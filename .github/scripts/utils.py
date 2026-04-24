@@ -3,6 +3,7 @@ import os
 import re
 import copy
 import string
+import hashlib
 import yaml
 import json
 import shutil
@@ -376,6 +377,90 @@ def process_description(desc_text):
     return result_html
 
 
+THUMB_REQUEST_TIMEOUT = (5, 15)
+
+
+def _normalize_header_value(value):
+    if value is None:
+        return None
+
+    value = value.strip()
+    return value or None
+
+
+@lru_cache(maxsize=2048)
+def _fetch_remote_image_headers(img_url):
+    last_error = None
+
+    for method in ("HEAD", "GET"):
+        response = None
+
+        try:
+            if method == "HEAD":
+                response = requests.head(
+                    img_url,
+                    allow_redirects=True,
+                    timeout=THUMB_REQUEST_TIMEOUT,
+                )
+            else:
+                response = requests.get(
+                    img_url,
+                    allow_redirects=True,
+                    timeout=THUMB_REQUEST_TIMEOUT,
+                    stream=True,
+                )
+
+            if response.status_code >= 400:
+                if method == "HEAD":
+                    continue
+                response.raise_for_status()
+
+            headers = {
+                "etag": _normalize_header_value(response.headers.get("ETag")),
+                "last_modified": _normalize_header_value(response.headers.get("Last-Modified")),
+                "content_length": _normalize_header_value(response.headers.get("Content-Length")),
+            }
+
+            # Некоторые CDN почти ничего полезного не отдают на HEAD, но отдают на GET.
+            if method == "HEAD" and not headers["etag"] and not headers["last_modified"]:
+                continue
+
+            return headers
+        except requests.RequestException as e:
+            last_error = e
+        finally:
+            if response is not None:
+                response.close()
+
+    if last_error is not None:
+        print_message(
+            f"Не удалось получить HTTP-метаданные для {img_url}: {last_error}",
+            "warning",
+        )
+
+    return {
+        "etag": None,
+        "last_modified": None,
+        "content_length": None,
+    }
+
+
+def _get_thumb_version_token(img_url):
+    headers = _fetch_remote_image_headers(img_url)
+    etag = headers["etag"]
+    last_modified = headers["last_modified"]
+    content_length = headers["content_length"]
+
+    if etag:
+        version_source = f"etag:{etag}"
+    elif last_modified:
+        version_source = f"last-modified:{last_modified}|content-length:{content_length or ''}"
+    else:
+        return None
+
+    return hashlib.sha1(version_source.encode("utf-8")).hexdigest()[:12]
+
+
 def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, temp_thumbs_dir, skip_thumbs=False, count_thumbs=5):
     # Ensure count_thumbs is an integer
     # Convert string or other types to integer, with fallback to default value
@@ -407,27 +492,37 @@ def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, temp_thum
             
             # Получение последних 5 символов имени файла (без расширения)
             last_5_chars = filename_without_extension[-5:]
+
+            version_token = _get_thumb_version_token(img_url)
+            version_suffix = f"_{version_token}" if version_token else ""
             
             # Формирование имени файла с учетом последних 5 символов
-            output_filename = f"thumb_{friendly_url}_{last_5_chars}_{index}.webp"
+            output_filename = f"thumb_{friendly_url}_{last_5_chars}_{index}{version_suffix}.webp"
             output_path = os.path.join(thumbs_dir, output_filename)
-            temp_output_path = os.path.join(temp_thumbs_dir, output_filename)
             relative_output_path = os.path.join(relative_thumbs_dir, output_filename)
 
             # print(f"   📁 Путь к превью: {output_path}")
 
-            # Проверка существования файла
-            if not os.path.exists(output_path) and not skip_thumbs:
-                # print(f"   ⬇️ Загружаю изображение...")
-                # Загрузка и обработка изображения, если файла нет
-                response = requests.get(img_url)
+            file_exists = os.path.exists(output_path)
+
+            # Без ETag/Last-Modified не можем доверять имени файла и перегенерируем превью.
+            should_generate = not skip_thumbs and (
+                version_token is None or not file_exists
+            )
+
+            if should_generate:
+                response = requests.get(img_url, timeout=THUMB_REQUEST_TIMEOUT)
+                response.raise_for_status()
                 image = Image.open(BytesIO(response.content))
                 aspect_ratio = image.width / image.height
                 new_width = 360
                 new_height = int(new_width / aspect_ratio)
                 resized_image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
                 resized_image.save(output_path, "WEBP")
-                print(f"   ✅ Создано превью: {relative_output_path}")
+                if version_token is None and file_exists:
+                    print(f"   ♻️ Обновлено превью без HTTP-валидаторов: {relative_output_path}")
+                else:
+                    print(f"   ✅ Создано превью: {relative_output_path}")
             else:
                 print(f"   ⚠️ Файл уже существует: {relative_output_path} или пропущен флагом skip_thumbs: {skip_thumbs}")
 
@@ -1173,9 +1268,11 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
         existing_images = data.get('images', [])
         unique_images = list(dict.fromkeys(existing_images + images))
         data['images'] = unique_images
-        if 'thumbs' not in data or (len(data['thumbs']) < 5):
-            thumbs_files = createThumbs(images, friendly_url, current_thumbs, config['thumbs_dir'], config['temp_thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
-            data.setdefault('thumbs', []).extend(thumbs_files)
+
+    all_images = data.get('images', [])
+    if all_images:
+        thumbs_files = createThumbs(all_images, friendly_url, current_thumbs, config['thumbs_dir'], config['temp_thumbs_dir'], config['skip_thumbs'], config['count_thumbs'])
+        data['thumbs'] = thumbs_files
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
 
     # Reassemble the content with the updated YAML block
