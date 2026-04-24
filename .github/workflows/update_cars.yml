@@ -2,7 +2,7 @@ name: Generate Astro Files from XML
 
 on:
   schedule:
-    - cron: '0 3-17 * * *'  # Запускается каждый час с 3 до 17 (UTC)
+    - cron: '0 3-17 * * *'  # Запускается каждый час с 3 до 17 (UTC) — 06:00 до 20:00 по МСК
   push:
     paths:
       - '.github/scripts/sh/getAirStorage.sh'
