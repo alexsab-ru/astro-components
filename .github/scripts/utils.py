@@ -1521,7 +1521,11 @@ def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
         f"{prefix}ELEMENTS_TO_LOCALIZE": "elements_to_localize",
         f"{prefix}REMOVE_CARS_AFTER_DUPLICATE": "remove_cars_after_duplicate",
         f"{prefix}REMOVE_MARK_IDS": "remove_mark_ids",
-        f"{prefix}REMOVE_FOLDER_IDS": "remove_folder_ids"
+        f"{prefix}REMOVE_FOLDER_IDS": "remove_folder_ids",
+        f"{prefix}H1_TEMPLATE": "h1_template",
+        f"{prefix}BREADCRUMB_TEMPLATE": "breadcrumb_template",
+        f"{prefix}TITLE_TEMPLATE": "title_template",
+        f"{prefix}DESCRIPTION_TEMPLATE": "description_template",
     }
 
     env_json_data = _load_env_json()
