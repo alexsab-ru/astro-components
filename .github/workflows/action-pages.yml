@@ -9,10 +9,6 @@ name: Deploy website to Pages
 on:
   schedule:
     - cron: '0 2 * * *'  # Запускается в 2 по гринвичу принулительно
-  workflow_run:
-    workflows: ["Generate Astro Files from XML"]  # Замените на имя вашего рабочего процесса обновления АВН
-    types:
-      - completed
   # Runs on pushes targeting the default branch
   push:
     branches: ["main","brand","dealer"]
@@ -154,34 +150,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Determine changes
-        id: check_changes
-        run: |
-          # Проверка запущен ли экшн вручную или есть ли коммиты за последние 10 минут
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ] || [ "${{ github.event_name }}" == "schedule" ]; then
-            echo "Run manually. Assuming changes." && echo "changes=true" >> $GITHUB_OUTPUT
-          else
-            COUNT=$(git rev-list --count HEAD --since="10 minutes ago")
-            if [ "$COUNT" -eq "0" ]; then
-              echo "No new commits. Exiting workflow." && echo "changes=false" >> $GITHUB_OUTPUT
-              exit 0
-            else
-              echo "New commits found." && echo "changes=true" >> $GITHUB_OUTPUT
-            fi
-          fi
-
       - name: Setup Pages
         id: pages
-        if: steps.check_changes.outputs.changes == 'true'
         uses: actions/configure-pages@v5
 
       - name: Init output.txt
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           > output.txt
 
       - name: Create env file
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           touch .env
           echo JSON_REPO=${{ secrets.JSON_REPO }} >> .env
@@ -189,13 +166,11 @@ jobs:
           cat .env
 
       - name: PNPM install
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
 
       - name: Download JSONs
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm downloadCommonRepo
         env:
@@ -204,7 +179,6 @@ jobs:
           FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
 
       - name: Load env.json into environment
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           if [ -f src/data/env.json ]; then
             node -e '
@@ -220,7 +194,7 @@ jobs:
           fi
 
       - name: Get dealer prices
-        if: ${{ steps.check_changes.outputs.changes == 'true' && env.DEALER_PRICE_CSV_URL && env.DEALER_PRICE_CSV_COLUMN }}
+        if: ${{ env.DEALER_PRICE_CSV_URL && env.DEALER_PRICE_CSV_COLUMN }}
         run: |
           pnpm getDealerPrices
         continue-on-error: true
@@ -230,7 +204,7 @@ jobs:
           KEY_MAPPING: ${{ env.DEALER_PRICE_KEY_MAPPING }}
 
       - name: Get dealer Service prices
-        if: ${{ steps.check_changes.outputs.changes == 'true' && env.DEALER_SERVICE_PRICE_CSV_URL && env.DEALER_SERVICE_PRICE_QUERY_STRING }}
+        if: ${{ env.DEALER_SERVICE_PRICE_CSV_URL && env.DEALER_SERVICE_PRICE_QUERY_STRING }}
         run: |
           pnpm getDealerServicePrices
         continue-on-error: true
@@ -244,25 +218,21 @@ jobs:
           if [[ -d src/data ]]; then ls -al src/data; fi
 
       - name: Merge car prices
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm mergeCarPrices
 
       - name: Replace Placeholders in JSON
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm replacePlaceholdersAndSearchDates
         env:
           DOMAIN: ${{ vars.DOMAIN }}
 
       - name: Astro Build
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pnpm build --outDir ./_site
           cp ./_site/sitemap-0.xml ./_site/sitemap.xml
 
       - name: Find English Words
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           pip install beautifulsoup4 --quiet
           python3 .github/scripts/findEnglishWords.py
@@ -284,7 +254,6 @@ jobs:
 
       - name: Set output
         id: set_output
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           if [ -s output.txt ]; then
             encoded_output=$(base64 -w 0 output.txt)
@@ -308,18 +277,15 @@ jobs:
           fi
 
       - name: Upload artifact
-        if: steps.check_changes.outputs.changes == 'true'
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v4
 
       - name: Create After_deploy text
-        if: steps.check_changes.outputs.changes == 'true'
         id: after_deploy
         run: |
           echo text="<blockquote>After deploy: https://${{ vars.DOMAIN }}</blockquote>" >> $GITHUB_OUTPUT
 
     outputs:
-      changes: ${{ steps.check_changes.outputs.changes }}
       script_output: ${{ steps.set_output.outputs.script_output }}
       specials: ${{ steps.check_specials.outputs.specials }}
       specials_marketing: ${{ steps.check_specials.outputs.specials_marketing }}
@@ -330,7 +296,6 @@ jobs:
   # Deployment job
   deploy:
     needs: build
-    if: needs.build.outputs.changes == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -353,7 +318,6 @@ jobs:
 
   notify_telegram_after_deploy:
     needs: [build, deploy]
-    if: needs.build.outputs.changes == 'true'
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'after-deploy'
