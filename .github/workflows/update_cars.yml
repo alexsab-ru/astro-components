@@ -25,6 +25,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
 
 concurrency:
@@ -408,16 +409,14 @@ jobs:
     - name: Check for changes
       id: check_changes
       run: |
-        if git diff --exit-code; then
-          echo 'check_changes true — git diff'
-          echo "changes=true" >> $GITHUB_ENV
-          echo "changes=true" >> $GITHUB_OUTPUT
-        elif git status -s; then
+        status_output=$(git status --short --untracked-files=all | grep -vE 'output(_wrapped)?\.txt$' || true)
+        if [[ -n "$status_output" ]]; then
           echo 'check_changes true — git status'
+          printf '%s\n' "$status_output"
           echo "changes=true" >> $GITHUB_ENV
           echo "changes=true" >> $GITHUB_OUTPUT
         else
-          echo 'check_changes else'
+          echo 'check_changes false — no repo changes to commit'
           echo "changes=false" >> $GITHUB_ENV
           echo "changes=false" >> $GITHUB_OUTPUT
         fi
@@ -442,6 +441,20 @@ jobs:
         git commit -m "Update cars from XML" -a || echo "No changes to commit"
         git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         git push origin $GITHUB_REF_NAME
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Trigger Pages deploy
+      if: env.changes == 'true'
+      run: |
+        payload=$(printf '{"ref":"%s"}' "$GITHUB_REF_NAME")
+        curl -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/action-pages.yml/dispatches" \
+          -d "$payload"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
