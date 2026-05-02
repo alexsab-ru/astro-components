@@ -76,7 +76,7 @@ const navItems = flatNavLinks.map((link, i) => ({
   "url": link.url,
 }));
 
-const navSchema = navItems.length > 0
+const navSchema = navItems.length > 0 && schemas.length > 0
   ? {
       "@context": "https://schema.org",
       "@type": "ItemList",
