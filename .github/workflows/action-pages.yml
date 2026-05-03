@@ -178,9 +178,9 @@ jobs:
 
       - name: Load env.json into environment
         run: |
-          if [ -f src/data/env.json ]; then
+          if [ -f src/data/site/env.json ]; then
             node -e '
-              const data = JSON.parse(require("fs").readFileSync("src/data/env.json","utf8"));
+              const data = JSON.parse(require("fs").readFileSync("src/data/site/env.json","utf8"));
               for (const [k,v] of Object.entries(data)) {
                 if (typeof v === "object") console.log(k+"="+JSON.stringify(v));
                 else console.log(k+"="+v);
@@ -188,7 +188,7 @@ jobs:
             ' >> $GITHUB_ENV
             echo "✅ env.json loaded into environment"
           else
-            echo "⚠ src/data/env.json not found — skipping"
+            echo "⚠ src/data/site/env.json not found — skipping"
           fi
 
       - name: Get dealer prices

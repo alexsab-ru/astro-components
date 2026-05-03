@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { getPair } from '@/js/utils/helpers';
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 
 const { connectforms_link } = settings;
 

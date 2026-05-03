@@ -1,4 +1,4 @@
-import modelsData from '@/data/models.json';
+import modelsData from '@/data/site/models.json';
 
 /**
  * Находит модель автомобиля по folder_id

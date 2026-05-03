@@ -1,7 +1,7 @@
 // store.js
 import Alpine from 'alpinejs';
 
-import salons from '@/data/salons.json';
+import salons from '@/data/site/salons.json';
 
 export function store() {
 	Alpine.store('import', {

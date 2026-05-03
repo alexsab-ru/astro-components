@@ -52,7 +52,7 @@ fi
 
 # Устанавливаем остальные переменные
 export KEY_COLUMN=""
-export OUTPUT_PATHS="./src/data/dealer-models_price.json"
+export OUTPUT_PATHS="./src/data/site/dealer-models_price.json"
 # export OUTPUT_FORMAT="simple"
 export OUTPUT_FORMAT="detailed"
 

@@ -4,7 +4,7 @@ interface Props {
 	url: string
 }
 const { car= {}, url } = Astro.props;
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { brand, legal_city_where } = settings;
 import './cars.css'

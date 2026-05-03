@@ -2,7 +2,7 @@
 # -----------------------------------------------------------
 # envJsonToDotenv.sh
 #
-# Reads src/data/env.json and merges its keys into .env.
+# Reads src/data/site/env.json and merges its keys into .env.
 # Keys already present in .env are overwritten; new keys are appended.
 # Keys that are JSON objects (e.g. *_KEY_MAPPING) are serialised
 # to a single-line JSON string.
@@ -19,7 +19,7 @@
 # -----------------------------------------------------------
 set -euo pipefail
 
-ENV_JSON="${ENV_JSON_PATH:-src/data/env.json}"
+ENV_JSON="${ENV_JSON_PATH:-src/data/site/env.json}"
 
 if [ ! -f "$ENV_JSON" ]; then
   echo "⚠ env.json not found at $ENV_JSON — skipping merge"

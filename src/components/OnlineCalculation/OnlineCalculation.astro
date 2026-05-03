@@ -1,6 +1,6 @@
 ---
 import FormSelect from '@/components/FormSelect.astro';
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('online_modal'));
 import Button from '@/components/Button/Button.astro';

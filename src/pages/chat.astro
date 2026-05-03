@@ -3,15 +3,15 @@ import Layout from '@/layouts/Layout.astro';
 import { ChatWidget } from '@/components/React/ChatWidget/ChatWidget-v2';
 import { USPSection } from '@/components/React/USPSection';
 import Banner from '@/components/Banner/Banner.astro'
-import siteSettings from '@/data/settings.json';
+import siteSettings from '@/data/site/settings.json';
 if(siteSettings.brand === 'Livan') { siteSettings.brand = 'ЛИВЭН (LIVAN)'; }
-import modelsData from '@/data/models.json';
-import salonsData from '@/data/salons.json';
+import modelsData from '@/data/site/models.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 // import.meta.glob — Vite-нативный optional import (не падает если файла нет)
-const chatFiles = import.meta.glob('/src/data/chat-landing.json', { eager: true });
+const chatFiles = import.meta.glob('/src/data/site/chat-landing.json', { eager: true });
 const chatConfig: any = (Object.values(chatFiles)[0] as any)?.default || { settings: {}, questions: [] };
 
 const { models } = modelsData;

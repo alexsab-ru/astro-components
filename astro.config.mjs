@@ -15,7 +15,7 @@ import { pathMatchesRouteRules } from './src/js/utils/pathMatchesRouteRules.js';
 
 // https://astro.build/config
 //
-// Определяем значение site из src/data/scripts.json.
+// Определяем значение site из src/data/site/scripts.json.
 // Если там нет, то берём DOMAIN из .env и добавляем https:// в начале.
 // Если ни одно не задано, используем прежнее значение по умолчанию.
 // Важно: в astro.config.mjs .env не загружается автоматически. Рекомендуемый способ — loadEnv из Vite.
@@ -29,8 +29,8 @@ const env = (() => {
 })();
 
 const resolveSiteFromConfig = (fallbackUrl) => {
-    // Читаем ./src/data/scripts.json из корня проекта.
-    const scriptsJsonPath = path.resolve(process.cwd(), 'src/data/scripts.json');
+    // Читаем ./src/data/site/scripts.json из корня проекта.
+    const scriptsJsonPath = path.resolve(process.cwd(), 'src/data/site/scripts.json');
     let scriptsSiteFromJson = '';
     try {
         const rawFileContent = fs.readFileSync(scriptsJsonPath, 'utf-8');
@@ -54,10 +54,10 @@ const resolveSiteFromConfig = (fallbackUrl) => {
 const computedSite = resolveSiteFromConfig('https://example.com');
 
 // --- robots.json ---
-// Читаем настройки robots из src/data/robots.json.
+// Читаем настройки robots из src/data/site/robots.json.
 // При отсутствии файла или ошибках парсинга используем минимальный безопасный конфиг.
 const resolveRobotsConfig = () => {
-	const robotsJsonPath = path.resolve(process.cwd(), 'src/data/robots.json');
+	const robotsJsonPath = path.resolve(process.cwd(), 'src/data/site/robots.json');
 	try {
 		const raw = JSON.parse(fs.readFileSync(robotsJsonPath, 'utf-8'));
 		const warn = (msg) => console.warn(`[astro.config] robots.json: ${msg}`);
@@ -121,8 +121,8 @@ const robotsConfig = resolveRobotsConfig();
 // Формат: { "disabled_routes": [], "sitemap_ignore": [], "redirects": { "/from": "/to" | { status, destination } } }
 // Резерв: если routes.json нет, читаем legacy redirects.json как объект редиректов.
 const loadSiteRoutesFromData = () => {
-	const routesJsonPath = path.resolve(process.cwd(), 'src/data/routes.json');
-	const legacyRedirectsPath = path.resolve(process.cwd(), 'src/data/redirects.json');
+	const routesJsonPath = path.resolve(process.cwd(), 'src/data/site/routes.json');
+	const legacyRedirectsPath = path.resolve(process.cwd(), 'src/data/site/redirects.json');
 	const empty = { disabled_routes: [], sitemap_ignore: [], redirects: {} };
 	try {
 		const raw = JSON.parse(fs.readFileSync(routesJsonPath, 'utf-8'));

@@ -4,9 +4,9 @@ if (isRouteDisabled('/trade-in/')) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
 import PageLayout from '@/layouts/PageLayout.astro';
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { legal_entity, legal_inn } = settings;
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('trade_in'));
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 

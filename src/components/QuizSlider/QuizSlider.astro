@@ -4,8 +4,8 @@ import QuizSlide from './QuizSlide.astro';
 import './quiz.css';
 
 // import.meta.glob — Vite-нативный optional import (не падает если файла нет)
-const quizFiles = import.meta.glob('/src/data/quiz.json', { eager: true });
-const modelsFiles = import.meta.glob('/src/data/models.json', { eager: true });
+const quizFiles = import.meta.glob('/src/data/site/quiz.json', { eager: true });
+const modelsFiles = import.meta.glob('/src/data/site/models.json', { eager: true });
 
 let quizData = (Object.values(quizFiles)[0] as any)?.default || null;
 

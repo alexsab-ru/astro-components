@@ -1,4 +1,4 @@
-import translations from '@/data/all-translations.json';
+import translations from '@/data/common/translations.json';
 
 export function useTranslit(word) {
 	if (!word) return false;

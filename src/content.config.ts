@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
-import collectionsData from './data/collections.json';
+import collectionsData from './data/site/collections.json';
 
 // Базовая схема для markdown-контента (общие страницы коллекций из COLLECTIONS)
 const baseCollectionSchema = z.object({

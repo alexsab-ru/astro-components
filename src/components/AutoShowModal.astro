@@ -6,7 +6,7 @@ import CloseModalBtn from '@/components/CloseModalBtn.astro';
 import FormSelect from '@/components/FormSelect.astro';
 import {AGREE_LABEL} from '@/const';
 
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { manager_photo } = settings;
 
 const { 
@@ -20,7 +20,7 @@ const {
 	formName = ''
 } = Astro.props;
 
-import modelsData from '@/data/models.json';
+import modelsData from '@/data/site/models.json';
 const { models } = modelsData;
 const options = testDrive
 	? models

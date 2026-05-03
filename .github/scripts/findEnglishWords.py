@@ -105,7 +105,7 @@ def main():
     if domain:
         print(f"[INFO] Домен: {domain}", file=sys.stderr)
 
-    settings_path = Path('src/data/settings-common.json')
+    settings_path = Path('src/data/common/settings-common.json')
     skip_words = load_skip_words(settings_path)
     if skip_words:
         print(f"[INFO] Игнорируем слова: {', '.join(sorted(skip_words))}", file=sys.stderr)

@@ -56,8 +56,8 @@ export async function getModelSectionsYML(model = null) {
 	if(!model) return [];
 	let sections = [];
 	const normalized_brand_name = model.mark_id.toLowerCase().replace(/ /g, '-');
-	const sectionsModules = import.meta.glob('@/data/model-sections/**/*.yml');
-	const sectionsPath = `/src/data/model-sections/${normalized_brand_name}/${model.id}.yml`;
+	const sectionsModules = import.meta.glob('@/data/common/model-sections/**/*.yml');
+	const sectionsPath = `/src/data/common/model-sections/${normalized_brand_name}/${model.id}.yml`;
 	if (sectionsModules[sectionsPath]) {
 		const module = await sectionsModules[sectionsPath]();  
 		sections = module.default ?? module;

@@ -1,5 +1,5 @@
 ---
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('header'));
 
@@ -7,7 +7,7 @@ const { brand = null } = Astro.props;
 const path = Astro.url.pathname;
 
 import { LINKS_MENU as links } from '@/const.js';
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { header_top_line, is_header_transparent } = settings;
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
@@ -20,7 +20,7 @@ import HeaderMenuList from './MenuList.astro';
 
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
-import socials from '@/data/socials.json';
+import socials from '@/data/site/socials.json';
 
 import './styles.css';
 

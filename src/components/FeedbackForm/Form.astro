@@ -6,7 +6,7 @@ import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
 interface Props{
@@ -20,7 +20,7 @@ const {
   labelBtn = 'Отправить',
 } = Astro.props;
 
-import modelsData from '@/data/models.json';
+import modelsData from '@/data/site/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 const options = modelsData.services.filter(isModelVisible).map(({ id, mark_id, name, caption }) => {
 	// Используем отдельную переменную, чтобы не менять исходные данные модели.

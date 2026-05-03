@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs';
-import modelsData from '@/data/models.json';
+import modelsData from '@/data/site/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
 

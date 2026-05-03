@@ -1,5 +1,5 @@
 ---
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 import {TIMER, MARQUEE} from '@/const.js';
@@ -16,10 +16,10 @@ import Services from '@/components/Services.astro';
 import Contacts from '@/components/Contacts.astro';
 import Morquee from '@/components/Marquee/Index.astro';
 
-import modelsData from '@/data/models.json'
+import modelsData from '@/data/site/models.json'
 const { models } = modelsData;
 
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));

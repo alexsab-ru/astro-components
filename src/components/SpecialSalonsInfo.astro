@@ -13,7 +13,7 @@ const {
 } = Astro.props;
 import Button from '@/components/Button/Button.astro';
 import { phoneFormat } from '@/js/utils/numbers.format';
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = type 
     ? salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes(type))

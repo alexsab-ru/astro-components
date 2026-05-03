@@ -121,9 +121,9 @@ jobs:
 
     - name: Load env.json into environment
       run: |
-        if [ -f src/data/env.json ]; then
+        if [ -f src/data/site/env.json ]; then
           node -e '
-            const data = JSON.parse(require("fs").readFileSync("src/data/env.json","utf8"));
+            const data = JSON.parse(require("fs").readFileSync("src/data/site/env.json","utf8"));
             for (const [k,v] of Object.entries(data)) {
               if (typeof v === "object") console.log(k+"="+JSON.stringify(v));
               else console.log(k+"="+v);
@@ -131,7 +131,7 @@ jobs:
           ' >> $GITHUB_ENV
           echo "✅ env.json loaded into environment"
         else
-          echo "⚠ src/data/env.json not found — skipping"
+          echo "⚠ src/data/site/env.json not found — skipping"
         fi
 
     - name: Get Dealer cars Storage
@@ -432,7 +432,7 @@ jobs:
         if [[ -d src/content/cars && $(find src/content/cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
         if [[ -d src/content/used_cars && $(find src/content/used_cars -type f -name "*.mdx") ]]; then git add src/content/used_cars/*.mdx; fi
         if [[ "$GITHUB_REF_NAME" != "master" ]]; then
-          if [[ -f src/data/dealer-models_cars_price.json ]]; then git add src/data/dealer-models_cars_price.json --force; fi
+          if [[ -f src/data/site/dealer-models_cars_price.json ]]; then git add src/data/site/dealer-models_cars_price.json --force; fi
         fi
         if [[ -f public/cars.xml ]]; then git add public/cars.xml; fi
         if [[ -f public/used_cars.xml ]]; then git add public/used_cars.xml; fi

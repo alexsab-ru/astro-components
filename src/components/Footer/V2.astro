@@ -1,6 +1,6 @@
 ---
-import scripts_json from '@/data/scripts.json';
-import settings from '@/data/settings.json';
+import scripts_json from '@/data/site/scripts.json';
+import settings from '@/data/site/settings.json';
 const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
@@ -9,7 +9,7 @@ import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => {
     if (salon?.hidden_in?.includes('footer')) return false;
@@ -26,8 +26,8 @@ interface Props {
 const { showSiteLinks = true, logoNoLink = false } = Astro.props;
 // SOCIALS
 import SocialList from '@/components/Social/List.astro';
-import socials from '@/data/socials.json';
-import scripts from '@/data/scripts.json';
+import socials from '@/data/site/socials.json';
+import scripts from '@/data/site/scripts.json';
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
 [`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] : 
 salons

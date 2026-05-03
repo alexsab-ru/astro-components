@@ -1,16 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 
-const dataDirectory = path.join(process.cwd(), 'src', 'data');
-const outputPath = path.join(dataDirectory, 'all-prices.json');
-const federalFilePath = path.join(dataDirectory, 'all-cars.json');
-const dealerFilePath = path.join(dataDirectory, 'dealer-models_price.json');
-const dealerCarsFilePath = path.join(dataDirectory, 'dealer-models_cars_price.json');
-const allModelsFilePath = path.join(dataDirectory, 'all-models.json');
+const siteDataDirectory = path.join(process.cwd(), 'src', 'data', 'site');
+const commonDataDirectory = path.join(process.cwd(), 'src', 'data', 'common');
+const outputPath = path.join(siteDataDirectory, 'all-prices.json');
+const federalFilePath = path.join(commonDataDirectory, 'cars.json');
+const dealerFilePath = path.join(siteDataDirectory, 'dealer-models_price.json');
+const dealerCarsFilePath = path.join(siteDataDirectory, 'dealer-models_cars_price.json');
+const allModelsFilePath = path.join(commonDataDirectory, 'models.json');
 
 const Message = {
   SUCCESS: 'Файл all-prices.json успешно создан',
-  ERROR_NO_MODELS: 'Ошибка: Файл all-models.json не найден',
+  ERROR_NO_MODELS: 'Ошибка: Файл src/data/common/models.json не найден',
 };
 
 const DISABLE_FEED_PRICE    = process.env.DISABLE_FEED_PRICE === 'true';
@@ -247,7 +248,7 @@ allModels.forEach(model => {
 
 // Предупреждения о несопоставленных федеральных моделях
 if (unmatchedFederal.size > 0) {
-  const header = `Не найдены в all-models.json (${unmatchedFederal.size}):`;
+  const header = `Не найдены в src/data/common/models.json (${unmatchedFederal.size}):`;
   const lines = [...unmatchedFederal].map(id => `  - ${id}`);
   const message = [header, ...lines].join('\n');
 

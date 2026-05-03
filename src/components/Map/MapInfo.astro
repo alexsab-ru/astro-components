@@ -6,7 +6,7 @@ interface Props {
 
 const {salons = [], classes = ''} = Astro.props;
 
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { site_name, logo_map_info, logo_header, logo_dealer_header, logo_dealer_map_info } = settings;
 const logo_dealer = logo_dealer_map_info || logo_dealer_header || '';
 

@@ -4,7 +4,7 @@ import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 if (isRouteDisabled('/catalog/')) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
@@ -17,7 +17,7 @@ import SeoText from '@/components/Seo/Index.astro';
 import {Icon} from 'astro-icon/components';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 
-import modelsData from '@/data/models.json';
+import modelsData from '@/data/site/models.json';
 const { models } = modelsData;
 let image = '';
 

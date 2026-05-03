@@ -21,12 +21,12 @@ class CarProcessor:
         self.cars_price_data = {}
         
         self.sort_storage_data = {}
-        if os.path.exists('./src/data/sort_storage.json'):
+        if os.path.exists('./src/data/site/sort_storage.json'):
             try:
-                with open('./src/data/sort_storage.json', 'r', encoding='utf-8') as f:
+                with open('./src/data/site/sort_storage.json', 'r', encoding='utf-8') as f:
                     self.sort_storage_data = json.load(f)
             except json.JSONDecodeError:
-                print("Ошибка при чтении ./src/data/sort_storage.json")
+                print("Ошибка при чтении ./src/data/site/sort_storage.json")
             except Exception as e:
                 print(f"Произошла ошибка при работе с файлом: {e}")
         
@@ -979,18 +979,18 @@ class CarProcessor:
         if 'model_id' not in car_data:
             car_data['model_id'] = process_friendly_url(model_full)
 
-        # get info from ./src/data/settings.json
+        # get info from ./src/data/site/settings.json
         settings = {
             'legal_city': 'Город',
             'legal_city_where': 'Городе'
         }
 
-        if os.path.exists('./src/data/settings.json'):
+        if os.path.exists('./src/data/site/settings.json'):
             try:
-                with open('./src/data/settings.json', 'r', encoding='utf-8') as f:
+                with open('./src/data/site/settings.json', 'r', encoding='utf-8') as f:
                     settings = json.load(f)
             except json.JSONDecodeError:
-                print("Ошибка при чтении ./src/data/settings.json")
+                print("Ошибка при чтении ./src/data/site/settings.json")
             except Exception as e:
                 print(f"Произошла ошибка при работе с файлом: {e}")
 
@@ -1483,9 +1483,9 @@ def main():
         print("❌ Найдены ошибки 404")
 
     # --- Сохранение данных в JSON с ценами и скидками из фида ---
-    os.makedirs('src/data', exist_ok=True)
+    os.makedirs('src/data/site', exist_ok=True)
     sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
-    with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
+    with open('src/data/site/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
         json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
     # --- конец блока ---
 

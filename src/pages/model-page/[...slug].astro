@@ -2,22 +2,22 @@
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';
-import bannersData from '@/data/banners.json';
+import bannersData from '@/data/site/banners.json';
 import type { TBanner } from '@/components/Banner/types';
 import PageH1 from '@/components/PageH1/Index.astro';
-import modelsData from '@/data/models.json';
-import settings from '@/data/settings.json';
+import modelsData from '@/data/site/models.json';
+import settings from '@/data/site/settings.json';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import Sections from '@/components/ImageGallery/Sections.astro';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
 import { IS_MODEL_PREFIX_URL } from '@/const';
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 
-const allSections = import.meta.glob('/src/data/model-sections/**/*.yml', { eager: true });
+const allSections = import.meta.glob('/src/data/common/model-sections/**/*.yml', { eager: true });
 
 export async function getStaticPaths() {
   if (isRouteDisabled('/model-page/')) return [];
@@ -35,7 +35,7 @@ const { name, caption, slogan, homeImg, id, thumb, mark_id } = model;
 const modelTitle = caption ?? name ?? '';
 
 const brandFolder = mark_id.toLowerCase();
-const sectionsModule = allSections[`/src/data/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
+const sectionsModule = allSections[`/src/data/common/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
 const rawSections = sectionsModule?.default ?? [];
 
 const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

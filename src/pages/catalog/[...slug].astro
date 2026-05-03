@@ -5,10 +5,10 @@ import { getReadyCars, breadcrumb } from './index.astro';
 
 export async function getStaticPaths() {
 	if (isRouteDisabled('/catalog/')) return [];
-	const settingsModule = await import('@/data/settings.json');
+	const settingsModule = await import('@/data/site/settings.json');
 	const settings = (settingsModule as any).default || settingsModule;
 	const legal_city_where = settings.legal_city_where;
-	const modelsModule = await import('@/data/models.json');
+	const modelsModule = await import('@/data/site/models.json');
 	const models = ((modelsModule as any).default || modelsModule).models || [];
 	const readyCars = await getReadyCars(legal_city_where, models);
 	return readyCars.map((car) => ({

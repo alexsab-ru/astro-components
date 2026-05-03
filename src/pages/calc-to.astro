@@ -3,7 +3,7 @@ import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 if (isRouteDisabled('/calc-to/')) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { site_name } = settings;
 import Layout from '@/layouts/Layout.astro';
 import Banner from '@/components/Banner/Banner.astro';

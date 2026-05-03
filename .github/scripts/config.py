@@ -2,6 +2,8 @@
 import json
 import os
 
+os.makedirs('src/data/common', exist_ok=True)
+
 COLOROFF='\033[0m'
 BGYELLOW='\033[30;43m'
 BGGREEN='\033[30;42m'
@@ -21,7 +23,7 @@ def print_message(message, type='info'):
     with open('output.txt', 'a') as file:
         file.write(f"{message}\n")
 
-def load_all_models(json_path: str = "./src/data/all-models.json"):
+def load_all_models(json_path: str = "./src/data/common/models.json"):
     """Загружаем полный список моделей из all-models.json.
 
     Возвращает список объектов моделей, как есть в файле.
@@ -50,14 +52,14 @@ def build_all_models_index(all_models: list) -> dict:
 all_models_data = load_all_models()
 # Строим индекс моделей по бренду и сохраняем результат в файл для тестирования
 all_models_index_by_brand = build_all_models_index(all_models_data)
-with open('src/data/all_models_index_by_brand.json', 'w', encoding='utf-8') as f:
+with open('src/data/common/all_models_index_by_brand.json', 'w', encoding='utf-8') as f:
     # Документируем: сохраняем файл с группировкой по бренду и ID, для ознакомления
     # Это поможет быстро анализировать структуру и использовать её в других скриптах
     json.dump(all_models_index_by_brand, f, ensure_ascii=False, indent=2)
 
 
 # Генерация model_mapping из файла all-models.json
-def load_model_mapping(json_path: str = "./src/data/all-models.json"):
+def load_model_mapping(json_path: str = "./src/data/common/models.json"):
     """Загрузка и построение мэпинга моделей из all-models.json.
 
     ВАЖНО: Раньше мы читали готовый объект из model_mapping.json. Теперь источник данных —
@@ -123,7 +125,7 @@ def load_model_mapping(json_path: str = "./src/data/all-models.json"):
 model_mapping = load_model_mapping()
 
 # Сохраняем model_mapping в JSON для отладки и повторного использования
-with open('src/data/model_mapping.json', 'w', encoding='utf-8') as f:
+with open('src/data/common/model_mapping.json', 'w', encoding='utf-8') as f:
     # Документируем: сохраняем мэпинг моделей в файл model_mapping.json
     # Это поможет быстро анализировать структуру и использовать её в других скриптах
     json.dump(model_mapping, f, ensure_ascii=False, indent=2)

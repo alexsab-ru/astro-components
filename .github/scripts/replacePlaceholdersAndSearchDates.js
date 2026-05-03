@@ -20,7 +20,7 @@ const ReportFile = {
 class PlaceholderProcessor {
     constructor() {
         // Пути к директориям
-        this.dataDirectory = path.join(process.cwd(), 'src', 'data');
+        this.dataDirectory = path.join(process.cwd(), 'src', 'data', 'site');
         this.contentDirectory = path.join(process.cwd(), 'src', 'content');
         this.pagesDirectory = path.join(process.cwd(), 'src', 'pages');
         

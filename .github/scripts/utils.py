@@ -32,7 +32,7 @@ CYRILLIC_TO_LATIN = {
 
 def _load_settings_common():
     """Загружает settings-common.json и возвращает словари переводов."""
-    settings_path = Path('./src/data/settings-common.json')
+    settings_path = Path('./src/data/common/settings-common.json')
     try:
         with open(settings_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -772,8 +772,8 @@ def load_avito_color_mapping() -> Dict[str, str]:
 
     Приоритет источников:
     1) AVITO_COLOR_MAPPING_PATH (env)
-    2) src/data/all-avito-colors.json
-    3) src/data/avito-colors.json
+    2) src/data/common/avito-colors.json
+    3) src/data/common/avito-colors.json
     4) ../astro-json/src/avito-colors.json (локальная разработка в mono-workspace)
     5) Встроенный fallback-словарь
     """
@@ -785,11 +785,11 @@ def load_avito_color_mapping() -> Dict[str, str]:
         candidates.append(Path(env_path))
 
     candidates.extend([
-        repo_root / 'src/data/all-avito-colors.json',
-        repo_root / 'src/data/avito-colors.json',
+        repo_root / 'src/data/common/avito-colors.json',
+        repo_root / 'src/data/common/avito-colors.json',
         repo_root.parent / 'astro-json/src/avito-colors.json',
-        Path('./src/data/all-avito-colors.json'),
-        Path('./src/data/avito-colors.json'),
+        Path('./src/data/common/avito-colors.json'),
+        Path('./src/data/common/avito-colors.json'),
     ])
 
     seen_paths = set()
@@ -901,8 +901,8 @@ def load_localized_value_translations() -> Dict[str, str]:
 
     Приоритет источников:
     1) LOCALIZED_VALUE_TRANSLATIONS_PATH / TRANSLATIONS_MAPPING_PATH (env)
-    2) src/data/all-translations.json
-    3) src/data/translations.json
+    2) src/data/common/translations.json
+    3) src/data/common/translations.json
     4) ../astro-json/src/translations.json (локальная разработка в mono-workspace)
     5) Встроенный fallback-словарь
     """
@@ -914,11 +914,11 @@ def load_localized_value_translations() -> Dict[str, str]:
         candidates.append(Path(env_path))
 
     candidates.extend([
-        repo_root / 'src/data/all-translations.json',
-        repo_root / 'src/data/translations.json',
+        repo_root / 'src/data/common/translations.json',
+        repo_root / 'src/data/common/translations.json',
         repo_root.parent / 'astro-json/src/translations.json',
-        Path('./src/data/all-translations.json'),
-        Path('./src/data/translations.json'),
+        Path('./src/data/common/translations.json'),
+        Path('./src/data/common/translations.json'),
     ])
 
     seen_paths = set()
@@ -965,7 +965,7 @@ def load_localized_value_translations() -> Dict[str, str]:
     return _LOCALIZED_VALUE_TRANSLATIONS_FALLBACK
 
 
-def load_price_data(file_path: str = "./src/data/dealer-cars_price.json") -> Dict[str, Dict[str, int]]:
+def load_price_data(file_path: str = "./src/data/site/dealer-cars_price.json") -> Dict[str, Dict[str, int]]:
     """
     Загружает данные о ценах из JSON файла.
     
@@ -1485,8 +1485,8 @@ def _load_env_json() -> Dict[str, Any]:
     """
     repo_root = Path(__file__).resolve().parents[2]
     candidates = [
-        repo_root / 'src/data/env.json',
-        Path('./src/data/env.json'),
+        repo_root / 'src/data/site/env.json',
+        Path('./src/data/site/env.json'),
     ]
     for candidate in candidates:
         if candidate.exists():
@@ -1508,7 +1508,7 @@ def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
     CARS_AUTORU_REMOVE_MARK_IDS = '["mark1", "mark2"]'
     CARS_AVITO_ELEMENTS_TO_LOCALIZE = '["elem1", "elem2"]'
 
-    Приоритет: os.environ > src/data/env.json > default_config
+    Приоритет: os.environ > src/data/site/env.json > default_config
     """
     prefix = f"CARS_{source_type.upper()}_"
 
