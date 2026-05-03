@@ -4,11 +4,34 @@ import time
 import requests
 import argparse
 from lxml import etree
-from requests.exceptions import ConnectionError, Timeout
+from requests.exceptions import RequestException
 
 
-def download_or_read_file(path, retries=3, delay=5):
+def write_output(message):
+    with open('output.txt', 'a', encoding='utf-8') as file:
+        file.write(f"{message}\n")
+
+
+def get_positive_int_env(name, default):
+    value = os.getenv(name)
+    if not value:
+        return default
+    try:
+        parsed = int(value)
+        if parsed > 0:
+            return parsed
+    except ValueError:
+        pass
+    print(f"Invalid {name}={value!r}; using default {default}")
+    return default
+
+
+def download_or_read_file(path, retries=None, delay=None, timeout=None):
     """Скачать XML по URL или прочитать локальный файл с обработкой повторных попыток."""
+    retries = retries or get_positive_int_env('GET_ONE_XML_RETRIES', 5)
+    delay = delay or get_positive_int_env('GET_ONE_XML_RETRY_DELAY', 20)
+    timeout = timeout or get_positive_int_env('GET_ONE_XML_TIMEOUT', 30)
+
     if os.path.isfile(path):
         with open(path, 'rb') as file:
             return file.read()
@@ -16,15 +39,22 @@ def download_or_read_file(path, retries=3, delay=5):
     if path.startswith('http://') or path.startswith('https://'):
         for attempt in range(retries):
             try:
-                response = requests.get(path, timeout=10)  # Установим тайм-аут
+                response = requests.get(path, timeout=timeout)
                 response.raise_for_status()
                 return response.content
-            except (ConnectionError, Timeout) as e:
-                print(f"Attempt {attempt + 1} failed: {e}")
+            except RequestException as e:
+                print(f"Attempt {attempt + 1}/{retries} failed: {e}")
                 if attempt < retries - 1:
-                    time.sleep(delay)  # Ждем перед повторной попыткой
+                    time.sleep(delay)
                 else:
-                    raise
+                    warning_msg = (
+                        f"⚠️ XML не удалось получить после {retries} попыток: {path}\n"
+                        f"Таймаут запроса: {timeout} сек.; пауза между попытками: {delay} сек.\n"
+                        f"Последняя ошибка: {e}"
+                    )
+                    print(warning_msg)
+                    write_output(warning_msg)
+                    return None
     
     return None
 

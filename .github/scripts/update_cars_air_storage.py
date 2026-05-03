@@ -160,6 +160,13 @@ def main():
     config['new_phone'] = source_config['new_phone']
 
     root = get_xml_content(args.input_file, args.xml_url)
+    if root is None:
+        warning_msg = f"⚠️ Не удалось получить XML для {args.input_file}. Обработка {args.source_type} пропущена."
+        print(warning_msg)
+        with open('output.txt', 'a', encoding='utf-8') as file:
+            file.write(f"{warning_msg}\n")
+        return
+
     tree = ET.ElementTree(root)
 
     # Загружаем данные из JSON файла
