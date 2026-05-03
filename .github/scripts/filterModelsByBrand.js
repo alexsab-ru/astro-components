@@ -59,11 +59,17 @@ const logWarning = (msg) => console.log('\x1b[30;43m%s\x1b[0m', msg);
 const logError   = (msg) => console.log('\x1b[30;41m%s\x1b[0m', msg);
 
 // Пути
-const dataDirectory = path.join(process.cwd(), 'src', 'data');
-const settingsFilePath = path.join(dataDirectory, 'settings.json');
-const allModelsFilePath = path.join(dataDirectory, 'all-models.json');
-const federalDisclaimerFilePath = path.join(dataDirectory, 'federal-disclaimer.json');
-const modelsFilePath = path.join(dataDirectory, 'models.json');
+const siteDataDirectory = process.env.SITE_DATA_DIR
+  ? path.resolve(process.cwd(), process.env.SITE_DATA_DIR)
+  : path.join(process.cwd(), 'src', 'data');
+const commonDataDirectory = process.env.COMMON_DATA_DIR
+  ? path.resolve(process.cwd(), process.env.COMMON_DATA_DIR)
+  : path.join(process.cwd(), 'src', 'data');
+const useSplitDataDirectories = Boolean(process.env.SITE_DATA_DIR || process.env.COMMON_DATA_DIR);
+const settingsFilePath = path.join(siteDataDirectory, 'settings.json');
+const allModelsFilePath = path.join(commonDataDirectory, useSplitDataDirectories ? 'models.json' : 'all-models.json');
+const federalDisclaimerFilePath = path.join(siteDataDirectory, 'federal-disclaimer.json');
+const modelsFilePath = path.join(siteDataDirectory, 'models.json');
 
 // Структура вывода
 const data = {
@@ -76,7 +82,7 @@ try {
   const settings = readJson(settingsFilePath);
   if (!settings) throw new Error('Не удалось загрузить файл settings.json');
   const allModels = readJson(allModelsFilePath);
-  if (!allModels) throw new Error('Не удалось загрузить файл all-models.json');
+  if (!allModels) throw new Error('Не удалось загрузить общий файл models.json');
   const federalDisclaimer = readOptionalJson(federalDisclaimerFilePath);
 
   if (settings.brand == 'BRAND') {
