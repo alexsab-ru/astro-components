@@ -99,6 +99,18 @@ jobs:
         JSON_REPO: ${{ secrets.JSON_REPO }}
         DOMAIN: ${{ vars.DOMAIN }}
         FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
+
+    - name: Migrate legacy dealer models cars price file
+      run: |
+        legacy_file="src/data/dealer-models_cars_price.json"
+        target_file="src/data/site/dealer-models_cars_price.json"
+        if [[ -f "$legacy_file" ]]; then
+          mkdir -p "$(dirname "$target_file")"
+          mv -f "$legacy_file" "$target_file"
+          echo "✅ Migrated $legacy_file → $target_file"
+        else
+          echo "ℹ $legacy_file not found — skipping migration"
+        fi
     
     - name: Set up Python
       uses: actions/setup-python@v6
@@ -432,6 +444,7 @@ jobs:
         if [[ -d src/content/cars && $(find src/content/cars -type f -name "*.mdx") ]]; then git add src/content/cars/*.mdx; fi
         if [[ -d src/content/used_cars && $(find src/content/used_cars -type f -name "*.mdx") ]]; then git add src/content/used_cars/*.mdx; fi
         if [[ "$GITHUB_REF_NAME" != "master" ]]; then
+          git add -u src/data || true
           if [[ -f src/data/site/dealer-models_cars_price.json ]]; then git add src/data/site/dealer-models_cars_price.json --force; fi
         fi
         if [[ -f public/cars.xml ]]; then git add public/cars.xml; fi
