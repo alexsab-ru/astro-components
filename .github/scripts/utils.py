@@ -564,6 +564,7 @@ def _merge_and_validate_car_images(existing_images, new_images, vin):
 def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumbs, config, vin, brand=None, model=None, color=None):
     if config.get('skip_thumbs'):
         data['images'] = []
+        data['imageSets'] = []
         data['image'] = _get_color_fallback_image(
             data.get('mark_id', brand or ''),
             data.get('folder_id', model or ''),
@@ -593,7 +594,12 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
         )
         mirror_result = ImageMirror(mirror_config).mirror_car_images(vin, merged_images, friendly_url)
         data['images'] = mirror_result.images
-        data['image'] = mirror_result.image or _get_color_fallback_image(
+        data['imageSets'] = mirror_result.image_sets
+        data['image'] = (
+            mirror_result.image_sets[0].get('medium')
+            if mirror_result.image_sets
+            else mirror_result.image
+        ) or _get_color_fallback_image(
             data.get('mark_id', brand or ''),
             data.get('folder_id', model or ''),
             data.get('color', color or ''),
@@ -627,9 +633,11 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
 
 
 def _sync_processed_images_to_car_data(car_data, data):
-    for key in ('image', 'images'):
+    for key in ('images',):
         if key in data:
             car_data[key] = data[key]
+    if data.get('images'):
+        car_data['image'] = data['images'][0]
 
 
 def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, temp_thumbs_dir, skip_thumbs=False, count_thumbs=5):

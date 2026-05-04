@@ -175,6 +175,7 @@ class MirrorResult:
     image: str | None = None
     images: list[str] = field(default_factory=list)
     thumbs: list[str] = field(default_factory=list)
+    image_sets: list[dict[str, str]] = field(default_factory=list)
     manifest: dict[str, Any] = field(default_factory=dict)
     changed_indexes: list[int] = field(default_factory=list)
     changed_remote_paths: list[str] = field(default_factory=list)
@@ -342,12 +343,14 @@ class ImageMirror:
         changed_remote_paths.append(self.manifest_remote_path(vin))
 
         images = [item["cdn"]["full"] for item in manifest_images]
-        thumbs = [item["cdn"]["large"] for item in manifest_images[:5]]
+        thumbs = [item["cdn"]["medium"] for item in manifest_images[:5]]
+        image_sets = [item["cdn"] for item in manifest_images]
 
         return MirrorResult(
             image=images[0] if images else None,
             images=images,
             thumbs=thumbs,
+            image_sets=image_sets,
             manifest=manifest,
             changed_indexes=changed_indexes,
             changed_remote_paths=changed_remote_paths,
@@ -408,6 +411,7 @@ def main() -> None:
         "image": result.image,
         "images": result.images,
         "thumbs": result.thumbs,
+        "image_sets": result.image_sets,
         "changed_indexes": result.changed_indexes,
         "changed_remote_paths": result.changed_remote_paths,
     }, ensure_ascii=False, indent=2))

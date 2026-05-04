@@ -63,6 +63,10 @@ export function calculateCarPrice(carData: any) {
  */
 export function getCarThumbnail(carData: any) {
   if (!carData) return null;
+
+  if (carData.imageSets && carData.imageSets.length) {
+    return carData.imageSets[0].medium;
+  }
   
   if (carData.thumbs && carData.thumbs.length) {
     return carData.thumbs[0];
