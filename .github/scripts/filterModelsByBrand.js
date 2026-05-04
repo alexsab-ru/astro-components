@@ -157,6 +157,47 @@ const addDisclaimersToModel = (model, brandId, modelId, federalDisclaimer) => {
 	};
 };
 
+const refResolvers = {
+	benefitRefs: {
+		registryFile: 'defaults/benefits.json',
+		localOverridesKey: 'benefitOverrides',
+		outputKey: 'benefits',
+		mode: 'array',
+	},
+};
+
+const resolveRefs = (model, layers) => {
+	const resolvedModel = { ...model };
+
+	for (const [refsKey, config] of Object.entries(refResolvers)) {
+		const refs = Array.isArray(resolvedModel[refsKey]) ? resolvedModel[refsKey] : [];
+		const registry = deepMerge(
+			readOptionalJson(path.join(commonDataDirectory, config.registryFile)),
+			...layers.map((layer) => layer?.[config.localOverridesKey]).filter(isPlainObject),
+		);
+
+		if (config.mode === 'array') {
+			resolvedModel[config.outputKey] = refs
+				.map((ref) => {
+					const item = registry[ref];
+
+					if (!item) {
+						logWarning(`Не найдена ссылка ${refsKey}: ${ref}`);
+						return null;
+					}
+
+					return item;
+				})
+				.filter(Boolean);
+		}
+
+		delete resolvedModel[refsKey];
+		delete resolvedModel[config.localOverridesKey];
+	}
+
+	return resolvedModel;
+};
+
 const buildModel = (brandId, modelId, federalDisclaimer) => {
 	const layers = [
 		readOptionalJson(path.join(commonDataDirectory, 'defaults', 'model.json')),
@@ -174,7 +215,7 @@ const buildModel = (brandId, modelId, federalDisclaimer) => {
 	const model = deepMerge(...layers);
 	model.id = modelId;
 
-	return addDisclaimersToModel(model, brandId, modelId, federalDisclaimer);
+	return addDisclaimersToModel(resolveRefs(model, layers), brandId, modelId, federalDisclaimer);
 };
 
 const siteDataDirectory = process.env.SITE_DATA_DIR
