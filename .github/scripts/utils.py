@@ -558,6 +558,12 @@ def _merge_and_validate_car_images(existing_images, new_images, vin):
 
 
 def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumbs, config, vin, brand=None, model=None, color=None):
+    if config.get('skip_thumbs'):
+        data['images'] = []
+        data['image'] = DEFAULT_CAR_IMAGE
+        data['thumbs'] = []
+        return
+
     data['images'] = _merge_and_validate_car_images(data.get('images', []), incoming_images, vin)
     data['image'] = data['images'][0] if data['images'] else _get_color_fallback_image(
         data.get('mark_id', brand or ''),

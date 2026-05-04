@@ -1003,6 +1003,9 @@ class CarProcessor:
         else:
             create_file(car_data, file_path, friendly_url, self.current_thumbs, self.sort_storage_data, self.dealer_photos_for_cars_avito, config, self.existing_files)
 
+        if config.get('skip_thumbs'):
+            car_data['images'] = []
+
         # Возвращаем новый XML элемент в формате data_cars_car
         return self.create_car_element(car_data)
 
@@ -1133,7 +1136,7 @@ def main():
     parser.add_argument('--output_path', default='./public/cars.xml', help='Output path/file')
     parser.add_argument('--domain', default=os.getenv('DOMAIN', 'localhost'), help='Repository name')
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
-    parser.add_argument('--skip_thumbs', action="store_true", help='Skip create thumbnails')
+    parser.add_argument('--skip_thumbs', action="store_true", help='Skip car images and thumbnail generation')
     parser.add_argument('--skip_check_thumb', action="store_true", help='Skip check thumbnails')
     parser.add_argument('--count_thumbs', default=5, help='Count thumbs for create')
     parser.add_argument('--image_tag', default='image', help='Image tag name')

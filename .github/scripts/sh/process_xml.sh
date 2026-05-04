@@ -11,7 +11,7 @@ show_help() {
     echo "  test TYPE [OPTIONS]              - Run getone and update commands in sequence"
     echo
     echo "Options (can be used with update, auto, test commands):"
-    echo "  --skip_thumbs                    - Skip thumbnail generation"
+    echo "  --skip_thumbs                    - Skip car images and thumbnail generation"
     echo "  --count_thumbs N                 - Number of thumbnails to generate (default: 5)"
     echo "  --skip_check_thumb               - Skip thumbnail existence check"
     echo "  --dev                            - Start dev server after processing (for auto and test)"
