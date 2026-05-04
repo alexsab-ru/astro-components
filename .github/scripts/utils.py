@@ -46,9 +46,9 @@ def _load_settings_common():
 
 def _build_complectation_translation_map():
     """Строит словарь {русское_название_lower: английское_название}
-    из complectations в all-models.json (уже загружен в config.py)."""
+    из complectations в site/models.json (уже загружен в config.py)."""
     trans = {}
-    for model in all_models_data:
+    for model in site_models_data:
         for comp in model.get('complectations', []):
             caption = comp.get('displayName') or comp.get('caption', '')
             name = comp.get('name', '')
@@ -86,7 +86,7 @@ def _lookup_complectation_name(value, mark_id=None, folder_id=None):
 
     # 1. Точный поиск в комплектациях конкретной модели
     if mark_id and folder_id:
-        brand_bucket = all_models_index_by_brand.get(mark_id.lower(), {})
+        brand_bucket = model_index_by_brand.get(mark_id.lower(), {})
         model_obj = brand_bucket.get(folder_id.lower())
         if model_obj:
             for comp in model_obj.get('complectations', []):
@@ -192,7 +192,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
     1. Замена «Nх» на «Nx» (например, «4х4» → «4x4», «2х4» → «2x4»)
     1.1. Замена «л.с.» / «л.с)» → «h.p.» / «h.p.)» (потом удалятся → hp)
     2. Бренд/модель-специфичные переопределения из settings-common.json
-    3. Комплектации из all-models.json
+    3. Комплектации из site/models.json
     4. Аббревиатуры из url_translations (settings-common.json)
     5. Логирование непереведённых слов
     6. Транслитерация оставшейся кириллицы
@@ -217,7 +217,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
                 text = text[:idx] + eng + text[idx + len(rus):]
                 text_lower = text.lower()
 
-    # 3. Комплектации из all-models.json (базовый словарь, для оставшейся кириллицы)
+    # 3. Комплектации из site/models.json (базовый словарь, для оставшейся кириллицы)
     if _has_cyrillic(text):
         text_lower = text.lower()
         for rus, eng in _complectation_sorted:

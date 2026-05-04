@@ -7,11 +7,11 @@ const outputPath = path.join(siteDataDirectory, 'all-prices.json');
 const federalFilePath = path.join(commonDataDirectory, 'cars.json');
 const dealerFilePath = path.join(siteDataDirectory, 'dealer-models_price.json');
 const dealerCarsFilePath = path.join(siteDataDirectory, 'dealer-models_cars_price.json');
-const allModelsFilePath = path.join(commonDataDirectory, 'models.json');
+const modelsFilePath = path.join(siteDataDirectory, 'models.json');
 
 const Message = {
   SUCCESS: 'Файл all-prices.json успешно создан',
-  ERROR_NO_MODELS: 'Ошибка: Файл src/data/common/models.json не найден',
+  ERROR_NO_MODELS: 'Ошибка: Файл src/data/site/models.json не найден. Запустите filterModelsByBrand.js',
 };
 
 const DISABLE_FEED_PRICE    = process.env.DISABLE_FEED_PRICE === 'true';
@@ -202,18 +202,18 @@ const aggregateMax = (matches, key) => {
 
 // --- Основная логика ---
 
-if (!fs.existsSync(allModelsFilePath)) {
+if (!fs.existsSync(modelsFilePath)) {
   console.error(Message.ERROR_NO_MODELS);
   process.exit(1);
 }
 
-const allModels = readJSON(allModelsFilePath) || [];
+const modelsData = readJSON(modelsFilePath) || {};
+const allModels = Array.isArray(modelsData.models) ? modelsData.models : [];
 const federalData = readJSON(federalFilePath) || [];
 const dealerData = loadDealerData(dealerFilePath);
 const dealerCarsData = loadDealerData(dealerCarsFilePath);
 
 const results = [];
-const unmatchedFederal = new Set(federalData.map(f => f.id));
 
 allModels.forEach(model => {
   const brand = getModelBrandId(model);
@@ -224,7 +224,6 @@ allModels.forEach(model => {
 
   // Поиск федеральных данных
   const federal = findFederalMatch(federalData, ourId, brand, knownNames);
-  if (federal) unmatchedFederal.delete(federal.id);
 
   // Поиск дилерских данных
   const dealerMatches = findDealerMatches(dealerData, ourId, brand, knownNames);
@@ -256,20 +255,6 @@ allModels.forEach(model => {
     benefitDealerAVN,
   });
 });
-
-// Предупреждения о несопоставленных федеральных моделях
-if (unmatchedFederal.size > 0) {
-  const header = `Не найдены в src/data/common/models.json (${unmatchedFederal.size}):`;
-  const lines = [...unmatchedFederal].map(id => `  - ${id}`);
-  const message = [header, ...lines].join('\n');
-
-  console.warn(`\n${message}`);
-
-  // Дописываем в output.txt для уведомления в workflow
-  const outputTxtPath = path.join(process.cwd(), 'output.txt');
-  const outputContent = `<b>mergeCarPrices:</b> ${header}\n${lines.map(l => `<code>${l.trim()}</code>`).join('\n')}\n\n`;
-  fs.appendFileSync(outputTxtPath, outputContent, 'utf-8');
-}
 
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2), 'utf-8');
 console.log(Message.SUCCESS);

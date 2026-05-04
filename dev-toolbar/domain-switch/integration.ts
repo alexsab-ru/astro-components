@@ -270,8 +270,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
           onError?: (message: string) => void,
           options?: {
             skipDealerFiles?: boolean;
-            skipModelSections?: boolean;
-            skipModels?: boolean;
             skipCars?: boolean;
           }
         ) => {
@@ -281,8 +279,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
           }
 
           if (options?.skipDealerFiles) args.push("--skip-dealer-files");
-          if (options?.skipModelSections) args.push("--skip-model-sections");
-          if (options?.skipModels) args.push("--skip-models");
           if (options?.skipCars) args.push("--skip-cars");
 
           return runScript("bash", args, label, opId, onError, {
@@ -410,7 +406,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
 
           await appendServerLog("INFO", `OP_START: file=${targetFile} domain=${safeDomain || "-"} preserveLog=${preserve}`, opId);
 
-          const isCommonModels = targetFile === "__common_models__";
           const isCommonCars = targetFile === "__common_cars__";
           const isDownloadAll = targetFile === "__all__";
           const isKnownDomainFile = domainFiles.includes(targetFile);
@@ -425,41 +420,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
             return;
           }
 
-          // Общие файлы скачиваем через тот же скрипт с нужными флагами.
-          if (isCommonModels) {
-            const commonDomain = safeDomain || String(currentDomain || "").trim();
-            if (!commonDomain) {
-              await reportRun({
-                ok: false,
-                message: "Для общего models нужен DOMAIN: выбери домен в тулбаре или задай DOMAIN в .env.",
-              });
-              await appendServerLog("INFO", "OP_END", opId);
-              await finalizeRun("Ошибка: DOMAIN не задан");
-              return;
-            }
-            try {
-              await reportRun({ ok: true, message: "START: скачиваю общий models" });
-              await runScript(
-                "bash",
-                [
-                  DOWNLOAD_SCRIPT,
-                  "--skip-dealer-files",
-                  "--skip-model-sections",
-                  "--skip-cars",
-                ],
-                "Скачал общий models",
-                opId,
-                (msg) => errors.push(msg),
-                { DOMAIN: commonDomain, JSON_REPO: jsonRepo }
-              );
-            } catch (e: any) {
-              await reportRun({ ok: false, message: e?.message ?? String(e) });
-            } finally {
-              await appendServerLog("INFO", "OP_END", opId);
-              await finalizeRun("Общий models");
-            }
-            return;
-          }
           if (isCommonCars) {
             const commonDomain = safeDomain || String(currentDomain || "").trim();
             if (!commonDomain) {
@@ -478,8 +438,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
                 [
                   DOWNLOAD_SCRIPT,
                   "--skip-dealer-files",
-                  "--skip-model-sections",
-                  "--skip-models",
                 ],
                 "Скачал общий cars",
                 opId,
@@ -531,8 +489,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
               opId,
               (msg) => errors.push(msg),
               {
-                skipModelSections: true,
-                skipModels: true,
                 skipCars: true,
               }
             );

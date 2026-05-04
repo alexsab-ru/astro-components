@@ -788,7 +788,7 @@ class CarProcessor:
 
         self.pending_color_errors[group_key] = (
             f"\nvin: <code>{vin}</code>\n"
-            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в models.json\n"
+            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в site/models.json\n"
             f"<code>{friendly_url}</code>"
         )
 
@@ -974,7 +974,7 @@ class CarProcessor:
                 }
         # --- конец блока ---
 
-        # Фоллбэк: если model_id не установлен (модель не найдена в models.json),
+        # Фоллбэк: если model_id не установлен (модель не найдена в site/models.json),
         # генерируем его из folder_id через process_friendly_url
         if 'model_id' not in car_data:
             car_data['model_id'] = process_friendly_url(model_full)

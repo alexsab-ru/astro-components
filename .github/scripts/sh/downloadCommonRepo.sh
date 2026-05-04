@@ -18,8 +18,6 @@ Options:
   -f, --file FILE            Specify file(s) to copy from data directory
                              Can be used multiple times or comma-separated
   -d, --skip-dealer-files    Skip copying dealer data files from src/$DOMAIN
-  -s, --skip-model-sections  Skip copying model-sections directory
-  -m, --skip-models          Skip copying models.json
   -c, --skip-cars            Skip copying cars.json
   -k, --keep-tmp             Keep cloned repo in tmp/
   -cd, --clean-data          Remove generated files from src/data/site and src/data/common
@@ -37,7 +35,7 @@ Examples:
   pnpm downloadCommonRepo -f settings.json -f faq.json
   pnpm downloadCommonRepo -f settings.json,faq.json
   pnpm downloadCommonRepo --skip-dealer-files
-  pnpm downloadCommonRepo --skip-model-sections --skip-models --skip-cars
+  pnpm downloadCommonRepo --skip-cars
   JSON_REPO=https://github.com/org/repo DOMAIN=site.com pnpm downloadCommonRepo
 
 Warning:
@@ -48,8 +46,6 @@ EOF
 # Обработка параметров командной строки
 SPECIFIC_FILES=()
 SKIP_DEALER_FILES=false
-SKIP_MODEL_SECTIONS=false
-SKIP_MODELS=false
 SKIP_CARS=false
 KEEP_TMP=false
 CLEAN_DATA=false
@@ -74,14 +70,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -d|--skip-dealer-files)
             SKIP_DEALER_FILES=true
-            shift
-            ;;
-        -s|--skip-model-sections)
-            SKIP_MODEL_SECTIONS=true
-            shift
-            ;;
-        -m|--skip-models)
-            SKIP_MODELS=true
             shift
             ;;
         -c|--skip-cars)
@@ -309,8 +297,6 @@ cd "$TMP_DIR"
 git sparse-checkout init --no-cone
 git sparse-checkout set \
   "src/$DOMAIN" \
-  "src/_model-sections" \
-  "src/models.json" \
   "src/cars.json" \
   "src/avito-colors.json" \
   "src/settings-common.json" \
@@ -370,104 +356,12 @@ else
   echo -e "${BGYELLOW}Пропускаем копирование astro-json/data: папка не найдена в JSON_REPO${Color_Off}"
 fi
 
-# ==================================================
-# Парсинг брендов и копирование model-sections
-# ==================================================
-# Проверяем, нужно ли копировать model-sections
-SHOULD_COPY_MODEL_SECTIONS=false
-
-# Копируем model-sections если:
-# 1. Не указан флаг --skip-model-sections
-# 2. И (копировались все файлы ИЛИ settings.json в списке скопированных файлов)
-if [ "$SKIP_MODEL_SECTIONS" = false ]; then
-  if [ ${#SPECIFIC_FILES[@]} -eq 0 ]; then
-    # Копировались все файлы
-    SHOULD_COPY_MODEL_SECTIONS=true
-  else
-    # Проверяем, есть ли settings.json в списке
-    for file in "${SPECIFIC_FILES[@]}"; do
-      if [ "$file" = "settings.json" ]; then
-        SHOULD_COPY_MODEL_SECTIONS=true
-        break
-      fi
-    done
-  fi
-fi
-
-if [ "$SHOULD_COPY_MODEL_SECTIONS" = true ]; then
-  SETTINGS_FILE_LOCAL="$SITE_DATA_DIR/settings.json"
-  SETTINGS_FILE_REMOTE="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
-
-  if [ -f "$SETTINGS_FILE_LOCAL" ]; then
-    SETTINGS_FILE="$SETTINGS_FILE_LOCAL"
-  elif [ -f "$SETTINGS_FILE_REMOTE" ]; then
-    SETTINGS_FILE="$SETTINGS_FILE_REMOTE"
-  else
-    echo "❌ Error: settings.json not found"
-    exit 1
-  fi
-
-  BRANDS_RAW=$(extract_brands "$SETTINGS_FILE")
-  if [ -z "$BRANDS_RAW" ]; then
-    echo "▶ Skipping model-sections (brand is not set in settings.json; service mode uses site_brand_style for styles)"
-  else
-    BRANDS=()
-    while IFS= read -r line; do
-      [ -z "$line" ] && continue
-      BRANDS+=("$line")
-    done <<< "$BRANDS_RAW"
-
-    # ==================================================
-    # Копирование model-sections по брендам
-    # ==================================================
-    echo "▶ Sync model-sections…"
-
-    for BRAND in "${BRANDS[@]}"; do
-      RAW_BRAND=$(echo "$BRAND" | xargs)
-
-      NORMALIZED_BRAND=$(echo "$RAW_BRAND" \
-        | tr '[:upper:]' '[:lower:]' \
-        | sed -E 's/[^a-z0-9 ]//g; s/[[:space:]]+/-/g; s/^-+|-+$//g')
-
-      SRC_DIR="$TMP_DIR/src/_model-sections/$NORMALIZED_BRAND"
-      DEST_DIR="$COMMON_DATA_DIR/model-sections/$NORMALIZED_BRAND"
-
-      if [ -d "$SRC_DIR" ]; then
-        mkdir -p "$DEST_DIR"
-        rsync -a "$SRC_DIR/" "$DEST_DIR/"
-        echo "  ✔ $RAW_BRAND → $NORMALIZED_BRAND"
-      else
-        echo "  ⚠ model-sections not found for brand: $RAW_BRAND ($NORMALIZED_BRAND)"
-      fi
-    done
-  fi
+if ! ensure_local_settings_for_models; then
+  printf "${BGYELLOW}settings.json не найден, пропускаем сборку site/models.json${Color_Off}\n"
 else
-  if [ "$SKIP_MODEL_SECTIONS" = true ]; then
-    echo "▶ Skipping model-sections (--skip-model-sections flag set)"
-  else
-    echo "▶ Skipping model-sections (settings.json not in file list)"
-  fi
+  SITE_DATA_DIR="$SITE_DATA_DIR" COMMON_DATA_DIR="$COMMON_DATA_DIR" node .github/scripts/filterModelsByBrand.js
 fi
 
-# Копирование models.json (если не пропущен)
-if [ "$SKIP_MODELS" = false ]; then
-  echo -e "\n${BGGREEN}Копируем общий models.json...${Color_Off}"
-  rsync -a "$TMP_DIR/src/models.json" "$COMMON_DATA_DIR/models.json"
-
-  if ! ensure_local_settings_for_models; then
-      printf "${BGRED}Внимание: settings.json не найден, невозможно отфильтровать models.json${Color_Off}\n"
-      exit 1
-  fi
-
-  # Проверяем, что файл скачался
-  if [ ! -s "$COMMON_DATA_DIR/models.json" ]; then
-      printf "${BGRED}Внимание: общий файл models.json не найден или получен некорректный файл!${Color_Off}\n"
-  else
-      SITE_DATA_DIR="$SITE_DATA_DIR" COMMON_DATA_DIR="$COMMON_DATA_DIR" node .github/scripts/filterModelsByBrand.js
-  fi
-else
-  echo -e "\n${BGYELLOW}Пропускаем копирование models.json (--skip-models flag set)${Color_Off}"
-fi
 
 # Копирование cars.json (если не пропущен)
 if [ "$SKIP_CARS" = false ]; then

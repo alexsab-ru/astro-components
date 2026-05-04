@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 import json
-import os
-
-os.makedirs('src/data/common', exist_ok=True)
 
 COLOROFF='\033[0m'
 BGYELLOW='\033[30;43m'
@@ -23,17 +20,34 @@ def print_message(message, type='info'):
     with open('output.txt', 'a') as file:
         file.write(f"{message}\n")
 
-def load_all_models(json_path: str = "./src/data/common/models.json"):
-    """Загружаем полный список моделей из all-models.json.
-
-    Возвращает список объектов моделей, как есть в файле.
-    """
+def load_site_models(json_path: str = "./src/data/site/models.json"):
+    """Загружаем собранные модели сайта из site/models.json."""
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
     except Exception as e:
         print_message(f"Ошибка при загрузке {json_path}: {e}", 'error')
         return []
+
+    if isinstance(data, dict):
+        result = []
+        seen = set()
+        for group in ('models', 'testDrive', 'service'):
+            for model in data.get(group, []):
+                if not isinstance(model, dict):
+                    continue
+                brand = get_model_brand_id(model)
+                model_id = str(model.get('id') or '').lower()
+                key = (brand, model_id)
+                if brand and model_id and key not in seen:
+                    seen.add(key)
+                    result.append(model)
+        return result
+
+    if isinstance(data, list):
+        return data
+
+    return []
 
 
 def _append_unique(items: list, value):
@@ -103,10 +117,14 @@ def get_color_image(entry: dict):
     return entry.get('image') or entry.get('carImage')
 
 
-def build_all_models_index(all_models: list) -> dict:
+def normalize_lookup_key(value) -> str:
+    return str(value or '').strip().lower()
+
+
+def build_model_index(models: list) -> dict:
     """Строим индекс для быстрого доступа: { brand_id: { id: model_obj } }"""
     index: dict = {}
-    for model in all_models:
+    for model in models:
         brand = get_model_brand_id(model)
         model_id = str(model.get('id') or '').lower()
         if not brand or not model_id:
@@ -115,51 +133,31 @@ def build_all_models_index(all_models: list) -> dict:
     return index
 
 
-# Глобально подгружаем all-models и индекс для быстрых запросов
-all_models_data = load_all_models()
-# Строим индекс моделей по бренду и сохраняем результат в файл для тестирования
-all_models_index_by_brand = build_all_models_index(all_models_data)
-with open('src/data/common/all_models_index_by_brand.json', 'w', encoding='utf-8') as f:
-    # Документируем: сохраняем файл с группировкой по бренду и ID, для ознакомления
-    # Это поможет быстро анализировать структуру и использовать её в других скриптах
-    json.dump(all_models_index_by_brand, f, ensure_ascii=False, indent=2)
+# Глобально подгружаем собранные модели сайта и индекс для быстрых запросов
+site_models_data = load_site_models()
+model_index_by_brand = build_model_index(site_models_data)
 
 
-# Генерация model_mapping из файла all-models.json
-def load_model_mapping(json_path: str = "./src/data/common/models.json"):
-    """Загрузка и построение мэпинга моделей из all-models.json.
-
-    ВАЖНО: Раньше мы читали готовый объект из model_mapping.json. Теперь источник данных —
-    большой файл all-models.json, где каждая запись описывает модель.
+def build_model_lookup(models: list):
+    """Построение индекса моделей из собранного site/models.json.
 
     Требуемый результат — компактный объект для быстрого поиска:
-        model_mapping[brand][model_name] = { "mark_id": <brand>, "id": <model_id> }
+        model_lookup[brand][model_name] = { "mark_id": <brand>, "id": <model_id> }
 
     - brand берём из brand.id / mark_id
     - brand aliases — из feed.markIds / feed.brandNames / brand display fields
     - model_name — из feed.folderIds / feed.modelNames / feed_names / name / displayName
 
-    Такой подход обеспечивает обратную совместимость по функционалу поиска модели,
-    при этом сам объект теперь минимальный и быстрый в работе.
-
-    Args:
-        json_path (str): Путь к файлу all-models.json
+    Такой подход обеспечивает обратную совместимость по функционалу поиска модели.
 
     Returns:
         dict: Словарь вида { brand: { model_name: { mark_id, id } } }
     """
 
-    try:
-        with open(json_path, 'r', encoding='utf-8') as f:
-            all_models = json.load(f)
-    except Exception as e:
-        print_message(f"Ошибка при загрузке {json_path}: {e}", 'error')
-        return {}
+    lookup: dict = {}
 
-    mapping: dict = {}
-
-    # Проходим по всем моделям и собираем мэпинг
-    for model in all_models:
+    # Проходим по всем моделям и собираем индекс
+    for model in models:
         brand = get_model_brand_id(model)
         model_id = str(model.get('id') or '').lower()
         brand_names = get_model_brand_names(model)
@@ -170,25 +168,19 @@ def load_model_mapping(json_path: str = "./src/data/common/models.json"):
             continue
 
         for brand_name in brand_names:
-            brand_key = brand_name.lower()
-            mapping.setdefault(brand_key, {})
+            brand_key = normalize_lookup_key(brand_name)
+            lookup.setdefault(brand_key, {})
 
-            # Записываем все синонимы модели в мэпинг
+            # Записываем все синонимы модели в индекс
             for model_name in model_names:
-                mapping[brand_key][model_name.lower()] = {
+                lookup[brand_key][normalize_lookup_key(model_name)] = {
                     'mark_id': brand,
                     'id': model_id,
                 }
 
-    return mapping
+    return lookup
 
-model_mapping = load_model_mapping()
-
-# Сохраняем model_mapping в JSON для отладки и повторного использования
-with open('src/data/common/model_mapping.json', 'w', encoding='utf-8') as f:
-    # Документируем: сохраняем мэпинг моделей в файл model_mapping.json
-    # Это поможет быстро анализировать структуру и использовать её в других скриптах
-    json.dump(model_mapping, f, ensure_ascii=False, indent=2)
+model_lookup = build_model_lookup(site_models_data)
 
 
 
@@ -204,8 +196,8 @@ def get_model_info(
     Получение информации о модели автомобиля на основе нового мэпинга.
 
     Теперь поддерживаются только свойства мэпинга:
-      - 'mark_id' — бренд из all-models.json
-      - 'id' — идентификатор модели (slug) из all-models.json
+      - 'mark_id' — бренд из site/models.json
+      - 'id' — идентификатор модели (slug) из site/models.json
       - 'color_id' — идентификатор цвета (при указании color)
 
     Поиск модели идёт по feed.folderIds / feed.modelNames / feed_names / name / displayName.
@@ -226,47 +218,36 @@ def get_model_info(
     normalized_property = property.lower() if property else None
 
     # Нормализуем входные данные
-    normalized_brand = brand.lower()
-    normalized_model = model.lower()
+    normalized_brand = normalize_lookup_key(brand)
+    normalized_model = normalize_lookup_key(model)
+    brand_bucket = model_lookup.get(normalized_brand)
     
-    # Найдем бренд независимо от регистра
-    brand_key = next(
-        (key for key in model_mapping if key.lower() == normalized_brand),
-        None
-    )
-    
-    if not brand_key:
-        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден бренд</b> <code>{brand}</code> в models.json (модель {normalized_model})"
+    if not brand_bucket:
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден бренд</b> <code>{brand}</code> в site/models.json (модель {normalized_model})"
         if log_errors:
             print_message(errorText, 'error')
         return None
     
-    # Найдем модель независимо от регистра
-    model_key = next(
-        (key for key in model_mapping[brand_key] if key.lower() == normalized_model),
-        None
-    )
-    
-    if not model_key:
-        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в feed.folderIds/feed.modelNames бренда <code>{brand}</code> в models.json (ищем {property or color})"
+    model_ref = brand_bucket.get(normalized_model)
+
+    if not model_ref:
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в feed.folderIds/feed.modelNames бренда <code>{brand}</code> в site/models.json (ищем {property or color})"
         if log_errors:
             print_message(errorText, 'error')
         return None
-    
-    model_ref = model_mapping[brand_key][model_key]
 
     # Получаем фактический объект модели из индекса all-models
     target_brand = model_ref.get('mark_id')
     target_id = model_ref.get('id')
 
     model_obj = None
-    brand_bucket = all_models_index_by_brand.get(target_brand)
+    brand_bucket = model_index_by_brand.get(target_brand)
     if isinstance(brand_bucket, dict):
         model_obj = brand_bucket.get(target_id)
 
     # На случай рассинхронизации попробуем найти линейным поиском
     if not model_obj:
-        for m in all_models_data:
+        for m in site_models_data:
             if get_model_brand_id(m) == target_brand and m.get('id') == target_id:
                 model_obj = m
                 break
@@ -274,7 +255,7 @@ def get_model_info(
     if not model_obj:
         errorText = (
             f"\nvin: <code>{vin}</code>\n"
-            f"<b>Не найдены данные модели</b> <code>{model}</code> бренда <code>{brand}</code> в models.json"
+            f"<b>Не найдены данные модели</b> <code>{model}</code> бренда <code>{brand}</code> в site/models.json"
         )
         if log_errors:
             print_message(errorText, 'error')
@@ -304,7 +285,7 @@ def get_model_info(
 
         errorText = (
             f"\nvin: <code>{vin}</code>\n"
-            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в models.json"
+            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в site/models.json"
         )
         if log_errors:
             print_message(errorText, 'error')
@@ -374,7 +355,7 @@ def get_folder(brand: str, model: str, vin: str = None) -> str | None:
 
 
 def get_cyrillic(brand: str, model: str, vin: str = None) -> str | None:
-    """Получение кириллического названия модели из all-models.json."""
+    """Получение кириллического названия модели из site/models.json."""
     return get_model_info(brand, model, 'cyrillic', vin=vin)
 
 

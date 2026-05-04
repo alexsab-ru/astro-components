@@ -278,7 +278,6 @@ export default defineToolbarApp({
       actionsRow.appendChild(makeDownloadButton("special-services.json", "special-services.json"));
       actionsRow.appendChild(makeDownloadButton("dealer-service-price.json", "dealer-service-price.json"));
       actionsRow.appendChild(makeDownloadButton("all-prices.json", "all-prices.json"));
-      actionsRow.appendChild(makeDownloadButton("Скачать общий Models", "__common_models__", "blue", false));
       actionsRow.appendChild(makeDownloadButton("Скачать общий Cars", "__common_cars__", "blue", false));
 
       const setStatus = (msg: string, ok?: boolean) => {
