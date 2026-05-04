@@ -36,12 +36,79 @@ def load_all_models(json_path: str = "./src/data/common/models.json"):
         return []
 
 
+def _append_unique(items: list, value):
+    if isinstance(value, str) and value.strip():
+        normalized = value.strip()
+        if not any(str(item).lower() == normalized.lower() for item in items):
+            items.append(normalized)
+
+
+def _extend_unique(items: list, values):
+    if isinstance(values, list):
+        for value in values:
+            _append_unique(items, value)
+
+
+def get_model_brand_id(model: dict) -> str:
+    brand = model.get('brand') if isinstance(model.get('brand'), dict) else {}
+    value = brand.get('id') or model.get('mark_id') or ''
+    return str(value).strip().lower()
+
+
+def get_model_brand_names(model: dict) -> list:
+    brand = model.get('brand') if isinstance(model.get('brand'), dict) else {}
+    feed = model.get('feed') if isinstance(model.get('feed'), dict) else {}
+    names = []
+
+    _append_unique(names, get_model_brand_id(model))
+    _append_unique(names, model.get('mark_id'))
+    _append_unique(names, brand.get('name'))
+    _append_unique(names, brand.get('displayName'))
+    _append_unique(names, brand.get('legalName'))
+    _extend_unique(names, feed.get('markIds'))
+    _extend_unique(names, feed.get('brandNames'))
+
+    return names
+
+
+def get_model_display_name(model: dict) -> str:
+    return model.get('displayName') or model.get('caption') or model.get('name') or ''
+
+
+def get_model_feed_names(model: dict) -> list:
+    feed = model.get('feed') if isinstance(model.get('feed'), dict) else {}
+    names = []
+
+    _append_unique(names, model.get('name'))
+    _append_unique(names, get_model_display_name(model))
+    _extend_unique(names, model.get('feed_names'))
+    _extend_unique(names, feed.get('folderIds'))
+    _extend_unique(names, feed.get('modelNames'))
+
+    return names
+
+
+def get_color_aliases(entry: dict) -> list:
+    aliases = []
+
+    _append_unique(aliases, entry.get('id'))
+    _append_unique(aliases, entry.get('name'))
+    _extend_unique(aliases, entry.get('names'))
+    _extend_unique(aliases, entry.get('aliases'))
+
+    return aliases
+
+
+def get_color_image(entry: dict):
+    return entry.get('image') or entry.get('carImage')
+
+
 def build_all_models_index(all_models: list) -> dict:
-    """Строим индекс для быстрого доступа: { mark_id: { id: model_obj } }"""
+    """Строим индекс для быстрого доступа: { brand_id: { id: model_obj } }"""
     index: dict = {}
     for model in all_models:
-        brand = model.get('mark_id').lower()
-        model_id = model.get('id').lower()
+        brand = get_model_brand_id(model)
+        model_id = str(model.get('id') or '').lower()
         if not brand or not model_id:
             continue
         index.setdefault(brand, {})[model_id] = model
@@ -68,9 +135,9 @@ def load_model_mapping(json_path: str = "./src/data/common/models.json"):
     Требуемый результат — компактный объект для быстрого поиска:
         model_mapping[brand][model_name] = { "mark_id": <brand>, "id": <model_id> }
 
-    - brand берём из поля "mark_id"
-    - model_name — из всех значений массива "feed_names"
-    - если у конкретной записи нет feed_names, используем поле "name" как резервный ключ
+    - brand берём из brand.id / mark_id
+    - brand aliases — из feed.markIds / feed.brandNames / brand display fields
+    - model_name — из feed.folderIds / feed.modelNames / feed_names / name / displayName
 
     Такой подход обеспечивает обратную совместимость по функционалу поиска модели,
     при этом сам объект теперь минимальный и быстрый в работе.
@@ -93,32 +160,25 @@ def load_model_mapping(json_path: str = "./src/data/common/models.json"):
 
     # Проходим по всем моделям и собираем мэпинг
     for model in all_models:
-        # Безопасно читаем ключевые поля
-        brand = model.get('mark_id').lower()
-        model_id = model.get('id').lower()
-        feed_names = model.get('feed_names') or []
+        brand = get_model_brand_id(model)
+        model_id = str(model.get('id') or '').lower()
+        brand_names = get_model_brand_names(model)
+        model_names = get_model_feed_names(model)
 
         # Если ключевых полей нет — пропускаем запись
         if not brand or not model_id:
             continue
 
-        # Создаём ветку бренда при необходимости
-        if brand not in mapping:
-            mapping[brand] = {}
+        for brand_name in brand_names:
+            brand_key = brand_name.lower()
+            mapping.setdefault(brand_key, {})
 
-        # Если feed_names пуст, используем основное имя модели как ключ
-        model_names = [name for name in feed_names if isinstance(name, str) and name.strip()]
-        if not model_names:
-            fallback_name = model.get('name')
-            if isinstance(fallback_name, str) and fallback_name.strip():
-                model_names = [fallback_name]
-
-        # Записываем все синонимы модели в мэпинг
-        for model_name in model_names:
-            mapping[brand][model_name.lower()] = {
-                'mark_id': brand,
-                'id': model_id,
-            }
+            # Записываем все синонимы модели в мэпинг
+            for model_name in model_names:
+                mapping[brand_key][model_name.lower()] = {
+                    'mark_id': brand,
+                    'id': model_id,
+                }
 
     return mapping
 
@@ -148,7 +208,7 @@ def get_model_info(
       - 'id' — идентификатор модели (slug) из all-models.json
       - 'color_id' — идентификатор цвета (при указании color)
 
-    Поиск модели идёт по любому имени из массива feed_names (или по name, если feed_names пуст).
+    Поиск модели идёт по feed.folderIds / feed.modelNames / feed_names / name / displayName.
 
     Args:
         brand: Название бренда (любая регистровая форма)
@@ -188,7 +248,7 @@ def get_model_info(
     )
     
     if not model_key:
-        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в \"feed_names\" бренда <code>{brand}</code> в models.json (ищем {property or color})"
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в feed.folderIds/feed.modelNames бренда <code>{brand}</code> в models.json (ищем {property or color})"
         if log_errors:
             print_message(errorText, 'error')
         return None
@@ -207,7 +267,7 @@ def get_model_info(
     # На случай рассинхронизации попробуем найти линейным поиском
     if not model_obj:
         for m in all_models_data:
-            if m.get('mark_id') == target_brand and m.get('id') == target_id:
+            if get_model_brand_id(m) == target_brand and m.get('id') == target_id:
                 model_obj = m
                 break
 
@@ -226,14 +286,7 @@ def get_model_info(
         colors = model_obj.get('colors') or []
 
         def match_color(entry: dict) -> bool:
-            names = entry.get('names') or []
-            entry_id = entry.get('id')
-            entry_name = entry.get('name')
-            if isinstance(entry_id, str) and entry_id.lower() == normalized_color:
-                return True
-            if isinstance(entry_name, str) and entry_name.lower() == normalized_color:
-                return True
-            for n in names:
+            for n in get_color_aliases(entry):
                 if isinstance(n, str) and n.lower() == normalized_color:
                     return True
             return False
@@ -241,13 +294,13 @@ def get_model_info(
         for entry in colors:
             if isinstance(entry, dict) and match_color(entry):
                 if normalized_property in (None, 'carimage', 'color_image'):
-                    return entry.get('carImage')
+                    return get_color_image(entry)
                 if normalized_property in ('color_id', 'colorid'):
                     return entry.get('id')
                 if normalized_property in ('color', 'color_entry'):
                     return entry
                 # Если передано свойство, но оно не связано с цветом — возвращаем carImage для обратной совместимости
-                return entry.get('carImage')
+                return get_color_image(entry)
 
         errorText = (
             f"\nvin: <code>{vin}</code>\n"
@@ -286,7 +339,7 @@ def get_model_info(
                 print_message(errorText, 'error')
             return None
         if normalized_property == 'name':
-            value = model_obj.get('name')
+            value = get_model_display_name(model_obj) or model_obj.get('name')
             if value:
                 return value
             errorText = (
@@ -310,7 +363,7 @@ def get_model_info(
     return {
         'mark_id': target_brand,
         'id': target_id,
-        'name': model_obj.get('name'),
+        'name': get_model_display_name(model_obj) or model_obj.get('name'),
         'cyrillic': model_obj.get('cyrillic'),
     }
 

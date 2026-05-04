@@ -50,7 +50,7 @@ def _build_complectation_translation_map():
     trans = {}
     for model in all_models_data:
         for comp in model.get('complectations', []):
-            caption = comp.get('caption', '')
+            caption = comp.get('displayName') or comp.get('caption', '')
             name = comp.get('name', '')
             if not caption or not name:
                 continue
@@ -90,7 +90,7 @@ def _lookup_complectation_name(value, mark_id=None, folder_id=None):
         model_obj = brand_bucket.get(folder_id.lower())
         if model_obj:
             for comp in model_obj.get('complectations', []):
-                caption = comp.get('caption', '')
+                caption = comp.get('displayName') or comp.get('caption', '')
                 name = comp.get('name', '')
                 if not caption or not name:
                     continue
