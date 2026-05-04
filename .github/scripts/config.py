@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import json
+from pathlib import Path
 
 COLOROFF='\033[0m'
 BGYELLOW='\033[30;43m'
@@ -20,34 +21,82 @@ def print_message(message, type='info'):
     with open('output.txt', 'a') as file:
         file.write(f"{message}\n")
 
-def load_site_models(json_path: str = "./src/data/site/models.json"):
-    """Загружаем собранные модели сайта из site/models.json."""
+COMMON_DATA_DIR = Path("./src/data/common")
+SITE_DATA_DIR = Path("./src/data/site")
+
+
+def is_plain_object(value) -> bool:
+    return isinstance(value, dict)
+
+
+def deep_merge(*layers):
+    result = {}
+    for layer in layers:
+        if not is_plain_object(layer):
+            continue
+        for key, value in layer.items():
+            if value is None:
+                result[key] = None
+            elif is_plain_object(value) and is_plain_object(result.get(key)):
+                result[key] = deep_merge(result[key], value)
+            elif is_plain_object(value):
+                result[key] = deep_merge({}, value)
+            elif isinstance(value, list):
+                result[key] = value.copy()
+            else:
+                result[key] = value
+    return result
+
+
+def read_json(file_path: Path) -> dict:
     try:
-        with open(json_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-    except Exception as e:
-        print_message(f"Ошибка при загрузке {json_path}: {e}", 'error')
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def load_model_catalog():
+    """Загружаем полный layered-каталог моделей из common/brands.
+
+    В отличие от site/models.json, этот каталог не ограничен model-matrix и нужен
+    для сопоставления фидов новых авто, где могут встречаться бренды вне сайта.
+    """
+    common_model_defaults = read_json(COMMON_DATA_DIR / "defaults" / "model.json")
+    dealer_defaults = read_json(SITE_DATA_DIR / "data" / "defaults.json")
+    common_brands_dir = COMMON_DATA_DIR / "brands"
+    result = []
+
+    if not common_brands_dir.exists():
+        print_message(f"Ошибка: папка {common_brands_dir} не найдена", 'error')
         return []
 
-    if isinstance(data, dict):
-        result = []
-        seen = set()
-        for group in ('models', 'testDrive', 'service'):
-            for model in data.get(group, []):
-                if not isinstance(model, dict):
-                    continue
-                brand = get_model_brand_id(model)
-                model_id = str(model.get('id') or '').lower()
-                key = (brand, model_id)
-                if brand and model_id and key not in seen:
-                    seen.add(key)
-                    result.append(model)
-        return result
+    for brand_dir in sorted(common_brands_dir.iterdir()):
+        if not brand_dir.is_dir():
+            continue
 
-    if isinstance(data, list):
-        return data
+        brand_id = brand_dir.name.lower()
+        models_dir = brand_dir / "models"
+        if not models_dir.exists():
+            continue
 
-    return []
+        common_brand_defaults = read_json(brand_dir / "defaults.json")
+        dealer_brand_defaults = read_json(SITE_DATA_DIR / "data" / "brands" / brand_id / "defaults.json")
+
+        for model_file in sorted(models_dir.glob("*.json")):
+            model_id = model_file.stem.lower()
+            model = deep_merge(
+                common_model_defaults,
+                common_brand_defaults,
+                read_json(model_file),
+                dealer_defaults,
+                dealer_brand_defaults,
+                read_json(SITE_DATA_DIR / "data" / "brands" / brand_id / "models" / f"{model_id}.json"),
+            )
+            model['id'] = model_id
+            result.append(model)
+
+    return result
 
 
 def _append_unique(items: list, value):
@@ -133,13 +182,13 @@ def build_model_index(models: list) -> dict:
     return index
 
 
-# Глобально подгружаем собранные модели сайта и индекс для быстрых запросов
-site_models_data = load_site_models()
-model_index_by_brand = build_model_index(site_models_data)
+# Глобально подгружаем полный layered-каталог и индекс для быстрых запросов
+model_catalog_data = load_model_catalog()
+model_index_by_brand = build_model_index(model_catalog_data)
 
 
 def build_model_lookup(models: list):
-    """Построение индекса моделей из собранного site/models.json.
+    """Построение индекса моделей из layered-каталога.
 
     Требуемый результат — компактный объект для быстрого поиска:
         model_lookup[brand][model_name] = { "mark_id": <brand>, "id": <model_id> }
@@ -180,7 +229,7 @@ def build_model_lookup(models: list):
 
     return lookup
 
-model_lookup = build_model_lookup(site_models_data)
+model_lookup = build_model_lookup(model_catalog_data)
 
 
 
@@ -196,8 +245,8 @@ def get_model_info(
     Получение информации о модели автомобиля на основе нового мэпинга.
 
     Теперь поддерживаются только свойства мэпинга:
-      - 'mark_id' — бренд из site/models.json
-      - 'id' — идентификатор модели (slug) из site/models.json
+      - 'mark_id' — бренд из layered-каталога
+      - 'id' — идентификатор модели (slug) из layered-каталога
       - 'color_id' — идентификатор цвета (при указании color)
 
     Поиск модели идёт по feed.folderIds / feed.modelNames / feed_names / name / displayName.
@@ -223,7 +272,7 @@ def get_model_info(
     brand_bucket = model_lookup.get(normalized_brand)
     
     if not brand_bucket:
-        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден бренд</b> <code>{brand}</code> в site/models.json (модель {normalized_model})"
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найден бренд</b> <code>{brand}</code> в layered model catalog (модель {normalized_model})"
         if log_errors:
             print_message(errorText, 'error')
         return None
@@ -231,7 +280,7 @@ def get_model_info(
     model_ref = brand_bucket.get(normalized_model)
 
     if not model_ref:
-        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в feed.folderIds/feed.modelNames бренда <code>{brand}</code> в site/models.json (ищем {property or color})"
+        errorText = f"\nvin: <code>{vin}</code>\n<b>Не найдено название модели</b> <code>{model}</code> в feed.folderIds/feed.modelNames бренда <code>{brand}</code> в layered model catalog (ищем {property or color})"
         if log_errors:
             print_message(errorText, 'error')
         return None
@@ -247,7 +296,7 @@ def get_model_info(
 
     # На случай рассинхронизации попробуем найти линейным поиском
     if not model_obj:
-        for m in site_models_data:
+        for m in model_catalog_data:
             if get_model_brand_id(m) == target_brand and m.get('id') == target_id:
                 model_obj = m
                 break
@@ -255,7 +304,7 @@ def get_model_info(
     if not model_obj:
         errorText = (
             f"\nvin: <code>{vin}</code>\n"
-            f"<b>Не найдены данные модели</b> <code>{model}</code> бренда <code>{brand}</code> в site/models.json"
+            f"<b>Не найдены данные модели</b> <code>{model}</code> бренда <code>{brand}</code> в layered model catalog"
         )
         if log_errors:
             print_message(errorText, 'error')
@@ -285,7 +334,7 @@ def get_model_info(
 
         errorText = (
             f"\nvin: <code>{vin}</code>\n"
-            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в site/models.json"
+            f"<b>Не найден цвет</b> <code>{color}</code> модели <code>{model}</code> бренда <code>{brand}</code> в layered model catalog"
         )
         if log_errors:
             print_message(errorText, 'error')
@@ -355,7 +404,7 @@ def get_folder(brand: str, model: str, vin: str = None) -> str | None:
 
 
 def get_cyrillic(brand: str, model: str, vin: str = None) -> str | None:
-    """Получение кириллического названия модели из site/models.json."""
+    """Получение кириллического названия модели из layered-каталога."""
     return get_model_info(brand, model, 'cyrillic', vin=vin)
 
 

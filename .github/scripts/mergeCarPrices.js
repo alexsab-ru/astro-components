@@ -7,11 +7,10 @@ const outputPath = path.join(siteDataDirectory, 'all-prices.json');
 const federalFilePath = path.join(commonDataDirectory, 'cars.json');
 const dealerFilePath = path.join(siteDataDirectory, 'dealer-models_price.json');
 const dealerCarsFilePath = path.join(siteDataDirectory, 'dealer-models_cars_price.json');
-const modelsFilePath = path.join(siteDataDirectory, 'models.json');
 
 const Message = {
   SUCCESS: 'Файл all-prices.json успешно создан',
-  ERROR_NO_MODELS: 'Ошибка: Файл src/data/site/models.json не найден. Запустите filterModelsByBrand.js',
+  ERROR_NO_MODELS: 'Ошибка: layered-каталог моделей пуст. Проверьте src/data/common/brands',
 };
 
 const DISABLE_FEED_PRICE    = process.env.DISABLE_FEED_PRICE === 'true';
@@ -40,6 +39,73 @@ const readJSON = (filePath) => {
     console.warn(`Не удалось прочитать ${path.basename(filePath)}: ${e.message}`);
     return null;
   }
+};
+
+const isPlainObject = (value) =>
+  value !== null && typeof value === 'object' && !Array.isArray(value);
+
+const deepMerge = (...layers) =>
+  layers.reduce((result, layer) => {
+    if (!isPlainObject(layer)) return result;
+
+    for (const [key, value] of Object.entries(layer)) {
+      if (value === undefined) continue;
+
+      if (value === null) {
+        result[key] = null;
+      } else if (isPlainObject(value) && isPlainObject(result[key])) {
+        result[key] = deepMerge(result[key], value);
+      } else if (isPlainObject(value)) {
+        result[key] = deepMerge({}, value);
+      } else if (Array.isArray(value)) {
+        result[key] = [...value];
+      } else {
+        result[key] = value;
+      }
+    }
+
+    return result;
+  }, {});
+
+const readOptionalJSON = (filePath) => readJSON(filePath) || {};
+
+const loadModelCatalog = () => {
+  const commonBrandsDirectory = path.join(commonDataDirectory, 'brands');
+  if (!fs.existsSync(commonBrandsDirectory)) return [];
+
+  const commonModelDefaults = readOptionalJSON(path.join(commonDataDirectory, 'defaults', 'model.json'));
+  const dealerDefaults = readOptionalJSON(path.join(siteDataDirectory, 'data', 'defaults.json'));
+  const models = [];
+
+  fs.readdirSync(commonBrandsDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .forEach((brandEntry) => {
+      const brand = brandEntry.name.toLowerCase();
+      const brandDirectory = path.join(commonBrandsDirectory, brand);
+      const modelsDirectory = path.join(brandDirectory, 'models');
+      if (!fs.existsSync(modelsDirectory)) return;
+
+      const commonBrandDefaults = readOptionalJSON(path.join(brandDirectory, 'defaults.json'));
+      const dealerBrandDefaults = readOptionalJSON(path.join(siteDataDirectory, 'data', 'brands', brand, 'defaults.json'));
+
+      fs.readdirSync(modelsDirectory, { withFileTypes: true })
+        .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+        .forEach((modelEntry) => {
+          const modelId = path.basename(modelEntry.name, '.json').toLowerCase();
+          const model = deepMerge(
+            commonModelDefaults,
+            commonBrandDefaults,
+            readOptionalJSON(path.join(modelsDirectory, modelEntry.name)),
+            dealerDefaults,
+            dealerBrandDefaults,
+            readOptionalJSON(path.join(siteDataDirectory, 'data', 'brands', brand, 'models', `${modelId}.json`)),
+          );
+          model.id = modelId;
+          models.push(model);
+        });
+    });
+
+  return models;
 };
 
 // Замена похожих кириллических символов на латинские (для сопоставления моделей вроде "Т1" vs "T1")
@@ -202,13 +268,12 @@ const aggregateMax = (matches, key) => {
 
 // --- Основная логика ---
 
-if (!fs.existsSync(modelsFilePath)) {
+const allModels = loadModelCatalog();
+if (!allModels.length) {
   console.error(Message.ERROR_NO_MODELS);
   process.exit(1);
 }
 
-const modelsData = readJSON(modelsFilePath) || {};
-const allModels = Array.isArray(modelsData.models) ? modelsData.models : [];
 const federalData = readJSON(federalFilePath) || [];
 const dealerData = loadDealerData(dealerFilePath);
 const dealerCarsData = loadDealerData(dealerCarsFilePath);
