@@ -10,6 +10,7 @@ on:
       - '.github/scripts/sh/getDealerPrices.sh'
       - '.github/scripts/sh/getDealerServicePrices.sh'
       - '.github/scripts/sh/getDealerStorage.sh'
+      - '.github/scripts/sh/process_xml.sh'
       - '.github/scripts/sh/getSortStorage.sh'
       - '.github/scripts/CarFeedProcessorCSV.py'
       - '.github/scripts/config_air_storage-friend.json'
@@ -20,6 +21,8 @@ on:
       - '.github/scripts/mergeCarPrices.js'
       - '.github/scripts/update_cars_air_storage.py'
       - '.github/scripts/update_cars.py'
+      - '.github/scripts/image_mirror.py'
+      - '.github/scripts/sh/uploadImageMirror.sh'
       - '.github/scripts/utils.py'
       - '.github/workflows/update_cars.yml'
   workflow_dispatch:
@@ -306,9 +309,43 @@ jobs:
 
     - name: Generate src/content/cars/ and src/content/used_cars/
       run: |
-        pnpm cars auto
+        mirror_args=""
+        if [[ "${MIRROR_CAR_IMAGES:-}" == "true" ]]; then
+          mirror_args="--mirror_images"
+        fi
+        pnpm cars auto $mirror_args
       env:
         DOMAIN: ${{ vars.DOMAIN }}
+        CDN_BASE_URL: ${{ secrets.CDN_BASE_URL }}
+        MIRROR_CAR_IMAGES: ${{ vars.MIRROR_CAR_IMAGES }}
+
+    - name: Upload mirrored car images to CDN
+      if: ${{ vars.MIRROR_CAR_IMAGES == 'true' }}
+      run: |
+        if [[ ! -d tmp/image_mirror/cars ]]; then
+          echo "No mirrored images to upload"
+          exit 0
+        fi
+
+        if [[ -z "${CDN_SSH_HOST:-}" || -z "${CDN_SSH_USER:-}" || -z "${CDN_SSH_PRIVATE_KEY:-}" ]]; then
+          echo "CDN SSH secrets are not configured; skipping image mirror upload"
+          exit 0
+        fi
+
+        install -m 700 -d ~/.ssh
+        printf '%s\n' "$CDN_SSH_PRIVATE_KEY" > ~/.ssh/cdn_cars
+        chmod 600 ~/.ssh/cdn_cars
+        ssh-keyscan -H "$CDN_SSH_HOST" >> ~/.ssh/known_hosts
+
+        rsync -rzO --no-perms --itemize-changes \
+          -e "ssh -i ~/.ssh/cdn_cars -o IdentitiesOnly=yes -o BatchMode=yes" \
+          tmp/image_mirror/cars/ \
+          "$CDN_SSH_USER@$CDN_SSH_HOST:${CDN_REMOTE_PATH:-.}/"
+      env:
+        CDN_SSH_HOST: ${{ secrets.CDN_SSH_HOST }}
+        CDN_SSH_USER: ${{ secrets.CDN_SSH_USER }}
+        CDN_SSH_PRIVATE_KEY: ${{ secrets.CDN_SSH_PRIVATE_KEY }}
+        CDN_REMOTE_PATH: ${{ secrets.CDN_REMOTE_PATH }}
 
     - name: Get Dealer XML for auto.ru and generate auto.ru xml
       if: ${{ env.AUTORU_XML_URL && !env.AUTORU_FRIEND_XML_URL }}

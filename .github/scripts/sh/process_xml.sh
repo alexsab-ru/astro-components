@@ -12,6 +12,8 @@ show_help() {
     echo
     echo "Options (can be used with update, auto, test commands):"
     echo "  --skip_thumbs                    - Skip car images and thumbnail generation"
+    echo "  --mirror_images                  - Mirror external car images into CDN layout"
+    echo "  --mirror_dry_run                 - Build image mirror manifest without writing image files"
     echo "  --count_thumbs N                 - Number of thumbnails to generate (default: 5)"
     echo "  --skip_check_thumb               - Skip thumbnail existence check"
     echo "  --dev                            - Start dev server after processing (for auto and test)"
@@ -127,6 +129,14 @@ parse_options() {
             --skip_check_thumb)
                 thumb_args="$thumb_args --skip_check_thumb"
                 # echo "🔧 Добавили --skip_check_thumb, thumb_args='$thumb_args'" >&2
+                shift
+                ;;
+            --mirror_images)
+                thumb_args="$thumb_args --mirror_images"
+                shift
+                ;;
+            --mirror_dry_run)
+                thumb_args="$thumb_args --mirror_dry_run"
                 shift
                 ;;
             --dev)

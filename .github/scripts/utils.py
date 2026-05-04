@@ -543,7 +543,7 @@ def _get_color_fallback_image(brand, model, color, vin, skip_check_thumb):
     return DEFAULT_CAR_IMAGE
 
 
-def _merge_and_validate_car_images(existing_images, new_images, vin):
+def _merge_car_image_urls(existing_images, new_images):
     merged_images = []
 
     for img in list(existing_images or []) + list(new_images or []):
@@ -554,17 +554,56 @@ def _merge_and_validate_car_images(existing_images, new_images, vin):
         if img and img not in merged_images:
             merged_images.append(img)
 
-    return _filter_valid_image_urls(merged_images, vin)
+    return merged_images
+
+
+def _merge_and_validate_car_images(existing_images, new_images, vin):
+    return _filter_valid_image_urls(_merge_car_image_urls(existing_images, new_images), vin)
 
 
 def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumbs, config, vin, brand=None, model=None, color=None):
     if config.get('skip_thumbs'):
         data['images'] = []
-        data['image'] = DEFAULT_CAR_IMAGE
+        data['image'] = _get_color_fallback_image(
+            data.get('mark_id', brand or ''),
+            data.get('folder_id', model or ''),
+            data.get('color', color or ''),
+            vin,
+            config['skip_check_thumb'],
+        )
         data['thumbs'] = []
         return
 
-    data['images'] = _merge_and_validate_car_images(data.get('images', []), incoming_images, vin)
+    if config.get('mirror_images'):
+        merged_images = _merge_car_image_urls(data.get('images', []), incoming_images)
+    else:
+        merged_images = _merge_and_validate_car_images(data.get('images', []), incoming_images, vin)
+
+    if config.get('mirror_images') and merged_images:
+        from image_mirror import ImageMirror, MirrorConfig
+
+        mirror_config = MirrorConfig(
+            site=config['domain'],
+            category=config.get('category_type') or ('used' if config.get('path_car_page') == '/used_cars/' else 'new'),
+            cdn_base_url=config.get('mirror_cdn_base_url') or 'https://cdn.alexsab.ru',
+            remote_prefix=config.get('mirror_remote_prefix') or 'cars',
+            local_root=Path(config.get('mirror_local_root') or 'tmp/image_mirror'),
+            probe_count=int(config.get('mirror_probe_count') or 3),
+            dry_run=config.get('mirror_dry_run', False),
+        )
+        mirror_result = ImageMirror(mirror_config).mirror_car_images(vin, merged_images, friendly_url)
+        data['images'] = mirror_result.images
+        data['image'] = mirror_result.image or _get_color_fallback_image(
+            data.get('mark_id', brand or ''),
+            data.get('folder_id', model or ''),
+            data.get('color', color or ''),
+            vin,
+            config['skip_check_thumb'],
+        )
+        data['thumbs'] = mirror_result.thumbs
+        return
+
+    data['images'] = merged_images
     data['image'] = data['images'][0] if data['images'] else _get_color_fallback_image(
         data.get('mark_id', brand or ''),
         data.get('folder_id', model or ''),
@@ -585,6 +624,12 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
         )
     else:
         data['thumbs'] = []
+
+
+def _sync_processed_images_to_car_data(car_data, data):
+    for key in ('image', 'images'):
+        if key in data:
+            car_data[key] = data[key]
 
 
 def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, temp_thumbs_dir, skip_thumbs=False, count_thumbs=5):
@@ -1216,6 +1261,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
 
     # Обработка изображений (images уже получены и обработаны выше)
     _apply_car_images_to_data(data, images, friendly_url, current_thumbs, config, vin, brand=brand, model=model, color=color)
+    _sync_processed_images_to_car_data(car_data, data)
 
     # Приводим определённые числовые поля к int, если они есть
     for key in ["max_discount", "price", "priceWithDiscount", "run", "sale_price", "year", "credit_discount", "optional_discount", "insurance_discount", "tradein_discount"]:
@@ -1293,6 +1339,7 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
             model=data.get('folder_id', car_data.get('folder_id', '')),
             color=data.get('color', str(car_data.get('color', '')).capitalize()),
         )
+        _sync_processed_images_to_car_data(car_data, data)
 
         updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
         updated_content = yaml_delimiter.join([parts[0], updated_yaml_block, yaml_delimiter.join(parts[2:])])
@@ -1386,6 +1433,7 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
         model=data.get('folder_id', car_data.get('folder_id', '')),
         color=data.get('color', str(car_data.get('color', '')).capitalize()),
     )
+    _sync_processed_images_to_car_data(car_data, data)
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
 
     # Reassemble the content with the updated YAML block

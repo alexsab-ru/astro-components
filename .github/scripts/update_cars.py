@@ -744,28 +744,28 @@ class CarProcessor:
 
         return car_data
 
-    def _car_has_images(self, car_data: Dict[str, any]) -> bool:
+    def _car_has_images(self, car_data: Dict[str, any], ignore_feed_images: bool = False) -> bool:
         """Проверяет, есть ли у машины изображения в feed или в dealer photos."""
         images = car_data.get('images') or []
-        if images:
+        if images and not ignore_feed_images:
             return True
 
         vin = car_data.get('vin')
-        if vin and vin in self.dealer_photos_for_cars_avito:
+        if vin and vin in self.dealer_photos_for_cars_avito and not ignore_feed_images:
             dealer_images = self.dealer_photos_for_cars_avito[vin].get('images') or []
             if dealer_images:
                 return True
 
         return False
 
-    def register_deferred_color_error(self, car_data: Dict[str, any], group_key: str, friendly_url: str) -> None:
+    def register_deferred_color_error(self, car_data: Dict[str, any], group_key: str, friendly_url: str, ignore_feed_images: bool = False) -> None:
         """
         Отложенно фиксирует ошибку цвета для заглушки:
         - если в группе уже есть фото, ошибку удаляем;
         - если фото нет и цвет не найден, запоминаем ошибку;
         - запись в output.txt делаем только в конце обработки.
         """
-        if self._car_has_images(car_data):
+        if self._car_has_images(car_data, ignore_feed_images=ignore_feed_images):
             self.friendly_url_has_images[group_key] = True
             self.pending_color_errors.pop(group_key, None)
             return
@@ -944,7 +944,7 @@ class CarProcessor:
         file_path = os.path.join(config['temp_cars_dir'], file_name)
 
         # Проверяем ошибку "не найден цвет для заглушки" отложенно на уровне friendly_url.
-        self.register_deferred_color_error(car_data, file_path, friendly_url)
+        self.register_deferred_color_error(car_data, file_path, friendly_url, ignore_feed_images=config.get('skip_thumbs', False))
 
         # Обновляем цены и скидки на основе car_data
         update_car_prices(car_data, self.prices_data)
@@ -1138,6 +1138,12 @@ def main():
     parser.add_argument('--xml_url', default=os.getenv('XML_URL'), help='XML URL')
     parser.add_argument('--skip_thumbs', action="store_true", help='Skip car images and thumbnail generation')
     parser.add_argument('--skip_check_thumb', action="store_true", help='Skip check thumbnails')
+    parser.add_argument('--mirror_images', action="store_true", help='Mirror external car images into CDN layout')
+    parser.add_argument('--mirror_local_root', default='tmp/image_mirror', help='Local root for mirrored CDN image files')
+    parser.add_argument('--mirror_cdn_base_url', default=os.getenv('CDN_BASE_URL', 'https://cdn.alexsab.ru'), help='CDN base URL for mirrored images')
+    parser.add_argument('--mirror_remote_prefix', default='cars', help='Remote URL/path prefix for mirrored images')
+    parser.add_argument('--mirror_probe_count', default=3, help='Number of first non-Avito images to probe before probing all')
+    parser.add_argument('--mirror_dry_run', action="store_true", help='Build image mirror manifest without writing image files')
     parser.add_argument('--count_thumbs', default=5, help='Count thumbs for create')
     parser.add_argument('--image_tag', default='image', help='Image tag name')
     parser.add_argument('--description_tag', default='description', help='Description tag name')
@@ -1394,6 +1400,7 @@ def main():
         config['move_vin_id_up'] = source_config['move_vin_id_up']
         config['new_address'] = source_config['new_address']
         config['new_phone'] = source_config['new_phone']
+        config['category_type'] = 'used' if config.get('path_car_page') == '/used_cars/' else 'new'
 
         # Инициализация процессора для конкретного источника
         processor = CarProcessor()
