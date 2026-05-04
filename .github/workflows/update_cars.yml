@@ -409,7 +409,7 @@ jobs:
     - name: Check for changes
       id: check_changes
       run: |
-        status_output=$(git status --short --untracked-files=all | grep -vE 'output(_wrapped)?\.txt$' || true)
+        status_output=$(git status --short --untracked-files=all | grep -vE '^.. (output(_wrapped)?\.txt|cars(_friend)?\.xml)$' || true)
         if [[ -n "$status_output" ]]; then
           echo 'check_changes true — git status'
           printf '%s\n' "$status_output"
