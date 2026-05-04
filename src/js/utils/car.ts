@@ -3,7 +3,7 @@ import {
   getModelBrandId,
   getModelFeedBrandNames,
   getModelFeedModelNames,
-} from '@/js/utils/modelFields';
+} from './modelFields.js';
 
 /**
  * Находит модель автомобиля по folder_id

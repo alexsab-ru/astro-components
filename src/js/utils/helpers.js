@@ -1,4 +1,4 @@
-import { getModelBrandUrlName } from '@/js/utils/modelFields';
+import { getModelBrandUrlName } from './modelFields.js';
 
 export const calcMinPrice = (price) => {
 	var minimum = 0;

@@ -1,4 +1,4 @@
-import { getModelTitle } from '@/js/utils/modelFields';
+import { getModelTitle } from './modelFields.js';
 
 export type ModelBadgePlacement = 'menu' | 'model_list' | 'model_page' | 'car_list' | 'car_page';
 
