@@ -1,196 +1,190 @@
 import fs from 'fs';
 import path from 'path';
 
-// Утилиты
+const logSuccess = (msg) => console.log('\x1b[30;42m%s\x1b[0m', msg);
+const logWarning = (msg) => console.log('\x1b[30;43m%s\x1b[0m', msg);
+const logError = (msg) => console.log('\x1b[30;41m%s\x1b[0m', msg);
+
+const isPlainObject = (value) =>
+	value !== null &&
+	typeof value === 'object' &&
+	!Array.isArray(value);
+
+const deepMerge = (...layers) =>
+	layers.reduce((result, layer) => {
+		if (!isPlainObject(layer)) {
+			return result;
+		}
+
+		for (const [key, value] of Object.entries(layer)) {
+			if (value === undefined) {
+				continue;
+			}
+
+			if (isPlainObject(value) && isPlainObject(result[key])) {
+				result[key] = deepMerge(result[key], value);
+				continue;
+			}
+
+			if (isPlainObject(value)) {
+				result[key] = deepMerge({}, value);
+				continue;
+			}
+
+			if (Array.isArray(value)) {
+				result[key] = [...value];
+				continue;
+			}
+
+			result[key] = value;
+		}
+
+		return result;
+	}, {});
+
 const readJson = (filePath) => {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (err) {
-    logError(`Ошибка чтения JSON файла: ${filePath}`);
-    return null;
-  }
+	try {
+		return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+	} catch (err) {
+		logError(`Ошибка чтения JSON файла: ${filePath}`);
+		return null;
+	}
 };
 
 const readOptionalJson = (filePath) => {
-  if (!fs.existsSync(filePath)) {
-    return null;
-  }
+	if (!fs.existsSync(filePath)) {
+		return {};
+	}
 
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (err) {
-    logError(`Ошибка чтения JSON файла: ${filePath}`);
-    return null;
-  }
+	return readJson(filePath) ?? {};
 };
 
-const parseList = (value) => {
-  if (typeof value === 'string') {
-    return value
-      .split(',')
-      .map(s => s.trim().toLowerCase())
-      .filter(Boolean);
-  }
+const normalizeModelIds = (value) => {
+	if (value === '*') {
+		return '*';
+	}
 
-  if (Array.isArray(value)) {
-    return value
-      .flatMap(item => (typeof item === 'string' ? item.split(',') : []))
-      .map(s => s.trim().toLowerCase())
-      .filter(Boolean);
-  }
+	if (!Array.isArray(value)) {
+		return [];
+	}
 
-  return [];
+	return value.map((id) => String(id).trim().toLowerCase()).filter(Boolean);
 };
 
-const normalizeArray = (arr) =>
-  Array.isArray(arr) ? arr.map(id => String(id).toLowerCase()) : [];
+const listBrandModelIds = (brandId) => {
+	const modelsDirectory = path.join(commonDataDirectory, 'brands', brandId, 'models');
 
-const pickFields = (obj, keys) =>
-  keys.reduce((res, key) => {
-    if (obj.hasOwnProperty(key)) {
-      res[key] = obj[key];
-    }
-    return res;
-  }, {});
+	if (!fs.existsSync(modelsDirectory)) {
+		logWarning(`Папка моделей бренда не найдена: ${modelsDirectory}`);
+		return [];
+	}
 
-// Логирование
-const logSuccess = (msg) => console.log('\x1b[30;42m%s\x1b[0m', msg);
-const logWarning = (msg) => console.log('\x1b[30;43m%s\x1b[0m', msg);
-const logError   = (msg) => console.log('\x1b[30;41m%s\x1b[0m', msg);
+	return fs
+		.readdirSync(modelsDirectory, { withFileTypes: true })
+		.filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+		.map((entry) => path.basename(entry.name, '.json'))
+		.sort();
+};
 
-// Пути
+const expandMatrixItems = (items = []) =>
+	items.flatMap((item) => {
+		const brandId = String(item?.brandId ?? '').trim().toLowerCase();
+		const modelIds = normalizeModelIds(item?.modelIds);
+
+		if (!brandId) {
+			logWarning('Пропущена запись model-matrix без brandId');
+			return [];
+		}
+
+		const ids = modelIds === '*' ? listBrandModelIds(brandId) : modelIds;
+
+		return ids.map((modelId) => ({ brandId, modelId }));
+	});
+
+const addDisclaimersToModel = (model, brandId, modelId, federalDisclaimer) => {
+	if (!federalDisclaimer || Object.keys(federalDisclaimer).length === 0) {
+		return model;
+	}
+
+	const disclaimer = federalDisclaimer[`${brandId}-${modelId}`];
+
+	if (!disclaimer) {
+		return model;
+	}
+
+	logSuccess(`Добавлен дисклеймер для модели ${brandId} ${modelId}`);
+
+	return {
+		...model,
+		priceDisclaimer: disclaimer.price || '',
+		benefitDisclaimer: disclaimer.benefit || '',
+	};
+};
+
+const buildModel = (brandId, modelId, federalDisclaimer) => {
+	const layers = [
+		readOptionalJson(path.join(commonDataDirectory, 'defaults', 'model.json')),
+		readOptionalJson(path.join(commonDataDirectory, 'brands', brandId, 'defaults.json')),
+		readOptionalJson(path.join(commonDataDirectory, 'brands', brandId, 'models', `${modelId}.json`)),
+		readOptionalJson(path.join(siteDataDirectory, 'data', 'defaults.json')),
+		readOptionalJson(path.join(siteDataDirectory, 'data', 'brands', brandId, 'defaults.json')),
+		readOptionalJson(path.join(siteDataDirectory, 'data', 'brands', brandId, 'models', `${modelId}.json`)),
+	];
+
+	if (!fs.existsSync(path.join(commonDataDirectory, 'brands', brandId, 'models', `${modelId}.json`))) {
+		logWarning(`Базовая модель не найдена: ${brandId}/${modelId}`);
+	}
+
+	const model = deepMerge(...layers);
+	model.id = modelId;
+
+	return addDisclaimersToModel(model, brandId, modelId, federalDisclaimer);
+};
+
 const siteDataDirectory = process.env.SITE_DATA_DIR
-  ? path.resolve(process.cwd(), process.env.SITE_DATA_DIR)
-  : path.join(process.cwd(), 'src', 'data');
+	? path.resolve(process.cwd(), process.env.SITE_DATA_DIR)
+	: path.join(process.cwd(), 'src', 'data', 'site');
 const commonDataDirectory = process.env.COMMON_DATA_DIR
-  ? path.resolve(process.cwd(), process.env.COMMON_DATA_DIR)
-  : path.join(process.cwd(), 'src', 'data');
-const useSplitDataDirectories = Boolean(process.env.SITE_DATA_DIR || process.env.COMMON_DATA_DIR);
-const settingsFilePath = path.join(siteDataDirectory, 'settings.json');
-const allModelsFilePath = path.join(commonDataDirectory, useSplitDataDirectories ? 'models.json' : 'all-models.json');
+	? path.resolve(process.cwd(), process.env.COMMON_DATA_DIR)
+	: path.join(process.cwd(), 'src', 'data', 'common');
+
+const modelMatrixFilePath = path.join(siteDataDirectory, 'model-matrix.json');
 const federalDisclaimerFilePath = path.join(siteDataDirectory, 'federal-disclaimer.json');
 const modelsFilePath = path.join(siteDataDirectory, 'models.json');
 
-// Структура вывода
 const data = {
-  models: [],
-  testDrive: [],
-  services: []
+	models: [],
+	testDrive: [],
+	service: [],
 };
 
 try {
-  const settings = readJson(settingsFilePath);
-  if (!settings) throw new Error('Не удалось загрузить файл settings.json');
-  const allModels = readJson(allModelsFilePath);
-  if (!allModels) throw new Error('Не удалось загрузить общий файл models.json');
-  const federalDisclaimer = readOptionalJson(federalDisclaimerFilePath);
+	const modelMatrix = readJson(modelMatrixFilePath);
+	if (!modelMatrix) {
+		throw new Error('Не удалось загрузить файл model-matrix.json');
+	}
 
-  if (settings.brand == 'BRAND') {
-    // random brand from unique brands
-    settings.brand = [...new Set(allModels.map(m => m.mark_id))].sort(() => Math.random() - 0.5)[0];
-    logWarning('Ни одна модель не прошла фильтрацию. models.json будет заполнен случайным брендом: ' + settings.brand);
-  }
-  let brands = parseList(settings.brand);
-  const hasBrandFilter = brands.length > 0;
-  if (!hasBrandFilter) {
-    logWarning('brand не указан в settings.json: фильтруем models.json по всем брендам');
-  }
+	const federalDisclaimer = readOptionalJson(federalDisclaimerFilePath);
+	const buildMatrixGroup = (items) =>
+		expandMatrixItems(items).map(({ brandId, modelId }) =>
+			buildModel(brandId, modelId, federalDisclaimer),
+		);
 
-  const modelIDs = normalizeArray(settings.modelIDs);
-  const testDriveIDs = normalizeArray(settings.testDriveIDs);
-  const serviceIDs = normalizeArray(settings.serviceIDs);
+	data.models = buildMatrixGroup(modelMatrix.models);
+	data.testDrive = buildMatrixGroup(modelMatrix.testDrive);
+	data.service = buildMatrixGroup(modelMatrix.service);
 
-  // Универсальная фильтрация по бренду и ID
-  const filterBy = (targetIDs) => (m) => {
-    const markMatch = !hasBrandFilter || (m.mark_id && brands.includes(String(m.mark_id).toLowerCase()));
-    const idMatch = m.id && targetIDs.includes(String(m.id).toLowerCase());
-    // Модель видна, если: (status существует и не 'disable' и не 'hide') ИЛИ show === true
-    const isVisible = (m?.status && m.status !== 'disable' && m.status !== 'hide') || m?.show;
-    return markMatch && (targetIDs.length === 0 || idMatch) && isVisible;
-  };
-
-  /**
-   * Функция для добавления дисклеймеров к модели
-   * Проверяет соответствие модели ключам из federal-disclaimer.json
-   * Ключ формируется как mark_id-id в lowercase (например: "solaris-krs")
-   * @param {Object} model - объект модели из all-models.json
-   * @returns {Object} модель с добавленными дисклеймерами или без изменений
-   */
-  const addDisclaimersToModel = (model) => {
-    // Если файл с дисклеймерами не загружен, возвращаем модель без изменений
-    if (!federalDisclaimer) return model;
-    
-    // Создаем ключ для поиска в формате mark_id-id (в lowercase)
-    // Например: "Solaris" + "krs" = "solaris-krs"
-    const disclaimerKey = `${String(model.mark_id).toLowerCase()}-${String(model.id).toLowerCase()}`;
-    
-    // Ищем соответствующий дисклеймер в федеральном файле
-    const disclaimer = federalDisclaimer[disclaimerKey];
-    
-    if (disclaimer) {
-      // Логируем успешное добавление дисклеймера
-      logSuccess(`Добавлен дисклеймер для модели ${model.mark_id} ${model.id}`);
-      
-      // Добавляем дисклеймеры к модели
-      // priceDisclaimer - дисклеймер для цены
-      // benefitDisclaimer - дисклеймер для выгод/акций
-      return {
-        ...model,
-        priceDisclaimer: disclaimer.price || '',
-        benefitDisclaimer: disclaimer.benefit || ''
-      };
-    }
-    
-    // Если дисклеймер не найден, возвращаем модель без изменений
-    return model;
-  };
-
-  // Обработка основных моделей - фильтруем по бренду/ID и добавляем дисклеймеры
-  data.models = allModels
-    .filter(filterBy(modelIDs))
-    .map(addDisclaimersToModel);
-
-  // Обработка моделей для тест-драйва - фильтруем и добавляем дисклеймеры
-  // Выбираем только нужные поля + дисклеймеры
-  data.testDrive = allModels
-    .filter(filterBy(testDriveIDs))
-    .map(m => {
-      const modelWithDisclaimers = addDisclaimersToModel(m);
-      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'caption', 'thumb', 'globalChars', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
-    });
-
-  // Обработка моделей для сервисов - фильтруем и добавляем дисклеймеры
-  // Выбираем только нужные поля + дисклеймеры
-  data.services = allModels
-    .filter(filterBy(serviceIDs))
-    .map(m => {
-      const modelWithDisclaimers = addDisclaimersToModel(m);
-      return pickFields(modelWithDisclaimers, ['mark_id', 'id', 'name', 'caption', 'show', 'status', 'priceDisclaimer', 'benefitDisclaimer']);
-    });
-
-  if (
-    data.models.length === 0 &&
-    data.testDrive.length === 0 &&
-    data.services.length === 0
-  ) {
-    logWarning('Ни одна модель не прошла фильтрацию. models.json будет пустым.');
-  } else {
-    logSuccess('models.json успешно обновлён по брендам и ID из settings.json');
-    
-    // Подсчитываем количество моделей с дисклеймерами
-    const modelsWithDisclaimers = data.models.filter(m => m.priceDisclaimer || m.benefitDisclaimer).length;
-    const testDriveWithDisclaimers = data.testDrive.filter(m => m.priceDisclaimer || m.benefitDisclaimer).length;
-    const servicesWithDisclaimers = data.services.filter(m => m.priceDisclaimer || m.benefitDisclaimer).length;
-    
-    if (modelsWithDisclaimers > 0 || testDriveWithDisclaimers > 0 || servicesWithDisclaimers > 0) {
-      logSuccess(`Добавлены дисклеймеры: ${modelsWithDisclaimers} моделей, ${testDriveWithDisclaimers} тест-драйвов, ${servicesWithDisclaimers} сервисов`);
-    } else {
-      logWarning('Дисклеймеры не найдены для отфильтрованных моделей');
-    }
-  }
+	if (
+		data.models.length === 0 &&
+		data.testDrive.length === 0 &&
+		data.service.length === 0
+	) {
+		logWarning('Ни одна модель не добавлена из model-matrix.json. models.json будет пустым.');
+	} else {
+		logSuccess('models.json успешно собран из model-matrix.json и слоёв данных');
+	}
 } catch (err) {
-  logError('Ошибка при обработке моделей. models.json будет создан как пустой объект.');
+	logError(`Ошибка при обработке моделей: ${err.message}`);
 }
 
-// Сохраняем результат
-fs.writeFileSync(modelsFilePath, JSON.stringify(data, null, 2));
+fs.writeFileSync(modelsFilePath, JSON.stringify(data, null, 2) + '\n');
