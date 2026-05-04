@@ -71,6 +71,20 @@ const normalizeModelIds = (value) => {
 	return value.map((id) => String(id).trim().toLowerCase()).filter(Boolean);
 };
 
+const normalizeOrder = (value) =>
+	Array.isArray(value)
+		? value.map((id) => String(id).trim().toLowerCase()).filter(Boolean)
+		: [];
+
+const getModelSortName = (brandId, modelId) => {
+	const modelData = deepMerge(
+		readOptionalJson(path.join(commonDataDirectory, 'brands', brandId, 'models', `${modelId}.json`)),
+		readOptionalJson(path.join(siteDataDirectory, 'data', 'brands', brandId, 'models', `${modelId}.json`)),
+	);
+
+	return String(modelData.displayName || modelData.name || modelId).toLowerCase();
+};
+
 const listBrandModelIds = (brandId) => {
 	const modelsDirectory = path.join(commonDataDirectory, 'brands', brandId, 'models');
 
@@ -86,17 +100,39 @@ const listBrandModelIds = (brandId) => {
 		.sort();
 };
 
+const sortWildcardModelIds = (brandId, modelIds, modelOrder) => {
+	const availableIds = new Set(modelIds);
+	const orderMap = new Map(modelOrder.map((modelId, index) => [modelId, index]));
+	const orderedIds = modelOrder.filter((modelId) => availableIds.has(modelId));
+	const restIds = modelIds
+		.filter((modelId) => !orderMap.has(modelId))
+		.sort((a, b) => {
+			const nameCompare = getModelSortName(brandId, a).localeCompare(
+				getModelSortName(brandId, b),
+				'ru',
+			);
+
+			return nameCompare || a.localeCompare(b, 'ru');
+		});
+
+	return [...orderedIds, ...restIds];
+};
+
 const expandMatrixItems = (items = []) =>
 	items.flatMap((item) => {
 		const brandId = String(item?.brandId ?? '').trim().toLowerCase();
 		const modelIds = normalizeModelIds(item?.modelIds);
+		const modelOrder = normalizeOrder(item?.modelOrder);
 
 		if (!brandId) {
 			logWarning('Пропущена запись model-matrix без brandId');
 			return [];
 		}
 
-		const ids = modelIds === '*' ? listBrandModelIds(brandId) : modelIds;
+		const ids =
+			modelIds === '*'
+				? sortWildcardModelIds(brandId, listBrandModelIds(brandId), modelOrder)
+				: modelIds;
 
 		return ids.map((modelId) => ({ brandId, modelId }));
 	});
