@@ -14,9 +14,12 @@ interface Props {
 	section: {
 		[key: string]: any;
 		id?: string;
+		type?: string;
 		sectionClass?: string;
+		content?: Record<string, any>;
+		contentOrder?: string[];
 		items?: TItem[];
-		suptitle?: string;
+		subtitle?: string;
 		title?: string;
 		text?: string;
 		more?: string;
@@ -53,8 +56,12 @@ interface Props {
 	}
 }
 const { section, ...rest } = Astro.props;
+const sectionContent = section?.content ?? section ?? {};
+const contentOrder = Array.isArray(section?.contentOrder)
+	? section.contentOrder
+	: Object.keys(sectionContent);
 
-import SuptitleSection from './suptitle.astro';
+import SubtitleSection from './subtitle.astro';
 import TitleSection from './title.astro';
 import TextSection from './text.astro';
 import MoreSection from './more.astro';
@@ -68,28 +75,32 @@ import FeedbackFormSection from './feedback-form.astro';
 
 <section class:list={['sm:py-20 py-10 font-light model-section odd:bg-gray-100', section?.sectionClass]} id={section?.id} {...rest}>
 	<div class="container">
-		{Object.keys(section ?? {}).map((key) => {
+		{contentOrder.map((key) => {
+			const value = sectionContent[key];
+
 			switch (key) {
+				case 'subtitle':
+					return <SubtitleSection value={value} />;
 				case 'suptitle':
-					return <SuptitleSection value={section?.suptitle} />;
+					return <SubtitleSection value={value} />;
 				case 'title':
-					return <TitleSection value={section?.title} />;
+					return <TitleSection value={value} />;
 				case 'text':
-					return <TextSection value={section?.text} />;
+					return <TextSection value={value} />;
 				case 'more':
-					return <MoreSection value={section.more} />;
+					return <MoreSection value={value} />;
 				case 'items':
-					return <ItemsSection items={section?.items} />;
+					return <ItemsSection items={value} />;
 				case 'images':
-					return <ImagesSection images={section?.images} sectionId={section?.id} title={section?.title} />;
+					return <ImagesSection images={value} sectionId={section?.id} title={sectionContent?.title} />;
 				case 'button':
-					return <ButtonSection value={section?.button} />;
+					return <ButtonSection value={value} />;
 				case 'alternatingMedia':
-					return <AlternatingMediaSection section={section?.alternatingMedia} />;
+					return <AlternatingMediaSection section={value} />;
 				case 'advantages':
-					return <AdvantagesSection section={section?.advantages} />;
+					return <AdvantagesSection section={value} />;
 				case 'feedbackForm':
-					return <FeedbackFormSection feedbackForm={section?.feedbackForm} />;
+					return <FeedbackFormSection feedbackForm={value} />;
 				default:
 					return null;
 			}

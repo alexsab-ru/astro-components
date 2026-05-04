@@ -14,7 +14,7 @@ const seoname = 'models-'+slug;
 import modelsData from '@/data/site/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
-import { getModelSectionsYML, setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelSections, setPrefixModelUrl } from '@/js/utils/helpers';
 import {
   getModelBrandDisplayName,
   getModelBrandId,
@@ -80,8 +80,13 @@ import type { TStatus } from '@/types/TStatus';
 
 const status: TStatus = (model?.status && STATUS.includes(model.status as TStatus)) ? model.status : 'enable';
 
-// Загружаем YML файл модели из директории model-sections 
-let sections = await getModelSectionsYML(model);
+const sections = getModelSections(model);
+const getSectionImages = (section: any) =>
+  Array.isArray(section?.content?.images) ? section.content.images : [];
+const firstSectionImageUrl = sections
+  .flatMap(getSectionImages)
+  .find((image: any) => image?.url)
+  ?.url;
 ---
 <Layout 
   title={`${brandDisplayName} ${modelTitle} – фото, цены, комплектации и характеристики ${brandDisplayName} ${modelTitle} в ${legal_city_where}`} 
@@ -106,15 +111,9 @@ let sections = await getModelSectionsYML(model);
       <div class="container">
         <FeedbackForm 
           title="Записаться на тест-драйв" 
-          imageUrl={sections.length > 0
-            ? (sections[0]?.images && sections[0].images.length > 0 ? sections[0].images[0].url : null) || 
-              (sections[1]?.images && sections[1].images.length > 0 ? sections[1].images[0].url : null) || 
-              (sections[2]?.images && sections[2].images.length > 0 ? sections[2].images[0].url : null) || 
-              getModelThumb(model)
-            : (model.colors && model.colors.length > 0) 
+          imageUrl={firstSectionImageUrl || ((model.colors && model.colors.length > 0)
               ? getModelColorImage(model.colors[getRandomInt(0, model.colors.length)])
-              : getModelThumb(model)
-          } 
+              : getModelThumb(model))}
         />
       </div>
     </section>

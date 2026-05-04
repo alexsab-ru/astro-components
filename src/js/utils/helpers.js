@@ -54,6 +54,61 @@ export function setPrefixModelUrl(model, prefix = false) {
 	return prefix ? getModelBrandUrlName(model).replace(/ /g, '-') + '-' + model.id : model.id;
 }
 
+const isPlainObject = (value) =>
+	value !== null &&
+	typeof value === 'object' &&
+	!Array.isArray(value);
+
+const normalizeSectionContent = (section) => {
+	if (isPlainObject(section?.content)) {
+		return section.content;
+	}
+
+	const {
+		id,
+		type,
+		show,
+		sectionClass,
+		contentOrder,
+		content,
+		...contentFields
+	} = section ?? {};
+
+	return contentFields;
+};
+
+const normalizeModelSection = ([sectionId, section]) => {
+	if (!isPlainObject(section) || section.show === false) {
+		return null;
+	}
+
+	return {
+		...section,
+		id: section.id ?? sectionId,
+		content: normalizeSectionContent(section),
+	};
+};
+
+export function getModelSections(model = null) {
+	const sections = model?.page?.sections;
+
+	if (!isPlainObject(sections)) {
+		return [];
+	}
+
+	const sectionOrder = Array.isArray(model?.page?.sectionOrder)
+		? model.page.sectionOrder
+		: Object.keys(sections);
+	const orderedSectionIds = [
+		...sectionOrder.filter((sectionId) => sections[sectionId]),
+		...Object.keys(sections).filter((sectionId) => !sectionOrder.includes(sectionId)),
+	];
+
+	return orderedSectionIds
+		.map((sectionId) => normalizeModelSection([sectionId, sections[sectionId]]))
+		.filter(Boolean);
+}
+
 export async function getModelSectionsYML(model = null) {
 	if(!model) return [];
 	let sections = [];
