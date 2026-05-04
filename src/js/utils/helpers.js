@@ -1,3 +1,5 @@
+import { getModelBrandUrlName } from '@/js/utils/modelFields';
+
 export const calcMinPrice = (price) => {
 	var minimum = 0;
 	var percent = 25;
@@ -49,13 +51,13 @@ export function quoteEscaper(str) {
 }
 
 export function setPrefixModelUrl(model, prefix = false) {
-	return prefix ? model.mark_id.toLowerCase().replace(/ /g, '-') + '-' + model.id : model.id;
+	return prefix ? getModelBrandUrlName(model).replace(/ /g, '-') + '-' + model.id : model.id;
 }
 
 export async function getModelSectionsYML(model = null) {
 	if(!model) return [];
 	let sections = [];
-	const normalized_brand_name = model.mark_id.toLowerCase().replace(/ /g, '-');
+	const normalized_brand_name = getModelBrandUrlName(model).replace(/ /g, '-');
 	const sectionsModules = import.meta.glob('@/data/common/model-sections/**/*.yml');
 	const sectionsPath = `/src/data/common/model-sections/${normalized_brand_name}/${model.id}.yml`;
 	if (sectionsModules[sectionsPath]) {

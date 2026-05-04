@@ -9,6 +9,7 @@ import ModelItem from './Item.astro';
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelBrandDisplayName } from '@/js/utils/modelFields';
 import { IS_MODEL_PREFIX_URL } from '@/const';
 
 import modelsData from '@/data/site/models.json';
@@ -16,7 +17,13 @@ const { models: modelsArr } = modelsData;
 const defaultGetModelPath = (model: any) => `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
 const {models = modelsArr, title = 'Модельный ряд', classes, getModelPath = defaultGetModelPath, ...rest} = Astro.props;
 const filteredModels = models.filter(isModelVisible);
-const groupModelsByBrand = groupArrayByKey(filteredModels, 'mark_id');
+const groupModelsByBrand = groupArrayByKey(
+	filteredModels.map((model: any) => ({
+		...model,
+		brandGroup: getModelBrandDisplayName(model),
+	})),
+	'brandGroup',
+);
 const brandCount = Object.keys(groupModelsByBrand).length;
 const multipleBrands = brandCount > 1;
 // Если title есть (h2), то бренды — h3, иначе бренды — h2

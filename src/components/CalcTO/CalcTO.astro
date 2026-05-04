@@ -1,6 +1,7 @@
 ---
 import ModelItem from './ModelItem.astro';
 import modelsData from '@/data/site/models.json'
+import { getModelBrandDisplayName, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
 const { models } = modelsData;
 ---
 
@@ -10,12 +11,10 @@ const { models } = modelsData;
 			<h2 class="text-center text-xl sm:text-4xl font-medium mb-14 before:hidden mx-0">Расчет стоимости ТО</h2>
 			<div class="flex flex-wrap mb-10 lg:mb-20 last:mb-0 lg:gap-5 text-xs 2xl:text-base justify-between lg:justify-center">
 				{
-					// Визуально показываем подпись модели из caption, а name оставляем как fallback.
-					models.map(model => <ModelItem brand={model.mark_id} name={model.caption || model.name} image={model.thumb} />)
+					models.map(model => <ModelItem brand={getModelBrandDisplayName(model)} name={getModelTitle(model)} image={getModelThumb(model)} />)
 				}
 			</div>
 		</div>
 	</section>
 )}
-
 

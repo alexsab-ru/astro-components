@@ -6,6 +6,7 @@ import Banner from '@/components/Banner/Banner.astro'
 import siteSettings from '@/data/site/settings.json';
 if(siteSettings.brand === 'Livan') { siteSettings.brand = 'ЛИВЭН (LIVAN)'; }
 import modelsData from '@/data/site/models.json';
+import { getModelBrandDisplayName, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
@@ -70,10 +71,10 @@ const config = {
             const model = models.find((m: any) => m.name === name);
             if (model) {
                 acc.push({
-                    label: model.mark_id + ' ' + model.name,
+                    label: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}`,
                     value: model.name,
                     description: model.slogan,
-                    image: model.thumb,
+                    image: getModelThumb(model),
                 });
             }
             return acc;

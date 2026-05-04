@@ -10,6 +10,14 @@ import settings from '@/data/site/settings.json';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import Sections from '@/components/ImageGallery/Sections.astro';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
+import {
+  getModelBrandDisplayName,
+  getModelBrandId,
+  getModelBrandUrlName,
+  getModelHomeImg,
+  getModelThumb,
+  getModelTitle,
+} from '@/js/utils/modelFields';
 import { IS_MODEL_PREFIX_URL } from '@/const';
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
@@ -31,10 +39,12 @@ export async function getStaticPaths() {
 
 const { model } = Astro.props;
 const { legal_city_where } = settings;
-const { name, caption, slogan, homeImg, id, thumb, mark_id } = model;
-const modelTitle = caption ?? name ?? '';
+const { name, slogan, id } = model;
+const modelTitle = getModelTitle(model);
+const brandDisplayName = getModelBrandDisplayName(model);
+const brandId = getModelBrandId(model);
 
-const brandFolder = mark_id.toLowerCase();
+const brandFolder = getModelBrandUrlName(model);
 const sectionsModule = allSections[`/src/data/common/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
 const rawSections = sectionsModule?.default ?? [];
 
@@ -64,17 +74,17 @@ const sortedBanners = relatedSlidesCount > 0 ? [...relatedBanners, ...otherBanne
 ---
 
 <Layout
-  title={`${mark_id} ${modelTitle} – фото ${mark_id} ${modelTitle} в ${legal_city_where}`} 
-  description={`${mark_id} ${modelTitle} купить в ${legal_city_where}. Кредит, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
-  brand={mark_id}
-  image={homeImg ?? thumb ?? ''}
+  title={`${brandDisplayName} ${modelTitle} – фото ${brandDisplayName} ${modelTitle} в ${legal_city_where}`} 
+  description={`${brandDisplayName} ${modelTitle} купить в ${legal_city_where}. Кредит, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
+  brand={brandId}
+  image={getModelHomeImg(model) || getModelThumb(model)}
   showHeaderMenu={false}
   showFooterLinks={false}
   logoNoLink={true}>
   {relatedSlidesCount > 0 && <Banner banners={sortedBanners} onlyModal={true} />}
   <div class="px-2 md:px-4 mt-6 xl:mt-12">
     <section>
-      <PageH1 classes="text-center text-4xl! md:text-6xl!" h1={`${mark_id} ${name}`} />
+      <PageH1 classes="text-center text-4xl! md:text-6xl!" h1={`${brandDisplayName} ${modelTitle}`} />
       {
         slogan && (
           <div class="text-center text-4xl">{`${slogan}`}</div>
@@ -97,7 +107,7 @@ const sortedBanners = relatedSlidesCount > 0 ? [...relatedBanners, ...otherBanne
       <FeedbackForm
         title="Остались вопросы?"
         subtitle="Оставьте заявку и мы свяжемся с вами"
-        dataFormName={`Заявка на ${mark_id} ${name}`}
+        dataFormName={`Заявка на ${brandDisplayName} ${modelTitle}`}
       />
     </section>
   </div>

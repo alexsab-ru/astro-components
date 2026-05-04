@@ -8,15 +8,14 @@ import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
-import { getModelBadgeData } from '@/js/utils/modelBadge.utils';
+import { getModelBadgeData } from '@/js/utils/modelBadge';
+import { getModelBrandDisplayName, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
 import { IS_MODEL_PREFIX_URL } from '@/const';
 let { model, modelPath, headingLevel = 'h3' } = Astro.props;
-if(model.mark_id === 'Livan') { model.mark_id = 'ЛИВЭН (LIVAN)'; }
 const HeadingTag = headingLevel;
 const noPriceText = (model?.status && (model.status === 'preorder' || model.status === 'comminsoon')) ? 'cкоро в продаже' : 'по запросу';
-// В UI показываем человекочитаемое имя модели из caption.
-// Если caption не заполнен, оставляем старое поведение через name.
-const modelTitle = model?.caption || model?.name;
+const modelTitle = getModelTitle(model);
+const brandDisplayName = getModelBrandDisplayName(model);
 const resolvedModelPath = modelPath || `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
 const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_list', modelTitle || '');
 ---
@@ -29,7 +28,7 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_lis
 	<HeadingTag
 		class="leading-none! xs:text-xs! text-sm! sm:text-2xl! uppercase transition-colors duration-300 group-hover:text-accent-500 m-0! p-0! before:content-none! text-left! w-auto!"
 	>
-		<small class="block xs:text-[10px] text-xs sm:text-sm leading-none! text-title-brand-model-item">{model.mark_id}</small>
+		<small class="block xs:text-[10px] text-xs sm:text-sm leading-none! text-title-brand-model-item">{brandDisplayName}</small>
 		<span>{modelTitle}</span>
 	</HeadingTag>
 		{
@@ -57,7 +56,7 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_lis
 		}
 		<img
 			src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg"
-			data-src={model.thumb}
+			data-src={getModelThumb(model)}
 			class="scale-100 transition-transform duration-500 in-expo group-hover:scale-105 max-h-full"
 			alt={modelTitle}
 			loading="lazy"

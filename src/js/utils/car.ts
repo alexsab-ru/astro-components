@@ -1,4 +1,9 @@
 import modelsData from '@/data/site/models.json';
+import {
+  getModelBrandId,
+  getModelFeedBrandNames,
+  getModelFeedModelNames,
+} from '@/js/utils/modelFields';
 
 /**
  * Находит модель автомобиля по folder_id
@@ -12,13 +17,22 @@ export function findModelByCarData(carData: any) {
   // Приводим folder_id один раз к нижнему регистру, чтобы не дергать toLowerCase в каждом сравнении.
   const normalizedFolderId = String(carData.folder_id).toLowerCase();
 
+  const normalizedMarkId = carData?.mark_id ? String(carData.mark_id).toLowerCase() : null;
+
   return models.find(model => {
-    // Нормализуем feed_names в нижний регистр, чтобы поиск не зависел от регистра значений в данных модели.
-    const normalizedFeedNames = model?.feed_names?.map((feedName: string) => String(feedName).toLowerCase()) || [];
+    const normalizedFeedNames = getModelFeedModelNames(model)
+      .map((feedName: string) => String(feedName).toLowerCase());
+    const normalizedBrandNames = getModelFeedBrandNames(model)
+      .map((brandName: string) => String(brandName).toLowerCase());
+    const brandMatch =
+      !normalizedMarkId ||
+      getModelBrandId(model) === normalizedMarkId ||
+      normalizedBrandNames.includes(normalizedMarkId);
 
     return (
-      model.id.toLowerCase() === normalizedFolderId ||
-      normalizedFeedNames.includes(normalizedFolderId)
+      brandMatch &&
+      (model.id.toLowerCase() === normalizedFolderId ||
+        normalizedFeedNames.includes(normalizedFolderId))
     );
   }) || null;
 }

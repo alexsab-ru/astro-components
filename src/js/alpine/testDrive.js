@@ -2,6 +2,13 @@ import Alpine from 'alpinejs';
 import modelsData from '@/data/site/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
+import {
+	getModelBrandDisplayName,
+	getModelBrandId,
+	getModelBrandValue,
+	getModelThumb,
+	getModelTitle,
+} from '@/js/utils/modelFields';
 
 const { testDrive } = modelsData;
 
@@ -27,7 +34,7 @@ export function testDriveComponent() {
 				const modelIdNormalized = normalizeModelId(m.id);
 				const brandMatch =
 					!stored.markId ||
-					(m.mark_id && m.mark_id.toLowerCase() === stored.markId.toLowerCase());
+					getModelBrandId(m) === stored.markId.toLowerCase();
 
 				return modelIdNormalized === stored.idNormalized && brandMatch;
 			});
@@ -49,11 +56,11 @@ export function testDriveComponent() {
 			if (stored && typeof stored.setModel === 'function') {
 				stored.setModel({
 					idNormalized: normalizeModelId(this.current.id),
-					markId: this.current.mark_id,
+					markId: getModelBrandId(this.current),
 				});
 			}
 
-			const brandValue = this.current?.mark_id;
+			const brandValue = getModelBrandId(this.current);
 			if (brandValue) {
 				document.documentElement.setAttribute('data-brand', brandValue);
 				this.$dispatch('brand-updated', { brand: brandValue });
@@ -61,6 +68,26 @@ export function testDriveComponent() {
 				document.documentElement.removeAttribute('data-brand');
 				this.$dispatch('brand-updated', { brand: null });
 			}
+		},
+
+		modelTitle(model) {
+			return getModelTitle(model);
+		},
+
+		modelThumb(model) {
+			return getModelThumb(model);
+		},
+
+		modelBrandId(model) {
+			return getModelBrandId(model);
+		},
+
+		modelBrandDisplayName(model) {
+			return getModelBrandDisplayName(model);
+		},
+
+		modelBrandValue(model) {
+			return getModelBrandValue(model);
 		},
 
 		init() {

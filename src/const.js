@@ -16,9 +16,16 @@ const { phone_common } = settings;
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelBrandDisplayName, getModelBrandId, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
 import modelsData from '@/data/site/models.json';
 const { models } = modelsData;
-const groupModelsByBrand = groupArrayByKey(models.filter(isModelVisible), 'mark_id');
+const groupModelsByBrand = groupArrayByKey(
+	models.filter(isModelVisible).map((model) => ({
+		...model,
+		brandGroup: getModelBrandDisplayName(model),
+	})),
+	'brandGroup',
+);
 
 export const IS_MODEL_PREFIX_URL = Object.keys(groupModelsByBrand).length > 1;
 
@@ -29,11 +36,11 @@ const dynamicMenuConfig = {
 		dataSource: groupModelsByBrand,
 		transform: (model) => ({
 			url: `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`,
-			// Для пунктов меню показываем caption, а name используем как fallback для старых данных.
-			name: (model.caption || model.name).toUpperCase(),
-			thumb: model.thumb,
+			name: getModelTitle(model).toUpperCase(),
+			thumb: getModelThumb(model),
 			status: model?.status || null,
 			badge: model?.badge || null,
+			brandId: getModelBrandId(model),
 		})
 	}
 	// В будущем можно добавить другие типы:

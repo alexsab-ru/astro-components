@@ -21,14 +21,14 @@ const {
 } = Astro.props;
 
 import modelsData from '@/data/site/models.json';
+import { getModelTitle } from '@/js/utils/modelFields';
 const { models } = modelsData;
 const options = testDrive
 	? models
 		.filter((m: any) => m?.testDrive)
 		.map((m: any) => ({
 			...m,
-			// В селекте тест-драйва показываем caption, чтобы названия совпадали с витриной.
-			name: m.caption || m.name,
+			name: getModelTitle(m),
 		}))
 	: [];
 ---
