@@ -59,24 +59,6 @@ const isPlainObject = (value) =>
 	typeof value === 'object' &&
 	!Array.isArray(value);
 
-const normalizeSectionContent = (section) => {
-	if (isPlainObject(section?.content)) {
-		return section.content;
-	}
-
-	const {
-		id,
-		type,
-		show,
-		sectionClass,
-		contentOrder,
-		content,
-		...contentFields
-	} = section ?? {};
-
-	return contentFields;
-};
-
 const normalizeModelSection = ([sectionId, section]) => {
 	if (!isPlainObject(section) || section.show === false) {
 		return null;
@@ -85,7 +67,7 @@ const normalizeModelSection = ([sectionId, section]) => {
 	return {
 		...section,
 		id: section.id ?? sectionId,
-		content: normalizeSectionContent(section),
+		content: isPlainObject(section.content) ? section.content : {},
 	};
 };
 
@@ -107,20 +89,4 @@ export function getModelSections(model = null) {
 	return orderedSectionIds
 		.map((sectionId) => normalizeModelSection([sectionId, sections[sectionId]]))
 		.filter(Boolean);
-}
-
-export async function getModelSectionsYML(model = null) {
-	if(!model) return [];
-	let sections = [];
-	const normalized_brand_name = getModelBrandUrlName(model).replace(/ /g, '-');
-	const sectionsModules = import.meta.glob('@/data/common/model-sections/**/*.yml');
-	const sectionsPath = `/src/data/common/model-sections/${normalized_brand_name}/${model.id}.yml`;
-	if (sectionsModules[sectionsPath]) {
-		const module = await sectionsModules[sectionsPath]();  
-		sections = module.default ?? module;
-	} else {
-		console.warn(`${sectionsPath} not found, using default empty sections`);
-		sections = [];
-	}
-	return sections;
 }

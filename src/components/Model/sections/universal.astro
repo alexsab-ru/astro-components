@@ -56,7 +56,7 @@ interface Props {
 	}
 }
 const { section, ...rest } = Astro.props;
-const sectionContent = section?.content ?? section ?? {};
+const sectionContent = section?.content ?? {};
 const contentOrder = Array.isArray(section?.contentOrder)
 	? section.contentOrder
 	: Object.keys(sectionContent);
@@ -80,8 +80,6 @@ import FeedbackFormSection from './feedback-form.astro';
 
 			switch (key) {
 				case 'subtitle':
-					return <SubtitleSection value={value} />;
-				case 'suptitle':
 					return <SubtitleSection value={value} />;
 				case 'title':
 					return <TitleSection value={value} />;
