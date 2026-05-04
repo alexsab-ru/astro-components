@@ -251,12 +251,13 @@ class ImageMirror:
 
         image = download_image(source_url)
 
-        for path, target_width in zip(remote_paths, IMAGE_SIZES.values()):
+        for path, (size_name, target_width) in zip(remote_paths, IMAGE_SIZES.items()):
             output_path = local_path(self.config.local_root, path)
 
             output_path.parent.mkdir(parents=True, exist_ok=True)
             resized = resize_image(image, target_width)
-            resized.save(output_path, "WEBP", quality=86, method=6)
+            quality = 8 if size_name == "thumb" else 86
+            resized.save(output_path, "WEBP", quality=quality, method=6)
 
         return remote_paths
 

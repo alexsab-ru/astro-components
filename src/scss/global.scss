@@ -57,7 +57,7 @@ section:not(.model-section) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	img{
+	&:not(.lazy-stretch) img{
 		max-height: 70px;
 		width: auto;
 	}

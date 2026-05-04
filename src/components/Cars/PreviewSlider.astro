@@ -27,7 +27,7 @@ const previewImages = car.data.imageSets && car.data.imageSets.length
 			{
 				previewImages.map((img:any, idx:number) => (
 					idx < 5 && (
-						<a href={url} class="lazy relative snap-always snap-start shrink-0 w-full aspect-4/3 block mb-0!" data-slide={idx}>
+						<a href={url} class="lazy lazy-stretch relative snap-always snap-start shrink-0 w-full aspect-4/3 block mb-0!" data-slide={idx}>
 							<img class="w-full h-full object-cover object-center" src={img.placeholder} data-src={img.src} alt={`Купить ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.color} ${car.data?.modification_id} от ${car.data?.priceWithDiscount} ₽. в ${legal_city_where}`} width="359" />
 							{
 								idx === 4 && car.data.images.length > 5 && (
@@ -50,7 +50,7 @@ const previewImages = car.data.imageSets && car.data.imageSets.length
 			}
 			</div></Fragment>
 			) : (
-			<a href={url} class="lazy relative snap-always snap-start shrink-0 w-full aspect-4/3 mb-0!" title="Подробнее">
+			<a href={url} class="lazy lazy-stretch relative snap-always snap-start shrink-0 w-full aspect-4/3 mb-0!" title="Подробнее">
 				<img src="https://cdn.alexsab.ru/loaders/simple-loading-gray.svg" data-src={car.data.image} class="relative top-1/2 -translate-y-1/2 w-full h-auto object-contain" alt={`Купить ${ car.data.mark_id } ${car.data?.folder_id} ${car.data?.color} ${car.data?.modification_id} от ${car.data?.priceWithDiscount} ₽. в ${legal_city_where}`} width="359" />
 			</a>
 			)

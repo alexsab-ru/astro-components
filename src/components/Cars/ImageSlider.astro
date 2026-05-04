@@ -18,13 +18,13 @@ const imageSets = data.imageSets && data.imageSets.length
 	<div class="swiper-wrapper">
 			{
 				imageSets.map((img:any) => (
-					<div class="swiper-slide w-fit! sm:w-full! lazy">
+					<div class="swiper-slide w-full! lazy lazy-stretch">
 						<a 
 							href={img.full} 
-							class="inline-block sm:block cursor-zoom-in h-full w-auto sm:w-full select-none glightbox"
+							class="block cursor-zoom-in h-full w-full select-none glightbox"
 							data-gallery={data.vin_hidden}
 						>
-							<img src={img.thumb} data-src={img.large} class="w-auto sm:mx-auto h-full object-cover select-none" alt={data.folder_id} height="405" loading="lazy" />
+							<img src={img.thumb} data-src={img.large} class="w-full h-full object-cover select-none" alt={data.folder_id} width="540" height="405" loading="lazy" />
 							<div class="swiper-lazy-preloader"></div>
 						</a>
 					</div>
