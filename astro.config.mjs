@@ -176,6 +176,10 @@ const siteRoutes = loadSiteRoutesFromData();
 const redirectsConfig = validateRedirectEntries(siteRoutes.redirects);
 const disabledRoutesForBuild = siteRoutes.disabled_routes;
 const sitemapIgnoreRoutes = siteRoutes.sitemap_ignore;
+const isDevCommand = process.argv.includes('dev');
+const devToolbarIntegrations = isDevCommand
+	? [(await import('./dev-toolbar/domain-switch/integration.ts')).default()]
+	: [];
 
 // Удаляет из dist папки целых разделов (например catalog), если соответствующий путь в disabled_routes.
 // Дублирует логику «не собирать» для статических index.astro без getStaticPaths.
@@ -204,6 +208,7 @@ const stripDisabledRoutesIntegration = (disabledRules) => ({
 
 export default defineConfig({
 	integrations: [
+		...devToolbarIntegrations,
 		sitemap({
 			filter: (page) => {
 				let pathname = '';

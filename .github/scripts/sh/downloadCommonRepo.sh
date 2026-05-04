@@ -345,6 +345,7 @@ if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
     DEST_FILE="$SITE_DATA_DIR/$file"
     
     if [ -f "$SRC_FILE" ]; then
+      mkdir -p "$(dirname "$DEST_FILE")"
       cp "$SRC_FILE" "$DEST_FILE"
       echo "  ✔ Copied: $file"
     else
