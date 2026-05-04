@@ -157,12 +157,39 @@ const addDisclaimersToModel = (model, brandId, modelId, federalDisclaimer) => {
 	};
 };
 
+const normalizeBenefit = (benefit) => {
+	if (!isPlainObject(benefit)) {
+		return benefit;
+	}
+
+	const normalized = { ...benefit };
+
+	if (normalized.iconName === undefined && normalized.icon_name !== undefined) {
+		normalized.iconName = normalized.icon_name;
+	}
+
+	if (normalized.dataTitle === undefined && normalized.data_title !== undefined) {
+		normalized.dataTitle = normalized.data_title;
+	}
+
+	if (normalized.dataFormName === undefined && normalized.data_form_name !== undefined) {
+		normalized.dataFormName = normalized.data_form_name;
+	}
+
+	delete normalized.icon_name;
+	delete normalized.data_title;
+	delete normalized.data_form_name;
+
+	return normalized;
+};
+
 const refResolvers = {
 	benefitRefs: {
 		registryFile: 'defaults/benefits.json',
 		localOverridesKey: 'benefitOverrides',
 		outputKey: 'benefits',
 		mode: 'array',
+		normalize: normalizeBenefit,
 	},
 };
 
@@ -186,7 +213,7 @@ const resolveRefs = (model, layers) => {
 						return null;
 					}
 
-					return item;
+					return config.normalize ? config.normalize(item) : item;
 				})
 				.filter(Boolean);
 		}
