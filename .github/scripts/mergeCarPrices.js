@@ -65,6 +65,18 @@ const normalizeId = (id) => {
   return id.toLowerCase().replace(/[-_]/g, '');
 };
 
+const getModelBrandId = (model) =>
+  model?.brand?.id || (model?.mark_id ? String(model.mark_id).toLowerCase() : '');
+
+const getModelDisplayName = (model) =>
+  model?.displayName || model?.caption || model?.name || '';
+
+const getModelFeedModelNames = (model) => [
+  ...(Array.isArray(model?.feed?.folderIds) ? model.feed.folderIds : []),
+  ...(Array.isArray(model?.feed?.modelNames) ? model.feed.modelNames : []),
+  ...(Array.isArray(model?.feed_names) ? model.feed_names : []),
+].filter(Boolean);
+
 // Конструирование id из mark_id и model id:
 // - пробелы в id заменяем на дефис ("uni-k idd" → "uni-k-idd")
 // - если id уже начинается с бренда, не дублируем ("wey-05" при mark_id=WEY → "wey-05", не "wey-wey-05")
@@ -124,13 +136,12 @@ const loadDealerData = (filePath) => {
 const getKnownNames = (model) => {
   const names = [];
   if (model.name) names.push(model.name);
-  if (Array.isArray(model.feed_names)) {
-    model.feed_names.forEach(fn => {
-      if (fn && !names.some(n => normalize(n) === normalize(fn))) {
-        names.push(fn);
-      }
-    });
-  }
+  if (getModelDisplayName(model)) names.push(getModelDisplayName(model));
+  getModelFeedModelNames(model).forEach(fn => {
+    if (fn && !names.some(n => normalize(n) === normalize(fn))) {
+      names.push(fn);
+    }
+  });
   return names;
 };
 
@@ -205,10 +216,10 @@ const results = [];
 const unmatchedFederal = new Set(federalData.map(f => f.id));
 
 allModels.forEach(model => {
-  if (!model.mark_id || !model.id) return;
+  const brand = getModelBrandId(model);
+  if (!brand || !model.id) return;
 
-  const brand = model.mark_id.toLowerCase();
-  const ourId = constructId(model.mark_id, model.id);
+  const ourId = constructId(brand, model.id);
   const knownNames = getKnownNames(model);
 
   // Поиск федеральных данных
@@ -233,7 +244,7 @@ allModels.forEach(model => {
   results.push({
     id: ourId,
     brand,
-    model: model.name,
+    model: getModelDisplayName(model),
     price: prices.length ? Math.min(...prices) : 0,
     benefit: Math.max(0, ...benefits),
     priceOfficial,
