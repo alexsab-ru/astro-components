@@ -561,6 +561,31 @@ def _merge_and_validate_car_images(existing_images, new_images, vin):
     return _filter_valid_image_urls(_merge_car_image_urls(existing_images, new_images), vin)
 
 
+def _is_mirror_cdn_image_url(image_url, config):
+    if not image_url:
+        return False
+
+    cdn_base_url = config.get('mirror_cdn_base_url') or 'https://cdn.alexsab.ru'
+    remote_prefix = (config.get('mirror_remote_prefix') or 'cars').strip('/')
+    parsed_url = urllib.parse.urlparse(str(image_url))
+    parsed_base = urllib.parse.urlparse(cdn_base_url)
+
+    if parsed_url.netloc.lower() != parsed_base.netloc.lower():
+        return False
+
+    base_path = parsed_base.path.rstrip('/')
+    mirror_path_prefix = f"{base_path}/{remote_prefix}/" if base_path else f"/{remote_prefix}/"
+    return parsed_url.path.startswith(mirror_path_prefix)
+
+
+def _filter_mirror_cdn_image_urls(image_urls, config):
+    return [
+        image_url
+        for image_url in list(image_urls or [])
+        if not _is_mirror_cdn_image_url(image_url, config)
+    ]
+
+
 def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumbs, config, vin, brand=None, model=None, color=None):
     if config.get('skip_thumbs'):
         data['images'] = []
@@ -576,7 +601,10 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
         return
 
     if config.get('mirror_images'):
-        merged_images = _merge_car_image_urls(data.get('images', []), incoming_images)
+        merged_images = _merge_car_image_urls(
+            _filter_mirror_cdn_image_urls(data.get('images', []), config),
+            _filter_mirror_cdn_image_urls(incoming_images, config),
+        )
     else:
         merged_images = _merge_and_validate_car_images(data.get('images', []), incoming_images, vin)
 
