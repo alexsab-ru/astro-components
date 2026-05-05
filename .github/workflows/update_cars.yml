@@ -308,6 +308,8 @@ jobs:
 
 
     - name: Generate src/content/cars/ and src/content/used_cars/
+      id: generate_cars
+      continue-on-error: true
       run: |
         mirror_args=""
         if [[ "${MIRROR_CAR_IMAGES:-}" == "true" ]]; then
@@ -320,10 +322,15 @@ jobs:
         MIRROR_CAR_IMAGES: ${{ vars.MIRROR_CAR_IMAGES }}
 
     - name: Upload mirrored car images to CDN
-      if: ${{ vars.MIRROR_CAR_IMAGES == 'true' }}
+      if: ${{ always() && vars.MIRROR_CAR_IMAGES == 'true' }}
       run: |
         if [[ ! -d tmp/image_mirror/cars ]]; then
           echo "No mirrored images to upload"
+          exit 0
+        fi
+
+        if ! find tmp/image_mirror/cars -type f -name '*.webp' -print -quit | grep -q .; then
+          echo "No new mirrored image files to upload"
           exit 0
         fi
 
@@ -346,6 +353,12 @@ jobs:
         CDN_SSH_USER: ${{ secrets.CDN_SSH_USER }}
         CDN_SSH_PRIVATE_KEY: ${{ secrets.CDN_SSH_PRIVATE_KEY }}
         CDN_REMOTE_PATH: ${{ secrets.CDN_REMOTE_PATH }}
+
+    - name: Stop after failed car generation
+      if: ${{ steps.generate_cars.outcome == 'failure' }}
+      run: |
+        echo "Car generation failed after writing mirrored images. Uploaded available image mirror files; stopping before committing partial content."
+        exit 1
 
     - name: Get Dealer XML for auto.ru and generate auto.ru xml
       if: ${{ env.AUTORU_XML_URL && !env.AUTORU_FRIEND_XML_URL }}
