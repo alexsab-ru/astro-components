@@ -89,6 +89,8 @@ show_help() {
     echo "  $0 update vehicles_vehicle --skip_thumbs"
     echo "  $0 auto"
     echo "  $0 auto --skip_thumbs --dev"
+    echo "  $0 auto --mirror_images --dev"
+    echo "  $0 auto --mirror_images --mirror_dry_run"
     echo "  $0 test data_cars_car --count_thumbs 10 --dev"
     echo "  $0 update ads_ad --skip_thumbs --skip_check_thumb"
 }
