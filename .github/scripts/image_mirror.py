@@ -38,6 +38,8 @@ IMAGE_SIZES = {
     "thumb": 19,
 }
 
+_AVITO_AUTOLOAD_DOWNLOADS_BY_CAR: dict[tuple[str, str, str], int] = {}
+
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -186,6 +188,16 @@ class ImageMirror:
     def __init__(self, config: MirrorConfig):
         self.config = config
 
+    def avito_autoload_download_key(self, vin: str) -> tuple[str, str, str]:
+        return (self.config.site, self.config.category, vin)
+
+    def avito_autoload_downloads_for_run(self, vin: str) -> int:
+        return _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(self.avito_autoload_download_key(vin), 0)
+
+    def register_avito_autoload_download_for_run(self, vin: str) -> None:
+        key = self.avito_autoload_download_key(vin)
+        _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR[key] = _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(key, 0) + 1
+
     def manifest_remote_path(self, vin: str) -> str:
         return posixpath.join(
             remote_dir(self.config.remote_prefix, self.config.site, self.config.category, vin),
@@ -295,7 +307,6 @@ class ImageMirror:
 
         prepared_images = []
         force_probe_all = False
-        avito_autoload_downloads = 0
 
         for index, source_url in enumerate(image_urls):
             source_url = source_url.strip()
@@ -339,9 +350,8 @@ class ImageMirror:
 
             if regenerate and is_avito_autoload:
                 max_new = max(0, int(self.config.avito_autoload_max_new_per_car))
-                if avito_autoload_downloads >= max_new:
+                if self.avito_autoload_downloads_for_run(vin) >= max_new:
                     continue
-                avito_autoload_downloads += 1
 
             cdn = (
                 existing.get("cdn")
@@ -352,6 +362,8 @@ class ImageMirror:
             if regenerate:
                 changed_indexes.append(index)
                 changed_remote_paths.extend(self.write_image_set(vin, index, source_url, version))
+                if is_avito_autoload:
+                    self.register_avito_autoload_download_for_run(vin)
 
             manifest_images.append({
                 "index": index,
