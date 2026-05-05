@@ -167,6 +167,7 @@ class MirrorConfig:
     remote_prefix: str = DEFAULT_REMOTE_PREFIX
     local_root: Path = Path(DEFAULT_LOCAL_ROOT)
     probe_count: int = DEFAULT_PROBE_COUNT
+    avito_autoload_max_new_per_car: int = 1
     dry_run: bool = False
 
 
@@ -227,6 +228,19 @@ class ImageMirror:
             or existing.get("version") != version
         )
 
+    def existing_image_for_source(
+        self,
+        existing_images_by_index: dict[int, dict[str, Any]],
+        existing_images_by_source_hash: dict[str, dict[str, Any]],
+        index: int,
+        source_url: str,
+    ) -> dict[str, Any] | None:
+        existing = existing_images_by_index.get(index)
+        if existing and existing.get("source_url") == source_url:
+            return existing
+
+        return existing_images_by_source_hash.get(sha1_text(source_url))
+
     def image_remote_paths(self, vin: str, index: int) -> list[str]:
         return [
             remote_image_path(
@@ -268,6 +282,11 @@ class ImageMirror:
             for item in existing_manifest.get("images", [])
             if "index" in item
         }
+        existing_images_by_source_hash = {
+            item.get("source_url_hash") or sha1_text(item.get("source_url", "")): item
+            for item in existing_manifest.get("images", [])
+            if item.get("source_url")
+        }
 
         now = utc_now_iso()
         manifest_images = []
@@ -276,6 +295,7 @@ class ImageMirror:
 
         prepared_images = []
         force_probe_all = False
+        avito_autoload_downloads = 0
 
         for index, source_url in enumerate(image_urls):
             source_url = source_url.strip()
@@ -284,7 +304,12 @@ class ImageMirror:
 
             metadata = self.inspect_source(source_url, index)
             version = source_signature(source_url, metadata)
-            existing = existing_images.get(index)
+            existing = self.existing_image_for_source(
+                existing_images,
+                existing_images_by_source_hash,
+                index,
+                source_url,
+            )
             is_changed = self.should_regenerate(existing, source_url, version)
 
             if is_changed and index < self.config.probe_count and not is_avito_autoload_url(source_url):
@@ -309,8 +334,20 @@ class ImageMirror:
                 metadata = self.inspect_source(source_url, index, force=True)
                 version = source_signature(source_url, metadata)
 
-            cdn = self.build_cdn_map(vin, index, version)
             regenerate = self.should_regenerate(existing, source_url, version)
+            is_avito_autoload = is_avito_autoload_url(source_url)
+
+            if regenerate and is_avito_autoload:
+                max_new = max(0, int(self.config.avito_autoload_max_new_per_car))
+                if avito_autoload_downloads >= max_new:
+                    continue
+                avito_autoload_downloads += 1
+
+            cdn = (
+                existing.get("cdn")
+                if existing and not regenerate and isinstance(existing.get("cdn"), dict)
+                else self.build_cdn_map(vin, index, version)
+            )
 
             if regenerate:
                 changed_indexes.append(index)
@@ -380,6 +417,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--cdn_base_url")
     parser.add_argument("--remote_prefix", default=DEFAULT_REMOTE_PREFIX)
     parser.add_argument("--probe_count", type=int, default=DEFAULT_PROBE_COUNT)
+    parser.add_argument("--avito_autoload_max_new_per_car", type=int, default=1)
     parser.add_argument("--env_file", default=DEFAULT_ENV_FILE)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
@@ -404,6 +442,7 @@ def main() -> None:
         remote_prefix=args.remote_prefix,
         local_root=Path(args.local_root),
         probe_count=args.probe_count,
+        avito_autoload_max_new_per_car=args.avito_autoload_max_new_per_car,
         dry_run=args.dry_run,
     )
     result = ImageMirror(config).mirror_car_images(args.vin, image_urls, args.friendly_url)

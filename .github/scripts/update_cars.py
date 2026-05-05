@@ -1143,6 +1143,7 @@ def main():
     parser.add_argument('--mirror_cdn_base_url', default=os.getenv('CDN_BASE_URL', 'https://cdn.alexsab.ru'), help='CDN base URL for mirrored images')
     parser.add_argument('--mirror_remote_prefix', default='cars', help='Remote URL/path prefix for mirrored images')
     parser.add_argument('--mirror_probe_count', default=3, help='Number of first non-Avito images to probe before probing all')
+    parser.add_argument('--mirror_avito_autoload_max_new_per_car', default=1, help='Max new avito.ru/autoload images to download per car in one run')
     parser.add_argument('--mirror_dry_run', action="store_true", help='Build image mirror manifest without writing image files')
     parser.add_argument('--count_thumbs', default=5, help='Count thumbs for create')
     parser.add_argument('--image_tag', default='image', help='Image tag name')
