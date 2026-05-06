@@ -340,16 +340,24 @@ jobs:
         fi
 
         install -m 700 -d ~/.ssh
-        printf '%s\n' "$CDN_SSH_PRIVATE_KEY" > ~/.ssh/cdn_cars
+        printf '%s' "$CDN_SSH_PRIVATE_KEY" | sed 's/\\n/\n/g' | tr -d '\r' > ~/.ssh/cdn_cars
+        printf '\n' >> ~/.ssh/cdn_cars
         chmod 600 ~/.ssh/cdn_cars
-        ssh-keyscan -H "$CDN_SSH_HOST" >> ~/.ssh/known_hosts
+
+        if ! ssh-keygen -y -f ~/.ssh/cdn_cars > /dev/null; then
+          echo "CDN_SSH_PRIVATE_KEY is not a valid unencrypted private key"
+          exit 1
+        fi
+
+        ssh-keyscan -p "${CDN_SSH_PORT:-22}" -H "$CDN_SSH_HOST" >> ~/.ssh/known_hosts
 
         rsync -rzO --no-perms --itemize-changes \
-          -e "ssh -i ~/.ssh/cdn_cars -o IdentitiesOnly=yes -o BatchMode=yes" \
+          -e "ssh -p ${CDN_SSH_PORT:-22} -i ~/.ssh/cdn_cars -o IdentitiesOnly=yes -o BatchMode=yes" \
           tmp/image_mirror/cars/ \
           "$CDN_SSH_USER@$CDN_SSH_HOST:${CDN_REMOTE_PATH:-.}/"
       env:
         CDN_SSH_HOST: ${{ secrets.CDN_SSH_HOST }}
+        CDN_SSH_PORT: ${{ secrets.CDN_SSH_PORT }}
         CDN_SSH_USER: ${{ secrets.CDN_SSH_USER }}
         CDN_SSH_PRIVATE_KEY: ${{ secrets.CDN_SSH_PRIVATE_KEY }}
         CDN_REMOTE_PATH: ${{ secrets.CDN_REMOTE_PATH }}
