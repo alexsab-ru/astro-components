@@ -314,12 +314,16 @@ jobs:
         mirror_args=""
         if [[ "${MIRROR_CAR_IMAGES:-}" == "true" ]]; then
           mirror_args="--mirror_images"
+          if [[ -n "${MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS:-}" ]]; then
+            mirror_args="$mirror_args --mirror_avito_autoload_download_delay_seconds ${MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS}"
+          fi
         fi
         pnpm cars auto $mirror_args
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CDN_BASE_URL: ${{ secrets.CDN_BASE_URL }}
         MIRROR_CAR_IMAGES: ${{ vars.MIRROR_CAR_IMAGES }}
+        MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS: ${{ vars.MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS }}
 
     - name: Upload mirrored car images to CDN
       if: ${{ always() && vars.MIRROR_CAR_IMAGES == 'true' }}

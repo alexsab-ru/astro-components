@@ -623,6 +623,11 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
                 if config.get('mirror_avito_autoload_max_new_per_car') is not None
                 else 1
             ),
+            avito_autoload_download_delay_seconds=float(
+                config.get('mirror_avito_autoload_download_delay_seconds')
+                if config.get('mirror_avito_autoload_download_delay_seconds') is not None
+                else 3
+            ),
             dry_run=config.get('mirror_dry_run', False),
         )
         mirror_result = ImageMirror(mirror_config).mirror_car_images(vin, merged_images, friendly_url)

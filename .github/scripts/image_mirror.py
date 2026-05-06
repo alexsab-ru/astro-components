@@ -12,6 +12,7 @@ import json
 import os
 import posixpath
 import tempfile
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from io import BytesIO
@@ -29,6 +30,7 @@ DEFAULT_CDN_BASE_URL = "https://cdn.alexsab.ru"
 DEFAULT_LOCAL_ROOT = "tmp/image_mirror"
 DEFAULT_PROBE_COUNT = 3
 DEFAULT_ENV_FILE = ".env"
+DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS = 3.0
 
 IMAGE_SIZES = {
     "full": 1920,
@@ -39,6 +41,7 @@ IMAGE_SIZES = {
 }
 
 _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR: dict[tuple[str, str, str], int] = {}
+_AVITO_AUTOLOAD_LAST_DOWNLOAD_AT: float | None = None
 
 
 def utc_now_iso() -> str:
@@ -170,6 +173,7 @@ class MirrorConfig:
     local_root: Path = Path(DEFAULT_LOCAL_ROOT)
     probe_count: int = DEFAULT_PROBE_COUNT
     avito_autoload_max_new_per_car: int = 1
+    avito_autoload_download_delay_seconds: float = DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS
     dry_run: bool = False
 
 
@@ -195,8 +199,28 @@ class ImageMirror:
         return _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(self.avito_autoload_download_key(vin), 0)
 
     def register_avito_autoload_download_for_run(self, vin: str) -> None:
+        global _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT
+
         key = self.avito_autoload_download_key(vin)
         _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR[key] = _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(key, 0) + 1
+        _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT = time.monotonic()
+
+    def wait_before_avito_autoload_download(self) -> None:
+        if self.config.dry_run:
+            return
+
+        delay = max(0.0, float(self.config.avito_autoload_download_delay_seconds))
+        if delay <= 0:
+            return
+
+        if _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT is None:
+            return
+
+        elapsed = time.monotonic() - _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT
+        remaining = delay - elapsed
+        if remaining > 0:
+            print(f"⏳ Пауза {remaining:.1f} сек перед скачиванием следующего Avito autoload изображения")
+            time.sleep(remaining)
 
     def manifest_remote_path(self, vin: str) -> str:
         return posixpath.join(
@@ -361,6 +385,8 @@ class ImageMirror:
 
             if regenerate:
                 changed_indexes.append(index)
+                if is_avito_autoload:
+                    self.wait_before_avito_autoload_download()
                 changed_remote_paths.extend(self.write_image_set(vin, index, source_url, version))
                 if is_avito_autoload:
                     self.register_avito_autoload_download_for_run(vin)
@@ -430,6 +456,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--remote_prefix", default=DEFAULT_REMOTE_PREFIX)
     parser.add_argument("--probe_count", type=int, default=DEFAULT_PROBE_COUNT)
     parser.add_argument("--avito_autoload_max_new_per_car", type=int, default=1)
+    parser.add_argument(
+        "--avito_autoload_download_delay_seconds",
+        type=float,
+        default=float(os.getenv("MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS", DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS)),
+    )
     parser.add_argument("--env_file", default=DEFAULT_ENV_FILE)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
@@ -455,6 +486,7 @@ def main() -> None:
         local_root=Path(args.local_root),
         probe_count=args.probe_count,
         avito_autoload_max_new_per_car=args.avito_autoload_max_new_per_car,
+        avito_autoload_download_delay_seconds=args.avito_autoload_download_delay_seconds,
         dry_run=args.dry_run,
     )
     result = ImageMirror(config).mirror_car_images(args.vin, image_urls, args.friendly_url)
