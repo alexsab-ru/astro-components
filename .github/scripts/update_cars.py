@@ -1148,7 +1148,7 @@ def main():
         '--mirror_autoload_download_delay_seconds',
         default=(
             os.getenv('MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS')
-            or 10
+            or 1
         ),
         help='Delay between mirrored image downloads in seconds',
     )
