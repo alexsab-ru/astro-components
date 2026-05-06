@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
-import collectionsData from './data/collections.json';
+import collectionsData from './data/site/collections.json';
 
 // Базовая схема для markdown-контента (общие страницы коллекций из COLLECTIONS)
 const baseCollectionSchema = z.object({
@@ -87,6 +87,13 @@ export const collections = {
             image: z.string(),
             images: z.array(z.string()).default([]),
             thumbs: z.array(z.string()).default([]),
+            imageSets: z.array(z.object({
+                full: z.string(),
+                large: z.string(),
+                medium: z.string(),
+                small: z.string(),
+                thumb: z.string(),
+            })).default([]),
             // Прочее
             order: z.number(),
             total: z.number(),
@@ -136,6 +143,13 @@ export const collections = {
             image: z.string(),
             images: z.array(z.string()).default([]),
             thumbs: z.array(z.string()).default([]),
+            imageSets: z.array(z.object({
+                full: z.string(),
+                large: z.string(),
+                medium: z.string(),
+                small: z.string(),
+                thumb: z.string(),
+            })).default([]),
             // Прочее
             order: z.number(),
             total: z.number(),
@@ -146,5 +160,3 @@ export const collections = {
         }),
     }),
 };
-
-

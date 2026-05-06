@@ -18,11 +18,9 @@ Options:
   -f, --file FILE            Specify file(s) to copy from data directory
                              Can be used multiple times or comma-separated
   -d, --skip-dealer-files    Skip copying dealer data files from src/$DOMAIN
-  -s, --skip-model-sections  Skip copying model-sections directory
-  -m, --skip-models          Skip copying models.json
   -c, --skip-cars            Skip copying cars.json
   -k, --keep-tmp             Keep cloned repo in tmp/
-  -cd, --clean-data          Remove all files from src/data and restore tracked files
+  -cd, --clean-data          Remove generated files from src/data/site and src/data/common
 
 Env:
   JSON_REPO                  Git repository URL (without .git)
@@ -37,19 +35,17 @@ Examples:
   pnpm downloadCommonRepo -f settings.json -f faq.json
   pnpm downloadCommonRepo -f settings.json,faq.json
   pnpm downloadCommonRepo --skip-dealer-files
-  pnpm downloadCommonRepo --skip-model-sections --skip-models --skip-cars
+  pnpm downloadCommonRepo --skip-cars
   JSON_REPO=https://github.com/org/repo DOMAIN=site.com pnpm downloadCommonRepo
 
 Warning:
-  --clean-data removes all files in src/data and discards local changes there.
+  --clean-data removes all files in src/data/site and src/data/common.
 EOF
 }
 
 # Обработка параметров командной строки
 SPECIFIC_FILES=()
 SKIP_DEALER_FILES=false
-SKIP_MODEL_SECTIONS=false
-SKIP_MODELS=false
 SKIP_CARS=false
 KEEP_TMP=false
 CLEAN_DATA=false
@@ -74,14 +70,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -d|--skip-dealer-files)
             SKIP_DEALER_FILES=true
-            shift
-            ;;
-        -s|--skip-model-sections)
-            SKIP_MODEL_SECTIONS=true
-            shift
-            ;;
-        -m|--skip-models)
-            SKIP_MODELS=true
             shift
             ;;
         -c|--skip-cars)
@@ -213,7 +201,7 @@ cleanup() {
 }
 
 ensure_local_settings_for_models() {
-  local local_settings="$LOCAL_DATA_DIR/settings.json"
+  local local_settings="$SITE_DATA_DIR/settings.json"
   local remote_settings="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
 
   if [ -f "$local_settings" ]; then
@@ -230,35 +218,22 @@ ensure_local_settings_for_models() {
 }
 
 clean_data_dir() {
-  if [ -z "${LOCAL_DATA_DIR:-}" ]; then
-    echo "❌ Error: LOCAL_DATA_DIR is not set"
+  if [ -z "${SITE_DATA_DIR:-}" ] || [ -z "${COMMON_DATA_DIR:-}" ]; then
+    echo "❌ Error: SITE_DATA_DIR or COMMON_DATA_DIR is not set"
     exit 1
   fi
 
-  echo "⚠ WARNING: this will delete all files in $LOCAL_DATA_DIR and discard local changes there."
+  echo "⚠ WARNING: this will delete all files in $SITE_DATA_DIR and $COMMON_DATA_DIR."
 
-  if [ "$LOCAL_DATA_DIR" = "/" ] || [ "$LOCAL_DATA_DIR" = "." ]; then
-    echo "❌ Error: refusing to clean unsafe path: $LOCAL_DATA_DIR"
+  if [ "$SITE_DATA_DIR" = "/" ] || [ "$SITE_DATA_DIR" = "." ] || [ "$COMMON_DATA_DIR" = "/" ] || [ "$COMMON_DATA_DIR" = "." ]; then
+    echo "❌ Error: refusing to clean unsafe data paths"
     exit 1
   fi
 
-  mkdir -p "$LOCAL_DATA_DIR"
+  mkdir -p "$SITE_DATA_DIR" "$COMMON_DATA_DIR"
 
-  find "$LOCAL_DATA_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-
-  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    if [ -n "$(git ls-files -- "$LOCAL_DATA_DIR")" ]; then
-      if git restore --help >/dev/null 2>&1; then
-        git restore --source=HEAD --worktree -- "$LOCAL_DATA_DIR"
-      else
-        git checkout -- "$LOCAL_DATA_DIR"
-      fi
-    else
-      echo "▶ No tracked files to restore in $LOCAL_DATA_DIR"
-    fi
-  else
-    echo "⚠ Warning: not a git repo, cannot restore tracked files"
-  fi
+  find "$SITE_DATA_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+  find "$COMMON_DATA_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 }
 
 # ==================================================
@@ -295,6 +270,9 @@ TMP_DIR="tmp/$REPO_NAME"
 
 REMOTE_DATA_PATH="src/$DOMAIN"
 LOCAL_DATA_DIR="src/data"
+SITE_DATA_DIR="$LOCAL_DATA_DIR/site"
+COMMON_DATA_DIR="$LOCAL_DATA_DIR/common"
+ASTRO_JSON_DATA_PATH="data"
 
 trap cleanup EXIT INT TERM
 
@@ -319,12 +297,11 @@ cd "$TMP_DIR"
 git sparse-checkout init --no-cone
 git sparse-checkout set \
   "src/$DOMAIN" \
-  "src/_model-sections" \
-  "src/models.json" \
   "src/cars.json" \
   "src/avito-colors.json" \
   "src/settings-common.json" \
-  "src/translations.json"
+  "src/translations.json" \
+  "$ASTRO_JSON_DATA_PATH"
 
 DEFAULT_BRANCH=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@')
 if [ -z "$DEFAULT_BRANCH" ]; then
@@ -345,15 +322,16 @@ if [ "$CLEAN_DATA" = true ]; then
   clean_data_dir
 fi
 
-mkdir -p "$LOCAL_DATA_DIR"
+mkdir -p "$SITE_DATA_DIR" "$COMMON_DATA_DIR"
 
 # Если указаны конкретные файлы, копируем только их
 if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
   for file in "${SPECIFIC_FILES[@]}"; do
     SRC_FILE="$TMP_DIR/$REMOTE_DATA_PATH/$file"
-    DEST_FILE="$LOCAL_DATA_DIR/$file"
+    DEST_FILE="$SITE_DATA_DIR/$file"
     
     if [ -f "$SRC_FILE" ]; then
+      mkdir -p "$(dirname "$DEST_FILE")"
       cp "$SRC_FILE" "$DEST_FILE"
       echo "  ✔ Copied: $file"
     else
@@ -366,116 +344,32 @@ else
   if [ "$SKIP_DEALER_FILES" = false ]; then
     rsync -a \
         "$TMP_DIR/$REMOTE_DATA_PATH/" \
-        "$LOCAL_DATA_DIR/"
+        "$SITE_DATA_DIR/"
   fi
 fi
 
-# ==================================================
-# Парсинг брендов и копирование model-sections
-# ==================================================
-# Проверяем, нужно ли копировать model-sections
-SHOULD_COPY_MODEL_SECTIONS=false
-
-# Копируем model-sections если:
-# 1. Не указан флаг --skip-model-sections
-# 2. И (копировались все файлы ИЛИ settings.json в списке скопированных файлов)
-if [ "$SKIP_MODEL_SECTIONS" = false ]; then
-  if [ ${#SPECIFIC_FILES[@]} -eq 0 ]; then
-    # Копировались все файлы
-    SHOULD_COPY_MODEL_SECTIONS=true
-  else
-    # Проверяем, есть ли settings.json в списке
-    for file in "${SPECIFIC_FILES[@]}"; do
-      if [ "$file" = "settings.json" ]; then
-        SHOULD_COPY_MODEL_SECTIONS=true
-        break
-      fi
-    done
-  fi
-fi
-
-if [ "$SHOULD_COPY_MODEL_SECTIONS" = true ]; then
-  SETTINGS_FILE_LOCAL="$LOCAL_DATA_DIR/settings.json"
-  SETTINGS_FILE_REMOTE="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
-
-  if [ -f "$SETTINGS_FILE_LOCAL" ]; then
-    SETTINGS_FILE="$SETTINGS_FILE_LOCAL"
-  elif [ -f "$SETTINGS_FILE_REMOTE" ]; then
-    SETTINGS_FILE="$SETTINGS_FILE_REMOTE"
-  else
-    echo "❌ Error: settings.json not found"
-    exit 1
-  fi
-
-  BRANDS_RAW=$(extract_brands "$SETTINGS_FILE")
-  if [ -z "$BRANDS_RAW" ]; then
-    echo "▶ Skipping model-sections (brand is not set in settings.json; service mode uses site_brand_style for styles)"
-  else
-    BRANDS=()
-    while IFS= read -r line; do
-      [ -z "$line" ] && continue
-      BRANDS+=("$line")
-    done <<< "$BRANDS_RAW"
-
-    # ==================================================
-    # Копирование model-sections по брендам
-    # ==================================================
-    echo "▶ Sync model-sections…"
-
-    for BRAND in "${BRANDS[@]}"; do
-      RAW_BRAND=$(echo "$BRAND" | xargs)
-
-      NORMALIZED_BRAND=$(echo "$RAW_BRAND" \
-        | tr '[:upper:]' '[:lower:]' \
-        | sed -E 's/[^a-z0-9 ]//g; s/[[:space:]]+/-/g; s/^-+|-+$//g')
-
-      SRC_DIR="$TMP_DIR/src/_model-sections/$NORMALIZED_BRAND"
-      DEST_DIR="$LOCAL_DATA_DIR/model-sections/$NORMALIZED_BRAND"
-
-      if [ -d "$SRC_DIR" ]; then
-        mkdir -p "$DEST_DIR"
-        rsync -a "$SRC_DIR/" "$DEST_DIR/"
-        echo "  ✔ $RAW_BRAND → $NORMALIZED_BRAND"
-      else
-        echo "  ⚠ model-sections not found for brand: $RAW_BRAND ($NORMALIZED_BRAND)"
-      fi
-    done
-  fi
+# Копируем внутренности astro-json/data для дальнейшей обработки.
+if [ -d "$TMP_DIR/$ASTRO_JSON_DATA_PATH" ]; then
+  echo "▶ Sync astro-json/data → $COMMON_DATA_DIR…"
+  rsync -a "$TMP_DIR/$ASTRO_JSON_DATA_PATH/" "$COMMON_DATA_DIR/"
 else
-  if [ "$SKIP_MODEL_SECTIONS" = true ]; then
-    echo "▶ Skipping model-sections (--skip-model-sections flag set)"
-  else
-    echo "▶ Skipping model-sections (settings.json not in file list)"
-  fi
+  echo -e "${BGYELLOW}Пропускаем копирование astro-json/data: папка не найдена в JSON_REPO${Color_Off}"
 fi
 
-# Копирование models.json (если не пропущен)
-if [ "$SKIP_MODELS" = false ]; then
-  echo -e "\n${BGGREEN}Копируем общий models.json...${Color_Off}"
-  rsync -a "$TMP_DIR/src/models.json" "$LOCAL_DATA_DIR/all-models.json"
-
-  if ! ensure_local_settings_for_models; then
-      printf "${BGRED}Внимание: settings.json не найден, невозможно отфильтровать models.json${Color_Off}\n"
-      exit 1
-  fi
-
-  # Проверяем, что файл скачался
-  if [ ! -s "$LOCAL_DATA_DIR/all-models.json" ]; then
-      printf "${BGRED}Внимание: общий файл models.json не найден или получен некорректный файл!${Color_Off}\n"
-  else
-      node .github/scripts/filterModelsByBrand.js
-  fi
+if ! ensure_local_settings_for_models; then
+  printf "${BGYELLOW}settings.json не найден, пропускаем сборку site/models.json${Color_Off}\n"
 else
-  echo -e "\n${BGYELLOW}Пропускаем копирование models.json (--skip-models flag set)${Color_Off}"
+  SITE_DATA_DIR="$SITE_DATA_DIR" COMMON_DATA_DIR="$COMMON_DATA_DIR" node .github/scripts/filterModelsByBrand.js
 fi
+
 
 # Копирование cars.json (если не пропущен)
 if [ "$SKIP_CARS" = false ]; then
   echo -e "\n${BGGREEN}Копируем общий cars.json...${Color_Off}"
-  rsync -a "$TMP_DIR/src/cars.json" "$LOCAL_DATA_DIR/all-cars.json"
+  rsync -a "$TMP_DIR/src/cars.json" "$COMMON_DATA_DIR/cars.json"
 
   # Проверяем, что файл скачался
-  if [ ! -s "$LOCAL_DATA_DIR/all-cars.json" ]; then
+  if [ ! -s "$COMMON_DATA_DIR/cars.json" ]; then
       printf "${BGRED}Внимание: общий файл cars.json не найден или получен некорректный файл!${Color_Off}\n"
   else
       printf "${BGGREEN}Общий файл cars.json успешно скопирован${Color_Off}\n"
@@ -487,8 +381,8 @@ fi
 # Копирование avito-colors.json (всегда, если есть в общем репозитории)
 echo -e "\n${BGGREEN}Копируем общий avito-colors.json...${Color_Off}"
 if [ -f "$TMP_DIR/src/avito-colors.json" ]; then
-  rsync -a "$TMP_DIR/src/avito-colors.json" "$LOCAL_DATA_DIR/all-avito-colors.json"
-  if [ ! -s "$LOCAL_DATA_DIR/all-avito-colors.json" ]; then
+  rsync -a "$TMP_DIR/src/avito-colors.json" "$COMMON_DATA_DIR/avito-colors.json"
+  if [ ! -s "$COMMON_DATA_DIR/avito-colors.json" ]; then
       printf "${BGRED}Внимание: общий файл avito-colors.json не найден или получен некорректный файл!${Color_Off}\n"
   else
       printf "${BGGREEN}Общий файл avito-colors.json успешно скопирован${Color_Off}\n"
@@ -500,8 +394,8 @@ fi
 # Копирование translations.json (всегда, если есть в общем репозитории)
 echo -e "\n${BGGREEN}Копируем общий translations.json...${Color_Off}"
 if [ -f "$TMP_DIR/src/translations.json" ]; then
-  rsync -a "$TMP_DIR/src/translations.json" "$LOCAL_DATA_DIR/all-translations.json"
-  if [ ! -s "$LOCAL_DATA_DIR/all-translations.json" ]; then
+  rsync -a "$TMP_DIR/src/translations.json" "$COMMON_DATA_DIR/translations.json"
+  if [ ! -s "$COMMON_DATA_DIR/translations.json" ]; then
       printf "${BGRED}Внимание: общий файл translations.json не найден или получен некорректный файл!${Color_Off}\n"
   else
       printf "${BGGREEN}Общий файл translations.json успешно скопирован${Color_Off}\n"
@@ -513,8 +407,8 @@ fi
 # Копирование settings-common.json (всегда, если есть в общем репозитории)
 echo -e "\n${BGGREEN}Копируем общий settings-common.json...${Color_Off}"
 if [ -f "$TMP_DIR/src/settings-common.json" ]; then
-  rsync -a "$TMP_DIR/src/settings-common.json" "$LOCAL_DATA_DIR/settings-common.json"
-  if [ ! -s "$LOCAL_DATA_DIR/settings-common.json" ]; then
+  rsync -a "$TMP_DIR/src/settings-common.json" "$COMMON_DATA_DIR/settings-common.json"
+  if [ ! -s "$COMMON_DATA_DIR/settings-common.json" ]; then
       printf "${BGRED}Внимание: settings-common.json не найден или получен некорректный файл!${Color_Off}\n"
   else
       printf "${BGGREEN}Общий файл settings-common.json успешно скопирован${Color_Off}\n"
@@ -529,7 +423,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "$SCRIPT_DIR/envJsonToDotenv.sh" ]; then
   echo ""
-  bash "$SCRIPT_DIR/envJsonToDotenv.sh"
+  ENV_JSON_PATH="$SITE_DATA_DIR/env.json" bash "$SCRIPT_DIR/envJsonToDotenv.sh"
 fi
 
 if [ "$KEEP_TMP" = true ]; then

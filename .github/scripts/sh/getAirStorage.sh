@@ -20,7 +20,7 @@ fi
 # Устанавливаем остальные переменные
 export QUERY_STRING="SELECT A, B"
 export KEY_COLUMN="VIN"
-export OUTPUT_PATHS="./src/data/air_storage.json"
+export OUTPUT_PATHS="./src/data/site/air_storage.json"
 export OUTPUT_FORMAT="simple"
 
 # Запускаем скрипт

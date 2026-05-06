@@ -1,3 +1,5 @@
+import { getModelBrandUrlName } from './modelFields.js';
+
 export const calcMinPrice = (price) => {
 	var minimum = 0;
 	var percent = 25;
@@ -49,21 +51,42 @@ export function quoteEscaper(str) {
 }
 
 export function setPrefixModelUrl(model, prefix = false) {
-	return prefix ? model.mark_id.toLowerCase().replace(/ /g, '-') + '-' + model.id : model.id;
+	return prefix ? getModelBrandUrlName(model).replace(/ /g, '-') + '-' + model.id : model.id;
 }
 
-export async function getModelSectionsYML(model = null) {
-	if(!model) return [];
-	let sections = [];
-	const normalized_brand_name = model.mark_id.toLowerCase().replace(/ /g, '-');
-	const sectionsModules = import.meta.glob('@/data/model-sections/**/*.yml');
-	const sectionsPath = `/src/data/model-sections/${normalized_brand_name}/${model.id}.yml`;
-	if (sectionsModules[sectionsPath]) {
-		const module = await sectionsModules[sectionsPath]();  
-		sections = module.default ?? module;
-	} else {
-		console.warn(`${sectionsPath} not found, using default empty sections`);
-		sections = [];
+const isPlainObject = (value) =>
+	value !== null &&
+	typeof value === 'object' &&
+	!Array.isArray(value);
+
+const normalizeModelSection = ([sectionId, section]) => {
+	if (!isPlainObject(section) || section.show === false) {
+		return null;
 	}
-	return sections;
+
+	return {
+		...section,
+		id: section.id ?? sectionId,
+		content: isPlainObject(section.content) ? section.content : {},
+	};
+};
+
+export function getModelSections(model = null) {
+	const sections = model?.page?.sections;
+
+	if (!isPlainObject(sections)) {
+		return [];
+	}
+
+	const sectionOrder = Array.isArray(model?.page?.sectionOrder)
+		? model.page.sectionOrder
+		: Object.keys(sections);
+	const orderedSectionIds = [
+		...sectionOrder.filter((sectionId) => sections[sectionId]),
+		...Object.keys(sections).filter((sectionId) => !sectionOrder.includes(sectionId)),
+	];
+
+	return orderedSectionIds
+		.map((sectionId) => normalizeModelSection([sectionId, sections[sectionId]]))
+		.filter(Boolean);
 }

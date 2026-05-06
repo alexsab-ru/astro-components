@@ -5,7 +5,7 @@ interface Props {
 const { links } = Astro.props;
 
 import HeaderMenuList from './MenuList.astro';
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { is_header_transparent } = settings;
 
 const path = Astro.url.pathname;

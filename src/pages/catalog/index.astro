@@ -4,7 +4,7 @@ import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 if (isRouteDisabled('/catalog/')) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 const dateTo = `${LAST_DAY}.${MONTH}.${YEAR}`;
@@ -16,8 +16,14 @@ import Checkbox from "@/components/Checkbox/Checkbox.astro";
 import SeoText from '@/components/Seo/Index.astro';
 import {Icon} from 'astro-icon/components';
 import { isModelVisible } from '@/js/utils/modelVisibility';
+import {
+    getModelBrandDisplayName,
+    getModelBrandUrlName,
+    getModelColorImage,
+    getModelTitle,
+} from '@/js/utils/modelFields';
 
-import modelsData from '@/data/models.json';
+import modelsData from '@/data/site/models.json';
 const { models } = modelsData;
 let image = '';
 
@@ -25,9 +31,9 @@ export async function getReadyCars(legal_city_where, models) {
     const cars = [];
     models.filter(isModelVisible).forEach(model => {
         const id = model.id;
-        // В витрине и SEO каталога показываем caption модели.
-        // name сохраняем для технических полей (например folder_id) и совместимости.
-        const modelTitle = model.caption || model.name;
+        const modelTitle = getModelTitle(model);
+        const brandDisplayName = getModelBrandDisplayName(model);
+        const brandUrlName = getModelBrandUrlName(model);
         const benefit = Number(model?.benefit);
 
         // Если у модели нет комплектаций, создаём базовую карточку
@@ -35,16 +41,16 @@ export async function getReadyCars(legal_city_where, models) {
             model.colors.forEach(color => {
                 cars.push({
                     id,
-                    slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' / ', '-').replace(/ \//g, '-').replace(/ /g, '-')}`,
+                    slug: `${brandUrlName}-${id}-${color.name.toLowerCase().replace(' / ', '-').replace(/ \//g, '-').replace(/ /g, '-')}`,
                     color: color.name,
                     data: {
-                        mark_id: model.mark_id,
+                        mark_id: brandDisplayName,
                         folder_id: model.name,
                         price: 0, // или другое значение по умолчанию
                         priceWithDiscount: 0,
                         max_discount: benefit,
                         color: color.name,
-                        image: color.carImage,
+                        image: getModelColorImage(color),
                         engine: 'Н/Д',
                         enginePower: 'Н/Д',
                         drive: 'Н/Д',
@@ -52,10 +58,10 @@ export async function getReadyCars(legal_city_where, models) {
                         modification_id: 'Н/Д',
                         body_type: 'Н/Д',
                         complectation_name: 'Н/Д',
-                        breadcrumb: `${model.mark_id} ${modelTitle}`,
-                        h1: `${model.mark_id} ${modelTitle}`,
-                        title: `Купить ${model.mark_id} ${modelTitle} у официального дилера в ${legal_city_where}`,
-                        description: `Купить автомобиль ${model.mark_id} ${modelTitle}, цвет - ${color.name} у официального дилера в ${legal_city_where}`,
+                        breadcrumb: `${brandDisplayName} ${modelTitle}`,
+                        h1: `${brandDisplayName} ${modelTitle}`,
+                        title: `Купить ${brandDisplayName} ${modelTitle} у официального дилера в ${legal_city_where}`,
+                        description: `Купить автомобиль ${brandDisplayName} ${modelTitle}, цвет - ${color.name} у официального дилера в ${legal_city_where}`,
                         total: 1
                     }
                 });
@@ -64,29 +70,30 @@ export async function getReadyCars(legal_city_where, models) {
             // Стандартная обработка при наличии комплектаций
             model.colors.forEach(color => {
                 model.complectations.forEach(compl => {
+                    const enginePower = compl.enginePower ?? compl.engine_power;
                     cars.push({
                         id,
-                        slug: `${model.mark_id.toLowerCase()}-${id}-${color.name.toLowerCase().replace(' ', '-')}-${compl.engine.toLowerCase().replace(' ', '-')}-${compl.name.toLowerCase().replace(' ', '-')}`,
+                        slug: `${brandUrlName}-${id}-${color.name.toLowerCase().replace(' ', '-')}-${compl.engine.toLowerCase().replace(' ', '-')}-${compl.name.toLowerCase().replace(' ', '-')}`,
                         color: color.name,
                         data: {
-                            mark_id: model.mark_id,
+                            mark_id: brandDisplayName,
                             folder_id: model.name,
                             price: Number(compl.price),
                             priceWithDiscount: Number(compl.price),
                             max_discount: benefit,
                             color: color.name,
-                            image: color.carImage,
+                            image: getModelColorImage(color),
                             engine: compl.engine,
-                            enginePower: compl.engine_power,
+                            enginePower,
                             drive: compl.drive,
                             fuel: compl.fuel,
-                            modification_id: `${compl.engine} (${compl.engine_power} л.с.)`,
+                            modification_id: `${compl.engine} (${enginePower} л.с.)`,
                             body_type: compl.bodytype,
                             complectation_name: compl.name,
-                            breadcrumb: `${model.mark_id} ${modelTitle} ${compl.name}`,
-                            h1: `${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.)`,
-                            title: `Купить ${model.mark_id} ${modelTitle} ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}`,
-                            description: `Купить автомобиль ${model.mark_id} ${modelTitle}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${compl.engine_power} л.с.) у официального дилера в ${legal_city_where}. Стоимость данного автомобиля ${model.mark_id} ${modelTitle} – ${Number(compl.price)}`,
+                            breadcrumb: `${brandDisplayName} ${modelTitle} ${compl.name}`,
+                            h1: `${brandDisplayName} ${modelTitle} ${compl.engine} (${enginePower} л.с.)`,
+                            title: `Купить ${brandDisplayName} ${modelTitle} ${compl.engine} (${enginePower} л.с.) у официального дилера в ${legal_city_where}`,
+                            description: `Купить автомобиль ${brandDisplayName} ${modelTitle}, комплектация - ${compl.name}, цвет - ${color.name}, двигатель - ${compl.engine} (${enginePower} л.с.) у официального дилера в ${legal_city_where}. Стоимость данного автомобиля ${brandDisplayName} ${modelTitle} – ${Number(compl.price)}`,
                             total: 1
                         }
                     });
@@ -137,7 +144,7 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 						<div class="flex flex-col gap-2">
 							<h3 class="mb-0!">Модель</h3>
 							{models.map((model) => (
-								<Checkbox value={model.name.toLocaleLowerCase()} id={model.id} color="black" label={model.caption || model.name} @change={`toggleFilter('Models', '${model.name.toLocaleLowerCase()}')`} />
+								<Checkbox value={model.name.toLocaleLowerCase()} id={model.id} color="black" label={getModelTitle(model)} @change={`toggleFilter('Models', '${model.name.toLocaleLowerCase()}')`} />
 							))}
 						</div>
 						<div class="flex flex-col gap-2">

@@ -644,5 +644,8 @@ const isMainModule = process.argv[1] && path.resolve(process.argv[1]) === fileUR
 
 if (isMainModule) {
     const fetcher = new GSheetFetcher(config);
-    fetcher.process().catch(console.error);
+    fetcher.process().catch((error) => {
+        console.error(error);
+        process.exitCode = 1;
+    });
 }

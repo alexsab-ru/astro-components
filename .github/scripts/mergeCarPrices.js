@@ -1,16 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 
-const dataDirectory = path.join(process.cwd(), 'src', 'data');
-const outputPath = path.join(dataDirectory, 'all-prices.json');
-const federalFilePath = path.join(dataDirectory, 'all-cars.json');
-const dealerFilePath = path.join(dataDirectory, 'dealer-models_price.json');
-const dealerCarsFilePath = path.join(dataDirectory, 'dealer-models_cars_price.json');
-const allModelsFilePath = path.join(dataDirectory, 'all-models.json');
+const siteDataDirectory = path.join(process.cwd(), 'src', 'data', 'site');
+const commonDataDirectory = path.join(process.cwd(), 'src', 'data', 'common');
+const outputPath = path.join(siteDataDirectory, 'all-prices.json');
+const federalFilePath = path.join(commonDataDirectory, 'cars.json');
+const dealerFilePath = path.join(siteDataDirectory, 'dealer-models_price.json');
+const dealerCarsFilePath = path.join(siteDataDirectory, 'dealer-models_cars_price.json');
 
 const Message = {
   SUCCESS: 'Файл all-prices.json успешно создан',
-  ERROR_NO_MODELS: 'Ошибка: Файл all-models.json не найден',
+  ERROR_NO_MODELS: 'Ошибка: layered-каталог моделей пуст. Проверьте src/data/common/brands',
 };
 
 const DISABLE_FEED_PRICE    = process.env.DISABLE_FEED_PRICE === 'true';
@@ -41,6 +41,73 @@ const readJSON = (filePath) => {
   }
 };
 
+const isPlainObject = (value) =>
+  value !== null && typeof value === 'object' && !Array.isArray(value);
+
+const deepMerge = (...layers) =>
+  layers.reduce((result, layer) => {
+    if (!isPlainObject(layer)) return result;
+
+    for (const [key, value] of Object.entries(layer)) {
+      if (value === undefined) continue;
+
+      if (value === null) {
+        result[key] = null;
+      } else if (isPlainObject(value) && isPlainObject(result[key])) {
+        result[key] = deepMerge(result[key], value);
+      } else if (isPlainObject(value)) {
+        result[key] = deepMerge({}, value);
+      } else if (Array.isArray(value)) {
+        result[key] = [...value];
+      } else {
+        result[key] = value;
+      }
+    }
+
+    return result;
+  }, {});
+
+const readOptionalJSON = (filePath) => readJSON(filePath) || {};
+
+const loadModelCatalog = () => {
+  const commonBrandsDirectory = path.join(commonDataDirectory, 'brands');
+  if (!fs.existsSync(commonBrandsDirectory)) return [];
+
+  const commonModelDefaults = readOptionalJSON(path.join(commonDataDirectory, 'defaults', 'model.json'));
+  const dealerDefaults = readOptionalJSON(path.join(siteDataDirectory, 'data', 'defaults.json'));
+  const models = [];
+
+  fs.readdirSync(commonBrandsDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .forEach((brandEntry) => {
+      const brand = brandEntry.name.toLowerCase();
+      const brandDirectory = path.join(commonBrandsDirectory, brand);
+      const modelsDirectory = path.join(brandDirectory, 'models');
+      if (!fs.existsSync(modelsDirectory)) return;
+
+      const commonBrandDefaults = readOptionalJSON(path.join(brandDirectory, 'defaults.json'));
+      const dealerBrandDefaults = readOptionalJSON(path.join(siteDataDirectory, 'data', 'brands', brand, 'defaults.json'));
+
+      fs.readdirSync(modelsDirectory, { withFileTypes: true })
+        .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+        .forEach((modelEntry) => {
+          const modelId = path.basename(modelEntry.name, '.json').toLowerCase();
+          const model = deepMerge(
+            commonModelDefaults,
+            commonBrandDefaults,
+            readOptionalJSON(path.join(modelsDirectory, modelEntry.name)),
+            dealerDefaults,
+            dealerBrandDefaults,
+            readOptionalJSON(path.join(siteDataDirectory, 'data', 'brands', brand, 'models', `${modelId}.json`)),
+          );
+          model.id = modelId;
+          models.push(model);
+        });
+    });
+
+  return models;
+};
+
 // Замена похожих кириллических символов на латинские (для сопоставления моделей вроде "Т1" vs "T1")
 const CYRILLIC_TO_LATIN = { 'а':'a','в':'b','с':'c','е':'e','к':'k','м':'m','н':'h','о':'o','р':'p','т':'t','у':'y','х':'x' };
 const cyrillicToLatin = (str) => str.replace(/[авсекмнорту]/g, ch => CYRILLIC_TO_LATIN[ch] || ch);
@@ -63,6 +130,18 @@ const normalizeId = (id) => {
   if (!id) return '';
   return id.toLowerCase().replace(/[-_]/g, '');
 };
+
+const getModelBrandId = (model) =>
+  model?.brand?.id || (model?.mark_id ? String(model.mark_id).toLowerCase() : '');
+
+const getModelDisplayName = (model) =>
+  model?.displayName || model?.caption || model?.name || '';
+
+const getModelFeedModelNames = (model) => [
+  ...(Array.isArray(model?.feed?.folderIds) ? model.feed.folderIds : []),
+  ...(Array.isArray(model?.feed?.modelNames) ? model.feed.modelNames : []),
+  ...(Array.isArray(model?.feed_names) ? model.feed_names : []),
+].filter(Boolean);
 
 // Конструирование id из mark_id и model id:
 // - пробелы в id заменяем на дефис ("uni-k idd" → "uni-k-idd")
@@ -123,13 +202,12 @@ const loadDealerData = (filePath) => {
 const getKnownNames = (model) => {
   const names = [];
   if (model.name) names.push(model.name);
-  if (Array.isArray(model.feed_names)) {
-    model.feed_names.forEach(fn => {
-      if (fn && !names.some(n => normalize(n) === normalize(fn))) {
-        names.push(fn);
-      }
-    });
-  }
+  if (getModelDisplayName(model)) names.push(getModelDisplayName(model));
+  getModelFeedModelNames(model).forEach(fn => {
+    if (fn && !names.some(n => normalize(n) === normalize(fn))) {
+      names.push(fn);
+    }
+  });
   return names;
 };
 
@@ -190,29 +268,27 @@ const aggregateMax = (matches, key) => {
 
 // --- Основная логика ---
 
-if (!fs.existsSync(allModelsFilePath)) {
+const allModels = loadModelCatalog();
+if (!allModels.length) {
   console.error(Message.ERROR_NO_MODELS);
   process.exit(1);
 }
 
-const allModels = readJSON(allModelsFilePath) || [];
 const federalData = readJSON(federalFilePath) || [];
 const dealerData = loadDealerData(dealerFilePath);
 const dealerCarsData = loadDealerData(dealerCarsFilePath);
 
 const results = [];
-const unmatchedFederal = new Set(federalData.map(f => f.id));
 
 allModels.forEach(model => {
-  if (!model.mark_id || !model.id) return;
+  const brand = getModelBrandId(model);
+  if (!brand || !model.id) return;
 
-  const brand = model.mark_id.toLowerCase();
-  const ourId = constructId(model.mark_id, model.id);
+  const ourId = constructId(brand, model.id);
   const knownNames = getKnownNames(model);
 
   // Поиск федеральных данных
   const federal = findFederalMatch(federalData, ourId, brand, knownNames);
-  if (federal) unmatchedFederal.delete(federal.id);
 
   // Поиск дилерских данных
   const dealerMatches = findDealerMatches(dealerData, ourId, brand, knownNames);
@@ -232,7 +308,7 @@ allModels.forEach(model => {
   results.push({
     id: ourId,
     brand,
-    model: model.name,
+    model: getModelDisplayName(model),
     price: prices.length ? Math.min(...prices) : 0,
     benefit: Math.max(0, ...benefits),
     priceOfficial,
@@ -244,20 +320,6 @@ allModels.forEach(model => {
     benefitDealerAVN,
   });
 });
-
-// Предупреждения о несопоставленных федеральных моделях
-if (unmatchedFederal.size > 0) {
-  const header = `Не найдены в all-models.json (${unmatchedFederal.size}):`;
-  const lines = [...unmatchedFederal].map(id => `  - ${id}`);
-  const message = [header, ...lines].join('\n');
-
-  console.warn(`\n${message}`);
-
-  // Дописываем в output.txt для уведомления в workflow
-  const outputTxtPath = path.join(process.cwd(), 'output.txt');
-  const outputContent = `<b>mergeCarPrices:</b> ${header}\n${lines.map(l => `<code>${l.trim()}</code>`).join('\n')}\n\n`;
-  fs.appendFileSync(outputTxtPath, outputContent, 'utf-8');
-}
 
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2), 'utf-8');
 console.log(Message.SUCCESS);

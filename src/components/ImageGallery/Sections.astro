@@ -4,12 +4,16 @@ import SimpleGrid from './SimpleGrid.astro';
 
 type SectionImage = { url: string; title?: string; description?: string };
 
-interface Props {
-  sections: {
-    id: string;
-    title: string;
+interface Section {
+  id: string;
+  content?: {
+    title?: string;
     images?: SectionImage[];
-  }[];
+  };
+}
+
+interface Props {
+  sections: Section[];
   variant?: 'grid' | 'simple';
   ctaHref?: string;
   ctaText?: string;
@@ -17,23 +21,23 @@ interface Props {
 
 const { sections, variant = 'grid', ctaHref, ctaText = 'Узнать подробности' } = Astro.props;
 
-const filteredSections = sections.filter((section) => section.images?.length);
+const filteredSections = sections.filter((section) => section.content?.images?.length);
 const ctaAfterIndex = Math.floor(filteredSections.length / 2) - 1;
 ---
 
 {filteredSections.map((section, index) => (
   <>
     <section class="">
-      <h2 class="text-2xl sm:text-4xl font-bold mb-6">{section.title}</h2>
+      <h2 class="text-2xl sm:text-4xl font-bold mb-6">{section.content?.title}</h2>
       {variant === 'simple' ? (
         <SimpleGrid
-          images={section.images as SectionImage[]}
+          images={section.content?.images as SectionImage[]}
           gallery={`gallery-${section.id}`}
-          title={section.title}
+          title={section.content?.title}
         />
       ) : (
         <Grid
-          images={section.images as SectionImage[]}
+          images={section.content?.images as SectionImage[]}
           gallery={`gallery-${section.id}`}
         />
       )}

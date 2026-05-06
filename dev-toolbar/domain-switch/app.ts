@@ -6,6 +6,16 @@ type InitPayload = {
   presets: string[];
   currentDomain: string;
   hasJSONRepo: boolean;
+  domainFiles?: string[];
+  dataSummary?: {
+    hasModelMatrix: boolean;
+    modelMatrixBrands: string[];
+    dealerBrands: string[];
+    commonBrandsCount: number;
+    builtModelsCount: number;
+    builtTestDriveCount: number;
+    builtServiceCount: number;
+  };
   /**
    * Итог последнего запуска на сервере.
    *
@@ -88,6 +98,7 @@ export default defineToolbarApp({
             overflow-y: scroll;
             max-height: 170px;
           }
+          .summary{font-size:12px;opacity:.78;line-height:1.4}
           code{font-size:12px}
         </style>
         <div class="col">
@@ -102,6 +113,8 @@ export default defineToolbarApp({
 
           <div class="row" id="actions"></div>
 
+          <div class="summary" id="summary"></div>
+
           <div class="status" id="status"></div>
 
           <div style="font-size:12px;opacity:.75;">
@@ -115,6 +128,7 @@ export default defineToolbarApp({
       const domainRow = win.querySelector("#domainRow") as HTMLDivElement;
       const optionsRow = win.querySelector("#options") as HTMLDivElement;
       const actionsRow = win.querySelector("#actions") as HTMLDivElement;
+      const summaryEl = win.querySelector("#summary") as HTMLDivElement;
 
       /**
        * Лог храним в localStorage, а не в памяти страницы.
@@ -245,6 +259,8 @@ export default defineToolbarApp({
       // Основные действия
       actionsRow.appendChild(makeDownloadButton("Скачать всё", "__all__", "purple"));
       actionsRow.appendChild(makeDownloadButton("settings.json", "settings.json", "blue"));
+      actionsRow.appendChild(makeDownloadButton("routes.json", "routes.json"));
+      actionsRow.appendChild(makeDownloadButton("robots.json", "robots.json"));
       actionsRow.appendChild(makeDownloadButton("scripts.json", "scripts.json"));
       actionsRow.appendChild(makeDownloadButton("env.json", "env.json"));
       actionsRow.appendChild(makeDownloadButton("banners.json", "banners.json"));
@@ -254,11 +270,14 @@ export default defineToolbarApp({
       actionsRow.appendChild(makeDownloadButton("collections.json", "collections.json"));
       actionsRow.appendChild(makeDownloadButton("faq.json", "faq.json"));
       actionsRow.appendChild(makeDownloadButton("federal-disclaimer.json", "federal-disclaimer.json"));
+      actionsRow.appendChild(makeDownloadButton("model-matrix.json", "model-matrix.json", "blue"));
+      actionsRow.appendChild(makeDownloadButton("data/defaults.json", "data/defaults.json"));
       actionsRow.appendChild(makeDownloadButton("reviews.json", "reviews.json"));
       actionsRow.appendChild(makeDownloadButton("seo.json", "seo.json"));
       actionsRow.appendChild(makeDownloadButton("services.json", "services.json"));
       actionsRow.appendChild(makeDownloadButton("special-services.json", "special-services.json"));
-      actionsRow.appendChild(makeDownloadButton("Скачать общий Models", "__common_models__", "blue", false));
+      actionsRow.appendChild(makeDownloadButton("dealer-service-price.json", "dealer-service-price.json"));
+      actionsRow.appendChild(makeDownloadButton("all-prices.json", "all-prices.json"));
       actionsRow.appendChild(makeDownloadButton("Скачать общий Cars", "__common_cars__", "blue", false));
 
       const setStatus = (msg: string, ok?: boolean) => {
@@ -325,6 +344,19 @@ export default defineToolbarApp({
 
         // Если есть выбранный домен в localStorage, используем его; иначе fallback на currentDomain.
         refreshOptions(savedSelected || data.currentDomain || undefined);
+
+        if (data.dataSummary) {
+          const matrixBrands = data.dataSummary.modelMatrixBrands.length
+            ? data.dataSummary.modelMatrixBrands.join(", ")
+            : "нет";
+          const dealerBrands = data.dataSummary.dealerBrands.length
+            ? data.dataSummary.dealerBrands.join(", ")
+            : "нет";
+          summaryEl.textContent =
+            `Local data: models ${data.dataSummary.builtModelsCount}, testDrive ${data.dataSummary.builtTestDriveCount}, service ${data.dataSummary.builtServiceCount}. ` +
+            `model-matrix: ${data.dataSummary.hasModelMatrix ? matrixBrands : "нет"}. ` +
+            `dealer overrides: ${dealerBrands}. common brands: ${data.dataSummary.commonBrandsCount}.`;
+        }
 
         /**
          * Показываем итог последнего запуска с сервера, если:

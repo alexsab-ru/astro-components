@@ -13,7 +13,13 @@ import {Icon} from 'astro-icon/components';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
-import { getModelBadgeData } from '@/js/utils/modelBadge.utils';
+import { getModelBadgeData } from '@/js/utils/modelBadge';
+import {
+	getModelBrandDisplayName,
+	getModelColorImage,
+	getModelHomeImg,
+	getModelTitle,
+} from '@/js/utils/modelFields';
 const photoSlides = !model.photos
 ? []
 : [].concat(
@@ -25,13 +31,12 @@ const photoSlides = !model.photos
 );
 import Button from '@/components/Button/Button.astro';
 import ColorLink from '@/components/ColorLink/ColorLink.astro'
-const carImagePath = model.colors[0].carImage || `/img/${model.id}/${model.colors[0].id}.png`;
 import './model.css';
 const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
-// В шаблонах используем caption как приоритетное отображаемое имя модели.
-// Это позволяет хранить технический name отдельно и не ломает старые данные.
-const modelTitle = model?.caption || model?.name;
+const modelTitle = getModelTitle(model);
+const brandDisplayName = getModelBrandDisplayName(model);
 const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_page', modelTitle || '');
+const carImagePath = getModelColorImage(model.colors?.[0]) || `/img/${model.id}/${model.colors?.[0]?.id}.png`;
 ---
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
@@ -40,14 +45,14 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_pag
 	)}
 	<div
 		class="model__info"
-		style={`background-image: url(${model?.homeImg})`}>
+		style={`background-image: url(${getModelHomeImg(model)})`}>
 		<div class="container h-full pt-8 sm:pt-[2.5%] xl:pb-10">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} color="text-(--color-white)!" />}
 			<div class="flex justify-between items-start flex-col lg:flex-row">
 				<div>
 					<h2
 						class="text-2xl sm:text-5xl text-title-brand-model-page tracking-wider uppercase before:hidden mx-0">
-						{model.mark_id}
+						{brandDisplayName}
 						<b
 							class="font-heading-weight tracking-tighter xs:text-3xl text-5xl sm:text-8xl uppercase text-title-model-page"
 							>{modelTitle}</b
@@ -72,8 +77,8 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_pag
 								classes="popup-link btn px-20! mt-5 flex-1 whitespace-nowrap"
 								url="#common-modal"
 								title={labelBtn}
-								dataTitle={`${labelBtn} ${model.mark_id} ${modelTitle}`}
-								dataFormName={`${labelBtn}. ${model.mark_id} ${modelTitle}`}
+								dataTitle={`${labelBtn} ${brandDisplayName} ${modelTitle}`}
+								dataFormName={`${labelBtn}. ${brandDisplayName} ${modelTitle}`}
 							/>
 						)
 					}
@@ -82,18 +87,18 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_pag
 
 			<div class="flex flex-col gap-4 mt-10 lg:mt-14">
 				{
-					model?.benefits && model.benefits.map(benefit => (
+					Array.isArray(model?.benefits) && model.benefits.map(benefit => (
 					<a
 						class={`w-fit inline-flex items-center flex-nowrap gap-1.5 last:pb-5 text-white font-medium text-base sm:text-xl group ${benefit.view === 'popup-link' ? 'popup-link' : ''}`}
 						href={benefit?.url ? benefit.url : '#'}
-						data-title={benefit?.data_title}
-						data-form_name={benefit?.data_form_name}
+						data-title={benefit?.dataTitle}
+						data-form_name={benefit?.dataFormName}
 					>
 						<span
 							class="w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center">
 							{
-								benefit.icon_name && (
-									<Icon name={benefit.icon_name} class="text-2xl" />
+								benefit.iconName && (
+									<Icon name={benefit.iconName} class="text-2xl" />
 								)
 							}
 						</span>
@@ -121,7 +126,7 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_pag
 					class="w-full color-img-preview"
 					width="1143"
 					height="493"
-					alt={`${model.mark_id} ${modelTitle}`}
+					alt={`${brandDisplayName} ${modelTitle}`}
 					fetchpriority="high"
 				/>
 			</div>
@@ -129,7 +134,7 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_pag
 				{
 					model.colors &&
 						model.colors.map((c: any, idx: number) => (
-							<ColorLink title={c.name} id={c.id} idx={idx} carImage={c.carImage} style={c.style} />
+							<ColorLink title={c.name} id={c.id} idx={idx} carImage={getModelColorImage(c)} style={c.style} />
 						))
 				}
 				<p class="w-full text-center text-xs color-name text-black">
@@ -186,29 +191,29 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_pag
 					classes="popup-link btn black btn-o px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Купить"
-					dataTitle={`Купить ${model.mark_id}`}
-					dataFormName={`Купить. ${model.mark_id} ${modelTitle}`}
+					dataTitle={`Купить ${brandDisplayName}`}
+					dataFormName={`Купить. ${brandDisplayName} ${modelTitle}`}
 				/>
 				<Button
 					classes="popup-link btn px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Рассчитать кредит"
 					dataTitle="Рассчитать кредит"
-					dataFormName={`Рассчитать кредит. ${model.mark_id} ${modelTitle}`}
+					dataFormName={`Рассчитать кредит. ${brandDisplayName} ${modelTitle}`}
 				/>
 				<Button
 					classes="popup-link btn gray px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Записаться на тест-драйв"
 					dataTitle="Записаться на тест-драйв"
-					dataFormName={`Записаться на тест-драйв. ${model.mark_id} ${modelTitle}`}
+					dataFormName={`Записаться на тест-драйв. ${brandDisplayName} ${modelTitle}`}
 				/>
 				<Button
 					classes="popup-link btn black px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
 					title="Узнать цену по акции"
 					dataTitle="Узнать цену по акции"
-					dataFormName={`Узнать цену по акции. ${model.mark_id} ${modelTitle}`}
+					dataFormName={`Узнать цену по акции. ${brandDisplayName} ${modelTitle}`}
 				/>
 				{ (model?.complectations !== undefined && model?.complectations.length) ? (
 					<Button
@@ -224,7 +229,7 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_pag
 						url="#common-modal"
 						title="Подобрать комплектацию"
 						dataTitle="Подобрать комплектацию"
-						dataFormName={`Подобрать комплектацию. ${model.mark_id} ${modelTitle}`}
+						dataFormName={`Подобрать комплектацию. ${brandDisplayName} ${modelTitle}`}
 					/>
 				)}
 			</div>

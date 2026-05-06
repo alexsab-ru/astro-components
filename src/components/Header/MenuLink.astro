@@ -6,10 +6,10 @@ interface Props {
 const { link = {}, sublink = false, ...rest } = Astro.props;
 const path = Astro.url.pathname;
 
-import { getModelBadgeData } from '@/js/utils/modelBadge.utils';
+import { getModelBadgeData } from '@/js/utils/modelBadge';
 const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(link, 'menu', link.name || '');
 
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { is_header_transparent } = settings;
 
 const transparentClasses = is_header_transparent ? 'text-header-transparent-text hover:text-header-transparent-text/80 hover:bg-header-transparent-menu-link-bg-hover' : 'text-header-text hover:bg-header-menu-link-bg-hover hover:text-button-text';

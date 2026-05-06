@@ -1,7 +1,7 @@
 import Dropzone from "dropzone";
 import "dropzone/dist/basic.css";
 import "dropzone/dist/dropzone.css";
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 
 const fileUploads = document.querySelectorAll(".file-upload");
 const { connectforms_link } = settings;

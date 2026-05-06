@@ -15,7 +15,7 @@ interface Props {
 }
 let {title, h1, description, image, keywords, brand = null, breadcrumb, footerVersion = '2', showHeaderMenu = true, showFooterLinks = true, logoNoLink = false} = Astro.props;
 
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { site_name, site_description, is_header_transparent } = settings;
 
 import Head from '@/components/Head.astro';
@@ -26,7 +26,7 @@ import Header from '@/components/Header/Header.astro';
 import Modals from '@/components/Modals.astro';
 import UpBtn from '@/components/UpBtn.astro';
 import Cookie from '@/components/Cookie/Cookie.astro';
-import seo from '@/data/seo.json';
+import seo from '@/data/site/seo.json';
 import StripEmptyQuery from '../components/StripEmptyQuery.astro';
 import Tooltip from '@/components/Tooltip/Tooltip.astro';
 import SchemaOrg from '@/components/SchemaOrg/Index.astro';

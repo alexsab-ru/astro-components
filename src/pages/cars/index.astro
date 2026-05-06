@@ -5,7 +5,7 @@ if (isRouteDisabled('/cars/')) {
 }
 import PageLayout from "@/layouts/PageLayout.astro";
 import { getCollection } from "astro:content";
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { site_name, brand, legal_city_where } = settings;
 import CarsList from '@/components/Cars/List.astro';

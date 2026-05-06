@@ -83,6 +83,8 @@ export OUTPUT_FORMAT="simple"
 export KEY_COLUMN=""
 export KEY_MAPPING="{}"
 export QUERY_MODE="${QUERY_MODE:-export}"
+export CSV_URL
+export QUERY_STRING
 
 if ! node .github/scripts/GSheetFetcher.js; then
     echo "Ошибка: не удалось скачать CSV через GSheetFetcher.js (режим: $MODE)" >&2

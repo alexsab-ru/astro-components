@@ -18,6 +18,7 @@ on:
       - '.github/scripts/sh/getDealerPrices.sh'
       - '.github/scripts/sh/getDealerServicePrices.sh'
       - '.github/scripts/sh/getDealerStorage.sh'
+      - '.github/scripts/sh/process_xml.sh'
       - '.github/scripts/sh/getSortStorage.sh'
       - '.github/scripts/CarFeedProcessorCSV.py'
       - '.github/scripts/config_air_storage-friend.json'
@@ -26,6 +27,8 @@ on:
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
       - '.github/scripts/mergeCarPrices.js'
+      - '.github/scripts/image_mirror.py'
+      - '.github/scripts/sh/uploadImageMirror.sh'
       - '.github/scripts/update_cars_air_storage.py'
       - '.github/scripts/update_cars.py'
       - '.github/scripts/utils.py'
@@ -178,9 +181,9 @@ jobs:
 
       - name: Load env.json into environment
         run: |
-          if [ -f src/data/env.json ]; then
+          if [ -f src/data/site/env.json ]; then
             node -e '
-              const data = JSON.parse(require("fs").readFileSync("src/data/env.json","utf8"));
+              const data = JSON.parse(require("fs").readFileSync("src/data/site/env.json","utf8"));
               for (const [k,v] of Object.entries(data)) {
                 if (typeof v === "object") console.log(k+"="+JSON.stringify(v));
                 else console.log(k+"="+v);
@@ -188,7 +191,7 @@ jobs:
             ' >> $GITHUB_ENV
             echo "✅ env.json loaded into environment"
           else
-            echo "⚠ src/data/env.json not found — skipping"
+            echo "⚠ src/data/site/env.json not found — skipping"
           fi
 
       - name: Get dealer prices

@@ -9,6 +9,8 @@ import { fileURLToPath } from 'url';
 dotenv.config();
 
 const NOTIFICATIONS_DIR = './tmp/notifications';
+const getModelBrandId = (model) =>
+    model?.brand?.id || (model?.mark_id ? String(model.mark_id).toLowerCase() : '');
 
 const ReportFile = {
     DATES: `${NOTIFICATIONS_DIR}/dates.txt`,
@@ -20,7 +22,7 @@ const ReportFile = {
 class PlaceholderProcessor {
     constructor() {
         // Пути к директориям
-        this.dataDirectory = path.join(process.cwd(), 'src', 'data');
+        this.dataDirectory = path.join(process.cwd(), 'src', 'data', 'site');
         this.contentDirectory = path.join(process.cwd(), 'src', 'content');
         this.pagesDirectory = path.join(process.cwd(), 'src', 'pages');
         
@@ -303,7 +305,8 @@ class PlaceholderProcessor {
             if (value > 0 && model) {
                 // Форматируем значение с дисклеймером
                 let formatted = currencyFormat(value);
-                const carId = `${model.mark_id.toLowerCase()}-${model.id}`;
+                const brandId = getModelBrandId(model);
+                const carId = brandId ? `${brandId}-${model.id}` : model.id;
                 
                 if (this.disclaimerData[carId]?.[disclaimerKey] && this.disclaimerData[carId][disclaimerKey] !== '') {
                     formatted += quoteEscaper(

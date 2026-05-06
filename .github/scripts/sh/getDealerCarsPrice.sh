@@ -20,7 +20,7 @@ fi
 # Устанавливаем остальные переменные
 export QUERY_STRING="SELECT A, B, C, D"
 export KEY_COLUMN="VIN"
-export OUTPUT_PATHS="./src/data/dealer-cars_price.json"
+export OUTPUT_PATHS="./src/data/site/dealer-cars_price.json"
 export OUTPUT_FORMAT="detailed"
 
 # Запускаем скрипт

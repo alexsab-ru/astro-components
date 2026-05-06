@@ -1,11 +1,12 @@
 ---
 import type { TStep } from './types';
 import QuizSlide from './QuizSlide.astro';
+import { getModelBrandDisplayName, getModelTitle } from '@/js/utils/modelFields';
 import './quiz.css';
 
 // import.meta.glob — Vite-нативный optional import (не падает если файла нет)
-const quizFiles = import.meta.glob('/src/data/quiz.json', { eager: true });
-const modelsFiles = import.meta.glob('/src/data/models.json', { eager: true });
+const quizFiles = import.meta.glob('/src/data/site/quiz.json', { eager: true });
+const modelsFiles = import.meta.glob('/src/data/site/models.json', { eager: true });
 
 let quizData = (Object.values(quizFiles)[0] as any)?.default || null;
 
@@ -14,7 +15,7 @@ if (quizData) {
     if (modelsData) {
         let modelStep = quizData.find(el => el.id === 'model');
         if (modelStep && (!Array.isArray(modelStep.answerOptions) || !modelStep.answerOptions.length)) {
-            const models = modelsData.models.map(el => `${el.mark_id} ${el.caption || el.name}`).filter(Boolean);
+            const models = modelsData.models.map(el => `${getModelBrandDisplayName(el)} ${getModelTitle(el)}`).filter(Boolean);
             modelStep.answerOptions = models;
         }
     }

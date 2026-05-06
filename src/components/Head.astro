@@ -6,7 +6,7 @@ interface Props {
 	image?: string;
 	keywords?: string;
 }
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { favicon, improve_offer_background } = settings;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);

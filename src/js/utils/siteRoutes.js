@@ -1,5 +1,5 @@
 /**
- * Настройки из src/data/routes.json (приходит из astro-json).
+ * Настройки из src/data/site/routes.json (приходит из astro-json).
  *
  * Зачем этот модуль, если есть хук strip-disabled в astro.config?
  * - При `astro build` фронтматтер каждой страницы тоже выполняется: здесь мы режем getStaticPaths
@@ -15,7 +15,7 @@
  * Кастомная 404: в .astro вместо `new Response` используйте `return Astro.rewrite(SITE_NOT_FOUND_PATH)` —
  * тогда отрисуется src/pages/404.astro, URL в адресной строке не сменится.
  */
-import routes from '../../data/routes.json';
+import routes from '../../data/site/routes.json';
 import { pathMatchesRouteRules } from './pathMatchesRouteRules.js';
 
 const disabled = Array.isArray(routes.disabled_routes) ? routes.disabled_routes : [];

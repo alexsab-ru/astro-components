@@ -32,7 +32,7 @@ CYRILLIC_TO_LATIN = {
 
 def _load_settings_common():
     """Загружает settings-common.json и возвращает словари переводов."""
-    settings_path = Path('./src/data/settings-common.json')
+    settings_path = Path('./src/data/common/settings-common.json')
     try:
         with open(settings_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -46,11 +46,11 @@ def _load_settings_common():
 
 def _build_complectation_translation_map():
     """Строит словарь {русское_название_lower: английское_название}
-    из complectations в all-models.json (уже загружен в config.py)."""
+    из layered-каталога моделей (уже загружен в config.py)."""
     trans = {}
-    for model in all_models_data:
+    for model in model_catalog_data:
         for comp in model.get('complectations', []):
-            caption = comp.get('caption', '')
+            caption = comp.get('displayName') or comp.get('caption', '')
             name = comp.get('name', '')
             if not caption or not name:
                 continue
@@ -86,11 +86,11 @@ def _lookup_complectation_name(value, mark_id=None, folder_id=None):
 
     # 1. Точный поиск в комплектациях конкретной модели
     if mark_id and folder_id:
-        brand_bucket = all_models_index_by_brand.get(mark_id.lower(), {})
+        brand_bucket = model_index_by_brand.get(mark_id.lower(), {})
         model_obj = brand_bucket.get(folder_id.lower())
         if model_obj:
             for comp in model_obj.get('complectations', []):
-                caption = comp.get('caption', '')
+                caption = comp.get('displayName') or comp.get('caption', '')
                 name = comp.get('name', '')
                 if not caption or not name:
                     continue
@@ -192,7 +192,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
     1. Замена «Nх» на «Nx» (например, «4х4» → «4x4», «2х4» → «2x4»)
     1.1. Замена «л.с.» / «л.с)» → «h.p.» / «h.p.)» (потом удалятся → hp)
     2. Бренд/модель-специфичные переопределения из settings-common.json
-    3. Комплектации из all-models.json
+    3. Комплектации из layered-каталога моделей
     4. Аббревиатуры из url_translations (settings-common.json)
     5. Логирование непереведённых слов
     6. Транслитерация оставшейся кириллицы
@@ -217,7 +217,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
                 text = text[:idx] + eng + text[idx + len(rus):]
                 text_lower = text.lower()
 
-    # 3. Комплектации из all-models.json (базовый словарь, для оставшейся кириллицы)
+    # 3. Комплектации из layered-каталога моделей (базовый словарь, для оставшейся кириллицы)
     if _has_cyrillic(text):
         text_lower = text.lower()
         for rus, eng in _complectation_sorted:
@@ -543,7 +543,7 @@ def _get_color_fallback_image(brand, model, color, vin, skip_check_thumb):
     return DEFAULT_CAR_IMAGE
 
 
-def _merge_and_validate_car_images(existing_images, new_images, vin):
+def _merge_car_image_urls(existing_images, new_images):
     merged_images = []
 
     for img in list(existing_images or []) + list(new_images or []):
@@ -554,11 +554,95 @@ def _merge_and_validate_car_images(existing_images, new_images, vin):
         if img and img not in merged_images:
             merged_images.append(img)
 
-    return _filter_valid_image_urls(merged_images, vin)
+    return merged_images
+
+
+def _merge_and_validate_car_images(existing_images, new_images, vin):
+    return _filter_valid_image_urls(_merge_car_image_urls(existing_images, new_images), vin)
+
+
+def _is_mirror_cdn_image_url(image_url, config):
+    if not image_url:
+        return False
+
+    cdn_base_url = config.get('mirror_cdn_base_url') or 'https://cdn.alexsab.ru'
+    remote_prefix = (config.get('mirror_remote_prefix') or 'cars').strip('/')
+    parsed_url = urllib.parse.urlparse(str(image_url))
+    parsed_base = urllib.parse.urlparse(cdn_base_url)
+
+    if parsed_url.netloc.lower() != parsed_base.netloc.lower():
+        return False
+
+    base_path = parsed_base.path.rstrip('/')
+    mirror_path_prefix = f"{base_path}/{remote_prefix}/" if base_path else f"/{remote_prefix}/"
+    return parsed_url.path.startswith(mirror_path_prefix)
+
+
+def _filter_mirror_cdn_image_urls(image_urls, config):
+    return [
+        image_url
+        for image_url in list(image_urls or [])
+        if not _is_mirror_cdn_image_url(image_url, config)
+    ]
 
 
 def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumbs, config, vin, brand=None, model=None, color=None):
-    data['images'] = _merge_and_validate_car_images(data.get('images', []), incoming_images, vin)
+    if config.get('skip_thumbs'):
+        data['images'] = []
+        data['imageSets'] = []
+        data['image'] = _get_color_fallback_image(
+            data.get('mark_id', brand or ''),
+            data.get('folder_id', model or ''),
+            data.get('color', color or ''),
+            vin,
+            config['skip_check_thumb'],
+        )
+        data['thumbs'] = []
+        return
+
+    if config.get('mirror_images'):
+        merged_images = _merge_car_image_urls(
+            _filter_mirror_cdn_image_urls(data.get('images', []), config),
+            _filter_mirror_cdn_image_urls(incoming_images, config),
+        )
+    else:
+        merged_images = _merge_and_validate_car_images(data.get('images', []), incoming_images, vin)
+
+    if config.get('mirror_images') and merged_images:
+        from image_mirror import ImageMirror, MirrorConfig
+
+        mirror_config = MirrorConfig(
+            site=config['domain'],
+            category=config.get('category_type') or ('used' if config.get('path_car_page') == '/used_cars/' else 'new'),
+            cdn_base_url=config.get('mirror_cdn_base_url') or 'https://cdn.alexsab.ru',
+            remote_prefix=config.get('mirror_remote_prefix') or 'cars',
+            local_root=Path(config.get('mirror_local_root') or 'tmp/image_mirror'),
+            probe_count=int(config.get('mirror_probe_count') or 3),
+            avito_autoload_max_new_per_car=int(
+                config.get('mirror_avito_autoload_max_new_per_car')
+                if config.get('mirror_avito_autoload_max_new_per_car') is not None
+                else 1
+            ),
+            dry_run=config.get('mirror_dry_run', False),
+        )
+        mirror_result = ImageMirror(mirror_config).mirror_car_images(vin, merged_images, friendly_url)
+        data['images'] = mirror_result.images
+        data['imageSets'] = mirror_result.image_sets
+        data['image'] = (
+            mirror_result.image_sets[0].get('medium')
+            if mirror_result.image_sets
+            else mirror_result.image
+        ) or _get_color_fallback_image(
+            data.get('mark_id', brand or ''),
+            data.get('folder_id', model or ''),
+            data.get('color', color or ''),
+            vin,
+            config['skip_check_thumb'],
+        )
+        data['thumbs'] = mirror_result.thumbs
+        return
+
+    data['images'] = merged_images
     data['image'] = data['images'][0] if data['images'] else _get_color_fallback_image(
         data.get('mark_id', brand or ''),
         data.get('folder_id', model or ''),
@@ -579,6 +663,14 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
         )
     else:
         data['thumbs'] = []
+
+
+def _sync_processed_images_to_car_data(car_data, data):
+    for key in ('images',):
+        if key in data:
+            car_data[key] = data[key]
+    if data.get('images'):
+        car_data['image'] = data['images'][0]
 
 
 def createThumbs(image_urls, friendly_url, current_thumbs, thumbs_dir, temp_thumbs_dir, skip_thumbs=False, count_thumbs=5):
@@ -772,9 +864,9 @@ def load_avito_color_mapping() -> Dict[str, str]:
 
     Приоритет источников:
     1) AVITO_COLOR_MAPPING_PATH (env)
-    2) src/data/all-avito-colors.json
-    3) src/data/avito-colors.json
-    4) ../astro-json/src/avito-colors.json (локальная разработка в mono-workspace)
+    2) src/data/common/avito-colors.json (от корня репозитория)
+    3) ../astro-json/src/avito-colors.json (локальная разработка в mono-workspace)
+    4) src/data/common/avito-colors.json (относительно текущей директории)
     5) Встроенный fallback-словарь
     """
     repo_root = Path(__file__).resolve().parents[2]
@@ -785,11 +877,9 @@ def load_avito_color_mapping() -> Dict[str, str]:
         candidates.append(Path(env_path))
 
     candidates.extend([
-        repo_root / 'src/data/all-avito-colors.json',
-        repo_root / 'src/data/avito-colors.json',
+        repo_root / 'src/data/common/avito-colors.json',
         repo_root.parent / 'astro-json/src/avito-colors.json',
-        Path('./src/data/all-avito-colors.json'),
-        Path('./src/data/avito-colors.json'),
+        Path('./src/data/common/avito-colors.json'),
     ])
 
     seen_paths = set()
@@ -901,9 +991,9 @@ def load_localized_value_translations() -> Dict[str, str]:
 
     Приоритет источников:
     1) LOCALIZED_VALUE_TRANSLATIONS_PATH / TRANSLATIONS_MAPPING_PATH (env)
-    2) src/data/all-translations.json
-    3) src/data/translations.json
-    4) ../astro-json/src/translations.json (локальная разработка в mono-workspace)
+    2) src/data/common/translations.json (от корня репозитория)
+    3) ../astro-json/src/translations.json (локальная разработка в mono-workspace)
+    4) src/data/common/translations.json (относительно текущей директории)
     5) Встроенный fallback-словарь
     """
     repo_root = Path(__file__).resolve().parents[2]
@@ -914,11 +1004,9 @@ def load_localized_value_translations() -> Dict[str, str]:
         candidates.append(Path(env_path))
 
     candidates.extend([
-        repo_root / 'src/data/all-translations.json',
-        repo_root / 'src/data/translations.json',
+        repo_root / 'src/data/common/translations.json',
         repo_root.parent / 'astro-json/src/translations.json',
-        Path('./src/data/all-translations.json'),
-        Path('./src/data/translations.json'),
+        Path('./src/data/common/translations.json'),
     ])
 
     seen_paths = set()
@@ -965,7 +1053,7 @@ def load_localized_value_translations() -> Dict[str, str]:
     return _LOCALIZED_VALUE_TRANSLATIONS_FALLBACK
 
 
-def load_price_data(file_path: str = "./src/data/dealer-cars_price.json") -> Dict[str, Dict[str, int]]:
+def load_price_data(file_path: str = "./src/data/site/dealer-cars_price.json") -> Dict[str, Dict[str, int]]:
     """
     Загружает данные о ценах из JSON файла.
     
@@ -1210,6 +1298,7 @@ def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_d
 
     # Обработка изображений (images уже получены и обработаны выше)
     _apply_car_images_to_data(data, images, friendly_url, current_thumbs, config, vin, brand=brand, model=model, color=color)
+    _sync_processed_images_to_car_data(car_data, data)
 
     # Приводим определённые числовые поля к int, если они есть
     for key in ["max_discount", "price", "priceWithDiscount", "run", "sale_price", "year", "credit_discount", "optional_discount", "insurance_discount", "tradein_discount"]:
@@ -1287,6 +1376,7 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
             model=data.get('folder_id', car_data.get('folder_id', '')),
             color=data.get('color', str(car_data.get('color', '')).capitalize()),
         )
+        _sync_processed_images_to_car_data(car_data, data)
 
         updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
         updated_content = yaml_delimiter.join([parts[0], updated_yaml_block, yaml_delimiter.join(parts[2:])])
@@ -1380,6 +1470,7 @@ def update_yaml(car_data, filename, friendly_url, current_thumbs, sort_storage_d
         model=data.get('folder_id', car_data.get('folder_id', '')),
         color=data.get('color', str(car_data.get('color', '')).capitalize()),
     )
+    _sync_processed_images_to_car_data(car_data, data)
     updated_yaml_block = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
 
     # Reassemble the content with the updated YAML block
@@ -1485,8 +1576,8 @@ def _load_env_json() -> Dict[str, Any]:
     """
     repo_root = Path(__file__).resolve().parents[2]
     candidates = [
-        repo_root / 'src/data/env.json',
-        Path('./src/data/env.json'),
+        repo_root / 'src/data/site/env.json',
+        Path('./src/data/site/env.json'),
     ]
     for candidate in candidates:
         if candidate.exists():
@@ -1508,7 +1599,7 @@ def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
     CARS_AUTORU_REMOVE_MARK_IDS = '["mark1", "mark2"]'
     CARS_AVITO_ELEMENTS_TO_LOCALIZE = '["elem1", "elem2"]'
 
-    Приоритет: os.environ > src/data/env.json > default_config
+    Приоритет: os.environ > src/data/site/env.json > default_config
     """
     prefix = f"CARS_{source_type.upper()}_"
 

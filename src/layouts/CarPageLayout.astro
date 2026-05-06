@@ -10,8 +10,8 @@ interface Props {
 const {car = {}, breadcrumb, backLink = false, keywords, totalShow = true} = Astro.props;
 const data = car?.data || {};
 
-import { getCarThumbnail, calculateCarPrice, findModelByCarData } from '@/js/utils/car.utils';
-import { getModelBadgeData } from '@/js/utils/modelBadge.utils';
+import { getCarThumbnail, calculateCarPrice, findModelByCarData } from '@/js/utils/car';
+import { getModelBadgeData } from '@/js/utils/modelBadge';
 const thumb = getCarThumbnail(data);
 const price = calculateCarPrice(data);
 const carModel = findModelByCarData(data);

@@ -11,7 +11,9 @@ show_help() {
     echo "  test TYPE [OPTIONS]              - Run getone and update commands in sequence"
     echo
     echo "Options (can be used with update, auto, test commands):"
-    echo "  --skip_thumbs                    - Skip thumbnail generation"
+    echo "  --skip_thumbs                    - Skip car images and thumbnail generation"
+    echo "  --mirror_images                  - Mirror external car images into CDN layout"
+    echo "  --mirror_dry_run                 - Build image mirror manifest without writing image files"
     echo "  --count_thumbs N                 - Number of thumbnails to generate (default: 5)"
     echo "  --skip_check_thumb               - Skip thumbnail existence check"
     echo "  --dev                            - Start dev server after processing (for auto and test)"
@@ -87,6 +89,8 @@ show_help() {
     echo "  $0 update vehicles_vehicle --skip_thumbs"
     echo "  $0 auto"
     echo "  $0 auto --skip_thumbs --dev"
+    echo "  $0 auto --mirror_images --dev"
+    echo "  $0 auto --mirror_images --mirror_dry_run"
     echo "  $0 test data_cars_car --count_thumbs 10 --dev"
     echo "  $0 update ads_ad --skip_thumbs --skip_check_thumb"
 }
@@ -127,6 +131,14 @@ parse_options() {
             --skip_check_thumb)
                 thumb_args="$thumb_args --skip_check_thumb"
                 # echo "🔧 Добавили --skip_check_thumb, thumb_args='$thumb_args'" >&2
+                shift
+                ;;
+            --mirror_images)
+                thumb_args="$thumb_args --mirror_images"
+                shift
+                ;;
+            --mirror_dry_run)
+                thumb_args="$thumb_args --mirror_dry_run"
                 shift
                 ;;
             --dev)

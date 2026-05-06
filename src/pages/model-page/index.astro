@@ -3,7 +3,7 @@ import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 if (isRouteDisabled('/model-page/')) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { brand, legal_city_where } = settings;
 import Layout from '@/layouts/Layout.astro';

@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import { AGREE_LABEL } from '@/const';
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { brand, legal_city_where } = settings;
 import Button from '@/components/Button/Button.astro';
@@ -9,60 +9,81 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
 import PageH1 from '@/components/PageH1/Index.astro';
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('test_drive'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-import modelsData from '@/data/models.json';
+import modelsData from '@/data/site/models.json';
+import { getModelBrandId } from '@/js/utils/modelFields';
 const { testDrive } = modelsData;
+/** Левая колонка с карточкой модели нужна только если в данных есть модели для тест-драйва. */
+const hasTestDriveModels = Array.isArray(testDrive) && testDrive.length > 0;
 ---
 <Layout 
 	title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} 
 	description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`} 
-	{...salons.length > 1 ? {'brand': testDrive[0]?.mark_id} : {} }
+	{...salons.length > 1 && hasTestDriveModels ? { brand: getModelBrandId(testDrive[0]) } : {}}
 	breadcrumb={[{ name: 'Тест-драйв', href: '/test-drive/' }]}
 >
 	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data="testDrive">
 
-		<div class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-1" style="background-image: url('https://cdn.alexsab.ru/models/default-model-bg.webp')" x-cloak>
-			<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
-			<h2 class="p-5 sm:p-10 text-2xl text-white" x-text="current?.caption || current?.name"></h2>
-			<img :src="current?.thumb" class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]" :alt="current?.caption || current?.name" width="533" height="300" loading="lazy" />
-			<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white xl:text-black">
-				<template x-for="char in current?.globalChars">
-					<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow-sm xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
-						<div class="text-xs" x-text="char.title+':'"></div>
-						<div>
-							<b class="text-base xl:text-lg font-weight-bold" x-text="char.value"></b>{' '}
-							<span class="xs:text-[11px]" x-text="char?.measure"></span>
+		{hasTestDriveModels && (
+			<div
+				class="bg-cover bg-center w-full h-100% lg:w-3/5 2xl:w-1/2 overflow-hidden relative z-1"
+				style="background-image: url('https://cdn.alexsab.ru/models/default-model-bg.webp')"
+				x-cloak
+			>
+				<div class="absolute inset-0 bg-black/20 z-[-1]"></div>
+				<h2 class="p-5 sm:p-10 text-2xl text-white" x-text="modelTitle(current)"></h2>
+				<img
+					:src="modelThumb(current)"
+					class="mx-auto xl:h-[300px] xl:w-auto object-contain sm:w-4/5 absolute -right-20 sm:-right-32 top-1/2 -translate-y-1/2 xl:translate-y-0 xl:top-auto xl:right-auto xl:relative z-[-1]"
+					:alt="modelTitle(current)"
+					width="533"
+					height="300"
+					loading="lazy"
+				/>
+				<div class="p-5 sm:p-10 flex flex-col xl:grid grid-cols-6 gap-4 mt-10 lg:mt-14 text-white xl:text-black">
+					<template x-for="char in current?.globalChars">
+						<div class="flex flex-col items-start justify-between xl:gap-8 xl:p-3 xl:shadow-sm xl:shadow-white/70 rounded-xl sm:w-1/2 xl:w-auto xl:bg-white/70">
+							<div class="text-xs" x-text="char.title+':'"></div>
+							<div>
+								<b class="text-base xl:text-lg font-weight-bold" x-text="char.value"></b>{' '}
+								<span class="xs:text-[11px]" x-text="char?.measure"></span>
+							</div>
 						</div>
-					</div>
-				</template>
+					</template>
+				</div>
 			</div>
-		</div>
+		)}
 
-		<div class="p-5 sm:p-10 space-y-10 w-full lg:w-2/5 2xl:w-1/2" x-cloak>
+		<div
+			class:list={[
+				'p-5 sm:p-10 space-y-10 w-full',
+				{ 'lg:w-2/5 2xl:w-1/2': hasTestDriveModels },
+			]}
+			x-cloak
+		>
 			<PageH1 h1="Записаться на&nbsp;тест-драйв" classes="text-3xl sm:text-4xl text-center" />
 			<div class="flex justify-center gap-4 flex-wrap">
 				<template x-for="(model, index) in models" :key="model.id+index">
 					<div class="contents">
 						<!-- Невидимый разделитель перед новым брендом -->
-						<div x-show="index > 0 && models[index - 1].mark_id !== model.mark_id" 
+						<div x-show="index > 0 && modelBrandId(models[index - 1]) !== modelBrandId(model)" 
 							 class="basis-full h-0"></div>
 						
 						<!-- Ваша кнопка -->
 						<button
 							class="text-sm sm:text-base py-3 px-2 sm:px-4 rounded relative cursor-pointer"
 							:class="model?.id === current?.id ? 'bg-accent-500 text-white!' : 'bg-gray-200'"
-							x-html="`${model?.caption || model?.name} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] leading-none! text-gray-500'>${model?.mark_id}</small>`"
+							x-html="`${modelTitle(model)} <small class='absolute top-1 right-1 text-[6px] sm:text-[8px] leading-none! text-gray-500'>${modelBrandDisplayName(model)}</small>`"
 							@click="currentModel(model.id)"
 						></button>
 					</div>
 				</template>
 			</div>
-			</template>
 			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
-				<input type="hidden" name="form" :value="(current?.caption || current?.name) ? `Запись на тест-драйв. ${current.caption || current.name}` : 'Запись на тест-драйв'" />
+				<input type="hidden" name="form" :value="modelTitle(current) ? `Запись на тест-драйв. ${modelTitle(current)}` : 'Запись на тест-драйв'" />
 				<input
 					type="email"
 					tabindex="-1"

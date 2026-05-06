@@ -7,6 +7,7 @@ interface Props {
 }
 const { models = [], model, brand, title = "Подобрать комплектацию" } = Astro.props
 import { isModelVisible } from '@/js/utils/modelVisibility';
+import { getModelTitle } from '@/js/utils/modelFields';
 ---
 
 <section class="odd:bg-gray-100" id="complectation" x-init={`selectedModel('${models.length ? models[0]?.id : model?.id}')`}>
@@ -20,7 +21,7 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 					class="inline border py-2.5 px-3 sm:px-6 rounded-full cursor-pointer min-w-[100px] w-auto sm:flex-initial text-xs sm:text-base text-center transition-colors hover:border-accent-500 hover:text-accent-500 select-none"
 					:class={`{'border-accent-500 text-accent-500': currentModel.id === '${model.id}' }`}
 					@click={`selectedModel('${model.id}')`}
-				>{model.caption || model.name}</span>
+				>{getModelTitle(model)}</span>
 			) : ('');
 			})}
 		</div>
@@ -38,10 +39,10 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 		</template>
 		<div class="grid lg:grid-cols-2">
 			<div class="relative">
-				<img :src="currentModel.colors[0].carImage" class="w-full col-span-1" :alt="currentModel.caption || currentModel.name" width="748" height="323" loading="lazy" />
+				<img :src="currentModel.colors[0].image || currentModel.colors[0].carImage" class="w-full col-span-1" :alt="currentModel.displayName || currentModel.caption || currentModel.name" width="748" height="323" loading="lazy" />
 				<div class="absolute -top-5 sm:top-0 left-0">
 					<!-- В динамическом блоке тоже используем caption с fallback на name -->
-					<div class="text-xl sm:text-3xl font-weight-bold uppercase leading-none!" x-html={`'${brand}&nbsp;' + (currentModel.caption || currentModel.name)`}></div>
+					<div class="text-xl sm:text-3xl font-weight-bold uppercase leading-none!" x-html={`'${brand}&nbsp;' + (currentModel.displayName || currentModel.caption || currentModel.name)`}></div>
 					<div class="sm:text-xl" x-text="currentModelComplectation.caption || currentModelComplectation.name"></div>
 						<!-- Показываем цену только если она валидна (не пустая, не null, не NaN). 
 						Используем currencyFormat как валидатор: при невалидной цене он вернёт undefined,
@@ -69,10 +70,10 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 					</template>
 				</div>
 				<div class="flex flex-col gap-4">
-					<a class="popup-link btn black btn-o px-4! whitespace-nowrap" href="#common-modal" :data-title={`'Купить ${brand} ' + (currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`} :data-form_name={`'Купить. ${brand} ' + (currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Купить</a>
-					<a class="popup-link btn px-4! whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + (currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
-					<a class="popup-link btn gray px-4! whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + (currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
-					<a class="popup-link btn black px-4! whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + (currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
+					<a class="popup-link btn black btn-o px-4! whitespace-nowrap" href="#common-modal" :data-title={`'Купить ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`} :data-form_name={`'Купить. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Купить</a>
+					<a class="popup-link btn px-4! whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
+					<a class="popup-link btn gray px-4! whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
+					<a class="popup-link btn black px-4! whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import CarPageLayout from '@/layouts/CarPageLayout.astro';
-import { findModelByCarData } from '@/js/utils/car.utils';
+import { findModelByCarData } from '@/js/utils/car';
+import { getModelBrandId } from '@/js/utils/modelFields';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
 
@@ -33,7 +34,7 @@ const lastViewedModelForStore = car?.data
 		const baseId = relatedModel?.id || String(car.data.folder_id || '');
 		return {
 			idNormalized: normalizeModelId(baseId),
-			markId: relatedModel?.mark_id || car.data.mark_id,
+			markId: getModelBrandId(relatedModel) || String(car.data.mark_id || '').toLowerCase(),
 		};
 	})()
 	: null;

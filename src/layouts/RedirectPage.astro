@@ -22,10 +22,10 @@ let {
 	saveSearchParam = true,
 } = Astro.props;
 
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { favicon } = settings;
 
-import scripts_json from '@/data/scripts.json';
+import scripts_json from '@/data/site/scripts.json';
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 ---
 

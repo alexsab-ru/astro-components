@@ -9,8 +9,8 @@ const {car = {}, path = '/cars/', slug, totalShow = true, ...rest} = Astro.props
 // Формируем URL по приоритету: переданный slug | внутренний путь по id
 const url = slug ? slug : `${path}${car.id}/`;
 
-import { calculateCarPrice, findModelByCarData } from '@/js/utils/car.utils';
-import { getModelBadgeData } from '@/js/utils/modelBadge.utils';
+import { calculateCarPrice, findModelByCarData } from '@/js/utils/car';
+import { getModelBadgeData } from '@/js/utils/modelBadge';
 const carModel = findModelByCarData(car.data);
 const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'car_list');
 const price = calculateCarPrice(car.data);
@@ -19,7 +19,7 @@ import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import PreviewSlider from './PreviewSlider.astro';
 import Button from '@/components/Button/Button.astro';
 
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('common_modal'));
 ---

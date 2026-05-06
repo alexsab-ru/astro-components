@@ -13,9 +13,9 @@ const brandFromEnv = process.env.ASTRO_ACTIVE_BRAND?.trim()
 let brand = brandFromArg || brandFromEnv
 
 if (!brand) {
-  // Try reading from src/data/settings.json
+  // Try reading from src/data/site/settings.json
   try {
-    const settingsPath = path.join(process.cwd(), 'src', 'data', 'settings.json')
+    const settingsPath = path.join(process.cwd(), 'src', 'data', 'site', 'settings.json')
     const raw = fs.readFileSync(settingsPath, 'utf8')
     const settings = JSON.parse(raw)
     brand = (settings?.site_brand_style || '').trim()
@@ -36,5 +36,4 @@ if (brand) {
 
 fs.writeFileSync(brandCssPath, content, 'utf8')
 console.log(`[setBrand] Active brand: ${brand} -> wrote ${path.relative(projectRoot, brandCssPath)}`)
-
 

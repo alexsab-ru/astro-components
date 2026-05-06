@@ -6,10 +6,10 @@ interface Props {
 	onlyModal?: boolean;
 }
 import BannerSlide from './BannerSlide.astro';
-import bannersData from '@/data/banners.json';
+import bannersData from '@/data/site/banners.json';
 const { banners = bannersData, onlyView = false, onlyModal = false } = Astro.props;
 
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { is_header_transparent } = settings;
 
 const bannerClasses = is_header_transparent ? 'pb-[160%] md:pb-[100%] lg:pb-0 lg:min-h-[850px] lg:h-dvh' : 'pb-[135%] md:pb-[100%] lg:pb-[56.25%] 2xl:pb-[40%]';

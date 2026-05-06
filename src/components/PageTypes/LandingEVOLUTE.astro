@@ -1,5 +1,5 @@
 ---
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import {TIMER, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
@@ -20,20 +20,18 @@ import SectionWithBg from '@/components/SectionWithBg/SectionWithBg.astro';
 import SeoText from '@/components/Seo/Index.astro';
 import InfoList from '@/components/Info/List.astro';
 import UniversalSection from '@/components/Model/sections/universal.astro';
-import modelsData from '@/data/models.json'
+import modelsData from '@/data/site/models.json'
 const { models } = modelsData;
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const modelsWithComplectations = models.filter(m => (m?.complectations !== undefined && m?.complectations.length));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 
-import { getModelSectionsYML } from '@/js/utils/helpers';
+import { getModelSections } from '@/js/utils/helpers';
 
 const iSpaceModel = models.find(model => model.id === 'i-space');
-
-// Загружаем YML файл модели из директории model-sections 
-let sections = await getModelSectionsYML(iSpaceModel);
+const sections = getModelSections(iSpaceModel);
 
 const bannersSection = [
     {
@@ -90,8 +88,8 @@ const bannersSection = [
 	{TIMER.show && <Timer endtime={new Date(TIMER.endtime)} title="До конца акции осталось" subtitle="Подзаголовок" />}
 	<Model model={iSpaceModel} />
 
-	{ sections.length > 0 && sections.map(s => 
-		s.id === 'info' ? (<InfoList items={s.items} title={s?.title} classes={s?.sectionClass} id={s.id} grid={true}/>) : (<UniversalSection section={s} />)
+	{ sections.length > 0 && sections.map(s =>
+		s.id === 'info' ? (<InfoList items={s.content?.items} title={s.content?.title} classes={s?.sectionClass} id={s.id} grid={true}/>) : (<UniversalSection section={s} />)
 	)}
 
 	<section class="bg-[#404a59]">

@@ -5,7 +5,7 @@ interface Props{
 	closeBtn?: boolean;
 }
 import { Icon } from 'astro-icon/components';
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { is_header_transparent } = settings;
 const defaultClasses = 'px-12 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative';
 const {content, classes = is_header_transparent ? defaultClasses : 'bg-accent-500 ' + defaultClasses, closeBtn = true} = Astro.props

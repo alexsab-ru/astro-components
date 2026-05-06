@@ -14,7 +14,7 @@ import domainSwitchToolbar from "./dev-toolbar/domain-switch/integration";
 
 // https://astro.build/config
 //
-// Определяем значение site из src/data/scripts.json.
+// Определяем значение site из src/data/site/scripts.json.
 // Если там нет, то берём DOMAIN из .env и добавляем https:// в начале.
 // Если ни одно не задано, используем прежнее значение по умолчанию.
 // Важно: в astro.config.mjs .env не загружается автоматически. Рекомендуемый способ — loadEnv из Vite.
@@ -28,8 +28,8 @@ const env = (() => {
 })();
 
 const resolveSiteFromConfig = (fallbackUrl) => {
-    // Читаем ./src/data/scripts.json из корня проекта.
-    const scriptsJsonPath = path.resolve(process.cwd(), 'src/data/scripts.json');
+    // Читаем ./src/data/site/scripts.json из корня проекта.
+    const scriptsJsonPath = path.resolve(process.cwd(), 'src/data/site/scripts.json');
     let scriptsSiteFromJson = '';
     try {
         const rawFileContent = fs.readFileSync(scriptsJsonPath, 'utf-8');

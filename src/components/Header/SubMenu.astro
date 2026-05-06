@@ -5,7 +5,7 @@ interface Props {
 const { children } = Astro.props;
 import MenuLink from './MenuLink.astro';
 import { Icon } from 'astro-icon/components';
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { is_header_transparent } = settings;
 
 const commonClasses = 'left-0 lg:absolute top-full min-w-full w-fit lg:opacity-0 lg:invisible lg:-translate-y-1 transition-all group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 lg:shadow-2xl lg:border-t lg:max-h-[calc(100vh-129px)] lg:overflow-y-auto z-50';

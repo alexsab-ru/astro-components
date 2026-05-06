@@ -16,6 +16,7 @@ type DownloadPayload = { domain: string; file?: string; preserveLog?: boolean };
 const domainFiles = [
   "settings.json",
   "routes.json",
+  "robots.json",
   "banners.json",
   "scripts.json",
   "env.json",
@@ -25,10 +26,14 @@ const domainFiles = [
   "collections.json",
   "faq.json",
   "federal-disclaimer.json",
+  "model-matrix.json",
+  "data/defaults.json",
   "reviews.json",
   "seo.json",
   "services.json",
   "special-services.json",
+  "dealer-service-price.json",
+  "all-prices.json",
 ];
 
 function getEnvVar(key: string) {
@@ -40,6 +45,52 @@ function getEnvVar(key: string) {
 
   return env[key] ?? process.env[key] ?? "";
 }
+
+const readJson = async (filePath: string) => {
+  try {
+    return JSON.parse(await fs.readFile(filePath, "utf8"));
+  } catch {
+    return null;
+  }
+};
+
+const listDirectories = async (dirPath: string) => {
+  try {
+    const entries = await fs.readdir(dirPath, { withFileTypes: true });
+    return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
+  } catch {
+    return [];
+  }
+};
+
+const getLocalDataSummary = async () => {
+  const siteDataDir = path.join(process.cwd(), "src", "data", "site");
+  const commonDataDir = path.join(process.cwd(), "src", "data", "common");
+  const modelMatrix = await readJson(path.join(siteDataDir, "model-matrix.json"));
+  const modelsJson = await readJson(path.join(siteDataDir, "models.json"));
+  const dealerBrands = await listDirectories(path.join(siteDataDir, "data", "brands"));
+  const commonBrands = await listDirectories(path.join(commonDataDir, "brands"));
+  const matrixGroups = ["models", "testDrive", "service"] as const;
+  const matrixBrands = Array.from(
+    new Set(
+      matrixGroups.flatMap((group) =>
+        Array.isArray(modelMatrix?.[group])
+          ? modelMatrix[group].map((item: any) => String(item?.brandId ?? "").trim()).filter(Boolean)
+          : []
+      )
+    )
+  ).sort();
+
+  return {
+    hasModelMatrix: Boolean(modelMatrix),
+    modelMatrixBrands: matrixBrands,
+    dealerBrands,
+    commonBrandsCount: commonBrands.length,
+    builtModelsCount: Array.isArray(modelsJson?.models) ? modelsJson.models.length : 0,
+    builtTestDriveCount: Array.isArray(modelsJson?.testDrive) ? modelsJson.testDrive.length : 0,
+    builtServiceCount: Array.isArray(modelsJson?.service) ? modelsJson.service.length : 0,
+  };
+};
 
 export default function domainSwitchToolbar(): AstroIntegration {
   return {
@@ -158,12 +209,14 @@ export default function domainSwitchToolbar(): AstroIntegration {
 
         // Handshake: клиент спросил — сервер ответил начальными данными
         toolbar.on<HelloPayload>(`${APP_ID}:hello`, () => {
-          toolbar.send(`${APP_ID}:init`, {
+          getLocalDataSummary().then((dataSummary) => toolbar.send(`${APP_ID}:init`, {
             presets,
             currentDomain: currentDomain ?? "",
             hasJSONRepo: Boolean(jsonRepo),
+            domainFiles,
+            dataSummary,
             lastRun,
-          });
+          }));
         });
 
         const toText = (value: string | Buffer | undefined) => {
@@ -217,8 +270,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
           onError?: (message: string) => void,
           options?: {
             skipDealerFiles?: boolean;
-            skipModelSections?: boolean;
-            skipModels?: boolean;
             skipCars?: boolean;
           }
         ) => {
@@ -228,8 +279,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
           }
 
           if (options?.skipDealerFiles) args.push("--skip-dealer-files");
-          if (options?.skipModelSections) args.push("--skip-model-sections");
-          if (options?.skipModels) args.push("--skip-models");
           if (options?.skipCars) args.push("--skip-cars");
 
           return runScript("bash", args, label, opId, onError, {
@@ -272,6 +321,20 @@ export default function domainSwitchToolbar(): AstroIntegration {
             } else {
               await report({ ok: true, message: "SKIP: settings.json не найден, post-скрипты пропущены." }, opId);
             }
+          }
+
+          if (
+            files.includes("model-matrix.json") ||
+            files.includes("federal-disclaimer.json") ||
+            files.some((file) => file.startsWith("data/"))
+          ) {
+            await runScript(
+              "node",
+              [".github/scripts/filterModelsByBrand.js"],
+              "Обновил модели (filterModelsByBrand)",
+              opId,
+              onError
+            );
           }
 
           if (files.includes("banners.json")) {
@@ -343,7 +406,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
 
           await appendServerLog("INFO", `OP_START: file=${targetFile} domain=${safeDomain || "-"} preserveLog=${preserve}`, opId);
 
-          const isCommonModels = targetFile === "__common_models__";
           const isCommonCars = targetFile === "__common_cars__";
           const isDownloadAll = targetFile === "__all__";
           const isKnownDomainFile = domainFiles.includes(targetFile);
@@ -358,41 +420,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
             return;
           }
 
-          // Общие файлы скачиваем через тот же скрипт с нужными флагами.
-          if (isCommonModels) {
-            const commonDomain = safeDomain || String(currentDomain || "").trim();
-            if (!commonDomain) {
-              await reportRun({
-                ok: false,
-                message: "Для общего models нужен DOMAIN: выбери домен в тулбаре или задай DOMAIN в .env.",
-              });
-              await appendServerLog("INFO", "OP_END", opId);
-              await finalizeRun("Ошибка: DOMAIN не задан");
-              return;
-            }
-            try {
-              await reportRun({ ok: true, message: "START: скачиваю общий models" });
-              await runScript(
-                "bash",
-                [
-                  DOWNLOAD_SCRIPT,
-                  "--skip-dealer-files",
-                  "--skip-model-sections",
-                  "--skip-cars",
-                ],
-                "Скачал общий models",
-                opId,
-                (msg) => errors.push(msg),
-                { DOMAIN: commonDomain, JSON_REPO: jsonRepo }
-              );
-            } catch (e: any) {
-              await reportRun({ ok: false, message: e?.message ?? String(e) });
-            } finally {
-              await appendServerLog("INFO", "OP_END", opId);
-              await finalizeRun("Общий models");
-            }
-            return;
-          }
           if (isCommonCars) {
             const commonDomain = safeDomain || String(currentDomain || "").trim();
             if (!commonDomain) {
@@ -411,8 +438,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
                 [
                   DOWNLOAD_SCRIPT,
                   "--skip-dealer-files",
-                  "--skip-model-sections",
-                  "--skip-models",
                 ],
                 "Скачал общий cars",
                 opId,
@@ -464,8 +489,6 @@ export default function domainSwitchToolbar(): AstroIntegration {
               opId,
               (msg) => errors.push(msg),
               {
-                skipModelSections: true,
-                skipModels: true,
                 skipCars: true,
               }
             );

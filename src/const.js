@@ -8,7 +8,7 @@ export const MARQUEE = { title: `Тотальная распродажа до ${
 // Ссылка яндекс-виджета
 export const LINK_WIDGET = 'https://yandex.ru/map-widget/v1/-/';
 
-import settings from '@/data/settings.json';
+import settings from '@/data/site/settings.json';
 const { phone_common } = settings;
 
 
@@ -16,9 +16,16 @@ const { phone_common } = settings;
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
-import modelsData from '@/data/models.json';
+import { getModelBrandDisplayName, getModelBrandId, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
+import modelsData from '@/data/site/models.json';
 const { models } = modelsData;
-const groupModelsByBrand = groupArrayByKey(models.filter(isModelVisible), 'mark_id');
+const groupModelsByBrand = groupArrayByKey(
+	models.filter(isModelVisible).map((model) => ({
+		...model,
+		brandGroup: getModelBrandDisplayName(model),
+	})),
+	'brandGroup',
+);
 
 export const IS_MODEL_PREFIX_URL = Object.keys(groupModelsByBrand).length > 1;
 
@@ -29,11 +36,11 @@ const dynamicMenuConfig = {
 		dataSource: groupModelsByBrand,
 		transform: (model) => ({
 			url: `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`,
-			// Для пунктов меню показываем caption, а name используем как fallback для старых данных.
-			name: (model.caption || model.name).toUpperCase(),
-			thumb: model.thumb,
+			name: getModelTitle(model).toUpperCase(),
+			thumb: getModelThumb(model),
 			status: model?.status || null,
 			badge: model?.badge || null,
+			brandId: getModelBrandId(model),
 		})
 	}
 	// В будущем можно добавить другие типы:
@@ -54,7 +61,7 @@ const childrenGroup = Object.keys(dynamicMenuConfig).reduce((acc, type) => {
 let menu = [];
 
 try {
-	menu = await import('@/data/menu.json');	
+	menu = await import('@/data/site/menu.json');
 	menu = menu.default || menu; // Обработка случая, когда импорт возвращает объект с ключом default
 } catch (e) {
 	console.warn('menu.json not found, using default empty menu');
@@ -76,13 +83,13 @@ export const LINKS_MENU = menu;
 
 export const STATUS = ['enable','show','disable','hide','preorder','comminsoon'];
 
-// Коллекции теперь хранятся в @/data/collections.json
+// Коллекции теперь хранятся в @/data/site/collections.json
 
 // Текст согласия в формах
 export const AGREE_LABEL = '<span>Даю согласие на обработку своих персональных данных на условиях, указанных</span> <a href="/privacy-policy/" class="m-0! underline transition-all hover:no-underline" target="_blank">здесь</a> и на использование cookie на условиях, указанных <a href="/cookie-policy/" class="m-0! underline transition-all hover:no-underline" target="_blank">здесь</a>';
 
 // Текст информации в футере
-import salonsData from '@/data/salons.json';
+import salonsData from '@/data/site/salons.json';
 const salons = salonsData.filter(salon => !salon?.type || salon?.type.includes('footer_info'));
 const phones = phone_common ? [`<a class="whitespace-nowrap" href="tel:${phoneFormat(phone_common)}">${phone_common}</a>`] : salons.map((salon) => { return `<span>${salon.name}</span> <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a>` });
 
