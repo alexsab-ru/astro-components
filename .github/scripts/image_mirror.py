@@ -42,6 +42,7 @@ IMAGE_SIZES = {
 
 _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR: dict[tuple[str, str, str], int] = {}
 _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT: float | None = None
+_AVITO_AUTOLOAD_BLOCKED_FOR_RUN = False
 
 
 def utc_now_iso() -> str:
@@ -131,6 +132,11 @@ def float_value(value: Any, default: float) -> float:
         return default
 
     return float(value)
+
+
+def append_output_message(message: str) -> None:
+    with open("output.txt", "a", encoding="utf-8") as file:
+        file.write(message.rstrip() + "\n")
 
 
 def inspect_remote_image(url: str) -> dict[str, Any]:
@@ -231,6 +237,24 @@ class ImageMirror:
         if remaining > 0:
             print(f"⏳ Пауза {remaining:.1f} сек перед скачиванием следующего Avito autoload изображения")
             time.sleep(remaining)
+
+    def avito_autoload_blocked_for_run(self) -> bool:
+        return _AVITO_AUTOLOAD_BLOCKED_FOR_RUN
+
+    def register_avito_autoload_download_error(self, vin: str, index: int, source_url: str, error: Exception) -> None:
+        global _AVITO_AUTOLOAD_BLOCKED_FOR_RUN
+
+        _AVITO_AUTOLOAD_BLOCKED_FOR_RUN = True
+        status_code = getattr(getattr(error, "response", None), "status_code", None)
+        status = f" HTTP {status_code}" if status_code else ""
+        message = (
+            f"⚠️ Avito autoload image download failed{status}: VIN {vin}, image #{index + 1}. "
+            "Новые Avito autoload изображения будут пропущены до конца запуска; "
+            "для авто без сохраненных изображений будет использована цветовая заглушка. "
+            f"URL: {source_url}"
+        )
+        print(message)
+        append_output_message(message)
 
     def manifest_remote_path(self, vin: str) -> str:
         return posixpath.join(
@@ -383,6 +407,9 @@ class ImageMirror:
             is_avito_autoload = is_avito_autoload_url(source_url)
 
             if regenerate and is_avito_autoload:
+                if self.avito_autoload_blocked_for_run():
+                    continue
+
                 max_new = max(0, int(self.config.avito_autoload_max_new_per_car))
                 if self.avito_autoload_downloads_for_run(vin) >= max_new:
                     continue
@@ -397,7 +424,14 @@ class ImageMirror:
                 changed_indexes.append(index)
                 if is_avito_autoload:
                     self.wait_before_avito_autoload_download()
-                changed_remote_paths.extend(self.write_image_set(vin, index, source_url, version))
+                try:
+                    changed_remote_paths.extend(self.write_image_set(vin, index, source_url, version))
+                except requests.RequestException as error:
+                    if is_avito_autoload:
+                        changed_indexes.pop()
+                        self.register_avito_autoload_download_error(vin, index, source_url, error)
+                        continue
+                    raise
                 if is_avito_autoload:
                     self.register_avito_autoload_download_for_run(vin)
 
