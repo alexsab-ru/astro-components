@@ -325,15 +325,27 @@ jobs:
         fi
 
         ssh-keyscan -p "${CDN_SSH_PORT:-22}" -H "$CDN_SSH_HOST" >> ~/.ssh/known_hosts
-        mkdir -p tmp/image_mirror/cars
+        site="${DOMAIN#http://}"
+        site="${site#https://}"
+        site="${site%%/*}"
+        site="${site%/}"
+        remote_base="${CDN_REMOTE_PATH:-.}"
+        remote_base="${remote_base%/}"
 
-        rsync -rzO --no-perms --itemize-changes \
+        if [[ -z "$site" ]]; then
+          echo "DOMAIN is empty; skipping image mirror manifest download"
+          exit 0
+        fi
+
+        mkdir -p "tmp/image_mirror/cars/$site"
+
+        rsync -rzO --no-perms --prune-empty-dirs --itemize-changes \
           --include='*/' \
           --include='manifest.json' \
           --exclude='*' \
           -e "ssh -p ${CDN_SSH_PORT:-22} -i ~/.ssh/cdn_cars -o IdentitiesOnly=yes -o BatchMode=yes" \
-          "$CDN_SSH_USER@$CDN_SSH_HOST:${CDN_REMOTE_PATH:-.}/" \
-          tmp/image_mirror/cars/ || {
+          "$CDN_SSH_USER@$CDN_SSH_HOST:$remote_base/$site/" \
+          "tmp/image_mirror/cars/$site/" || {
             echo "Could not download image mirror manifests from CDN; continuing with empty local manifests"
             exit 0
           }
@@ -343,6 +355,7 @@ jobs:
         CDN_SSH_USER: ${{ secrets.CDN_SSH_USER }}
         CDN_SSH_PRIVATE_KEY: ${{ secrets.CDN_SSH_PRIVATE_KEY }}
         CDN_REMOTE_PATH: ${{ secrets.CDN_REMOTE_PATH }}
+        DOMAIN: ${{ vars.DOMAIN }}
 
     - name: Generate src/content/cars/ and src/content/used_cars/
       id: generate_cars

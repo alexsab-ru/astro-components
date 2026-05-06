@@ -413,6 +413,13 @@ class ImageMirror:
                 continue
 
             version = source_signature(source_url, metadata)
+            if (
+                existing
+                and index >= self.config.probe_count
+                and not is_avito_autoload_url(source_url)
+                and existing.get("source_url") == source_url
+            ):
+                version = existing.get("version") or version
             is_changed = self.should_regenerate(existing, source_url, version)
 
             if is_changed and index < self.config.probe_count and not is_avito_autoload_url(source_url):
