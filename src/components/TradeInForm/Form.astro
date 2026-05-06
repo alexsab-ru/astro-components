@@ -7,7 +7,7 @@ import FormSelect from '@/components/FormSelect.astro';
 import { AGREE_LABEL } from '@/const';
 import modelsData from '@/data/site/models.json';
 import { getModelBrandDisplayName, getModelBrandId, getModelTitle } from '@/js/utils/modelFields';
-const options = (modelsData.service || modelsData.services || []).map((model) => ({ 
+const options = (modelsData.service || []).map((model) => ({
 	id: `${getModelBrandId(model)}-${model.id}`.toLowerCase(), 
 	name: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}` 
 }));

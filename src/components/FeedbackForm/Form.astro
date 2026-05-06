@@ -23,7 +23,7 @@ const {
 import modelsData from '@/data/site/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { getModelBrandDisplayName, getModelBrandId, getModelTitle } from '@/js/utils/modelFields';
-const options = (modelsData.service || modelsData.services || []).filter(isModelVisible).map((model) => ({
+const options = (modelsData.service || []).filter(isModelVisible).map((model) => ({
 	id: `${getModelBrandId(model)}-${model.id}`.toLowerCase(),
 	name: `${getModelBrandDisplayName(model)} ${model.name}`,
 	caption: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}`,

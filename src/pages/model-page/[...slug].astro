@@ -9,11 +9,10 @@ import modelsData from '@/data/site/models.json';
 import settings from '@/data/site/settings.json';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import Sections from '@/components/ImageGallery/Sections.astro';
-import { setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelSections, setPrefixModelUrl } from '@/js/utils/helpers';
 import {
   getModelBrandDisplayName,
   getModelBrandId,
-  getModelBrandUrlName,
   getModelHomeImg,
   getModelThumb,
   getModelTitle,
@@ -24,8 +23,6 @@ import type { ISalon } from '@/types/ISalon';
 
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-
-const allSections = import.meta.glob('/src/data/common/model-sections/**/*.yml', { eager: true });
 
 export async function getStaticPaths() {
   if (isRouteDisabled('/model-page/')) return [];
@@ -44,9 +41,7 @@ const modelTitle = getModelTitle(model);
 const brandDisplayName = getModelBrandDisplayName(model);
 const brandId = getModelBrandId(model);
 
-const brandFolder = getModelBrandUrlName(model);
-const sectionsModule = allSections[`/src/data/common/model-sections/${brandFolder}/${model.id}.yml`] as { default: any[] } | undefined;
-const rawSections = sectionsModule?.default ?? [];
+const sections = getModelSections(model);
 
 const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const urlSegment = `/${id.toLowerCase()}/`;
@@ -101,7 +96,7 @@ const sortedBanners = relatedSlidesCount > 0 ? [...relatedBanners, ...otherBanne
       </a>
     </div>
 
-    <Sections sections={rawSections} variant="grid" ctaHref="#feedback" ctaText="Узнать подробности" />
+    <Sections sections={sections} variant="grid" ctaHref="#feedback" ctaText="Узнать подробности" />
 
     <section id="feedback" class="bg-gray-50">
       <FeedbackForm

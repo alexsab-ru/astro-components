@@ -864,9 +864,9 @@ def load_avito_color_mapping() -> Dict[str, str]:
 
     Приоритет источников:
     1) AVITO_COLOR_MAPPING_PATH (env)
-    2) src/data/common/avito-colors.json
-    3) src/data/common/avito-colors.json
-    4) ../astro-json/src/avito-colors.json (локальная разработка в mono-workspace)
+    2) src/data/common/avito-colors.json (от корня репозитория)
+    3) ../astro-json/src/avito-colors.json (локальная разработка в mono-workspace)
+    4) src/data/common/avito-colors.json (относительно текущей директории)
     5) Встроенный fallback-словарь
     """
     repo_root = Path(__file__).resolve().parents[2]
@@ -878,9 +878,7 @@ def load_avito_color_mapping() -> Dict[str, str]:
 
     candidates.extend([
         repo_root / 'src/data/common/avito-colors.json',
-        repo_root / 'src/data/common/avito-colors.json',
         repo_root.parent / 'astro-json/src/avito-colors.json',
-        Path('./src/data/common/avito-colors.json'),
         Path('./src/data/common/avito-colors.json'),
     ])
 
@@ -993,9 +991,9 @@ def load_localized_value_translations() -> Dict[str, str]:
 
     Приоритет источников:
     1) LOCALIZED_VALUE_TRANSLATIONS_PATH / TRANSLATIONS_MAPPING_PATH (env)
-    2) src/data/common/translations.json
-    3) src/data/common/translations.json
-    4) ../astro-json/src/translations.json (локальная разработка в mono-workspace)
+    2) src/data/common/translations.json (от корня репозитория)
+    3) ../astro-json/src/translations.json (локальная разработка в mono-workspace)
+    4) src/data/common/translations.json (относительно текущей директории)
     5) Встроенный fallback-словарь
     """
     repo_root = Path(__file__).resolve().parents[2]
@@ -1007,9 +1005,7 @@ def load_localized_value_translations() -> Dict[str, str]:
 
     candidates.extend([
         repo_root / 'src/data/common/translations.json',
-        repo_root / 'src/data/common/translations.json',
         repo_root.parent / 'astro-json/src/translations.json',
-        Path('./src/data/common/translations.json'),
         Path('./src/data/common/translations.json'),
     ])
 

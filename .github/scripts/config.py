@@ -285,7 +285,7 @@ def get_model_info(
             print_message(errorText, 'error')
         return None
 
-    # Получаем фактический объект модели из индекса all-models
+    # Получаем фактический объект модели из индекса по бренду
     target_brand = model_ref.get('mark_id')
     target_id = model_ref.get('id')
 
