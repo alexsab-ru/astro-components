@@ -624,9 +624,7 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
                 else 1
             ),
             avito_autoload_download_delay_seconds=float(
-                config.get('mirror_avito_autoload_download_delay_seconds')
-                if config.get('mirror_avito_autoload_download_delay_seconds') is not None
-                else 3
+                config.get('mirror_avito_autoload_download_delay_seconds') or 3
             ),
             dry_run=config.get('mirror_dry_run', False),
         )

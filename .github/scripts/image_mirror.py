@@ -123,6 +123,16 @@ def env_value(env_file_values: dict[str, str], key: str, default: str | None = N
     return os.getenv(key) or env_file_values.get(key) or default
 
 
+def float_value(value: Any, default: float) -> float:
+    if value is None:
+        return default
+
+    if isinstance(value, str) and not value.strip():
+        return default
+
+    return float(value)
+
+
 def inspect_remote_image(url: str) -> dict[str, Any]:
     response = requests.head(url, allow_redirects=True, timeout=REQUEST_TIMEOUT)
     if response.status_code >= 400:
@@ -459,7 +469,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--avito_autoload_download_delay_seconds",
         type=float,
-        default=float(os.getenv("MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS", DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS)),
+        default=float_value(
+            os.getenv("MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS"),
+            DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS,
+        ),
     )
     parser.add_argument("--env_file", default=DEFAULT_ENV_FILE)
     parser.add_argument("--dry-run", action="store_true")
