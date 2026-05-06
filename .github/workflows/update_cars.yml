@@ -306,6 +306,43 @@ jobs:
         CSV_URL: ${{ env.DEALER_CARS_PRICE_CSV_URL }}
         DEALER_CARS_PRICE_CSV_URL: ${{ env.DEALER_CARS_PRICE_CSV_URL }}
 
+    - name: Download image mirror manifests from CDN
+      if: ${{ vars.MIRROR_CAR_IMAGES == 'true' }}
+      run: |
+        if [[ -z "${CDN_SSH_HOST:-}" || -z "${CDN_SSH_USER:-}" || -z "${CDN_SSH_PRIVATE_KEY:-}" ]]; then
+          echo "CDN SSH secrets are not configured; skipping image mirror manifest download"
+          exit 0
+        fi
+
+        install -m 700 -d ~/.ssh
+        printf '%s' "$CDN_SSH_PRIVATE_KEY" | sed 's/\\n/\n/g' | tr -d '\r' > ~/.ssh/cdn_cars
+        printf '\n' >> ~/.ssh/cdn_cars
+        chmod 600 ~/.ssh/cdn_cars
+
+        if ! ssh-keygen -y -f ~/.ssh/cdn_cars > /dev/null; then
+          echo "CDN_SSH_PRIVATE_KEY is not a valid unencrypted private key"
+          exit 1
+        fi
+
+        ssh-keyscan -p "${CDN_SSH_PORT:-22}" -H "$CDN_SSH_HOST" >> ~/.ssh/known_hosts
+        mkdir -p tmp/image_mirror/cars
+
+        rsync -rzO --no-perms --itemize-changes \
+          --include='*/' \
+          --include='manifest.json' \
+          --exclude='*' \
+          -e "ssh -p ${CDN_SSH_PORT:-22} -i ~/.ssh/cdn_cars -o IdentitiesOnly=yes -o BatchMode=yes" \
+          "$CDN_SSH_USER@$CDN_SSH_HOST:${CDN_REMOTE_PATH:-.}/" \
+          tmp/image_mirror/cars/ || {
+            echo "Could not download image mirror manifests from CDN; continuing with empty local manifests"
+            exit 0
+          }
+      env:
+        CDN_SSH_HOST: ${{ secrets.CDN_SSH_HOST }}
+        CDN_SSH_PORT: ${{ secrets.CDN_SSH_PORT }}
+        CDN_SSH_USER: ${{ secrets.CDN_SSH_USER }}
+        CDN_SSH_PRIVATE_KEY: ${{ secrets.CDN_SSH_PRIVATE_KEY }}
+        CDN_REMOTE_PATH: ${{ secrets.CDN_REMOTE_PATH }}
 
     - name: Generate src/content/cars/ and src/content/used_cars/
       id: generate_cars
@@ -333,8 +370,8 @@ jobs:
           exit 0
         fi
 
-        if ! find tmp/image_mirror/cars -type f -name '*.webp' -print -quit | grep -q .; then
-          echo "No new mirrored image files to upload"
+        if ! find tmp/image_mirror/cars -type f \( -name '*.webp' -o -name 'manifest.json' \) -print -quit | grep -q .; then
+          echo "No mirrored image files or manifests to upload"
           exit 0
         fi
 
