@@ -126,7 +126,7 @@ Key top-level directories under `src`:
 ### Routing and collections
 
 - Dynamic collection pages: `src/pages/[collection]/index.astro`
-  - Uses `getStaticPaths` + `collectionsData` (`@/data/collections.json`) to expose arbitrary Astro content collections under `/{collection}/`.
+  - Uses `getStaticPaths` + `collectionsData` (`@/data/site/collections.json`) to expose arbitrary Astro content collections under `/{collection}/`.
   - Reads entries via `getCollection` from `astro:content` and passes them through `sortingAndFilteringPosts`.
   - Picks a random image for page meta using `getRandomInt`.
   - Renders a grid of `PostItem` components and an MDX SEO block via `<SeoText mdx={collection} />`.
