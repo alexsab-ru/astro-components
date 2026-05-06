@@ -623,8 +623,9 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
                 if config.get('mirror_avito_autoload_max_new_per_car') is not None
                 else 1
             ),
-            avito_autoload_download_delay_seconds=float(
-                config.get('mirror_avito_autoload_download_delay_seconds') or 3
+            autoload_download_delay_seconds=float(
+                config.get('mirror_autoload_download_delay_seconds')
+                or 10
             ),
             dry_run=config.get('mirror_dry_run', False),
         )

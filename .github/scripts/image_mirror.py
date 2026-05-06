@@ -30,7 +30,7 @@ DEFAULT_CDN_BASE_URL = "https://cdn.alexsab.ru"
 DEFAULT_LOCAL_ROOT = "tmp/image_mirror"
 DEFAULT_PROBE_COUNT = 3
 DEFAULT_ENV_FILE = ".env"
-DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS = 3.0
+DEFAULT_AUTOLOAD_DOWNLOAD_DELAY_SECONDS = 10.0
 
 IMAGE_SIZES = {
     "full": 1920,
@@ -41,7 +41,7 @@ IMAGE_SIZES = {
 }
 
 _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR: dict[tuple[str, str, str], int] = {}
-_AVITO_AUTOLOAD_LAST_DOWNLOAD_AT: float | None = None
+_LAST_IMAGE_DOWNLOAD_AT: float | None = None
 _AVITO_AUTOLOAD_BLOCKED_FOR_RUN = False
 
 
@@ -189,7 +189,7 @@ class MirrorConfig:
     local_root: Path = Path(DEFAULT_LOCAL_ROOT)
     probe_count: int = DEFAULT_PROBE_COUNT
     avito_autoload_max_new_per_car: int = 1
-    avito_autoload_download_delay_seconds: float = DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS
+    autoload_download_delay_seconds: float = DEFAULT_AUTOLOAD_DOWNLOAD_DELAY_SECONDS
     dry_run: bool = False
 
 
@@ -215,27 +215,29 @@ class ImageMirror:
         return _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(self.avito_autoload_download_key(vin), 0)
 
     def register_avito_autoload_download_for_run(self, vin: str) -> None:
-        global _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT
-
         key = self.avito_autoload_download_key(vin)
         _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR[key] = _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(key, 0) + 1
-        _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT = time.monotonic()
 
-    def wait_before_avito_autoload_download(self) -> None:
+    def register_image_download_for_run(self) -> None:
+        global _LAST_IMAGE_DOWNLOAD_AT
+
+        _LAST_IMAGE_DOWNLOAD_AT = time.monotonic()
+
+    def wait_before_image_download(self) -> None:
         if self.config.dry_run:
             return
 
-        delay = max(0.0, float(self.config.avito_autoload_download_delay_seconds))
+        delay = max(0.0, float(self.config.autoload_download_delay_seconds))
         if delay <= 0:
             return
 
-        if _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT is None:
+        if _LAST_IMAGE_DOWNLOAD_AT is None:
             return
 
-        elapsed = time.monotonic() - _AVITO_AUTOLOAD_LAST_DOWNLOAD_AT
+        elapsed = time.monotonic() - _LAST_IMAGE_DOWNLOAD_AT
         remaining = delay - elapsed
         if remaining > 0:
-            print(f"⏳ Пауза {remaining:.1f} сек перед скачиванием следующего Avito autoload изображения")
+            print(f"⏳ Пауза {remaining:.1f} сек перед скачиванием следующего изображения")
             time.sleep(remaining)
 
     def avito_autoload_blocked_for_run(self) -> bool:
@@ -251,6 +253,18 @@ class ImageMirror:
             f"⚠️ Avito autoload image download failed{status}: VIN {vin}, image #{index + 1}. "
             "Новые Avito autoload изображения будут пропущены до конца запуска; "
             "для авто без сохраненных изображений будет использована цветовая заглушка. "
+            f"URL: {source_url}"
+        )
+        print(message)
+        append_output_message(message)
+
+    def register_image_source_error(self, vin: str, index: int, source_url: str, action: str, error: Exception) -> None:
+        status_code = getattr(getattr(error, "response", None), "status_code", None)
+        status = f" HTTP {status_code}" if status_code else ""
+        message = (
+            f"⚠️ Image {action} failed{status}: VIN {vin}, image #{index + 1}. "
+            "Картинка будет пропущена; если у авто не останется сохраненных изображений, "
+            "будет использована цветовая заглушка. "
             f"URL: {source_url}"
         )
         print(message)
@@ -371,14 +385,34 @@ class ImageMirror:
             if not source_url:
                 continue
 
-            metadata = self.inspect_source(source_url, index)
-            version = source_signature(source_url, metadata)
             existing = self.existing_image_for_source(
                 existing_images,
                 existing_images_by_source_hash,
                 index,
                 source_url,
             )
+            try:
+                metadata = self.inspect_source(source_url, index)
+            except requests.RequestException as error:
+                self.register_image_source_error(vin, index, source_url, "inspect", error)
+                if existing and isinstance(existing.get("cdn"), dict):
+                    metadata = {
+                        "etag": existing.get("etag"),
+                        "last_modified": existing.get("last_modified"),
+                        "content_length": existing.get("content_length"),
+                    }
+                    version = existing.get("version") or source_signature(source_url, metadata)
+                    prepared_images.append({
+                        "index": index,
+                        "source_url": source_url,
+                        "metadata": metadata,
+                        "version": version,
+                        "existing": existing,
+                        "force_keep_existing": True,
+                    })
+                continue
+
+            version = source_signature(source_url, metadata)
             is_changed = self.should_regenerate(existing, source_url, version)
 
             if is_changed and index < self.config.probe_count and not is_avito_autoload_url(source_url):
@@ -390,6 +424,7 @@ class ImageMirror:
                 "metadata": metadata,
                 "version": version,
                 "existing": existing,
+                "force_keep_existing": False,
             })
 
         for item in prepared_images:
@@ -398,12 +433,26 @@ class ImageMirror:
             metadata = item["metadata"]
             version = item["version"]
             existing = item["existing"]
+            force_keep_existing = item["force_keep_existing"]
 
             if force_probe_all and index >= self.config.probe_count and not is_avito_autoload_url(source_url):
-                metadata = self.inspect_source(source_url, index, force=True)
-                version = source_signature(source_url, metadata)
+                try:
+                    metadata = self.inspect_source(source_url, index, force=True)
+                    version = source_signature(source_url, metadata)
+                except requests.RequestException as error:
+                    self.register_image_source_error(vin, index, source_url, "inspect", error)
+                    if existing and isinstance(existing.get("cdn"), dict):
+                        metadata = {
+                            "etag": existing.get("etag"),
+                            "last_modified": existing.get("last_modified"),
+                            "content_length": existing.get("content_length"),
+                        }
+                        version = existing.get("version") or source_signature(source_url, metadata)
+                        force_keep_existing = True
+                    else:
+                        continue
 
-            regenerate = self.should_regenerate(existing, source_url, version)
+            regenerate = False if force_keep_existing else self.should_regenerate(existing, source_url, version)
             is_avito_autoload = is_avito_autoload_url(source_url)
 
             if regenerate and is_avito_autoload:
@@ -422,16 +471,17 @@ class ImageMirror:
 
             if regenerate:
                 changed_indexes.append(index)
-                if is_avito_autoload:
-                    self.wait_before_avito_autoload_download()
+                self.wait_before_image_download()
                 try:
                     changed_remote_paths.extend(self.write_image_set(vin, index, source_url, version))
                 except requests.RequestException as error:
+                    changed_indexes.pop()
                     if is_avito_autoload:
-                        changed_indexes.pop()
                         self.register_avito_autoload_download_error(vin, index, source_url, error)
-                        continue
-                    raise
+                    else:
+                        self.register_image_source_error(vin, index, source_url, "download", error)
+                    continue
+                self.register_image_download_for_run()
                 if is_avito_autoload:
                     self.register_avito_autoload_download_for_run(vin)
 
@@ -465,6 +515,11 @@ class ImageMirror:
         images = [item["cdn"]["full"] for item in manifest_images]
         thumbs = [item["cdn"]["medium"] for item in manifest_images[:5]]
         image_sets = [item["cdn"] for item in manifest_images]
+        print(
+            f"🖼️ Image mirror VIN {vin}: "
+            f"source={len(image_urls)}, manifest={len(manifest_images)}, "
+            f"generated_sets={len(changed_indexes)}, generated_files={len(changed_indexes) * len(IMAGE_SIZES)}"
+        )
 
         return MirrorResult(
             image=images[0] if images else None,
@@ -501,11 +556,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--probe_count", type=int, default=DEFAULT_PROBE_COUNT)
     parser.add_argument("--avito_autoload_max_new_per_car", type=int, default=1)
     parser.add_argument(
-        "--avito_autoload_download_delay_seconds",
+        "--autoload_download_delay_seconds",
         type=float,
         default=float_value(
-            os.getenv("MIRROR_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS"),
-            DEFAULT_AVITO_AUTOLOAD_DOWNLOAD_DELAY_SECONDS,
+            os.getenv("MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS"),
+            DEFAULT_AUTOLOAD_DOWNLOAD_DELAY_SECONDS,
         ),
     )
     parser.add_argument("--env_file", default=DEFAULT_ENV_FILE)
@@ -533,7 +588,7 @@ def main() -> None:
         local_root=Path(args.local_root),
         probe_count=args.probe_count,
         avito_autoload_max_new_per_car=args.avito_autoload_max_new_per_car,
-        avito_autoload_download_delay_seconds=args.avito_autoload_download_delay_seconds,
+        autoload_download_delay_seconds=args.autoload_download_delay_seconds,
         dry_run=args.dry_run,
     )
     result = ImageMirror(config).mirror_car_images(args.vin, image_urls, args.friendly_url)

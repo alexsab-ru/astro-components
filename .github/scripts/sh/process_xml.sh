@@ -14,7 +14,7 @@ show_help() {
     echo "  --skip_thumbs                    - Skip car images and thumbnail generation"
     echo "  --mirror_images                  - Mirror external car images into CDN layout"
     echo "  --mirror_dry_run                 - Build image mirror manifest without writing image files"
-    echo "  --mirror_avito_autoload_download_delay_seconds N - Delay between avito.ru/autoload image downloads"
+    echo "  --mirror_autoload_download_delay_seconds N - Delay between mirrored image downloads"
     echo "  --count_thumbs N                 - Number of thumbnails to generate (default: 5)"
     echo "  --skip_check_thumb               - Skip thumbnail existence check"
     echo "  --dev                            - Start dev server after processing (for auto and test)"
@@ -142,12 +142,12 @@ parse_options() {
                 thumb_args="$thumb_args --mirror_dry_run"
                 shift
                 ;;
-            --mirror_avito_autoload_download_delay_seconds)
+            --mirror_autoload_download_delay_seconds)
                 if [ -n "$2" ] && [[ "$2" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-                    thumb_args="$thumb_args --mirror_avito_autoload_download_delay_seconds $2"
+                    thumb_args="$thumb_args --mirror_autoload_download_delay_seconds $2"
                     shift 2
                 else
-                    echo -e "${BGRED}Error: --mirror_avito_autoload_download_delay_seconds requires a numeric value${Color_Off}"
+                    echo -e "${BGRED}Error: --mirror_autoload_download_delay_seconds requires a numeric value${Color_Off}"
                     exit 1
                 fi
                 ;;
