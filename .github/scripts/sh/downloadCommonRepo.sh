@@ -281,12 +281,12 @@ clean_data_dir() {
 
 sync_remote_content() {
   local copied_any_brand=false
+  mkdir -p "$ASTRO_CONTENT_DIR"
 
   for brand_domain in "${BRAND_DOMAINS[@]}"; do
     local src_dir="$TMP_DIR/src/$brand_domain/content"
 
     if [ -d "$src_dir" ]; then
-      mkdir -p "$ASTRO_CONTENT_DIR"
       rsync -a "$src_dir/" "$ASTRO_CONTENT_DIR/"
       echo "  ✔ Brand content: $brand_domain/content → $ASTRO_CONTENT_DIR"
       copied_any_brand=true
@@ -301,7 +301,6 @@ sync_remote_content() {
 
   local site_content_dir="$TMP_DIR/$REMOTE_DATA_PATH/content"
   if [ -d "$site_content_dir" ]; then
-    mkdir -p "$ASTRO_CONTENT_DIR"
     rsync -a "$site_content_dir/" "$ASTRO_CONTENT_DIR/"
     echo "  ✔ Site content: $REMOTE_DATA_PATH/content → $ASTRO_CONTENT_DIR"
   else
