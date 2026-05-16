@@ -6,6 +6,7 @@ import bannersData from '@/data/site/banners.json';
 import type { TBanner } from '@/components/Banner/types';
 import PageH1 from '@/components/PageH1/Index.astro';
 import modelsData from '@/data/site/models.json';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 import settings from '@/data/site/settings.json';
 import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
 import Sections from '@/components/ImageGallery/Sections.astro';
@@ -26,12 +27,13 @@ const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phon
 
 export async function getStaticPaths() {
   if (isRouteDisabled('/model-page/')) return [];
-  return modelsData.models
-    .filter((m) => m.show)
-    .map((model) => ({
+  const { models } = modelsData;
+  return models.filter(isModelVisible).map((model) => {
+    return {
       params: { slug: setPrefixModelUrl(model, IS_MODEL_PREFIX_URL) },
       props: { model },
-    }));
+    };
+  });
 }
 
 const { model } = Astro.props;
