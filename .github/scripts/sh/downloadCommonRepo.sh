@@ -281,7 +281,15 @@ clean_data_dir() {
 
 sync_remote_content() {
   local copied_any_brand=false
+  local common_content_dir="$TMP_DIR/$ASTRO_JSON_DATA_PATH/content"
   mkdir -p "$ASTRO_CONTENT_DIR"
+
+  if [ -d "$common_content_dir" ]; then
+    rsync -a "$common_content_dir/" "$ASTRO_CONTENT_DIR/"
+    echo "  ✔ Common content: $ASTRO_JSON_DATA_PATH/content → $ASTRO_CONTENT_DIR"
+  else
+    echo "▶ Common content not found: $ASTRO_JSON_DATA_PATH/content"
+  fi
 
   for brand_domain in "${BRAND_DOMAINS[@]}"; do
     local src_dir="$TMP_DIR/src/$brand_domain/content"
