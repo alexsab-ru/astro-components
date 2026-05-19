@@ -4,10 +4,10 @@ import PageLayout from '@/layouts/PageLayout.astro';
 interface Props {
 	Content: any;
 	fallbackTitle: string;
+	frontmatter?: Record<string, any>;
 }
 
-const { Content, fallbackTitle } = Astro.props;
-const frontmatter = Content?.frontmatter || {};
+const { Content, fallbackTitle, frontmatter = Content?.frontmatter || {} } = Astro.props;
 const h1 = frontmatter.h1 || frontmatter.title || fallbackTitle;
 const title = frontmatter.title || h1;
 const description = frontmatter.description || title;

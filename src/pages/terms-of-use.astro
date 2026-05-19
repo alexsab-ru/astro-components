@@ -1,6 +1,11 @@
 ---
 import TermsOfUse from '@/content/terms-of-use.mdx';
+import { frontmatter as termsOfUseFrontmatter } from '@/content/terms-of-use.mdx';
 import LegalDocumentPage from '@/components/Legal/DocumentPage.astro';
 ---
 
-<LegalDocumentPage Content={TermsOfUse} fallbackTitle="Пользовательское соглашение" />
+<LegalDocumentPage
+	Content={TermsOfUse}
+	frontmatter={termsOfUseFrontmatter}
+	fallbackTitle="Пользовательское соглашение"
+/>

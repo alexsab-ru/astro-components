@@ -1,6 +1,11 @@
 ---
 import PersonalDataConsent from '@/content/personal-data-consent.mdx';
+import { frontmatter as personalDataConsentFrontmatter } from '@/content/personal-data-consent.mdx';
 import LegalDocumentPage from '@/components/Legal/DocumentPage.astro';
 ---
 
-<LegalDocumentPage Content={PersonalDataConsent} fallbackTitle="Согласие на обработку персональных данных" />
+<LegalDocumentPage
+	Content={PersonalDataConsent}
+	frontmatter={personalDataConsentFrontmatter}
+	fallbackTitle="Согласие на обработку персональных данных"
+/>
