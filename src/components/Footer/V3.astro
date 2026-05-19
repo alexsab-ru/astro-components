@@ -7,6 +7,7 @@ import { YEAR } from '@/js/utils/date';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_campaign=${scripts_json.site}`;
 
 import { Icon } from 'astro-icon/components'
+import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';
 
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
@@ -20,6 +21,7 @@ const LEGAL_SALONS_INFO = legal_entity && legal_inn ?
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
     .map(s => `<p>${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
+const legalDocuments = getEnabledLegalDocuments(settings.legal);
 
 interface Props {
     classes?: string;
@@ -71,8 +73,9 @@ const footerClasses = [
                 {site_name && site_name != legal_city && (<p set:html={site_name}></p>)}
                 {legal_city && (<p set:html={legal_city}></p>)}
                 {legal_inn && (<p set:html={legal_inn}></p>)}
-                <p><a href="/privacy-policy/" class="underline hover:no-underline" target="_blank">Политика конфиденциальности</a></p>
-                <p><a href="/cookie-policy/" class="underline hover:no-underline" target="_blank">Правила использования cookie</a></p>
+                {legalDocuments.map(document => (
+                    <p><a href={document.href} class="underline hover:no-underline" target="_blank">{document.label}</a></p>
+                ))}
             </div>
             <div class="mt-3 pt-3 border-t border-gray-200 xl:border-gray-400/30">
                 <span>&copy; {YEAR}</span>

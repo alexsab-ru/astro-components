@@ -1,0 +1,24 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+
+interface Props {
+	Content: any;
+	fallbackTitle: string;
+}
+
+const { Content, fallbackTitle } = Astro.props;
+const frontmatter = Content?.frontmatter || {};
+const h1 = frontmatter.h1 || frontmatter.title || fallbackTitle;
+const title = frontmatter.title || h1;
+const description = frontmatter.description || title;
+const breadcrumb = frontmatter.breadcrumb || h1;
+---
+
+<PageLayout
+	h1={h1}
+	title={title}
+	description={description}
+	breadcrumb={[{ name: breadcrumb, href: '' }]}
+>
+	<Content />
+</PageLayout>

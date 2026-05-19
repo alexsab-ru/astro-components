@@ -3,7 +3,9 @@ import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
 const { site_name, legal_entity, brand } = settings;
 import { FOOTER_INFO } from '@/const'
+import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
+const legalDocuments = getEnabledLegalDocuments(settings.legal);
 ---
 
 <footer class="bg-black text-white py-8" x-data="footer">
@@ -27,8 +29,17 @@ const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compai
 			</noindex>
 		</div>
 		<div class="relative flex flex-col sm:flex-row justify-between pt-10">
-		<p class="mb-4">© 2024 {legal_entity}</p>
-		<p class="relative bottom-0 right-0 text-sm opacity-70">Разработка <a href={url} target="_blank">alexsab.ru</a></p>
+			<div class="mb-4">
+				<p>© 2024 {legal_entity}</p>
+				{legalDocuments.length > 0 && (
+					<div class="flex gap-x-4 gap-y-1 flex-wrap mt-3 text-sm opacity-80">
+						{legalDocuments.map(document => (
+							<a href={document.href} class="underline transition hover:no-underline">{document.label}</a>
+						))}
+					</div>
+				)}
+			</div>
+			<p class="relative bottom-0 right-0 text-sm opacity-70">Разработка <a href={url} target="_blank">alexsab.ru</a></p>
 		</div>
 	</div>
 </footer>

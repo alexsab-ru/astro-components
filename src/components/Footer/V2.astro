@@ -28,11 +28,13 @@ const { showSiteLinks = true, logoNoLink = false } = Astro.props;
 import SocialList from '@/components/Social/List.astro';
 import socials from '@/data/site/socials.json';
 import scripts from '@/data/site/scripts.json';
+import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
 [`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`] : 
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
     .map(s => `<p class="text-sm">${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
+const legalDocuments = getEnabledLegalDocuments(settings.legal);
 ---
 
 <footer class="bg-linear-[var(--footer-bg)] text-footer-text-color py-14 relative">
@@ -122,8 +124,11 @@ salons
                     <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                     {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
                 </div>
-                <div><a href="/privacy-policy/" class="text-white/80 text-sm font-light hover:text-white!">Политика конфиденциальности</a></div>
-                <div><a href="/cookie-policy/" class="text-white/80 text-sm font-light hover:text-white!">Правила использования cookie</a></div>
+                {legalDocuments.map(document => (
+                    <div>
+                        <a href={document.href} class="text-white/80 text-sm font-light hover:text-white!">{document.label}</a>
+                    </div>
+                ))}
             </div>
             <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:text-white!" target="_blank">alexsab.ru</a></div>
         </div>
