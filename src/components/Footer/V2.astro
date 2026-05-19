@@ -123,7 +123,7 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
 
         {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
 
-        <div class="flex flex-wrap items-start gap-x-10 gap-y-4 pt-5 mt-7 border-white/20 border-t">
+        <div class="flex flex-wrap items-end gap-x-10 gap-y-4 pt-5 mt-7 border-white/20 border-t">
             <div class="md:shrink-0">
                 <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                 {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
