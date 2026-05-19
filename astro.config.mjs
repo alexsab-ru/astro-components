@@ -248,6 +248,20 @@ export default defineConfig({
 				},
 			},
 		},
+		environments: {
+			client: {
+			  build: {
+				rollupOptions: {
+				  output: {
+					// path names relative to `outDir`
+					entryFileNames: 'js/e.[hash].js', // js/[name].[hash:8].js
+					chunkFileNames: 'js/c.[hash].js', //js/chunks/[name].[hash:8].js
+					assetFileNames: 'static/[hash][extname]', // static/[name].[hash:8][extname]
+				  },
+				},
+			  },
+			},
+		},
 	},
 	redirects: redirectsConfig,
 	site: computedSite,
