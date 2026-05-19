@@ -8,7 +8,6 @@ import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import { AGREE_LABEL } from '@/const';
 
 import settings from '@/data/site/settings.json';
-if(settings.brand === 'Livan') { settings.brand = 'ЛИВЭН (LIVAN)'; }
 const { site_name, brand, legal_city_where } = settings;
 
 interface Props {
