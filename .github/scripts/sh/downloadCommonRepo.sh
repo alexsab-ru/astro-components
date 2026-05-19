@@ -394,7 +394,6 @@ SPARSE_PATHS=(
   "/src/$DOMAIN" \
   "/src/cars.json" \
   "/src/avito-colors.json" \
-  "/src/settings-common.json" \
   "/src/translations.json" \
   "/$ASTRO_JSON_DATA_PATH"
 )
@@ -433,9 +432,23 @@ if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
       mkdir -p "$(dirname "$DEST_FILE")"
       cp "$SRC_FILE" "$DEST_FILE"
       echo "  ✔ Copied: $file"
+    elif [ -f "$TMP_DIR/$ASTRO_JSON_DATA_PATH/json/$file" ]; then
+      echo "  ▶ Layered file '$file' not found in $REMOTE_DATA_PATH; using common JSON layer"
     else
-      echo "❌ Error: File '$file' not found in $REMOTE_DATA_PATH"
-      exit 1
+      FOUND_IN_BRAND=false
+      for brand_domain in "${BRAND_DOMAINS[@]}"; do
+        if [ -f "$TMP_DIR/src/$brand_domain/$file" ]; then
+          FOUND_IN_BRAND=true
+          break
+        fi
+      done
+
+      if [ "$FOUND_IN_BRAND" = true ]; then
+        echo "  ▶ Layered file '$file' not found in $REMOTE_DATA_PATH; using brand JSON layer"
+      else
+        echo "❌ Error: File '$file' not found in $REMOTE_DATA_PATH"
+        exit 1
+      fi
     fi
   done
 else
@@ -448,13 +461,26 @@ else
   fi
 fi
 
+echo "▶ Merge layered JSON…"
+TMP_DIR="$TMP_DIR" \
+SITE_DATA_DIR="$SITE_DATA_DIR" \
+REMOTE_DATA_PATH="$REMOTE_DATA_PATH" \
+ASTRO_JSON_DATA_PATH="$ASTRO_JSON_DATA_PATH" \
+BRAND_DOMAINS="$(printf '%s\n' "${BRAND_DOMAINS[@]}")" \
+SPECIFIC_FILES="$(printf '%s\n' "${SPECIFIC_FILES[@]}")" \
+node .github/scripts/mergeLayeredJson.js
+
 echo "▶ Sync content…"
 sync_remote_content
 
 # Копируем внутренности astro-json/data для дальнейшей обработки.
 if [ -d "$TMP_DIR/$ASTRO_JSON_DATA_PATH" ]; then
   echo "▶ Sync astro-json/data → $COMMON_DATA_DIR…"
-  rsync -a "$TMP_DIR/$ASTRO_JSON_DATA_PATH/" "$COMMON_DATA_DIR/"
+  rsync -a \
+    --exclude "content/" \
+    --exclude "json/" \
+    "$TMP_DIR/$ASTRO_JSON_DATA_PATH/" \
+    "$COMMON_DATA_DIR/"
 else
   echo -e "${BGYELLOW}Пропускаем копирование astro-json/data: папка не найдена в JSON_REPO${Color_Off}"
 fi
@@ -505,19 +531,6 @@ if [ -f "$TMP_DIR/src/translations.json" ]; then
   fi
 else
   echo -e "${BGYELLOW}Пропускаем копирование translations.json: файла нет в JSON_REPO${Color_Off}"
-fi
-
-# Копирование settings-common.json (всегда, если есть в общем репозитории)
-echo -e "\n${BGGREEN}Копируем общий settings-common.json...${Color_Off}"
-if [ -f "$TMP_DIR/src/settings-common.json" ]; then
-  rsync -a "$TMP_DIR/src/settings-common.json" "$COMMON_DATA_DIR/settings-common.json"
-  if [ ! -s "$COMMON_DATA_DIR/settings-common.json" ]; then
-      printf "${BGRED}Внимание: settings-common.json не найден или получен некорректный файл!${Color_Off}\n"
-  else
-      printf "${BGGREEN}Общий файл settings-common.json успешно скопирован${Color_Off}\n"
-  fi
-else
-  echo -e "${BGYELLOW}Пропускаем копирование settings-common.json: файла нет в JSON_REPO${Color_Off}"
 fi
 
 # ==================================================

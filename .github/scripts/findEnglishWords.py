@@ -72,7 +72,7 @@ def find_english_words(text: str) -> set:
 
 
 def load_skip_words(settings_path: Path) -> set:
-    """Загрузить список игнорируемых слов из settings-common.json."""
+    """Загрузить список игнорируемых слов из итогового settings.json."""
     if not settings_path.exists():
         return set()
     try:
@@ -105,7 +105,7 @@ def main():
     if domain:
         print(f"[INFO] Домен: {domain}", file=sys.stderr)
 
-    settings_path = Path('src/data/common/settings-common.json')
+    settings_path = Path('src/data/site/settings.json')
     skip_words = load_skip_words(settings_path)
     if skip_words:
         print(f"[INFO] Игнорируем слова: {', '.join(sorted(skip_words))}", file=sys.stderr)

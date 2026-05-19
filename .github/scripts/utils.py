@@ -30,9 +30,9 @@ CYRILLIC_TO_LATIN = {
 }
 
 
-def _load_settings_common():
-    """Загружает settings-common.json и возвращает словари переводов."""
-    settings_path = Path('./src/data/common/settings-common.json')
+def _load_site_settings():
+    """Загружает итоговый settings.json и возвращает словари переводов."""
+    settings_path = Path('./src/data/site/settings.json')
     try:
         with open(settings_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -65,7 +65,7 @@ def _build_complectation_translation_map():
 
 
 # Загружаем один раз при старте
-_url_translations, _url_translations_by_brand = _load_settings_common()
+_url_translations, _url_translations_by_brand = _load_site_settings()
 _complectation_map = _build_complectation_translation_map()
 # Сортируем по длине (самые длинные первые) для корректной замены
 _complectation_sorted = sorted(_complectation_map.items(), key=lambda x: len(x[0]), reverse=True)
@@ -191,9 +191,9 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
     Порядок:
     1. Замена «Nх» на «Nx» (например, «4х4» → «4x4», «2х4» → «2x4»)
     1.1. Замена «л.с.» / «л.с)» → «h.p.» / «h.p.)» (потом удалятся → hp)
-    2. Бренд/модель-специфичные переопределения из settings-common.json
+    2. Бренд/модель-специфичные переопределения из settings.json
     3. Комплектации из layered-каталога моделей
-    4. Аббревиатуры из url_translations (settings-common.json)
+    4. Аббревиатуры из url_translations (settings.json)
     5. Логирование непереведённых слов
     6. Транслитерация оставшейся кириллицы
     """
@@ -226,7 +226,7 @@ def _translate_russian_in_url(text, mark_id=None, folder_id=None, vin=None, log_
                 text = text[:idx] + eng + text[idx + len(rus):]
                 text_lower = text.lower()
 
-    # 4. Пословная замена аббревиатур из settings-common.json
+    # 4. Пословная замена аббревиатур из settings.json
     if _has_cyrillic(text):
         def _replace_abbrev(m):
             w_lower = m.group(0).lower()
