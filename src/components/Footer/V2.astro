@@ -118,19 +118,17 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
 
         {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
 
-        <div class="flex justify-between items-start gap-10 flex-wrap pt-5 mt-7 border-white/20 border-t">
-            <div class="flex grow gap-10 flex-wrap">
-                <div>
-                    <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
-                    {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
-                </div>
-                {legalDocuments.map(document => (
-                    <div>
-                        <a href={document.href} class="text-white/80 text-sm font-light hover:text-white!">{document.label}</a>
-                    </div>
-                ))}
+        <div class="flex flex-wrap items-start gap-x-10 gap-y-4 pt-5 mt-7 border-white/20 border-t">
+            <div class="md:shrink-0">
+                <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
+                {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
             </div>
-            <div class="made-by text-sm m-0 text-white/80">Разработка <a href={url} class="hover:text-white!" target="_blank">alexsab.ru</a></div>
+            {legalDocuments.map(document => (
+                <div class="shrink-0">
+                    <a href={document.href} class="text-white/80 text-sm font-light hover:text-white!">{document.label}</a>
+                </div>
+            ))}
+            <div class="made-by ml-auto shrink-0 text-sm m-0 text-white/80">Разработка <a href={url} class="hover:text-white!" target="_blank">alexsab.ru</a></div>
         </div>
 
     </div>
