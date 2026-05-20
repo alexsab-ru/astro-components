@@ -1,0 +1,35 @@
+---
+// First-party маячок времени на странице.
+// Шлёт navigator.sendBeacon на /__t.gif при закрытии вкладки/уходе со страницы.
+// Эндпоинт обрабатывается nginx прямо на сервере (return 204), не зависит от Метрики/GHP.
+// Лог попадает в /var/log/nginx/access.log на 88.218.61.141 — оттуда считаем dwell-time.
+const isProd = import.meta.env.PROD;
+---
+{isProd && (
+<script>
+(function(){
+  if (typeof navigator === 'undefined' || !('sendBeacon' in navigator)) return;
+  var t0 = performance.now();
+  var sent = false;
+  function send(){
+    if (sent) return; sent = true;
+    var t = Math.max(0, Math.round((performance.now() - t0) / 1000));
+    try {
+      var url = '/__t.gif?p=' + encodeURIComponent(location.pathname)
+              + '&q=' + encodeURIComponent(location.search.slice(0, 500))
+              + '&r=' + encodeURIComponent((document.referrer || '').slice(0, 300))
+              + '&t=' + t
+              + '&s=' + (screen.width + 'x' + screen.height)
+              + '&v=1';
+      navigator.sendBeacon(url);
+    } catch (e) {}
+  }
+  // pagehide — единственное надёжное событие в Safari/iOS (unload там не срабатывает).
+  // visibilitychange ловит сворачивание вкладки и переход в фон на мобильных.
+  window.addEventListener('pagehide', send, { capture: true });
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'hidden') send();
+  });
+})();
+</script>
+)}

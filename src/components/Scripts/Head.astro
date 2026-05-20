@@ -23,6 +23,7 @@ import STREAMWOOD from '@/components/Scripts/components/runSTREAMWOOD.astro';
 import SMARTPOINT from '@/components/Scripts/components/runSMARTPOINT.astro';
 import WIDGETS from '@/components/Scripts/components/runWIDGETS.astro';
 import LoadAnalyticsScripts from '@/components/Scripts/components/loadAnalyticsScripts.astro';
+import DWELL from '@/components/Scripts/components/runDWELL.astro';
 
 const cleanedScripts = cleanScriptsData(scripts_json);
 ---
@@ -40,4 +41,5 @@ const cleanedScripts = cleanScriptsData(scripts_json);
 <STREAMWOOD />
 <SMARTPOINT />
 <WIDGETS />
+<DWELL />
 <LoadAnalyticsScripts />
