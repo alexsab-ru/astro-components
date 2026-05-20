@@ -58,10 +58,17 @@
             loadAnalyticsScripts();
             return;
         }
-        
-        // Otherwise, set up event listeners
-        window.addEventListener('scroll', loadAnalyticsScripts);
-        document.addEventListener('mousemove', loadAnalyticsScripts);
+
+        // Триггеры запуска аналитики при первом взаимодействии.
+        // touchstart/pointerdown/keydown — для мобильных: mousemove на тачскрине не существует,
+        // из-за чего короткие визиты без скролла раньше не попадали в Метрику.
+        ['scroll','mousemove','touchstart','pointerdown','keydown'].forEach(function(ev){
+            var tgt = (ev === 'scroll') ? window : document;
+            tgt.addEventListener(ev, loadAnalyticsScripts, { once: true, passive: true });
+        });
+        // Страховка: если за 3 сек не было ни одного взаимодействия — всё равно грузим аналитику.
+        // Ловит «открыл, посмотрел, закрыл, ничего не трогая» — типичный мобильный визит из ПромоСтраниц.
+        setTimeout(loadAnalyticsScripts, 3000);
     }
 
     // Initialize based on document ready state
