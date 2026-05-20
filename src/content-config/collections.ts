@@ -1,5 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 import { getRegularCollectionNames, hasContentCollection } from './fs';
 import { carsSchema, pageCollectionSchema, usedCarsSchema } from './schemas';
@@ -8,6 +10,29 @@ export type CollectionMeta = {
 	name: string;
 	title: string;
 	description: string;
+	image: string;
+};
+
+type SeoEntry = {
+	title?: string;
+	h1?: string;
+	breadcrumb?: string;
+	description?: string;
+	image?: string;
+};
+
+const readSeoData = (): Record<string, SeoEntry> => {
+	const path = resolve(process.cwd(), 'src/data/site/seo.json');
+	if (!existsSync(path)) return {};
+
+	return JSON.parse(readFileSync(path, 'utf-8'));
+};
+
+const seoData = readSeoData();
+
+const titleFromSeoTitle = (title?: string): string | undefined => {
+	const value = title?.split('|')[0]?.trim();
+	return value || undefined;
 };
 
 export const titleFromCollectionName = (name: string): string =>
@@ -18,11 +43,17 @@ export const titleFromCollectionName = (name: string): string =>
 		.join(' ');
 
 export const getContentCollections = (): CollectionMeta[] =>
-	getRegularCollectionNames().map((name) => ({
-		name,
-		title: titleFromCollectionName(name),
-		description: '',
-	}));
+	getRegularCollectionNames().map((name) => {
+		const seo = seoData[`/${name}/`];
+		const title = seo?.h1 || seo?.breadcrumb || titleFromSeoTitle(seo?.title);
+
+		return {
+			name,
+			title: title || titleFromCollectionName(name),
+			description: seo?.description || '',
+			image: seo?.image || '',
+		};
+	});
 
 const createGlobCollection = (collection: string, schema?: unknown) => defineCollection({
 	loader: glob({
