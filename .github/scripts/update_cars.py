@@ -1309,6 +1309,10 @@ def main():
             current_config['new_phone'] = source_config['new_phone']
             current_config['dealer_cars_price_override'] = source_config.get('dealer_cars_price_override', False)
             current_config['category_type'] = category_type
+            current_config['h1_template'] = source_config.get('h1_template', '')
+            current_config['breadcrumb_template'] = source_config.get('breadcrumb_template', '')
+            current_config['title_template'] = source_config.get('title_template', '')
+            current_config['description_template'] = source_config.get('description_template', '')
                         
             # Инициализация XML
             root = get_xml_content(xml_file_path, args.xml_url)
@@ -1424,6 +1428,10 @@ def main():
         config['new_phone'] = source_config['new_phone']
         config['dealer_cars_price_override'] = source_config.get('dealer_cars_price_override', False)
         config['category_type'] = 'used' if config.get('path_car_page') == '/used_cars/' else 'new'
+        config['h1_template'] = source_config.get('h1_template', '')
+        config['breadcrumb_template'] = source_config.get('breadcrumb_template', '')
+        config['title_template'] = source_config.get('title_template', '')
+        config['description_template'] = source_config.get('description_template', '')
 
         # Инициализация процессора для конкретного источника
         processor = CarProcessor()
