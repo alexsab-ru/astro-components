@@ -1,0 +1,11 @@
+---
+import CompanySout from '@/content/company-sout.mdx';
+import { frontmatter as companySoutFrontmatter } from '@/content/company-sout.mdx';
+import LegalDocumentPage from '@/components/Legal/DocumentPage.astro';
+---
+
+<LegalDocumentPage
+	Content={CompanySout}
+	frontmatter={companySoutFrontmatter}
+	fallbackTitle="Специальная оценка условий труда"
+/>

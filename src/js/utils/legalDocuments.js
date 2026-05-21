@@ -24,6 +24,12 @@ export const LEGAL_DOCUMENTS = [
 		label: 'Согласие на рекламные сообщения',
 	},
 	{
+		key: 'companySout',
+		slug: 'company-sout',
+		href: '/company-sout/',
+		label: 'СОУТ',
+	},
+	{
 		key: 'termsOfUse',
 		slug: 'terms-of-use',
 		href: '/terms-of-use/',
