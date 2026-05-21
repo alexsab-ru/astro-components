@@ -2,6 +2,7 @@
 import type { TStep } from './types';
 import QuizSlide from './QuizSlide.astro';
 import { getModelBrandDisplayName, getModelTitle } from '@/js/utils/modelFields';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 import './quiz.css';
 
 // import.meta.glob — Vite-нативный optional import (не падает если файла нет)
@@ -15,7 +16,7 @@ if (quizData) {
     if (modelsData) {
         let modelStep = quizData.find(el => el.id === 'model');
         if (modelStep && (!Array.isArray(modelStep.answerOptions) || !modelStep.answerOptions.length)) {
-            const models = modelsData.models.map(el => `${getModelBrandDisplayName(el)} ${getModelTitle(el)}`).filter(Boolean);
+            const models = modelsData.models.filter(isModelVisible).map(el => `${getModelBrandDisplayName(el)} ${getModelTitle(el)}`).filter(Boolean);
             modelStep.answerOptions = models;
         }
     }

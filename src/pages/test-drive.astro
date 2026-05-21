@@ -14,14 +14,16 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
 import modelsData from '@/data/site/models.json';
 import { getModelBrandId } from '@/js/utils/modelFields';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 const { testDrive } = modelsData;
+const visibleTestDrive = Array.isArray(testDrive) ? testDrive.filter(isModelVisible) : [];
 /** Левая колонка с карточкой модели нужна только если в данных есть модели для тест-драйва. */
-const hasTestDriveModels = Array.isArray(testDrive) && testDrive.length > 0;
+const hasTestDriveModels = visibleTestDrive.length > 0;
 ---
 <Layout 
 	title={`Тест-драйв автомобиля ${brand} – Онлайн запись в салон официального дилера ${brand} в ${legal_city_where}`} 
 	description={`Записаться на тест-драйв автомобиля ${brand} в ${legal_city_where} вы можете на официальном сайте дилера ${brand} в ${legal_city_where}, заполнив специальную форму, или по телефонам: ${salonsPhone}`} 
-	{...salons.length > 1 && hasTestDriveModels ? { brand: getModelBrandId(testDrive[0]) } : {}}
+	{...salons.length > 1 && hasTestDriveModels ? { brand: getModelBrandId(visibleTestDrive[0]) } : {}}
 	breadcrumb={[{ name: 'Тест-драйв', href: '/test-drive/' }]}
 >
 	<div class="flex flex-col lg:flex-row xl:min-h-[600px]" x-data="testDrive">

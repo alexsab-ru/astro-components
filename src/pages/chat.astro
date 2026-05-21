@@ -6,6 +6,7 @@ import Banner from '@/components/Banner/Banner.astro'
 import siteSettings from '@/data/site/settings.json';
 import modelsData from '@/data/site/models.json';
 import { getModelBrandDisplayName, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
@@ -15,6 +16,7 @@ const chatFiles = import.meta.glob('/src/data/site/chat-landing.json', { eager: 
 const chatConfig: any = (Object.values(chatFiles)[0] as any)?.default || { settings: {}, questions: [] };
 
 const { models } = modelsData;
+const visibleModels = models.filter(isModelVisible);
 const banners = [
     {
         "id": 1,
@@ -56,7 +58,7 @@ const config = {
     ...chatConfig,
     settings: mergedSettings,
     // Данные моделей для динамических опций (цвета по выбранной модели)
-    models: models.map((m: any) => ({
+    models: visibleModels.map((m: any) => ({
         name: m.name,
         colors: (m.colors || []).map((c: any) => ({ id: c.id, name: c.name })),
     })),
@@ -64,10 +66,10 @@ const config = {
         if (q.id !== 'model') return q;
         // Если answerOptions пуст — показываем все модели, иначе только указанные
         const sourceNames = q.answerOptions.length === 0
-            ? models.map((m: any) => m.name)
+            ? visibleModels.map((m: any) => m.name)
             : q.answerOptions.map((a: any) => typeof a === 'string' ? a : a);
         const newOptions = sourceNames.reduce((acc: any[], name: string) => {
-            const model = models.find((m: any) => m.name === name);
+            const model = visibleModels.find((m: any) => m.name === name);
             if (model) {
                 acc.push({
                     label: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}`,

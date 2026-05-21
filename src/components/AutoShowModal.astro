@@ -22,9 +22,11 @@ const {
 
 import modelsData from '@/data/site/models.json';
 import { getModelTitle } from '@/js/utils/modelFields';
+import { isModelVisible } from '@/js/utils/modelVisibility';
 const { models } = modelsData;
 const options = testDrive
 	? models
+		.filter(isModelVisible)
 		.filter((m: any) => m?.testDrive)
 		.map((m: any) => ({
 			...m,
