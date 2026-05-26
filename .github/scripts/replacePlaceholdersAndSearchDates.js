@@ -25,6 +25,7 @@ class PlaceholderProcessor {
         this.dataDirectory = path.join(process.cwd(), 'src', 'data', 'site');
         this.contentDirectory = path.join(process.cwd(), 'src', 'content');
         this.pagesDirectory = path.join(process.cwd(), 'src', 'pages');
+        this.componentsDirectory = path.join(process.cwd(), 'src', 'components');
         
         // Иконка для дисклеймера
         this.infoIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>';
@@ -590,6 +591,9 @@ class PlaceholderProcessor {
 
         // Обработка Astro файлов
         this.processDirectory(this.pagesDirectory, ['.astro']);
+
+        // Обработка компонентов
+        this.processDirectory(this.componentsDirectory, ['.astro']);
     }
 
     // Вывод результатов обработки
@@ -743,7 +747,7 @@ class PlaceholderProcessor {
         walkDirectory(this.dataDirectory, ['.json']);
         walkDirectory(this.contentDirectory, ['.mdx']);
         walkDirectory(this.pagesDirectory, ['.astro']);
-
+        walkDirectory(this.componentsDirectory, ['.astro']);
         if (unreplaced.length > 0) {
             console.log('\n⚠️ Найдены незаменённые плейсхолдеры:');
             const outputLines = [];
