@@ -169,10 +169,10 @@ const cards = [
 					<Fragment slot="card-content">
 						<h2 class="m-0! p-0! before:hidden text-2xl! lg:text-4xl!">{card.title}</h2>
 							<ul class="list-disc pl-5 text-gray-700 text-base! lg:text-lg!">
-								<li>Выгода {card.benefit}</li>
+								<li><Fragment set:html={`Выгода ${card.benefit}`} /></li>
 								<li>Кредит 0.01%</li>
 								<li>Гарантия 5 лет</li>
-								<li>Набор доп.оборудование в комплекте</li>
+								<li>Набор доп.оборудование в&nbsp;комплекте</li>
 							</ul>
 						
 						<div class={`grid gap-3 sm:grid-cols-2`}>
