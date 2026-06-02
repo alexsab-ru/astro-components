@@ -610,8 +610,12 @@ node .github/scripts/mergeLayeredJson.js
 echo "▶ Sync content…"
 sync_remote_content
 
-echo "▶ Sync pages…"
-sync_remote_pages
+if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
+  echo "▶ Sync pages skipped for specific file download"
+else
+  echo "▶ Sync pages…"
+  sync_remote_pages
+fi
 
 # Копируем внутренности astro-json/data для дальнейшей обработки.
 if [ -d "$TMP_DIR/$ASTRO_JSON_DATA_PATH" ]; then
