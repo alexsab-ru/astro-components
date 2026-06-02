@@ -33,3 +33,8 @@ src/data/**/*.yaml
 /tmp
 .claude/settings.local.json
 /.pnpm-store
+/src/content/**
+!/src/content/cars/
+!/src/content/cars/**
+!/src/content/used_cars/
+!/src/content/used_cars/**
