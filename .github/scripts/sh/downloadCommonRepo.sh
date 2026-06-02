@@ -342,6 +342,91 @@ sync_remote_content() {
   fi
 }
 
+extract_page_template() {
+  local settings_file="$1"
+
+  if [ ! -f "$settings_file" ]; then
+    return 0
+  fi
+
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '
+      (.pageTemplate // .siteType // "") |
+      if type == "string" then . else "" end
+    ' "$settings_file"
+    return
+  fi
+
+  if ! command -v node >/dev/null 2>&1; then
+    echo "❌ Error: node is required to parse pageTemplate when jq is unavailable"
+    exit 1
+  fi
+
+  node - "$settings_file" <<'NODE'
+const fs = require("fs");
+
+const file = process.argv[2];
+const data = JSON.parse(fs.readFileSync(file, "utf8"));
+const template = data.pageTemplate ?? data.siteType ?? "";
+process.stdout.write(typeof template === "string" ? template : "");
+NODE
+}
+
+sync_remote_pages() {
+  local copied_any_brand=false
+  local common_pages_dir="$TMP_DIR/$ASTRO_JSON_DATA_PATH/pages"
+  local settings_file="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
+  local page_template
+
+  page_template=$(extract_page_template "$settings_file" | xargs)
+
+  mkdir -p "$ASTRO_PAGES_DIR"
+
+  if [ -d "$common_pages_dir" ]; then
+    rsync -a "$common_pages_dir/" "$ASTRO_PAGES_DIR/"
+    echo "  ✔ Common pages: $ASTRO_JSON_DATA_PATH/pages → $ASTRO_PAGES_DIR"
+  else
+    echo "▶ Common pages not found: $ASTRO_JSON_DATA_PATH/pages"
+  fi
+
+  for brand_domain in "${BRAND_DOMAINS[@]}"; do
+    local src_dir="$TMP_DIR/src/$brand_domain/pages"
+
+    if [ -d "$src_dir" ]; then
+      rsync -a "$src_dir/" "$ASTRO_PAGES_DIR/"
+      echo "  ✔ Brand pages: $brand_domain/pages → $ASTRO_PAGES_DIR"
+      copied_any_brand=true
+    else
+      echo "  ⚠ Brand pages not found: src/$brand_domain/pages"
+    fi
+  done
+
+  if [ "$copied_any_brand" = false ] && [ ${#BRAND_DOMAINS[@]} -gt 0 ]; then
+    echo "▶ No brand pages directories were found"
+  fi
+
+  if [ -n "$page_template" ]; then
+    local template_pages_dir="$TMP_DIR/$ASTRO_JSON_DATA_PATH/pages-template/$page_template"
+
+    if [ -d "$template_pages_dir" ]; then
+      rsync -a "$template_pages_dir/" "$ASTRO_PAGES_DIR/"
+      echo "  ✔ Template pages: $ASTRO_JSON_DATA_PATH/pages-template/$page_template → $ASTRO_PAGES_DIR"
+    else
+      echo "▶ Page template not found, skipped: $ASTRO_JSON_DATA_PATH/pages-template/$page_template"
+    fi
+  else
+    echo "▶ pageTemplate is not set; template pages skipped"
+  fi
+
+  local site_pages_dir="$TMP_DIR/$REMOTE_DATA_PATH/pages"
+  if [ -d "$site_pages_dir" ]; then
+    rsync -a "$site_pages_dir/" "$ASTRO_PAGES_DIR/"
+    echo "  ✔ Site pages: $REMOTE_DATA_PATH/pages → $ASTRO_PAGES_DIR"
+  else
+    echo "▶ Site pages not found: $REMOTE_DATA_PATH/pages"
+  fi
+}
+
 # ==================================================
 # Подготовка env
 # ==================================================
@@ -377,6 +462,7 @@ LOCAL_DATA_DIR="src/data"
 SITE_DATA_DIR="$LOCAL_DATA_DIR/site"
 COMMON_DATA_DIR="$LOCAL_DATA_DIR/common"
 ASTRO_CONTENT_DIR="src/content"
+ASTRO_PAGES_DIR="src/pages"
 ASTRO_JSON_DATA_PATH="data"
 
 trap cleanup EXIT INT TERM
@@ -506,6 +592,7 @@ else
   if [ "$SKIP_DEALER_FILES" = false ]; then
     rsync -a \
         --exclude "content/" \
+        --exclude "pages/" \
         "$TMP_DIR/$REMOTE_DATA_PATH/" \
         "$SITE_DATA_DIR/"
   fi
@@ -523,12 +610,17 @@ node .github/scripts/mergeLayeredJson.js
 echo "▶ Sync content…"
 sync_remote_content
 
+echo "▶ Sync pages…"
+sync_remote_pages
+
 # Копируем внутренности astro-json/data для дальнейшей обработки.
 if [ -d "$TMP_DIR/$ASTRO_JSON_DATA_PATH" ]; then
   echo "▶ Sync astro-json/data → $COMMON_DATA_DIR…"
   rsync -a \
     --exclude "content/" \
     --exclude "json/" \
+    --exclude "pages/" \
+    --exclude "pages-template/" \
     "$TMP_DIR/$ASTRO_JSON_DATA_PATH/" \
     "$COMMON_DATA_DIR/"
 else
