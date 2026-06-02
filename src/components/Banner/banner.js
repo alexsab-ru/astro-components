@@ -23,12 +23,19 @@ const slides = document.querySelectorAll(".banner-slide");
 
 const headerEl = document.querySelector('.header-wrapper');
 const closeHeaderTopLineBtn = document.querySelector('.close-header-top-line-btn');
-function setPaddingTop(){
-	if(!headerEl) return;
+// Все .banner-slide внутри слайдера, включая loop-дубликаты Swiper (их нет в slides на L22).
+function getBannerSlides() {
+	return document.querySelectorAll('.banner-slider .banner-slide');
+}
+
+function setPaddingTop() {
+	if (!headerEl) return;
 	const headerElHeight = headerEl.clientHeight;
-	Array.from(slides).map(s => {
-		const container = s.querySelector('.banner-slide-container');
-		container.style.paddingTop = `${headerElHeight+20}px`;
+	getBannerSlides().forEach((slide) => {
+		const container = slide.querySelector('.banner-slide-container');
+		if (container) {
+			container.style.paddingTop = `${headerElHeight + 20}px`;
+		}
 	});
 }
 document.addEventListener('alpine:init', () => {
@@ -82,6 +89,10 @@ const initSlider = () => {
 		},
 		on: {
 			init(s) {
+				// После init loop=true уже создал клоны — сразу выставляем padding на всех слайдах.
+				if (is_header_transparent) {
+					setPaddingTop();
+				}
 				if (slides.length > 1) {
 					progressCircle.closest('.autoplay-progress').style.display = 'flex';
 					const firstVideo = this.slides[0].querySelector("video");
