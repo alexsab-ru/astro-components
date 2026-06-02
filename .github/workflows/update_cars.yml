@@ -532,6 +532,10 @@ jobs:
         if [[ -d tmp/feeds/new ]]; then ls -al tmp/feeds/new; fi
         if [[ -d tmp/feeds/used_cars ]]; then ls -al tmp/feeds/used_cars; fi
 
+    - name: Restore generated pages before commit
+      run: |
+        git restore src/pages || true
+
     - name: Check for changes
       id: check_changes
       run: |
