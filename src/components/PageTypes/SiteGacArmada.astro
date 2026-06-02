@@ -133,6 +133,7 @@ const cards = [
 		</div>
 	</section>
 	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
+	{false &&(
 	<section class="py-6 lg:py-8">
 		<div class="container flex flex-col gap-8 lg:gap-16">
 			<CardMedia imgPlacement={`left`} images={[{imageUrl: 'https://cdn.alexsab.ru/pages/2605/family-rest-1000x1000.webp', thumbUrl: 'https://cdn.alexsab.ru/pages/2605/family-rest-1000x1000.webp'}]}>
@@ -155,6 +156,7 @@ const cards = [
 			</CardMedia>
 		</div>
 	</section>
+	)}
 	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
 		<div class="container">
 			<PageH1 h1=`Автомобили ${brand} в&nbsp;наличии в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
