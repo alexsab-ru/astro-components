@@ -2,6 +2,20 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { phoneSchema } from '../validation';
+import type { ChatLandingConfig, ModelData } from '../types';
+
+/** id моделей из квиза → подписи для письма менеджеру */
+function modelIdsToLeadText(
+  modelAnswer: string | undefined,
+  models: ModelData[] | undefined,
+): string | undefined {
+  if (!modelAnswer || !models?.length) return modelAnswer;
+  return modelAnswer
+    .split(',')
+    .map((id) => id.trim())
+    .map((id) => models.find((m) => m.id === id)?.name ?? id)
+    .join(', ');
+}
 
 interface UseInputHandlerParams {
   currentStep: string;
@@ -11,7 +25,8 @@ interface UseInputHandlerParams {
   addBotMessage: (text: string) => void;
   addErrorMessage: (text: string) => void;
   sendLead: (data: Record<string, any>) => Promise<void>;
-  handleAnswer: (value: string) => void;
+  handleAnswer: (value: string, displayText?: string) => void;
+  config: ChatLandingConfig;
 }
 
 /**
@@ -30,6 +45,7 @@ export function useInputHandler({
   addErrorMessage,
   sendLead,
   handleAnswer,
+  config,
 }: UseInputHandlerParams) {
   // Состояния формы ввода
   const [inputValue, setInputValue] = useState("");
@@ -89,7 +105,14 @@ export function useInputHandler({
         }
         setInputValue("");
 
-        await sendLead(updatedAnswers); // отправляем письмо
+        const leadPayload = { ...updatedAnswers };
+        if (leadPayload.model) {
+          leadPayload.model = modelIdsToLeadText(
+            leadPayload.model,
+            config.models,
+          );
+        }
+        await sendLead(leadPayload);
       } catch (err: any) {
         addErrorMessage(err.message);
       }
@@ -111,6 +134,7 @@ export function useInputHandler({
     addErrorMessage,
     sendLead,
     handleAnswer,
+    config,
   ]);
 
   return {

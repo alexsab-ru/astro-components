@@ -18,17 +18,17 @@ function interpolate(template: string, vars: Record<string, string>): string {
 
 /**
  * Собирает уникальные цвета выбранных моделей + кнопку "Ещё не определился"
- * Поддерживает множественный выбор (через запятую)
+ * Поддерживает множественный выбор (id моделей через запятую)
  */
 function getColorOptions(modelAnswer: string | undefined, models: ModelData[]): AnswerOption[] {
   if (!modelAnswer) return [{ label: 'Ещё выбираю', value: 'Ещё выбираю' }];
 
-  const selectedNames = modelAnswer.split(',').map(s => s.trim());
+  const selectedIds = modelAnswer.split(',').map(s => s.trim());
   const seen = new Set<string>();
   const options: AnswerOption[] = [];
 
-  for (const name of selectedNames) {
-    const model = models.find(m => m.name === name);
+  for (const modelId of selectedIds) {
+    const model = models.find(m => m.id === modelId);
     if (!model?.colors) continue;
     for (const color of model.colors) {
       if (color.name && !seen.has(color.name)) {

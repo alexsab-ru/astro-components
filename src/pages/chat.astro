@@ -57,29 +57,32 @@ const mergedSettings = {
 const config = {
     ...chatConfig,
     settings: mergedSettings,
-    // Данные моделей для динамических опций (цвета по выбранной модели)
+    // Справочник моделей: id — ключ выбора, name — подпись для заявки
     models: visibleModels.map((m: any) => ({
-        name: m.name,
+        id: m.id,
+        name: `${getModelBrandDisplayName(m)} ${getModelTitle(m)}`,
         colors: (m.colors || []).map((c: any) => ({ id: c.id, name: c.name })),
     })),
     questions: chatConfig.questions.map(q => {
         if (q.id !== 'model') return q;
-        // Если answerOptions пуст — показываем все модели, иначе только указанные
-        const sourceNames = q.answerOptions.length === 0
-            ? visibleModels.map((m: any) => m.name)
-            : q.answerOptions.map((a: any) => typeof a === 'string' ? a : a);
-        const newOptions = sourceNames.reduce((acc: any[], name: string) => {
-            const model = visibleModels.find((m: any) => m.name === name);
-            if (model) {
-                acc.push({
-                    label: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}`,
-                    value: model.name,
-                    description: model.slogan,
-                    image: getModelThumb(model),
-                });
-            }
-            return acc;
-        }, []);
+        // Пустой answerOptions — все видимые модели; иначе фильтр по id или legacy name
+        const sourceModels =
+            q.answerOptions.length === 0
+                ? visibleModels
+                : q.answerOptions
+                      .map((a: any) => (typeof a === 'string' ? a : a?.value ?? a))
+                      .map((key: string) =>
+                          visibleModels.find(
+                              (m: any) => m.id === key || m.name === key,
+                          ),
+                      )
+                      .filter(Boolean);
+        const newOptions = sourceModels.map((model: any) => ({
+            label: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}`,
+            value: model.id,
+            description: model.slogan,
+            image: getModelThumb(model),
+        }));
         return { ...q, answerOptions: newOptions };
     }),
 };

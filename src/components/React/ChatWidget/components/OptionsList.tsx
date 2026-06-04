@@ -6,7 +6,7 @@ import type { AnswerOption } from "../types";
 interface OptionsListProps {
   options: AnswerOption[];
   currentStep: string;
-  onSelect: (value: string) => void;
+  onSelect: (value: string, displayText?: string) => void;
   onHide: () => void;
 }
 
@@ -27,9 +27,9 @@ export function OptionsList({
   onSelect,
   onHide,
 }: OptionsListProps) {
-  const handleSelect = (value: string) => {
+  const handleSelect = (value: string, displayText?: string) => {
     onHide();
-    onSelect(value);
+    onSelect(value, displayText);
   };
 
   return (
@@ -48,7 +48,7 @@ export function OptionsList({
           return (
             <motion.button
               key={opt.value}
-              onClick={() => handleSelect(opt.value)}
+              onClick={() => handleSelect(opt.value, opt.label)}
               className="flex flex-col bg-white border-2 rounded-md sm:rounded-xl overflow-hidden hover:shadow-lg hover:border-accent-500 transition-all cursor-pointer group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

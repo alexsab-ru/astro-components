@@ -73,6 +73,9 @@ export interface ModelColor {
  * Данные модели для динамических опций (цвета и т.д.)
  */
 export interface ModelData {
+  /** Уникальный id из models.json — ключ выбора в квизе */
+  id: string;
+  /** Человекочитаемое название для заявки */
   name: string;
   colors?: ModelColor[];
 }

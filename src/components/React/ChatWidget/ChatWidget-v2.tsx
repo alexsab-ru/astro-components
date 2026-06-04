@@ -108,6 +108,7 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     addErrorMessage,
     sendLead,
     handleAnswer,
+    config,
   });
 
   setInputValueRef.current = setInputValue;

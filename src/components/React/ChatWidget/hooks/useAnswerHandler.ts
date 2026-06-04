@@ -39,12 +39,12 @@ export function useAnswerHandler({
    * Обрабатывает ответ пользователя
    * Сохраняет ответ, переходит к следующему шагу и показывает соответствующие сообщения
    * 
-   * @param value - значение ответа пользователя
+   * @param value - значение для сохранения (id модели и т.п.)
+   * @param displayText - текст в пузыре пользователя (если отличается от value)
    */
   const handleAnswer = useCallback(
-    (value: string) => {
-      // Добавляем сообщение пользователя
-      addUserMessage(value);
+    (value: string, displayText?: string) => {
+      addUserMessage(displayText ?? value);
 
       // Включаем автоскролл после первого ответа пользователя
       onFirstAnswer?.();
