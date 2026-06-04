@@ -74,10 +74,19 @@ export function useAnswerHandler({
       }
 
       const nextCfg = steps[nextKey];
-      if (nextCfg?.botMessages?.length) {
-        addBotMessages(nextCfg.botMessages, () => {
-          if (nextKey !== "done") setShowOptions(true);
-        });
+      const botTexts = (nextCfg?.botMessages ?? []).filter((t) => t.trim());
+
+      const revealNextStepUi = () => {
+        if (nextKey === "done") return;
+        if (nextCfg?.options?.length || nextCfg?.inputField) {
+          setShowOptions(true);
+        }
+      };
+
+      if (botTexts.length) {
+        addBotMessages(botTexts, revealNextStepUi);
+      } else {
+        revealNextStepUi();
       }
     },
     [

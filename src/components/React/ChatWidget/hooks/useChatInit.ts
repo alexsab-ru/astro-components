@@ -32,9 +32,16 @@ export function useChatInit({
         const firstStep = steps.intro.nextStep();
         setCurrentStep(firstStep);
 
-        addBotMessages(steps[firstStep]?.botMessages || [], () => {
-          setShowOptions(true);
-        });
+        const firstCfg = steps[firstStep];
+        const firstBotTexts = (firstCfg?.botMessages ?? []).filter((t) =>
+          t.trim(),
+        );
+        const revealFirst = () => setShowOptions(true);
+        if (firstBotTexts.length) {
+          addBotMessages(firstBotTexts, revealFirst);
+        } else {
+          revealFirst();
+        }
       });
     }
   }, [steps, addBotMessages, setCurrentStep, setShowOptions]);

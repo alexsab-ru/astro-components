@@ -116,8 +116,9 @@ export function useChatSteps(config: ChatLandingConfig) {
         });
       }
 
+      // Пустой title — шаг без реплики бота (см. silentBridge в chat-landing.json)
       map[q.id] = {
-        botMessages: [q.title],
+        botMessages: q.title?.trim() ? [q.title] : [],
         options,
         multiple: q.type === "checkbox",
         nextStep: () => next,

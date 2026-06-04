@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useMemo } from "react";
 import {
   Header,
   Message,
@@ -111,7 +111,10 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     config,
   });
 
-  setInputValueRef.current = setInputValue;
+  // Ref для sendLead при ошибке: синхронизация через effect, не при каждом рендере
+  useEffect(() => {
+    setInputValueRef.current = setInputValue;
+  }, [setInputValue, setInputValueRef]);
 
   useChatInit({
     steps,
@@ -125,6 +128,13 @@ export function ChatWidget({ config }: ChatWidgetProps) {
   }, [messages, showOptions, scrollIfEnabled]);
 
   const cfg = steps[currentStep];
+
+  const successMessageText = useMemo(() => {
+    const template =
+      config.messages?.success ||
+      "Спасибо, {name}! Ваша заявка принята ✅";
+    return template.replace(/\{name\}/g, answers.name || "");
+  }, [config.messages?.success, answers.name]);
 
   return (
     <div className="w-full max-w-5xl 2xl:max-w-7xl mx-auto px-0 md:px-5">
@@ -147,12 +157,15 @@ export function ChatWidget({ config }: ChatWidgetProps) {
             <OptionsList
               options={cfg.options}
               currentStep={currentStep}
+              multiple={cfg.multiple}
               onSelect={handleAnswer}
               onHide={() => setShowOptions(false)}
             />
           )}
 
-          {isFinished && !isTyping && <SuccessMessage />}
+          {isFinished && !isTyping && (
+            <SuccessMessage text={successMessageText} />
+          )}
         </div>
 
         {/* Input area */}
