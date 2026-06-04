@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import type { ChatLandingConfig, StepConfig } from '../types';
+import { CHAT_OFFLINE_STEP_ID } from './useChatSteps';
 
 interface UseAnswerHandlerParams {
   currentStep: string;
@@ -77,7 +78,8 @@ export function useAnswerHandler({
       const botTexts = (nextCfg?.botMessages ?? []).filter((t) => t.trim());
 
       const revealNextStepUi = () => {
-        if (nextKey === "done") return;
+        // done — только офлайн-режим без квиза, без опций/полей
+        if (nextKey === CHAT_OFFLINE_STEP_ID) return;
         if (nextCfg?.options?.length || nextCfg?.inputField) {
           setShowOptions(true);
         }

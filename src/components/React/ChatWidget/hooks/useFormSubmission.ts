@@ -1,4 +1,7 @@
 // ──────────────── Хук для отправки формы ────────────────
+//
+// Успешная отправка: setIsFinished(true) → SuccessMessage в ChatWidget-v2
+// (messages.success из JSON). Шаг done в useChatSteps для этого не используется.
 
 import { useState, useCallback, useRef } from 'react';
 import axios from 'axios';

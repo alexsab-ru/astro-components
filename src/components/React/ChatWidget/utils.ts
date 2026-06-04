@@ -1,6 +1,21 @@
 // ──────────────── Утилиты для ChatWidget ────────────────
 
 /**
+ * Fallback для SuccessMessage после sendLead.
+ * Не используется в map шагов — шаг done с success убран (вариант B).
+ */
+export const DEFAULT_CHAT_SUCCESS_MESSAGE =
+	'Спасибо, {name}! Ваша заявка принята ✅';
+
+/** Подстановка {name}, {brand} и др. в шаблоны из JSON */
+export function interpolateChatTemplate(
+	template: string,
+	vars: Record<string, string>,
+): string {
+	return template.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? '');
+}
+
+/**
  * Маскирует номер телефона в формат +7 XXX XXX-XX-XX
  * Удаляет все нецифровые символы, кроме начальных +7, 8 или 7
  * Форматирует номер с пробелами и дефисами

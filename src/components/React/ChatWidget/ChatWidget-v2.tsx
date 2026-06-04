@@ -17,8 +17,14 @@ import { useFormSubmission } from './hooks/useFormSubmission';
 import { useAnswerHandler } from './hooks/useAnswerHandler';
 import { useInputHandler } from './hooks/useInputHandler';
 import { useChatInit } from './hooks/useChatInit';
+import {
+  DEFAULT_CHAT_SUCCESS_MESSAGE,
+  interpolateChatTemplate,
+} from './utils';
 
 // ──────────────── component ────────────────
+// Финал успешной заявки: isFinished + SuccessMessage (messages.success),
+// не шаг done в useChatSteps (done только для пустого конфига).
 
 export function ChatWidget({ config }: ChatWidgetProps) {
   const settings = config.settings || {};
@@ -129,12 +135,15 @@ export function ChatWidget({ config }: ChatWidgetProps) {
 
   const cfg = steps[currentStep];
 
-  const successMessageText = useMemo(() => {
-    const template =
-      config.messages?.success ||
-      "Спасибо, {name}! Ваша заявка принята ✅";
-    return template.replace(/\{name\}/g, answers.name || "");
-  }, [config.messages?.success, answers.name]);
+  // Текст после sendLead OK; fallback — DEFAULT_CHAT_SUCCESS_MESSAGE в utils.ts
+  const successMessageText = useMemo(
+    () =>
+      interpolateChatTemplate(
+        config.messages?.success || DEFAULT_CHAT_SUCCESS_MESSAGE,
+        { name: answers.name || '' },
+      ),
+    [config.messages?.success, answers.name],
+  );
 
   return (
     <div className="w-full max-w-5xl 2xl:max-w-7xl mx-auto px-0 md:px-5">
