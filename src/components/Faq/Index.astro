@@ -5,24 +5,64 @@ interface Props {
 	items: TFaqItem[];
 	title?: string;
 	class?: string;
+	withSchema?: boolean;
+	schema?: boolean;
 }
-const { items = [], title, class: classNames = '' } = Astro.props;
+const {
+	items = [],
+	title,
+	class: classNames = '',
+	withSchema = false,
+	schema = false,
+} = Astro.props;
+
+const shouldRenderSchema = withSchema || schema;
+const normalizeSchemaText = (value: string) =>
+	value
+		.replace(/<[^>]*>/g, ' ')
+		.replace(/&nbsp;/g, ' ')
+		.replace(/&amp;/g, '&')
+		.replace(/&quot;/g, '"')
+		.replace(/&#39;/g, "'")
+		.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/\s+/g, ' ')
+		.trim();
+
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: items.map((item) => ({
+		'@type': 'Question',
+		name: normalizeSchemaText(item.question),
+		acceptedAnswer: {
+			'@type': 'Answer',
+			text: normalizeSchemaText(item.answer),
+		},
+	})),
+};
 ---
 
 {
 	items.length > 0 && (
-		<section
-			class={`faq ${classNames}`}
-			id="faq"
-			x-data="{activities:[]}"
-		>
-			<div class="container">
-				{title && (<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
+		<>
+			<section
+				class={`faq ${classNames}`}
+				id="faq"
+				x-data="{activities:[]}"
+			>
+				<div class="container">
+					{title && (<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
 
-				{items.map((item) => (
-					<FaqItem item={item} />
-				))}
-			</div>
-		</section>
+					{items.map((item) => (
+						<FaqItem item={item} />
+					))}
+				</div>
+			</section>
+
+			{shouldRenderSchema && (
+				<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+			)}
+		</>
 	)
 }
