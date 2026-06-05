@@ -15,8 +15,6 @@ const getModelBrandId = (model) =>
 const ReportFile = {
     DATES: `${NOTIFICATIONS_DIR}/dates.txt`,
     DATES_MARKETING: `${NOTIFICATIONS_DIR}/dates-marketing.txt`,
-    RASSROCHKA: `${NOTIFICATIONS_DIR}/rassrochka.txt`,
-    RASSROCHKA_MARKETING: `${NOTIFICATIONS_DIR}/rassrochka-marketing.txt`,
 };
 
 class PlaceholderProcessor {
@@ -33,7 +31,6 @@ class PlaceholderProcessor {
         // Массивы для отслеживания
         this.modifiedFiles = [];
         this.filesWithUpcomingDates = [];
-        this.filesWithRassrochka = [];
         
         // Данные
         this.carsData = [];
@@ -504,13 +501,6 @@ class PlaceholderProcessor {
         }
     }
 
-    // Поиск слова "Рассрочка" в файле
-    searchRassrochkaWord(content, filePath) {
-        if (/рассрочк/i.test(content)) {
-            this.filesWithRassrochka.push(filePath);
-        }
-    }
-
     // Функция для формирования URL в зависимости от расположения файла
     buildUrl(relativePath, domain) {
         const sanitizedPath = relativePath.replace(/^src\/(content|pages)\//, '');
@@ -544,9 +534,6 @@ class PlaceholderProcessor {
 
             // Проверяем даты в файле
             this.searchDates(content, filePath);
-
-            // Проверяем наличие слова "Рассрочка"
-            this.searchRassrochkaWord(content, filePath);
 
             if (hasChanges) {
                 fs.writeFileSync(filePath, updatedContent, 'utf-8');
@@ -652,41 +639,6 @@ class PlaceholderProcessor {
         fs.writeFileSync(ReportFile.DATES, htmlOutput, 'utf8');
         fs.writeFileSync(ReportFile.DATES_MARKETING, htmlOutputMarketing, 'utf8');
         console.log(`\nРезультаты сохранены в: ${ReportFile.DATES}, ${ReportFile.DATES_MARKETING}`);
-    }
-
-    // Вывод информации о файлах, содержащих слово "Рассрочка"
-    outputRassrochkaFiles() {
-        if (this.filesWithRassrochka.length === 0) return;
-
-        const domain = process.env.DOMAIN;
-        console.log('\n⚠️ Найдено слово "Рассрочка" в следующих файлах:');
-
-        const parsedFiles = this.filesWithRassrochka.map(filePath => {
-            const relativePath = path.relative(process.cwd(), filePath);
-            const url = this.generateUrl(filePath, domain);
-            return { relativePath, url };
-        });
-
-        parsedFiles.forEach(({ relativePath, url }) => {
-            console.log(`\nФайл: \`${relativePath}\`\nURL: ${url}`);
-        });
-
-        const htmlHeader = '<b>⚠️ Найдено слово "Рассрочка":</b>\n\n';
-        const htmlContent = htmlHeader + parsedFiles
-            .map(({ relativePath, url }) =>
-                `<strong>Файл:</strong> <code>${relativePath}</code>\n<strong>URL:</strong> <a href="${url}">${url}</a>`
-            )
-            .join('\n\n');
-
-        const htmlContentMarketing = htmlHeader + parsedFiles
-            .map(({ url }) =>
-                `<strong>URL:</strong> <a href="${url}">${url}</a>`
-            )
-            .join('\n\n');
-
-        fs.writeFileSync(ReportFile.RASSROCHKA, htmlContent, 'utf8');
-        fs.writeFileSync(ReportFile.RASSROCHKA_MARKETING, htmlContentMarketing, 'utf8');
-        console.log(`\nИнформация о "Рассрочке" сохранена в: ${ReportFile.RASSROCHKA}, ${ReportFile.RASSROCHKA_MARKETING}`);
     }
 
     // Экспорт всех доступных плейсхолдеров в TSV файл в папку tmp
@@ -814,8 +766,6 @@ class PlaceholderProcessor {
         // 9. Выводим информацию о приближающихся датах
         this.outputUpcomingDates();
 
-        // 10. Выводим информацию о файлах с "Рассрочкой"
-        this.outputRassrochkaFiles();
     }
 }
 

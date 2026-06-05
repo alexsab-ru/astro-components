@@ -103,6 +103,7 @@
     "filterModelsByBrand": "node .github/scripts/filterModelsByBrand.js",
     "mergeCarPrices": "bash ./.github/scripts/sh/mergeCarPrices.sh",
     "replacePlaceholdersAndSearchDates": "node .github/scripts/replacePlaceholdersAndSearchDates.js",
+    "searchRassrochkaWord": "node .github/scripts/searchRassrochkaWord.js",
     "astro": "astro",
     "\n# https://alexsab.ru": ""
   },

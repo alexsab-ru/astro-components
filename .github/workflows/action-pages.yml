@@ -228,6 +228,13 @@ jobs:
         env:
           DOMAIN: ${{ vars.DOMAIN }}
 
+      - name: Search Rassrochka word
+        if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.send_rassrochka == 'true' || github.event.inputs.send_rassrochka_marketing == 'true') }}
+        run: |
+          pnpm searchRassrochkaWord
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
+
       - name: Astro Build
         run: |
           pnpm build --outDir ./_site
@@ -373,7 +380,7 @@ jobs:
 
   notify_telegram_about_rassrochka:
     needs: [build]
-    if: ${{ needs.build.outputs.specials_rassrochka != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka == 'true')) }}
+    if: ${{ needs.build.outputs.specials_rassrochka != '' && github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka == 'true' }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'rassrochka'
@@ -385,7 +392,7 @@ jobs:
 
   notify_telegram_about_rassrochka_marketing:
     needs: [build, check_marketing_secret]
-    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka_marketing != '' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka_marketing == 'true')) }}
+    if: ${{ needs.check_marketing_secret.outputs.secret_exists == 'true' && needs.build.outputs.specials_rassrochka_marketing != '' && github.event_name == 'workflow_dispatch' && github.event.inputs.send_rassrochka_marketing == 'true' }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'rassrochka-marketing'
