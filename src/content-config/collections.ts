@@ -8,7 +8,12 @@ import { carsSchema, pageCollectionSchema, usedCarsSchema } from './schemas';
 
 export type CollectionMeta = {
 	name: string;
+	/** Полный SEO title для тега <title> */
 	title: string;
+	/** Видимый заголовок страницы коллекции */
+	h1: string;
+	/** Короткая подпись коллекции для хлебных крошек */
+	breadcrumb: string;
 	description: string;
 	image: string;
 };
@@ -42,14 +47,36 @@ export const titleFromCollectionName = (name: string): string =>
 		.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
 		.join(' ');
 
+/** SEO title: берём seo.title целиком, без обрезки по «|» */
+const resolveCollectionTitle = (seo: SeoEntry | undefined, name: string): string =>
+	seo?.title ||
+	seo?.h1 ||
+	seo?.breadcrumb ||
+	titleFromCollectionName(name);
+
+/** h1 на странице: отдельное поле, короткая часть title — только как fallback */
+const resolveCollectionH1 = (seo: SeoEntry | undefined, name: string): string =>
+	seo?.h1 ||
+	titleFromSeoTitle(seo?.title) ||
+	seo?.breadcrumb ||
+	titleFromCollectionName(name);
+
+/** Подпись для крошек: breadcrumb → h1 → короткая часть title → slug */
+const resolveCollectionBreadcrumb = (seo: SeoEntry | undefined, name: string): string =>
+	seo?.breadcrumb ||
+	seo?.h1 ||
+	titleFromSeoTitle(seo?.title) ||
+	titleFromCollectionName(name);
+
 export const getContentCollections = (): CollectionMeta[] =>
 	getRegularCollectionNames().map((name) => {
 		const seo = seoData[`/${name}/`];
-		const title = seo?.h1 || seo?.breadcrumb || titleFromSeoTitle(seo?.title);
 
 		return {
 			name,
-			title: title || titleFromCollectionName(name),
+			title: resolveCollectionTitle(seo, name),
+			h1: resolveCollectionH1(seo, name),
+			breadcrumb: resolveCollectionBreadcrumb(seo, name),
 			description: seo?.description || '',
 			image: seo?.image || '',
 		};

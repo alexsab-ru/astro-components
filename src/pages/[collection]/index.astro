@@ -18,6 +18,8 @@ export async function getStaticPaths() {
 		params: { collection: collection.name },
 		props: {
 			title: collection.title,
+			h1: collection.h1,
+			breadcrumb: collection.breadcrumb,
 			description: collection.description,
 			image: collection.image,
 		}
@@ -28,7 +30,9 @@ const { collection } = Astro.params;
 if (typeof collection === 'string' && isRouteDisabled(`/${collection}/`)) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
-const { title, description, image: seoImage } = Astro.props;
+const { title, h1, breadcrumb: collectionBreadcrumb, description, image: seoImage } = Astro.props;
+// seo.title уже может содержать «| site_name» — не дублируем суффикс
+const metaTitle = title.includes('|') ? title : `${title} | ${site_name}`;
 const entries = await getCollection(collection as keyof DataEntryMap);
 let posts: TCollection[], image = '';
 if (entries && entries.length > 0) {
@@ -41,12 +45,12 @@ if (entries && entries.length > 0) {
 	image = ''; // или какая-то другая логика
 	posts = [];
 }
-const breadcrumb = { name: title, href: `/${collection}/` };
+const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
 ---
 
 <PageLayout
-	h1={title}
-	title={`${title} | ${site_name}`}
+	h1={h1}
+	title={metaTitle}
 	description={`${description}`}
 	breadcrumb={[breadcrumb]}
 	image={seoImage || image || ''}
@@ -59,7 +63,7 @@ const breadcrumb = { name: title, href: `/${collection}/` };
 				{ posts.map(post => ( <PostItem post={post} /> )) }
 			</div>
 		) : (
-			<p>Скоро здесь появятся {title.toLowerCase()} {site_name}.</p>
+			<p>Скоро здесь появятся {h1.toLowerCase()} {site_name}.</p>
 		)
 	}
 </PageLayout>

@@ -19,7 +19,11 @@ export async function getStaticPaths() {
         // В Astro 5 рекомендуется передавать сам объект записи в props,
         // а для параметра маршрута использовать id записи
         params: { collection: collection.name, slug: entry.id },
-        props: entry
+        props: {
+          post: entry,
+          // Подпись коллекции для крошек — из seo.json через getContentCollections
+          collectionBreadcrumb: collection.breadcrumb,
+        },
       });
     }
   }
@@ -27,25 +31,22 @@ export async function getStaticPaths() {
   return paths;
 }
 
-// Тип записи контента. Для общей страницы используем универсальный тип.
-type Props = CollectionEntry<any>;
+type Props = {
+  post: CollectionEntry<any>;
+  collectionBreadcrumb: string;
+};
 
 const { collection, slug } = Astro.params;
 if (typeof collection === 'string' && isRouteDisabled(`/${collection}/`)) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
-const post = Astro.props as Props;
-
-// Находим заголовок коллекции по имени коллекции
-const collectionsData = getContentCollections();
-const collectionMeta = collectionsData.find((c) => c.name === collection) || { title: '' };
-const title = collectionMeta.title as string;
+const { post, collectionBreadcrumb } = Astro.props as Props;
 
 // Данные записи для передачи в layout
 const data: TDataCollection = (post as any)?.data || {};
 
-// Хлебные крошки и контент записи
-const breadcrumb = { name: title, href: `/${collection}/` };
+// Хлебные крошки: коллекция — из seo.json, текущая страница — из frontmatter
+const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
 // Приводим к any, т.к. страница универсальна для разных коллекций
 const { Content } = await render(post as any);
 ---
