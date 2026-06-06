@@ -5,6 +5,7 @@ interface Props {
 	items: TFaqItem[];
 	title?: string;
 	class?: string;
+	id?: string;
 	withSchema?: boolean;
 	schema?: boolean;
 }
@@ -12,11 +13,17 @@ const {
 	items = [],
 	title,
 	class: classNames = '',
+	id = 'faq',
 	withSchema = false,
 	schema = false,
 } = Astro.props;
 
 const shouldRenderSchema = withSchema || schema;
+const faqItems = items.map((item, index) => ({
+	...item,
+	id: item.id ?? index + 1,
+	open: Boolean(item.open),
+}));
 const normalizeSchemaText = (value: string) =>
 	value
 		.replace(/<[^>]*>/g, ' ')
@@ -32,7 +39,7 @@ const normalizeSchemaText = (value: string) =>
 const faqSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'FAQPage',
-	mainEntity: items.map((item) => ({
+	mainEntity: faqItems.map((item) => ({
 		'@type': 'Question',
 		name: normalizeSchemaText(item.question),
 		acceptedAnswer: {
@@ -44,17 +51,17 @@ const faqSchema = {
 ---
 
 {
-	items.length > 0 && (
+	faqItems.length > 0 && (
 		<>
 			<section
 				class={`faq ${classNames}`}
-				id="faq"
+				id={id}
 				x-data="{activities:[]}"
 			>
 				<div class="container">
 					{title && (<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
 
-					{items.map((item) => (
+					{faqItems.map((item) => (
 						<FaqItem item={item} />
 					))}
 				</div>

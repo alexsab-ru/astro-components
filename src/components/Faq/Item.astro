@@ -17,12 +17,13 @@ interface Props {
 	centerTitle?: boolean;
 }
 const { item, centerTitle = false } = Astro.props;
+const itemId = JSON.stringify(item.id);
 ---
 
 <div
 	class="px-5 py-4 rounded-md mb-3 transition hover:bg-gray-200"
-	:class={ `activities.includes(${item.id}) ? 'bg-gray-200' : 'bg-gray-100'` }
-	x-init={ `${item.open} && activities.push(${item.id})` }
+	:class={ `activities.includes(${itemId}) ? 'bg-gray-200' : 'bg-gray-100'` }
+	x-init={ `${item.open} && activities.push(${itemId})` }
 >
 	{/* В обычном режиме оставляем flex как было.
 		В режиме centerTitle используем grid, чтобы заголовок был по центру независимо от иконки. */}
@@ -31,7 +32,7 @@ const { item, centerTitle = false } = Astro.props;
 			'items-center cursor-pointer',
 			centerTitle ? 'grid grid-cols-[1.25rem_1fr_1.25rem]' : 'flex justify-between',
 		]}
-		@click={ `activities.includes(${item.id}) ? activities = activities.filter(id => id != ${item.id}) : activities.push(${item.id})` }
+		@click={ `activities.includes(${itemId}) ? activities = activities.filter(id => id != ${itemId}) : activities.push(${itemId})` }
 	>
 		{/* Невидимая "заглушка" слева — занимает место, равное иконке справа.
 			Нужна только для идеального визуального центрирования заголовка. */}
@@ -47,7 +48,7 @@ const { item, centerTitle = false } = Astro.props;
 
 		<span
 			class="text-xl transition-transform origin-center shrink-0"
-			:class={ `{'-rotate-180': activities.includes(${item.id}) }` }
+			:class={ `{'-rotate-180': activities.includes(${itemId}) }` }
 		>
 			{/* Иконке не передаём class напрямую, чтобы TypeScript не ругался на проп `class`.
 				Управляем внешним видом через wrapper-элемент. */}
@@ -56,7 +57,7 @@ const { item, centerTitle = false } = Astro.props;
 	</div>
 	<div
 		class="mt-3 text-xs md:text-base"
-		x-show={ `activities.includes(${item.id})` }
+		x-show={ `activities.includes(${itemId})` }
 		x-transition.opacity.duration.100ms
 	>
 		<Fragment set:html={item.answer} />
