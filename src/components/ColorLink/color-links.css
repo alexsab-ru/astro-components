@@ -35,6 +35,9 @@
 	&[data-color="green"] {
 		@apply bg-green-700;
 	}
+	&[data-color="gold"] {
+		@apply bg-[#B7A38A];
+	}
 	&.active::after {
 		border: 2px solid #aaa;
 		border-radius: 50%;
