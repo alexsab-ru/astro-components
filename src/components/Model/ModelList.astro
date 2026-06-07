@@ -34,7 +34,7 @@ const cardHeadingLevel: 'h2' | 'h3' = (multipleBrands || !!title) ? 'h3' : 'h2';
 
 {
 	brandCount > 0 && (
-		<section class={`models py-10 sm:py-20 ${classes}`} {...rest}>
+		<section class={`section models py-10 sm:py-20 ${classes}`} id="models" {...rest}>
 			<div class="container">
 				{title && ( <h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
 				{Object.keys(groupModelsByBrand).map(key => (
