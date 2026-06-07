@@ -145,6 +145,7 @@ apply_pat_to_url() {
     echo "$url"
   fi
 }
+
 extract_brands() {
   local settings_file="$1"
 
@@ -427,6 +428,61 @@ sync_remote_pages() {
   fi
 }
 
+sync_remote_components() {
+  local copied_any_brand=false
+  local common_components_dir="$TMP_DIR/$ASTRO_JSON_DATA_PATH/components"
+  local settings_file="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
+  local page_template
+
+  page_template=$(extract_page_template "$settings_file" | xargs)
+
+  mkdir -p "$ASTRO_COMPONENTS_DIR"
+
+  if [ -d "$common_components_dir" ]; then
+    rsync -a "$common_components_dir/" "$ASTRO_COMPONENTS_DIR/"
+    echo "  ✔ Common components: $ASTRO_JSON_DATA_PATH/components → $ASTRO_COMPONENTS_DIR"
+  else
+    echo "▶ Common components not found: $ASTRO_JSON_DATA_PATH/components"
+  fi
+
+  for brand_domain in "${BRAND_DOMAINS[@]}"; do
+    local src_dir="$TMP_DIR/src/$brand_domain/components"
+
+    if [ -d "$src_dir" ]; then
+      rsync -a "$src_dir/" "$ASTRO_COMPONENTS_DIR/"
+      echo "  ✔ Brand components: $brand_domain/components → $ASTRO_COMPONENTS_DIR"
+      copied_any_brand=true
+    else
+      echo "  ⚠ Brand components not found: src/$brand_domain/components"
+    fi
+  done
+
+  if [ "$copied_any_brand" = false ] && [ ${#BRAND_DOMAINS[@]} -gt 0 ]; then
+    echo "▶ No brand components directories were found"
+  fi
+
+  if [ -n "$page_template" ]; then
+    local template_components_dir="$TMP_DIR/$ASTRO_JSON_DATA_PATH/components-template/$page_template"
+
+    if [ -d "$template_components_dir" ]; then
+      rsync -a "$template_components_dir/" "$ASTRO_COMPONENTS_DIR/"
+      echo "  ✔ Template components: $ASTRO_JSON_DATA_PATH/components-template/$page_template → $ASTRO_COMPONENTS_DIR"
+    else
+      echo "▶ Component template not found, skipped: $ASTRO_JSON_DATA_PATH/components-template/$page_template"
+    fi
+  else
+    echo "▶ pageTemplate is not set; template components skipped"
+  fi
+
+  local site_components_dir="$TMP_DIR/$REMOTE_DATA_PATH/components"
+  if [ -d "$site_components_dir" ]; then
+    rsync -a "$site_components_dir/" "$ASTRO_COMPONENTS_DIR/"
+    echo "  ✔ Site components: $REMOTE_DATA_PATH/components → $ASTRO_COMPONENTS_DIR"
+  else
+    echo "▶ Site components not found: $REMOTE_DATA_PATH/components"
+  fi
+}
+
 # ==================================================
 # Подготовка env
 # ==================================================
@@ -463,6 +519,7 @@ SITE_DATA_DIR="$LOCAL_DATA_DIR/site"
 COMMON_DATA_DIR="$LOCAL_DATA_DIR/common"
 ASTRO_CONTENT_DIR="src/content"
 ASTRO_PAGES_DIR="src/pages"
+ASTRO_COMPONENTS_DIR="src/components"
 ASTRO_JSON_DATA_PATH="data"
 
 trap cleanup EXIT INT TERM
@@ -592,6 +649,7 @@ else
   if [ "$SKIP_DEALER_FILES" = false ]; then
     rsync -a \
         --exclude "content/" \
+        --exclude "components/" \
         --exclude "pages/" \
         "$TMP_DIR/$REMOTE_DATA_PATH/" \
         "$SITE_DATA_DIR/"
@@ -611,10 +669,13 @@ echo "▶ Sync content…"
 sync_remote_content
 
 if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
-  echo "▶ Sync pages skipped for specific file download"
+  echo "▶ Sync pages and components skipped for specific file download"
 else
   echo "▶ Sync pages…"
   sync_remote_pages
+
+  echo "▶ Sync components…"
+  sync_remote_components
 fi
 
 # Копируем внутренности astro-json/data для дальнейшей обработки.
@@ -622,6 +683,8 @@ if [ -d "$TMP_DIR/$ASTRO_JSON_DATA_PATH" ]; then
   echo "▶ Sync astro-json/data → $COMMON_DATA_DIR…"
   rsync -a \
     --exclude "content/" \
+    --exclude "components/" \
+    --exclude "components-template/" \
     --exclude "json/" \
     --exclude "pages/" \
     --exclude "pages-template/" \
