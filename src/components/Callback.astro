@@ -9,7 +9,7 @@ interface Props {
 import settings from '@/data/site/settings.json';
 import salons from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
-const { improve_offer_background } = settings;
+const { improve_offer_background, agree_label } = settings;
 const {
     bgUrl = improve_offer_background,
     title = "Улучшим предложение конкурентов!", 
@@ -22,7 +22,6 @@ import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
-import {AGREE_LABEL} from '@/const'
 import Textarea from '@/components/Textarea/Textarea.astro';
 ---
 
@@ -76,7 +75,7 @@ import Textarea from '@/components/Textarea/Textarea.astro';
 
                 <Checkbox
                     name="agree"
-                    label={AGREE_LABEL}
+                    label={agree_label}
                     color="white"
                     required
                     errorClasses="text-red-500 text-xs w-full"

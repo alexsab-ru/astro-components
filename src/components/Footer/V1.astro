@@ -1,8 +1,7 @@
 ---
 import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
-const { site_name, legal_entity, brand } = settings;
-import { FOOTER_INFO } from '@/const'
+const { site_name, legal_entity, brand, footer_info } = settings;
 import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
 const legalDocuments = getEnabledLegalDocuments(settings.legal);
@@ -24,7 +23,7 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
 		>
 			<noindex>
 				<p class="my-10">
-					<Fragment set:html={FOOTER_INFO} />
+					<Fragment set:html={footer_info} />
 				</p>
 			</noindex>
 		</div>

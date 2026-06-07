@@ -2,9 +2,11 @@
 
 import { motion } from "motion/react";
 import { Send } from "lucide-react";
-import { AGREE_LABEL } from "@/const";
+import settings from "@/data/site/settings.json";
 import { maskPhone } from "../utils";
 import type { InputFieldConfig } from "../types";
+
+const { agree_label } = settings;
 
 interface InputFieldProps {
   inputField: InputFieldConfig;
@@ -94,7 +96,7 @@ export function InputField({
           <div className="text-black/80 text-xs sm:text-sm flex items-start">
             <span className="fake-checkbox-black mr-2"></span>
             <div>
-              <div dangerouslySetInnerHTML={{ __html: AGREE_LABEL }}></div>
+              <div dangerouslySetInnerHTML={{ __html: agree_label }}></div>
               {agreeError && (
                 <div className="error-message mt-2 text-xs text-red-500">
                   {agreeError}

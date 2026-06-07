@@ -2,7 +2,8 @@
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
-import { AGREE_LABEL } from '@/const';
+import settings from '@/data/site/settings.json';
+const { agree_label } = settings;
 ---
 <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
 <Input
@@ -15,7 +16,7 @@ import { AGREE_LABEL } from '@/const';
   />
   <Checkbox
   name="agree"
-  label={AGREE_LABEL}
+  label={agree_label}
   color="black"
   required
   errorClasses="text-red-500 w-full"

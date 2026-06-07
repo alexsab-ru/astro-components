@@ -1,9 +1,9 @@
 ---
 import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
-const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer } = settings;
+const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer, footer_info } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
-import { FOOTER_INFO, LINKS_MENU as links } from '@/const';
+import { LINKS_MENU as links } from '@/const';
 import Brands from '@/components/Brands/Brands.astro';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
@@ -119,7 +119,7 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
 
         </div>
 
-        {FOOTER_INFO && <div class="text-xs text-white/60 pt-5 mt-7 border-white/20 border-t"><Fragment set:html={FOOTER_INFO} /></div>}
+        {footer_info && <div class="text-xs text-white/60 pt-5 mt-7 border-white/20 border-t"><Fragment set:html={footer_info} /></div>}
 
         {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
 

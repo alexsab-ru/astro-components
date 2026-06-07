@@ -4,7 +4,8 @@ import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import Textarea from '../Textarea/Textarea.astro';
 import FormSelect from '@/components/FormSelect.astro';
-import { AGREE_LABEL } from '@/const';
+import settings from '@/data/site/settings.json';
+const { agree_label } = settings;
 import modelsData from '@/data/site/models.json';
 import { getModelBrandDisplayName, getModelBrandId, getModelTitle } from '@/js/utils/modelFields';
 import { isModelVisible } from '@/js/utils/modelVisibility';
@@ -51,7 +52,7 @@ const gearboxOptions = [
 
   <Checkbox
     name="agree"
-    label={AGREE_LABEL}
+    label={agree_label}
     color="black"
     required
     errorText="Чтобы продолжить, установите флажок"

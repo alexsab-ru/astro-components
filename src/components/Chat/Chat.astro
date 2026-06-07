@@ -5,10 +5,8 @@ import './chat.css';
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
-import { AGREE_LABEL } from '@/const';
-
 import settings from '@/data/site/settings.json';
-const { site_name, brand, legal_city_where } = settings;
+const { site_name, brand, legal_city_where, agree_label } = settings;
 
 interface Props {
     quizSteps?: TStep[];
@@ -175,7 +173,7 @@ const lastStep = quizSteps[quizSteps.length - 1];
 
                                         <Checkbox
                                             name="agree"
-                                            label={AGREE_LABEL}
+                                            label={agree_label}
                                             color="black"
                                             required
                                             classes='*:text-sm!'

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { MONTH_NOMINATIVE, MONTH_GENITIVE, MONTH_PREPOSITIONAL, MONTH, FIRST_DAY, LAST_DAY, YEAR } from '../../src/js/utils/date.js';
-import { currencyFormat } from '../../src/js/utils/numbers.format.js';
+import { currencyFormat, phoneFormat } from '../../src/js/utils/numbers.format.js';
 import { quoteEscaper } from '../../src/js/utils/helpers.js';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
@@ -37,6 +37,7 @@ class PlaceholderProcessor {
         this.modelsData = [];
         this.disclaimerData = {};
         this.settingsData = {};
+        this.salonsData = [];
         
         // Placeholders
         this.carsPlaceholder = {};
@@ -99,11 +100,25 @@ class PlaceholderProcessor {
         this.carsData = this.readAndValidateJSON('all-prices.json', 'array', []);
         this.disclaimerData = this.readAndValidateJSON('federal-disclaimer.json', 'object', {});
         this.settingsData = this.readAndValidateJSON('settings.json', 'object', {});
+        this.salonsData = this.readAndValidateJSON('salons.json', 'array', []);
     }
 
     // Создание настроечных placeholders
     createSettingsPlaceholders() {
         if (Object.keys(this.settingsData).length === 0) return;
+
+        const footerSalons = this.salonsData.filter(
+            salon => !salon?.type || salon.type.includes('footer_info')
+        );
+        const phones = this.settingsData.phone_common
+            ? [
+                `<a class="whitespace-nowrap" href="tel:${phoneFormat(this.settingsData.phone_common)}">${this.settingsData.phone_common}</a>`,
+            ]
+            : footerSalons
+                .filter(salon => salon?.phone)
+                .map(salon => `<span>${salon.name}</span> <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a>`);
+
+        this.settingsPlaceholder['{{phone_list}}'] = JSON.stringify(phones.join(', ')).slice(1, -1);
         
         const settingsKeys = [
             'brand',

@@ -1,8 +1,7 @@
 ---
 import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
-const { site_name, legal_city, legal_inn, legal_entity, brand } = settings;
-import { FOOTER_INFO } from '@/const';
+const { site_name, legal_city, legal_inn, legal_entity, brand, footer_info } = settings;
 import { YEAR } from '@/js/utils/date';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_campaign=${scripts_json.site}`;
 
@@ -86,9 +85,9 @@ const footerClasses = [
             </div>
         )}
         </div>
-        {FOOTER_INFO && (
+        {footer_info && (
             <div class="mt-3 xl:mt-0 pt-3 xl:pt-2 border-t xl:border-t border-gray-200 text-gray-500 xl:w-full xl:bg-white/90 xl:backdrop-blur-sm xl:text-[10px]">
-                <Fragment set:html={FOOTER_INFO} />
+                <Fragment set:html={footer_info} />
             </div>
         )}
     </div>

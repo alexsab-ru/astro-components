@@ -1,10 +1,11 @@
 ---
-import { AGREE_LABEL } from '@/const';
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
 import FormSelect from '@/components/FormSelect.astro';
 import ChoosingDealerSelect from '@/components/ChoosingDealerSelect/ChoosingDealerSelect.astro';
+import settings from '@/data/site/settings.json';
+const { agree_label } = settings;
 
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
@@ -56,7 +57,7 @@ const options = (modelsData.service || []).filter(isModelVisible).map((model) =>
 
   <Checkbox
     name="agree"
-    label={AGREE_LABEL}
+    label={agree_label}
     color="black"
     required
     errorClasses="text-red-500 w-full"

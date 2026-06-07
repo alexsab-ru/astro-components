@@ -1,8 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import { AGREE_LABEL } from '@/const';
 import settings from '@/data/site/settings.json';
-const { brand, legal_city_where } = settings;
+const { brand, legal_city_where, agree_label } = settings;
 import Button from '@/components/Button/Button.astro';
 import Input from '@/components/Input.astro';
 import Checkbox from '@/components/Checkbox/Checkbox.astro';
@@ -106,7 +105,7 @@ const hasTestDriveModels = visibleTestDrive.length > 0;
 
 				<Checkbox
 					name="agree"
-					label={AGREE_LABEL}
+					label={agree_label}
 					color="black"
 					required
 					errorClasses="text-red-500 w-full"
