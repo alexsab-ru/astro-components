@@ -1,5 +1,5 @@
 ---
-import type {TBreadcrumb} from '@/components/Breadcrumbs/types';
+import type {TBreadcrumb} from '@/ui/breadcrumbs/types';
 import type { TStatus } from '@/types/TStatus';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 const {model, breadcrumb, status} = Astro.props;
 
 import {Icon} from 'astro-icon/components';
-import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
 import { currencyFormat } from '@/js/utils/numbers.format';
 import { createDisclaimerIcon } from '@/js/utils/disclaimer';
 import { getModelBadgeData } from '@/js/utils/modelBadge';
@@ -29,8 +29,8 @@ const photoSlides = !model.photos
 	)
 )
 );
-import Button from '@/components/Button/Button.astro';
-import ColorLink from '@/components/ColorLink/ColorLink.astro'
+import Button from '@/ui/button/Button.astro';
+import ColorLink from '@/ui/color-link/ColorLink.astro'
 import './model.css';
 const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
 const modelTitle = getModelTitle(model);

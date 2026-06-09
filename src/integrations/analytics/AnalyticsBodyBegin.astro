@@ -1,7 +1,7 @@
 ---
-import GTM from '@/components/Scripts/components/runGTM-body.astro';
-import METRIKA_DEV from '@/components/Scripts/components/runMETRIKA_DEV-body.astro';
-import METRIKA from '@/components/Scripts/components/runMETRIKA-body.astro';
+import GTM from '@/integrations/analytics/providers/GoogleTagManagerBody.astro';
+import METRIKA_DEV from '@/integrations/analytics/providers/YandexMetrikaDevelopmentBody.astro';
+import METRIKA from '@/integrations/analytics/providers/YandexMetrikaBody.astro';
 ---
 <GTM />
 <METRIKA_DEV />

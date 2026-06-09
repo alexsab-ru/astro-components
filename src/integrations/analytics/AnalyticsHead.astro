@@ -9,21 +9,21 @@ const dealer_params = JSON.stringify({
     ...(grecaptcha_open && { grecaptcha_open }),
     ...(grecaptcha_action && { grecaptcha_action })
 });
-import { cleanScriptsData } from '@/components/Scripts/components/cleanScriptsData';
-import GTM from '@/components/Scripts/components/runGTM.astro';
-import METRIKA_DEV from '@/components/Scripts/components/runMETRIKA_DEV.astro';
-import METRIKA from '@/components/Scripts/components/runMETRIKA.astro';
-import GA4 from '@/components/Scripts/components/runGA4.astro';
-import RE from '@/components/Scripts/components/runRE.astro';
-import VK_RTRG from '@/components/Scripts/components/runVK_RTRG.astro';
-import TOP_MAIL_RU from '@/components/Scripts/components/runTOP_MAIL_RU.astro';
-import CALLTOUCH from '@/components/Scripts/components/runCALLTOUCH.astro';
-import KONGET from '@/components/Scripts/components/runKONGET.astro';
-import STREAMWOOD from '@/components/Scripts/components/runSTREAMWOOD.astro';
-import SMARTPOINT from '@/components/Scripts/components/runSMARTPOINT.astro';
-import WIDGETS from '@/components/Scripts/components/runWIDGETS.astro';
-import LoadAnalyticsScripts from '@/components/Scripts/components/loadAnalyticsScripts.astro';
-import DWELL from '@/components/Scripts/components/runDWELL.astro';
+import { cleanScriptsData } from '@/integrations/analytics/providers/clean-scripts-data';
+import GTM from '@/integrations/analytics/providers/GoogleTagManager.astro';
+import METRIKA_DEV from '@/integrations/analytics/providers/YandexMetrikaDevelopment.astro';
+import METRIKA from '@/integrations/analytics/providers/YandexMetrika.astro';
+import GA4 from '@/integrations/analytics/providers/GoogleAnalytics.astro';
+import RE from '@/integrations/analytics/providers/ReAnalytics.astro';
+import VK_RTRG from '@/integrations/analytics/providers/VkRetargetingAnalytics.astro';
+import TOP_MAIL_RU from '@/integrations/analytics/providers/TopMailRuAnalytics.astro';
+import CALLTOUCH from '@/integrations/analytics/providers/CalltouchAnalytics.astro';
+import KONGET from '@/integrations/analytics/providers/KongetAnalytics.astro';
+import STREAMWOOD from '@/integrations/analytics/providers/StreamwoodAnalytics.astro';
+import SMARTPOINT from '@/integrations/analytics/providers/SmartpointAnalytics.astro';
+import WIDGETS from '@/integrations/analytics/providers/WidgetsScripts.astro';
+import LoadAnalyticsScripts from '@/integrations/analytics/providers/LoadAnalyticsScripts.astro';
+import DWELL from '@/integrations/analytics/providers/DwellAnalytics.astro';
 
 const cleanedScripts = cleanScriptsData(scripts_json);
 ---

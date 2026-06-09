@@ -1,5 +1,5 @@
 ---
-import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
+import type {TBreadcrumb} from '@/ui/breadcrumbs/types'
 interface Props {
 	car: any;
 	breadcrumb?: TBreadcrumb[];
@@ -19,11 +19,11 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'car_pa
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import Layout from '@/layouts/Layout.astro';
-import CarImageSlider from '@/components/Cars/ImageSlider.astro';
-import CarPageHeading from '@/components/Cars/PageHeading.astro';
-import CarCharItem from '@/components/Cars/CharItem.astro';
-import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
-import BackLink from '@/components/BackLink.astro';
+import CarImageSlider from '@/blocks/cars/CarsImageSlider.astro';
+import CarPageHeading from '@/blocks/cars/CarsPageHeading.astro';
+import CarCharItem from '@/blocks/cars/CarsCharItem.astro';
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
+import BackLink from '@/ui/back-link/BackLink.astro';
 ---
 
 <Layout title={data?.title || data?.h1} description={data?.description} image={thumb} keywords={keywords} brand={data?.mark_id} breadcrumb={breadcrumb}>

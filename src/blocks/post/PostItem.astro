@@ -4,7 +4,7 @@ interface Props {
 	isLink?: boolean;
 }
 const { post, isLink = true } = Astro.props;
-import FormattedDate from '@/components/FormattedDate.astro';
+import FormattedDate from '@/ui/formatted-date/FormattedDate.astro';
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
 let date = null;
 post.data?.toDate && typeof post.data?.toDate === 'boolean'

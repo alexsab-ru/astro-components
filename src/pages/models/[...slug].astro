@@ -1,13 +1,13 @@
 ---
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
 import Layout from '@/layouts/Layout.astro';
-import Model from '@/components/Model/Model.astro';
-import ModelComplectations from '@/components/Model/Complectations.astro';
-import CarItem from "@/components/Cars/Item.astro";
-import UniversalSection from '@/components/Model/sections/universal.astro';
-import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
-import SeoText from '@/components/Seo/Index.astro';
-import PageH1 from '@/components/PageH1/Index.astro';
+import Model from '@/blocks/model/Model.astro';
+import ModelComplectations from '@/blocks/model/ModelComplectations.astro';
+import CarItem from "@/blocks/cars/CarsItem.astro";
+import UniversalSection from '@/blocks/model/sections/ModelSectionRenderer.astro';
+import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
+import SeoText from '@/blocks/seo/Seo.astro';
+import PageH1 from '@/ui/page-h1/PageH1.astro';
 const { slug } = Astro.params;
 const seoname = 'models-'+slug;
 

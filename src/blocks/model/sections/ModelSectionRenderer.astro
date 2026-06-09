@@ -61,17 +61,17 @@ const contentOrder = Array.isArray(section?.contentOrder)
 	? section.contentOrder
 	: Object.keys(sectionContent);
 
-import SubtitleSection from './subtitle.astro';
-import TitleSection from './title.astro';
-import TextSection from './text.astro';
-import MoreSection from './more.astro';
-import ItemsSection from './items.astro';
-import ImagesSection from './images.astro';
-import ButtonSection from './button.astro';
-import AlternatingMediaSection from './alternating-media.astro';
-import AdvantagesSection from './advantages.astro';
-import FeedbackFormSection from './feedback-form.astro';
-import Faq from '@/components/Faq/Index.astro';
+import SubtitleSection from './ModelSectionSubtitle.astro';
+import TitleSection from './ModelSectionTitle.astro';
+import TextSection from './ModelSectionText.astro';
+import MoreSection from './ModelSectionMore.astro';
+import ItemsSection from './ModelSectionItems.astro';
+import ImagesSection from './ModelSectionImages.astro';
+import ButtonSection from './ModelSectionButton.astro';
+import AlternatingMediaSection from './ModelSectionAlternatingMedia.astro';
+import AdvantagesSection from './ModelSectionAdvantages.astro';
+import FeedbackFormSection from './ModelSectionFeedbackForm.astro';
+import Faq from '@/blocks/faq/Faq.astro';
 
 const faqContent = section?.content?.faq ?? section?.faq ?? {};
 const faqItems = section?.content?.items ?? section?.items ?? faqContent?.items ?? [];

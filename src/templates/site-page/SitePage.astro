@@ -3,17 +3,17 @@ import settings from '@/data/site/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import {TIMER, MARQUEE} from '@/const.js';
 import Layout from '@/layouts/Layout.astro';
-import Banner from '@/components/Banner/Banner.astro';
-import PageH1 from '@/components/PageH1/Index.astro';
-import Timer from '@/components/Timer/Timer.astro';
-import ModelList from '@/components/Model/ModelList.astro';
-import LatestPosts from '@/components/LatestPosts/Index.astro';
-import Model from '@/components/Model/Model.astro';
-import ModelComplectations from '@/components/Model/Complectations.astro';
-import Callback from '@/components/Callback.astro';
-import Services from '@/components/Services.astro';
-import Contacts from '@/components/Contacts.astro';
-import Morquee from '@/components/Marquee/Index.astro';
+import Banner from '@/blocks/banner/Banner.astro';
+import PageH1 from '@/ui/page-h1/PageH1.astro';
+import Timer from '@/blocks/timer/Timer.astro';
+import ModelList from '@/blocks/model/ModelList.astro';
+import LatestPosts from '@/blocks/latest-posts/LatestPosts.astro';
+import Model from '@/blocks/model/Model.astro';
+import ModelComplectations from '@/blocks/model/ModelComplectations.astro';
+import Callback from '@/blocks/forms/callback/Callback.astro';
+import Services from '@/blocks/services/Services.astro';
+import Contacts from '@/blocks/contacts/Contacts.astro';
+import Morquee from '@/blocks/marquee/Marquee.astro';
 
 import modelsData from '@/data/site/models.json'
 import { isModelVisible } from '@/js/utils/modelVisibility';
@@ -24,7 +24,7 @@ import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const modelsWithComplectations = models.filter(m => isModelVisible(m) && (m?.complectations !== undefined && m?.complectations.length));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-import SeoText from '@/components/Seo/Index.astro';
+import SeoText from '@/blocks/seo/Seo.astro';
 ---
 
 <Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>

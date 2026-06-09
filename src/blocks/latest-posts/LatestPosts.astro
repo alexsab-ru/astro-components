@@ -1,9 +1,9 @@
 ---
 import { getSafeCollection } from '@/js/utils/safeContent';
-import SliderNavigation from '@/components/SliderNav/Navigation.astro';
-import SliderPagination from '@/components/SliderNav/Pagination.astro';
-import PostItem from '@/components/Post/Item.astro';
-import Button from '@/components/Button/Button.astro';
+import SliderNavigation from '@/ui/slider-nav/SliderNavNavigation.astro';
+import SliderPagination from '@/ui/slider-nav/SliderNavPagination.astro';
+import PostItem from '@/blocks/post/PostItem.astro';
+import Button from '@/ui/button/Button.astro';
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 interface Props {
 	collectionName: string;

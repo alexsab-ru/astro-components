@@ -1,7 +1,7 @@
 ## Подключение
 
 ```mdx
-import QuizSlider from '@/components/QuizSlider/QuizSlider.astro';
+import QuizSlider from '@/blocks/forms/quiz-slider/QuizSlider.astro';
 <QuizSlider />
 ```
 

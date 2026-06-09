@@ -12,14 +12,14 @@ const { header_top_line, is_header_transparent } = settings;
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
 import { Icon } from 'astro-icon/components';
-import Button from '@/components/Button/Button.astro';
-import Logo from '@/components/Logo/Logo.astro';
+import Button from '@/ui/button/Button.astro';
+import Logo from '@/ui/logo/Logo.astro';
 import HeaderTopLine from './HeaderTopLine.astro';
-import HeaderMenu from './Menu.astro';
-import HeaderMenuList from './MenuList.astro';
+import HeaderMenu from './HeaderMenu.astro';
+import HeaderMenuList from './HeaderMenuList.astro';
 
 // SOCIALS
-import SocialList from '@/components/Social/List.astro';
+import SocialList from '@/site-shell/social/SocialList.astro';
 import socials from '@/data/site/socials.json';
 
 import './styles.css';

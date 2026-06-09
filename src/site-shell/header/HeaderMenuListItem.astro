@@ -3,8 +3,8 @@ interface Props {
 	link: any
 }
 const { link } = Astro.props;
-import MenuLink from './MenuLink.astro';
-import SubMenu from './SubMenu.astro';
+import MenuLink from './HeaderMenuLink.astro';
+import SubMenu from './HeaderSubMenu.astro';
 const relative = link?.children && Array.isArray(link.children) ? 'relative' : '';
 const hasSubMenu =
 	Array.isArray(link?.children)

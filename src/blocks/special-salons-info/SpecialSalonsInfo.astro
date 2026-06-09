@@ -1,5 +1,5 @@
 ---
-import type {TButtonData} from '@/components/Button/types';
+import type {TButtonData} from '@/ui/button/types';
 interface Props extends TButtonData {
     type?: string;
 }
@@ -11,7 +11,7 @@ const {
     dataFormName = 'Узнать подробнее',
     type = 'sales'
 } = Astro.props;
-import Button from '@/components/Button/Button.astro';
+import Button from '@/ui/button/Button.astro';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';

@@ -16,8 +16,8 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'car_li
 const price = calculateCarPrice(car.data);
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
-import PreviewSlider from './PreviewSlider.astro';
-import Button from '@/components/Button/Button.astro';
+import PreviewSlider from './CarsPreviewSlider.astro';
+import Button from '@/ui/button/Button.astro';
 
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';

@@ -9,7 +9,7 @@ interface Props {
 	salons: ISalon[];
 }
 const { required, errorMessage = 'Выберите дилерский центр', pageData = false, modalData = false, salons, disabled = false } = Astro.props;
-import FormSelect from '@/components/FormSelect.astro';
+import FormSelect from '@/ui/form-select/FormSelect.astro';
 // Сразу пробрасываем calltouch-метаданные в опцию селекта.
 // Позже они попадут в data-атрибуты hidden input[name="dealer"].
 const options = salons.map((salon, idx) => ({

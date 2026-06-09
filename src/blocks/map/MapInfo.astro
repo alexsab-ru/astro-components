@@ -10,7 +10,7 @@ import settings from '@/data/site/settings.json';
 const { site_name, logo_map_info, logo_header, logo_dealer_header, logo_dealer_map_info } = settings;
 const logo_dealer = logo_dealer_map_info || logo_dealer_header || '';
 
-import InfoItem from '@/components/Contacts/InfoItem.astro';
+import InfoItem from '@/blocks/contacts/ContactsInfoItem.astro';
 const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
 ---
 

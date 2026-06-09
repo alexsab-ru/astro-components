@@ -4,7 +4,7 @@ import settings from '@/data/site/settings.json';
 const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer, footer_info } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { LINKS_MENU as links } from '@/const';
-import Brands from '@/components/Brands/Brands.astro';
+import Brands from '@/blocks/brands/Brands.astro';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
 import { phoneFormat } from '@/js/utils/numbers.format';
@@ -17,7 +17,7 @@ const salons = salonsData.filter((salon: ISalon) => {
     return true;
 });
 const path = Astro.url.pathname;
-import DisclaimerCollapse from '@/components/DisclaimerCollapse/DisclaimerCollapse.astro';
+import DisclaimerCollapse from '@/ui/disclaimer-collapse/DisclaimerCollapse.astro';
 
 interface Props {
 	showSiteLinks?: boolean;
@@ -25,7 +25,7 @@ interface Props {
 }
 const { showSiteLinks = true, logoNoLink = false } = Astro.props;
 // SOCIALS
-import SocialList from '@/components/Social/List.astro';
+import SocialList from '@/site-shell/social/SocialList.astro';
 import socials from '@/data/site/socials.json';
 import scripts from '@/data/site/scripts.json';
 import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';

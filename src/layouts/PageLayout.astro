@@ -1,6 +1,6 @@
 ---
-import type {TBreadcrumb} from '@/components/Breadcrumbs/types'
-import PageH1 from '@/components/PageH1/Index.astro';
+import type {TBreadcrumb} from '@/ui/breadcrumbs/types'
+import PageH1 from '@/ui/page-h1/PageH1.astro';
 interface Props {
 	title?: string;
 	h1?: string;
@@ -13,8 +13,8 @@ interface Props {
 }
 const {title, h1, description, image, breadcrumb, backLink = false, keywords, brand} = Astro.props;
 import Layout from '@/layouts/Layout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
-import BackLink from '@/components/BackLink.astro';
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
+import BackLink from '@/ui/back-link/BackLink.astro';
 ---
 
 <Layout title={title || h1} description={description} image={image} keywords={keywords} brand={brand?.toLowerCase() || null} breadcrumb={breadcrumb}>

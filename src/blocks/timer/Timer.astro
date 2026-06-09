@@ -14,7 +14,7 @@ const {
 	class: className,
 	...rest 
 } = Astro.props;
-import Button from '@/components/Button/Button.astro';
+import Button from '@/ui/button/Button.astro';
 ---
 
 <section class={`pt-10 pb-16 ${className}`} {...rest} id="timer" data-endtime={endtime}>

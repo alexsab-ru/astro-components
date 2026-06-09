@@ -1,4 +1,4 @@
-import Select from '@/components/React/Select';
+import Select from '@/react/Select';
 import { useCarInfo } from '@/store/useCarInfo';
 import { useTranslit } from '@/js/utils/translit';
 import { scroll } from '@/js/modules/scroll';
