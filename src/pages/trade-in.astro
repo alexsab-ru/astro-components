@@ -14,7 +14,7 @@ const LEGAL_SALONS_INFO = legal_entity && legal_inn ?
 salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
     .map(s => `${s?.legal_entity}`);
-import TradeInCalc from '@/components/React/TradeInCalc';
+import TradeInCalc from '@/react/TradeInCalc';
 ---
 
 <PageLayout

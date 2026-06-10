@@ -519,7 +519,8 @@ SITE_DATA_DIR="$LOCAL_DATA_DIR/site"
 COMMON_DATA_DIR="$LOCAL_DATA_DIR/common"
 ASTRO_CONTENT_DIR="src/content"
 ASTRO_PAGES_DIR="src/pages"
-ASTRO_COMPONENTS_DIR="src/components"
+# Оверрайды компонентов в astro-json зеркалят корень src/ (ui/blocks/templates/site-shell/integrations)
+ASTRO_COMPONENTS_DIR="src"
 ASTRO_JSON_DATA_PATH="data"
 
 trap cleanup EXIT INT TERM

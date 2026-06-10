@@ -1,0 +1,140 @@
+---
+import scripts_json from '@/data/site/scripts.json';
+import settings from '@/data/site/settings.json';
+const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer, footer_info } = settings;
+const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
+import { LINKS_MENU as links } from '@/const';
+import Brands from '@/blocks/brands/Brands.astro';
+import { YEAR } from '@/js/utils/date';
+import { Icon } from 'astro-icon/components'
+import { phoneFormat } from '@/js/utils/numbers.format';
+const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
+import salonsData from '@/data/site/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => {
+    if (salon?.hidden_in?.includes('footer')) return false;
+    if (salon?.type && salon.type.length) return salon.type.includes('footer');
+    return true;
+});
+const path = Astro.url.pathname;
+import DisclaimerCollapse from '@/ui/disclaimer-collapse/DisclaimerCollapse.astro';
+
+interface Props {
+	showSiteLinks?: boolean;
+	logoNoLink?: boolean;
+}
+const { showSiteLinks = true, logoNoLink = false } = Astro.props;
+// SOCIALS
+import SocialList from '@/site-shell/social/SocialList.astro';
+import socials from '@/data/site/socials.json';
+import scripts from '@/data/site/scripts.json';
+import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';
+// 1) legal из settings; 2) legal из salons; 3) если salons пустой или без legal — site_name
+const salonsLegalLines = salons
+    .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
+    .map(s => `<p class="text-sm">${s?.legal_entity}${s?.legal_inn ? `&nbsp;- ИНН:&nbsp;${s?.legal_inn}` : ''}</p>`);
+const LEGAL_SALONS_INFO =
+    legal_entity && legal_inn
+        ? [`<span class="text-sm">${legal_entity}&nbsp;- ИНН:&nbsp;${legal_inn}</span>`]
+        : salonsLegalLines.length > 0
+            ? salonsLegalLines
+            : [`<span class="text-sm">${site_name}</span>`];
+const legalDocuments = getEnabledLegalDocuments(settings.legal);
+---
+
+<footer class="bg-linear-[var(--footer-bg)] text-footer-text-color py-14 relative">
+    <div class="container">
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-y-10 lg:gap-y-5">
+
+            <div class="flex flex-col gap-3 w-fit divide-y divide-footer-divide/5">
+                <div class="pb-5">
+                    <img src={logo_footer || logo_header} class="h-[var(--logo-footer-height)] w-auto" loading="lazy" alt={site_name} width="151" height="32" />
+                </div>
+                <div>
+                    {logo_dealer ? (
+                        <img src={logo_dealer} class="h-[var(--logo-dealer-footer-height)] w-auto" alt={site_name} loading="lazy" width="200" height="40" />
+                    ) : logoNoLink ? (
+                        <span class="uppercase text-2xl inline-block">{site_name}</span>
+                    ) : (
+                        <a href="/" class="uppercase text-2xl inline-block transition-opacity hover:opacity-70">{site_name}</a>
+                    )}
+                </div>
+            </div>
+            {showSiteLinks && (
+            <div class="">
+                <div class="text-xl mb-3 md:mb-5">Разделы сайта</div>
+                <ul class="space-y-2">
+                {
+                    links
+                        .filter(link => link.url !== 'javascript:void(0)')
+                        .map(link => (
+                            <li><a href={link.url} class={`transition hover:underline ${path === link.url ? 'font-weight-bold' : ''}`}>{link.name}</a></li>
+                    ))
+                }
+                </ul>
+            </div>
+            )}
+            {
+                salons.length ? (
+                    <div class="">
+                        <div class="text-xl mb-3 md:mb-5">Контакты</div>
+                        <div class="space-y-6">
+                        {
+                            salons.map(salon => (
+                            <div class="flex flex-col gap-3">
+                                <span class="flex items-center gap-1 flex-nowrap">
+                                    <Icon name="mdi:map-marker-outline" class="text-2xl shrink-0" />
+                                    <Fragment set:html={salon.address} />
+                                </span>
+                                <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
+                                    <Icon name="mdi:cellphone" class="text-xl shrink-0" />
+                                    {salon.phone}
+                                </a>
+                            </div>
+                            ))
+                        }
+                        </div>
+                    </div>
+                ) : <Brands type="logo" />
+            }
+
+            <div class="flex flex-col justify-between gap-6">
+                {Object.keys(socials.footer).length ? (
+                    <div>
+                        <div class="text-xl mb-3 md:mb-5">Будь в курсе выгодных предложений</div>
+                        <SocialList data={socials.footer} />
+                    </div>
+                ) : ('')}
+                {scripts?.yandex_widget_rating_badge?.id && (
+                    <div>
+                        <iframe
+                            src={`https://yandex.ru/sprav/widget/rating-badge/${scripts.yandex_widget_rating_badge.id}?type=${scripts.yandex_widget_rating_badge.type}&theme=${scripts.yandex_widget_rating_badge.theme}`}
+                            width="150"
+                            height="50">
+                        </iframe>
+                    </div>
+                )}
+            </div>
+
+        </div>
+
+        {footer_info && <div class="text-xs text-white/60 pt-5 mt-7 border-white/20 border-t"><Fragment set:html={footer_info} /></div>}
+
+        {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
+
+        <div class="flex flex-wrap items-end gap-x-10 gap-y-4 pt-5 mt-7 border-white/20 border-t">
+            <div class="md:shrink-0">
+                <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
+                {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
+            </div>
+            {legalDocuments.map(document => (
+                <div class="shrink-0">
+                    <a href={document.href} class="text-white/80 text-sm font-light hover:text-white!">{document.label}</a>
+                </div>
+            ))}
+            <div class="made-by ml-auto shrink-0 text-sm m-0 text-white/80">Разработка <a href={url} class="hover:text-white!" target="_blank">alexsab.ru</a></div>
+        </div>
+
+    </div>
+</footer>

@@ -1,0 +1,114 @@
+---
+import Image from './TableImage.astro';
+
+interface Props {
+  data: any[];
+  head?: string[];
+  headClasses?: string;
+  popupText?: string | HTMLElement;
+  imageClasses?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  tableLoyoutFixed?: boolean;
+  lightbox?: boolean;
+  lightboxId?: string;
+  calc?: boolean;
+  /**
+   * Опциональный "контекст" для строк таблицы в режиме calc.
+   *
+   * Зачем:
+   * - Одинаковые услуги (название + цена) могут встречаться в разных категориях.
+   * - store считает выбранность по ключу (group + title + price).
+   * - Поэтому передаём `calcGroup`, чтобы данные были уникальными.
+   */
+  calcGroup?: string;
+}
+
+const { 
+  data = [],
+  head = [],
+  headClasses = 'sm:sticky sm:-top-px lg:top-[49px] bg-accent-500! text-white z-10',
+  popupText,
+  imageClasses = 'min-w-[50px] sm:min-w-0 max-w-[250px] mx-auto',
+  imageWidth = 250,
+  imageHeight = 177,
+  tableLoyoutFixed = false,
+  lightbox = false,
+  lightboxId = 'gallery-id',
+  calc = false,
+  calcGroup = '',
+} = Astro.props;
+const tableClass = tableLoyoutFixed ? 'table-fixed' : 'table-auto';
+---
+{
+  !!data.length && (
+    <table class={tableClass} {...(calc ? { 'data-table-calc': ''}: {})}>
+
+      {!!head.length && (
+        <thead class={headClasses}>
+          <tr>
+            {head.map(th => (
+              <th>{th}</th>
+            ))}
+          </tr>
+        </thead>
+      )}
+
+      <tbody>
+        {data.map((item: any) => {
+          const price = calc ? Number(item.price.replace(/\D/g, '')) : 0;
+          // Группа используется только для режима calc, чтобы не смешивать одинаковые услуги из разных блоков.
+          const group = calc ? String(calcGroup ?? '') : '';
+          return (
+          <tr 
+            {...(calc ? { 'data-title': item.name, 'data-price': price, 'data-group': group } : {})}
+            {/**
+              * ВАЖНО (безопасность строки):
+              * Раньше тут было что-то вроде:
+              *   @click="$store.calcItems.toggleItem(${price}, '${item.name}', $el)"
+              * Если `item.name` содержит апостроф/кавычку (например "Oil's Change"),
+              * это ломает JS-выражение Alpine (строка преждевременно закрывается).
+              * Поэтому НЕ вставляем `item.name` в JS как строковый литерал.
+              * Вместо этого читаем значения из `data-title` / `data-price` / `data-group` у строки.
+              */}
+            {...(calc ? { '@click': '$store.calcItems.toggleRow($el)', } : {})}
+            class={calc ? 'cursor-pointer hover:bg-gray-100 [&.selected]:bg-green-100' : ''}
+          >
+            {Object.keys(item).map(key => (
+              <td>
+                {
+                  key === 'name' || key === 'title' ? (
+                    popupText ? (
+                      <a 
+                        class="popup-link underline hover:no-underline" 
+                        href="#common-modal" 
+                        data-title={`${popupText} <strong>${item[key]}</strong>`} 
+                        data-form_name={`${popupText} ${item[key]}`}
+                      >
+                        {item[key]}
+                      </a>
+                    ) : item[key]
+                  ) : key === 'image' || key === 'img' || key === 'photo' ? (
+                    <Image 
+                      src={item[key]}
+                      class={imageClasses}
+                      width={imageWidth}
+                      height={imageHeight}
+                      alt={item?.name || item?.title || ''}
+                      price={item?.price || ''}
+                      lightbox={lightbox}
+                      lightboxId={lightboxId}
+                      loading="lazy"
+                    />
+                  ) : item[key]
+                }
+              </td>
+            ))}
+          </tr>
+          )
+        })}
+      </tbody>
+
+    </table>
+  )
+}

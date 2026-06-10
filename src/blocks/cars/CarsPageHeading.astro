@@ -1,0 +1,22 @@
+---
+const { data = {}, totalShow = true } = Astro.props;
+import { declOfNums } from '@/js/utils/numbers.format';
+import PageH1 from '@/ui/page-h1/PageH1.astro';
+---
+
+<PageH1 h1={data.h1} classes="xs:text-lg text-2xl sm:text-4xl uppercase" />
+
+{
+	data.complectation_name && data.complectation_name !== "" && (
+		<p class="text-gray-400 text-lg font-light">
+			{data.complectation_name !== "" ? (
+				<Fragment
+					set:html={`${data.complectation_name}${data?.year ? ",&nbsp;" + data.year : ""}`}
+				/>
+			) : (
+				data.year
+			)}
+		</p>
+	)
+}
+{(data.total && totalShow) && (<p class="my-2">{data.total}&nbsp;{declOfNums(data.total)} в наличии</p>)}

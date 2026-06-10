@@ -1,12 +1,12 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Map from '@/components/Map/Map.astro';
-import MapWidget from '@/components/Map/Widget.astro';
-import AutoShowModal from '@/components/AutoShowModal.astro';
-import InfoItem from '@/components/Contacts/InfoItem.astro';
-import WorkerItem from '@/components/Contacts/WorkerItem.astro';
+import Map from '@/blocks/map/Map.astro';
+import MapWidget from '@/blocks/map/MapWidget.astro';
+import AutoShowModal from '@/site-shell/auto-show-modal/AutoShowModal.astro';
+import InfoItem from '@/blocks/contacts/ContactsInfoItem.astro';
+import WorkerItem from '@/blocks/contacts/ContactsWorkerItem.astro';
 import settings from '@/data/site/settings.json';
-import PageH1 from '@/components/PageH1/Index.astro';
+import PageH1 from '@/ui/page-h1/PageH1.astro';
 const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_background, manager_photo } = settings;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';

@@ -1,5 +1,5 @@
 ---
-import type { TBreadcrumb } from '@/components/Breadcrumbs/types';
+import type { TBreadcrumb } from '@/ui/breadcrumbs/types';
 interface Props {
 	title?: string;
 	h1?: string;
@@ -18,22 +18,22 @@ let {title, h1, description, image, keywords, brand = null, breadcrumb, footerVe
 import settings from '@/data/site/settings.json';
 const { site_name, site_description, is_header_transparent } = settings;
 
-import Head from '@/components/Head.astro';
-import ScriptHead from '@/components/Scripts/Head.astro';
-import ScriptBodyBegin from '@/components/Scripts/BodyBegin.astro';
-import ScriptBodyEnd from '@/components/Scripts/BodyEnd.astro';
-import Header from '@/components/Header/Header.astro';
-import Modals from '@/components/Modals.astro';
-import UpBtn from '@/components/UpBtn.astro';
-import Cookie from '@/components/Cookie/Cookie.astro';
+import Head from '@/integrations/seo/DocumentHead.astro';
+import ScriptHead from '@/integrations/scripts/ScriptsHead.astro';
+import ScriptBodyBegin from '@/integrations/scripts/ScriptsBodyBegin.astro';
+import ScriptBodyEnd from '@/integrations/scripts/ScriptsBodyEnd.astro';
+import Header from '@/site-shell/header/Header.astro';
+import Modals from '@/site-shell/modals/Modals.astro';
+import UpBtn from '@/ui/up-btn/UpBtn.astro';
+import Cookie from '@/site-shell/cookie/Cookie.astro';
 import seo from '@/data/site/seo.json';
-import StripEmptyQuery from '../components/StripEmptyQuery.astro';
-import Tooltip from '@/components/Tooltip/Tooltip.astro';
-import SchemaOrg from '@/components/SchemaOrg/Index.astro';
+import StripEmptyQuery from '@/site-shell/strip-empty-query/StripEmptyQuery.astro';
+import Tooltip from '@/ui/tooltip/Tooltip.astro';
+import SchemaOrg from '@/integrations/schema-org/SchemaOrg.astro';
 
-import FooterV1 from '@/components/Footer/V1.astro';
-import FooterV2 from '@/components/Footer/V2.astro';
-import FooterV3 from '@/components/Footer/V3.astro';
+import FooterV1 from '@/site-shell/footer/FooterV1.astro';
+import FooterV2 from '@/site-shell/footer/FooterV2.astro';
+import FooterV3 from '@/site-shell/footer/FooterV3.astro';
 const FOOTER_MAP = {
 	'1': FooterV1,
 	'2': FooterV2,

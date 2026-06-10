@@ -1,0 +1,45 @@
+---
+import settings from '@/data/site/settings.json';
+const { site_name, brand, legal_city_where } = settings;
+import {TIMER, MARQUEE} from '@/const.js';
+import Layout from '@/layouts/Layout.astro';
+import Banner from '@/blocks/banner/Banner.astro';
+import PageH1 from '@/ui/page-h1/PageH1.astro';
+import Timer from '@/blocks/timer/Timer.astro';
+import ModelList from '@/blocks/model/ModelList.astro';
+import LatestPosts from '@/blocks/latest-posts/LatestPosts.astro';
+import Model from '@/blocks/model/Model.astro';
+import ModelComplectations from '@/blocks/model/ModelComplectations.astro';
+import Callback from '@/blocks/forms/callback/Callback.astro';
+import Services from '@/blocks/services/Services.astro';
+import Contacts from '@/blocks/contacts/Contacts.astro';
+import Morquee from '@/blocks/marquee/Marquee.astro';
+
+import modelsData from '@/data/site/models.json'
+import { isModelVisible } from '@/js/utils/modelVisibility';
+const { models } = modelsData;
+
+import salonsData from '@/data/site/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
+const modelsWithComplectations = models.filter(m => isModelVisible(m) && (m?.complectations !== undefined && m?.complectations.length));
+const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
+import SeoText from '@/blocks/seo/Seo.astro';
+---
+
+<Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
+	<Banner />
+	{MARQUEE.show && <Morquee marquee={ MARQUEE } />}
+	<section class="ptop-[2.7] pbottom-[2.5] bg-accent-500">
+		<div class="container">
+			<PageH1 h1=`Автомобили ${brand} в&nbsp;наличии в&nbsp;${legal_city_where}` classes="text-center fz-3 text-white leading-none" />
+		</div>
+	</section>
+	{TIMER.show && <Timer endtime={new Date(TIMER.endtime)} title={TIMER.title} subtitle={TIMER.subtitle} btnName={TIMER.btnName} />}
+	<ModelList />
+	<LatestPosts collectionName="special-offers" title="Специальные предложения" id="specials" class="bg-gray-100" showAllButton={true} />
+	<Callback />
+	<Services />
+	<SeoText mdx="index" />
+	<Contacts />
+</Layout>

@@ -1,0 +1,32 @@
+---
+import Button from '@/ui/button/Button.astro';
+import Input from '@/ui/input/Input.astro';
+import Checkbox from '@/ui/checkbox/Checkbox.astro';
+import settings from '@/data/site/settings.json';
+const { agree_label } = settings;
+---
+<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+<Input
+    type="tel"
+    name="phone"
+    classes="border-gray-100"
+    placeholder="+7 (999) 999-99-99*"
+    required
+    errorClasses="text-red-500"
+  />
+  <Checkbox
+  name="agree"
+  label={agree_label}
+  color="black"
+  required
+  errorClasses="text-red-500 w-full"
+  errorText="Чтобы продолжить, установите флажок"
+/>
+
+<input
+  type="checkbox"
+  name="subscribe"
+  class="absolute w-0 h-0 opacity-0 invisible"
+/>
+
+<Button view="form-button" classes="w-full" title="Отправить" />

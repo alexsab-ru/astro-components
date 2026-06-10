@@ -1,0 +1,101 @@
+---
+import type { TBanner } from './types';
+interface Props {
+	banner: TBanner;
+	index?: number;
+	onlyView?: boolean;
+	onlyModal?: boolean;
+}
+const {banner, index, onlyView, onlyModal} = Astro.props;
+import Button from '@/ui/button/Button.astro';
+import Badge from './BannerBadge.astro';
+import BannerTitle from './BannerTitle.astro';
+import BannerDescription from './BannerDescription.astro';
+import BannerVideo from './BannerVideo.astro';
+import BannerImage from './BannerImage.astro';
+
+import settings from '@/data/site/settings.json';
+const { is_header_transparent, header_top_line } = settings;
+
+const containerClasses = is_header_transparent && header_top_line
+	? 'pt-[117px] md:pt-[141px] lg:pt-[190px]'
+	: is_header_transparent
+	? 'pt-[80px] md:pt-[100px] lg:pt-[149px]'
+	: 'pt-5 sm:pt-10 lg:py-10';
+
+// Определяем цвет кнопки с fallback на белый
+const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
+
+// Определяем тип контента и наличие ссылки
+// Делаем код проще и читаемее
+const isVideo = banner?.type === 'video';
+const resolvedBannerUrl = onlyModal && banner?.bannerUrl ? '#common-modal' : banner?.bannerUrl;
+const resolvedBtnUrl = onlyModal && banner?.btnUrl ? '#common-modal' : banner?.btnUrl;
+const resolvedView = onlyModal ? 'popup-link' : banner?.view;
+const hasBannerUrl = !!resolvedBannerUrl;
+
+// Выбираем компонент медиа один раз
+const BannerType = isVideo ? BannerVideo : BannerImage;
+
+// Готовим атрибуты ссылки один раз (только если есть URL)
+const linkAttrs = hasBannerUrl ? {
+	href: resolvedBannerUrl as string,
+	class: `absolute inset-0 h-full w-full z-10 block ${resolvedView === 'popup-link' ? 'popup-link' : ''}`,
+	...(banner?.dataTitle ? {'data-title': banner.dataTitle} : {}),
+	...(banner?.dataFormName ? {'data-form_name': banner.dataFormName} : {}),
+	...(banner?.target && !onlyModal ? {target: banner.target} : {}),
+} : null;
+---
+
+<div class={`swiper-slide banner-slide ${banner?.gradient === false ? '' : 'gradient'}`} data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
+	<div class={`h-full relative z-2 px-5 sm:px-10 md:px-20 pb-5 banner-slide-container ${containerClasses}`}>
+		<div class="h-full flex flex-col justify-between">
+			<div class="">
+				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
+				{ banner?.descr && ( <BannerDescription description={banner.descr} /> ) }
+				{
+					(!onlyView || onlyModal) && banner?.btn && (
+						<div data-swiper-parallax="-55%">
+							<Button
+								classes={`btn inline-block py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
+								view={resolvedView}
+								url={resolvedBtnUrl}
+								title={banner?.btn}
+								dataTitle={banner?.dataTitle}
+								dataFormName={banner?.dataFormName}
+							/>
+						</div>
+					)
+				}
+			</div>
+			{
+				banner?.badge && (
+					<Badge
+						autoname={banner.badge?.autoname}
+						title={banner.badge?.title}
+						descr={banner.badge?.descr}
+						image={banner.badge?.image}
+						position={banner.badge?.position}
+						colorText={banner.badge?.colorText}
+						bg={banner.badge?.bg}
+					/>
+				)
+			}
+		</div>
+	</div>
+	
+	{/* 
+		Простой и читаемый рендер медиа:
+		- `BannerType` выбирается один раз
+		- Если есть `bannerUrl`, оборачиваем в ссылку, иначе выводим как есть
+	*/}
+	{
+		hasBannerUrl && (!onlyView || onlyModal) ? (
+			<a {...linkAttrs}>
+				<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
+			</a>
+		) : (
+			<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
+		)
+	}
+</div>

@@ -1,0 +1,275 @@
+---
+import type {TBreadcrumb} from '@/ui/breadcrumbs/types';
+import type { TStatus } from '@/types/TStatus';
+
+interface Props {
+	model: any;
+	breadcrumb?: TBreadcrumb[];
+	status?: TStatus;
+}
+const {model, breadcrumb, status} = Astro.props;
+
+import {Icon} from 'astro-icon/components';
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
+import { currencyFormat } from '@/js/utils/numbers.format';
+import { createDisclaimerIcon } from '@/js/utils/disclaimer';
+import { getModelBadgeData } from '@/js/utils/modelBadge';
+import {
+	getModelBrandDisplayName,
+	getModelColorImage,
+	getModelHomeImg,
+	getModelTitle,
+} from '@/js/utils/modelFields';
+const photoSlides = !model.photos
+? []
+: [].concat(
+	...Object.values(
+		await fetch(model.photos).then((response) =>
+		response.json()
+	)
+)
+);
+import Button from '@/ui/button/Button.astro';
+import ColorLink from '@/ui/color-link/ColorLink.astro'
+import './model.css';
+const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
+const modelTitle = getModelTitle(model);
+const brandDisplayName = getModelBrandDisplayName(model);
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_page', modelTitle || '');
+const carImagePath = getModelColorImage(model.colors?.[0]) || `/img/${model.id}/${model.colors?.[0]?.id}.png`;
+---
+
+<section class="model model-section relative" id={model?.id} data-dir={model?.id}>
+	{badgeImage && (
+		<img src={badgeImage} alt={badgeAlt} class="absolute right-4 top-4 h-auto max-h-[70px] lg:max-h-[100px] xs:w-[80px] w-[150px] lg:w-[200px] z-10 object-contain" loading="lazy" />
+	)}
+	<div
+		class="model__info"
+		style={`background-image: url(${getModelHomeImg(model)})`}>
+		<div class="container h-full pt-8 sm:pt-[2.5%] xl:pb-10">
+			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} color="text-(--color-white)!" />}
+			<div class="flex justify-between items-start flex-col lg:flex-row">
+				<div>
+					<h2
+						class="text-2xl sm:text-5xl text-title-brand-model-page tracking-wider uppercase before:hidden mx-0">
+						{brandDisplayName}
+						<b
+							class="font-heading-weight tracking-tighter xs:text-3xl text-5xl sm:text-8xl uppercase text-title-model-page"
+							>{modelTitle}</b
+						>
+					</h2>
+					{
+						model.slogan && (
+						<p class="uppercase text-lg sm:text-2xl opacity-80">
+							{model.slogan}
+						</p>
+						)
+					}
+					{
+						model?.price && !isNaN(model?.price) && model?.price != 0 && model?.price != '' ? (
+							<p class="uppercase text-3xl sm:text-4xl">
+								<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+								{/* Добавляем значок с дисклеймером для цены, если он существует */}
+								{model?.priceDisclaimer && <Fragment set:html={createDisclaimerIcon(model.priceDisclaimer)} />}
+							</p>
+						) : (
+							<Button
+								classes="popup-link btn px-20! mt-5 flex-1 whitespace-nowrap"
+								url="#common-modal"
+								title={labelBtn}
+								dataTitle={`${labelBtn} ${brandDisplayName} ${modelTitle}`}
+								dataFormName={`${labelBtn}. ${brandDisplayName} ${modelTitle}`}
+							/>
+						)
+					}
+				</div>
+			</div>
+
+			<div class="flex flex-col gap-4 mt-10 lg:mt-14">
+				{
+					Array.isArray(model?.benefits) && model.benefits.map(benefit => (
+					<a
+						class={`w-fit inline-flex items-center flex-nowrap gap-1.5 last:pb-5 text-white font-medium text-base sm:text-xl group ${benefit.view === 'popup-link' ? 'popup-link' : ''}`}
+						href={benefit?.url ? benefit.url : '#'}
+						data-title={benefit?.dataTitle}
+						data-form_name={benefit?.dataFormName}
+					>
+						<span
+							class="w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center">
+							{
+								benefit.iconName && (
+									<Icon name={benefit.iconName} class="text-2xl" />
+								)
+							}
+						</span>
+						{
+							benefit.label && (
+							<span
+								class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+								<Fragment set:html={benefit.label} />
+							</span>
+							)
+						}
+					</a>
+					))
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class={`w-full lg:w-3/4 2xl:w-3/5 relative z-10 top-0 lg:top-[150px] xl:top-[120px] lg:pb-[120px] xl:pb-[120px] ${model?.centered ? 'mx-auto' : 'ml-auto'}`}>
+		<div class="flex flex-col justify-center">
+			<div class="lazy aspect-1143/493">
+				<img
+					src="https://cdn.alexsab.ru/loaders/simple-loading.svg"
+					data-src={carImagePath}
+					class="w-full color-img-preview"
+					width="1143"
+					height="493"
+					alt={`${brandDisplayName} ${modelTitle}`}
+					fetchpriority="high"
+				/>
+			</div>
+			<div class="flex flex-wrap justify-center gap-4 sm:gap-5 color-links">
+				{
+					model.colors &&
+						model.colors.map((c: any, idx: number) => (
+							<ColorLink title={c.name} id={c.id} idx={idx} carImage={getModelColorImage(c)} style={c.style} />
+						))
+				}
+				<p class="w-full text-center text-xs color-name text-black">
+					{model.colors[0]?.name}
+				</p>
+			</div>
+		</div>
+	</div>
+
+	{
+		photoSlides.length > 0 && (
+			<div class="container px-0 sm:px-5">
+				<div class="swiper photo-slider h-[120px] md:h-[200px] mt-14">
+					<div class="swiper-wrapper">
+						{photoSlides.map((photo) => (
+							<a
+								href={photo}
+								class="swiper-slide glightbox image-slide"
+								data-gallery={`gallery-${model.id}`}>
+								<img src={photo} loading="lazy" height="200" />
+								<div class="swiper-lazy-preloader" />
+							</a>
+						))}
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	<div class="container">
+		{
+			model.globalChars && (
+				<div class="flex justify-center flex-wrap gap-4 mt-10 lg:mt-14 text-black">
+					{model.globalChars.map((char: any) => (
+						<div class="flex flex-col justify-between gap-4 sm:gap-8 xs:p-3 p-4 shadow-sm rounded w-[calc((100%/2)-8px)] sm:w-[calc((100%/3)-11px)] xl:w-[calc((100%/6)-14px)]">
+							<div class="text-xs sm:text-base">{char.title}:</div>
+							<div>
+								<b class="xs:text-xl text-2xl sm:text-3xl 2xl:text-4xl font-weight-bold">
+									{char.value}
+								</b>{' '}
+								<span class="xs:text-[11px]">
+									{char?.measure}
+								</span>
+							</div>
+						</div>
+					))}
+				</div>
+			)
+		}
+
+		{(status === 'enable' || status === 'show' || model?.show) && (
+			<div class="flex justify-center flex-wrap xs:flex-col gap-4 mt-14">
+				<Button
+					classes="popup-link btn black btn-o px-4! flex-1 whitespace-nowrap"
+					url="#common-modal"
+					title="Купить"
+					dataTitle={`Купить ${brandDisplayName}`}
+					dataFormName={`Купить. ${brandDisplayName} ${modelTitle}`}
+				/>
+				<Button
+					classes="popup-link btn px-4! flex-1 whitespace-nowrap"
+					url="#common-modal"
+					title="Рассчитать кредит"
+					dataTitle="Рассчитать кредит"
+					dataFormName={`Рассчитать кредит. ${brandDisplayName} ${modelTitle}`}
+				/>
+				<Button
+					classes="popup-link btn gray px-4! flex-1 whitespace-nowrap"
+					url="#common-modal"
+					title="Записаться на тест-драйв"
+					dataTitle="Записаться на тест-драйв"
+					dataFormName={`Записаться на тест-драйв. ${brandDisplayName} ${modelTitle}`}
+				/>
+				<Button
+					classes="popup-link btn black px-4! flex-1 whitespace-nowrap"
+					url="#common-modal"
+					title="Узнать цену по акции"
+					dataTitle="Узнать цену по акции"
+					dataFormName={`Узнать цену по акции. ${brandDisplayName} ${modelTitle}`}
+				/>
+				{ (model?.complectations !== undefined && model?.complectations.length) ? (
+					<Button
+						classes="btn black btn-o px-4! flex-1 whitespace-nowrap"
+						view="scroll-link"
+						url="#complectation"
+						title="Подобрать комплектацию"
+					/>
+				) : (
+					<Button
+						classes="popup-link btn black btn-o px-4! flex-1 whitespace-nowrap"
+						view="popup-link"
+						url="#common-modal"
+						title="Подобрать комплектацию"
+						dataTitle="Подобрать комплектацию"
+						dataFormName={`Подобрать комплектацию. ${brandDisplayName} ${modelTitle}`}
+					/>
+				)}
+			</div>
+		)}
+
+	</div>
+</section>
+
+<script>
+	import GLightbox from 'glightbox';
+	import Swiper from 'swiper';
+	import {Autoplay} from 'swiper/modules';
+	const photo = new Swiper('.photo-slider', {
+		modules: [Autoplay],
+		loop: true,
+		centeredSlides: true,
+		slidesPerView: 'auto',
+		speed: 100,
+		autoplay: {
+			// enabled: true,
+			disableOnInteraction: false,
+			waitForTransition: false,
+			delay: 5000,
+		},
+		breakpoints: {
+			320: {
+				spaceBetween: 5,
+			},
+			640: {
+				spaceBetween: 10,
+			},
+			1280: {
+				spaceBetween: 10,
+			},
+		},
+	});
+
+	if (photo) {
+		GLightbox({
+			loop: true,
+		});
+	}
+</script>

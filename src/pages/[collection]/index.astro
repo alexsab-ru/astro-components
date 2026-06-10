@@ -5,10 +5,10 @@ import { getCollection, type DataEntryMap } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
 import settings from '@/data/site/settings.json';
 const { site_name } = settings;
-import PostItem from '@/components/Post/Item.astro';
+import PostItem from '@/blocks/post/PostItem.astro';
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 import { getRandomInt } from '@/js/utils/numbers.format';
-import SeoText from '@/components/Seo/Index.astro';
+import SeoText from '@/blocks/seo/Seo.astro';
 import { getContentCollections } from '@/content-config/collections';
 
 export async function getStaticPaths() {

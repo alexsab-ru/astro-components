@@ -6,10 +6,10 @@ if (isRouteDisabled('/calc-to/')) {
 import settings from '@/data/site/settings.json';
 const { site_name } = settings;
 import Layout from '@/layouts/Layout.astro';
-import Banner from '@/components/Banner/Banner.astro';
-import Contacts from '@/components/Contacts.astro';
-import CalcTO from '@/components/CalcTO/CalcTO.astro';
-import FeedbackForm from '@/components/FeedbackForm/FeedbackForm.astro';
+import Banner from '@/blocks/banner/Banner.astro';
+import Contacts from '@/blocks/contacts/Contacts.astro';
+import CalcTO from '@/blocks/calc-to/CalcTO.astro';
+import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
 ---
 
 <Layout title=`Рассчитать стоимость ТО у официального дилера ${site_name}` description=``>

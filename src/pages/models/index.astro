@@ -6,11 +6,11 @@ if (isRouteDisabled('/models/')) {
 import settings from '@/data/site/settings.json';
 const { brand, legal_city_where } = settings;
 import Layout from '@/layouts/Layout.astro';
-import ModelList from '@/components/Model/ModelList.astro';
-import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs.astro';
+import ModelList from '@/blocks/model/ModelList.astro';
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
 export const breadcrumb = { name: `Модели`, href: "/models/" };
-import SeoText from '@/components/Seo/Index.astro';
-import PageH1 from '@/components/PageH1/Index.astro';
+import SeoText from '@/blocks/seo/Seo.astro';
+import PageH1 from '@/ui/page-h1/PageH1.astro';
 ---
 <Layout 
 	title={`Модельный ряд ${brand} – Официальный дилер ${brand} в ${legal_city_where}`} 

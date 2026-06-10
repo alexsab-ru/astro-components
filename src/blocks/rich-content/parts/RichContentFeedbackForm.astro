@@ -1,0 +1,25 @@
+---
+import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
+
+type TFeedbackForm = {
+	title?: string;
+	subtitle?: string;
+	imageUrl?: string;
+	dataFormName?: string;
+	showModelSelect?: boolean;
+}
+
+interface Props {
+	feedbackForm?: TFeedbackForm;
+}
+
+const { feedbackForm = {} } = Astro.props;
+---
+
+<FeedbackForm
+	title={feedbackForm.title}
+	subtitle={feedbackForm.subtitle}
+	imageUrl={feedbackForm.imageUrl}
+	dataFormName={feedbackForm.dataFormName}
+	showModelSelect={feedbackForm.showModelSelect}
+/>
