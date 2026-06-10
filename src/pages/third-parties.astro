@@ -1,10 +1,10 @@
 ---
 import ThirdParties from '@/content/third-parties.mdx';
 import { frontmatter as thirdPartiesFrontmatter } from '@/content/third-parties.mdx';
-import LegalDocumentPage from '@/templates/legal-page/LegalPage.astro';
+import LegalPage from '@/layouts/LegalPage.astro';
 ---
 
-<LegalDocumentPage
+<LegalPage
 	Content={ThirdParties}
 	frontmatter={thirdPartiesFrontmatter}
 	fallbackTitle="Перечень третьих лиц, которым могут передаваться персональные данные"

@@ -9,21 +9,21 @@ const dealer_params = JSON.stringify({
     ...(grecaptcha_open && { grecaptcha_open }),
     ...(grecaptcha_action && { grecaptcha_action })
 });
-import { cleanScriptsData } from '@/integrations/analytics/providers/clean-scripts-data';
-import GTM from '@/integrations/analytics/providers/GoogleTagManager.astro';
-import METRIKA_DEV from '@/integrations/analytics/providers/YandexMetrikaDevelopment.astro';
-import METRIKA from '@/integrations/analytics/providers/YandexMetrika.astro';
-import GA4 from '@/integrations/analytics/providers/GoogleAnalytics.astro';
-import RE from '@/integrations/analytics/providers/ReAnalytics.astro';
-import VK_RTRG from '@/integrations/analytics/providers/VkRetargetingAnalytics.astro';
-import TOP_MAIL_RU from '@/integrations/analytics/providers/TopMailRuAnalytics.astro';
-import CALLTOUCH from '@/integrations/analytics/providers/CalltouchAnalytics.astro';
-import KONGET from '@/integrations/analytics/providers/KongetAnalytics.astro';
-import STREAMWOOD from '@/integrations/analytics/providers/StreamwoodAnalytics.astro';
-import SMARTPOINT from '@/integrations/analytics/providers/SmartpointAnalytics.astro';
-import WIDGETS from '@/integrations/analytics/providers/WidgetsScripts.astro';
-import LoadAnalyticsScripts from '@/integrations/analytics/providers/LoadAnalyticsScripts.astro';
-import DWELL from '@/integrations/analytics/providers/DwellAnalytics.astro';
+import { cleanScriptsData } from '@/integrations/scripts/providers/clean-scripts-data';
+import GTM from '@/integrations/scripts/providers/GoogleTagManager.astro';
+import METRIKA_DEV from '@/integrations/scripts/providers/YandexMetrikaDevelopment.astro';
+import METRIKA from '@/integrations/scripts/providers/YandexMetrika.astro';
+import GA4 from '@/integrations/scripts/providers/GoogleAnalytics.astro';
+import RE from '@/integrations/scripts/providers/ReCaptcha.astro';
+import VK_RTRG from '@/integrations/scripts/providers/VkRetargetingPixel.astro';
+import TOP_MAIL_RU from '@/integrations/scripts/providers/TopMailRuPixel.astro';
+import CALLTOUCH from '@/integrations/scripts/providers/Calltouch.astro';
+import KONGET from '@/integrations/scripts/providers/Konget.astro';
+import STREAMWOOD from '@/integrations/scripts/providers/Streamwood.astro';
+import SMARTPOINT from '@/integrations/scripts/providers/Smartpoint.astro';
+import WIDGETS from '@/integrations/scripts/providers/WidgetsScripts.astro';
+import LoadAnalyticsScripts from '@/integrations/scripts/providers/LoadScripts.astro';
+import DWELL from '@/integrations/scripts/providers/DwellBeacon.astro';
 
 const cleanedScripts = cleanScriptsData(scripts_json);
 ---

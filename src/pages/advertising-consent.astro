@@ -1,10 +1,10 @@
 ---
 import AdvertisingConsent from '@/content/advertising-consent.mdx';
 import { frontmatter as advertisingConsentFrontmatter } from '@/content/advertising-consent.mdx';
-import LegalDocumentPage from '@/templates/legal-page/LegalPage.astro';
+import LegalPage from '@/layouts/LegalPage.astro';
 ---
 
-<LegalDocumentPage
+<LegalPage
 	Content={AdvertisingConsent}
 	frontmatter={advertisingConsentFrontmatter}
 	fallbackTitle="Согласие на получение рекламных и информационных сообщений"
