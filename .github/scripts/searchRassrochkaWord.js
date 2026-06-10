@@ -12,7 +12,8 @@ class RassrochkaWordSearcher {
         this.dataDirectory = path.join(process.cwd(), 'src', 'data', 'site');
         this.contentDirectory = path.join(process.cwd(), 'src', 'content');
         this.pagesDirectory = path.join(process.cwd(), 'src', 'pages');
-        this.componentsDirectory = path.join(process.cwd(), 'src', 'components');
+        this.componentDirectories = ['ui', 'blocks', 'templates', 'site-shell', 'integrations', 'layouts']
+            .map(dir => path.join(process.cwd(), 'src', dir));
         this.filesWithRassrochka = [];
     }
 
@@ -107,7 +108,7 @@ class RassrochkaWordSearcher {
         this.processDirectory(this.dataDirectory, ['.json']);
         this.processDirectory(this.contentDirectory, ['.mdx']);
         this.processDirectory(this.pagesDirectory, ['.astro']);
-        this.processDirectory(this.componentsDirectory, ['.astro']);
+        this.componentDirectories.forEach(dir => this.processDirectory(dir, ['.astro']));
         this.outputRassrochkaFiles();
     }
 }
