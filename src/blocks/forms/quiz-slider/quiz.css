@@ -1,4 +1,4 @@
-@reference "../../scss/app.css";
+@reference "../../../scss/app.css";
 
 .quiz-slide {
   &[data-step="1"] .slide-prev {

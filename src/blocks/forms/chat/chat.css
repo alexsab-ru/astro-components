@@ -1,4 +1,4 @@
-@reference "../../scss/app.css";
+@reference "../../../scss/app.css";
 
 .chat-container {
     max-width: 600px;
