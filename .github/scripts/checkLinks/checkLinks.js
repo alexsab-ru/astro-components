@@ -29,6 +29,7 @@ const excludeDomains = [
 
 const linksToSkip = [
   /javascript:void\(0\)/,
+  /\/404\/?$/,
   /checkLinks\.md/,
   /^https?:\/\/(www\.)?probegcentr\.ru/,
   /^https?:\/\/(www\.)?vtb\.ru/,

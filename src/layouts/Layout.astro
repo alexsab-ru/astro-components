@@ -12,8 +12,24 @@ interface Props {
 	showHeaderMenu?: boolean;
 	showFooterLinks?: boolean;
 	logoNoLink?: boolean;
+	canonical?: boolean;
+	noindex?: boolean;
 }
-let {title, h1, description, image, keywords, brand = null, breadcrumb, footerVersion = '2', showHeaderMenu = true, showFooterLinks = true, logoNoLink = false} = Astro.props;
+let {
+	title,
+	h1,
+	description,
+	image,
+	keywords,
+	brand = null,
+	breadcrumb,
+	footerVersion = '2',
+	showHeaderMenu = true,
+	showFooterLinks = true,
+	logoNoLink = false,
+	canonical = true,
+	noindex = false,
+} = Astro.props;
 
 import settings from '@/data/site/settings.json';
 const { site_name, site_description, is_header_transparent } = settings;
@@ -82,7 +98,14 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 	}>
 	<head>
 		<StripEmptyQuery />
-		<Head title={title || h1 || site_name} description={description ?? site_description} image={image} keywords={keywords} />
+		<Head
+			title={title || h1 || site_name}
+			description={description ?? site_description}
+			image={image}
+			keywords={keywords}
+			canonical={canonical}
+			noindex={noindex}
+		/>
 		<ScriptHead />
 		<SchemaOrg breadcrumbs={breadcrumb} />
 	</head>

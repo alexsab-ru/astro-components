@@ -5,13 +5,22 @@ interface Props {
 	description: string;
 	image?: string;
 	keywords?: string;
+	canonical?: boolean;
+	noindex?: boolean;
 }
 import settings from '@/data/site/settings.json';
 const { favicon, improve_offer_background } = settings;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
-const { title, description, image = improve_offer_background, keywords } = Astro.props;
+const {
+	title,
+	description,
+	image = improve_offer_background,
+	keywords,
+	canonical = true,
+	noindex = false,
+} = Astro.props;
 
 const yandexSiteVerification = import.meta.env.PUBLIC_YANDEX_SITE_VERIFICATION;
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
@@ -25,7 +34,9 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
+{canonical && <link rel="canonical" href={canonicalURL} />}
+
+{noindex && <meta name="robots" content="noindex, follow" />}
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
