@@ -115,8 +115,13 @@ export function useFormSubmission({
 
       const res = response.data;
       if (res?.answer && res.answer.toLowerCase() === 'ok') {
-        // Отправляем цель «успешная отправка» + данные в колтач (через reachGoal)
-        reachGoal("form_success", formDataObj);
+        // attention:true — сервер посчитал заявку подозрительной (антиспам).
+        if (res.attention === true) {
+          reachGoal("form_attention");
+        } else {
+          // Успешная отправка + данные в колтач (через reachGoal)
+          reachGoal("form_success", formDataObj);
+        }
         // Ставим куку, как connectForms, чтобы не было повторных отправок
         setCookie(SEND_MAIL_COOKIE, true, { domain: window.location.hostname, path: '/', expires: 600 });
         setIsFinished(true);

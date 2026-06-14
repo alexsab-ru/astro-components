@@ -192,7 +192,10 @@ const submitFormWithFiles = async (form, url, props) => {
 			showMessageModal(messageModal, errorIcon, errorText + '<br>' + data.error);
 			return;
 		}
-		if (data.attention !== true) {
+		// Сервер вернул attention:true — заявка похожа на спам, success не шлём.
+		if (data.attention === true) {
+			reachGoal('form_attention');
+		} else {
 			reachGoal('form_success', formDataObj);
 		}
 		setCookie(sendMailCookie, true, {

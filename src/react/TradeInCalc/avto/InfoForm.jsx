@@ -214,7 +214,12 @@ function AvtoInfoForm({ ct_routeKey = '' } = {}) {
 				.then(function (response) {
 					if (window.location.hostname == "localhost")
 						console.log('Отправка письма', response);
-					reachGoal("form_success", formDataObj);
+					// attention:true — антиспам сработал, лида в CRM нет.
+					if (response?.data?.attention === true) {
+						reachGoal("form_attention");
+					} else {
+						reachGoal("form_success", formDataObj);
+					}
 					setCookie(SEND_MAIL_COOKIE, true, { domain: window.location.hostname, path: '/', expires: 600 });
 					// recalculate();
 					e.target.reset();
