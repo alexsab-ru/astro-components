@@ -1,7 +1,6 @@
 ---
 import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 import type { TCollection } from '@/types/TCollection';
-import { getCollection, type DataEntryMap } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
 import settings from '@/data/site/settings.json';
 const { site_name } = settings;
@@ -9,10 +8,11 @@ import PostItem from '@/blocks/post/PostItem.astro';
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 import { getRandomInt } from '@/js/utils/numbers.format';
 import SeoText from '@/blocks/seo/Seo.astro';
-import { getContentCollections } from '@/content-config/collections';
+import { getIndexCollections } from '@/content-config/collections';
+import { getSafeCollection } from '@/js/utils/safeContent';
 
 export async function getStaticPaths() {
-  return getContentCollections()
+  return getIndexCollections()
 		.filter((c) => !isRouteDisabled(`/${c.name}/`))
 		.map((collection) => ({ 
 		params: { collection: collection.name },
@@ -33,7 +33,7 @@ if (typeof collection === 'string' && isRouteDisabled(`/${collection}/`)) {
 const { title, h1, breadcrumb: collectionBreadcrumb, description, image: seoImage } = Astro.props;
 // seo.title уже может содержать «| site_name» — не дублируем суффикс
 const metaTitle = title.includes('|') ? title : `${title} | ${site_name}`;
-const entries = await getCollection(collection as keyof DataEntryMap);
+const entries = await getSafeCollection(collection as string);
 let posts: TCollection[], image = '';
 if (entries && entries.length > 0) {
 	posts = sortingAndFilteringPosts(entries);
@@ -55,6 +55,7 @@ const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
 	breadcrumb={[breadcrumb]}
 	image={seoImage || image || ''}
 	backLink={true}
+	noindex={posts.length === 0}
 >
 	<SeoText mdx={collection} noPadding />
 	{

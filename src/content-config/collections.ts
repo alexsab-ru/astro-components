@@ -26,6 +26,10 @@ type SeoEntry = {
 	image?: string;
 };
 
+type RoutesData = {
+	always_available_collections?: unknown;
+};
+
 const readSeoData = (): Record<string, SeoEntry> => {
 	const path = resolve(process.cwd(), 'src/data/site/seo.json');
 	if (!existsSync(path)) return {};
@@ -34,6 +38,21 @@ const readSeoData = (): Record<string, SeoEntry> => {
 };
 
 const seoData = readSeoData();
+
+const readAlwaysAvailableCollections = (): string[] => {
+	const path = resolve(process.cwd(), 'src/data/site/routes.json');
+	if (!existsSync(path)) return [];
+
+	const routes = JSON.parse(readFileSync(path, 'utf-8')) as RoutesData;
+	if (!Array.isArray(routes.always_available_collections)) return [];
+
+	return routes.always_available_collections
+		.filter((name): name is string => typeof name === 'string')
+		.map((name) => name.trim())
+		.filter((name) => /^[a-z0-9][a-z0-9_-]*$/.test(name));
+};
+
+const alwaysAvailableCollections = readAlwaysAvailableCollections();
 
 const titleFromSeoTitle = (title?: string): string | undefined => {
 	const value = title?.split('|')[0]?.trim();
@@ -68,19 +87,26 @@ const resolveCollectionBreadcrumb = (seo: SeoEntry | undefined, name: string): s
 	titleFromSeoTitle(seo?.title) ||
 	titleFromCollectionName(name);
 
-export const getContentCollections = (): CollectionMeta[] =>
-	getRegularCollectionNames().map((name) => {
-		const seo = seoData[`/${name}/`];
+const getCollectionMeta = (name: string): CollectionMeta => {
+	const seo = seoData[`/${name}/`];
 
-		return {
-			name,
-			title: resolveCollectionTitle(seo, name),
-			h1: resolveCollectionH1(seo, name),
-			breadcrumb: resolveCollectionBreadcrumb(seo, name),
-			description: seo?.description || '',
-			image: seo?.image || '',
-		};
-	});
+	return {
+		name,
+		title: resolveCollectionTitle(seo, name),
+		h1: resolveCollectionH1(seo, name),
+		breadcrumb: resolveCollectionBreadcrumb(seo, name),
+		description: seo?.description || '',
+		image: seo?.image || '',
+	};
+};
+
+export const getContentCollections = (): CollectionMeta[] =>
+	getRegularCollectionNames().map(getCollectionMeta);
+
+export const getIndexCollections = (): CollectionMeta[] =>
+	[...new Set([...getRegularCollectionNames(), ...alwaysAvailableCollections])]
+		.sort()
+		.map(getCollectionMeta);
 
 const createGlobCollection = (collection: string, schema?: unknown) => defineCollection({
 	loader: glob({
