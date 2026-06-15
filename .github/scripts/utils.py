@@ -1647,6 +1647,19 @@ def _load_dotenv_file() -> Dict[str, str]:
     return {}
 
 
+def get_env_value(name: str, default: Any = None) -> Any:
+    """Возвращает настройку с приоритетом os.environ > .env > env.json."""
+    if name in os.environ:
+        return os.environ[name]
+
+    env_file_data = _load_dotenv_file()
+    if name in env_file_data:
+        return env_file_data[name]
+
+    env_json_data = _load_env_json()
+    return env_json_data.get(name, default)
+
+
 def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
     """
     Загружает конфигурацию из переменных окружения или env.json (фолбек).

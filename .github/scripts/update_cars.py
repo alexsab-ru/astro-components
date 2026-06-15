@@ -10,11 +10,19 @@ import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Tuple
 import requests
 
+TRUTHY_ENV_VALUES = {'1', 'true', 'yes', 'on'}
+AVAILABLE_CAR_VALUE = 'в наличии'
+
+
 class CarProcessor:
     def __init__(self):
         self.existing_files = set()
         self.current_thumbs = []
         self.prices_data = load_price_data()
+        self.show_only_available_cars = (
+            str(get_env_value('DEALER_CARS_SHOW_ONLY_AVAILABILITY', '')).strip().lower()
+            in TRUTHY_ENV_VALUES
+        )
         
         # Прямое хранение агрегированных данных в готовом формате
         # Ключ: (brand, model), Значение: полный объект для JSON
@@ -330,6 +338,34 @@ class CarProcessor:
         self.config = configs.get(self.source_type)
         if not self.config:
             raise ValueError(f"Неизвестный тип источника: {self.source_type}")
+
+    def should_skip_car_for_availability(self, car: ET.Element) -> bool:
+        """Проверяет доступность до полной обработки автомобиля."""
+        if not self.show_only_available_cars:
+            return False
+
+        availability_field = self.config['field_mapping'].get('availability')
+        field_names = (
+            availability_field
+            if isinstance(availability_field, (list, tuple))
+            else [availability_field]
+        )
+
+        for field_name in field_names:
+            if not field_name:
+                continue
+
+            elem = car.find(field_name)
+            if elem is not None and elem.text:
+                availability = elem.text.strip().lower()
+                return availability != AVAILABLE_CAR_VALUE
+
+            attribute_value = car.get(field_name)
+            if attribute_value is not None:
+                availability = attribute_value.strip().lower()
+                return availability not in TRUTHY_ENV_VALUES
+
+        return True
 
     def auto_detect_source_type(self, xml_file_path: str) -> Optional[str]:
         """
@@ -882,6 +918,9 @@ class CarProcessor:
 
     def process_car(self, car: ET.Element, config: Dict) -> ET.Element:
         """Обработка отдельного автомобиля"""
+        if self.should_skip_car_for_availability(car):
+            return None
+
         # Извлекаем данные автомобиля
         car_data = self.extract_car_data(car)
         
