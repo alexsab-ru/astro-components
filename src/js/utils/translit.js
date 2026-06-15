@@ -23,6 +23,7 @@ export const rusKey = (key) => {
       enginePower: { label: "Мощность (л.с.)", orderId: 10 },
       driveType: { label: "Привод", orderId: 11 },
       gearboxType: { label: "КПП", orderId: 12 },
+      gearRus: { label: "КПП", orderId: 12 },
    };
 
    if (!engToRus[key]) return null;

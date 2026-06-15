@@ -55,7 +55,7 @@ import { getModelTitle } from '@/js/utils/modelFields';
 			<div class="grid sm:grid-cols-2 gap-10 lg:gap-5 xl:gap-10">
 				<div class="space-y-5 xl:text-lg">
 					<template x-for="[key, value] in Object.entries(currentModelComplectation)">
-						<template x-if="key !== 'name' && key !== 'price'">
+						<template x-if="key !== 'name' && key !== 'displayName' && key !== 'price'">
 							<div class="flex justify-between items-end leading-none">
 								<div class="" x-text="translit(key)"></div>
 								<div class="grow border-b border-dotted mx-1"></div>
