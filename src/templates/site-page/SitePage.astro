@@ -24,7 +24,7 @@ import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('index'));
 const modelsWithComplectations = models.filter(m => isModelVisible(m) && (m?.complectations !== undefined && m?.complectations.length));
 const salonsPhone = salons.map((salon: any) => salon.phone).filter(phone => phone).join(', ');
-import SeoText from '@/blocks/seo/Seo.astro';
+import SeoText from '@/blocks/seo-text/SeoText.astro';
 ---
 
 <Layout title=`Купить ${brand} у официального дилера ${site_name}` description=`Забронируйте свой автомобиль прямо сейчас у официального дилера ${brand} в ${legal_city_where}! ☎️ ${salonsPhone}`>
