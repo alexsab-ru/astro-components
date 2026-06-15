@@ -1,0 +1,64 @@
+---
+// Реестр блоков page-builder: type (из page.blocks JSON или из роута) -> компонент.
+// Добавить блок = импорт + ветка в switch ниже. Перемещение компонента = только смена импорта.
+import type { TBlock } from './types';
+import RichContentBlock from '@/blocks/rich-content/RichContentBlock.astro';
+import Faq from '@/blocks/faq/Faq.astro';
+import Model from '@/blocks/model/Model.astro';
+import PageH1 from '@/ui/page-h1/PageH1.astro';
+import SeoText from '@/blocks/seo-text/SeoText.astro';
+import ModelComplectations from '@/blocks/model/ModelComplectations.astro';
+import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
+import CarsGrid from '@/blocks/cars-grid/CarsGrid.astro';
+
+interface Props {
+	blocks?: TBlock[];
+}
+const { blocks = [] } = Astro.props;
+
+// faq живёт top-level (раньше — ветка внутри RichContentBlock).
+// content может лежать как в block.content (JSON), так и в block напрямую.
+const faqProps = (block: TBlock) => {
+	const content = block?.content ?? {};
+	return {
+		items: content.items ?? block.items ?? [],
+		title: content.title ?? block.title,
+		id: block.id,
+		class: `sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${block.sectionClass ?? ''}`,
+		withSchema: Boolean(
+			block.withSchema ?? block.schema ?? content.withSchema ?? content.schema ?? false,
+		),
+	};
+};
+---
+{
+	blocks.map((block) => {
+		const props = block?.props ?? {};
+		switch (block?.type) {
+			case 'page-h1':
+				return <PageH1 {...props} />;
+			case 'model':
+				return <Model {...props} />;
+			case 'rich-content':
+				return <RichContentBlock section={block} />;
+			case 'faq':
+				return <Faq {...faqProps(block)} />;
+			case 'model-complectations':
+				return <ModelComplectations {...props} />;
+			case 'seo-text':
+				return <SeoText {...props} />;
+			case 'feedback-form':
+				return (
+					<section>
+						<div class="container">
+							<FeedbackForm {...props} />
+						</div>
+					</section>
+				);
+			case 'cars-grid':
+				return <CarsGrid {...props} />;
+			default:
+				return null;
+		}
+	})
+}

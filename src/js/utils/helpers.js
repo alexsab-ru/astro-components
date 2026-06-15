@@ -59,34 +59,34 @@ const isPlainObject = (value) =>
 	typeof value === 'object' &&
 	!Array.isArray(value);
 
-const normalizeModelSection = ([sectionId, section]) => {
-	if (!isPlainObject(section) || section.show === false) {
+const normalizeModelBlock = ([blockId, block]) => {
+	if (!isPlainObject(block) || block.show === false) {
 		return null;
 	}
 
 	return {
-		...section,
-		id: section.id ?? sectionId,
-		content: isPlainObject(section.content) ? section.content : {},
+		...block,
+		id: block.id ?? blockId,
+		content: isPlainObject(block.content) ? block.content : {},
 	};
 };
 
-export function getModelSections(model = null) {
-	const sections = model?.page?.sections;
+export function getModelBlocks(model = null) {
+	const blocks = model?.page?.blocks;
 
-	if (!isPlainObject(sections)) {
+	if (!isPlainObject(blocks)) {
 		return [];
 	}
 
-	const sectionOrder = Array.isArray(model?.page?.sectionOrder)
-		? model.page.sectionOrder
-		: Object.keys(sections);
-	const orderedSectionIds = [
-		...sectionOrder.filter((sectionId) => sections[sectionId]),
-		...Object.keys(sections).filter((sectionId) => !sectionOrder.includes(sectionId)),
+	const blockOrder = Array.isArray(model?.page?.blockOrder)
+		? model.page.blockOrder
+		: Object.keys(blocks);
+	const orderedBlockIds = [
+		...blockOrder.filter((blockId) => blocks[blockId]),
+		...Object.keys(blocks).filter((blockId) => !blockOrder.includes(blockId)),
 	];
 
-	return orderedSectionIds
-		.map((sectionId) => normalizeModelSection([sectionId, sections[sectionId]]))
+	return orderedBlockIds
+		.map((blockId) => normalizeModelBlock([blockId, blocks[blockId]]))
 		.filter(Boolean);
 }
