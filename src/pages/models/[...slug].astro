@@ -84,17 +84,27 @@ const firstSectionImageUrl = contentBlocks
   ?.url;
 
 const modelBreadcrumb = [breadcrumb, { name: modelTitle, href: Astro.url.pathname }];
-const hasComplectations = (model as any)?.complectations !== undefined && !!(model as any).complectations?.length;
+
+// Контекст страницы — runtime-данные для блоков (model/cars/complectations берут отсюда).
+const context = {
+  model,
+  status,
+  breadcrumb: modelBreadcrumb,
+  cars,
+  brandDisplayName,
+  modelTitle,
+  legal_city_where,
+  carsTitle: `Автомобили ${brandDisplayName}&nbsp;${modelTitle} в наличии в ${legal_city_where}`,
+};
 
 // Сборка страницы модели из блоков. JSON-блоки (contentBlocks) встраиваются между
 // структурными; порядок и условия — ответственность шаблона страницы.
+// model / model-complectations / cars-grid само-гейтятся внутри BlockRenderer по context.
 const blocks = [
   { type: 'page-h1', props: { h1: `Автомобиль ${brandDisplayName} ${modelTitle} в ${legal_city_where}`, classes: 'sr-only' } },
-  { type: 'model', props: { model, status, breadcrumb: modelBreadcrumb } },
+  { type: 'model' },
   ...contentBlocks,
-  ...(hasComplectations
-    ? [{ type: 'model-complectations', props: { title: `Подобрать комплектацию ${brandDisplayName} ${modelTitle}`, model, brand: brandDisplayName } }]
-    : []),
+  { type: 'model-complectations' },
   { type: 'seo-text', props: { mdx: seoname, sectionPaddingBlock: true } },
   ...((status === 'enable' || status === 'show')
     ? [{ type: 'feedback-form', props: {
@@ -107,9 +117,7 @@ const blocks = [
   ...(status === 'preorder'
     ? [{ type: 'feedback-form', props: { title: `Забронировать новый ${brandDisplayName} ${model.name}` } }]
     : []),
-  ...(cars.length
-    ? [{ type: 'cars-grid', props: { cars, title: `Автомобили ${brandDisplayName}&nbsp;${modelTitle} в наличии в ${legal_city_where}` } }]
-    : []),
+  { type: 'cars-grid' },
 ];
 ---
 <Layout
@@ -120,5 +128,5 @@ const blocks = [
   breadcrumb={[breadcrumb, { name: modelTitle, href: Astro.url.pathname }]}
 >
   <div x-init={`$store.lastViewedModel.setModel(${lastViewedModelJSON})`} class="hidden"></div>
-  <BlockRenderer blocks={blocks} />
+  <BlockRenderer blocks={blocks} context={context} />
 </Layout>

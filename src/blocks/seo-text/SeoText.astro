@@ -3,30 +3,34 @@ import { render } from 'astro:content';
 import { getSafeEntry } from '@/js/utils/safeContent';
 
 interface Props {
-  mdx: string;
+  mdx?: string;
+  text?: string;
   noPadding?: boolean;
-  sectionPaddingBlock?: boolean
+  sectionPaddingBlock?: boolean;
 }
 
-const { mdx, noPadding = false, sectionPaddingBlock = false } = Astro.props;
+const { mdx, text, noPadding = false, sectionPaddingBlock = false } = Astro.props;
 
-// Попробуем получить запись из коллекции 'seo' по слагу
-const content = await getSafeEntry('seo', mdx);
-let showseo = false;
+// Приоритет у inline-текста; mdx-файл подтягивается только если text пуст.
+const hasText = typeof text === 'string' && text.trim().length > 0;
+
 let Content = null;
-
-if (content) {
-  const result = await render(content);
-  Content = result.Content;
-  showseo = true;
+if (!hasText && mdx) {
+  const content = await getSafeEntry('seo', mdx);
+  if (content) {
+    const result = await render(content);
+    Content = result.Content;
+  }
 }
+
+const showseo = hasText || Content !== null;
 ---
 
-{ showseo ? ( 
+{ showseo ? (
 <section class={`${!sectionPaddingBlock ? 'pt-0!' : ''}`}>
 	<div class={`container ${noPadding ? 'px-0!' : ''}`}>
 		<div class="seo-content">
-			<Content />
+			{hasText ? <Fragment set:html={text} /> : <Content />}
 		</div>
 		<div class="flex justify-center mt-6">
 			<a href="javascript:void(0)" class="seo-show-more text-sm opacity-50 transition-opacity hover:opacity-90 leading-none py-3 relative no-underline!">

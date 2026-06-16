@@ -1,6 +1,9 @@
 ---
 // Реестр блоков page-builder: type (из page.blocks JSON или из роута) -> компонент.
-// Добавить блок = импорт + ветка в switch ниже. Перемещение компонента = только смена импорта.
+// Каждый case адаптирует блок к пропсам компонента ЕДИНООБРАЗНО:
+//   c = данные блока (JSON content + route props, props важнее);
+//   context = данные страницы (model, cars, ...) для блоков, которым нужен runtime-контекст.
+// Добавить блок = импорт + ветка в switch.
 import type { TBlock } from './types';
 import RichContentBlock from '@/blocks/rich-content/RichContentBlock.astro';
 import Faq from '@/blocks/faq/Faq.astro';
@@ -13,50 +16,53 @@ import CarsGrid from '@/blocks/cars-grid/CarsGrid.astro';
 
 interface Props {
 	blocks?: TBlock[];
+	context?: Record<string, any>;
 }
-const { blocks = [] } = Astro.props;
+const { blocks = [], context = {} } = Astro.props;
 
-// faq живёт top-level (раньше — ветка внутри RichContentBlock).
-// content может лежать как в block.content (JSON), так и в block напрямую.
-const faqProps = (block: TBlock) => {
-	const content = block?.content ?? {};
-	return {
-		items: content.items ?? block.items ?? [],
-		title: content.title ?? block.title,
-		id: block.id,
-		class: `sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${block.sectionClass ?? ''}`,
-		withSchema: Boolean(
-			block.withSchema ?? block.schema ?? content.withSchema ?? content.schema ?? false,
-		),
-	};
-};
+// Данные блока: JSON content + route props (props важнее). any — блоки собираются динамически.
+const data = (block: TBlock): any => ({ ...(block?.content ?? {}), ...(block?.props ?? {}) });
 ---
 {
 	blocks.map((block) => {
-		const props = block?.props ?? {};
+		const c = data(block);
 		switch (block?.type) {
 			case 'page-h1':
-				return <PageH1 {...props} />;
+				return <PageH1 h1={c.h1 ?? c.title ?? ''} classes={c.classes ?? c.class ?? ''} />;
 			case 'model':
-				return <Model {...props} />;
+				return context.model
+					? <Model model={context.model} status={context.status} breadcrumb={context.breadcrumb} />
+					: null;
 			case 'rich-content':
 				return <RichContentBlock section={block} />;
 			case 'faq':
-				return <Faq {...faqProps(block)} />;
+				return (
+					<Faq
+						items={c.items ?? []}
+						title={c.title}
+						id={block.id}
+						class={`sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${block.sectionClass ?? c.sectionClass ?? ''}`}
+						withSchema={Boolean(c.withSchema ?? c.schema ?? false)}
+					/>
+				);
 			case 'model-complectations':
-				return <ModelComplectations {...props} />;
+				return context.model?.complectations?.length
+					? <ModelComplectations model={context.model} brand={context.brandDisplayName} title={c.title ?? `Подобрать комплектацию ${context.brandDisplayName ?? ''} ${context.modelTitle ?? ''}`} />
+					: null;
 			case 'seo-text':
-				return <SeoText {...props} />;
+				return <SeoText mdx={c.mdx} text={c.text} noPadding={c.noPadding} sectionPaddingBlock={c.sectionPaddingBlock} />;
 			case 'feedback-form':
 				return (
 					<section>
 						<div class="container">
-							<FeedbackForm {...props} />
+							<FeedbackForm title={c.title} subtitle={c.subtitle} imageUrl={c.imageUrl ?? context.feedbackImageUrl ?? ''} dataFormName={c.dataFormName} showModelSelect={c.showModelSelect} />
 						</div>
 					</section>
 				);
 			case 'cars-grid':
-				return <CarsGrid {...props} />;
+				return context.cars?.length
+					? <CarsGrid cars={context.cars} title={c.title ?? context.carsTitle} />
+					: null;
 			default:
 				return null;
 		}
