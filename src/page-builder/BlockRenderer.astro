@@ -12,6 +12,7 @@ import PageH1 from '@/ui/page-h1/PageH1.astro';
 import SeoText from '@/blocks/seo-text/SeoText.astro';
 import ModelComplectations from '@/blocks/model/ModelComplectations.astro';
 import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
+import Callback from '@/blocks/forms/callback/Callback.astro';
 import CarsGrid from '@/blocks/cars-grid/CarsGrid.astro';
 
 interface Props {
@@ -59,6 +60,8 @@ const data = (block: TBlock): any => ({ ...(block?.content ?? {}), ...(block?.pr
 						</div>
 					</section>
 				);
+			case 'callback':
+				return <Callback bgUrl={c.bgUrl} title={c.title} subtitle={c.subtitle} formName={c.formName} btn={c.btn} />;
 			case 'cars-grid':
 				return context.cars?.length
 					? <CarsGrid cars={context.cars} title={c.title ?? context.carsTitle} />
