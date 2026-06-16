@@ -571,7 +571,26 @@ jobs:
         if [[ -f public/avito.xml ]]; then git add public/avito.xml; fi
         git commit -m "Update cars from XML" -a || echo "No changes to commit"
         git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        git push origin $GITHUB_REF_NAME
+        # push с rebase-retry: не теряем коммит генератора и не плодим merge-коммит,
+        # если ветку обогнал другой push (раскатка/деплой). Гонку cars-vs-cars снимает
+        # concurrency-group; тут — гонка с внешним push (разные файлы → rebase чистый).
+        pushed=false
+        for i in 1 2 3 4 5; do
+          if git push origin "HEAD:$GITHUB_REF_NAME"; then
+            echo "Pushed on attempt $i"; pushed=true; break
+          fi
+          echo "Push rejected (attempt $i) — fetch + rebase onto origin/$GITHUB_REF_NAME"
+          git fetch origin "$GITHUB_REF_NAME"
+          if ! git rebase "origin/$GITHUB_REF_NAME"; then
+            git rebase --abort || true
+            echo "::error::rebase-конфликт при обновлении cars — требуется ручное вмешательство"
+            exit 1
+          fi
+          sleep $((RANDOM % 5 + 3))
+        done
+        if [ "$pushed" != "true" ]; then
+          echo "::error::push не удался после 5 попыток"; exit 1
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
