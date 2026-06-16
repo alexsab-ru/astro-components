@@ -1,20 +1,14 @@
 ---
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
 import Layout from '@/layouts/Layout.astro';
-import Model from '@/blocks/model/Model.astro';
-import ModelComplectations from '@/blocks/model/ModelComplectations.astro';
-import CarItem from "@/blocks/cars/CarsItem.astro";
-import UniversalSection from '@/blocks/rich-content/RichContentBlock.astro';
-import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
-import SeoText from '@/blocks/seo/Seo.astro';
-import PageH1 from '@/ui/page-h1/PageH1.astro';
+import BlockRenderer from '@/page-builder/BlockRenderer.astro';
 const { slug } = Astro.params;
 const seoname = 'models-'+slug;
 
 import modelsData from '@/data/site/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
-import { getModelSections, setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelBlocks, setPrefixModelUrl } from '@/js/utils/helpers';
 import {
   getModelBrandDisplayName,
   getModelBrandId,
@@ -80,63 +74,59 @@ import type { TStatus } from '@/types/TStatus';
 
 const status: TStatus = (model?.status && STATUS.includes(model.status as TStatus)) ? model.status : 'enable';
 
-const sections = getModelSections(model);
-const getSectionImages = (section: any) =>
-  Array.isArray(section?.content?.images) ? section.content.images : [];
-const firstSectionImageUrl = sections
-  .flatMap(getSectionImages)
+// Блоки контента модели из JSON (page.blocks)
+const contentBlocks = getModelBlocks(model);
+const getBlockImages = (block: any) =>
+  Array.isArray(block?.content?.images) ? block.content.images : [];
+const firstSectionImageUrl = contentBlocks
+  .flatMap(getBlockImages)
   .find((image: any) => image?.url)
   ?.url;
+
+const modelBreadcrumb = [breadcrumb, { name: modelTitle, href: Astro.url.pathname }];
+
+// Контекст страницы — runtime-данные для блоков (model/cars/complectations берут отсюда).
+const context = {
+  model,
+  status,
+  breadcrumb: modelBreadcrumb,
+  cars,
+  brandDisplayName,
+  modelTitle,
+  legal_city_where,
+  carsTitle: `Автомобили ${brandDisplayName}&nbsp;${modelTitle} в наличии в ${legal_city_where}`,
+};
+
+// Сборка страницы модели из блоков. JSON-блоки (contentBlocks) встраиваются между
+// структурными; порядок и условия — ответственность шаблона страницы.
+// model / model-complectations / cars-grid само-гейтятся внутри BlockRenderer по context.
+const blocks = [
+  { type: 'page-h1', props: { h1: `Автомобиль ${brandDisplayName} ${modelTitle} в ${legal_city_where}`, classes: 'sr-only' } },
+  { type: 'model' },
+  ...contentBlocks,
+  { type: 'model-complectations' },
+  { type: 'seo-text', props: { mdx: seoname, sectionPaddingBlock: true } },
+  ...((status === 'enable' || status === 'show')
+    ? [{ type: 'feedback-form', props: {
+        title: 'Записаться на тест-драйв',
+        imageUrl: firstSectionImageUrl || ((model.colors && model.colors.length > 0)
+          ? getModelColorImage(model.colors[getRandomInt(0, model.colors.length)])
+          : getModelThumb(model)),
+      } }]
+    : []),
+  ...(status === 'preorder'
+    ? [{ type: 'feedback-form', props: { title: `Забронировать новый ${brandDisplayName} ${model.name}` } }]
+    : []),
+  { type: 'cars-grid' },
+];
 ---
-<Layout 
-  title={`${brandDisplayName} ${modelTitle} – фото, цены, комплектации и характеристики ${brandDisplayName} ${modelTitle} в ${legal_city_where}`} 
+<Layout
+  title={`${brandDisplayName} ${modelTitle} – фото, цены, комплектации и характеристики ${brandDisplayName} ${modelTitle} в ${legal_city_where}`}
   description={`${brandDisplayName} ${modelTitle} купить в ${legal_city_where}. Кредит, скидки на все автомобили от розничной цены. Гарантия. Звонить по тел.: ${salonsPhone}`}
   image={getModelImage(model)}
   brand={brandId}
   breadcrumb={[breadcrumb, { name: modelTitle, href: Astro.url.pathname }]}
 >
   <div x-init={`$store.lastViewedModel.setModel(${lastViewedModelJSON})`} class="hidden"></div>
-  <PageH1 h1={`Автомобиль ${brandDisplayName} ${modelTitle} в ${legal_city_where}`} classes="sr-only" />
-  <Model model={model} status={status} breadcrumb={[breadcrumb, {name: modelTitle, href: Astro.url.pathname}]} />
-  {
-    !!sections.length && sections.map(s => ( <UniversalSection section={s} /> ))
-  }
-  {
-    ((model as any)?.complectations && (model as any).complectations !== undefined && !!(model as any).complectations.length) && <ModelComplectations title={`Подобрать комплектацию ${brandDisplayName} ${modelTitle}`} model={model} brand={brandDisplayName} />
-  }
-  <SeoText mdx={seoname} sectionPaddingBlock />
-
-  {(status === 'enable' || status === 'show') && (
-    <section>
-      <div class="container">
-        <FeedbackForm 
-          title="Записаться на тест-драйв" 
-          imageUrl={firstSectionImageUrl || ((model.colors && model.colors.length > 0)
-              ? getModelColorImage(model.colors[getRandomInt(0, model.colors.length)])
-              : getModelThumb(model))}
-        />
-      </div>
-    </section>
-  )}
-
-  {(status === 'preorder') && (
-    <section>
-      <div class="container">
-        <FeedbackForm 
-          title={`Забронировать новый ${brandDisplayName} ${model.name}`}
-        />
-      </div>
-    </section>
-  )}
-
-  {!!cars.length && (
-    <section class="odd:bg-gray-100">
-      <div class="container">
-        <h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14"><Fragment set:html={`Автомобили ${brandDisplayName}&nbsp;${modelTitle} в наличии в ${legal_city_where}`} /></h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
-          {cars.map((car) => ( <CarItem car={car} /> ))}
-        </div>
-      </div>
-    </section>
-  )}
+  <BlockRenderer blocks={blocks} context={context} />
 </Layout>

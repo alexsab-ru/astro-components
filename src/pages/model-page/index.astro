@@ -11,7 +11,7 @@ import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
 import { setPrefixModelUrl } from '@/js/utils/helpers';
 import { IS_MODEL_PREFIX_URL } from '@/const';
 export const breadcrumb = { name: `Модели`, href: "/models/" };
-import SeoText from '@/blocks/seo/Seo.astro';
+import SeoText from '@/blocks/seo-text/SeoText.astro';
 import PageH1 from '@/ui/page-h1/PageH1.astro';
 const getModelPath = (model: any) => `/model-page/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
 

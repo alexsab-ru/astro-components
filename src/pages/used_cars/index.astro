@@ -8,7 +8,7 @@ import { getSafeCollection } from '@/js/utils/safeContent';
 import settings from '@/data/site/settings.json';
 const { site_name, brand, legal_city_where } = settings;
 import CarsList from '@/blocks/cars/CarsList.astro';
-import SeoText from '@/blocks/seo/Seo.astro';
+import SeoText from '@/blocks/seo-text/SeoText.astro';
 import { filterVisibleCars } from '@/js/utils/car';
 const rawCars = await getSafeCollection("used_cars");
 let cars: any, image: string;

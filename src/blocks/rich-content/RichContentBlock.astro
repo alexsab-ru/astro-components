@@ -71,63 +71,37 @@ import ButtonSection from './parts/RichContentButton.astro';
 import AlternatingMediaSection from './parts/RichContentAlternatingMedia.astro';
 import AdvantagesSection from './parts/RichContentAdvantages.astro';
 import FeedbackFormSection from './parts/RichContentFeedbackForm.astro';
-import Faq from '@/blocks/faq/Faq.astro';
-
-const faqContent = section?.content?.faq ?? section?.faq ?? {};
-const faqItems = section?.content?.items ?? section?.items ?? faqContent?.items ?? [];
-const faqTitle = section?.content?.title ?? section?.title ?? faqContent?.title;
-const isFaqSection = section?.type === 'faq';
-const faqWithSchema = Boolean(
-	section?.withSchema ??
-	section?.schema ??
-	sectionContent?.withSchema ??
-	sectionContent?.schema ??
-	faqContent?.withSchema ??
-	faqContent?.schema ??
-	false
-);
 ---
 
-{isFaqSection ? (
-	<Faq
-		items={faqItems}
-		title={faqTitle}
-		id={section?.id}
-		class={`sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${section?.sectionClass ?? ''}`}
-		withSchema={faqWithSchema}
-		{...rest}
-	/>
-) : (
-	<section class:list={['sm:py-20 py-10 font-light model-section odd:bg-gray-100', section?.sectionClass]} id={section?.id} {...rest}>
-		<div class="container">
-			{contentOrder.map((key) => {
-				const value = sectionContent[key];
+<section class:list={['sm:py-20 py-10 font-light model-section odd:bg-gray-100', section?.sectionClass]} id={section?.id} {...rest}>
+	<div class="container">
+		{contentOrder.map((key) => {
+			const value = sectionContent[key];
 
-				switch (key) {
-					case 'subtitle':
-						return <SubtitleSection value={value} />;
-					case 'title':
-						return <TitleSection value={value} />;
-					case 'text':
-						return <TextSection value={value} />;
-					case 'more':
-						return <MoreSection value={value} />;
-					case 'items':
-						return <ItemsSection items={value} />;
-					case 'images':
-						return <ImagesSection images={value} sectionId={section?.id} title={sectionContent?.title} />;
-					case 'button':
-						return <ButtonSection value={value} />;
-					case 'alternatingMedia':
-						return <AlternatingMediaSection section={value} />;
-					case 'advantages':
-						return <AdvantagesSection section={value} />;
-					case 'feedbackForm':
-						return <FeedbackFormSection feedbackForm={value} />;
-					default:
-						return null;
-				}
-			})}
-		</div>
-	</section>
-)}
+			switch (key) {
+				case 'subtitle':
+					return <SubtitleSection value={value} />;
+				case 'title':
+					return <TitleSection value={value} />;
+				case 'text':
+					return <TextSection value={value} />;
+				case 'more':
+					return <MoreSection value={value} />;
+				case 'items':
+					return <ItemsSection items={value} />;
+				case 'images':
+					return <ImagesSection images={value} sectionId={section?.id} title={sectionContent?.title} />;
+				case 'button':
+					return <ButtonSection value={value} />;
+				case 'alternatingMedia':
+					return <AlternatingMediaSection section={value} />;
+				case 'advantages':
+					return <AdvantagesSection section={value} />;
+				case 'feedbackForm':
+					return <FeedbackFormSection feedbackForm={value} />;
+				default:
+					return null;
+			}
+		})}
+	</div>
+</section>

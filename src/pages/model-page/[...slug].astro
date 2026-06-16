@@ -10,7 +10,7 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 import settings from '@/data/site/settings.json';
 import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
 import Sections from '@/blocks/image-gallery/ImageGallerySections.astro';
-import { getModelSections, setPrefixModelUrl } from '@/js/utils/helpers';
+import { getModelBlocks, setPrefixModelUrl } from '@/js/utils/helpers';
 import {
   getModelBrandDisplayName,
   getModelBrandId,
@@ -43,7 +43,7 @@ const modelTitle = getModelTitle(model);
 const brandDisplayName = getModelBrandDisplayName(model);
 const brandId = getModelBrandId(model);
 
-const sections = getModelSections(model);
+const sections = getModelBlocks(model);
 
 const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const urlSegment = `/${id.toLowerCase()}/`;
