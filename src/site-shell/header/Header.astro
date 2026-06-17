@@ -80,7 +80,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 					}
 					<div class="flex items-center xs:gap-2 gap-4 shrink-0">
 						<Button
-							classes="popup-link bg-header-button-bg! hover:bg-header-button-bg-hover! border-bg-header-button-bg! hover:border-bg-header-button-bg-hover! text-header-button-text! hover:text-header-button-text-hover! hidden! lg:inline-block! px-4! py-2! xl:py-3!"
+							classes="popup-link bg-header-button-bg! hover:bg-header-button-bg-hover! border-bg-header-button-bg! hover:border-bg-header-button-bg-hover! text-header-button-text! hover:text-header-button-text-hover! hidden! lg:inline-flex! px-4! py-2! xl:py-3!"
 							url="#common-modal"
 							title="Заказать звонок"
 							dataTitle="Заказать звонок"
@@ -106,7 +106,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 					</div>
 					<button
 						class="lg:hidden shadow-[var(--shadow-header-btn)] rounded flex items-center justify-center w-8 sm:w-10 h-8 sm:h-10 shrink-0"
-						id="mobile-menu" 
+						id="mobile-menu"
 						title="Mobile menu"
 						aria-label="Mobile menu"
 						@click.prevent="open = !open"

@@ -1,5 +1,5 @@
 export type TButtonData = {
-	view?: string,
+	view?: 'link' | 'form-button' | 'scroll-link',
 	classes?: string,
 	url?: string,
 	title?: string,

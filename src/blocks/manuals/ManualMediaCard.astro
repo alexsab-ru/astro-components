@@ -16,8 +16,8 @@ const { image, name, url, imgPlacement = 'left' } = Astro.props;
 	<Fragment slot="card-content">
 		<h2 class="m-0! p-0! before:hidden text-xl! lg:text-3xl!">Руководство по эксплуатации <span class="font-semibold">{name}</span></h2>
 		<div class="flex gap-3">
-			<Button view="link" classes="m-0! btn" url={url} target="_blank" title="Посмотреть" />
-			<Button view="link" classes="m-0! btn btn-o" url={url} download title="Скачать" />
+			<Button classes="m-0! btn" url={url} target="_blank" title="Посмотреть" />
+			<Button classes="m-0! btn btn-o" url={url} download title="Скачать" />
 		</div>
 	</Fragment>
 </CardMedia>

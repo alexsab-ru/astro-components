@@ -42,21 +42,8 @@ import {Icon} from 'astro-icon/components';
         {...rest}
     />
     ) :
-    view === 'popup-link' ? (
-        <a
-            class={`popup-link ${classes}`}
-            href={url ? url : '#'}
-            data-title={dataTitle}
-            data-form_name={dataFormName}
-            data-choose_department={dataChooseDepartment}
-            {...rest}
-        >
-            <span>{title}</span>
-            {icon && <Icon name={icon} class={iconClasses} />}
-        </a>
-    ) :
     view === 'scroll-link' ? (
-        <a 
+        <a
             class={`scroll-link ${classes}`}
             href={url ? url : '#'}
             {...rest}
