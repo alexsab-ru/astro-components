@@ -1,0 +1,71 @@
+---
+import Button from '@/ui/button/Button.astro';
+import type { TButtonData } from '@/ui/button/types';
+import { phoneFormat } from '@/js/utils/numbers.format';
+import salonsData from '@/data/site/salons.json';
+import type { ISalon } from '@/types/ISalon';
+
+interface Props extends TButtonData {
+	type?: string;
+	showInfo?: boolean;
+	showButton?: boolean;
+	wrapperClasses?: string;
+	buttonClasses?: string;
+}
+
+const {
+	view = 'link',
+	classes,
+	url = '#common-modal',
+	title = 'Узнать подробнее',
+	dataTitle = 'Узнать подробнее',
+	dataFormName = 'Узнать подробнее',
+	type = 'sales',
+	showInfo = true,
+	showButton = true,
+	wrapperClasses = 'flex justify-center mt-10 mb-5',
+	buttonClasses = classes ??
+		'popup-link block px-4! xl:px-8! py-2! xl:py-3! text-white! no-underline!',
+	...buttonProps
+} = Astro.props;
+
+const salons = type
+	? salonsData.filter(
+			(salon: ISalon) => !salon?.type || salon?.type.includes(type),
+		)
+	: salonsData;
+
+const LEGAL_SALONS_INFO =
+	salons.length > 1
+		? `<p class="font-weight-bold">Подробности по телефону:</p>` +
+			salons
+				.map(
+					(salon: ISalon) =>
+						`<p class="text-sm">${salon.name}&nbsp;- <a class="whitespace-nowrap" href="tel:${phoneFormat(salon.phone)}">${salon.phone}</a></p>`,
+				)
+				.join('')
+		: salons.length === 1
+			? `<p class="font-weight-bold">Подробности в нашем дилерском центре по тел.: <a href="tel:${phoneFormat(salons[0].phone)}">${salons[0].phone}</a></p>`
+			: '';
+---
+
+{
+	showInfo && LEGAL_SALONS_INFO.length > 0 && (
+		<Fragment set:html={LEGAL_SALONS_INFO} />
+	)
+}
+{
+	showButton && (
+		<div class={wrapperClasses}>
+			<Button
+				classes={buttonClasses}
+				view={view}
+				url={url}
+				title={title}
+				dataTitle={dataTitle}
+				dataFormName={dataFormName}
+				{...buttonProps}
+			/>
+		</div>
+	)
+}
