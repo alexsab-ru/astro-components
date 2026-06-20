@@ -1,0 +1,56 @@
+/* VOLGA theme overrides using Tailwind v4 @theme variables.
+   Цвета и шрифт взяты с официального сайта volga.auto. */
+
+@font-face {
+	font-family: "Wix Madefor Text";
+	src: url("https://cdn.alexsab.ru/fonts/WixMadeforText/WixMadeforText-Regular.woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Wix Madefor Text";
+	src: url("https://cdn.alexsab.ru/fonts/WixMadeforText/WixMadeforText-Medium.woff2");
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Wix Madefor Text";
+	src: url("https://cdn.alexsab.ru/fonts/WixMadeforText/WixMadeforText-SemiBold.woff2");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Wix Madefor Text";
+	src: url("https://cdn.alexsab.ru/fonts/WixMadeforText/WixMadeforText-Bold.woff2");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@theme {
+	/* Основной акцент бренда — тёмно-синий #001b34 */
+	--color-accent-400: #0b1a30;
+	--color-accent-500: #001b34;
+	--color-accent-600: #001b34;
+	--color-brand-color: #2e2d2d;
+	
+	--color-header-button-bg: var(--color-accent-400);
+	--color-header-button-bg-hover: #153059;
+	--footer-bg: var(--color-accent-400);
+
+	--logo-header-height: clamp(0.75rem, calc(2vw + 0.25rem), 1.25rem);
+	--logo-map-info-height: 0.75rem;
+
+	/* Фирменный шрифт VOLGA */
+	--font-sans: "Wix Madefor Text", Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	--font-heading: inherit;
+
+	/* Скругление элементов на volga.auto — ~10px (кнопки, поля, карточки через rounded-btn) */
+	--radius-btn: 10px;
+}
