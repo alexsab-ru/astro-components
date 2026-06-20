@@ -43,6 +43,7 @@
 	--color-header-button-bg: var(--color-accent-400);
 	--color-header-button-bg-hover: #153059;
 	--footer-bg: var(--color-accent-400);
+	--logo-footer-height: var(--logo-header-height);
 
 	--logo-header-height: clamp(0.75rem, calc(2vw + 0.25rem), 1.25rem);
 	--logo-map-info-height: 0.75rem;
