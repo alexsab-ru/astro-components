@@ -4,7 +4,7 @@
 	@apply min-h-[350px] sm:min-h-[420px] h-auto py-0 mb-10 lg:mb-20 text-white;
 }
 .model__info {
-	@apply relative lg:absolute w-full top-0 left-0 bg-cover bg-center z-[1];
+	@apply relative w-full top-0 left-0 bg-cover bg-center z-[1];
 	&::before {
 		content: '';
 		position: absolute;
