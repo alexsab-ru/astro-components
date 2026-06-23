@@ -86,6 +86,7 @@
     "dd": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
     "ddl": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo --local && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
     "ddol": "pnpm downloadCommonRepo --local && pnpm dev",
+    "ddolcd": "pnpm downloadCommonRepo --local -cd && pnpm dev",
     "ddcars": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm getAll && pnpm cars auto --skip_thumbs && pnpm dev",
     "test_links_local": "astro dev --port 4343 & sleep 10 && export DOMAIN=localhost:4343 && node .github/scripts/checkLinks/checkLinks.js && pkill -f 'astro dev'",
     "test_links_production": "node .github/scripts/checkLinks/checkLinks.js",
