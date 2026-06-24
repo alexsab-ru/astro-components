@@ -22,7 +22,7 @@ Options:
   -k, --keep-tmp             Keep cloned repo in tmp/
   -l, --local                Use local astro-json directory instead of cloning JSON_REPO
       --local-path PATH      Local astro-json directory (default: ../astro-json)
-  -cd, --clean-data          Remove generated files from src/data/site and src/data/common
+  -cd, --clean-data          Remove generated files from src/data/site, src/data/common and src/content
 
 Env:
   JSON_REPO                  Git repository URL (without .git)
@@ -45,7 +45,8 @@ Examples:
   JSON_REPO=https://github.com/org/repo DOMAIN=site.com pnpm downloadCommonRepo
 
 Warning:
-  --clean-data removes all files in src/data/site and src/data/common.
+  --clean-data removes all files in src/data/site, src/data/common and src/content
+  (synced MDX collections from astro-json).
 EOF
 }
 
@@ -288,22 +289,26 @@ ensure_local_settings_for_models() {
 }
 
 clean_data_dir() {
-  if [ -z "${SITE_DATA_DIR:-}" ] || [ -z "${COMMON_DATA_DIR:-}" ]; then
-    echo "❌ Error: SITE_DATA_DIR or COMMON_DATA_DIR is not set"
+  # Очищаем сгенерированные JSON (site/common) и синхронизированный контент (src/content).
+  if [ -z "${SITE_DATA_DIR:-}" ] || [ -z "${COMMON_DATA_DIR:-}" ] || [ -z "${ASTRO_CONTENT_DIR:-}" ]; then
+    echo "❌ Error: SITE_DATA_DIR, COMMON_DATA_DIR or ASTRO_CONTENT_DIR is not set"
     exit 1
   fi
 
-  echo "⚠ WARNING: this will delete all files in $SITE_DATA_DIR and $COMMON_DATA_DIR."
+  echo "⚠ WARNING: this will delete all files in $SITE_DATA_DIR, $COMMON_DATA_DIR and $ASTRO_CONTENT_DIR."
 
-  if [ "$SITE_DATA_DIR" = "/" ] || [ "$SITE_DATA_DIR" = "." ] || [ "$COMMON_DATA_DIR" = "/" ] || [ "$COMMON_DATA_DIR" = "." ]; then
+  if [ "$SITE_DATA_DIR" = "/" ] || [ "$SITE_DATA_DIR" = "." ] \
+    || [ "$COMMON_DATA_DIR" = "/" ] || [ "$COMMON_DATA_DIR" = "." ] \
+    || [ "$ASTRO_CONTENT_DIR" = "/" ] || [ "$ASTRO_CONTENT_DIR" = "." ]; then
     echo "❌ Error: refusing to clean unsafe data paths"
     exit 1
   fi
 
-  mkdir -p "$SITE_DATA_DIR" "$COMMON_DATA_DIR"
+  mkdir -p "$SITE_DATA_DIR" "$COMMON_DATA_DIR" "$ASTRO_CONTENT_DIR"
 
   find "$SITE_DATA_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
   find "$COMMON_DATA_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+  find "$ASTRO_CONTENT_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 }
 
 sync_remote_content() {
@@ -610,7 +615,7 @@ fi
 echo "▶ Sync JSON data…"
 
 if [ "$CLEAN_DATA" = true ]; then
-  echo "▶ Cleaning local data directory..."
+  echo "▶ Cleaning local data and content directories..."
   clean_data_dir
 fi
 
