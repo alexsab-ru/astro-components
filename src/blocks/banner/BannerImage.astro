@@ -9,9 +9,9 @@ import settings from '@/data/site/settings.json';
 const { site_name, site_description, legal_city_where } = settings;
 const {banner, index} = Astro.props;
 
-const desktopImage = banner?.imageUrl ?? banner?.image?.desktop ?? null;
-const tabletImage  = banner?.tabletImageUrl ?? banner?.image?.tablet ?? null;
-const mobileImage  = banner?.mobileImageUrl ?? banner?.image?.mobile ?? null;
+const desktopImage = banner?.image?.desktop ?? null;
+const tabletImage  = banner?.image?.tablet ?? null;
+const mobileImage  = banner?.image?.mobile ?? null;
 
 const pos = getObjectPosition(banner);
 ---

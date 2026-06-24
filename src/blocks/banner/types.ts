@@ -2,7 +2,7 @@ export type Viewport = 'mobile' | 'tablet' | 'desktop';
 export type TBadge = {
 	autoname?: string
 	title?: string
-	descr?: string
+	description?: string
 	image?: string
 	position?: string
 	colorText?: string
@@ -10,32 +10,23 @@ export type TBadge = {
 }
 export type TMediaKeys = {
 	desktop: string
-	tablet: string
+	tablet?: string
 	mobile: string
 }
 export type TBanner = {
 	id?: number
 	show?: boolean
-	type?: string
-	view?: 'link' | 'form-button' | 'scroll-link' | 'popup-link'
 
 	image?: TMediaKeys
 	video?: TMediaKeys
 	position?: TMediaKeys
 
-	videoUrl?: string
-	mobileVideoUrl?: string
-	imageUrl?: string
-	tabletImageUrl?: string
-	mobileImageUrl?: string
-	imagePosition?: string
-	bannerUrl?: string
-	target?: string
+	url?: string
 	gradient?: boolean
 	title?: string
-	descr?: string
+	description?: string
+	disclaimer?: string
 	btn?: string
-	btnUrl?: string
 	btnColor?: string
 	dataTitle?: string
 	dataFormName?: string

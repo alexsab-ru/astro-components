@@ -1,22 +1,21 @@
 ---
 import type { TBadge } from './types'; 
 interface Props extends TBadge {}
-const {autoname, title, descr, image, position = 'center', colorText = 'white', bg = false} = Astro.props;
-const classPosition = position === 'right' ? 'mx-auto md:mx-0 md:ml-auto pr-0' : position === 'left' ? 'mx-auto md:mx-0 pl-0' : 'mx-auto';
+const {autoname, title, description, image, colorText = 'white', bg = false} = Astro.props;
 const textColor = colorText === 'black' ? 'text-black' : 'text-white';
 const background = bg ? 'bg-white/30' : '';
 const images = image ? image.split(',') : [];
 ---
 
-<div class={`px-5 py-3 w-fit inline-flex flex-col items-center justify-center ${classPosition} ${textColor} ${background}`}>
-    { autoname && (<div class="text-xl md:text-2xl xl:text-3xl font-weight-bold uppercase"><Fragment set:html={autoname}></div>) }
-    { !!images && (
+<div class={`px-5 py-3 w-fit max-w-full inline-flex flex-col items-center justify-center text-center ${textColor} ${background}`}>
+    { autoname && (<div class="w-full text-xl md:text-2xl xl:text-3xl font-weight-bold uppercase" set:html={autoname} />) }
+    { images.length > 0 && (
         <div class="flex items-center gap-5 grow">
             {images.map(image => (
                 <img src={image} class="w-full max-w-sm xl:max-w-[280px] max-h-28 sm:max-h-36 md:max-h-[300px] object-contain h-full" loading="lazy" width="280" height="300" />
             ))}
         </div>
     )}
-    { title && (<p class="xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4"><Fragment set:html={title}></p>) }
-    { descr && (<p class="xs:text-xs sm:text-lg font-medium text-center uppercase"><Fragment set:html={descr}></p>) }
+    { title && (<p class="w-full xs:text-[10px] text-xs md:text-sm font-medium text-center uppercase mt-1 mb-2 md:mb-4" set:html={title} />) }
+    { description && (<p class="w-full xs:text-xs sm:text-lg font-medium text-center uppercase" set:html={description} />) }
 </div>

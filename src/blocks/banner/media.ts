@@ -18,9 +18,9 @@ function toPosition(value: string): string {
 }
 
 export function getObjectPosition(banner?: TBanner): { className: string; style: string } {
-	const mobileRaw  = banner?.position?.mobile  ?? banner?.imagePosition ?? 'center';
-	const tabletRaw  = banner?.position?.tablet  ?? banner?.imagePosition ?? 'center';
-	const desktopRaw = banner?.position?.desktop ?? banner?.imagePosition ?? 'center';
+	const mobileRaw  = banner?.position?.mobile  ?? 'center';
+	const tabletRaw  = banner?.position?.tablet  ?? 'center';
+	const desktopRaw = banner?.position?.desktop ?? 'center';
 
 	const style = `--pos: ${toPosition(mobileRaw)}; --pos-md: ${toPosition(tabletRaw)}; --pos-lg: ${toPosition(desktopRaw)};`;
 

@@ -13,8 +13,10 @@ import BannerTitle from './BannerTitle.astro';
 import BannerDescription from './BannerDescription.astro';
 import BannerVideo from './BannerVideo.astro';
 import BannerImage from './BannerImage.astro';
+import { resolveBannerLink } from './link.js';
 
 import settings from '@/data/site/settings.json';
+import scripts from '@/data/site/scripts.json';
 const { is_header_transparent, header_top_line } = settings;
 
 const containerClasses = is_header_transparent && header_top_line
@@ -23,81 +25,96 @@ const containerClasses = is_header_transparent && header_top_line
 	? 'pt-[80px] md:pt-[100px] lg:pt-[149px]'
 	: 'pt-5 sm:pt-10 lg:py-10';
 
-// Определяем цвет кнопки с fallback на белый
 const btnColor = banner?.btnColor ? banner?.btnColor : 'white';
-
-// Определяем тип контента и наличие ссылки
-// Делаем код проще и читаемее
-const isVideo = banner?.type === 'video';
-const resolvedBannerUrl = onlyModal && banner?.bannerUrl ? '#common-modal' : banner?.bannerUrl;
-const resolvedBtnUrl = onlyModal && banner?.btnUrl ? '#common-modal' : banner?.btnUrl;
-const isPopupLink = onlyModal || banner?.view === 'popup-link';
-const resolvedView = onlyModal || banner?.view === 'popup-link' ? 'link' : banner?.view;
-const popupLinkClass = isPopupLink ? 'popup-link' : '';
-const hasBannerUrl = !!resolvedBannerUrl;
-
-// Выбираем компонент медиа один раз
+const isVideo = Boolean(
+	banner?.video?.desktop ||
+	banner?.video?.tablet ||
+	banner?.video?.mobile
+);
+const bannerLink = resolveBannerLink(
+	onlyModal && banner?.url ? { ...banner, url: '#common-modal' } : banner,
+	{ siteOrigin: scripts.site }
+);
+const popupLinkClass = bannerLink?.isPopup ? 'popup-link' : '';
+const stripHtml = (value?: string) => (value ? value.replace(/<[^>]*>/g, '').trim() : '');
+const dataTitle = banner?.dataTitle || stripHtml(banner?.title) || 'Обратная связь';
+const dataFormName = banner?.dataFormName || `${dataTitle}. Баннер`;
 const BannerType = isVideo ? BannerVideo : BannerImage;
+const badgePosition = typeof banner?.badge === 'object' && !Array.isArray(banner.badge)
+	? banner.badge?.position
+	: 'center';
+const badgeBlockPositionClass = badgePosition === 'right'
+	? 'items-end'
+	: badgePosition === 'left'
+	? 'items-start'
+	: 'items-center';
 
-// Готовим атрибуты ссылки один раз (только если есть URL)
-const linkAttrs = hasBannerUrl ? {
-	href: resolvedBannerUrl as string,
+const linkAttrs = bannerLink ? {
+	href: bannerLink.href,
 	class: `absolute inset-0 h-full w-full z-10 block ${popupLinkClass}`,
-	...(banner?.dataTitle ? {'data-title': banner.dataTitle} : {}),
-	...(banner?.dataFormName ? {'data-form_name': banner.dataFormName} : {}),
-	...(banner?.target && !onlyModal ? {target: banner.target} : {}),
+	'aria-label': dataTitle,
+	'data-title': dataTitle,
+	'data-form_name': dataFormName,
+	...(bannerLink.target ? { target: bannerLink.target } : {}),
+	...(bannerLink.rel ? { rel: bannerLink.rel } : {}),
 } : null;
 ---
 
 <div class={`swiper-slide banner-slide ${banner?.gradient === false ? '' : 'gradient'}`} data-swiper-autoplay={banner?.autoplay ? banner.autoplay : 5000}>
-	<div class={`h-full relative z-2 px-5 sm:px-10 md:px-20 pb-5 banner-slide-container ${containerClasses}`}>
+	<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
+
+	<div class={`h-full relative z-20 pointer-events-none px-5 sm:px-10 md:px-20 pb-5 banner-slide-container ${containerClasses}`}>
 		<div class="h-full flex flex-col justify-between">
 			<div class="">
 				{ banner?.title && ( <BannerTitle title={banner.title} /> ) }
-				{ banner?.descr && ( <BannerDescription description={banner.descr} /> ) }
+				{ banner?.description && ( <BannerDescription description={banner.description} /> ) }
 				{
-					(!onlyView || onlyModal) && banner?.btn && (
-						<div data-swiper-parallax="-55%">
+					(!onlyView || onlyModal) && banner?.btn && bannerLink && (
+						<div data-swiper-parallax="-55%" class="pointer-events-auto">
 							<Button
-								classes={`btn ${popupLinkClass} py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
-								view={resolvedView}
-								url={resolvedBtnUrl}
+								classes={`${popupLinkClass} py-2! sm:py-3 text-sm sm:text-base mt-8 sm:mt-10 ${btnColor}`}
+								view="link"
+								url={bannerLink.href}
 								title={banner?.btn}
-								dataTitle={banner?.dataTitle}
-								dataFormName={banner?.dataFormName}
+								dataTitle={dataTitle}
+								dataFormName={dataFormName}
+								{...(bannerLink.target ? { target: bannerLink.target } : {})}
+								{...(bannerLink.rel ? { rel: bannerLink.rel } : {})}
 							/>
 						</div>
 					)
 				}
 			</div>
 			{
-				banner?.badge && (
-					<Badge
-						autoname={banner.badge?.autoname}
-						title={banner.badge?.title}
-						descr={banner.badge?.descr}
-						image={banner.badge?.image}
-						position={banner.badge?.position}
-						colorText={banner.badge?.colorText}
-						bg={banner.badge?.bg}
-					/>
+				(banner?.badge || banner?.disclaimer) && (
+					<div class="w-full">
+						{
+							banner?.badge && (
+								<div class={`flex w-full flex-col ${badgeBlockPositionClass}`}>
+									<Badge
+										autoname={banner.badge?.autoname}
+										title={banner.badge?.title}
+										description={banner.badge?.description}
+										image={banner.badge?.image}
+										position={banner.badge?.position}
+										colorText={banner.badge?.colorText}
+										bg={banner.badge?.bg}
+									/>
+								</div>
+							)
+						}
+						{
+							banner?.disclaimer && (
+								<div class="mt-3 text-xs sm:text-sm text-white/90">
+									<Fragment set:html={banner.disclaimer} />
+								</div>
+							)
+						}
+					</div>
 				)
 			}
 		</div>
 	</div>
 
-	{/*
-		Простой и читаемый рендер медиа:
-		- `BannerType` выбирается один раз
-		- Если есть `bannerUrl`, оборачиваем в ссылку, иначе выводим как есть
-	*/}
-	{
-		hasBannerUrl && (!onlyView || onlyModal) ? (
-			<a {...linkAttrs}>
-				<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
-			</a>
-		) : (
-			<BannerType banner={banner} {...(!isVideo ? { index } : {})} />
-		)
-	}
+	{ bannerLink && (!onlyView || onlyModal) && <a {...linkAttrs} /> }
 </div>
