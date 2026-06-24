@@ -10,11 +10,10 @@ import PageH1 from '@/ui/page-h1/PageH1.astro';
 const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_background, manager_photo } = settings;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
-import { map } from 'astro:schema';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
-const workers = salons.flatMap(salon => 
-    salon?.workers?.map(worker => ({
-        ...worker, 
+const staff = salons.flatMap(salon =>
+    salon?.staff?.map(worker => ({
+        ...worker,
         salonName: salon.name
     })) || []
 );
@@ -39,7 +38,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
 								<div class="flex flex-wrap gap-y-3 py-8">
 									{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
 									{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
-									{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
+									{salon?.schedule && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.schedule} iconName="mdi:clock-time-three-outline" />)}
 								</div>
 								))
 							}
@@ -53,7 +52,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
 									{salon?.legal_inn && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={salon?.legal_inn} iconName="mdi:list-box-outline" />)}
 									{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
 									{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
-									{salon?.work_hours && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.work_hours} iconName="mdi:clock-time-three-outline" />)}
+									{salon?.schedule && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.schedule} iconName="mdi:clock-time-three-outline" />)}
 								</div>
 								))
 							}
@@ -72,12 +71,12 @@ const description = `Контакты автосалона ${site_name} - ${salo
 			</div>
 		</div>
 	</div>
-	{workers.length > 0 && (
+	{staff.length > 0 && (
 		<section class="bg-gray-100">
 			<div class="container">
 				<h2 class="mb-10">Ваши менеджеры</h2>
 				<div class="flex gap-5 sm:gap-[1%] flex-wrap justify-center">
-					{workers.map(worker => (
+					{staff.map(worker => (
 						<WorkerItem worker={worker} />
 					))}
 				</div>

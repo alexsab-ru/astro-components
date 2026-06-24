@@ -58,18 +58,18 @@ function init() {
 	}
 	myMapTemp.behaviors.disable("scrollZoom");
 	salons.sort(function(a, b) {
-		return b.map.coords[1] - a.map.coords[1];
+		return b.map.coordinates[1] - a.map.coordinates[1];
 	});
 	salons.map((salon) => {
-		center = add(center,salon.map.coords);
+		center = add(center, salon.map.coordinates);
 		const _ball_bg = salon.map.balloon ? salon.map.balloon : 'https://cdn.alexsab.ru/locator/empty-locator.svg';
-		const yaLink = salon.map.ya_link || generateYandexMapLink(salon.map.coords, salon.map.zoom);
+		const yaLink = salon.map.ya_link || generateYandexMapLink(salon.map.coordinates, salon.map.zoom);
 		myMapTemp.geoObjects.add(
 			new ymaps.Placemark(
-				[salon.map.coords[0], salon.map.coords[1]],
+				[salon.map.coordinates[0], salon.map.coordinates[1]],
 				{
 					balloonContentHeader: balloonContentHeader(salon.name),
-					balloonContentBody: balloonContentBody(salon.work_hours, salon.phone, yaLink),
+					balloonContentBody: balloonContentBody(salon.schedule, salon.phone, yaLink),
 					balloonContentFooter: '',
 					hintContent: salon.address,
 				},
@@ -94,8 +94,6 @@ function init() {
 	});
 	}
 
-	// myMapTemp.balloon.open(this.coords,
-	//     this.balloonContentHeader + this.balloonContentFooter + this.balloonContentBody, {});
 	// Получаем первый экземпляр коллекции слоев, потом первый слой коллекции
 	var layer = myMapTemp.layers.get(0).get(0);
 
@@ -208,8 +206,8 @@ mapObserver.observe(document.querySelector('#map'));
 
 }
 
-function generateYandexMapLink(coords: [number, number], zoom: number): string {
-	const [latitude, longitude] = coords;
+function generateYandexMapLink(coordinates: [number, number], zoom: number): string {
+	const [latitude, longitude] = coordinates;
 	
 	// Проверяем валидность координат
 	if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {

@@ -1,9 +1,18 @@
 export type TSalonMap = {
-    zoom?: number;
-    balloon?: string;
-    coords?: number[],
-    ya_link?: string;
-}
+	zoom?: number;
+	balloon?: string;
+	coordinates?: [number, number];
+	ya_link?: string;
+};
+
+export type TSalonStaff = {
+	name?: string;
+	position?: string;
+	photo?: string;
+	phone?: string;
+	email?: string;
+	[key: string]: unknown;
+};
 
 export type TSalonCalltouch = {
 	mod_id?: string;
@@ -22,10 +31,11 @@ export interface ISalon {
 	address?: string;
 	phone?: string;
 	email?: string;
-	work_hours?: string;
+	schedule?: string;
 	legal_entity?: string;
 	legal_inn?: number;
 	map?: TSalonMap;
+	staff?: TSalonStaff[];
 	hidden_in?: string[];
 	scripts?: TSalonScripts;
 }
