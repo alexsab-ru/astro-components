@@ -7,10 +7,13 @@ import scripts from '@/data/site/scripts.json';
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 
+const frontmatter = privacyPolicyFrontmatter || {};
+if (frontmatter.link) {
+	return Astro.redirect(frontmatter.link);
+}
 const { legal_entity, legal_inn, legal_city } = settings;
 const { site } = scripts;
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('privacy_policy'));
-const frontmatter = privacyPolicyFrontmatter || {};
 const h1 = frontmatter.h1 || frontmatter.title || 'Политика конфиденциальности';
 const title = frontmatter.title || h1;
 const description = frontmatter.description || title;
