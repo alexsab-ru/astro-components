@@ -17,7 +17,9 @@ import { resolveBannerLink } from './link.js';
 
 import settings from '@/data/site/settings.json';
 import scripts from '@/data/site/scripts.json';
-const { is_header_transparent, header_top_line } = settings;
+import { isHeaderTransparentEnabled } from '@/js/utils/features';
+const { header_top_line } = settings;
+const is_header_transparent = isHeaderTransparentEnabled(settings);
 
 const containerClasses = is_header_transparent && header_top_line
 	? 'pt-[117px] md:pt-[141px] lg:pt-[190px]'

@@ -32,7 +32,9 @@ let {
 } = Astro.props;
 
 import settings from '@/data/site/settings.json';
-const { site_name, site_description, is_header_transparent } = settings;
+import { isHeaderTransparentEnabled } from '@/js/utils/features';
+const { site_name, site_description } = settings;
+const is_header_transparent = isHeaderTransparentEnabled(settings);
 
 import Head from '@/integrations/seo/DocumentHead.astro';
 import ScriptHead from '@/integrations/scripts/ScriptsHead.astro';

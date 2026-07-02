@@ -8,7 +8,9 @@ const path = Astro.url.pathname;
 
 import { LINKS_MENU as links } from '@/const.js';
 import settings from '@/data/site/settings.json';
-const { header_top_line, is_header_transparent } = settings;
+import { isHeaderTransparentEnabled } from '@/js/utils/features';
+const { header_top_line } = settings;
+const is_header_transparent = isHeaderTransparentEnabled(settings);
 import { phoneFormat, declOfNums } from '@/js/utils/numbers.format';
 
 import { Icon } from 'astro-icon/components';

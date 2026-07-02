@@ -2,7 +2,8 @@ import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay, Parallax, Keyboard } from "swiper/modules";
 
 import settings from '@/data/site/settings.json';
-const { is_header_transparent } = settings;
+import { isHeaderTransparentEnabled } from '@/js/utils/features';
+const is_header_transparent = isHeaderTransparentEnabled(settings);
 
 const progressCircle = document.querySelector(".autoplay-progress svg");
 const progressContent = document.querySelector(".autoplay-progress span");

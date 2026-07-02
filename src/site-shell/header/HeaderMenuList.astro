@@ -5,7 +5,8 @@ interface Props {
 const { links } = Astro.props;
 import MenuListItem from './HeaderMenuListItem.astro';
 import settings from '@/data/site/settings.json';
-const { is_header_transparent } = settings;
+import { isHeaderTransparentEnabled } from '@/js/utils/features';
+const is_header_transparent = isHeaderTransparentEnabled(settings);
 const borderColor = is_header_transparent ? 'border-header-border-transparent' : 'border-header-border';
 ---
 <ul class={`overflow-hidden flex flex-col lg:flex-row ${borderColor} border-b lg:border-b-0`}>

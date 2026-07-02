@@ -1,6 +1,8 @@
 ---
 import settings from '@/data/site/settings.json';
-const { site_name, logo_header, logo_dealer_header, is_header_transparent } = settings;
+import { isHeaderTransparentEnabled } from '@/js/utils/features';
+const { site_name, logo_header, logo_dealer_header } = settings;
+const is_header_transparent = isHeaderTransparentEnabled(settings);
 const path = Astro.url.pathname;
 const logoHeaderSize = "h-[var(--logo-header-height)] w-auto";
 const dealerLogoSize = "h-[var(--logo-dealer-header-height)] w-auto";
