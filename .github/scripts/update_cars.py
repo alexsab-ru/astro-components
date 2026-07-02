@@ -81,6 +81,7 @@ class CarProcessor:
         # Нужны, чтобы не писать ложные ошибки, если позже в эту же карточку пришли фото.
         self.pending_color_errors: Dict[str, str] = {}
         self.friendly_url_has_images: Dict[str, bool] = {}
+        self.reported_redirected_car_urls = set()
 
     def setup_source_config(self):
         """Настройка конфигурации в зависимости от типа источника"""
@@ -984,6 +985,16 @@ class CarProcessor:
         
         url = f"https://{config['domain']}{config['path_car_page']}{friendly_url}/"
         car_data['url'] = url
+        car_path = normalize_redirect_path(url)
+        redirect_target = get_redirect_target_for_car_url(car_path)
+        if redirect_target and car_path not in self.reported_redirected_car_urls:
+            self.reported_redirected_car_urls.add(car_path)
+            print_message(
+                "\n<b>Сгенерированный URL автомобиля попал в redirects routes.json</b>\n"
+                f"<code>{car_path}</code> → <code>{redirect_target}</code>\n"
+                f"VIN: <code>{car_data.get('vin')}</code>",
+                'error',
+            )
         
         # Обработка файла
         file_name = f"{friendly_url}.mdx"

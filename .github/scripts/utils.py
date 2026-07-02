@@ -13,7 +13,7 @@ from PIL import Image, ImageOps
 from io import BytesIO
 import urllib.parse
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from functools import lru_cache
 from config import *
 from bs4 import BeautifulSoup
@@ -1246,6 +1246,42 @@ def check_local_files(brand, model, color, vin):
             return DEFAULT_CAR_IMAGE
     else:
         return DEFAULT_CAR_IMAGE
+
+
+def normalize_redirect_path(path: str) -> str:
+    parsed_path = urllib.parse.urlparse(str(path or '')).path or '/'
+    if not parsed_path.startswith('/'):
+        parsed_path = f'/{parsed_path}'
+    if parsed_path != '/':
+        parsed_path = parsed_path.rstrip('/')
+    return parsed_path
+
+
+@lru_cache(maxsize=16)
+def load_routes_redirects(routes_path: str = './src/data/site/routes.json') -> Dict[str, str]:
+    try:
+        with open(routes_path, 'r', encoding='utf-8') as file:
+            routes = json.load(file)
+    except Exception:
+        return {}
+
+    redirects = routes.get('redirects', {})
+    if not isinstance(redirects, dict):
+        return {}
+
+    return {
+        normalize_redirect_path(source): target
+        for source, target in redirects.items()
+        if isinstance(source, str) and isinstance(target, str)
+    }
+
+
+def get_redirect_target_for_car_url(
+    car_url: str,
+    routes_path: str = './src/data/site/routes.json',
+) -> Optional[str]:
+    car_path = normalize_redirect_path(car_url)
+    return load_routes_redirects(routes_path).get(car_path)
 
 
 def create_file(car_data, filename, friendly_url, current_thumbs, sort_storage_data, dealer_photos_for_cars_avito, config, existing_files):
