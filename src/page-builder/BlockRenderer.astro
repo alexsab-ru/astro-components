@@ -61,7 +61,7 @@ const data = (block: TBlock): any => ({ ...(block?.content ?? {}), ...(block?.pr
 					</section>
 				);
 			case 'callback':
-				return <Callback bgUrl={c.bgUrl} title={c.title} subtitle={c.subtitle} formName={c.formName} btn={c.btn} />;
+				return <Callback bgUrl={c.bgUrl} bgImage={c.bgImage} bgPosition={c.bgPosition} title={c.title} subtitle={c.subtitle} formName={c.formName} btn={c.btn} showComment={c.showComment} commentPlaceholder={c.commentPlaceholder} />;
 			case 'cars-grid':
 				return context.cars?.length
 					? <CarsGrid cars={context.cars} title={c.title ?? context.carsTitle} />

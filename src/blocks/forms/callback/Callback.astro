@@ -1,10 +1,22 @@
 ---
 interface Props {
     bgUrl?: string;
+    bgImage?: {
+        desktop?: string;
+        tablet?: string;
+        mobile?: string;
+    };
+    bgPosition?: {
+        desktop?: string;
+        tablet?: string;
+        mobile?: string;
+    };
     title?: string;
     subtitle?: string;
     formName?: string;
     btn?: string;
+    showComment?: boolean;
+    commentPlaceholder?: string;
 }
 import settings from '@/data/site/settings.json';
 import salons from '@/data/site/salons.json';
@@ -12,10 +24,14 @@ import type { ISalon } from '@/types/ISalon';
 const { improve_offer_background, agree_label } = settings;
 const {
     bgUrl = improve_offer_background,
+    bgImage,
+    bgPosition,
     title = "Улучшим предложение конкурентов!", 
     subtitle = "<p>У Вас уже есть предложение от другого дилера?</p><p>Сделаем лучше!</p><p>Оставьте Ваши контакты и в ближайшее время мы перезвоним!</p>",
     formName = "Улучшим предложение конкурентов",
     btn = "Отправить",
+    showComment = true,
+    commentPlaceholder = "Напишите предложение конкурента*",
     ...rest
 } = Astro.props;
 import Button from '@/ui/button/Button.astro';
@@ -23,9 +39,27 @@ import Input from '@/ui/input/Input.astro';
 import Checkbox from '@/ui/checkbox/Checkbox.astro';
 import ChoosingDealerSelect from '@/ui/choosing-dealer-select/ChoosingDealerSelect.astro';
 import Textarea from '@/ui/textarea/Textarea.astro';
+
+const defaultBgPosition = 'bottom';
+const desktopBg = bgImage?.desktop ?? bgUrl;
+const tabletBg = bgImage?.tablet ?? desktopBg;
+const mobileBg = bgImage?.mobile ?? tabletBg;
+const desktopBgPosition = bgPosition?.desktop ?? defaultBgPosition;
+const tabletBgPosition = bgPosition?.tablet ?? desktopBgPosition;
+const mobileBgPosition = bgPosition?.mobile ?? tabletBgPosition;
+
+const cssUrl = (url: string) => `url("${url.replace(/"/g, '\\"')}")`;
+const callbackStyle = [
+    `--callback-bg-mobile: ${cssUrl(mobileBg)}`,
+    `--callback-bg-tablet: ${cssUrl(tabletBg)}`,
+    `--callback-bg-desktop: ${cssUrl(desktopBg)}`,
+    `--callback-bg-position-mobile: ${mobileBgPosition}`,
+    `--callback-bg-position-tablet: ${tabletBgPosition}`,
+    `--callback-bg-position-desktop: ${desktopBgPosition}`,
+].join('; ');
 ---
 
-<section class="text-white py-20 sm:py-24 bg-cover bg-bottom relative z-1 before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-[-1] model-section" style={`background-image: url(${bgUrl});`} {...rest}>
+<section class="callback-bg-responsive text-white py-20 sm:py-24 bg-cover relative z-1 before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-[-1] model-section" style={callbackStyle} {...rest}>
     <div class="container">
         <div class="w-wull xl:w-1/2 text-base sm:text-xl leading-normal!">
             {title && (<h2 class="text-left text-xl sm:text-5xl mb-4 before:hidden ml-0 mr-0">{title}</h2>)}
@@ -61,7 +95,9 @@ import Textarea from '@/ui/textarea/Textarea.astro';
 
                     <ChoosingDealerSelect required={true} salons={salons} />
 
-                    <Textarea classes="border-gray-100 resize-none min-h-[100px] overflow-y-auto" name="comment" required placeholder="Напишите предложение конкурента*" minlength="10" />
+                    {showComment && (
+                        <Textarea classes="border-gray-100 resize-none min-h-[100px] overflow-y-auto" name="comment" required placeholder={commentPlaceholder} minlength="10" />
+                    )}
 
                     <input
                         type="checkbox"
@@ -86,3 +122,24 @@ import Textarea from '@/ui/textarea/Textarea.astro';
         </div>
     </div>
 </section>
+
+<style>
+    .callback-bg-responsive {
+        background-image: var(--callback-bg-mobile);
+        background-position: var(--callback-bg-position-mobile, bottom);
+    }
+
+    @media (min-width: 768px) {
+        .callback-bg-responsive {
+            background-image: var(--callback-bg-tablet);
+            background-position: var(--callback-bg-position-tablet, bottom);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .callback-bg-responsive {
+            background-image: var(--callback-bg-desktop);
+            background-position: var(--callback-bg-position-desktop, bottom);
+        }
+    }
+</style>
