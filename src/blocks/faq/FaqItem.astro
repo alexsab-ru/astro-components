@@ -21,8 +21,8 @@ const itemId = JSON.stringify(item.id);
 ---
 
 <div
-	class="px-5 py-4 rounded-md mb-3 transition hover:bg-gray-200"
-	:class={ `activities.includes(${itemId}) ? 'bg-gray-200' : 'bg-gray-100'` }
+	class="px-5 py-4 rounded-md mb-3 transition border border-gray-200 hover:bg-gray-200 hover:border-gray-200"
+	:class={ `activities.includes(${itemId}) ? 'bg-gray-200 border-gray-200' : 'bg-gray-100 border-gray-200'` }
 	x-init={ `${item.open} && activities.push(${itemId})` }
 >
 	{/* В обычном режиме оставляем flex как было.
