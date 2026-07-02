@@ -8,6 +8,9 @@ interface Props {
 const { models = [], model, brand, title = "Подобрать комплектацию" } = Astro.props
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { getModelTitle } from '@/js/utils/modelFields';
+import settings from '@/data/site/settings.json';
+import { isCreditEnabled } from '@/js/utils/features';
+const creditEnabled = isCreditEnabled(settings);
 ---
 
 <section class="odd:bg-gray-100" id="complectation" x-init={`selectedModel('${models.length ? models[0]?.id : model?.id}')`}>
@@ -68,14 +71,16 @@ import { getModelTitle } from '@/js/utils/modelFields';
 							</div>
 						</template>
 					</template>
-				</div>
-				<div class="flex flex-col gap-4">
-					<a class="popup-link btn black btn-o px-4! whitespace-nowrap" href="#common-modal" :data-title={`'Купить ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`} :data-form_name={`'Купить. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Купить</a>
-					<a class="popup-link btn px-4! whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
-					<a class="popup-link btn gray px-4! whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
-					<a class="popup-link btn black px-4! whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
+					</div>
+					<div class="flex flex-col gap-4">
+						<a class="popup-link btn black btn-o px-4! whitespace-nowrap" href="#common-modal" :data-title={`'Купить ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`} :data-form_name={`'Купить. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Купить</a>
+						{creditEnabled && (
+							<a class="popup-link btn px-4! whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
+						)}
+						<a class="popup-link btn gray px-4! whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
+						<a class="popup-link btn black px-4! whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
+					</div>
 				</div>
 			</div>
-		</div>
 	</div>
 </section>

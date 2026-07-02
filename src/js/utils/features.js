@@ -15,6 +15,10 @@ export function getFeatureFlag(settings = {}, featureName, defaultValue = true) 
 	return defaultValue;
 }
 
+export function isCreditEnabled(settings = {}) {
+	return getFeatureFlag(settings, 'credit', true) !== false;
+}
+
 export function isHeaderTransparentEnabled(settings = {}) {
 	return getFeatureFlag(settings, 'is_header_transparent', false) === true;
 }

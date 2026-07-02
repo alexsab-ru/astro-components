@@ -31,12 +31,15 @@ const photoSlides = !model.photos
 );
 import Button from '@/ui/button/Button.astro';
 import ColorLink from '@/ui/color-link/ColorLink.astro'
+import settings from '@/data/site/settings.json';
+import { isCreditEnabled } from '@/js/utils/features';
 import './model.css';
 const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
 const modelTitle = getModelTitle(model);
 const brandDisplayName = getModelBrandDisplayName(model);
 const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_page', modelTitle || '');
 const carImagePath = getModelColorImage(model.colors?.[0]) || `/img/${model.id}/${model.colors?.[0]?.id}.png`;
+const creditEnabled = isCreditEnabled(settings);
 ---
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
@@ -194,13 +197,15 @@ const carImagePath = getModelColorImage(model.colors?.[0]) || `/img/${model.id}/
 					dataTitle={`Купить ${brandDisplayName}`}
 					dataFormName={`Купить. ${brandDisplayName} ${modelTitle}`}
 				/>
-				<Button
-					classes="popup-link btn px-4! flex-1 whitespace-nowrap"
-					url="#common-modal"
-					title="Рассчитать кредит"
-					dataTitle="Рассчитать кредит"
-					dataFormName={`Рассчитать кредит. ${brandDisplayName} ${modelTitle}`}
-				/>
+				{creditEnabled && (
+					<Button
+						classes="popup-link btn px-4! flex-1 whitespace-nowrap"
+						url="#common-modal"
+						title="Рассчитать кредит"
+						dataTitle="Рассчитать кредит"
+						dataFormName={`Рассчитать кредит. ${brandDisplayName} ${modelTitle}`}
+					/>
+				)}
 				<Button
 					classes="popup-link btn gray px-4! flex-1 whitespace-nowrap"
 					url="#common-modal"
