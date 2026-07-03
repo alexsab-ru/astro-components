@@ -6,6 +6,14 @@
 # MODE можно передать через ENV или как аргумент (по умолчанию new_cars)
 MODE=${MODE:-new_cars}
 
+if [ -z "${PYTHON_BIN:-}" ]; then
+    if [ -x "./.venv/bin/python3" ]; then
+        PYTHON_BIN="./.venv/bin/python3"
+    else
+        PYTHON_BIN="python3"
+    fi
+fi
+
 # Можно также передать как первый аргумент
 if [ -n "$1" ]; then
     MODE="$1"
@@ -97,7 +105,7 @@ if ! node .github/scripts/GSheetFetcher.js; then
 fi
 
 # Передаем путь к CSV и XML в Python-скрипт
-python3 .github/scripts/CarFeedProcessorCSV.py --csv "$CSV_FILE_PATH" --xml "$XML_FILE_PATH" --feed "$FEED_TYPE"
+"$PYTHON_BIN" .github/scripts/CarFeedProcessorCSV.py --csv "$CSV_FILE_PATH" --xml "$XML_FILE_PATH" --feed "$FEED_TYPE"
 
 # Имя переменной для .env (по умолчанию XML_URL_DATA_CARS_CAR)
 XML_ENV_VAR_NAME=${XML_ENV_VAR_NAME:-XML_URL_DATA_CARS_CAR}

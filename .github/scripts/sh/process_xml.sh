@@ -102,6 +102,14 @@ BGGREEN='\033[30;42m'
 BGRED='\033[30;41m'
 TEXTRED='\033[30;31m'
 
+if [ -z "${PYTHON_BIN:-}" ]; then
+    if [ -x "./.venv/bin/python3" ]; then
+        PYTHON_BIN="./.venv/bin/python3"
+    else
+        PYTHON_BIN="python3"
+    fi
+fi
+
 # Parse thumbnail and dev options from arguments
 parse_options() {
     local thumb_args=""
@@ -274,11 +282,27 @@ handle_getone() {
     fi
     
     export XML_URL
+
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        export GET_ONE_XML_RETRIES="${GET_ONE_XML_RETRIES:-1}"
+        export GET_ONE_XML_RETRY_DELAY="${GET_ONE_XML_RETRY_DELAY:-1}"
+        export GET_ONE_XML_TIMEOUT="${GET_ONE_XML_TIMEOUT:-5}"
+    fi
     
     if [ -n "$output_file" ]; then
-        python3 .github/scripts/getOneXML.py --output_path="$output_file"
+        "$PYTHON_BIN" .github/scripts/getOneXML.py --output_path="$output_file"
     else
-        python3 .github/scripts/getOneXML.py
+        "$PYTHON_BIN" .github/scripts/getOneXML.py
+    fi
+
+    if [ $? -ne 0 ]; then
+        echo -e "${BGRED}❌ Ошибка при скачивании XML из $env_var${Color_Off}"
+        if [ "$IGNORE_ERRORS" = "1" ]; then
+            echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+            return 0
+        else
+            return 1
+        fi
     fi
 }
 
@@ -307,13 +331,17 @@ handle_auto() {
     fi
     
     # Запускаем автоматическую обработку
-    echo -e "${BGYELLOW}🎯 Команда: python3 .github/scripts/update_cars.py --auto_scan $THUMB_ARGS --domain=\"$DOMAIN\"${Color_Off}"
-    python3 .github/scripts/update_cars.py --auto_scan $THUMB_ARGS --domain="$DOMAIN"
+    echo -e "${BGYELLOW}🎯 Команда: $PYTHON_BIN .github/scripts/update_cars.py --auto_scan $THUMB_ARGS --domain=\"$DOMAIN\"${Color_Off}"
+    "$PYTHON_BIN" .github/scripts/update_cars.py --auto_scan $THUMB_ARGS --domain="$DOMAIN"
     
     if [ $? -eq 0 ]; then
         echo -e "${BGGREEN}✅ Автоматическая обработка завершена успешно${Color_Off}"
     else
         echo -e "${BGRED}❌ Ошибка при автоматической обработке${Color_Off}"
+        if [ "$IGNORE_ERRORS" = "1" ]; then
+            echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
+            return 0
+        fi
         return 1
     fi
     
@@ -422,58 +450,58 @@ handle_update() {
     
     case $type in
         "avito")
-            python3 .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito.xml" --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito.xml" --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "avito_data_cars_car")
-            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/avito.xml" --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/avito.xml" --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "avito_friend")
-            python3 .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito_dc.xml" --domain=$DOMAIN $THUMB_ARGS
-            python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --domain=$DOMAIN $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars_air_storage.py --source_type avito --output_path="./public/avito_dc.xml" --domain=$DOMAIN $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type avito --input_file cars_friend.xml --output_path="./public/avito_friend.xml" --domain=$DOMAIN $THUMB_ARGS
             export XML_URL="./public/avito_dc.xml ./public/avito_friend.xml" 
-            python3 .github/scripts/getOneXML.py --output_path="./public/avito.xml"
+            "$PYTHON_BIN" .github/scripts/getOneXML.py --output_path="./public/avito.xml"
             ;;
         "autoru")
-            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru.xml" --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru.xml" --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "autoru_friend")
-            python3 .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru_dc.xml" --domain=$DOMAIN $THUMB_ARGS
-            python3 .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --domain=$DOMAIN $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars_air_storage.py --source_type autoru --output_path="./public/autoru_dc.xml" --domain=$DOMAIN $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars_air_storage.py --config_path="./.github/scripts/config_air_storage-friend.json" --source_type autoru --input_file cars_friend.xml --output_path="./public/autoru_friend.xml" --domain=$DOMAIN $THUMB_ARGS
             export XML_URL="./public/autoru_dc.xml ./public/autoru_friend.xml" 
-            python3 .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
+            "$PYTHON_BIN" .github/scripts/getOneXML.py --output_path="./public/autoru.xml"
             ;;
         "xml_url")
-            python3 .github/scripts/update_cars.py --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/new/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "catalog_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/new/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/new/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/new/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "carcopy_offers_offer")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/new/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/new/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" $THUMB_ARGS
             ;;
         "used_cars_data_cars_car")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/data_cars_car/cars.xml" --source_type data_cars_car --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_catalog_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/catalog_vehicles_vehicle/cars.xml" --source_type catalog_vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_vehicles_vehicle")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/vehicles_vehicle/cars.xml" --source_type vehicles_vehicle --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_ads_ad")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/ads_ad/cars.xml" --source_type ads_ad --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         "used_cars_carcopy_offers_offer")
-            python3 .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
+            "$PYTHON_BIN" .github/scripts/update_cars.py --input_file "./tmp/feeds/used_cars/carcopy_offers_offer/cars.xml" --source_type carcopy_offers_offer --domain="$DOMAIN" --cars_dir="src/content/used_cars" --output_path="./public/used_cars.xml" --thumbs_dir="public/img/thumbs_used/" --path_car_page="/used_cars/" $THUMB_ARGS
             ;;
         *)
             echo -e "${BGRED}Error: Unknown update type: $type${Color_Off}"

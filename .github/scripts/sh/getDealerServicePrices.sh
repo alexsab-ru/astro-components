@@ -57,4 +57,11 @@ export OUTPUT_PATHS="./src/data/site/dealer-service-price.json"
 export OUTPUT_FORMAT="detailed"
 
 # Запускаем скрипт
-node .github/scripts/GSheetFetcher.js
+if ! node .github/scripts/GSheetFetcher.js; then
+    if [ "$IGNORE_ERRORS" = "1" ]; then
+        echo "IGNORE_ERRORS=1: Пропускаем ошибку GSheetFetcher.js и продолжаем выполнение"
+        exit 0
+    else
+        exit 1
+    fi
+fi
