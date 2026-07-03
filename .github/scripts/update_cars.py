@@ -1574,9 +1574,9 @@ def main():
         print("❌ Найдены ошибки 404")
 
     # --- Сохранение данных в JSON с ценами и скидками из фида ---
-    os.makedirs('src/data/site', exist_ok=True)
+    os.makedirs('src/data', exist_ok=True)
     sorted_cars_price_data = sorted(processor.cars_price_data.values(), key=lambda x: (x['brand'], x['model']))
-    with open('src/data/site/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
+    with open('src/data/dealer-models_cars_price.json', 'w', encoding='utf-8') as f:
         json.dump(sorted_cars_price_data, f, ensure_ascii=False, indent=2)
     # --- конец блока ---
 

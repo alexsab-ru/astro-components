@@ -6,7 +6,7 @@ const commonDataDirectory = path.join(process.cwd(), 'src', 'data', 'common');
 const outputPath = path.join(siteDataDirectory, 'all-prices.json');
 const federalFilePath = path.join(commonDataDirectory, 'cars.json');
 const dealerFilePath = path.join(siteDataDirectory, 'dealer-models_price.json');
-const dealerCarsFilePath = path.join(siteDataDirectory, 'dealer-models_cars_price.json');
+const dealerCarsFilePath = path.join(process.cwd(), 'src', 'data', 'dealer-models_cars_price.json');
 
 const Message = {
   SUCCESS: 'Файл all-prices.json успешно создан',
