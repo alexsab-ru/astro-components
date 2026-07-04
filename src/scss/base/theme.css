@@ -28,9 +28,14 @@
     --color-gray-950: #030712;
 
     /* BORDER & DIVIDES */
+    /* Общесайтовый цвет рамки по умолчанию — фолбэк для любого голого `border`
+       (правило `* { border-color: var(--color-border) }` в base/layer.css).
+       НЕ переопределяйте ради тёмного хедера — для этого есть --color-header-border. */
     --color-border: var(--color-gray-200);
+    /* Рамки и разделители ХЕДЕРА. Тёмнотемные бренды переопределяют этот токен,
+       чтобы не задеть весь сайт. --color-header-divide наследуется отсюда. */
     --color-header-border: var(--color-border);
-    --color-header-divide: var(--color-border);
+    --color-header-divide: var(--color-header-border);
     --color-map-info-divide: var(--color-black);
     --color-footer-divide: var(--color-white);
 

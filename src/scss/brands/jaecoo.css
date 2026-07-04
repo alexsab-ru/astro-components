@@ -34,7 +34,9 @@
   --color-submenu-bg: var(--color-dark);
   --color-submenu-text: color-mix(in srgb, var(--color-white) 90%, transparent);
 
-  --color-border: color-mix(in srgb, var(--color-white) 30%, transparent);
+  /* Тёмный хедер: светлая рамка/разделитель на тёмном фоне.
+     Общесайтовый --color-border намеренно оставлен дефолтным. */
+  --color-header-border: color-mix(in srgb, var(--color-white) 30%, transparent);
 
   --logo-header-height: clamp(0.75rem, calc(2vw + 0.25rem), 1.25rem);
 

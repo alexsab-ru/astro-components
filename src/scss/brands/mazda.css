@@ -36,7 +36,9 @@
   --color-submenu-bg: var(--color-black);
   --color-submenu-text: var(--color-white);
 
-  --color-border: color-mix(in srgb, var(--color-white) 30%, transparent);
+  /* Тёмный хедер: светлая рамка/разделитель на тёмном фоне.
+     Общесайтовый --color-border намеренно оставлен дефолтным. */
+  --color-header-border: color-mix(in srgb, var(--color-white) 30%, transparent);
 
   /* Fonts */
   --font-sans: Mazda, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
