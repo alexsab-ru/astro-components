@@ -35,14 +35,14 @@ const cardHeadingLevel: 'h2' | 'h3' = (multipleBrands || !!title) ? 'h3' : 'h2';
 {
 	brandCount > 0 && (
 		<section class={`section models py-10 sm:py-20 ${classes}`} id="models" {...rest}>
-			<div class="container">
+			<div class="px-1 sm:px-4">
 				{title && ( <h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
 				{Object.keys(groupModelsByBrand).map(key => (
 					<>
 
-						{multipleBrands && (<BrandTag class="text-2xl md:text-3xl lg:text-5xl mb-5 lg:mb-8">{key}</BrandTag>)}
+						{multipleBrands && (<BrandTag class="text-center text-2xl md:text-3xl lg:text-5xl mb-5 lg:mb-8">{key}</BrandTag>)}
 
-						<div class={`flex flex-wrap mb-10 lg:mb-20 last:mb-0 lg:gap-5 text-xs 2xl:text-base justify-between ${multipleBrands ? 'lg:justify-start' : 'lg:justify-center'}`}>
+						<div class="flex flex-wrap justify-center gap-1 sm:gap-4 lg:gap-5 mb-10 lg:mb-20 last:mb-0 text-xs 2xl:text-base">
 							{groupModelsByBrand[key].map((model: any) => (
 
 								<ModelItem model={model} modelPath={getModelPath(model)} headingLevel={cardHeadingLevel} />
