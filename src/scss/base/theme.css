@@ -39,6 +39,12 @@
     --color-map-info-divide: var(--color-black);
     --color-footer-divide: var(--color-white);
 
+    /* CONTENT LAYOUT — раскладка content-grid (см. .section-grid в base/layer.css).
+       Дефолты подобраны так, чтобы .section-grid визуально совпадал с .container. */
+    --content-max: 1536px;   /* ширина центральной «контейнерной» колонки (как .container на 2xl) */
+    --gutter: 1.25rem;       /* минимальные боковые поля контента (как padding-inline у .container).
+                                Можно сделать адаптивными, напр.: clamp(1rem, 4vw, 3rem) в стиле Tesla. */
+
     /* Logo sizing */
     --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
     --logo-dealer-header-height: var(--logo-header-height);
