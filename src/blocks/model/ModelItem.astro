@@ -77,10 +77,10 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_lis
 		)
 	}
 	</div>
-	<div class="flex flex-col sm:flex-row sm:mt-10 sm:divide-x">
+	<div class="flex flex-col sm:flex-row sm:mt-10 justify-around w-full">
 		{
 			Object.keys(model.chars).map((key) => (
-				<div class="flex-1 py-1.5 sm:py-0 sm:p-4 flex sm:flex-col items-center gap-0.5 sm:gap-2">
+				<div class="py-1.5 sm:py-0 sm:p-2 flex sm:flex-col items-center gap-0.5 sm:gap-1">
 					<Icon
 						name={
 							key === 'seats'
