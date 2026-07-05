@@ -18,7 +18,7 @@ import Button from '@/ui/button/Button.astro';
 ---
 
 <section class={`pt-10 pb-16 ${className}`} {...rest} id="timer" data-endtime={endtime}>
-	<div class="container">
+	<div class="section-grid">
 		{title && (<div class="text-center font-medium mobile-title-size"><Fragment set:html={ title } /></div>)}
 		{subtitle && (<p class="text-center text-xl xl:text-2xl"><Fragment set:html={ subtitle } /></p>)}
 		<div id="clockdiv" class="flex items-center justify-center gap-2 md:gap-5 mt-6 md:mt-10 font-weight-bold text-[40px] md:text-8xl lg:text-9xl leading-none!">

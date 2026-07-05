@@ -14,7 +14,7 @@ const creditEnabled = isCreditEnabled(settings);
 ---
 
 <section class="odd:bg-gray-100" id="complectation" x-init={`selectedModel('${models.length ? models[0]?.id : model?.id}')`}>
-	<div class="container">
+	<div class="section-grid">
 		<h2 class="text-center mb-10">{title}</h2>
 		<div class="flex gap-4 flex-wrap justify-center my-10">
 			{models.length > 0 && models.map(model => {
