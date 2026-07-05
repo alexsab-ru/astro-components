@@ -20,7 +20,7 @@ import BackLink from '@/ui/back-link/BackLink.astro';
 
 <Layout title={title || h1} description={description} image={image} keywords={keywords} brand={brand?.toLowerCase() || null} breadcrumb={breadcrumb} noindex={noindex}>
 	<section class="content">
-		<div class="container">
+		<div class="section-grid">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
 			<PageH1 h1={h1} />
 			<slot />

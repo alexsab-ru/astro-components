@@ -18,6 +18,8 @@
     */
     .section-grid {
         display: grid;
+        max-width: var(--section-max);   /* кэп рамки; на ultrawide центрируется */
+        margin-inline: auto;
         grid-template-columns:
             [full-start] minmax(var(--gutter), 1fr)
             [content-start] minmax(0, var(--content-max)) [content-end]
