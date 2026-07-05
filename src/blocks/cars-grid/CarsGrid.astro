@@ -19,7 +19,7 @@ const { cars = [], title } = Astro.props;
 				)}
 				<div class="full-bleed flex flex-wrap justify-center gap-3 sm:gap-5 mt-5 car-list px-2 sm:px-4">
 					{cars.map((car) => (
-						<CarsItem car={car} />
+						<CarsItem car={car} class="w-[calc(50%-6px)] sm:w-[300px] lg:w-[320px] xl:w-[340px]" />
 					))}
 				</div>
 			</div>
