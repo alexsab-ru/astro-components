@@ -37,6 +37,16 @@
     .section-grid > .bleed-left { grid-column: full-start / content-end; }
 }
 
+/* Swiper как ПРЯМОЙ ребёнок .section-grid.
+   swiper.css задаёт .swiper { margin-left/right: auto } — auto-маргины у grid item
+   отключают stretch, ширина становится контентной (shrink-to-fit), и ResizeObserver
+   Swiper входит в петлю: слайды бесконечно растут. Гасим маргины — item снова
+   растягивается по колонке. ВНЕ @layer намеренно: swiper.css тоже вне слоёв,
+   и unlayered-правило из @layer components он бы перебил. */
+.section-grid > .swiper {
+    margin-inline: 0;
+}
+
 /* Дефолтный цвет границы для всего проекта */
 @layer base {
     * {

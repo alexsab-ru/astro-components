@@ -74,7 +74,7 @@ import FeedbackFormSection from './parts/RichContentFeedbackForm.astro';
 ---
 
 <section class:list={['sm:py-20 py-10 font-light model-section odd:bg-gray-100', section?.sectionClass]} id={section?.id} {...rest}>
-	<div class="container">
+	<div class="section-grid">
 		{contentOrder.map((key) => {
 			const value = sectionContent[key];
 
