@@ -1,49 +1,57 @@
 /* Container behavior: center + padding-inline 1.25rem */
 @layer components {
     .container { margin-inline: auto; padding-inline: 1.25rem }
+}
 
-    /* ── Content-grid: Tesla-подобная full-bleed раскладка ────────────────────
-       Секция-обёртка во всю ширину. Прямые дети по умолчанию садятся в
-       центральную «контейнерную» колонку (max-width var(--content-max) +
-       минимальные боковые поля var(--gutter)); элемент с классом .full-bleed
-       вырывается до краёв экрана. Без горизонтального скролла (в отличие от
-       width:100vw). Дефолты совпадают с .container → визуально без изменений.
+/* ── Content-grid: Tesla-подобная full-bleed раскладка ────────────────────
+   Секция-обёртка во всю ширину. Прямые дети по умолчанию садятся в
+   центральную «контейнерную» колонку (max-width var(--content-max) +
+   минимальные боковые поля var(--gutter)); элемент с классом .full-bleed
+   вырывается до краёв экрана. Без горизонтального скролла (в отличие от
+   width:100vw). Дефолты совпадают с .container → визуально без изменений.
 
-       Пример:
-         <div class="section-grid">
-           <h2>Заголовок</h2>                         · как контейнер (центр)
-           <p>Текст…</p>                               · как контейнер
-           <div class="full-bleed"><Slider/></div>     · во всю ширину экрана
-         </div>
-    */
-    .section-grid {
-        display: grid;
-        max-width: var(--section-max);   /* кэп рамки; на ultrawide центрируется */
-        margin-inline: auto;
-        grid-template-columns:
-            [full-start] minmax(var(--gutter), 1fr)
-            [content-start] minmax(0, var(--content-max)) [content-end]
-            minmax(var(--gutter), 1fr) [full-end];
-    }
-    .section-grid > * {
+   @utility (а не @layer components), чтобы работали варианты Tailwind:
+   sm:section-grid, max-lg:section-grid и т.д. Вся логика на родителе —
+   .full-bleed/.bleed-* остаются маркерами без собственных правил, поэтому
+   вариант на родителе включает/выключает раскладку целиком.
+
+   Пример:
+     <div class="section-grid">
+       <h2>Заголовок</h2>                         · как контейнер (центр)
+       <p>Текст…</p>                               · как контейнер
+       <div class="full-bleed"><Slider/></div>     · во всю ширину экрана
+     </div>
+*/
+@utility section-grid {
+    display: grid;
+    max-width: var(--section-max);   /* кэп рамки; на ultrawide центрируется */
+    margin-inline: auto;
+    grid-template-columns:
+        [full-start] minmax(var(--gutter), 1fr)
+        [content-start] minmax(0, var(--content-max)) [content-end]
+        minmax(var(--gutter), 1fr) [full-end];
+
+    & > * {
         grid-column: content;
         min-width: 0; /* длинный текст/грид не распирает колонку */
     }
     /* opt-in: до краёв экрана */
-    .section-grid > .full-bleed { grid-column: full; }
+    & > .full-bleed { grid-column: full; }
     /* opt-in: контент → правый край (полезно для медиа-врезок) */
-    .section-grid > .bleed-right { grid-column: content-start / full-end; }
+    & > .bleed-right { grid-column: content-start / full-end; }
     /* opt-in: левый край → контент */
-    .section-grid > .bleed-left { grid-column: full-start / content-end; }
+    & > .bleed-left { grid-column: full-start / content-end; }
 }
 
-/* Swiper как ПРЯМОЙ ребёнок .section-grid.
-   swiper.css задаёт .swiper { margin-left/right: auto } — auto-маргины у grid item
-   отключают stretch, ширина становится контентной (shrink-to-fit), и ResizeObserver
-   Swiper входит в петлю: слайды бесконечно растут. Гасим маргины — item снова
-   растягивается по колонке. ВНЕ @layer намеренно: swiper.css тоже вне слоёв,
-   и unlayered-правило из @layer components он бы перебил. */
-.section-grid > .swiper {
+/* Swiper как ПРЯМОЙ ребёнок section-grid (в т.ч. вариантов вида sm:section-grid —
+   отсюда [class*=]). swiper.css задаёт .swiper { margin-left/right: auto } —
+   auto-маргины у grid item отключают stretch, ширина становится контентной
+   (shrink-to-fit), и ResizeObserver Swiper входит в петлю: слайды бесконечно
+   растут. Гасим маргины — item снова растягивается по колонке. Вне грида
+   (до брейкпоинта варианта) обнуление безвредно: блочный div и так во всю
+   ширину. ВНЕ @layer намеренно: swiper.css тоже вне слоёв, и unlayered-правило
+   из любого @layer он бы перебил. */
+[class*="section-grid"] > .swiper {
     margin-inline: 0;
 }
 
