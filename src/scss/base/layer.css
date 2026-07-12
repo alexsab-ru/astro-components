@@ -31,17 +31,27 @@
         [content-start] minmax(0, var(--content-max)) [content-end]
         minmax(var(--gutter), 1fr) [full-end];
 
-    & > * {
+    /* :where() → специфичность 0: любая утилита на ребёнке (full-bleed,
+       col-span-*, min-w-*) перебивает дефолт независимо от порядка в слое */
+    :where(& > *) {
         grid-column: content;
         min-width: 0; /* длинный текст/грид не распирает колонку */
     }
-    /* opt-in: до краёв экрана */
-    & > .full-bleed { grid-column: full; }
-    /* opt-in: контент → правый край (полезно для медиа-врезок) */
-    & > .bleed-right { grid-column: content-start / full-end; }
-    /* opt-in: левый край → контент */
-    & > .bleed-left { grid-column: full-start / content-end; }
 }
+
+/* Bleed-утилиты — отдельными @utility, чтобы работали варианты
+   (max-lg:full-bleed и т.п.). Имеют смысл только на ПРЯМОМ ребёнке
+   section-grid: grid-column ссылается на его именованные линии. */
+/* до краёв рамки */
+@utility full-bleed { grid-column: full; }
+/* контент → правый край рамки (медиа-врезки) */
+@utility bleed-right { grid-column: content-start / full-end; }
+/* левый край рамки → контент */
+@utility bleed-left { grid-column: full-start / content-end; }
+
+/* Bleed-классы из гайда (src/pages не сканируется — известный баг) не должны
+   выпадать из сборки: принудительная генерация. */
+@source inline("full-bleed bleed-right bleed-left");
 
 /* Swiper как ПРЯМОЙ ребёнок section-grid (в т.ч. вариантов вида sm:section-grid —
    отсюда [class*=]). swiper.css задаёт .swiper { margin-left/right: auto } —
