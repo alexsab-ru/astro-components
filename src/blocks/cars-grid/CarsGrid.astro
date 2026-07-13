@@ -11,15 +11,15 @@ const { cars = [], title } = Astro.props;
 {
 	!!cars.length && (
 		<section class="odd:bg-gray-100">
-			<div class="container">
+			<div class="section-grid">
 				{title && (
 					<h2 class="text-center mobile-title-size sm:text-4xl mb-8 sm:mb-14">
 						<Fragment set:html={title} />
 					</h2>
 				)}
-				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+				<div class="full-bleed flex flex-wrap justify-center gap-3 sm:gap-5 mt-5 car-list px-2 sm:px-4">
 					{cars.map((car) => (
-						<CarsItem car={car} />
+						<CarsItem car={car} class="w-[calc(50%-6px)] sm:w-[300px] lg:w-[320px] xl:w-[340px]" />
 					))}
 				</div>
 			</div>

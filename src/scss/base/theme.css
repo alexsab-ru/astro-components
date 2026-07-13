@@ -39,6 +39,13 @@
     --color-map-info-divide: var(--color-black);
     --color-footer-divide: var(--color-white);
 
+    /* CONTENT LAYOUT — раскладка content-grid (см. .section-grid в base/layer.css).
+       Две ширины, как у Tesla: кэп всей рамки и колонка читаемого контента. */
+    --section-max: 2560px;              /* кэп full-bleed рамки; .full-bleed доходит до этих краёв
+                                           (на сверхшироких экранах не тянется дальше 2560) */
+    --content-max: 1536px;              /* центральная «контейнерная» колонка — тексты/заголовки */
+    --gutter: clamp(1rem, 2.5vw, 3rem); /* адаптивные боковые поля контента: 16px → 48px (~36px на 1440) */
+
     /* Logo sizing */
     --logo-header-height: clamp(1rem, calc(2vw + 0.25rem), 2.5rem);
     --logo-dealer-header-height: var(--logo-header-height);

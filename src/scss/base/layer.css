@@ -3,6 +3,68 @@
     .container { margin-inline: auto; padding-inline: 1.25rem }
 }
 
+/* ── Content-grid: Tesla-подобная full-bleed раскладка ────────────────────
+   Секция-обёртка во всю ширину. Прямые дети по умолчанию садятся в
+   центральную «контейнерную» колонку (max-width var(--content-max) +
+   минимальные боковые поля var(--gutter)); элемент с классом .full-bleed
+   вырывается до краёв экрана. Без горизонтального скролла (в отличие от
+   width:100vw). Дефолты совпадают с .container → визуально без изменений.
+
+   @utility (а не @layer components), чтобы работали варианты Tailwind:
+   sm:section-grid, max-lg:section-grid и т.д. Вся логика на родителе —
+   .full-bleed/.bleed-* остаются маркерами без собственных правил, поэтому
+   вариант на родителе включает/выключает раскладку целиком.
+
+   Пример:
+     <div class="section-grid">
+       <h2>Заголовок</h2>                         · как контейнер (центр)
+       <p>Текст…</p>                               · как контейнер
+       <div class="full-bleed"><Slider/></div>     · во всю ширину экрана
+     </div>
+*/
+@utility section-grid {
+    display: grid;
+    max-width: var(--section-max);   /* кэп рамки; на ultrawide центрируется */
+    margin-inline: auto;
+    grid-template-columns:
+        [full-start] minmax(var(--gutter), 1fr)
+        [content-start] minmax(0, var(--content-max)) [content-end]
+        minmax(var(--gutter), 1fr) [full-end];
+
+    /* :where() → специфичность 0: любая утилита на ребёнке (full-bleed,
+       col-span-*, min-w-*) перебивает дефолт независимо от порядка в слое */
+    :where(& > *) {
+        grid-column: content;
+        min-width: 0; /* длинный текст/грид не распирает колонку */
+    }
+}
+
+/* Bleed-утилиты — отдельными @utility, чтобы работали варианты
+   (max-lg:full-bleed и т.п.). Имеют смысл только на ПРЯМОМ ребёнке
+   section-grid: grid-column ссылается на его именованные линии. */
+/* до краёв рамки */
+@utility full-bleed { grid-column: full; }
+/* контент → правый край рамки (медиа-врезки) */
+@utility bleed-right { grid-column: content-start / full-end; }
+/* левый край рамки → контент */
+@utility bleed-left { grid-column: full-start / content-end; }
+
+/* Bleed-классы из гайда (src/pages не сканируется — известный баг) не должны
+   выпадать из сборки: принудительная генерация. */
+@source inline("full-bleed bleed-right bleed-left");
+
+/* Swiper как ПРЯМОЙ ребёнок section-grid (в т.ч. вариантов вида sm:section-grid —
+   отсюда [class*=]). swiper.css задаёт .swiper { margin-left/right: auto } —
+   auto-маргины у grid item отключают stretch, ширина становится контентной
+   (shrink-to-fit), и ResizeObserver Swiper входит в петлю: слайды бесконечно
+   растут. Гасим маргины — item снова растягивается по колонке. Вне грида
+   (до брейкпоинта варианта) обнуление безвредно: блочный div и так во всю
+   ширину. ВНЕ @layer намеренно: swiper.css тоже вне слоёв, и unlayered-правило
+   из любого @layer он бы перебил. */
+[class*="section-grid"] > .swiper {
+    margin-inline: 0;
+}
+
 /* Дефолтный цвет границы для всего проекта */
 @layer base {
     * {

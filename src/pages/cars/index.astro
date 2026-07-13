@@ -3,7 +3,7 @@ import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
 if (isRouteDisabled('/cars/')) {
 	return Astro.rewrite(SITE_NOT_FOUND_PATH);
 }
-import PageLayout from "@/layouts/PageLayout.astro";
+import CarsListLayout from "@/layouts/CarsListLayout.astro";
 import { getSafeCollection } from '@/js/utils/safeContent';
 import settings from '@/data/site/settings.json';
 const { site_name, brand, legal_city_where } = settings;
@@ -27,7 +27,7 @@ if (rawCars && rawCars.length > 0) {
 export const breadcrumb = { name: "Авто в наличии", href: "/cars/" };
 ---
 
-<PageLayout
+<CarsListLayout
 	h1={`Автомобили ${brand} в наличии в ${legal_city_where}`}
 	title={`Автомобили в наличии | ${site_name}`}
 	description={`Автомобили ${brand} в наличии в ${legal_city_where} у официального дилера. Уточняйте комплектации, цены и сроки, записывайтесь на тест-драйв онлайн или по телефону.`}
@@ -43,4 +43,4 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 		)
 	}
 	<SeoText mdx="cars" noPadding />
-</PageLayout>
+</CarsListLayout>

@@ -55,7 +55,7 @@ const data = (block: TBlock): any => ({ ...(block?.content ?? {}), ...(block?.pr
 			case 'feedback-form':
 				return (
 					<section>
-						<div class="container">
+						<div class="section-grid">
 							<FeedbackForm title={c.title} subtitle={c.subtitle} imageUrl={c.imageUrl ?? context.feedbackImageUrl ?? ''} dataFormName={c.dataFormName} showModelSelect={c.showModelSelect} />
 						</div>
 					</section>

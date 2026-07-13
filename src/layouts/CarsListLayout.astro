@@ -23,14 +23,16 @@ import BackLink from '@/ui/back-link/BackLink.astro';
 		<div class="section-grid">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
 			<PageH1 h1={h1} />
+		</div>
+		<div class="px-1 sm:px-4">
 			<slot />
-
+		</div>
+		<div class="section-grid">
 			{backLink && (
 				<div class="mt-10">
 					<BackLink />
 				</div>
 			)}
-
 		</div>
 	</section>
 </Layout>
