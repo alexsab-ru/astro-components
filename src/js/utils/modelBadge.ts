@@ -1,6 +1,6 @@
 import { getModelTitle } from './modelFields.js';
 
-export type ModelBadgePlacement = 'menu' | 'model_list' | 'model_page' | 'car_list' | 'car_page';
+export type ModelBadgePlacement = 'menu' | 'modelList' | 'modelPage' | 'carList' | 'carPage';
 
 export function getModelBadgeData(model: any, placement: ModelBadgePlacement, fallbackAlt = '') {
   const badge = model?.badge;

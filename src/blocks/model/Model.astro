@@ -37,7 +37,7 @@ import './model.css';
 const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
 const modelTitle = getModelTitle(model);
 const brandDisplayName = getModelBrandDisplayName(model);
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'model_page', modelTitle || '');
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'modelPage', modelTitle || '');
 const carImagePath = getModelColorImage(model.colors?.[0]) || `/img/${model.id}/${model.colors?.[0]?.id}.png`;
 const creditEnabled = isCreditEnabled(settings);
 ---

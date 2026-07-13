@@ -12,7 +12,7 @@ const url = slug ? slug : `${path}${car.id}/`;
 import { calculateCarPrice, findModelByCarData } from '@/js/utils/car';
 import { getModelBadgeData } from '@/js/utils/modelBadge';
 const carModel = findModelByCarData(car.data);
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'car_list');
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'carList');
 const price = calculateCarPrice(car.data);
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';

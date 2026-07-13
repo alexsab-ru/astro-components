@@ -15,7 +15,7 @@ import { getModelBadgeData } from '@/js/utils/modelBadge';
 const thumb = getCarThumbnail(data);
 const price = calculateCarPrice(data);
 const carModel = findModelByCarData(data);
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'car_page');
+const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'carPage');
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import Layout from '@/layouts/Layout.astro';
