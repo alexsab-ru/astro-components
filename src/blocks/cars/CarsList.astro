@@ -46,6 +46,7 @@ if (rawCars && rawCars.length > 0) {
 }
 ---
 <div x-data="sorting" x-cloak>
+	<div class="section-grid">
 	<p x-text="`${total} ${declOfNums(total)} в наличии`"></p>
 	<hr class="my-5" />
 	<SortSelect />
@@ -73,10 +74,16 @@ if (rawCars && rawCars.length > 0) {
 			))}
 		</div></Fragment>
 	)}
-	<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 mt-5 car-list">
+	</div>
+	<div class="section-grid">
+	{/* до lg — full-bleed: список в края рамки (остаётся px-1 sm:px-4 от
+	    обёртки слота CarsListLayout); от lg — контентная колонка, вровень
+	    с фильтром */}
+	<div class="max-lg:full-bleed flex flex-wrap justify-start gap-1 sm:gap-2 lg:gap-3 mb-10 lg:mb-20 last:mb-0 mt-5 car-list">
 		{cars.map((car) => (
 			<CarItem car={car} path={path} />
 		))}
+	</div>
 	</div>
 	<div x-show="loading" class="text-center py-8" x-cloak>
 		<p class="text-gray-500">Загрузка...</p>

@@ -1,0 +1,38 @@
+---
+import type {TBreadcrumb} from '@/ui/breadcrumbs/types'
+import PageH1 from '@/ui/page-h1/PageH1.astro';
+interface Props {
+	title?: string;
+	h1?: string;
+	description?: string;
+	image?: string;
+	breadcrumb?: TBreadcrumb[];
+	backLink? : boolean;
+	keywords?: string;
+	brand?: string;
+	noindex?: boolean;
+}
+const {title, h1, description, image, breadcrumb, backLink = false, keywords, brand, noindex = false} = Astro.props;
+import Layout from '@/layouts/Layout.astro';
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
+import BackLink from '@/ui/back-link/BackLink.astro';
+---
+
+<Layout title={title || h1} description={description} image={image} keywords={keywords} brand={brand?.toLowerCase() || null} breadcrumb={breadcrumb} noindex={noindex}>
+	<section class="content">
+		<div class="section-grid">
+			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} />}
+			<PageH1 h1={h1} />
+		</div>
+		<div class="px-1 sm:px-4">
+			<slot />
+		</div>
+		<div class="section-grid">
+			{backLink && (
+				<div class="mt-10">
+					<BackLink />
+				</div>
+			)}
+		</div>
+	</section>
+</Layout>

@@ -31,7 +31,7 @@ const creditEnabled = isCreditEnabled(settings);
 ---
 
 <div
-	class={`car-item flex flex-col justify-between bg-white shadow-2xl pb-3 xl:pb-4 relative ${className}`}
+	class={`car-item w-[calc(50%-2px)] sm:w-[calc(33%-4px)] lg:w-[calc(24%-1px)] flex flex-col bg-white shadow-lg hover:shadow-md border border-gray-100 hover:border-gray-200 pb-3 xl:pb-4 relative ${className}`}
 	data-price={ price }
 	data-brand={ car.data.mark_id.replace(',', '') }
 	data-model={ car.data.folder_id.replace(',', '') }
