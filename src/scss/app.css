@@ -2,7 +2,7 @@
 
 @import "tailwindcss";
 
-@source "../**/*.{json,yml,yaml}";
+@source "../**/*.{json,yml,yaml,mdx,astro}";
 
 @import './base/theme.css';
 @import './base/variants.css';
