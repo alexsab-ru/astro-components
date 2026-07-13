@@ -17,7 +17,7 @@ const noPriceText = (model?.status && (model.status === 'preorder' || model.stat
 const modelTitle = getModelTitle(model);
 const brandDisplayName = getModelBrandDisplayName(model);
 const resolvedModelPath = modelPath || `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'modelList', modelTitle || '');
+const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadgeData(model, 'modelList', modelTitle || '');
 ---
 
 <a
@@ -50,7 +50,7 @@ const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'modelList
 				<img
 					data-src={badgeImage}
 					alt={badgeAlt}
-					class="opacity-0 absolute right-0 top-0 h-auto xs:w-[60px] w-[100px] z-10"
+					class={`opacity-0 absolute right-0 top-0 h-auto z-10 ${badgeClasses}`}
 				/>
 			)
 		}

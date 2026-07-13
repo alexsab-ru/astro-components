@@ -7,7 +7,7 @@ const { link = {}, sublink = false, ...rest } = Astro.props;
 const path = Astro.url.pathname;
 
 import { getModelBadgeData } from '@/js/utils/modelBadge';
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(link, 'menu', link.name || '');
+const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadgeData(link, 'menu', link.name || '');
 
 import settings from '@/data/site/settings.json';
 import { isHeaderTransparentEnabled } from '@/js/utils/features';
@@ -34,7 +34,7 @@ const activeTransparentClasses = is_header_transparent ? 'bg-gray-700 lg:bg-head
 {link?.thumb && (
 	<div class="aspect-video hidden lg:block w-full relative">
 		<img src={link.thumb} alt="" class="w-full h-auto absolute top-1/2 -translate-y-1/2 object-cover" width="338" height="190" alt={link.name || ''} />
-		{badgeImage && (<img src={badgeImage} class="absolute h-auto w-[50px] xl:w-[90px] top-0 right-5 xl:right-10" width="92" height="48" alt={badgeAlt} title={badgeAlt} />)}
+		{badgeImage && (<img src={badgeImage} class={`absolute h-auto top-0 right-5 xl:right-10 ${badgeClasses}`} width="92" height="48" alt={badgeAlt} title={badgeAlt} />)}
 	</div>
 )}
 </a>

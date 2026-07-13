@@ -37,14 +37,14 @@ import './model.css';
 const labelBtn = status === 'preorder' || status === 'comminsoon' ? 'Предзаказ' : 'Узнать цену';
 const modelTitle = getModelTitle(model);
 const brandDisplayName = getModelBrandDisplayName(model);
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(model, 'modelPage', modelTitle || '');
+const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadgeData(model, 'modelPage', modelTitle || '');
 const carImagePath = getModelColorImage(model.colors?.[0]) || `/img/${model.id}/${model.colors?.[0]?.id}.png`;
 const creditEnabled = isCreditEnabled(settings);
 ---
 
 <section class="model model-section relative" id={model?.id} data-dir={model?.id}>
 	{badgeImage && (
-		<img src={badgeImage} alt={badgeAlt} class="absolute right-4 top-4 h-auto max-h-[70px] lg:max-h-[100px] xs:w-[80px] w-[150px] lg:w-[200px] z-10 object-contain" loading="lazy" />
+		<img src={badgeImage} alt={badgeAlt} class={`absolute right-4 top-4 h-auto z-10 object-contain ${badgeClasses}`} loading="lazy" />
 	)}
 	<div
 		class="model__info"

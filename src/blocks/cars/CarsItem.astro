@@ -15,7 +15,7 @@ const url = slug ? slug : `${path}${car.id}/`;
 import { calculateCarPrice, findModelByCarData } from '@/js/utils/car';
 import { getModelBadgeData } from '@/js/utils/modelBadge';
 const carModel = findModelByCarData(car.data);
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'carList');
+const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadgeData(carModel, 'carList');
 const price = calculateCarPrice(car.data);
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
@@ -61,7 +61,7 @@ const creditEnabled = isCreditEnabled(settings);
 			{car.data.run ? <Fragment set:html={`&nbsp;/&nbsp;${car.data.run}&nbsp;км`} /> : ''}
 		</div></noindex>
 		{(car.data.total && totalShow) && (<div class="text-xs sm:text-sm md:text-base mt-0.5 sm:mt-1 text-gray-900">{ car.data.total } {declOfNums(car.data.total)}</div>)}
-		{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 h-auto w-[50px]! xl:w-[90px]! object-contain" alt={badgeAlt} />)}
+		{badgeImage && (<img src={badgeImage} class={`absolute right-3 top-3 xs:right-1 xs:top-1 z-10 h-auto object-contain ${badgeClasses}`} alt={badgeAlt} />)}
 	</div>
 	<div class="px-3 xl:px-4 flex flex-wrap justify-between gap-y-2 sm:gap-y-3">
 		<Button

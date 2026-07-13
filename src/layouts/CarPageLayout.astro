@@ -15,7 +15,7 @@ import { getModelBadgeData } from '@/js/utils/modelBadge';
 const thumb = getCarThumbnail(data);
 const price = calculateCarPrice(data);
 const carModel = findModelByCarData(data);
-const { image: badgeImage, alt: badgeAlt } = getModelBadgeData(carModel, 'carPage');
+const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadgeData(carModel, 'carPage');
 
 import { declOfNums, currencyFormat } from '@/js/utils/numbers.format';
 import Layout from '@/layouts/Layout.astro';
@@ -43,7 +43,7 @@ const creditEnabled = isCreditEnabled(settings);
 
 				<div class="col-span-12 lg:col-span-6 relative">
 
-					{badgeImage && (<img src={badgeImage} class="absolute right-3 top-3 xs:right-1 xs:top-1 z-10 h-auto xs:w-[60px] w-[100px] xl:w-[200px] object-contain" alt={badgeAlt} />)}
+					{badgeImage && (<img src={badgeImage} class={`absolute right-3 top-3 xs:right-1 xs:top-1 z-10 h-auto object-contain ${badgeClasses}`} alt={badgeAlt} />)}
 
 				{ data.images && data.images.length > 0 ? (
 					<CarImageSlider data={data} />
