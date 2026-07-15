@@ -354,7 +354,7 @@ class ImageMirror:
 
             output_path.parent.mkdir(parents=True, exist_ok=True)
             resized = resize_image(image, target_width)
-            quality = 8 if size_name == "thumb" else 86
+            quality = 8 if size_name == "thumb" else 75
             resized.save(output_path, "WEBP", quality=quality, method=6)
 
         return remote_paths
