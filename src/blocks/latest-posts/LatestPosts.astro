@@ -16,6 +16,8 @@ interface Props {
 	offset?: number;
 	limit?: number;
 	showAllButton?: boolean;
+	// Управляет переходом по карточке: по умолчанию ссылка остаётся включённой.
+	isLink?: boolean;
 }
 const {
 	collectionName,
@@ -28,6 +30,7 @@ const {
 	offset = 0,
 	limit = 10,
 	showAllButton = false,
+	isLink = true,
 } = Astro.props;
 let posts = [];
 let rawPosts = await getSafeCollection(collectionName);
@@ -73,7 +76,7 @@ if (rawPosts && rawPosts.length) {
 						<div class="swiper-wrapper">
 							{posts.map((post) => (
 								<div class="swiper-slide">
-									<PostItem post={post} isLink={true} />
+									<PostItem post={post} isLink={isLink} />
 								</div>
 							))}
 						</div>
