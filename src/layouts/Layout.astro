@@ -39,6 +39,8 @@ const is_header_transparent = isHeaderTransparentEnabled(settings);
 import Head from '@/integrations/seo/DocumentHead.astro';
 import ScriptHeadPlatform from '@/integrations/scripts/ScriptsHeadPlatform.astro';
 import ScriptBodyBeginPlatform from '@/integrations/scripts/ScriptsBodyBeginPlatform.astro';
+import ScriptHead from '@/integrations/scripts/ScriptsHead.astro';
+import ScriptBodyBegin from '@/integrations/scripts/ScriptsBodyBegin.astro';
 import ScriptBodyEnd from '@/integrations/scripts/ScriptsBodyEnd.astro';
 import Header from '@/site-shell/header/Header.astro';
 import Modals from '@/site-shell/modals/Modals.astro';
@@ -109,10 +111,12 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 			noindex={noindex}
 		/>
 		<ScriptHeadPlatform />
+		<ScriptHead />
 		<SchemaOrg breadcrumbs={breadcrumb} />
 	</head>
 	<body class={`antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black ${bodyClasses}`} x-data="complectation">
 		<ScriptBodyBeginPlatform />
+		<ScriptBodyBegin />
 		<Header brand={brand} showMenu={showHeaderMenu} logoNoLink={logoNoLink} />
 		<main class="grow relative">
 			<slot />
