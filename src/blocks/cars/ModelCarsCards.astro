@@ -94,7 +94,7 @@ const getCarImages = (car: any): ModelCarsCardImage[] => {
 	if (Array.isArray(data.imageSets) && data.imageSets.length) {
 		return uniqueImages(data.imageSets.map((image: any) => ({
 			imageUrl: image?.full || image?.large || image?.medium,
-			thumbUrl: image?.large || image?.full || image?.medium || image?.small || image?.thumb,
+			thumbUrl: image?.large || image?.medium || image?.full || image?.small || image?.thumb,
 		})));
 	}
 
