@@ -184,7 +184,7 @@ function transformVkEmbedUrl(url) {
   if (vkEmbedMatch) {
     const [, oid, id] = vkEmbedMatch;
     // Преобразуем в прямую ссылку на видео VK
-    return `https://vk.com/video${oid}_${id}`;
+    return `https://vk.ru/video${oid}_${id}`;
   }
   
   return url;
