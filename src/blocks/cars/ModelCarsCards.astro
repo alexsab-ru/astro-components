@@ -1,0 +1,295 @@
+---
+import modelsData from '@/data/site/models.json';
+import { filterVisibleCars, findModelByCarData } from '@/js/utils/car';
+import { isModelVisible } from '@/js/utils/modelVisibility';
+import {
+	getModelBrandDisplayName,
+	getModelImage,
+	getModelThumb,
+	getModelTitle,
+} from '@/js/utils/modelFields';
+import { currencyFormat } from '@/js/utils/numbers.format';
+import Button from '@/ui/button/Button.astro';
+import CardMedia from '@/ui/card-media/CardMedia.astro';
+import type {
+	ModelCarsCardButton,
+	ModelCarsCardAspectRatio,
+	ModelCarsCardImage,
+	ModelCarsCardImageFit,
+	ModelCarsCardImageSelection,
+	ModelCarsCardOverride,
+} from './model-cars-cards.types';
+
+interface Props {
+	models?: any[];
+	cars?: any[];
+	overrides?: ModelCarsCardOverride[];
+	onlyWithCars?: boolean;
+	imageSelection?: ModelCarsCardImageSelection;
+	primaryButton?: ModelCarsCardButton;
+	secondaryButton?: ModelCarsCardButton;
+	imgPlacement?: 'alternate' | 'left' | 'right';
+	imageAspectRatio?: ModelCarsCardAspectRatio;
+	imageFit?: ModelCarsCardImageFit;
+}
+
+const DEFAULT_IMAGE_SELECTION: Required<Pick<ModelCarsCardImageSelection, 'strategy' | 'limit'>> = {
+	strategy: 'diagonal',
+	limit: 5,
+};
+const PRIMARY_BUTTON_CLASSES = 'w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white no-underline text-center bg-accent-500 hover:bg-accent-600';
+const SECONDARY_BUTTON_CLASSES = 'w-full flex items-center justify-center px-4 xl:px-8 py-2 xl:py-3 text-base text-white! no-underline text-center bg-black hover:bg-black/90';
+
+const {
+	models = modelsData.models,
+	cars: inputCars = [],
+	overrides = [],
+	onlyWithCars = false,
+	imageSelection = DEFAULT_IMAGE_SELECTION,
+	primaryButton = {},
+	secondaryButton = {},
+	imgPlacement = 'alternate',
+	imageAspectRatio = '4/3',
+	imageFit = 'cover',
+} = Astro.props;
+
+const cars = filterVisibleCars(inputCars);
+const overrideByModelId = new Map(overrides.map((override) => [override.modelId, override]));
+const carsByModelId = new Map<string, any[]>();
+
+cars.forEach((car) => {
+	const model = findModelByCarData(car?.data);
+	if (!model?.id) return;
+
+	const modelCars = carsByModelId.get(model.id) || [];
+	modelCars.push(car);
+	carsByModelId.set(model.id, modelCars);
+});
+
+const positiveNumber = (value: unknown) => {
+	const number = Number(value);
+	return Number.isFinite(number) && number > 0 ? number : 0;
+};
+
+const uniqueImages = (images: ModelCarsCardImage[]) => {
+	const urls = new Set<string>();
+	return images.filter((image) => {
+		if (!image?.imageUrl || urls.has(image.imageUrl)) return false;
+		urls.add(image.imageUrl);
+		return true;
+	});
+};
+
+const getCarImages = (car: any): ModelCarsCardImage[] => {
+	const data = car?.data || {};
+
+	if (Array.isArray(data.imageSets) && data.imageSets.length) {
+		return uniqueImages(data.imageSets.map((image: any) => ({
+			imageUrl: image?.full || image?.large || image?.medium,
+			thumbUrl: image?.large || image?.full || image?.medium || image?.small || image?.thumb,
+		})));
+	}
+
+	if (Array.isArray(data.images) && data.images.length) {
+		return uniqueImages(data.images.map((imageUrl: string, index: number) => ({
+			imageUrl,
+			thumbUrl: data.thumbs?.[index] || imageUrl,
+		})));
+	}
+
+	if (Array.isArray(data.thumbs) && data.thumbs.length) {
+		return uniqueImages(data.thumbs.map((imageUrl: string) => ({ imageUrl, thumbUrl: imageUrl })));
+	}
+
+	return data.image ? [{ imageUrl: data.image, thumbUrl: data.image }] : [];
+};
+
+const getCarVins = (car: any) => {
+	const data = car?.data || {};
+	return [data.vin, data.vin_list, data.vin_hidden]
+		.flatMap((value) => String(value || '').split(','))
+		.map((value) => value.trim().toLowerCase())
+		.filter(Boolean);
+};
+
+const carIdMatches = (car: any, carId: string) => {
+	const normalizedId = carId.trim().toLowerCase();
+	if (!normalizedId) return false;
+	if (String(car?.id || '').toLowerCase() === normalizedId) return true;
+
+	const urlParts = String(car?.data?.url || '').split('/').filter(Boolean);
+	return String(urlParts.at(-1) || '').toLowerCase() === normalizedId;
+};
+
+const selectIndexes = (images: ModelCarsCardImage[], indexes: number[] | undefined, limit: number) => {
+	const selected = indexes?.length
+		? indexes.map((index) => images[index]).filter(Boolean)
+		: images.slice(0, limit);
+	return selected.slice(0, limit);
+};
+
+const selectCarImages = (modelCars: any[], selection: ModelCarsCardImageSelection) => {
+	const strategy = selection.strategy || DEFAULT_IMAGE_SELECTION.strategy;
+	const limit = positiveNumber(selection.limit) || DEFAULT_IMAGE_SELECTION.limit;
+
+	if (!modelCars.length) return [];
+
+	if (strategy === 'vin' || strategy === 'car') {
+		const vin = String(selection.vin || '').trim().toLowerCase();
+		const carId = String(selection.carId || '');
+		const selectedCar = strategy === 'vin'
+			? (vin ? modelCars.find((car) => getCarVins(car).includes(vin)) : undefined)
+			: modelCars.find((car) => carIdMatches(car, carId));
+		if (selectedCar) return uniqueImages(selectIndexes(getCarImages(selectedCar), selection.indexes, limit));
+
+		return selectCarImages(modelCars, { strategy: 'diagonal', limit });
+	}
+
+	if (strategy === 'first-car') {
+		return uniqueImages(selectIndexes(getCarImages(modelCars[0]), selection.indexes, limit));
+	}
+
+	if (strategy === 'per-car') {
+		const indexes = selection.indexes?.length ? selection.indexes : [0];
+		const selected = modelCars.flatMap((car) => {
+			const images = getCarImages(car);
+			return indexes.map((index) => images[index]).filter(Boolean);
+		});
+		return uniqueImages(selected).slice(0, limit);
+	}
+
+	const selected = modelCars.map((car, index) => getCarImages(car)[index]).filter(Boolean);
+	return uniqueImages(selected).slice(0, limit);
+};
+
+const resolveButton = (
+	defaults: ModelCarsCardButton,
+	globalButton: ModelCarsCardButton,
+	cardButton: ModelCarsCardButton | undefined,
+	cardTitle: string,
+) => {
+	const button = { ...defaults, ...globalButton, ...cardButton };
+	const title = button.title || defaults.title || '';
+
+	return {
+		...button,
+		title,
+		dataTitle: button.dataTitle || `${title} на&nbsp;${cardTitle}`,
+		dataFormName: button.dataFormName || `${title}. ${cardTitle}`,
+		classes: `${button.popup ? 'popup-link ' : ''}${button.classes || ''}`.trim(),
+	};
+};
+
+const cards = models
+	.map((model: any, modelIndex: number) => {
+		const override = overrideByModelId.get(model.id);
+		const modelCars = carsByModelId.get(model.id) || [];
+		const isVisible = override?.show ?? (isModelVisible(model) && (!onlyWithCars || modelCars.length > 0));
+		if (!isVisible) return null;
+
+		const selection = { ...DEFAULT_IMAGE_SELECTION, ...imageSelection, ...override?.imageSelection };
+		let images = override?.images
+			? uniqueImages(override.images)
+			: selectCarImages(modelCars, selection);
+
+		if (!images.length) {
+			const modelImage = getModelImage(model) || getModelThumb(model);
+			if (modelImage) images = [{ imageUrl: modelImage, thumbUrl: modelImage }];
+		}
+		if (!images.length) return null;
+
+		const brand = getModelBrandDisplayName(model);
+		const modelTitle = getModelTitle(model);
+		const title = override?.title || `${brand} ${modelTitle}`.trim();
+		const carPrices = modelCars
+			.map((car) => positiveNumber(car?.data?.priceWithDiscount) || positiveNumber(car?.data?.sale_price) || positiveNumber(car?.data?.price))
+			.filter(Boolean);
+		const price = carPrices.length ? Math.min(...carPrices) : positiveNumber(model.price);
+		const carBenefits = modelCars.map((car) => positiveNumber(car?.data?.max_discount)).filter(Boolean);
+		const benefit = carBenefits.length ? Math.max(...carBenefits) : positiveNumber(model.benefit);
+		const contentItems = override?.contentItems || [
+			price ? `Цена от ${currencyFormat(price)}` : '',
+			benefit ? `Выгода до ${currencyFormat(benefit)}` : '',
+			...(Array.isArray(model.benefits) ? model.benefits.map((item: any) => item?.label) : []),
+		].filter(Boolean);
+
+		return {
+			model,
+			title,
+			subtitle: override?.subtitle ?? model.slogan ?? '',
+			contentItems,
+			images,
+			order: override?.order ?? modelIndex,
+			hasCustomOrder: override?.order !== undefined,
+			imgPlacement: override?.imgPlacement,
+			imageAspectRatio: override?.imageAspectRatio || imageAspectRatio,
+			imageFit: override?.imageFit || imageFit,
+			primaryButton: resolveButton({
+				title: 'Получить максимальную выгоду',
+				url: '#common-modal',
+				classes: PRIMARY_BUTTON_CLASSES,
+				popup: true,
+			}, primaryButton, override?.primaryButton, title),
+			secondaryButton: resolveButton({
+				title: 'Записаться на тест-драйв',
+				url: '#common-modal',
+				classes: SECONDARY_BUTTON_CLASSES,
+				popup: true,
+			}, secondaryButton, override?.secondaryButton, title),
+		};
+	})
+	.filter(Boolean)
+	.sort((first: any, second: any) => {
+		if (first.hasCustomOrder !== second.hasCustomOrder) return first.hasCustomOrder ? -1 : 1;
+		return first.order - second.order;
+	})
+	.map((card: any, index: number) => ({
+		...card,
+		imgPlacement: card.imgPlacement || (imgPlacement === 'alternate' ? (index % 2 === 0 ? 'left' : 'right') : imgPlacement),
+	}));
+---
+
+<div class="flex flex-col gap-8 lg:gap-16">
+	{cards.map((card: any) => (
+		<CardMedia
+			imgPlacement={card.imgPlacement}
+			images={card.images}
+			imageAspectRatio={card.imageAspectRatio}
+			imageFit={card.imageFit}
+		>
+			<Fragment slot="card-content">
+				<div class="flex flex-col gap-2">
+					{card.subtitle && <p class="text-gray-700 text-base! lg:text-lg!">{card.subtitle}</p>}
+					<h2 class="m-0! p-0! before:hidden text-2xl! lg:text-4xl!">{card.title}</h2>
+				</div>
+
+				{card.contentItems.length > 0 && (
+					<ul class="list-disc pl-5 text-gray-700 text-base! lg:text-lg!">
+						{card.contentItems.map((item: string) => <li><Fragment set:html={item} /></li>)}
+					</ul>
+				)}
+
+				<div class="grid gap-3 sm:grid-cols-2">
+					<Button
+						classes={card.primaryButton.classes}
+						url={card.primaryButton.url}
+						title={card.primaryButton.title}
+						dataTitle={card.primaryButton.dataTitle}
+						dataFormName={card.primaryButton.dataFormName}
+					/>
+					<Button
+						classes={card.secondaryButton.classes}
+						url={card.secondaryButton.url}
+						title={card.secondaryButton.title}
+						dataTitle={card.secondaryButton.dataTitle}
+						dataFormName={card.secondaryButton.dataFormName}
+					/>
+				</div>
+			</Fragment>
+		</CardMedia>
+	))}
+</div>
+
+<script>
+	import '@/ui/card-media/slider';
+</script>

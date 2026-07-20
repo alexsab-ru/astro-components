@@ -7,27 +7,42 @@ type TImage = {
 interface Props {
   imgPlacement?: string;
   images?: TImage[];
+  imageAspectRatio?: 'auto' | '4/3' | '16/9' | '3/2' | '1/1';
+  imageFit?: 'cover' | 'contain';
 }
 
 const {
   imgPlacement = 'left',
-  images = []
+  images = [],
+  imageAspectRatio = 'auto',
+  imageFit = 'contain',
 
 } = Astro.props;
+const aspectRatioClasses = {
+  auto: '',
+  '4/3': 'aspect-4/3',
+  '16/9': 'aspect-video',
+  '3/2': 'aspect-3/2',
+  '1/1': 'aspect-square',
+};
+const hasFixedAspectRatio = imageAspectRatio !== 'auto';
+const imageClasses = hasFixedAspectRatio
+  ? `w-full h-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} object-center`
+  : 'w-full h-auto object-contain object-center';
 ---
 
 <article class=`flex flex-col ${imgPlacement === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row'} bg-zinc-50 rounded-2xl overflow-hidden`>
   {images.length > 0 && (
-    <div class="swiper model-gallery-slider w-full lg:w-1/2">
-      <div class="swiper-wrapper">
+    <div class={`swiper model-gallery-slider w-full lg:w-1/2 bg-zinc-100 ${aspectRatioClasses[imageAspectRatio]}`}>
+      <div class={`swiper-wrapper ${hasFixedAspectRatio ? 'h-full' : ''}`}>
       {images.map(img => (
-          <div class="swiper-slide">
+          <div class={hasFixedAspectRatio ? 'swiper-slide h-full!' : 'swiper-slide'}>
             {img.thumbUrl ? (
-              <a href={img.imageUrl} class="glightbox cursor-zoom-in select-none" data-gallery={images[0].imageUrl}>
-                <img src={img.thumbUrl} class="w-full h-auto object-contain object-center" loading="lazy" />
+              <a href={img.imageUrl} class={`glightbox cursor-zoom-in select-none ${hasFixedAspectRatio ? 'block h-full' : ''}`} data-gallery={images[0].imageUrl}>
+                <img src={img.thumbUrl} class={imageClasses} loading="lazy" />
               </a>
             ) : (
-              <img src={img.imageUrl} loading="lazy" />
+              <img src={img.imageUrl} class={imageClasses} loading="lazy" />
             )}
           </div>
         )
