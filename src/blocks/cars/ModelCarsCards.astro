@@ -80,6 +80,14 @@ const uniqueImages = (images: ModelCarsCardImage[]) => {
 	});
 };
 
+const escapeHtml = (value: unknown) => String(value ?? '').replace(/[&<>'"]/g, (character) => ({
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	"'": '&#39;',
+	'"': '&quot;',
+})[character] || character);
+
 const getCarImages = (car: any): ModelCarsCardImage[] => {
 	const data = car?.data || {};
 
@@ -208,7 +216,6 @@ const cards = models
 		const carBenefits = modelCars.map((car) => positiveNumber(car?.data?.max_discount)).filter(Boolean);
 		const benefit = carBenefits.length ? Math.max(...carBenefits) : positiveNumber(model.benefit);
 		const contentItems = override?.contentItems || [
-			price ? `Цена от ${currencyFormat(price)}` : '',
 			benefit ? `Выгода до ${currencyFormat(benefit)}` : '',
 			...(Array.isArray(model.benefits) ? model.benefits.map((item: any) => item?.label) : []),
 		].filter(Boolean);
@@ -217,6 +224,7 @@ const cards = models
 			model,
 			title,
 			subtitle: override?.subtitle ?? model.slogan ?? '',
+			price: price ? currencyFormat(price) : '',
 			contentItems,
 			images,
 			order: override?.order ?? modelIndex,
@@ -224,6 +232,7 @@ const cards = models
 			imgPlacement: override?.imgPlacement,
 			imageAspectRatio: override?.imageAspectRatio || imageAspectRatio,
 			imageFit: override?.imageFit || imageFit,
+			lightboxDescription: `<div class="flex justify-center py-3"><button type="button" class="btn px-6! py-3!" data-model-lightbox-offer-trigger="${escapeHtml(model.id)}">Получить предложение</button></div>`,
 			primaryButton: resolveButton({
 				title: 'Получить максимальную выгоду',
 				url: '#common-modal',
@@ -256,12 +265,17 @@ const cards = models
 			images={card.images}
 			imageAspectRatio={card.imageAspectRatio}
 			imageFit={card.imageFit}
+			lightboxDescription={card.lightboxDescription}
 		>
 			<Fragment slot="card-content">
 				<div class="flex flex-col gap-2">
 					{card.subtitle && <p class="text-gray-700 text-base! lg:text-lg!">{card.subtitle}</p>}
 					<h2 class="m-0! p-0! before:hidden text-2xl! lg:text-4xl!">{card.title}</h2>
 				</div>
+
+				{card.price && (
+					<p class="m-0! text-2xl! lg:text-3xl! font-bold text-accent-500">Цена от {card.price}</p>
+				)}
 
 				{card.contentItems.length > 0 && (
 					<ul class="list-disc pl-5 text-gray-700 text-base! lg:text-lg!">
@@ -285,6 +299,14 @@ const cards = models
 						dataFormName={card.secondaryButton.dataFormName}
 					/>
 				</div>
+
+				<a
+					href="#common-modal"
+					class="popup-link hidden"
+					data-model-lightbox-offer={card.model.id}
+					data-title={`Получить предложение на&nbsp;${card.title}`}
+					data-form_name={`Получить предложение. ${card.title}`}
+				>Получить предложение</a>
 			</Fragment>
 		</CardMedia>
 	))}
@@ -292,4 +314,23 @@ const cards = models
 
 <script>
 	import '@/ui/card-media/slider';
+
+	const windowWithModelCarsCards = window as typeof window & { modelCarsCardsLightboxOfferBound?: boolean };
+	if (!windowWithModelCarsCards.modelCarsCardsLightboxOfferBound) {
+		windowWithModelCarsCards.modelCarsCardsLightboxOfferBound = true;
+		document.addEventListener('click', (event) => {
+			const trigger = event.target instanceof Element
+				? event.target.closest<HTMLElement>('[data-model-lightbox-offer-trigger]')
+				: null;
+			if (!trigger) return;
+
+			event.preventDefault();
+			const modelId = trigger.dataset.modelLightboxOfferTrigger;
+			const offerLink = modelId
+				? document.querySelector<HTMLElement>(`[data-model-lightbox-offer="${CSS.escape(modelId)}"]`)
+				: null;
+			document.querySelector<HTMLElement>('.gclose')?.click();
+			if (offerLink) window.setTimeout(() => offerLink.click(), 250);
+		});
+	}
 </script>

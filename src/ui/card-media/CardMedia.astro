@@ -9,6 +9,7 @@ interface Props {
   images?: TImage[];
   imageAspectRatio?: 'auto' | '4/3' | '16/9' | '3/2' | '1/1';
   imageFit?: 'cover' | 'contain';
+  lightboxDescription?: string;
 }
 
 const {
@@ -16,6 +17,7 @@ const {
   images = [],
   imageAspectRatio = 'auto',
   imageFit = 'contain',
+  lightboxDescription,
 
 } = Astro.props;
 const aspectRatioClasses = {
@@ -38,7 +40,7 @@ const imageClasses = hasFixedAspectRatio
       {images.map(img => (
           <div class={hasFixedAspectRatio ? 'swiper-slide h-full!' : 'swiper-slide'}>
             {img.thumbUrl ? (
-              <a href={img.imageUrl} class={`glightbox cursor-zoom-in select-none ${hasFixedAspectRatio ? 'block h-full' : ''}`} data-gallery={images[0].imageUrl}>
+              <a href={img.imageUrl} class={`glightbox cursor-zoom-in select-none ${hasFixedAspectRatio ? 'block h-full' : ''}`} data-gallery={images[0].imageUrl} data-description={lightboxDescription}>
                 <img src={img.thumbUrl} class={imageClasses} loading="lazy" />
               </a>
             ) : (
