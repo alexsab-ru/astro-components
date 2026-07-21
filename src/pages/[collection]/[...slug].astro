@@ -1,6 +1,6 @@
 ---
 import type { TDataCollection } from '@/types/TCollection';
-import { type CollectionEntry, type DataEntryMap, getCollection, render } from "astro:content";
+import { type CollectionEntry, type DataEntryMap, getCollection, render, getEntry } from "astro:content";
 import PageLayout from '@/layouts/PageLayout.astro';
 import SeoText from '@/blocks/seo-text/SeoText.astro';
 import { isRouteDisabled, SITE_NOT_FOUND_PATH } from '@/js/utils/siteRoutes';
@@ -46,16 +46,35 @@ const { post, collectionBreadcrumb } = Astro.props as Props;
 const data: TDataCollection = (post as any)?.data || {};
 
 // Хлебные крошки: коллекция — из seo.json, текущая страница — из frontmatter
-const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
+const breadcrumbs = [{ name: collectionBreadcrumb, href: `/${collection}/` }];
+if (post && typeof (post as any).id === 'string') {
+	const parts = (post as any).id.split('/');
+	let currentPath = '';
+	for (let i = 0; i < parts.length - 1; i++) {
+		currentPath = currentPath ? `${currentPath}/${parts[i]}` : parts[i];
+		const parentEntry = await getEntry(collection as any, currentPath);
+		if (parentEntry) {
+			breadcrumbs.push({
+				name: parentEntry.data.breadcrumb || parentEntry.data.title || parts[i],
+				href: `/${collection}/${currentPath}/`
+			});
+		} else {
+			if (collection === 'about' && parts[i] === 'news') {
+				breadcrumbs.push({ name: 'Новости', href: '/about/news/' });
+			} else if (collection === 'about' && parts[i] === 'blog') {
+				breadcrumbs.push({ name: 'Блог', href: '/about/blog/' });
+			}
+		}
+	}
+}
+breadcrumbs.push({ name: data?.breadcrumb || '', href: Astro.url.pathname });
+
 // Приводим к any, т.к. страница универсальна для разных коллекций
 const { Content } = await render(post as any);
 ---
 <PageLayout 
   {...data} 
-  breadcrumb={[
-    breadcrumb, 
-    { name: data?.breadcrumb, href: Astro.url.pathname }
-  ]} 
+  breadcrumb={breadcrumbs} 
   backLink={true}
 >
 
