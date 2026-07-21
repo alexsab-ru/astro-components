@@ -3,10 +3,10 @@
 		@apply text-2xl sm:text-4xl mb-7;
 	}
 	h2{
-		@apply mb-10;
+		@apply text-xl sm:text-3xl mb-5;
 	}
 	h3{
-		@apply text-xl mb-6;
+		@apply text-lg sm:text-2xl mb-4;
 	}
 	p, b, ul, ol, a {
 		@apply text-sm sm:text-lg mb-4;
