@@ -1597,9 +1597,9 @@ def increment_unique_id(unique_id, increment):
     if re.fullmatch(r'[a-z0-9]+', unique_id):
         return increment_str(unique_id, increment)
 
-    # У форматированных ID вроде CME_77236613 меняется только число после разделителя.
-    # Суффикс без разделителя, например Z9, относится к смешанному mixed-radix ID.
-    numeric_suffix = re.search(r'(?<=[^A-Za-z0-9])[0-9]+$', unique_id)
+    # У любого non-legacy ID с ASCII-числом справа меняется только этот суффикс.
+    # Например, Z9 становится Z10 и не переходит в mixed-radix ветку.
+    numeric_suffix = re.search(r'[0-9]+$', unique_id)
     if numeric_suffix:
         suffix = numeric_suffix.group()
         updated_suffix = str(int(suffix) + increment).zfill(len(suffix))

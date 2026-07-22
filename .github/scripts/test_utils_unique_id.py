@@ -28,8 +28,8 @@ class IncrementUniqueIdTests(unittest.TestCase):
         self.assertEqual(increment_unique_id('CME_0009', 1), 'CME_0010')
         self.assertEqual(increment_unique_id('0009', 1), '0010')
 
-    def test_expands_mixed_id_on_overflow(self):
-        self.assertEqual(increment_unique_id('Z9', 1), 'BA0')
+    def test_prioritizes_numeric_suffix_in_non_legacy_id(self):
+        self.assertEqual(increment_unique_id('Z9', 1), 'Z10')
 
     def test_preserves_separator_during_overflow(self):
         self.assertEqual(increment_unique_id('Z-9Z', 1), 'BA-0A')
