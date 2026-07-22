@@ -1582,9 +1582,14 @@ def increment_unique_id(unique_id, increment):
     Старый алгоритм остаётся отдельной веткой. Это сохраняет результаты,
     которые уже формировались для строчных ID из букв и цифр.
     """
-    # Полностью цифровой ID безопасно увеличивается как обычное число.
+    # Нулевой или отрицательный сдвиг не является увеличением.
+    # Ранний отказ также не позволяет mixed-radix циклу работать с отрицательным переносом.
+    if increment <= 0:
+        raise ValueError('increment должен быть положительным числом')
+
+    # Полностью цифровой ASCII ID безопасно увеличивается как обычное число.
     # zfill сохраняет ведущие нули, пока результат помещается в прежнюю длину.
-    if unique_id.isdigit():
+    if re.fullmatch(r'[0-9]+', unique_id):
         return str(int(unique_id) + increment).zfill(len(unique_id))
 
     # Эта проверка намеренно стоит раньше проверки числового окончания.
@@ -1592,8 +1597,9 @@ def increment_unique_id(unique_id, increment):
     if re.fullmatch(r'[a-z0-9]+', unique_id):
         return increment_str(unique_id, increment)
 
-    # У форматированных ID вроде CME_77236613 меняется только число справа.
-    numeric_suffix = re.search(r'\d+$', unique_id)
+    # У форматированных ID вроде CME_77236613 меняется только число после разделителя.
+    # Суффикс без разделителя, например Z9, относится к смешанному mixed-radix ID.
+    numeric_suffix = re.search(r'(?<=[^A-Za-z0-9])[0-9]+$', unique_id)
     if numeric_suffix:
         suffix = numeric_suffix.group()
         updated_suffix = str(int(suffix) + increment).zfill(len(suffix))
@@ -1625,7 +1631,7 @@ def increment_unique_id(unique_id, increment):
             return ''.join(updated_id)
 
     if leftmost_alphabet is None:
-        raise ValueError(f"ID '{unique_id}' не содержит букв или цифр")
+        raise ValueError(f"ID '{unique_id}' не содержит ASCII-букв или цифр")
 
     # Большой сдвиг может перенести значение за левую границу исходного ID.
     # Новые позиции используют класс крайнего левого изменяемого символа.

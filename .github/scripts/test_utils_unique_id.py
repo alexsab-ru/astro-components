@@ -11,7 +11,15 @@ with redirect_stdout(StringIO()):
 
 
 class IncrementUniqueIdTests(unittest.TestCase):
-    """Проверяет выбор алгоритма без обращения к XML и внешним сервисам."""
+    """Проверяет алгоритм на локальных данных без внешних XML-файлов и сервисов."""
+
+    def test_rejects_zero_increment(self):
+        with self.assertRaisesRegex(ValueError, 'increment должен быть положительным'):
+            increment_unique_id('CME_AB9Z', 0)
+
+    def test_rejects_negative_increment(self):
+        with self.assertRaisesRegex(ValueError, 'increment должен быть положительным'):
+            increment_unique_id('CME_AB9Z', -1)
 
     def test_increments_numeric_suffix_after_formatted_prefix(self):
         self.assertEqual(increment_unique_id('CME_77236613', 1), 'CME_77236614')
@@ -19,6 +27,25 @@ class IncrementUniqueIdTests(unittest.TestCase):
     def test_preserves_numeric_suffix_width(self):
         self.assertEqual(increment_unique_id('CME_0009', 1), 'CME_0010')
         self.assertEqual(increment_unique_id('0009', 1), '0010')
+
+    def test_expands_mixed_id_on_overflow(self):
+        self.assertEqual(increment_unique_id('Z9', 1), 'BA0')
+
+    def test_preserves_separator_during_overflow(self):
+        self.assertEqual(increment_unique_id('Z-9Z', 1), 'BA-0A')
+
+    def test_supports_large_increment_across_new_positions(self):
+        self.assertEqual(increment_unique_id('A', 676), 'BAA')
+
+    def test_expands_formatted_numeric_suffix(self):
+        self.assertEqual(increment_unique_id('CME_9999', 1), 'CME_10000')
+
+    def test_increments_lowercase_position_in_non_legacy_id(self):
+        self.assertEqual(increment_unique_id('A-aZ', 1), 'A-bA')
+
+    def test_rejects_id_without_ascii_letters_or_digits(self):
+        with self.assertRaisesRegex(ValueError, 'не содержит ASCII-букв или цифр'):
+            increment_unique_id('١٢٣', 1)
 
     def test_preserves_legacy_algorithm_for_old_format(self):
         legacy_id = 'abc129'
