@@ -7,7 +7,7 @@
  * 4. Строит граф «кто на кого ссылается» и находит «сирот»
  *
  * Запуск:
- *   pnpm interlink_map                          # http://127.0.0.1:4321
+ *   pnpm interlink_map                          # http://localhost:4321
  *   pnpm interlink_map -- --base http://127.0.0.1:4343
  *   pnpm interlink_map -- --from-dist            # парсить dist/ вместо fetch
  */
@@ -122,7 +122,7 @@ function bfsReachable(startUrl, outgoing) {
 }
 
 function parseArgs(argv) {
-	const args = { base: 'http://127.0.0.1:4321', fromDist: false };
+	const args = { base: 'http://localhost:4321', fromDist: false };
 	for (let i = 0; i < argv.length; i++) {
 		if (argv[i] === '--base' && argv[i + 1]) args.base = argv[++i];
 		if (argv[i] === '--from-dist') args.fromDist = true;
