@@ -102,6 +102,9 @@ jobs:
         JSON_REPO: ${{ secrets.JSON_REPO }}
         DOMAIN: ${{ vars.DOMAIN }}
         FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
+        # Переопределения settings/env/routes из панели управления (необязательные)
+        CP_API_URL: ${{ secrets.CP_API_URL }}
+        BUILDER_SERVICE_TOKEN: ${{ secrets.BUILDER_SERVICE_TOKEN }}
 
     - name: Migrate legacy dealer models cars price file
       run: |
