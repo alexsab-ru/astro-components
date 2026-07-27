@@ -1,97 +1,47 @@
 ---
 import type { TBreadcrumb } from '@/ui/breadcrumbs/types';
 import { LINKS_MENU } from '@/const.js';
+import settings from '@/data/site/settings.json';
+import {
+	composeSchemaOrg,
+	serializeJsonLd,
+} from './schemaOrg.js';
 
 interface Props {
-  breadcrumbs?: TBreadcrumb[];
+	breadcrumbs?: TBreadcrumb[];
 }
 
-const { breadcrumbs } = Astro.props;
+const { breadcrumbs = [] } = Astro.props;
+const schemaModules = import.meta.glob('/src/data/site/schema.json', {
+	eager: true,
+});
+const schemaModule = Object.values(schemaModules)[0] as
+	| { default?: unknown }
+	| undefined;
+const features = (
+	settings as { features?: Record<string, unknown> }
+).features;
 
-let schema: Record<string, unknown | unknown[]> = {};
-
-try {
-  const mod = import.meta.glob('/src/data/site/schema.json', { eager: true });
-  schema = (Object.values(mod)[0] as any)?.default || [];
-} catch {
-  // schema.json не существует — просто не рендерим разметку
-}
-
-const currentPath = Astro.url.pathname;
-const raw = schema[currentPath];
-const schemas = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
-
-const siteUrl = Astro.site?.href.replace(/\/$/, '') ?? '';
-
-const breadcrumbListSchema = breadcrumbs && breadcrumbs.length > 0 && schemas.length > 0
-  ? {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Главная", "item": siteUrl + "/" },
-        ...breadcrumbs.map((crumb, i) => ({
-          "@type": "ListItem",
-          "position": i + 2,
-          "name": crumb.name,
-          "item": siteUrl + crumb.href,
-        }))
-      ]
-    }
-  : null;
-
-const isValidUrl = (url: unknown): url is string =>
-  typeof url === 'string' &&
-  !url.startsWith('/#') &&
-  !url.startsWith('javascript:');
-
-const flatNavLinks: { name: string; url: string }[] = [];
-const pushNavLink = (name: unknown, url: unknown) => {
-  if (typeof name === 'string' && isValidUrl(url)) {
-    flatNavLinks.push({ name, url: siteUrl + url });
-  }
-};
-
-for (const link of LINKS_MENU as any[]) {
-  pushNavLink(link?.name, link?.url);
-
-  if (Array.isArray(link.children)) {
-    for (const child of link.children) {
-      pushNavLink(child?.name, child?.url);
-    }
-  } else if (link.children && typeof link.children === 'object') {
-    for (const brandItems of Object.values(link.children as Record<string, unknown>)) {
-      if (!Array.isArray(brandItems)) continue;
-
-      for (const child of brandItems) {
-        pushNavLink((child as { name?: unknown })?.name, (child as { url?: unknown })?.url);
-      }
-    }
-  }
-}
-
-const navItems = flatNavLinks.map((link, i) => ({
-  "@type": "SiteNavigationElement",
-  "position": i + 1,
-  "name": link.name,
-  "url": link.url,
-}));
-
-const navSchema = navItems.length > 0 && schemas.length > 0
-  ? {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Главное меню",
-      "itemListElement": navItems,
-    }
-  : null;
-
-const allSchemas = [
-  ...schemas,
-  ...(breadcrumbListSchema ? [breadcrumbListSchema] : []),
-  ...(navSchema ? [navSchema] : []),
-];
+const schemas = composeSchemaOrg({
+	schemaDocument: schemaModule?.default,
+	currentPath: Astro.url.pathname,
+	siteUrl: Astro.site ?? Astro.url.origin,
+	breadcrumbs,
+	menu: LINKS_MENU,
+	flags: {
+		useSchemaOrg: features?.use_schema_org === true,
+		useBreadcrumbs: features?.use_schema_org_breadcrumbs === true,
+		useNavigation: features?.use_schema_org_navigation === true,
+	},
+});
+const serializedSchemas =
+	schemas.length > 0 ? serializeJsonLd(schemas) : '';
 ---
 
-{allSchemas.length > 0 && (
-  <script type="application/ld+json" set:html={JSON.stringify(allSchemas)} />
+{serializedSchemas && (
+	<script
+		id="schema-org"
+		type="application/ld+json"
+		set:html={serializedSchemas}
+	/>
 )}
