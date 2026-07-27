@@ -39,7 +39,7 @@ export const breadcrumb = { name: "Авто в наличии", href: "/cars/" }
 		cars?.length ? (
 			<CarsList cars={cars} collection="cars" path="/cars/" />
 		) : (
-			<p>Скоро здесь появится список новых автомобилей.</p>
+			<div class="section-grid"><p>Скоро здесь появится список новых автомобилей.</p></div>
 		)
 	}
 	<SeoText mdx="cars" noPadding />

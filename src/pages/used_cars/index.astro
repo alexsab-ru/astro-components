@@ -39,7 +39,7 @@ export const breadcrumb = { name: "Авто с пробегом", href: "/used_c
 		cars?.length ? (
 			<CarsList cars={cars} collection="used_cars" path="/used_cars/" />
 		) : (
-			<p>Скоро здесь появится список автомобилей с пробегом.</p>
+			<div class="section-grid"><p>Скоро здесь появится список автомобилей с пробегом.</p></div>
 		)
 	}
 	<SeoText mdx="used_cars" noPadding />

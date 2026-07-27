@@ -64,7 +64,7 @@ const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
 				{ posts.map(post => ( <PostItem post={post} /> )) }
 			</div>
 		) : (
-			<p>Скоро здесь появятся {h1.toLowerCase()} {site_name}.</p>
+			<div class="section-grid"><p>Скоро здесь появятся {h1.toLowerCase()} {site_name}.</p></div>
 		)
 	}
 </PageLayout>
