@@ -159,20 +159,13 @@ test('generates navigation independently and filters unsafe or hash-only links',
 	);
 });
 
-test('recursively detects custom generated-structure types and suppresses duplicates', () => {
+test('an unrelated custom ItemList does not suppress generated navigation', () => {
 	const schemaDocument = {
 		global: [
 			{
 				'@context': 'https://schema.org',
-				'@graph': [
-					{ '@type': 'BreadcrumbList' },
-					{
-						'@type': 'Thing',
-						nested: {
-							'@type': 'ItemList',
-						},
-					},
-				],
+				'@type': 'ItemList',
+				name: 'Автомобили',
 			},
 		],
 		routes: {},
@@ -181,21 +174,82 @@ test('recursively detects custom generated-structure types and suppresses duplic
 		schemaDocument,
 		currentPath: '/',
 		siteUrl: SITE_URL,
-		breadcrumbs: [{ name: 'Страница', href: '' }],
 		menu: [{ name: 'Модели', url: '/models/' }],
 		flags: {
 			useSchemaOrg: true,
-			useBreadcrumbs: true,
 			useNavigation: true,
+		},
+	});
+
+	assert.equal(schemas.length, 2);
+	assert.equal(schemas[0].name, 'Автомобили');
+	assert.equal(schemas[1].name, 'Главное меню');
+});
+
+test('compact and absolute SiteNavigationElement types suppress generated navigation', () => {
+	for (const type of [
+		'SiteNavigationElement',
+		'https://schema.org/SiteNavigationElement',
+		'http://schema.org/SiteNavigationElement',
+	]) {
+		const schemaDocument = {
+			global: [
+				{
+					'@context': 'https://schema.org',
+					'@graph': [
+						{
+							'@type': 'Thing',
+							nested: { '@type': type },
+						},
+					],
+				},
+			],
+			routes: {},
+		};
+		const schemas = composeSchemaOrg({
+			schemaDocument,
+			currentPath: '/',
+			siteUrl: SITE_URL,
+			menu: [{ name: 'Модели', url: '/models/' }],
+			flags: {
+				useSchemaOrg: true,
+				useNavigation: true,
+			},
+		});
+
+		assert.equal(schemas.length, 1);
+		assert.equal(
+			containsSchemaType(schemas, 'SiteNavigationElement'),
+			true,
+		);
+	}
+});
+
+test('an absolute BreadcrumbList type suppresses generated breadcrumbs', () => {
+	const schemaDocument = {
+		global: [
+			{
+				'@context': 'https://schema.org',
+				'@graph': [
+					{ '@type': 'https://schema.org/BreadcrumbList' },
+				],
+			},
+		],
+		routes: {},
+	};
+	const schemas = composeSchemaOrg({
+		schemaDocument,
+		currentPath: '/contacts/',
+		siteUrl: SITE_URL,
+		breadcrumbs: [{ name: 'Контакты', href: '' }],
+		flags: {
+			useSchemaOrg: true,
+			useBreadcrumbs: true,
 		},
 	});
 
 	assert.equal(schemas.length, 1);
 	assert.equal(containsSchemaType(schemas, 'BreadcrumbList'), true);
-	assert.equal(
-		containsSchemaType(schemas, ['ItemList', 'SiteNavigationElement']),
-		true,
-	);
 });
 
 test('serializes JSON-LD without a literal script-closing sequence', () => {

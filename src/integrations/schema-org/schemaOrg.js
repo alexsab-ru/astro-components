@@ -1,5 +1,4 @@
 const SCHEMA_CONTEXT = 'https://schema.org';
-const NAVIGATION_TYPES = ['ItemList', 'SiteNavigationElement'];
 
 function isPlainObject(value) {
 	return (
@@ -70,7 +69,9 @@ export function normalizeSchemaDocument(value) {
 
 export function containsSchemaType(value, schemaTypes) {
 	const expectedTypes = new Set(
-		Array.isArray(schemaTypes) ? schemaTypes : [schemaTypes],
+		(Array.isArray(schemaTypes) ? schemaTypes : [schemaTypes]).map(
+			normalizeSchemaType,
+		),
 	);
 	const visited = new Set();
 
@@ -92,7 +93,9 @@ export function containsSchemaType(value, schemaTypes) {
 		const types = Array.isArray(candidate['@type'])
 			? candidate['@type']
 			: [candidate['@type']];
-		if (types.some((type) => expectedTypes.has(type))) {
+		if (
+			types.some((type) => expectedTypes.has(normalizeSchemaType(type)))
+		) {
 			return true;
 		}
 
@@ -100,6 +103,18 @@ export function containsSchemaType(value, schemaTypes) {
 	}
 
 	return visit(value);
+}
+
+function normalizeSchemaType(value) {
+	if (typeof value !== 'string') {
+		return value;
+	}
+
+	const absoluteType = value.match(
+		/^https?:\/\/schema\.org\/([^/?#]+)\/?$/i,
+	);
+
+	return absoluteType?.[1] ?? value;
 }
 
 function getBaseUrl(siteUrl) {
@@ -288,7 +303,7 @@ export function composeSchemaOrg({
 
 	if (
 		flags.useNavigation === true &&
-		!containsSchemaType(customSchemas, NAVIGATION_TYPES)
+		!containsSchemaType(customSchemas, 'SiteNavigationElement')
 	) {
 		const navigationSchema = createNavigationSchema({ menu, siteUrl });
 		if (navigationSchema) {
