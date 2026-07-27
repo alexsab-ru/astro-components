@@ -9,7 +9,11 @@ interface Props {
 	noindex?: boolean;
 }
 import settings from '@/data/site/settings.json';
+import { getFeatureFlag } from '@/js/utils/features';
 const { favicon, improve_offer_background } = settings;
+// Per-site toggles from settings.features (default: enabled).
+const useOpengraphTags = getFeatureFlag(settings, 'use_opengraph_tags', true);
+const useTwitterCard = getFeatureFlag(settings, 'use_twitter_card', true);
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 
@@ -45,16 +49,26 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 {keywords && <meta name="keywords" content={keywords} />}
 
 <!-- Open Graph -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
-<meta property="og:image:alt" content={title}>
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image, Astro.url)} />
+{useOpengraphTags && (
+	<>
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL(image, Astro.url)} />
+		<meta property="og:image:alt" content={title} />
+	</>
+)}
+
+<!-- Twitter Card -->
+{useTwitterCard && (
+	<>
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={new URL(image, Astro.url)} />
+	</>
+)}
 
 
 {
