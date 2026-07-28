@@ -49,6 +49,9 @@
 	ul {
 		@apply list-disc pl-5;
 	}
+	ol {
+		@apply list-decimal pl-5;
+	}
 }
 
 blockquote{
