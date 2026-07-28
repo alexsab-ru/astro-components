@@ -9,6 +9,9 @@ name: Deploy website to Pages
 on:
   schedule:
     - cron: '0 2 * * *'  # Запускается в 2 по гринвичу принулительно
+  # Кнопка «Опубликовать изменения» в панели управления (Repository Dispatch)
+  repository_dispatch:
+    types: [cp-rebuild]
   # Runs on pushes targeting the default branch
   push:
     branches: ["main","brand","dealer"]
@@ -178,6 +181,10 @@ jobs:
           JSON_REPO: ${{ secrets.JSON_REPO }}
           DOMAIN: ${{ vars.DOMAIN }}
           FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
+          # Переопределения контента из панели управления (необязательные:
+          # без секретов сборка идет полностью на локальных файлах)
+          CP_API_URL: ${{ secrets.CP_API_URL }}
+          BUILDER_SERVICE_TOKEN: ${{ secrets.BUILDER_SERVICE_TOKEN }}
 
       - name: Load env.json into environment
         run: |
@@ -402,6 +409,31 @@ jobs:
     secrets:
       TELEGRAM_TO: ${{ secrets.TELEGRAM_TO_SPECIAL_MARKETING }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  report_build_status:
+    # Вебхук результата в панель управления — только для запусков с кнопки
+    # «Опубликовать» (repository_dispatch). Недоступность CP сборку не ломает.
+    needs: [determine_env, build, deploy]
+    if: ${{ always() && github.event_name == 'repository_dispatch' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.determine_env.outputs.env_name }}
+    steps:
+      - name: Report build status to CP
+        continue-on-error: true
+        run: |
+          if [ -z "${{ secrets.CP_API_URL }}" ] || [ -z "${{ secrets.BUILDER_SERVICE_TOKEN }}" ]; then
+            echo "CP_API_URL / BUILDER_SERVICE_TOKEN не настроены — пропускаем"
+            exit 0
+          fi
+          if [ "${{ needs.deploy.result }}" = "success" ]; then STATUS=success; else STATUS=failed; fi
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s --max-time 20 -X POST \
+            -H "X-Builder-Token: ${{ secrets.BUILDER_SERVICE_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"status\":\"$STATUS\",\"run_url\":\"$RUN_URL\"}" \
+            "${{ secrets.CP_API_URL }}/projects/${{ vars.DOMAIN }}/build-status" \
+            || echo "CP API недоступен — статус снимет таймаут на стороне панели"
 
   check_links:
     needs: [build, deploy]
