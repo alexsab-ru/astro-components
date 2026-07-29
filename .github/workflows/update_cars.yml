@@ -597,7 +597,9 @@ jobs:
     - name: Trigger Pages deploy
       if: env.changes == 'true'
       run: |
-        payload=$(printf '{"ref":"%s"}' "$GITHUB_REF_NAME")
+        deploy_sha=$(git rev-parse HEAD)
+        echo "Triggering Pages deploy for $GITHUB_REF_NAME at $deploy_sha"
+        payload=$(printf '{"ref":"%s","inputs":{"deploy_sha":"%s"}}' "$GITHUB_REF_NAME" "$deploy_sha")
         curl -L \
           --fail-with-body \
           -X POST \

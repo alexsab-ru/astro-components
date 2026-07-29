@@ -36,6 +36,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
+      deploy_sha:
+        description: 'Точный SHA коммита для деплоя (служебный параметр)'
+        required: false
+        type: string
       send_specials:
         description: 'Отправить уведомление о датах окончания акций (TELEGRAM_TO_SPECIAL)'
         required: false
@@ -134,6 +138,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          # update_cars передаёт точный SHA, чтобы workflow_dispatch не взял
+          # предыдущий commit сразу после push. Для push/schedule/manual остаётся github.sha.
+          ref: ${{ github.event.inputs.deploy_sha || github.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
