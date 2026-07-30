@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+	CALLBACK_LEAD_CATEGORY,
 	getCalltouchGoalPayload,
 	isCalltouchCallbackCreated,
 	shouldSendCalltouchLead,
@@ -11,12 +12,19 @@ const leadPayload = {
 	eventProperties: { phone: '+7 900 000-00-00' },
 };
 
+// Подавление Lead API меняет только категорию: остальные поля обязаны доехать
+// до GA4, Метрики и GTM.
+const suppressed = {
+	...leadPayload,
+	eventCategory: CALLBACK_LEAD_CATEGORY,
+};
+
 test('client callback success suppresses Lead API for a legacy PHP response', () => {
 	const clientResult = { status: 'success' };
 
 	assert.equal(isCalltouchCallbackCreated({}, clientResult), true);
 	assert.equal(shouldSendCalltouchLead({}, clientResult), false);
-	assert.deepEqual(getCalltouchGoalPayload({}, clientResult, leadPayload), {});
+	assert.deepEqual(getCalltouchGoalPayload({}, clientResult, leadPayload), suppressed);
 });
 
 test('server response cannot override a confirmed client callback success', () => {
@@ -92,6 +100,15 @@ test('attention always suppresses Lead API, including a test phone', () => {
 			{ status: 'technical_failure' },
 			leadPayload
 		),
-		{}
+		suppressed
 	);
+});
+
+test('suppression swaps only the category and never mutates the source', () => {
+	const payload = getCalltouchGoalPayload({}, { status: 'success' }, leadPayload);
+
+	assert.equal(payload.eventCategory, CALLBACK_LEAD_CATEGORY);
+	assert.notEqual(payload.eventCategory, 'Lead');
+	assert.deepEqual(payload.eventProperties, leadPayload.eventProperties);
+	assert.equal(leadPayload.eventCategory, 'Lead');
 });

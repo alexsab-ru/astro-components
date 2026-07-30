@@ -30,8 +30,15 @@ export const shouldSendCalltouchLead = (response, clientResult) => {
 	return !isCalltouchCallbackCreated(response, clientResult);
 };
 
+// sendToCallTouch внутри reachGoal реагирует строго на eventCategory === 'Lead'.
+// Чтобы не отправить второй лид, достаточно подменить категорию — обнулять весь
+// payload нельзя: eventProperties и sourceName нужны GA4, Метрике и GTM.
+export const CALLBACK_LEAD_CATEGORY = 'CallbackLead';
+
 export const getCalltouchGoalPayload = (
 	response,
 	clientResult,
 	leadPayload
-) => shouldSendCalltouchLead(response, clientResult) ? leadPayload : {};
+) => shouldSendCalltouchLead(response, clientResult)
+	? leadPayload
+	: { ...leadPayload, eventCategory: CALLBACK_LEAD_CATEGORY };
