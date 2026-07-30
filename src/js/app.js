@@ -16,6 +16,13 @@ import FormsValidation from './modules/FormsValidation';
 
 import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
 
+import salons from '@/data/site/salons.json';
+
+const singleCalltouch =
+	salons.length === 1
+		? salons[0]?.scripts?.calltouch
+		: null;
+
 const confirmModalText = 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!';
 
 startNoBounce();
@@ -28,7 +35,8 @@ const waitForDp = setInterval(() => {
 		clearInterval(waitForDp);
 		connectForms(window._dp.connectforms_link, {
 			confirmModalText: confirmModalText,
-			validation: FormsValidation
+			validation: FormsValidation,
+			ct_routeKey: singleCalltouch?.routeKey || '',
 		});
 	}
 }, 100); // Check every 100ms
