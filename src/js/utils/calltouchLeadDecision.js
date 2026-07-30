@@ -9,13 +9,17 @@ export const getServerCallbackStatus = (response) =>
 	normalizeStatus(response?.calltouch_callback?.status);
 
 export const isCalltouchCallbackCreated = (response, clientResult) => {
+	if (normalizeStatus(clientResult?.status) === 'success') {
+		return true;
+	}
+
 	const serverStatus = getServerCallbackStatus(response);
 
 	if (serverStatus) {
 		return CALLBACK_CREATED_STATUSES.has(serverStatus);
 	}
 
-	return normalizeStatus(clientResult?.status) === 'success';
+	return false;
 };
 
 export const shouldSendCalltouchLead = (response, clientResult) => {

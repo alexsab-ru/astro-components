@@ -19,6 +19,20 @@ test('client callback success suppresses Lead API for a legacy PHP response', ()
 	assert.deepEqual(getCalltouchGoalPayload({}, clientResult, leadPayload), {});
 });
 
+test('server response cannot override a confirmed client callback success', () => {
+	const response = {
+		calltouch_callback: {
+			status: 'not_attempted',
+			source: 'none',
+		},
+	};
+
+	assert.equal(
+		shouldSendCalltouchLead(response, { status: 'success' }),
+		false
+	);
+});
+
 test('server callback success suppresses Lead API after a technical client failure', () => {
 	const response = {
 		calltouch_callback: {
