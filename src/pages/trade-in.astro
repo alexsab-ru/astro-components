@@ -9,6 +9,7 @@ const { legal_entity, legal_inn } = settings;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('trade_in'));
+const singleCalltouch = salons.length === 1 ? salons[0]?.scripts?.calltouch : null;
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
 [`${legal_entity}`] : 
 salons
@@ -22,5 +23,10 @@ import TradeInCalc from '@/react/TradeInCalc';
     title={`Онлайн-оценка вашего автомобиля в ${LEGAL_SALONS_INFO.join(' и ')}`}
     breadcrumb={[{name:"Онлайн-оценка вашего автомобиля",href:""}]}
 >
-    <TradeInCalc client:only />
+    <TradeInCalc
+        client:only
+        ct_routeKey={singleCalltouch?.routeKey || ''}
+        ct_mod_id={singleCalltouch?.mod_id || ''}
+        ct_site_id={singleCalltouch?.site_id || ''}
+    />
 </PageLayout>

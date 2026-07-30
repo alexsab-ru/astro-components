@@ -78,6 +78,8 @@ export function ChatWidget({ config }: ChatWidgetProps) {
   } = useFormSubmission({
     formName,
     ct_routeKey: settings.ct_routeKey,
+    ct_mod_id: settings.ct_mod_id,
+    ct_site_id: settings.ct_site_id,
     setIsTyping,
     setMessages,
     setCurrentStep,

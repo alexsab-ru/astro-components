@@ -8,7 +8,11 @@ import AvtoInfo from './avto/Info';
 import AvtoInfoResult from './avto/InfoResult';
 // axios.defaults.headers.common['Authorization'] = `Basic ${import.meta.env.PUBLIC_MAXPOSTER_TOKEN}`;
 
-export default function TradeInCalc({ ct_routeKey = '' } = {}) {
+export default function TradeInCalc({
+	ct_routeKey = '',
+	ct_mod_id = '',
+	ct_site_id = '',
+} = {}) {
 	const {step, error, brands, loading, fetchCarsInfo} = useCarInfo();
 	useEffect(() => {
 		const data = {
@@ -36,7 +40,11 @@ export default function TradeInCalc({ ct_routeKey = '' } = {}) {
 							}
 							{step === 1 &&
 								<>
-									<AvtoInfo ct_routeKey={ct_routeKey} />
+									<AvtoInfo
+										ct_routeKey={ct_routeKey}
+										ct_mod_id={ct_mod_id}
+										ct_site_id={ct_site_id}
+									/>
 								</>
 							}
 							{step === 2 &&

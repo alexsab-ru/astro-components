@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { getPair } from '@/js/utils/helpers';
+import { getCalltouchGoalPayload } from '@/js/utils/calltouchLeadDecision';
 import settings from '@/data/site/settings.json';
 
 const { connectforms_link } = settings;
@@ -15,6 +16,8 @@ const SEND_MAIL_COOKIE = 'SEND_MAIL';
 interface UseFormSubmissionParams {
   formName: string;
   ct_routeKey?: string;
+  ct_mod_id?: string;
+  ct_site_id?: string;
   setIsTyping: (value: boolean) => void;
   setMessages: React.Dispatch<React.SetStateAction<any[]>>;
   setCurrentStep: (step: string) => void;
@@ -31,6 +34,8 @@ interface UseFormSubmissionParams {
 export function useFormSubmission({
   formName,
   ct_routeKey = '',
+  ct_mod_id = '',
+  ct_site_id = '',
   setIsTyping,
   setMessages,
   setCurrentStep,
@@ -50,7 +55,13 @@ export function useFormSubmission({
     setIsTyping(true);
 
     // Динамический импорт: модуль содержит browser-only код (window.*), SSR его не должен трогать
-    const { reachGoal, setCookie, deleteCookie, createRequest } = await import('@alexsab-ru/scripts');
+    const [
+      { reachGoal, setCookie, deleteCookie },
+      { appendCalltouchResultToFormData, attemptCalltouchCallback },
+    ] = await Promise.all([
+      import('@alexsab-ru/scripts'),
+      import('@alexsab-ru/scripts/calltouch'),
+    ]);
 
     // Отправляем цель «форма отправлена»
     reachGoal("form_submit");
@@ -75,26 +86,32 @@ export function useFormSubmission({
       console.log(payload);
     }
 
-    // Объект для аналитики (аналог getFormDataObject из @alexsab-ru/scripts)
+    const calltouchResult = await attemptCalltouchCallback({
+      routeKey: ct_routeKey,
+      phone: data.phone || '',
+      name: data.name || '',
+      modId: ct_mod_id,
+      siteId: ct_site_id,
+    });
+    const calltouchFields = new FormData();
+    appendCalltouchResultToFormData(calltouchFields, calltouchResult);
+
+    Object.keys(payload).forEach((key) => {
+      if (/^ct_/i.test(key) || /^ctw_/i.test(key)) {
+        delete payload[key];
+      }
+    });
+    for (const [key, value] of calltouchFields.entries()) {
+      payload[key] = value;
+    }
+
+    // Объект для аналитики (аналог getFormDataObject из @alexsab-ru/scripts).
     const formDataObj = {
       eventProperties: { ...payload, formID: formName },
       eventCategory: "Lead",
       sourceName: "page",
+      ...(calltouchResult.siteId ? { siteId: calltouchResult.siteId } : {}),
     };
-
-    // Запрос на колл-бэк в КолТач (если передан ct_routeKey)
-    if (ct_routeKey) {
-      try {
-        const requestData = await createRequest(ct_routeKey, data.phone || '', data.name || '');
-        payload.ct_callback = true;
-        payload.ctw_createRequest = JSON.stringify(requestData);
-      } catch (error) {
-        payload.ctw_createRequest = String(error);
-        if (window.location.hostname === "localhost") {
-          console.log('Ошибка createRequest КолТач', error);
-        }
-      }
-    }
 
     const options = {
       method: "POST",
@@ -119,8 +136,10 @@ export function useFormSubmission({
         if (res.attention === true) {
           reachGoal("form_attention");
         } else {
-          // Успешная отправка + данные в колтач (через reachGoal)
-          reachGoal("form_success", formDataObj);
+          reachGoal(
+            "form_success",
+            getCalltouchGoalPayload(res, calltouchResult, formDataObj)
+          );
         }
         // Ставим куку, как connectForms, чтобы не было повторных отправок
         setCookie(SEND_MAIL_COOKIE, true, { domain: window.location.hostname, path: '/', expires: 600 });
@@ -162,7 +181,7 @@ export function useFormSubmission({
       setIsTyping(false);
       scroll();
     }
-  }, [formName, ct_routeKey, setIsTyping, setMessages, setCurrentStep, scroll]);
+  }, [formName, ct_routeKey, ct_mod_id, ct_site_id, setIsTyping, setMessages, setCurrentStep, scroll]);
 
   return {
     isFinished,

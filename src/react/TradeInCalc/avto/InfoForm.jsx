@@ -4,6 +4,7 @@ import { useTranslit } from '@/js/utils/translit';
 import { scroll } from '@/js/modules/scroll';
 import { maskphone } from '@alexsab-ru/scripts';
 import { calcMinPrice, getPair } from '@/js/utils/helpers';
+import { getCalltouchGoalPayload } from '@/js/utils/calltouchLeadDecision';
 import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
@@ -36,7 +37,11 @@ const schema = yup.object().shape({
 
 const SEND_MAIL_COOKIE = 'SEND_MAIL';
 
-function AvtoInfoForm({ ct_routeKey = '' } = {}) {
+function AvtoInfoForm({
+	ct_routeKey = '',
+	ct_mod_id = '',
+	ct_site_id = '',
+} = {}) {
 	const { 
 		vinState, 
 		mileageState, 
@@ -132,7 +137,13 @@ function AvtoInfoForm({ ct_routeKey = '' } = {}) {
 		const isFormCorrect = await trigger();
 		if (!isFormCorrect) return;
 		// Динамический импорт: модуль содержит browser-only код (window.*), SSR его не должен трогать
-		const { reachGoal, setCookie, deleteCookie, createRequest } = await import('@alexsab-ru/scripts');
+		const [
+			{ reachGoal, setCookie, deleteCookie },
+			{ appendCalltouchResultToFormData, attemptCalltouchCallback },
+		] = await Promise.all([
+			import('@alexsab-ru/scripts'),
+			import('@alexsab-ru/scripts/calltouch'),
+		]);
 		reachGoal("form_submit");
 		showLoader();
 		const info = JSON.parse(JSON.stringify(avtoInfo));
@@ -181,24 +192,21 @@ function AvtoInfoForm({ ct_routeKey = '' } = {}) {
 				});
 				formData.append("page_url", window.location.origin + window.location.pathname);
 
-				// Запрос на колл-бэк в КолТач (если передан ct_routeKey)
-				if (ct_routeKey) {
-					try {
-						const requestData = await createRequest(ct_routeKey, data.phone || '', data.name || '');
-						formData.append("ct_callback", true);
-						formData.append("ctw_createRequest", JSON.stringify(requestData));
-					} catch (ctError) {
-						formData.append("ctw_createRequest", String(ctError));
-						if (window.location.hostname == "localhost")
-							console.log('Ошибка createRequest КолТач', ctError);
-					}
-				}
+				const calltouchResult = await attemptCalltouchCallback({
+					routeKey: ct_routeKey,
+					phone: data.phone || '',
+					name: data.name || '',
+					modId: ct_mod_id,
+					siteId: ct_site_id,
+				});
+				appendCalltouchResultToFormData(formData, calltouchResult);
 
 				// Объект для аналитики (eventCategory: "Lead" → reachGoal отправит в КолТач)
 				const formDataObj = {
 					eventProperties: Object.fromEntries(formData.entries()),
 					eventCategory: "Lead",
 					sourceName: "page",
+					...(calltouchResult.siteId ? { siteId: calltouchResult.siteId } : {}),
 				};
 
 				const options = {
@@ -214,11 +222,27 @@ function AvtoInfoForm({ ct_routeKey = '' } = {}) {
 				.then(function (response) {
 					if (window.location.hostname == "localhost")
 						console.log('Отправка письма', response);
+					if (
+						response?.data?.answer
+						&& response.data.answer.toLowerCase() !== 'ok'
+					) {
+						throw new Error(
+							response.data.error
+							|| 'Ошибка на стороне сервера. Попробуйте еще раз.'
+						);
+					}
 					// attention:true — антиспам сработал, лида в CRM нет.
 					if (response?.data?.attention === true) {
 						reachGoal("form_attention");
 					} else {
-						reachGoal("form_success", formDataObj);
+						reachGoal(
+							"form_success",
+							getCalltouchGoalPayload(
+								response?.data,
+								calltouchResult,
+								formDataObj
+							)
+						);
 					}
 					setCookie(SEND_MAIL_COOKIE, true, { domain: window.location.hostname, path: '/', expires: 600 });
 					// recalculate();
