@@ -6,7 +6,6 @@ import {
 	getCookie,
 	setCookie,
 	deleteCookie,
-	createRequest,
 	getFormDataObject,
 	errorIcon,
 	errorText,
@@ -15,7 +14,12 @@ import {
 	messageModal,
 	phoneChecker,
 } from '@alexsab-ru/scripts';
+import {
+	appendCalltouchResultToFormData,
+	attemptCalltouchCallback,
+} from '@alexsab-ru/scripts/calltouch';
 import FormsValidation from './FormsValidation';
+import { getCalltouchGoalPayload } from '@/js/utils/calltouchLeadDecision';
 
 const defaultProps = {
 	validation: FormsValidation,
@@ -147,26 +151,23 @@ const submitFormWithFiles = async (form, url, props) => {
 			}
 		});
 
-	let formDataObj = {};
-	try {
-		if (props.ct_routeKey !== '') {
-			const requestData = await createRequest(
-				props.ct_routeKey,
-				phone?.value || '',
-				name?.value || '',
-				props.verbose
-			);
-			formData.append('ct_callback', true);
-			formData.append('ctw_createRequest', JSON.stringify(requestData));
-		} else {
-			throw new Error('Empty ct_routeKey');
-		}
-	} catch (error) {
-		if (props.ct_routeKey !== '') {
-			formData.append('ctw_createRequest', error);
-		}
-		props.verbose && console.error('Error during request Calltouch callback:', error);
-		formDataObj = getFormDataObject(formData, form.id);
+	const dealerRouteKey = dealer?.dataset?.ctRouteKey?.trim() || '';
+	const dealerModId = dealer?.dataset?.ctModId?.trim() || '';
+	const dealerSiteId = dealer?.dataset?.ctSiteId?.trim() || '';
+	const calltouchResult = await attemptCalltouchCallback({
+		routeKey: dealerRouteKey || props.ct_routeKey,
+		phone: phone?.value || '',
+		name: name?.value || '',
+		modId: dealerModId,
+		siteId: dealerSiteId,
+		verbose: props.verbose,
+	});
+	appendCalltouchResultToFormData(formData, calltouchResult);
+	props.verbose && console.log('Calltouch callback result:', calltouchResult);
+
+	const formDataObj = getFormDataObject(formData, form.id);
+	if (calltouchResult.siteId) {
+		formDataObj.siteId = calltouchResult.siteId;
 	}
 
 	try {
@@ -196,7 +197,10 @@ const submitFormWithFiles = async (form, url, props) => {
 		if (data.attention === true) {
 			reachGoal('form_attention');
 		} else {
-			reachGoal('form_success', formDataObj);
+			reachGoal(
+				'form_success',
+				getCalltouchGoalPayload(data, calltouchResult, formDataObj)
+			);
 		}
 		setCookie(sendMailCookie, true, {
 			domain: window.location.hostname,
