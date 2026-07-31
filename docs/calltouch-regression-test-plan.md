@@ -105,6 +105,17 @@ GA4 или Метрику. Любой тест должен использова
 содержимое `npm pack --dry-run`. Тегирование и `npm publish` выполняет владелец
 проекта; автоматическая проверка или Codex не публикуют пакет.
 
+Для release evidence отдельно записать:
+
+- соответствие тега `v0.17.4` коммиту `d282920`;
+- наличие `0.17.4` в registry после публикации владельцем;
+- версию в lockfile потребителя и `ct_client_version` реально загруженного
+  browser bundle.
+
+На `2026-08-01` локальный тег `v0.17.4` уже указывал на `d282920`, но проверка
+registry ещё не находила эту версию. Это датированная точка, а не постоянное
+утверждение: перед каждым rollout состояние registry проверяется заново.
+
 ### `lead`
 
 ```bash
@@ -115,6 +126,7 @@ npm run test:notifications
 npm run test:deploy
 npm run test:bot-config-deploy
 npm run test:gateway-deploy
+npm run test:app-code-deploy
 ```
 
 Ожидается успешная decision matrix для client success, technical fallback,
@@ -313,6 +325,12 @@ notifications.telegram / notifications.max / notifications.email
 документ нельзя обновлять под это число после каждой волны и нельзя считать
 миграцию завершённой по нему.
 
+На более поздней точке `2026-08-01`, integration HEAD `fb44395`, snapshot
+содержал 52 канонических и 4 legacy endpoint. Оставшиеся четыре:
+`changan/engels`, `samtermy`, `tank/penza` и `wey/penza`. Их зависимости и DoD
+зафиксированы в `lead/LEGACY_INTEGRATION_REMOVAL_PLAN.md`. Это также
+историческое свидетельство, а не замена актуального snapshot.
+
 Подготовленная на эту дату ветка `scripts` объявляет версию `0.17.4`, но наличие
 этой версии в исходниках не доказывает публикацию или rollout. Статус registry,
 lockfile и фактически загруженного браузером бандла проверяются отдельно;
@@ -340,7 +358,42 @@ npm test
 npm run test:gateway-deploy
 npm run test:deploy
 npm run test:bot-config-deploy
+npm run test:app-code-deploy
 ```
+
+Порядок rollout зависимостей фиксирован: сначала exact shared `app/`, затем
+зависящие от него bot configs и только после этого dealer/brand endpoint и
+gateway. Broad-команда `app_sync` не используется для этой миграции.
+
+Shared PHP выкладывается только по проверенному manifest из 24 tracked-файлов:
+
+```bash
+npm run app_code_backup -- \
+  deploy/app-code-manifests/calltouch-notification-migration.txt --dry-run
+npm run app_code_sync -- \
+  deploy/app-code-manifests/calltouch-notification-migration.txt --dry-run
+npm run app_code_backup -- \
+  deploy/app-code-manifests/calltouch-notification-migration.txt
+npm run app_code_sync -- \
+  deploy/app-code-manifests/calltouch-notification-migration.txt
+npm run app_code_restore -- \
+  deploy/app-code-manifests/calltouch-notification-migration.txt \
+  <backup-id> --dry-run
+# Только при откате после проверки restore dry-run:
+npm run app_code_restore -- \
+  deploy/app-code-manifests/calltouch-notification-migration.txt \
+  <backup-id>
+```
+
+Sync dry-run обязан перечислить каждый exact path как `create`, `update` или
+`unchanged`. Backup хранится вне webroot; restore восстанавливает состояние
+`present` и удаляет только exact-файлы, записанные как `missing`, предварительно
+создавая отдельный pre-restore backup. В свидетельствах сохранить commit SHA,
+manifest, ручной и автоматический backup ID, dry-run с итогами
+create/update/unchanged и точную restore-команду.
+
+После успешного shared-app rollout и его проверки теми же правилами выполняются
+allowlisted `bot_config_backup/sync/restore`, затем endpoint workflow ниже.
 
 Для каждого изменяемого dealer/brand endpoint процедура отдельная:
 
@@ -462,6 +515,14 @@ ct_client_version из browser POST:
 lead SHA:
 production bundle URL / hash или build ID:
 
+Shared app manifest / число путей:
+Shared app commit SHA:
+Shared app manual / automatic backup ID:
+Shared app dry-run create / update / unchanged:
+Shared app restore dry-run:
+Shared app точная restore-команда:
+Bot config backup ID / dry-run / restore-команда:
+
 Телефон: 79000000000 | fixture-only
 ct_submission_id:
 Client wire ct_callback_status / error_code / source:
@@ -538,6 +599,12 @@ session ID.
 - [ ] Runtime `requests.json` прошёл audit 71 маршрута; сохранены config/routing
       SHA-256.
 - [ ] Gateway и deploy/restore тесты зелёные.
+- [ ] `npm run test:app-code-deploy` прошёл локально.
+- [ ] Shared `app/` выведен первым по exact manifest из 24 tracked PHP;
+      сохранены manual/automatic backup ID, dry-run create/update/unchanged и
+      точная restore-команда.
+- [ ] Bot configs выведены после shared `app/`, а endpoint — после их
+      зависимостей.
 - [ ] Сверены `routeKey`, `mod_id`, `site_id` одного и нескольких салонов.
 - [ ] Проверен client callback с `79000000000`.
 - [ ] Проверен server fallback с session ID.
