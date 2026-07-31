@@ -38,6 +38,8 @@ export interface ChatSettings {
   managerPhoto?: string;
   formName?: string;
   ct_routeKey?: string;
+  ct_mod_id?: string;
+  ct_site_id?: string;
   brand?: string;
   dealer?: string;
   legalCityWhere?: string;
