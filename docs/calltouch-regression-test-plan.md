@@ -112,9 +112,13 @@ GA4 или Метрику. Любой тест должен использова
 - версию в lockfile потребителя и `ct_client_version` реально загруженного
   browser bundle.
 
-На `2026-08-01` локальный тег `v0.17.4` уже указывал на `d282920`, но проверка
-registry ещё не находила эту версию. Это датированная точка, а не постоянное
-утверждение: перед каждым rollout состояние registry проверяется заново.
+На ранней точке `2026-08-01` локальный тег `v0.17.4` уже указывал на `d282920`,
+но registry ещё не находил эту версию. Позже в тот же день владелец опубликовал
+`@alexsab-ru/scripts@0.17.4`, а
+[scripts PR #7](https://github.com/alexsab-ru/scripts/pull/7) был слит в `main`
+merge-коммитом `56b65043`. Оба утверждения — датированные release evidence, а
+не доказательство production rollout: перед каждым выпуском состояние registry
+и реально загруженный browser bundle проверяются заново.
 
 ### `lead`
 
@@ -177,6 +181,12 @@ TradeInCalc, а также единственный салон и выбор с�
 `@alexsab-ru/scripts`, которая будет в production. Значение
 `ct_client_version` в тестовом POST должно совпасть с версией реально
 загруженного браузером бандла, а не только с lockfile.
+
+На `2026-08-01` обновление Astro-потребителя до `0.17.4` подготовлено коммитом
+`452502ad` в
+[draft PR #119](https://github.com/alexsab-ru/astro-components/pull/119).
+Коммит прошёл focused-тесты и Astro production build на локальном снимке данных
+Changan, но открытый draft PR сам по себе не означает merge или deployment.
 
 Успешная сборка сама по себе не заменяет ручную проверку Calltouch.
 
@@ -331,10 +341,28 @@ notifications.telegram / notifications.max / notifications.email
 зафиксированы в `lead/LEGACY_INTEGRATION_REMOVAL_PLAN.md`. Это также
 историческое свидетельство, а не замена актуального snapshot.
 
-Подготовленная на эту дату ветка `scripts` объявляет версию `0.17.4`, но наличие
-этой версии в исходниках не доказывает публикацию или rollout. Статус registry,
-lockfile и фактически загруженного браузером бандла проверяются отдельно;
-публикация остаётся действием владельца проекта.
+На той же промежуточной точке exact shared-app manifest содержал 24 tracked PHP
+пути (полный SHA-256 файла
+`d401e09a54162dfd001c9fc76a91db4ec583d96619eb0dea9faa2e2bcbf1ee94`).
+Это датированный 24-path milestone до включения Eservice, а не текущая
+deployment-норма.
+
+Текущее локальное состояние на `2026-08-01` зафиксировано в `lead` коммитом
+`a246e40`: recipient snapshot содержит 56 канонических и 0 legacy endpoint.
+Eservice переведён коммитом `2366ae6` на canonical bot flow с явным
+`calltouch.mode=disabled`. Пользователь подтвердил и локальная ветка реализует
+три решения:
+
+1. tracked bearer/SMTP-секреты вынесены в игнорируемый `app/env.php`, а stale
+   закомментированный SMTP-блок удалён;
+2. Calltouch для Eservice отключён до появления рабочих реквизитов, Telegram
+   сохранён;
+3. все `ct_*`, включая `ct_callback_id`, остаются в raw audit и не создают поля
+   Google Sheets.
+
+Пакет `@alexsab-ru/scripts@0.17.4` опубликован владельцем, scripts PR #7 слит,
+а Astro consumer commit `452502ad` находится в draft PR #119. Production rollout
+этой локальной готовности и 14-дневное telemetry window ещё не начинались.
 
 Актуальное состояние всегда подтверждается командами:
 
@@ -344,9 +372,11 @@ php tools/notification-config-snapshot.php --check
 ```
 
 Inventory обязан содержать ровно 56 endpoint, пока отдельным изменением не
-согласован новый состав. Готовность удаления adapter доказывается отсутствием
-legacy-конфигураций в самом snapshot, тестах, ботах и gateway, а затем
-14-дневной телеметрией — не историческим числом 49.
+согласован новый состав. Все 56 сейчас должны иметь
+`configuration_source=notifications`. Готовность удаления adapter доказывается
+не только этим snapshot, но также отсутствием legacy-конфигураций в ботах и
+gateway, а затем 14-дневной production-телеметрией — не историческими числами
+49/56 или 52/4.
 
 ## Проверка gateway и восстановление production
 
@@ -365,7 +395,12 @@ npm run test:app-code-deploy
 зависящие от него bot configs и только после этого dealer/brand endpoint и
 gateway. Broad-команда `app_sync` не используется для этой миграции.
 
-Shared PHP выкладывается только по проверенному manifest из 24 tracked-файлов:
+Shared PHP выкладывается только по текущему проверенному manifest из 25
+tracked-файлов. Он покрывает reviewed rollout через Eservice commit `2366ae6`;
+sorted inventory SHA-256 равен
+`30efe316777888a39a25cd6fc67a90c206655b9044b0eea61e70b9c69c978338`, а
+SHA-256 полного manifest-файла —
+`b37db0c12abfb4f615ba80858d24b68fb58932f15feef5874d4e44f0932bb249`:
 
 ```bash
 npm run app_code_backup -- \
@@ -385,12 +420,12 @@ npm run app_code_restore -- \
   <backup-id>
 ```
 
-Sync dry-run обязан перечислить каждый exact path как `create`, `update` или
-`unchanged`. Backup хранится вне webroot; restore восстанавливает состояние
+Sync dry-run обязан перечислить каждый из 25 exact path как `create`, `update`
+или `unchanged`. Backup хранится вне webroot; restore восстанавливает состояние
 `present` и удаляет только exact-файлы, записанные как `missing`, предварительно
 создавая отдельный pre-restore backup. В свидетельствах сохранить commit SHA,
-manifest, ручной и автоматический backup ID, dry-run с итогами
-create/update/unchanged и точную restore-команду.
+manifest, оба проверенных SHA-256, ручной и автоматический backup ID, dry-run с
+итогами create/update/unchanged и точную restore-команду.
 
 После успешного shared-app rollout и его проверки теми же правилами выполняются
 allowlisted `bot_config_backup/sync/restore`, затем endpoint workflow ниже.
@@ -446,6 +481,11 @@ commit и production backup независимы: Git revert возвращае�
 `webhook_restore` — полную production-папку.
 
 ## 14-дневная телеметрия перед удалением legacy
+
+По состоянию на `2026-08-01` production deploy телеметрии и единый rollout
+нового client bundle не выполнялись, поэтому observation window не начато и
+telemetry gate нельзя считать пройденным. Локальные `56/0` и зелёные тесты не
+задают `observation_start` задним числом.
 
 Обычный raw audit заявки и rollout-телеметрия решают разные задачи:
 
@@ -600,9 +640,9 @@ session ID.
       SHA-256.
 - [ ] Gateway и deploy/restore тесты зелёные.
 - [ ] `npm run test:app-code-deploy` прошёл локально.
-- [ ] Shared `app/` выведен первым по exact manifest из 24 tracked PHP;
-      сохранены manual/automatic backup ID, dry-run create/update/unchanged и
-      точная restore-команда.
+- [ ] Shared `app/` выведен первым по exact manifest из 25 tracked PHP;
+      проверены оба SHA-256, сохранены manual/automatic backup ID, dry-run
+      create/update/unchanged и точная restore-команда.
 - [ ] Bot configs выведены после shared `app/`, а endpoint — после их
       зависимостей.
 - [ ] Сверены `routeKey`, `mod_id`, `site_id` одного и нескольких салонов.
