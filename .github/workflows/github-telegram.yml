@@ -118,16 +118,28 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Send message to Telegram
+        env:
+          # Имя ветки — пользовательский ввод: git разрешает в нём обратные кавычки,
+          # поэтому подставляем через env, а не в текст скрипта (см. job pull_request).
+          NEW_REF: ${{ github.event.ref }}
+          MASTER_BRANCH: ${{ github.event.master_branch }}
+          REPO: ${{ github.repository }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          REF_NAME: ${{ github.ref_name }}
+          ACTOR: ${{ github.actor }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_TO_CREATE: ${{ secrets.TELEGRAM_TO_CREATE }}
+          PARSE_MODE: ${{ inputs.parse-mode || 'Markdown' }}
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-          "${{ secrets.TELEGRAM_TOKEN }}" \
-          "${{ secrets.TELEGRAM_TO_CREATE }}" \
-          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
+          "$TELEGRAM_TOKEN" \
+          "$TELEGRAM_TO_CREATE" \
+          "*[${REPO_NAME}:${REF_NAME}]* by [${ACTOR}](https://github.com/${ACTOR}):
 
-          added branch [${{ github.event.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.ref }}) from [${{ github.event.master_branch }}](https://github.com/${{ github.repository }}/tree/${{ github.event.master_branch }})" \
-          "${{ inputs.parse-mode || 'Markdown' }}"
+          added branch [${NEW_REF}](https://github.com/${REPO}/tree/${NEW_REF}) from [${MASTER_BRANCH}](https://github.com/${REPO}/tree/${MASTER_BRANCH})" \
+          "$PARSE_MODE"
 
   pull_request:
     if: ${{ github.event.pull_request != null }}
@@ -137,38 +149,77 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Send message to Telegram
+        env:
+          # Всё, что приходит от пользователя, передаём через env, а НЕ через ${{ }}
+          # внутри run. При прямой подстановке GitHub вставляет текст в исходник
+          # скрипта, и обратные кавычки из описания PR выполняются шеллом как
+          # подстановка команд — шаг падает, а описание исполняется на раннере.
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_ACTION: ${{ github.event.action }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          REPO: ${{ github.repository }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          ACTOR: ${{ github.actor }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_TO_PULL_REQUEST: ${{ secrets.TELEGRAM_TO_PULL_REQUEST }}
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
-          send_telegram_message \
-          "${{ secrets.TELEGRAM_TOKEN }}" \
-          "${{ secrets.TELEGRAM_TO_PULL_REQUEST }}" \
-          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by **[${{ github.actor }}](https://github.com/${{ github.actor }})**:
 
-          [pull request #${{ github.event.pull_request.number }}](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}) from [${{ github.event.pull_request.head.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.head.ref }}) to [${{ github.event.pull_request.base.ref }}](https://github.com/${{ github.repository }}/tree/${{ github.event.base.ref }}) with comment:
-          \`\`\`
-          ${{ github.event.pull_request.body }}
-          \`\`\`" \
-          "${{ inputs.parse-mode || 'Markdown' }}"
+          action="$PR_ACTION"
+          if [ "$PR_ACTION" = "closed" ] && [ "$PR_MERGED" = "true" ]; then
+            action="merged"
+          fi
+
+          # Тело PR подставляется раскрытием переменной — результат повторно не
+          # разбирается шеллом, поэтому обратные кавычки внутри безопасны.
+          # Дальше это уходит в rich_message.markdown как GitHub Flavored Markdown.
+          markdown="## ${REPO_NAME}: pull request #${PR_NUMBER} ${action}
+
+          [**${PR_TITLE}**](https://github.com/${REPO}/pull/${PR_NUMBER})
+
+          by [@${ACTOR}](https://github.com/${ACTOR}) · [\`${HEAD_REF}\`](https://github.com/${REPO}/tree/${HEAD_REF}) → [\`${BASE_REF}\`](https://github.com/${REPO}/tree/${BASE_REF})
+
+          ---
+
+          ${PR_BODY}"
+
+          send_rich_telegram_message \
+            "$TELEGRAM_TOKEN" \
+            "$TELEGRAM_TO_PULL_REQUEST" \
+            "$markdown"
 
   delete:
-    if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null }}
+    if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null && github.event.issue == null }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
       - name: Send message to Telegram
+        env:
+          # Имя ветки может содержать обратные кавычки — только через env.
+          DELETED_REF: ${{ github.event.ref }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          REF_NAME: ${{ github.ref_name }}
+          ACTOR: ${{ github.actor }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_TO_DELETE: ${{ secrets.TELEGRAM_TO_DELETE }}
+          PARSE_MODE: ${{ inputs.parse-mode || 'Markdown' }}
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-          "${{ secrets.TELEGRAM_TOKEN }}" \
-          "${{ secrets.TELEGRAM_TO_DELETE }}" \
-          "*[${{ github.event.repository.name }}:${{ github.ref_name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
+          "$TELEGRAM_TOKEN" \
+          "$TELEGRAM_TO_DELETE" \
+          "*[${REPO_NAME}:${REF_NAME}]* by [${ACTOR}](https://github.com/${ACTOR}):
 
-          branch '\`${{ github.event.ref }}\`' is deleted" \
-          "${{ inputs.parse-mode || 'Markdown' }}"
+          branch '\`${DELETED_REF}\`' is deleted" \
+          "$PARSE_MODE"
 
   issues:
     if: ${{ github.event.issue != null }}
@@ -178,16 +229,28 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Send message to Telegram
+        env:
+          # Заголовок issue — произвольный пользовательский текст, включая
+          # обратные кавычки. Подставляем через env, а не в текст скрипта.
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_ACTION: ${{ github.event.action }}
+          REPO: ${{ github.repository }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          ACTOR: ${{ github.actor }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_TO_ISSUES: ${{ secrets.TELEGRAM_TO_ISSUES }}
+          PARSE_MODE: ${{ inputs.parse-mode || 'Markdown' }}
         run: |
           source ./.github/scripts/sh/utils.sh
           source ./.github/scripts/sh/send_telegram.sh
           send_telegram_message \
-          "${{ secrets.TELEGRAM_TOKEN }}" \
-          "${{ secrets.TELEGRAM_TO_ISSUES }}" \
-          "*[${{ github.event.repository.name }}]* by [${{ github.actor }}](https://github.com/${{ github.actor }}):
+          "$TELEGRAM_TOKEN" \
+          "$TELEGRAM_TO_ISSUES" \
+          "*[${REPO_NAME}]* by [${ACTOR}](https://github.com/${ACTOR}):
 
-          issue #${{ github.event.issue.number }} [${{ github.event.issue.title }}](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }}) was ${{ github.event.action }}" \
-          "${{ inputs.parse-mode || 'Markdown' }}"
+          issue #${ISSUE_NUMBER} [${ISSUE_TITLE}](https://github.com/${REPO}/issues/${ISSUE_NUMBER}) was ${ISSUE_ACTION}" \
+          "$PARSE_MODE"
 
   get_last_commit:
     if: ${{ inputs.additional-text != null }}
