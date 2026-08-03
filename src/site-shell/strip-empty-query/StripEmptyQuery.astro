@@ -2,9 +2,5 @@
 import scripts_json from '@/data/site/scripts.json';
 const site = scripts_json.site;
 ---
-<script data-remove-script-after-work="check_empty_query">
-if (location.href.split("#")[0].slice(-1) === '?') { const target = location.pathname + location.hash; location.replace(target); } else { const script = document.querySelector('script[data-remove-script-after-work="check_empty_query"]'); if (script) { script.remove(); } }
-</script>
-<script data-remove-script-after-work="domain_redirect">
-if(location.host.startsWith("alexsab")){ location.href = site; } else { const script = document.querySelector('script[data-remove-script-after-work="domain_redirect"]'); if (script) { script.remove(); } }
-</script>
+<script data-remove-script-after-work="check_empty_query"> if (location.href.split("#")[0].slice(-1) === '?') { const target = location.pathname + location.hash; location.replace(target); } else { const script = document.querySelector('script[data-remove-script-after-work="check_empty_query"]'); if (script) { script.remove(); } } </script>
+<script define:vars={{ site }} data-remove-script-after-work="domain_redirect"> if (location.host.startsWith('alexsab')) { location.href = site; } else { const script = document.querySelector('script[data-remove-script-after-work="domain_redirect"]'); if (script) { script.remove(); } } </script>
