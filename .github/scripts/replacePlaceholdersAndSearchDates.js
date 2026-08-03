@@ -9,6 +9,10 @@ import { fileURLToPath } from 'url';
 dotenv.config();
 
 const NOTIFICATIONS_DIR = './tmp/notifications';
+
+// Любой плейсхолдер вида {{...}}. Внутренние скобки исключены, чтобы не захватывать
+// JSX-пропы вида image={{desktop: '...'}} целиком и не ломать вложенные конструкции.
+const PLACEHOLDER_PATTERN = /\{\{[^{}]+\}\}/g;
 const getModelBrandId = (model) =>
     model?.brand?.id || (model?.mark_id ? String(model.mark_id).toLowerCase() : '');
 
@@ -379,11 +383,14 @@ class PlaceholderProcessor {
         }
 
         if (isSeoFile) {
-            return {
-                ...this._basePlaceholders,
-                ...this.carsPlaceholderWithoutDisclaimer,
-                ...this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer,
-            };
+            if (!this._cachedSeoPlaceholders) {
+                this._cachedSeoPlaceholders = {
+                    ...this._basePlaceholders,
+                    ...this.carsPlaceholderWithoutDisclaimer,
+                    ...this.minPriceMaxBenefitPlaceholdersWithoutDisclaimer,
+                };
+            }
+            return this._cachedSeoPlaceholders;
         }
 
         if (!this._cachedPlaceholders) {
@@ -410,6 +417,7 @@ class PlaceholderProcessor {
             ...this.settingsPlaceholder,
         };
         this._cachedPlaceholders = null;
+        this._cachedSeoPlaceholders = null;
     }
 
     // Функция для замены плейсхолдеров в содержимом файла
@@ -417,16 +425,18 @@ class PlaceholderProcessor {
         const placeholders = this.getAllPlaceholders(filePath);
 
         let hasChanges = false;
-        let updatedContent = content;
 
-        // Заменяем все плейсхолдеры
-        for (let placeholder in placeholders) {
-            const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-            if (regex.test(updatedContent)) {
-                updatedContent = updatedContent.replace(regex, placeholders[placeholder]);
-                hasChanges = true;
-            }
-        }
+        // Один проход по содержимому: находим все {{...}} и подменяем только те,
+        // что есть в словаре. Перебирать словарь нельзя — в нём десятки тысяч
+        // плейсхолдеров (243 авто × 9 ключей × 8 вариантов), и на каждый файл это
+        // давало столько же компиляций RegExp и проходов по всему тексту.
+        // Неизвестные плейсхолдеры возвращаются как есть — их ловит
+        // checkUnreplacedPlaceholders().
+        const updatedContent = content.replace(PLACEHOLDER_PATTERN, match => {
+            if (!Object.hasOwn(placeholders, match)) return match;
+            hasChanges = true;
+            return placeholders[match];
+        });
 
         return { content: updatedContent, hasChanges };
     }
