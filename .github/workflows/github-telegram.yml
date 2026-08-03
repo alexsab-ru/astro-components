@@ -194,7 +194,7 @@ jobs:
             "$markdown"
 
   delete:
-    if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null }}
+    if: ${{ github.event.master_branch == null && github.event.commits == null && github.event.pull_request == null && inputs.additional-text == null && github.event.issue == null }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
