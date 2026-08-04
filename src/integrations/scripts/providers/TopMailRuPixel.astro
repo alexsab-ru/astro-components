@@ -3,14 +3,15 @@ import scripts_json from '@/data/site/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].value.length > 0 && scripts_json['top.mail.ru'].value[0].id != "" && (
+{ isProd && scripts_json['top.mail.ru'] && scripts_json['top.mail.ru'].value.length > 0 && String(scripts_json['top.mail.ru'].value[0].id ?? '').trim() !== "" && (
 <script>
 function runTOP_MAIL_RU(top_mail_ru) {
     // console.log("runTOP_MAIL_RU", top_mail_ru);
     top_mail_ru.forEach(mail => {
-        if (mail.id && mail.id.trim() !== "") {
+        const id = String(mail?.id ?? '').trim();
+        if (id !== "") {
             var script = document.createElement('script');
-            script.innerHTML = `var _tmr = window._tmr || (window._tmr = []); _tmr.push({id: "${mail.id}", type: "pageView", start: (new Date()).getTime()}); (function (d, w, id) { if (d.getElementById(id)) return; var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id; ts.src = "https://top-fwz1.mail.ru/js/code.js"; var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);}; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "topmailru-code");`;
+            script.innerHTML = `var _tmr = window._tmr || (window._tmr = []); _tmr.push({id: "${id}", type: "pageView", start: (window.__pageStart || Date.now())}); (function (d, w, id) { if (d.getElementById(id)) return; var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id; ts.src = "https://top-fwz1.mail.ru/js/code.js"; var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);}; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "tmr-code");`;
             document.head.appendChild(script);
         }
     });

@@ -1,0 +1,11 @@
+---
+import scripts_json from '@/data/site/scripts.json';
+const isModeProd = import.meta.env.MODE === 'production';
+const isProd = import.meta.env.PROD;
+const topMailRuIds = (scripts_json['top.mail.ru']?.value ?? [])
+    .map(mail => String(mail?.id ?? '').trim())
+    .filter(id => id !== '');
+---
+{ isProd && topMailRuIds.map(id => (
+    <noscript><div><img src={`https://top-fwz1.mail.ru/counter?id=${id};js=na`} style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
+)) }
