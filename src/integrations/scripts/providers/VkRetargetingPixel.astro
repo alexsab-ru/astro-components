@@ -3,14 +3,15 @@ import scripts_json from '@/data/site/scripts.json';
 const isModeProd = import.meta.env.MODE === 'production';
 const isProd = import.meta.env.PROD;
 ---
-{ isProd && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].value.length > 0 && scripts_json['vk-rtrg'].value[0].id != "" && (
+{ isProd && scripts_json['vk-rtrg'] && scripts_json['vk-rtrg'].value.length > 0 && String(scripts_json['vk-rtrg'].value[0].id ?? '').trim() !== "" && (
 <script>
 function runVK_RTRG(vk_rtrg) {
     // console.log("runVK_RTRG", vk_rtrg);
     vk_rtrg.forEach(vk => {
-        if (vk.id && vk.id.trim() !== "") {
+        const id = String(vk?.id ?? '').trim();
+        if (id !== "") {
             var script = document.createElement('script');
-            script.innerHTML = `!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.ru/js/api/openapi.js?169",t.onload=function(){VK.Retargeting.Init("${vk.id}"),VK.Retargeting.Hit()},document.head.appendChild(t)}();`;
+            script.innerHTML = `!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.ru/js/api/openapi.js?169",t.onload=function(){VK.Retargeting.Init("${id}"),VK.Retargeting.Hit()},document.head.appendChild(t)}();`;
             document.head.appendChild(script);
         }
     });

@@ -10,6 +10,7 @@ const dealer_params = JSON.stringify({
     ...(grecaptcha_action && { grecaptcha_action })
 });
 import { cleanScriptsData } from '@/integrations/scripts/providers/clean-scripts-data';
+import PageStart from '@/integrations/scripts/providers/PageStart.astro';
 import GTM from '@/integrations/scripts/providers/GoogleTagManager.astro';
 import METRIKA_DEV from '@/integrations/scripts/providers/YandexMetrikaDevelopment.astro';
 import METRIKA from '@/integrations/scripts/providers/YandexMetrika.astro';
@@ -27,6 +28,7 @@ import DWELL from '@/integrations/scripts/providers/DwellBeacon.astro';
 
 const cleanedScripts = cleanScriptsData(scripts_json);
 ---
+<PageStart />
 <script id="scripts_json" type="application/ld+json" set:html={cleanedScripts}/>
 <script id="settings_json" type="application/ld+json" set:html={dealer_params}/>
 <GTM />

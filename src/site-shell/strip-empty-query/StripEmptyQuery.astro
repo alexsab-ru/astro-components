@@ -1,6 +1,8 @@
 ---
 import scripts_json from '@/data/site/scripts.json';
-const site = scripts_json.site;
+const site = String(scripts_json.site ?? '').trim();
 ---
-<script data-remove-script-after-work="check_empty_query"> if (location.href.split("#")[0].slice(-1) === '?') { const target = location.pathname + location.hash; location.replace(target); } else { const script = document.querySelector('script[data-remove-script-after-work="check_empty_query"]'); if (script) { script.remove(); } } </script>
-<script define:vars={{ site }} data-remove-script-after-work="domain_redirect"> if (location.host.startsWith('alexsab')) { location.href = "https://" + site; } else { const script = document.querySelector('script[data-remove-script-after-work="domain_redirect"]'); if (script) { script.remove(); } } </script>
+<script is:inline> if (location.href.split("#")[0].slice(-1) === '?') { location.replace(location.pathname + location.hash); } </script>
+{ site !== "" && (
+<script is:inline define:vars={{ site }}> if (location.host.startsWith('alexsab')) { location.href = "https://" + site; } </script>
+) }

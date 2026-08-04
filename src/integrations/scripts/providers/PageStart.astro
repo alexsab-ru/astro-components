@@ -1,0 +1,9 @@
+---
+// Единая точка отсчёта загрузки страницы для всех счётчиков.
+// Аналитика стартует отложенно (LoadScripts.astro: первое взаимодействие или таймер 3 с),
+// поэтому Date.now() в момент запуска счётчика даёт время на секунды позже реальной загрузки
+// и ломает метрики скорости в Метрике / GTM / GA4 / Top.Mail.Ru.
+// Берём navigationStart браузера — он не зависит от того, когда мы запустили счётчик.
+// is:inline — скрипт должен выполниться сразу при парсинге <head>, без бандлинга и defer.
+---
+<script is:inline> window.__pageStart = (function () { try { var p = window.performance; if (p) { if (typeof p.timeOrigin === 'number' && p.timeOrigin > 0) return Math.round(p.timeOrigin); if (p.timing && p.timing.navigationStart) return p.timing.navigationStart; } } catch (e) {} return Date.now(); })(); </script>
