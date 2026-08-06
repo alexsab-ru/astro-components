@@ -1,13 +1,5 @@
 @reference "../../scss/app.css";
 
-.banner-title {
-	@apply text-3xl md:text-4xl lg:text-5xl uppercase font-heading-weight mb-3 sm:mb-5;
-}
-
-.banner-description {
-	@apply xs:text-sm text-base sm:text-xl md:text-3xl relative z-10;
-}
-
 .banner-pos {
 	object-position: var(--pos, 50% 50%);
 }

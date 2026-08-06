@@ -4,8 +4,8 @@ interface Props{
 }
 const {description} = Astro.props
 ---
-<p
+<div
 	data-swiper-parallax="-40%"
-	class="banner-description">
+	class="xs:text-sm text-base sm:text-xl md:text-3xl relative z-10 mb-3 sm:mb-5">
 	<Fragment set:html={description} />
-</p>
+</div>
