@@ -11,7 +11,9 @@ import { loadEnv } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
 import { pathMatchesRouteRules } from './src/js/utils/pathMatchesRouteRules.js';
+import { resolveDevHost } from './src/js/utils/devHost.js';
 
 // https://astro.build/config
 //
@@ -28,7 +30,9 @@ const env = (() => {
     }
 })();
 
-const resolveSiteFromConfig = (fallbackUrl) => {
+// Единый источник домена: приоритетно src/data/site/scripts.json, затем .env DOMAIN.
+// Используется и для site:, и для dev-хоста — чтобы они не могли разойтись.
+const readRawDomain = () => {
     // Читаем ./src/data/site/scripts.json из корня проекта.
     const scriptsJsonPath = path.resolve(process.cwd(), 'src/data/site/scripts.json');
     let scriptsSiteFromJson = '';
@@ -42,7 +46,11 @@ const resolveSiteFromConfig = (fallbackUrl) => {
     }
 
     // Берём приоритетно значение из JSON, затем из ENV.
-    const rawDomain = scriptsSiteFromJson || ((env.DOMAIN ?? process.env.DOMAIN ?? '').toString().trim());
+    return scriptsSiteFromJson || ((env.DOMAIN ?? process.env.DOMAIN ?? '').toString().trim());
+};
+
+const resolveSiteFromConfig = (fallbackUrl) => {
+    const rawDomain = readRawDomain();
 
     // Нормализуем до https://<domain>. Также переводим http:// -> https://.
     if (!rawDomain) return fallbackUrl;
@@ -52,6 +60,13 @@ const resolveSiteFromConfig = (fallbackUrl) => {
 };
 
 const computedSite = resolveSiteFromConfig('https://example.com');
+
+// --- dev-сервер ---
+// Каждый дилерский сайт получает свой origin вида <DOMAIN>.localhost, иначе кэш,
+// localStorage и куки протекают между сайтами (см. spec 2026-08-06-dev-host-per-domain).
+// ASTRO_DEV_OPEN=0 отключает автооткрытие браузера (нужно для test_links_local).
+const devHost = resolveDevHost(readRawDomain());
+const devOpenEnabled = (env.ASTRO_DEV_OPEN ?? process.env.ASTRO_DEV_OPEN ?? '1') !== '0';
 
 // --- robots.json ---
 // Читаем настройки robots из src/data/site/robots.json.
@@ -176,9 +191,40 @@ const siteRoutes = loadSiteRoutesFromData();
 const redirectsConfig = validateRedirectEntries(siteRoutes.redirects);
 const disabledRoutesForBuild = siteRoutes.disabled_routes;
 const sitemapIgnoreRoutes = siteRoutes.sitemap_ignore;
+// Открывает браузер на origin текущего дилера.
+//
+// Почему не server.open: это статическая строка, вычисляемая до listen(), а Vite при
+// занятом порте делает httpServer.listen(++port, host). Открытие идёт через
+// `new URL(options.open, url).href`, где абсолютный URL игнорирует базу с реальным
+// портом. Второй инстанс сел бы на :4322, а вкладку открыл на :4321 — то есть на
+// чужом уже запущенном сайте. Хук astro:server:start отдаёт фактический address.port.
+const devHostOpenIntegration = (host) => ({
+	name: 'dev-host-open',
+	hooks: {
+		'astro:server:start': ({ address, logger }) => {
+			const url = `http://${host}:${address.port}/`;
+			logger.info(`Открываю ${url}`);
+
+			const isWin = process.platform === 'win32';
+			const cmd = process.platform === 'darwin' ? 'open' : isWin ? 'cmd' : 'xdg-open';
+			// На Windows первый аргумент start — заголовок окна, поэтому пустая строка.
+			const args = isWin ? ['/c', 'start', '', url] : [url];
+
+			try {
+				spawn(cmd, args, { stdio: 'ignore', detached: true }).unref();
+			} catch (e) {
+				logger.warn(`Не удалось открыть браузер: ${e}`);
+			}
+		},
+	},
+});
+
 const isDevCommand = process.argv.includes('dev');
 const devToolbarIntegrations = isDevCommand
-	? [(await import('./dev-toolbar/domain-switch/integration.ts')).default()]
+	? [
+		(await import('./dev-toolbar/domain-switch/integration.ts')).default(),
+		...(devOpenEnabled ? [devHostOpenIntegration(devHost)] : []),
+	]
 	: [];
 
 // Удаляет из dist папки целых разделов (например catalog), если соответствующий путь в disabled_routes.
@@ -236,6 +282,11 @@ export default defineConfig({
 		react(),
 		stripDisabledRoutesIntegration(disabledRoutesForBuild),
 	],
+	// port и open не задаём: порт остаётся астровским 4321 с автоинкрементом,
+	// открытие браузера делает интеграция dev-host-open с фактическим портом.
+	server: {
+		host: true,
+	},
 	vite: {
 		plugins: [
 			yaml(),
