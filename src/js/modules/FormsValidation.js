@@ -142,6 +142,12 @@ export default class FormsValidation {
                         errorField._inputHandler && element.removeEventListener(eventType, errorField._inputHandler);
                         // Добавляем новый обработчик: при изменении/вводе скрываем сообщение
                         const handler = () => {
+                            // Телефонная ошибка выставляется через setCustomValidity().
+                            // Сбрасываем её сразу при редактировании, иначе браузер
+                            // заблокирует следующий submit до повторного вызова validate().
+                            if (element.type === 'tel') {
+                                element.setCustomValidity('');
+                            }
                             errorField.classList.add('hidden');
                             element.removeEventListener(eventType, handler);
                             errorField._inputHandler = null;

@@ -203,7 +203,7 @@ Changan, но открытый draft PR сам по себе не означае
 
 | Сценарий | Callback API | Calltouch Lead API | PHP и уведомления | Ожидаемый результат |
 | --- | --- | --- | --- | --- |
-| Невалидный телефон | нет | нет | нет | Клиент показывает ошибку; сетевых запросов отправки нет |
+| Невалидный телефон | нет | нет | нет | Клиент показывает ошибку; сетевых запросов отправки нет. После исправления номера в той же форме повторный submit должен стать доступен без перезагрузки страницы |
 | Валидная фикстура, client success | один client | нет | `events.calltouch_callback_created` | Ровно один callback, PHP получает `client_success` |
 | Spam-like фикстура, client success | callback может быть уже принят | нет | без дилерских уведомлений | PHP отвечает `attention=true`, spam не восстанавливает получателей |
 | `79000000000`, client success | один client | нет | только callback test/webmaster Telegram | Нет email, MAX и дилерского Telegram |
@@ -651,6 +651,8 @@ session ID.
 - [ ] Проверен server fallback без session ID и с прямыми UTM.
 - [ ] Проверен business rejection без server retry.
 - [ ] Проверены invalid, spam-like и test-phone маршруты.
+- [ ] После невалидного submit телефон исправлен в той же форме; ошибка снята,
+      повторный submit проходит без перезагрузки страницы.
 - [ ] Проверены Telegram, MAX и email overrides.
 - [ ] В журнале нет пары «callback + Lead API» для одной отправки.
 - [ ] Каждый `server_success` содержит `callback_request_id` и подтверждён в
