@@ -1,0 +1,13 @@
+.badge {
+	@apply
+		inline-block w-fit
+		px-2 py-1
+		rounded-badge
+		bg-badge-bg
+		text-badge-text
+		text-xs font-normal;
+
+	&.badge-o {
+		@apply bg-transparent border border-badge-bg text-badge-bg;
+	}
+}

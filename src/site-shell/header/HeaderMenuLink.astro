@@ -13,9 +13,9 @@ import settings from '@/data/site/settings.json';
 import { isHeaderTransparentEnabled } from '@/js/utils/features';
 const is_header_transparent = isHeaderTransparentEnabled(settings);
 
-const transparentClasses = is_header_transparent ? 'text-header-transparent-text hover:text-header-transparent-text/80 hover:bg-header-transparent-menu-link-bg-hover' : 'text-header-text hover:bg-header-menu-link-bg-hover hover:text-button-text';
-const childTransparentClasses = is_header_transparent ? 'text-submenu-transparent-text hover:text-submenu-transparent-text/80 hover:bg-header-transparent-menu-link-bg-hover' : 'text-submenu-text hover:text-button-text';
-const activeTransparentClasses = is_header_transparent ? 'bg-gray-700 lg:bg-header-transparent-menu-link-bg-hover text-header-transparent-text/80' : 'bg-header-menu-link-bg-hover text-button-text!';
+const transparentClasses = is_header_transparent ? 'text-header-transparent-text hover:text-header-transparent-text/80 hover:bg-header-transparent-menu-link-bg-hover' : 'text-header-text hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover';
+const childTransparentClasses = is_header_transparent ? 'text-submenu-transparent-text hover:text-submenu-transparent-text/80 hover:bg-header-transparent-menu-link-bg-hover' : 'text-submenu-text hover:text-header-menu-link-text-hover';
+const activeTransparentClasses = is_header_transparent ? 'bg-gray-700 lg:bg-header-transparent-menu-link-bg-hover text-header-transparent-text/80' : 'bg-header-menu-link-bg-hover text-header-menu-link-text-hover!';
 ---
 <a
 	href={link.url}

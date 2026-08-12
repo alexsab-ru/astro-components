@@ -87,7 +87,7 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
                                     <Icon name="mdi:map-marker-outline" class="text-2xl shrink-0" />
                                     <Fragment set:html={salon.address} />
                                 </span>
-                                <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-accent-500">
+                                <a href={`tel:${phoneFormat(salon.phone)}`} class="flex items-center gap-1 flex-nowrap transition-colors hover:text-footer-phone-hover">
                                     <Icon name="mdi:cellphone" class="text-xl shrink-0" />
                                     {salon.phone}
                                 </a>
@@ -119,21 +119,21 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
 
         </div>
 
-        {footer_info && <div class="text-xs text-white/60 pt-5 mt-7 border-white/20 border-t"><Fragment set:html={footer_info} /></div>}
+        {footer_info && <div class="text-xs text-footer-text-muted pt-5 mt-7 border-footer-border border-t"><Fragment set:html={footer_info} /></div>}
 
         {footer_disclaimer && <DisclaimerCollapse content={footer_disclaimer} />}
 
-        <div class="flex flex-wrap items-end gap-x-10 gap-y-4 pt-5 mt-7 border-white/20 border-t">
+        <div class="flex flex-wrap items-end gap-x-10 gap-y-4 pt-5 mt-7 border-footer-border border-t">
             <div class="md:shrink-0">
                 <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                 {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
             </div>
             {legalDocuments.map(document => (
                 <div class="shrink-0">
-                    <a href={document.href} class="text-white/80 text-sm font-light hover:text-white!">{document.label}</a>
+                    <a href={document.href} class="text-footer-link text-sm font-light hover:text-footer-link-hover!">{document.label}</a>
                 </div>
             ))}
-            <div class="made-by ml-auto shrink-0 text-sm m-0 text-white/80">Разработка <a href={url} class="hover:text-white!" target="_blank">alexsab.ru</a></div>
+            <div class="made-by ml-auto shrink-0 text-sm m-0 text-footer-link">Разработка <a href={url} class="hover:text-footer-link-hover!" target="_blank">alexsab.ru</a></div>
         </div>
 
     </div>

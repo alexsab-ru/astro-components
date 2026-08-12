@@ -89,6 +89,10 @@
 
     /* HEADER LINK MENU BG HOVER COLOR */
     --color-header-menu-link-bg-hover: var(--color-accent-500);
+    /* Цвет текста пункта меню на hover и в активном состоянии.
+       По умолчанию совпадает с текстом кнопок; переопределяйте отдельно, если
+       --color-header-menu-link-bg-hover светлее, чем подложка кнопок. */
+    --color-header-menu-link-text-hover: var(--color-button-text);
     --color-header-transparent-menu-link-bg-hover: color-mix(in srgb, var(--transparent-bg-hover-color) 100%, transparent);
 
     /* DEFAULT SHADOW FOR HEADER MOBILE BTN'S */
@@ -99,9 +103,23 @@
     --brand-gradient-transparent: 90deg, transparent -14.69%, transparent 175.76%;
     --brand-gradient-hover: 90deg, var(--color-accent-500) -14.69%, var(--color-accent-500) 175.76%;
 
-    /* FOOTER COLORS */
+    /* BADGE COLORS — плашки-лейблы у заголовков («Новый», «Сезонная акция»).
+       Потребитель: .badge в scss/ui/badge.scss */
+    --color-badge-bg: var(--color-accent-500);
+    --color-badge-text: var(--color-white);
+    --radius-badge: var(--radius-sm);
+
+    /* FOOTER COLORS
+       Набор рассчитан на тёмный футер: приглушённый текст, ссылки и рамки —
+       это белый с разной прозрачностью. Для светлого футера переопределите
+       все токены ниже вместе с --footer-bg и --color-footer-divide. */
     --footer-bg: color-mix(in srgb, #000000 90%, transparent);
     --color-footer-text-color: color-mix(in srgb, var(--color-white) 90%, transparent);
+    --color-footer-text-muted: color-mix(in srgb, var(--color-white) 60%, transparent);
+    --color-footer-link: color-mix(in srgb, var(--color-white) 80%, transparent);
+    --color-footer-link-hover: var(--color-white);
+    --color-footer-border: color-mix(in srgb, var(--color-white) 20%, transparent);
+    --color-footer-phone-hover: var(--color-accent-500);
 
     /* COLOR LINKS DEFAULT */
     --color-link: var(--color-accent-500);
