@@ -15,6 +15,8 @@ show_help() {
     echo "  --mirror_images                  - Mirror external car images into CDN layout"
     echo "  --mirror_dry_run                 - Build image mirror manifest without writing image files"
     echo "  --mirror_autoload_download_delay_seconds N - Delay between mirrored image downloads"
+    echo "  --mirror_max_new_images_per_car N - Max new non-Avito images per car per run (0 = unlimited, default: 5)"
+    echo "  --mirror_avito_autoload_max_new_per_car N - Max new avito.ru/autoload images per car per run (0 = unlimited, default: 1)"
     echo "  --count_thumbs N                 - Number of thumbnails to generate (default: 5)"
     echo "  --skip_check_thumb               - Skip thumbnail existence check"
     echo "  --dev                            - Start dev server after processing (for auto and test)"
@@ -156,6 +158,24 @@ parse_options() {
                     shift 2
                 else
                     echo -e "${BGRED}Error: --mirror_autoload_download_delay_seconds requires a numeric value${Color_Off}"
+                    exit 1
+                fi
+                ;;
+            --mirror_max_new_images_per_car)
+                if [ -n "$2" ] && [[ "$2" =~ ^[0-9]+$ ]]; then
+                    thumb_args="$thumb_args --mirror_max_new_images_per_car $2"
+                    shift 2
+                else
+                    echo -e "${BGRED}Error: --mirror_max_new_images_per_car requires an integer value${Color_Off}"
+                    exit 1
+                fi
+                ;;
+            --mirror_avito_autoload_max_new_per_car)
+                if [ -n "$2" ] && [[ "$2" =~ ^[0-9]+$ ]]; then
+                    thumb_args="$thumb_args --mirror_avito_autoload_max_new_per_car $2"
+                    shift 2
+                else
+                    echo -e "${BGRED}Error: --mirror_avito_autoload_max_new_per_car requires an integer value${Color_Off}"
                     exit 1
                 fi
                 ;;

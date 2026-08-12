@@ -30,7 +30,10 @@ DEFAULT_CDN_BASE_URL = "https://cdn.alexsab.ru"
 DEFAULT_LOCAL_ROOT = "tmp/image_mirror"
 DEFAULT_PROBE_COUNT = 3
 DEFAULT_ENV_FILE = ".env"
+DEFAULT_ENV_JSON_FILE = "src/data/site/env.json"
 DEFAULT_AUTOLOAD_DOWNLOAD_DELAY_SECONDS = 1.0
+DEFAULT_MAX_NEW_IMAGES_PER_CAR = 5
+DEFAULT_AVITO_AUTOLOAD_MAX_NEW_PER_CAR = 1
 
 IMAGE_SIZES = {
     "full": 1920,
@@ -41,6 +44,7 @@ IMAGE_SIZES = {
 }
 
 _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR: dict[tuple[str, str, str], int] = {}
+_IMAGE_DOWNLOADS_BY_CAR: dict[tuple[str, str, str], int] = {}
 _LAST_IMAGE_DOWNLOAD_AT: float | None = None
 _AVITO_AUTOLOAD_BLOCKED_FOR_RUN = False
 
@@ -120,8 +124,56 @@ def read_env_file(path: Path) -> dict[str, str]:
     return values
 
 
+def read_env_json(path: Path) -> dict[str, str]:
+    """
+    Читает src/data/site/env.json как фолбек для настроек.
+    Тот же источник, что использует utils.get_env_value, — чтобы MIRROR_* можно было
+    держать в env.json, а не только в GitHub vars.
+    """
+    candidates = [path, Path(__file__).resolve().parents[2] / path]
+    for candidate in candidates:
+        if not candidate.exists():
+            continue
+
+        try:
+            with candidate.open("r", encoding="utf-8") as file:
+                data = json.load(file)
+        except Exception:
+            continue
+
+        return {
+            key: value if isinstance(value, str) else json.dumps(value, ensure_ascii=False)
+            for key, value in data.items()
+        }
+
+    return {}
+
+
 def env_value(env_file_values: dict[str, str], key: str, default: str | None = None) -> str | None:
-    return os.getenv(key) or env_file_values.get(key) or default
+    return (
+        os.getenv(key)
+        or env_file_values.get(key)
+        or read_env_json(Path(DEFAULT_ENV_JSON_FILE)).get(key)
+        or default
+    )
+
+
+def resolve_setting(key: str, default: str | None = None) -> str | None:
+    """Значение настройки с приоритетом os.environ > .env > env.json > default."""
+    return env_value(read_env_file(Path(DEFAULT_ENV_FILE)), key, default)
+
+
+def int_value(value: Any, default: int) -> int:
+    if value is None:
+        return default
+
+    if isinstance(value, str) and not value.strip():
+        return default
+
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
 
 
 def float_value(value: Any, default: float) -> float:
@@ -188,7 +240,9 @@ class MirrorConfig:
     remote_prefix: str = DEFAULT_REMOTE_PREFIX
     local_root: Path = Path(DEFAULT_LOCAL_ROOT)
     probe_count: int = DEFAULT_PROBE_COUNT
-    avito_autoload_max_new_per_car: int = 1
+    # 0 = без лимита; считается на одно авто за один прогон
+    max_new_images_per_car: int = DEFAULT_MAX_NEW_IMAGES_PER_CAR
+    avito_autoload_max_new_per_car: int = DEFAULT_AVITO_AUTOLOAD_MAX_NEW_PER_CAR
     autoload_download_delay_seconds: float = DEFAULT_AUTOLOAD_DOWNLOAD_DELAY_SECONDS
     dry_run: bool = False
 
@@ -208,20 +262,24 @@ class ImageMirror:
     def __init__(self, config: MirrorConfig):
         self.config = config
 
-    def avito_autoload_download_key(self, vin: str) -> tuple[str, str, str]:
+    def car_download_key(self, vin: str) -> tuple[str, str, str]:
         return (self.config.site, self.config.category, vin)
 
     def avito_autoload_downloads_for_run(self, vin: str) -> int:
-        return _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(self.avito_autoload_download_key(vin), 0)
+        return _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(self.car_download_key(vin), 0)
 
-    def register_avito_autoload_download_for_run(self, vin: str) -> None:
-        key = self.avito_autoload_download_key(vin)
-        _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR[key] = _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR.get(key, 0) + 1
+    def image_downloads_for_run(self, vin: str) -> int:
+        return _IMAGE_DOWNLOADS_BY_CAR.get(self.car_download_key(vin), 0)
 
-    def register_image_download_for_run(self) -> None:
+    def register_image_download_for_run(self, vin: str, is_avito_autoload: bool) -> None:
+        """Отмечает успешное скачивание: таймер паузы + счётчик лимита своего типа URL."""
         global _LAST_IMAGE_DOWNLOAD_AT
 
         _LAST_IMAGE_DOWNLOAD_AT = time.monotonic()
+
+        key = self.car_download_key(vin)
+        counter = _AVITO_AUTOLOAD_DOWNLOADS_BY_CAR if is_avito_autoload else _IMAGE_DOWNLOADS_BY_CAR
+        counter[key] = counter.get(key, 0) + 1
 
     def wait_before_image_download(self) -> None:
         if self.config.dry_run:
@@ -470,6 +528,23 @@ class ImageMirror:
                 if self.avito_autoload_downloads_for_run(vin) >= max_new:
                     continue
 
+            if regenerate and not is_avito_autoload:
+                max_new = max(0, int(self.config.max_new_images_per_car))
+                if max_new and self.image_downloads_for_run(vin) >= max_new:
+                    if existing and isinstance(existing.get("cdn"), dict):
+                        # Лимит исчерпан, но зеркало этой картинки уже есть: оставляем прошлую
+                        # версию и её metadata, чтобы на следующем прогоне она снова попала
+                        # в кандидаты на обновление.
+                        metadata = {
+                            "etag": existing.get("etag"),
+                            "last_modified": existing.get("last_modified"),
+                            "content_length": existing.get("content_length"),
+                        }
+                        version = existing.get("version") or version
+                        regenerate = False
+                    else:
+                        continue
+
             cdn = (
                 existing.get("cdn")
                 if existing and not regenerate and isinstance(existing.get("cdn"), dict)
@@ -488,9 +563,7 @@ class ImageMirror:
                     else:
                         self.register_image_source_error(vin, index, source_url, "download", error)
                     continue
-                self.register_image_download_for_run()
-                if is_avito_autoload:
-                    self.register_avito_autoload_download_for_run(vin)
+                self.register_image_download_for_run(vin, is_avito_autoload)
 
             manifest_images.append({
                 "index": index,
@@ -561,12 +634,28 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--cdn_base_url")
     parser.add_argument("--remote_prefix", default=DEFAULT_REMOTE_PREFIX)
     parser.add_argument("--probe_count", type=int, default=DEFAULT_PROBE_COUNT)
-    parser.add_argument("--avito_autoload_max_new_per_car", type=int, default=1)
+    parser.add_argument(
+        "--max_new_images_per_car",
+        type=int,
+        default=int_value(
+            resolve_setting("MIRROR_MAX_NEW_IMAGES_PER_CAR"),
+            DEFAULT_MAX_NEW_IMAGES_PER_CAR,
+        ),
+        help="Max new non-Avito images to download per car in one run (0 = unlimited)",
+    )
+    parser.add_argument(
+        "--avito_autoload_max_new_per_car",
+        type=int,
+        default=int_value(
+            resolve_setting("MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR"),
+            DEFAULT_AVITO_AUTOLOAD_MAX_NEW_PER_CAR,
+        ),
+    )
     parser.add_argument(
         "--autoload_download_delay_seconds",
         type=float,
         default=float_value(
-            os.getenv("MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS"),
+            resolve_setting("MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS"),
             DEFAULT_AUTOLOAD_DOWNLOAD_DELAY_SECONDS,
         ),
     )
@@ -594,6 +683,7 @@ def main() -> None:
         remote_prefix=args.remote_prefix,
         local_root=Path(args.local_root),
         probe_count=args.probe_count,
+        max_new_images_per_car=args.max_new_images_per_car,
         avito_autoload_max_new_per_car=args.avito_autoload_max_new_per_car,
         autoload_download_delay_seconds=args.autoload_download_delay_seconds,
         dry_run=args.dry_run,

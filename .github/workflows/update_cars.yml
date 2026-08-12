@@ -308,7 +308,9 @@ jobs:
         DEALER_CARS_PRICE_OVERRIDE: ${{ env.DEALER_CARS_PRICE_OVERRIDE }}
 
     - name: Download image mirror manifests from CDN
-      if: ${{ vars.MIRROR_CAR_IMAGES == 'true' }}
+      # MIRROR_* можно задавать и в GitHub vars, и в env.json (он уже загружен в env выше).
+      # Приоритет: vars > env.json.
+      if: ${{ (vars.MIRROR_CAR_IMAGES || env.MIRROR_CAR_IMAGES) == 'true' }}
       run: |
         if [[ -z "${CDN_SSH_HOST:-}" || -z "${CDN_SSH_USER:-}" || -z "${CDN_SSH_PRIVATE_KEY:-}" ]]; then
           echo "CDN SSH secrets are not configured; skipping image mirror manifest download"
@@ -368,17 +370,26 @@ jobs:
           if [[ -n "${MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS:-}" ]]; then
             mirror_args="$mirror_args --mirror_autoload_download_delay_seconds ${MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS}"
           fi
+          if [[ -n "${MIRROR_MAX_NEW_IMAGES_PER_CAR:-}" ]]; then
+            mirror_args="$mirror_args --mirror_max_new_images_per_car ${MIRROR_MAX_NEW_IMAGES_PER_CAR}"
+          fi
+          if [[ -n "${MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR:-}" ]]; then
+            mirror_args="$mirror_args --mirror_avito_autoload_max_new_per_car ${MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR}"
+          fi
         fi
         pnpm cars auto $mirror_args
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CDN_BASE_URL: ${{ secrets.CDN_BASE_URL }}
-        MIRROR_CAR_IMAGES: ${{ vars.MIRROR_CAR_IMAGES }}
-        MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS: ${{ vars.MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS }}
+        # vars имеет приоритет, но при пустом vars значение не должно затирать env.json
+        MIRROR_CAR_IMAGES: ${{ vars.MIRROR_CAR_IMAGES || env.MIRROR_CAR_IMAGES }}
+        MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS: ${{ vars.MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS || env.MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS }}
+        MIRROR_MAX_NEW_IMAGES_PER_CAR: ${{ vars.MIRROR_MAX_NEW_IMAGES_PER_CAR || env.MIRROR_MAX_NEW_IMAGES_PER_CAR }}
+        MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR: ${{ vars.MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR || env.MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR }}
         DEALER_CARS_PRICE_OVERRIDE: ${{ env.DEALER_CARS_PRICE_OVERRIDE }}
 
     - name: Upload mirrored car images to CDN
-      if: ${{ always() && vars.MIRROR_CAR_IMAGES == 'true' }}
+      if: ${{ always() && (vars.MIRROR_CAR_IMAGES || env.MIRROR_CAR_IMAGES) == 'true' }}
       run: |
         if [[ ! -d tmp/image_mirror/cars ]]; then
           echo "No mirrored images to upload"
