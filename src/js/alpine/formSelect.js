@@ -9,6 +9,7 @@ export function formSelect() {
 		disabled: Boolean(config.disabled),
 		pageData: Boolean(config.pageData),
 		modalData: Boolean(config.modalData),
+		brandSort: Boolean(config.brandSort),
 		value: null,
 		currentOption: {},
 		getCurrentOptionCalltouchValue(field) {
@@ -61,6 +62,54 @@ export function formSelect() {
 			// чтобы submitForm не взял routeKey/mod_id от прошлого выбора.
 			this.setCalltouchData();
 			this.disabled = false;
+		},
+		// Марка, под которую подстраиваем список. Явная ссылка (?brand=) важнее
+		// того, что проставила страница, а память о просмотренном автомобиле —
+		// последний источник.
+		getPriorityBrands() {
+			const params = new URLSearchParams(window.location.search);
+			const stored = Alpine.store('lastViewedModel');
+			const raw =
+				params.get('brand') ||
+				document.documentElement.dataset.brand ||
+				stored?.markId ||
+				'';
+
+			return raw
+				.split(',')
+				.map((brand) => brand.trim().toLowerCase())
+				.filter(Boolean);
+		},
+		sortOptionsByBrand() {
+			const brands = this.getPriorityBrands();
+			if (!brands.length) return;
+
+			const priority = [];
+			const rest = [];
+			this.options.forEach((option) => {
+				const brandId = (option.brandId || '').toLowerCase();
+				(brandId && brands.includes(brandId) ? priority : rest).push(option);
+			});
+			// Нечего поднимать наверх либо подняли бы вообще всё — оставляем как есть.
+			if (!priority.length || !rest.length) return;
+
+			this.options = [...priority, ...rest];
+
+			// Подставляем запомненный автомобиль, только если его марка попала в
+			// приоритетные. Иначе по ссылке одной марки открылся бы чужой автомобиль.
+			const stored = Alpine.store('lastViewedModel');
+			const storedBrand = (stored?.markId || '').toLowerCase();
+			if (!stored?.idNormalized || !brands.includes(storedBrand)) return;
+
+			const match = priority.find(
+				(option) =>
+					option.modelIdNormalized === stored.idNormalized &&
+					(option.brandId || '').toLowerCase() === storedBrand,
+			);
+			if (match) this.select(match.id);
+		},
+		init() {
+			if (this.brandSort) this.sortOptionsByBrand();
 		},
 		effect() {
 			if (this.modalData) {

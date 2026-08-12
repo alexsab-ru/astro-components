@@ -24,10 +24,16 @@ const {
 import modelsData from '@/data/site/models.json';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { getModelBrandDisplayName, getModelBrandId, getModelTitle } from '@/js/utils/modelFields';
+import { normalizeModelId } from '@/js/utils/normalizeModelId';
+// brandId и modelIdNormalized нужны селекту, чтобы вынести модели нужной марки
+// наверх и подставить запомненный автомобиль. По name/caption это не сделать:
+// там человекочитаемые подписи.
 const options = (modelsData.service || []).filter(isModelVisible).map((model) => ({
 	id: `${getModelBrandId(model)}-${model.id}`.toLowerCase(),
 	name: `${getModelBrandDisplayName(model)} ${model.name}`,
 	caption: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}`,
+	brandId: getModelBrandId(model),
+	modelIdNormalized: normalizeModelId(model.id),
 }));
 ---
 
@@ -41,7 +47,7 @@ const options = (modelsData.service || []).filter(isModelVisible).map((model) =>
     placeholder="mail@example.com"
 />
   
-  {showModelSelect && <FormSelect name="model" placeholder="Выберите модель" options={options} />}  
+  {showModelSelect && <FormSelect name="model" placeholder="Выберите модель" options={options} brandSort />}
   
   <Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
   <Input

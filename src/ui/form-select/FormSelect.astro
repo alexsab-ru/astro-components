@@ -6,6 +6,8 @@ interface Props {
 	disabled?: boolean;
 	pageData?: boolean;
 	modalData?: boolean;
+	/** Вынести опции выбранной марки в начало списка и подставить запомненный автомобиль */
+	brandSort?: boolean;
 	errorMessage?: string;
 	errorClasses?: string;
 	options?: {
@@ -14,6 +16,8 @@ interface Props {
 		ctModId?: string;
 		ctSiteId?: string;
 		ctRouteKey?: string;
+		brandId?: string;
+		modelIdNormalized?: string;
 	}[];
 }
 const {
@@ -23,6 +27,7 @@ const {
 	disabled = false, 
 	pageData = false,
 	modalData = false,
+	brandSort = false,
 	errorMessage = 'Это поле обязательное!',
 	errorClasses = 'xs:text-[10px] text-xs hidden text-red-500 mt-2',
 	options = []
@@ -34,7 +39,8 @@ const formSelectConfig = JSON.stringify({
 	placeholder,
 	disabled,
 	pageData,
-	modalData
+	modalData,
+	brandSort
 });
 ---
 <div
