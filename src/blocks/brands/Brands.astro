@@ -12,6 +12,20 @@ const ViewType = {
   CARD: 'card'
 };
 
+// Ссылки на логотипы лежат в layered-каталоге брендов (astro-json/data/brands),
+// который downloadCommonRepo кладёт в src/data/common/brands. Каталога может не быть
+// (данные не скачаны) или у бренда может не быть заполненного logo — тогда работает
+// фолбэк на стандартные имена файлов в cdn.alexsab.ru/logo.
+const brandDefaults = import.meta.glob<{ default: { logo?: Record<string, string> } }>(
+  '/src/data/common/brands/*/defaults.json',
+  { eager: true }
+);
+const brandLogos = Object.entries(brandDefaults).reduce((acc, [path, module]) => {
+  const brandId = path.split('/').at(-2);
+  if (brandId) acc[brandId] = module.default?.logo ?? {};
+  return acc;
+}, {} as Record<string, Record<string, string>>);
+
 const modules = import.meta.glob('/src/content/cars/*.mdx', { eager: true });
 const filePaths = Object.keys(modules);
 // Здесь мы считаем кол-во файлов для конкретой марки авто в src/content/cars. Кол-во файлов - это кол-во АВН. Получим примерно следующее { jetour: 14, soueast: 1 }
@@ -40,9 +54,9 @@ const { type = ViewType.LOGO } = Astro.props;
   brands.length ? (() => {
     switch (type) {
       case ViewType.LOGO:
-        return <BrandLogos brands={brands} />;
+        return <BrandLogos brands={brands} brandLogos={brandLogos} />;
       case ViewType.CARD:
-        return <BrandCards brands={brands} brandCounts={brandCounts} />;
+        return <BrandCards brands={brands} brandCounts={brandCounts} brandLogos={brandLogos} />;
       default:
         return null;
     }
