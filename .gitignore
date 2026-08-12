@@ -35,8 +35,5 @@ src/data/**/*.yaml
 .claude/worktrees/
 /.pnpm-store
 /src/content/**/*.mdx
-# !/src/content/cars/*.mdx
-# !/src/content/used_cars/*.mdx
-# /src/pages/**/*.astro
-# /src/**/*.mdx
-# /src/**/*.json
+!/src/content/cars/*.mdx
+!/src/content/used_cars/*.mdx
