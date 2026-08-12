@@ -1,12 +1,23 @@
 ---
-const { brands, brandLogos = {} } = Astro.props;
+import type { TBrandItem } from './types';
 
-const whiteLogo = (brand: string) =>
-  brandLogos[brand]?.white || `https://cdn.alexsab.ru/logo/${brand}/logo-footer.svg`;
+interface Props {
+  items: TBrandItem[];
+}
+
+const { items } = Astro.props;
 ---
 
 <div class="flex flex-wrap gap-2 p-2">
-  {brands.map((brand: string) => (
-    <div class="flex items-center object-contain w-[70px]"><img src={whiteLogo(brand)} alt={brand} loading="lazy" class="h-auto w-full filter brightness-0 invert opacity-70" /></div>
+  {items.map((item: TBrandItem) => (
+    <a
+      href={item.href}
+      target={item.target}
+      rel={item.rel}
+      data-title={item.isPopup ? item.displayName : undefined}
+      data-form_name={item.isPopup ? `${item.displayName}. Бренды` : undefined}
+      class={`flex items-center object-contain w-[70px] no-underline! ${item.isPopup ? 'popup-link' : ''}`}>
+      <img src={item.whiteLogo} alt={item.displayName} loading="lazy" class="h-auto w-full filter brightness-0 invert opacity-70" />
+    </a>
   ))}
 </div>

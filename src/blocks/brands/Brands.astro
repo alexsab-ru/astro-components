@@ -1,10 +1,18 @@
 ---
 import settingsData from '@/data/site/settings.json';
+import scripts from '@/data/site/scripts.json';
+import { resolveBannerLink } from '@/blocks/banner/link.js';
 import BrandLogos from './BrandLogos.astro';
 import BrandCards from './BrandCards.astro';
 
 interface Props {
   type?: string;
+  /** Явный список брендов для этого блока. По умолчанию — settings.brand */
+  brands?: string | string[];
+  /** Куда ведут все плашки блока. {brand} подставляет id бренда */
+  linkTo?: string;
+  /** Точечные переопределения по бренду, тоже поддерживают {brand} */
+  brandLinks?: Record<string, string>;
 }
 
 const ViewType = {
@@ -12,19 +20,21 @@ const ViewType = {
   CARD: 'card'
 };
 
+const DEFAULT_LINK = '#common-modal';
+
 // Ссылки на логотипы лежат в layered-каталоге брендов (astro-json/data/brands),
 // который downloadCommonRepo кладёт в src/data/common/brands. Каталога может не быть
 // (данные не скачаны) или у бренда может не быть заполненного logo — тогда работает
 // фолбэк на стандартные имена файлов в cdn.alexsab.ru/logo.
-const brandDefaults = import.meta.glob<{ default: { logo?: Record<string, string> } }>(
+const brandDefaults = import.meta.glob<{ default: Record<string, any> }>(
   '/src/data/common/brands/*/defaults.json',
   { eager: true }
 );
-const brandLogos = Object.entries(brandDefaults).reduce((acc, [path, module]) => {
+const brandData = Object.entries(brandDefaults).reduce((acc, [path, module]) => {
   const brandId = path.split('/').at(-2);
-  if (brandId) acc[brandId] = module.default?.logo ?? {};
+  if (brandId) acc[brandId] = module.default ?? {};
   return acc;
-}, {} as Record<string, Record<string, string>>);
+}, {} as Record<string, Record<string, any>>);
 
 const modules = import.meta.glob('/src/content/cars/*.mdx', { eager: true });
 const filePaths = Object.keys(modules);
@@ -37,26 +47,57 @@ const brandCounts = filePaths.reduce((acc, path) => {
   return acc;
 }, {} as Record<string, number>);
 
-const rawBrands = settingsData?.brand;
-const brands = (
-  Array.isArray(rawBrands)
-    ? rawBrands.flatMap((brand) => (typeof brand === 'string' ? brand.split(',') : []))
-    : typeof rawBrands === 'string'
-      ? rawBrands.split(',')
-      : []
-)
-  .map((brand) => brand.trim().toLowerCase())
-  .filter(Boolean);
+const { type = ViewType.LOGO, brands: brandsProp, linkTo, brandLinks = {} } = Astro.props;
 
-const { type = ViewType.LOGO } = Astro.props;
+const toBrandList = (raw: unknown): string[] =>
+  (Array.isArray(raw)
+    ? raw.flatMap((brand) => (typeof brand === 'string' ? brand.split(',') : []))
+    : typeof raw === 'string'
+      ? raw.split(',')
+      : []
+  )
+    .map((brand) => brand.trim().toLowerCase())
+    .filter(Boolean);
+
+const brands = toBrandList(brandsProp ?? settingsData?.brand);
+
+// Настройка из данных сайта — чтобы можно было управлять ссылками из astro-json,
+// не правя index.astro в каждом форке. Проп всегда важнее данных.
+const settingsLinks: Record<string, string> =
+  (settingsData as Record<string, any>)?.brand_links ?? {};
+
+const items = brands.map((brand) => {
+  const defaults = brandData[brand] ?? {};
+  const url = (
+    brandLinks[brand] ??
+    linkTo ??
+    settingsLinks[brand] ??
+    settingsLinks.default ??
+    DEFAULT_LINK
+  ).replaceAll('{brand}', brand);
+  const link = resolveBannerLink({ url }, { siteOrigin: scripts.site });
+  const displayName = defaults?.brand?.displayName || brand.toUpperCase();
+
+  return {
+    id: brand,
+    displayName,
+    count: brandCounts[brand] ?? 0,
+    colorLogo: defaults?.logo?.color || `https://cdn.alexsab.ru/logo/${brand}/logo-color.svg`,
+    whiteLogo: defaults?.logo?.white || `https://cdn.alexsab.ru/logo/${brand}/logo-footer.svg`,
+    href: link?.href ?? DEFAULT_LINK,
+    isPopup: link?.isPopup ?? true,
+    target: link?.target,
+    rel: link?.rel,
+  };
+});
 ---
 {
-  brands.length ? (() => {
+  items.length ? (() => {
     switch (type) {
       case ViewType.LOGO:
-        return <BrandLogos brands={brands} brandLogos={brandLogos} />;
+        return <BrandLogos items={items} />;
       case ViewType.CARD:
-        return <BrandCards brands={brands} brandCounts={brandCounts} brandLogos={brandLogos} />;
+        return <BrandCards items={items} />;
       default:
         return null;
     }
