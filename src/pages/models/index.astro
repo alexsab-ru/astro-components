@@ -26,3 +26,17 @@ import PageH1 from '@/ui/page-h1/PageH1.astro';
 	<SeoText mdx="models" />
 	<ModelList title="" classes="pt-0! pb-10" />
 </Layout>
+
+<script>
+	// /models/#uaz отрабатывает scroll.js сам. Здесь добавляем вторую форму
+	// записи — /models/?brand=uaz — чтобы ссылка совпадала с /cars/?brand=uaz.
+	import { scroll } from '@/js/modules/scroll';
+
+	const brand = new URLSearchParams(window.location.search).get('brand');
+	const brandId = brand?.trim().toLowerCase();
+	if (brandId && !window.location.hash && document.getElementById(brandId)) {
+		// Та же задержка, что в scroll.js: ждём, пока доедет ленивая подгрузка картинок,
+		// иначе высота карточек ещё не посчитана и промахиваемся мимо блока.
+		setTimeout(() => scroll(brandId), 300);
+	}
+</script>
