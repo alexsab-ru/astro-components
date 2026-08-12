@@ -1,0 +1,129 @@
+/* АВТОСАЛОН 2000 — токены сняты с живого avtosalon2000.ru (Dembrandt)
+   + точные цвета логотипа (assets/images/logo.png: тёмно-синий #06377b и красный #ed1c24).
+   Map tokens to classes like text-accent-500, bg-accent-500, font-sans, rounded-btn, etc. */
+
+/* На avtosalon2000.ru используется Graphik LCG (коммерческая лицензия, self-hosted
+   на их домене). На cdn.alexsab.ru её нет, хотлинк с чужого домена не ставим —
+   берём Montserrat: та же геометрическая гротескная логика, есть на CDN. */
+@font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Regular.woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Medium.woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-SemiBold.woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Bold.woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@theme {
+    /* COLORS — две фирменные шкалы из логотипа: красная и тёмно-синяя */
+
+    /* Красная шкала. 500 намеренно чуть глубже логотипного #ed1c24:
+       белый на #ed1c24 даёт 4.38:1 (AA для крупного текста, но не для 16px кнопок),
+       на #e01018 — 4.93:1, на #ca1018 — 5.84:1. Разница на глаз незаметна. */
+    --color-brand-red-400: #ed1c24;  /* чистый красный логотипа — декор, крупный текст */
+    --color-brand-red-500: #e01018;  /* базовый CTA, белый текст 4.93:1 */
+    --color-brand-red-600: #ca1018;  /* hover/pressed (этот же цвет у кнопок на сайте), 5.84:1 */
+    --color-brand-red-700: #a30d13;  /* максимальный контраст */
+
+    /* Тёмно-синяя шкала от логотипной плашки #06377b */
+    --color-brand-navy-400: #0d4593;  /* hover ссылок на тёмном */
+    --color-brand-navy-500: #06377b;  /* синий логотипа, белый текст 11.41:1 */
+    --color-brand-navy-600: #052a5d;  /* тёмная подложка меню */
+    --color-brand-navy-700: #041d41;  /* футер */
+
+    --color-accent-400: var(--color-brand-red-400);
+    --color-accent-500: var(--color-brand-red-500);
+    --color-accent-600: var(--color-brand-red-600);
+
+    /* Нейтрали с сайта: текст #333, светлые секции #f4f5f8 / #eaeaee,
+       приглушённый текст футера #bcbec1 */
+    --color-black: #333333;
+
+    /* BUTTON COLORS — красный CTA как на сайте: #ed1c24 → hover темнее.
+       Оба состояния с белым текстом проходят AA (4.93:1 и 5.84:1). */
+    --color-button-bg: var(--color-brand-red-500);
+    --color-button-bg-hover: var(--color-brand-red-600);
+    --color-button-text: var(--color-white);
+    --color-button-text-hover: var(--color-white);
+
+    /* HEADER BUTTON COLORS */
+    --color-header-button-bg: var(--color-brand-red-500);
+    --color-header-button-bg-hover: var(--color-brand-red-600);
+    --color-header-button-text: var(--color-white);
+    --color-header-button-text-hover: var(--color-white);
+
+    /* HEADER LINK MENU — на avtosalon2000.ru строка меню тёмная, ссылки белые.
+       У нас хедер светлый, поэтому темнеет только сама плашка пункта:
+       синяя подложка логотипа + белый текст (11.41:1). */
+    --color-header-menu-link-bg-hover: var(--color-brand-navy-500);
+    --color-header-menu-link-text-hover: var(--color-white);
+    --transparent-bg-hover-color: var(--color-brand-navy-500);
+
+    /* LINKS & ICONS — на сайте ссылки синие с красным hover (у них это дефолтный
+       бутстраповский #337ab7, не фирменный). Берём синий логотипа. */
+    --color-link: var(--color-brand-navy-500);
+    --color-link-hover: var(--color-brand-red-500);
+    --color-phone-hover: var(--color-brand-red-500);
+    --color-icon: var(--color-brand-navy-500);
+
+    /* BADGE — плашки-лейблы заголовков. Красный фирменный, не путать с
+       --color-red-500: тот занят ошибками валидации и .btn.danger. */
+    --color-badge-bg: var(--color-brand-red-500);
+    --color-badge-text: var(--color-white);
+
+    /* Swiper Slider */
+    --swiper-pagination-color: var(--color-brand-red-500);
+
+    /* FOOTER COLORS — тёмно-синий вместо чёрного: плашка логотипа в футере
+       остаётся различимой (navy-700 темнее логотипного #06377b).
+       Приглушённый текст — #bcbec1 с сайта. */
+    --footer-bg: var(--color-brand-navy-700);
+    --color-footer-text-color: color-mix(in srgb, var(--color-white) 90%, transparent);
+    --color-footer-text-muted: #bcbec1;
+    --color-footer-phone-hover: var(--color-brand-red-400);
+    --color-footer-link-hover: var(--color-brand-red-400);
+    --color-footer-divide: color-mix(in srgb, var(--color-white) 20%, transparent);
+
+    /* Logo sizing — логотип очень широкий (797×121, ≈6.6:1),
+       поэтому высоты ниже дефолтных, иначе он съедает всю строку */
+    --logo-header-height: clamp(0.9rem, calc(1.4vw + 0.25rem), 1.9rem);
+    --logo-dealer-header-height: var(--logo-header-height);
+
+    --logo-map-info-height: clamp(1.25rem, calc(1.2vw + 0.4rem), 2rem);
+    --logo-dealer-map-info-height: var(--logo-map-info-height);
+
+    --logo-footer-height: var(--logo-map-info-height);
+    --logo-dealer-footer-height: var(--logo-footer-height);
+
+    /* Fonts */
+    --font-sans: Montserrat, Roboto, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-heading: inherit;
+    --font-weight-heading-weight: 700;
+
+    /* Radii — на сайте кнопки без скругления (border-radius: 0),
+       что совпадает с дефолтом base/theme.css */
+    --radius-btn: 0px;
+}
