@@ -17,6 +17,7 @@ import { useFormSubmission } from './hooks/useFormSubmission';
 import { useAnswerHandler } from './hooks/useAnswerHandler';
 import { useInputHandler } from './hooks/useInputHandler';
 import { useChatInit } from './hooks/useChatInit';
+import { useChatAnalytics } from './hooks/useChatAnalytics';
 import {
   DEFAULT_CHAT_SUCCESS_MESSAGE,
   interpolateChatTemplate,
@@ -54,6 +55,13 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     setShowOptions,
     steps,
   } = useChatSteps(config);
+
+  const {
+    trackChatStart,
+    trackQuestionAnswer,
+    trackNameFilled,
+    trackPhoneShown,
+  } = useChatAnalytics(config.questions);
 
   const {
     messages,
@@ -97,6 +105,9 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     addBotMessages,
     config,
     onFirstAnswer: enableScroll,
+    onQuestionAnswered: trackQuestionAnswer,
+    onNameFilled: trackNameFilled,
+    onPhoneShown: trackPhoneShown,
   });
 
   const {
@@ -129,6 +140,7 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     addBotMessages,
     setCurrentStep,
     setShowOptions,
+    onFirstQuestionShown: trackChatStart,
   });
 
   useEffect(() => {

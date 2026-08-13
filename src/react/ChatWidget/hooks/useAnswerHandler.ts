@@ -15,6 +15,9 @@ interface UseAnswerHandlerParams {
   addBotMessages: (texts: string[], onDone?: () => void) => void;
   config: ChatLandingConfig;
   onFirstAnswer?: () => void;
+  onQuestionAnswered?: (questionId: string, answer: string) => void;
+  onNameFilled?: () => void;
+  onPhoneShown?: () => void;
 }
 
 /**
@@ -35,6 +38,9 @@ export function useAnswerHandler({
   addBotMessages,
   config,
   onFirstAnswer,
+  onQuestionAnswered,
+  onNameFilled,
+  onPhoneShown,
 }: UseAnswerHandlerParams) {
   /**
    * Обрабатывает ответ пользователя
@@ -58,18 +64,31 @@ export function useAnswerHandler({
         setAnswers(updatedAnswers);
       }
 
+      // Имя и телефон — ПД: никогда не передаём их в параметры шаговых целей.
+      const isQuizQuestion =
+        currentStep !== "intro" &&
+        currentStep !== "name" &&
+        currentStep !== "phone";
+      if (isQuizQuestion) {
+        onQuestionAnswered?.(currentStep, displayText ?? value);
+      }
+
       const nextKey = steps[currentStep].nextStep();
       setCurrentStep(nextKey);
 
       // Персонализация для шага ввода имени
       if (currentStep === "name") {
+        onNameFilled?.();
         const messages = config.messages || {};
         const afterName = (messages.afterName || "{name}, приятно познакомиться! 😊")
           .replace(/\{name\}/g, value);
         const askPhone = messages.askPhone || "Оставьте номер вашего телефона.";
         addBotMessages(
           [afterName, askPhone],
-          () => setShowOptions(true),
+          () => {
+            setShowOptions(true);
+            onPhoneShown?.();
+          },
         );
         return;
       }
@@ -102,6 +121,9 @@ export function useAnswerHandler({
       addBotMessages,
       config,
       onFirstAnswer,
+      onQuestionAnswered,
+      onNameFilled,
+      onPhoneShown,
     ],
   );
 

@@ -8,6 +8,7 @@ interface UseChatInitParams {
   addBotMessages: (texts: string[], onDone?: () => void) => void;
   setCurrentStep: (step: string) => void;
   setShowOptions: (show: boolean) => void;
+  onFirstQuestionShown?: () => void;
 }
 
 /**
@@ -21,6 +22,7 @@ export function useChatInit({
   addBotMessages,
   setCurrentStep,
   setShowOptions,
+  onFirstQuestionShown,
 }: UseChatInitParams) {
   const hasInit = useRef(false);
 
@@ -36,7 +38,10 @@ export function useChatInit({
         const firstBotTexts = (firstCfg?.botMessages ?? []).filter((t) =>
           t.trim(),
         );
-        const revealFirst = () => setShowOptions(true);
+        const revealFirst = () => {
+          setShowOptions(true);
+          onFirstQuestionShown?.();
+        };
         if (firstBotTexts.length) {
           addBotMessages(firstBotTexts, revealFirst);
         } else {
@@ -44,5 +49,11 @@ export function useChatInit({
         }
       });
     }
-  }, [steps, addBotMessages, setCurrentStep, setShowOptions]);
+  }, [
+    steps,
+    addBotMessages,
+    setCurrentStep,
+    setShowOptions,
+    onFirstQuestionShown,
+  ]);
 }
