@@ -55,6 +55,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 			(function() {
 
 				let saveFile = 0,
+					flowCompleted = false,
 					getCookie = function(name) {
 						var matches = document.cookie.match(new RegExp(
 							"(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -139,6 +140,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 				}
 
 				function saveOrRedirect() {
+					if (flowCompleted) return;
+					flowCompleted = true;
+
 					if(saveUrl) {
 						if(saveFile == 0) {
 							downloadFile(saveUrl);
@@ -178,8 +182,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 									});
 								});
 								setTimeout(function() {
-									if(saveFile == 0) {
-										fetch('https://alexsab.ru/lead/tg/', {
+									if(!flowCompleted) {
+										const relayTimeoutMs = 2000;
+										let relayTimeoutId;
+										const relayTimeout = new Promise((_, reject) => {
+											relayTimeoutId = setTimeout(function() {
+												reject(new Error('Telegram relay timeout'));
+											}, relayTimeoutMs);
+										});
+										const relayRequest = fetch('https://l.alexsab.ru/lead/tg/', {
 											method: 'POST',
 											body: JSON.stringify({
 												message: messageToTelegram,
@@ -187,13 +198,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 												redirectUrl: redirectUrl,
 												saveUrl: saveUrl
 											})
-										})
-										.then((res) => res.json())
-										.then((data) => {
-											saveOrRedirect();
-										})
+										}).then((res) => {
+											if (!res.ok) throw new Error(`Telegram relay failed: ${res.status}`);
+											return res.json();
+										});
+										Promise.race([relayRequest, relayTimeout])
 										.catch((error) => {
 											console.error('Error:', error);
+										})
+										.finally(() => {
+											clearTimeout(relayTimeoutId);
+											saveOrRedirect();
 										});
 									}
 								}, 1000);
