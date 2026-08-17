@@ -101,6 +101,36 @@ jobs:
             echo "pages_enabled=false" >> $GITHUB_OUTPUT
           fi
 
+  # Выбор целей деплоя по переменным репозитория:
+  #   DEPLOY_TO_PAGES — GitHub Pages включён по умолчанию, отключается значением 'false'
+  #   DEPLOY_TO_YC    — Yandex Object Storage включается только значением 'true' и требует YC_BUCKET
+  determine_targets:
+    needs: check-pages
+    runs-on: ubuntu-latest
+    outputs:
+      deploy_pages: ${{ steps.set_targets.outputs.deploy_pages }}
+      deploy_yc: ${{ steps.set_targets.outputs.deploy_yc }}
+    steps:
+      - name: Determine deployment targets
+        id: set_targets
+        env:
+          PAGES_ENABLED: ${{ needs.check-pages.outputs.pages_enabled }}
+          DEPLOY_TO_PAGES: ${{ vars.DEPLOY_TO_PAGES }}
+          DEPLOY_TO_YC: ${{ vars.DEPLOY_TO_YC }}
+          YC_BUCKET: ${{ vars.YC_BUCKET }}
+        run: |
+          if [ "$PAGES_ENABLED" = "true" ] && [ "$DEPLOY_TO_PAGES" != "false" ]; then
+            echo "deploy_pages=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_pages=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ "$DEPLOY_TO_YC" = "true" ] && [ -n "$YC_BUCKET" ]; then
+            echo "deploy_yc=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_yc=false" >> "$GITHUB_OUTPUT"
+          fi
+
   determine_env:
     needs: check-pages
     runs-on: ubuntu-latest
@@ -126,8 +156,8 @@ jobs:
 
   # Build job
   build:
-    needs: [check-pages, determine_env]
-    if: needs.check-pages.outputs.pages_enabled == 'true'
+    needs: [check-pages, determine_env, determine_targets]
+    if: needs.determine_targets.outputs.deploy_pages == 'true' || needs.determine_targets.outputs.deploy_yc == 'true'
     concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
 
@@ -160,6 +190,7 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Setup Pages
+        if: needs.determine_targets.outputs.deploy_pages == 'true'
         id: pages
         uses: actions/configure-pages@v6
 
@@ -294,12 +325,22 @@ jobs:
 
       - name: Upload artifact
         # Automatically uploads an artifact from the './_site' directory by default
+        if: needs.determine_targets.outputs.deploy_pages == 'true'
         uses: actions/upload-pages-artifact@v5
+
+      - name: Upload artifact for Yandex Cloud
+        if: needs.determine_targets.outputs.deploy_yc == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: ./_site
+          retention-days: 1
 
       - name: Create After_deploy text
         id: after_deploy
         run: |
           echo text="<blockquote>After deploy: https://${{ vars.DOMAIN }}</blockquote>" >> $GITHUB_OUTPUT
+          echo site_domain="${{ vars.DOMAIN }}" >> $GITHUB_OUTPUT
 
     outputs:
       script_output: ${{ steps.set_output.outputs.script_output }}
@@ -308,10 +349,12 @@ jobs:
       specials_rassrochka: ${{ steps.check_specials.outputs.specials_rassrochka }}
       specials_rassrochka_marketing: ${{ steps.check_specials.outputs.specials_rassrochka_marketing }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
+      site_domain: ${{ steps.after_deploy.outputs.site_domain }}
 
   # Deployment job
   deploy:
-    needs: build
+    needs: [build, determine_targets]
+    if: needs.determine_targets.outputs.deploy_pages == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -320,6 +363,82 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # Деплой той же сборки в Yandex Object Storage.
+  # Удаление лишних объектов и dry-run управляются отдельными opt-in переменными.
+  deploy_yc:
+    needs: [build, determine_targets]
+    if: needs.determine_targets.outputs.deploy_yc == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: yandex-cloud
+      url: https://website.yandexcloud.net/${{ vars.YC_BUCKET }}/
+    steps:
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: _site
+
+      - name: Validate Yandex Cloud deployment
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ru-central1
+          AWS_EC2_METADATA_DISABLED: 'true'
+          AWS_PAGER: ''
+          YC_BUCKET: ${{ vars.YC_BUCKET }}
+          SITE_DOMAIN: ${{ needs.build.outputs.site_domain }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+            echo "YC_ACCESS_KEY_ID and YC_SECRET_ACCESS_KEY must be configured"
+            exit 1
+          fi
+
+          if [[ ! "$YC_BUCKET" =~ ^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$ ]] || \
+             [[ "$YC_BUCKET" == *..* ]] || [[ "$YC_BUCKET" == *.-* ]] || [[ "$YC_BUCKET" == *-.* ]]; then
+            echo "Invalid YC_BUCKET: $YC_BUCKET"
+            exit 1
+          fi
+
+          if [ -n "$SITE_DOMAIN" ] && [ "$YC_BUCKET" != "$SITE_DOMAIN" ] && [ "$YC_BUCKET" != "www.$SITE_DOMAIN" ]; then
+            echo "YC_BUCKET must match DOMAIN or www.DOMAIN: bucket=$YC_BUCKET domain=$SITE_DOMAIN"
+            exit 1
+          fi
+
+          test -f _site/index.html
+          aws s3api head-bucket \
+            --bucket "$YC_BUCKET" \
+            --endpoint-url https://storage.yandexcloud.net
+
+      - name: Sync to Yandex Object Storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ru-central1
+          AWS_EC2_METADATA_DISABLED: 'true'
+          AWS_PAGER: ''
+          YC_BUCKET: ${{ vars.YC_BUCKET }}
+          YC_DEPLOY_DRY_RUN: ${{ vars.YC_DEPLOY_DRY_RUN }}
+          YC_SYNC_DELETE: ${{ vars.YC_SYNC_DELETE }}
+        run: |
+          set -euo pipefail
+          sync_args=(
+            --endpoint-url https://storage.yandexcloud.net
+            --only-show-errors
+          )
+
+          if [ "$YC_DEPLOY_DRY_RUN" = "true" ]; then
+            sync_args+=(--dryrun)
+          fi
+
+          if [ "$YC_SYNC_DELETE" = "true" ]; then
+            sync_args+=(--delete)
+          fi
+
+          aws s3 sync ./_site "s3://$YC_BUCKET" "${sync_args[@]}"
 
   notify_telegram_error:
     needs: build
@@ -333,7 +452,8 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   notify_telegram_after_deploy:
-    needs: [build, deploy]
+    needs: [build, deploy, deploy_yc]
+    if: ${{ !cancelled() && (needs.deploy.result == 'success' || needs.deploy_yc.result == 'success') }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'after-deploy'
@@ -412,7 +532,7 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   check_links:
-    needs: [build, deploy]
-    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.run_linkinator == 'true') }}
+    needs: [build, deploy, deploy_yc]
+    if: ${{ !cancelled() && (needs.deploy.result == 'success' || needs.deploy_yc.result == 'success') && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.run_linkinator == 'true')) }}
     uses: ./.github/workflows/linkinator.yml
     secrets: inherit
