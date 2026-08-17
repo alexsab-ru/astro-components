@@ -1,53 +1,8 @@
 ---
 import scripts_json from '@/data/site/scripts.json';
-const rawSite = String(scripts_json.site ?? '').trim();
-const repo = String(scripts_json.repo ?? '').trim();
-
-const siteHost = (() => {
-	if (!rawSite) return '';
-
-	try {
-		const siteUrl = rawSite.includes('://') ? rawSite : `https://${rawSite}`;
-		return new URL(siteUrl).hostname.toLowerCase();
-	} catch {
-		return '';
-	}
-})();
+const site = String(scripts_json.site ?? '').trim();
 ---
-
-<script is:inline define:vars={{ siteHost, repo }}>
-	const hasEmptyQuery = location.href.split('#')[0].endsWith('?');
-	let canonicalPath = null;
-
-	if (siteHost) {
-		const githubPagesPrefix = repo ? `/${repo}` : '';
-		const yandexBucketPrefix = `/${siteHost}`;
-
-		if (
-			location.hostname.endsWith('.github.io') &&
-			githubPagesPrefix &&
-			(location.pathname === githubPagesPrefix ||
-				location.pathname.startsWith(`${githubPagesPrefix}/`))
-		) {
-			canonicalPath = location.pathname.slice(githubPagesPrefix.length) || '/';
-		} else if (location.hostname === `${siteHost}.website.yandexcloud.net`) {
-			canonicalPath = location.pathname;
-		} else if (
-			location.hostname === 'website.yandexcloud.net' &&
-			(location.pathname === yandexBucketPrefix ||
-				location.pathname.startsWith(`${yandexBucketPrefix}/`))
-		) {
-			canonicalPath = location.pathname.slice(yandexBucketPrefix.length) || '/';
-		}
-	}
-
-	if (canonicalPath !== null) {
-		const canonicalUrl = new URL(`https://${siteHost}`);
-		canonicalUrl.pathname = canonicalPath;
-		canonicalUrl.search = location.search;
-		canonicalUrl.hash = location.hash;
-		location.replace(canonicalUrl.href);
-	} else if (hasEmptyQuery) {
-		location.replace(location.pathname + location.hash);
-	}
-</script>
+<script is:inline> if (location.href.split("#")[0].slice(-1) === '?') { location.replace(location.pathname + location.hash); } </script>
+{ site !== "" && (
+<script is:inline define:vars={{ site }}> if (location.host.startsWith('alexsab') || location.host.includes('yandexcloud')) { location.replace("https://" + site); } </script>
+) }
