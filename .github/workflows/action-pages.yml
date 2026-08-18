@@ -104,7 +104,7 @@ jobs:
   # Выбор целей деплоя по переменным репозитория:
   #   DEPLOY_TO_PAGES — GitHub Pages включён по умолчанию, отключается значением 'false'
   #   DEPLOY_TO_YC    — Yandex Object Storage включается только значением 'true' и требует YC_BUCKET
-  #   DEPLOY_TO_VPS   — прямой VPS-деплой включается только значением 'true' и требует VPS_RUNNER_LABEL
+  #   DEPLOY_TO_VPS   — прямой VPS-деплой включается только значением 'true' и требует VPS_HOST
   determine_targets:
     needs: check-pages
     runs-on: ubuntu-latest
@@ -121,7 +121,7 @@ jobs:
           DEPLOY_TO_YC: ${{ vars.DEPLOY_TO_YC }}
           YC_BUCKET: ${{ vars.YC_BUCKET }}
           DEPLOY_TO_VPS: ${{ vars.DEPLOY_TO_VPS }}
-          VPS_RUNNER_LABEL: ${{ vars.VPS_RUNNER_LABEL }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
         run: |
           if [ "$PAGES_ENABLED" = "true" ] && [ "$DEPLOY_TO_PAGES" != "false" ]; then
             echo "deploy_pages=true" >> "$GITHUB_OUTPUT"
@@ -135,7 +135,7 @@ jobs:
             echo "deploy_yc=false" >> "$GITHUB_OUTPUT"
           fi
 
-          if [ "$DEPLOY_TO_VPS" = "true" ] && [ -n "$VPS_RUNNER_LABEL" ]; then
+          if [ "$DEPLOY_TO_VPS" = "true" ] && [ -n "$VPS_HOST" ]; then
             echo "deploy_vps=true" >> "$GITHUB_OUTPUT"
           else
             echo "deploy_vps=false" >> "$GITHUB_OUTPUT"
@@ -456,12 +456,12 @@ jobs:
 
           aws s3 sync ./_site "s3://$YC_BUCKET" "${sync_args[@]}"
 
-  # Атомарный деплой готового артефакта на выбранный self-hosted static runner.
-  # Runner работает от непривилегированного пользователя и имеет доступ только к /srv/www.
+  # Атомарный деплой готового артефакта через ограниченный SSH forced-command.
+  # Ключ не получает shell, PTY, forwarding или доступ к другим доменам сервера.
   deploy_vps:
     needs: [build, determine_targets]
     if: needs.determine_targets.outputs.deploy_vps == 'true'
-    runs-on: [self-hosted, linux, "${{ vars.VPS_RUNNER_LABEL }}"]
+    runs-on: ubuntu-latest
     environment:
       name: static-vps
       url: https://${{ vars.VPS_DOMAIN || vars.DOMAIN }}/
@@ -476,7 +476,12 @@ jobs:
         env:
           SITE_DOMAIN: ${{ needs.build.outputs.site_domain }}
           VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_PORT: ${{ vars.VPS_PORT || '22' }}
+          VPS_USER: ${{ vars.VPS_USER || 'site-deploy' }}
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
         run: |
           set -euo pipefail
 
@@ -495,23 +500,64 @@ jobs:
             exit 1
           fi
 
-          test -x /usr/local/bin/ghstatic-deploy-release
+          if [[ ! "$VPS_HOST" =~ ^[A-Za-z0-9.-]+$ ]]; then
+            echo "Invalid VPS_HOST: $VPS_HOST"
+            exit 1
+          fi
+
+          if [[ ! "$VPS_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
+            echo "Invalid VPS_USER: $VPS_USER"
+            exit 1
+          fi
+
+          if [[ ! "$VPS_PORT" =~ ^[1-9][0-9]{0,4}$ ]] || (( VPS_PORT > 65535 )); then
+            echo "Invalid VPS_PORT: $VPS_PORT"
+            exit 1
+          fi
+
+          if [ -z "$VPS_SSH_PRIVATE_KEY" ] || [ -z "$VPS_KNOWN_HOSTS" ]; then
+            echo "VPS_SSH_PRIVATE_KEY and VPS_KNOWN_HOSTS must be configured"
+            exit 1
+          fi
+
           test -f "${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}/index.html"
 
-      - name: Activate VPS release
+      - name: Configure restricted SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 "${{ runner.temp }}/ghstatic-ssh"
+          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > "${{ runner.temp }}/ghstatic-ssh/id_ed25519"
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > "${{ runner.temp }}/ghstatic-ssh/known_hosts"
+          chmod 600 "${{ runner.temp }}/ghstatic-ssh/id_ed25519" "${{ runner.temp }}/ghstatic-ssh/known_hosts"
+          ssh-keygen -y -f "${{ runner.temp }}/ghstatic-ssh/id_ed25519" >/dev/null
+          test -s "${{ runner.temp }}/ghstatic-ssh/known_hosts"
+
+      - name: Upload and activate VPS release
         env:
           VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_PORT: ${{ vars.VPS_PORT || '22' }}
+          VPS_USER: ${{ vars.VPS_USER || 'site-deploy' }}
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
           DEPLOY_SHA: ${{ needs.build.outputs.deploy_sha }}
           ARTIFACT_DIR: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
         run: |
           set -euo pipefail
           release_id="${DEPLOY_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          /usr/local/bin/ghstatic-deploy-release \
-            "$VPS_DOMAIN" \
-            "$release_id" \
-            "$ARTIFACT_DIR" \
-            "$VPS_KEEP_RELEASES"
+          tar -C "$ARTIFACT_DIR" -czf - . | \
+            ssh -T \
+              -p "$VPS_PORT" \
+              -i "${{ runner.temp }}/ghstatic-ssh/id_ed25519" \
+              -o BatchMode=yes \
+              -o IdentitiesOnly=yes \
+              -o StrictHostKeyChecking=yes \
+              -o UserKnownHostsFile="${{ runner.temp }}/ghstatic-ssh/known_hosts" \
+              -o ConnectTimeout=15 \
+              "$VPS_USER@$VPS_HOST" \
+              "$release_id $VPS_KEEP_RELEASES"
 
       - name: Verify public site
         env:
@@ -523,7 +569,10 @@ jobs:
 
       - name: Clean downloaded artifact
         if: always()
-        run: rm -rf -- "${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}"
+        run: |
+          rm -rf -- \
+            "${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}" \
+            "${{ runner.temp }}/ghstatic-ssh"
 
   notify_telegram_error:
     needs: build
