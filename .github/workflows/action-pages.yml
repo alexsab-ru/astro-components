@@ -104,12 +104,14 @@ jobs:
   # Выбор целей деплоя по переменным репозитория:
   #   DEPLOY_TO_PAGES — GitHub Pages включён по умолчанию, отключается значением 'false'
   #   DEPLOY_TO_YC    — Yandex Object Storage включается только значением 'true' и требует YC_BUCKET
+  #   DEPLOY_TO_VPS   — прямой VPS-деплой включается только значением 'true' и требует VPS_HOST
   determine_targets:
     needs: check-pages
     runs-on: ubuntu-latest
     outputs:
       deploy_pages: ${{ steps.set_targets.outputs.deploy_pages }}
       deploy_yc: ${{ steps.set_targets.outputs.deploy_yc }}
+      deploy_vps: ${{ steps.set_targets.outputs.deploy_vps }}
     steps:
       - name: Determine deployment targets
         id: set_targets
@@ -118,6 +120,8 @@ jobs:
           DEPLOY_TO_PAGES: ${{ vars.DEPLOY_TO_PAGES }}
           DEPLOY_TO_YC: ${{ vars.DEPLOY_TO_YC }}
           YC_BUCKET: ${{ vars.YC_BUCKET }}
+          DEPLOY_TO_VPS: ${{ vars.DEPLOY_TO_VPS }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
         run: |
           if [ "$PAGES_ENABLED" = "true" ] && [ "$DEPLOY_TO_PAGES" != "false" ]; then
             echo "deploy_pages=true" >> "$GITHUB_OUTPUT"
@@ -129,6 +133,12 @@ jobs:
             echo "deploy_yc=true" >> "$GITHUB_OUTPUT"
           else
             echo "deploy_yc=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ "$DEPLOY_TO_VPS" = "true" ] && [ -n "$VPS_HOST" ]; then
+            echo "deploy_vps=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_vps=false" >> "$GITHUB_OUTPUT"
           fi
 
   determine_env:
@@ -157,7 +167,7 @@ jobs:
   # Build job
   build:
     needs: [check-pages, determine_env, determine_targets]
-    if: needs.determine_targets.outputs.deploy_pages == 'true' || needs.determine_targets.outputs.deploy_yc == 'true'
+    if: needs.determine_targets.outputs.deploy_pages == 'true' || needs.determine_targets.outputs.deploy_yc == 'true' || needs.determine_targets.outputs.deploy_vps == 'true'
     concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
 
@@ -172,6 +182,10 @@ jobs:
           # update_cars передаёт точный SHA, чтобы workflow_dispatch не взял
           # предыдущий commit сразу после push. Для push/schedule/manual остаётся github.sha.
           ref: ${{ github.event.inputs.deploy_sha || github.sha }}
+
+      - name: Capture deployment SHA
+        id: deployment_metadata
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -328,13 +342,13 @@ jobs:
         if: needs.determine_targets.outputs.deploy_pages == 'true'
         uses: actions/upload-pages-artifact@v5
 
-      - name: Upload artifact for Yandex Cloud
-        if: needs.determine_targets.outputs.deploy_yc == 'true'
+      - name: Upload portable site artifact
+        if: needs.determine_targets.outputs.deploy_yc == 'true' || needs.determine_targets.outputs.deploy_vps == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: site-dist
           path: ./_site
-          retention-days: 1
+          retention-days: 3
 
       - name: Create After_deploy text
         id: after_deploy
@@ -350,6 +364,7 @@ jobs:
       specials_rassrochka_marketing: ${{ steps.check_specials.outputs.specials_rassrochka_marketing }}
       after_deploy: ${{ steps.after_deploy.outputs.text }}
       site_domain: ${{ steps.after_deploy.outputs.site_domain }}
+      deploy_sha: ${{ steps.deployment_metadata.outputs.sha }}
 
   # Deployment job
   deploy:
@@ -427,11 +442,12 @@ jobs:
           set -euo pipefail
           sync_args=(
             --endpoint-url https://storage.yandexcloud.net
-            --only-show-errors
           )
 
           if [ "$YC_DEPLOY_DRY_RUN" = "true" ]; then
             sync_args+=(--dryrun)
+          else
+            sync_args+=(--only-show-errors)
           fi
 
           if [ "$YC_SYNC_DELETE" = "true" ]; then
@@ -439,6 +455,235 @@ jobs:
           fi
 
           aws s3 sync ./_site "s3://$YC_BUCKET" "${sync_args[@]}"
+
+  # Атомарный деплой готового артефакта через ограниченный SSH forced-command.
+  # Ключ не получает shell, PTY, forwarding или доступ к другим доменам сервера.
+  deploy_vps:
+    needs: [build, determine_targets]
+    if: needs.determine_targets.outputs.deploy_vps == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: static-vps
+      url: https://${{ vars.VPS_DOMAIN || vars.DOMAIN }}/
+    steps:
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Validate VPS deployment
+        env:
+          SITE_DOMAIN: ${{ needs.build.outputs.site_domain }}
+          VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_PORT: ${{ vars.VPS_PORT || '22' }}
+          VPS_USER: ${{ vars.VPS_USER || 'site-deploy' }}
+          VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
+          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
+          VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
+          VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
+          VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$VPS_DOMAIN" =~ ^[a-z0-9][a-z0-9.-]{1,251}[a-z0-9]$ ]]; then
+            echo "Invalid VPS_DOMAIN: $VPS_DOMAIN"
+            exit 1
+          fi
+
+          if [ "$VPS_DOMAIN" != "$SITE_DOMAIN" ]; then
+            echo "VPS_DOMAIN must match DOMAIN: vps=$VPS_DOMAIN domain=$SITE_DOMAIN"
+            exit 1
+          fi
+
+          if [[ ! "$VPS_KEEP_RELEASES" =~ ^[1-9][0-9]?$ ]]; then
+            echo "VPS_KEEP_RELEASES must be an integer from 1 to 99"
+            exit 1
+          fi
+
+          if [[ ! "$VPS_HOST" =~ ^[A-Za-z0-9.-]+$ ]]; then
+            echo "Invalid VPS_HOST: $VPS_HOST"
+            exit 1
+          fi
+
+          if [[ ! "$VPS_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
+            echo "Invalid VPS_USER: $VPS_USER"
+            exit 1
+          fi
+
+          if [[ ! "$VPS_PORT" =~ ^[1-9][0-9]{0,4}$ ]] || (( VPS_PORT > 65535 )); then
+            echo "Invalid VPS_PORT: $VPS_PORT"
+            exit 1
+          fi
+
+          if [ -z "$VPS_SSH_PRIVATE_KEY" ] || [ -z "$VPS_KNOWN_HOSTS" ]; then
+            echo "VPS_SSH_PRIVATE_KEY and VPS_KNOWN_HOSTS must be configured"
+            exit 1
+          fi
+
+          if [ -n "$VPS_PROXY_HOST" ]; then
+            if [[ ! "$VPS_PROXY_HOST" =~ ^[A-Za-z0-9.-]+$ ]]; then
+              echo "Invalid VPS_PROXY_HOST: $VPS_PROXY_HOST"
+              exit 1
+            fi
+
+            if [[ ! "$VPS_PROXY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
+              echo "Invalid VPS_PROXY_USER: $VPS_PROXY_USER"
+              exit 1
+            fi
+
+            if [[ ! "$VPS_PROXY_PORT" =~ ^[1-9][0-9]{0,4}$ ]] || (( VPS_PROXY_PORT > 65535 )); then
+              echo "Invalid VPS_PROXY_PORT: $VPS_PROXY_PORT"
+              exit 1
+            fi
+
+            if [ -z "$VPS_PROXY_SSH_PRIVATE_KEY" ] || [ -z "$VPS_PROXY_KNOWN_HOSTS" ]; then
+              echo "VPS_PROXY_SSH_PRIVATE_KEY and VPS_PROXY_KNOWN_HOSTS must be configured when VPS_PROXY_HOST is set"
+              exit 1
+            fi
+          elif [ -n "$VPS_PROXY_USER" ] || [ -n "$VPS_PROXY_SSH_PRIVATE_KEY" ] || [ -n "$VPS_PROXY_KNOWN_HOSTS" ]; then
+            echo "VPS_PROXY_HOST is required when any proxy setting is configured"
+            exit 1
+          fi
+
+          if [ -n "$VPS_HEALTHCHECK_VIA_PROXY" ] && [ "$VPS_HEALTHCHECK_VIA_PROXY" != "true" ] && [ "$VPS_HEALTHCHECK_VIA_PROXY" != "false" ]; then
+            echo "VPS_HEALTHCHECK_VIA_PROXY must be true, false, or empty"
+            exit 1
+          fi
+
+          if [ "$VPS_HEALTHCHECK_VIA_PROXY" = "true" ] && [ -z "$VPS_PROXY_HOST" ]; then
+            echo "VPS_PROXY_HOST is required when VPS_HEALTHCHECK_VIA_PROXY=true"
+            exit 1
+          fi
+
+          test -f "${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}/index.html"
+
+      - name: Configure restricted SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
+          VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 "${{ runner.temp }}/ghstatic-ssh"
+          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > "${{ runner.temp }}/ghstatic-ssh/id_ed25519"
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > "${{ runner.temp }}/ghstatic-ssh/known_hosts"
+          chmod 600 "${{ runner.temp }}/ghstatic-ssh/id_ed25519" "${{ runner.temp }}/ghstatic-ssh/known_hosts"
+          ssh-keygen -y -f "${{ runner.temp }}/ghstatic-ssh/id_ed25519" >/dev/null
+          test -s "${{ runner.temp }}/ghstatic-ssh/known_hosts"
+
+          if [ -n "$VPS_PROXY_HOST" ]; then
+            printf '%s\n' "$VPS_PROXY_SSH_PRIVATE_KEY" > "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519"
+            printf '%s\n' "$VPS_PROXY_KNOWN_HOSTS" > "${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts"
+            chmod 600 "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519" "${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts"
+            ssh-keygen -y -f "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519" >/dev/null
+            test -s "${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts"
+          fi
+
+      - name: Upload and activate VPS release
+        env:
+          VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_PORT: ${{ vars.VPS_PORT || '22' }}
+          VPS_USER: ${{ vars.VPS_USER || 'site-deploy' }}
+          VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
+          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
+          DEPLOY_SHA: ${{ needs.build.outputs.deploy_sha }}
+          ARTIFACT_DIR: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          release_id="${DEPLOY_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+          ssh_options=(
+            -T
+            -p "$VPS_PORT"
+            -i "${{ runner.temp }}/ghstatic-ssh/id_ed25519"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o UserKnownHostsFile="${{ runner.temp }}/ghstatic-ssh/known_hosts"
+            -o ConnectTimeout=15
+          )
+
+          if [ -n "$VPS_PROXY_HOST" ]; then
+            proxy_command="ssh -W %h:%p -p $VPS_PROXY_PORT -i ${{ runner.temp }}/ghstatic-ssh/proxy_ed25519 -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts -o ConnectTimeout=15 $VPS_PROXY_USER@$VPS_PROXY_HOST"
+            ssh_options+=( -o "ProxyCommand=$proxy_command" )
+          fi
+
+          tar -C "$ARTIFACT_DIR" -czf - . | \
+            ssh "${ssh_options[@]}" \
+              "$VPS_USER@$VPS_HOST" \
+              "$release_id $VPS_KEEP_RELEASES"
+
+      - name: Verify public site
+        env:
+          VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
+          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
+          VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
+        run: |
+          set -euo pipefail
+
+          curl_options=(
+            --fail
+            --silent
+            --show-error
+            --location
+            --retry 3
+            --retry-all-errors
+            --max-time 20
+          )
+
+          if [ "$VPS_HEALTHCHECK_VIA_PROXY" = "true" ]; then
+            healthcheck_port=18443
+            ssh -N \
+              -L "127.0.0.1:$healthcheck_port:$VPS_HOST:443" \
+              -p "$VPS_PROXY_PORT" \
+              -i "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519" \
+              -o BatchMode=yes \
+              -o IdentitiesOnly=yes \
+              -o StrictHostKeyChecking=yes \
+              -o UserKnownHostsFile="${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts" \
+              -o ExitOnForwardFailure=yes \
+              -o ConnectTimeout=15 \
+              "$VPS_PROXY_USER@$VPS_PROXY_HOST" &
+            relay_pid=$!
+            trap 'kill "$relay_pid" 2>/dev/null || true; wait "$relay_pid" 2>/dev/null || true' EXIT
+
+            for _ in {1..20}; do
+              if nc -z 127.0.0.1 "$healthcheck_port"; then
+                break
+              fi
+              if ! kill -0 "$relay_pid" 2>/dev/null; then
+                echo "HTTPS relay exited before the healthcheck started"
+                exit 1
+              fi
+              sleep 1
+            done
+
+            nc -z 127.0.0.1 "$healthcheck_port"
+            curl_options+=(--connect-to "$VPS_DOMAIN:443:127.0.0.1:$healthcheck_port")
+          fi
+
+          curl "${curl_options[@]}" "https://$VPS_DOMAIN/" >/dev/null
+
+      - name: Clean downloaded artifact
+        if: always()
+        run: |
+          rm -rf -- \
+            "${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}" \
+            "${{ runner.temp }}/ghstatic-ssh"
 
   notify_telegram_error:
     needs: build
@@ -452,8 +697,8 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   notify_telegram_after_deploy:
-    needs: [build, deploy, deploy_yc]
-    if: ${{ !cancelled() && (needs.deploy.result == 'success' || needs.deploy_yc.result == 'success') }}
+    needs: [build, deploy, deploy_yc, deploy_vps]
+    if: ${{ !cancelled() && (needs.deploy.result == 'success' || needs.deploy_yc.result == 'success' || needs.deploy_vps.result == 'success') }}
     uses: ./.github/workflows/github-telegram.yml
     with:
       caller-id: 'after-deploy'
@@ -532,7 +777,7 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   check_links:
-    needs: [build, deploy, deploy_yc]
-    if: ${{ !cancelled() && (needs.deploy.result == 'success' || needs.deploy_yc.result == 'success') && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.run_linkinator == 'true')) }}
+    needs: [build, deploy, deploy_yc, deploy_vps]
+    if: ${{ !cancelled() && (needs.deploy.result == 'success' || needs.deploy_yc.result == 'success' || needs.deploy_vps.result == 'success') && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.run_linkinator == 'true')) }}
     uses: ./.github/workflows/linkinator.yml
     secrets: inherit
