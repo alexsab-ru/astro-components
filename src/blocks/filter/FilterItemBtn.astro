@@ -6,10 +6,37 @@ interface Props {
 	filterType: string;
 }
 const { name, value, id, filterType, ...rest } = Astro.props;
+const inputValue = value || name;
+// HTML id cannot contain spaces or commas. PageSpeed/axe treat
+// ids like "atlas, ii" as unlabeled even when a wrapping <label> exists.
+const inputId = `${filterType}-${id || inputValue}`
+	.trim()
+	.toLowerCase()
+	.replace(/[^a-z0-9_-]+/g, '-')
+	.replace(/^-+|-+$/g, '');
 ---
-<div class="relative" {...rest}>
-	<label class="peer w-full h-full absolute cursor-pointer z-50">
-		<input type="checkbox" value={value || name} { ...id && {id} } class="asbsolute opacity-0" @change={`toggleFilter('${filterType}', '${value || name}', event)`} />
+
+<!--
+	Visible name lives inside <label>, not in a sibling.
+	An empty wrapping label does not give the checkbox an accessible name.
+-->
+<div
+	class="relative"
+	{...rest}
+>
+	<label
+		class="block cursor-pointer"
+		for={inputId}
+	>
+		<input
+			type="checkbox"
+			value={inputValue}
+			id={inputId}
+			class="peer sr-only"
+			@change={`toggleFilter('${filterType}', '${inputValue}', event)`}
+		/>
+		<div class="text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0 bg-gray-200 peer-checked:bg-accent-500 peer-checked:text-white">
+			{name}
+		</div>
 	</label>
-	<div class="text-xs sm:text-base py-2 px-2 sm:px-4 no-underline rounded-md m-0 bg-gray-200 peer-has-checked:bg-accent-500 peer-has-checked:text-white">{name}</div>
 </div>
