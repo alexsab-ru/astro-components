@@ -482,6 +482,11 @@ jobs:
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
           VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
+          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
+          VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
+          VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
         run: |
           set -euo pipefail
 
@@ -520,12 +525,40 @@ jobs:
             exit 1
           fi
 
+          if [ -n "$VPS_PROXY_HOST" ]; then
+            if [[ ! "$VPS_PROXY_HOST" =~ ^[A-Za-z0-9.-]+$ ]]; then
+              echo "Invalid VPS_PROXY_HOST: $VPS_PROXY_HOST"
+              exit 1
+            fi
+
+            if [[ ! "$VPS_PROXY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
+              echo "Invalid VPS_PROXY_USER: $VPS_PROXY_USER"
+              exit 1
+            fi
+
+            if [[ ! "$VPS_PROXY_PORT" =~ ^[1-9][0-9]{0,4}$ ]] || (( VPS_PROXY_PORT > 65535 )); then
+              echo "Invalid VPS_PROXY_PORT: $VPS_PROXY_PORT"
+              exit 1
+            fi
+
+            if [ -z "$VPS_PROXY_SSH_PRIVATE_KEY" ] || [ -z "$VPS_PROXY_KNOWN_HOSTS" ]; then
+              echo "VPS_PROXY_SSH_PRIVATE_KEY and VPS_PROXY_KNOWN_HOSTS must be configured when VPS_PROXY_HOST is set"
+              exit 1
+            fi
+          elif [ -n "$VPS_PROXY_USER" ] || [ -n "$VPS_PROXY_SSH_PRIVATE_KEY" ] || [ -n "$VPS_PROXY_KNOWN_HOSTS" ]; then
+            echo "VPS_PROXY_HOST is required when any proxy setting is configured"
+            exit 1
+          fi
+
           test -f "${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}/index.html"
 
       - name: Configure restricted SSH key
         env:
           VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
+          VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
         run: |
           set -euo pipefail
           install -d -m 700 "${{ runner.temp }}/ghstatic-ssh"
@@ -535,6 +568,14 @@ jobs:
           ssh-keygen -y -f "${{ runner.temp }}/ghstatic-ssh/id_ed25519" >/dev/null
           test -s "${{ runner.temp }}/ghstatic-ssh/known_hosts"
 
+          if [ -n "$VPS_PROXY_HOST" ]; then
+            printf '%s\n' "$VPS_PROXY_SSH_PRIVATE_KEY" > "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519"
+            printf '%s\n' "$VPS_PROXY_KNOWN_HOSTS" > "${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts"
+            chmod 600 "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519" "${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts"
+            ssh-keygen -y -f "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519" >/dev/null
+            test -s "${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts"
+          fi
+
       - name: Upload and activate VPS release
         env:
           VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
@@ -542,20 +583,33 @@ jobs:
           VPS_PORT: ${{ vars.VPS_PORT || '22' }}
           VPS_USER: ${{ vars.VPS_USER || 'site-deploy' }}
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
+          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
           DEPLOY_SHA: ${{ needs.build.outputs.deploy_sha }}
           ARTIFACT_DIR: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
         run: |
           set -euo pipefail
           release_id="${DEPLOY_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+          ssh_options=(
+            -T
+            -p "$VPS_PORT"
+            -i "${{ runner.temp }}/ghstatic-ssh/id_ed25519"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o UserKnownHostsFile="${{ runner.temp }}/ghstatic-ssh/known_hosts"
+            -o ConnectTimeout=15
+          )
+
+          if [ -n "$VPS_PROXY_HOST" ]; then
+            proxy_command="ssh -W %h:%p -p $VPS_PROXY_PORT -i ${{ runner.temp }}/ghstatic-ssh/proxy_ed25519 -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts -o ConnectTimeout=15 $VPS_PROXY_USER@$VPS_PROXY_HOST"
+            ssh_options+=( -o "ProxyCommand=$proxy_command" )
+          fi
+
           tar -C "$ARTIFACT_DIR" -czf - . | \
-            ssh -T \
-              -p "$VPS_PORT" \
-              -i "${{ runner.temp }}/ghstatic-ssh/id_ed25519" \
-              -o BatchMode=yes \
-              -o IdentitiesOnly=yes \
-              -o StrictHostKeyChecking=yes \
-              -o UserKnownHostsFile="${{ runner.temp }}/ghstatic-ssh/known_hosts" \
-              -o ConnectTimeout=15 \
+            ssh "${ssh_options[@]}" \
               "$VPS_USER@$VPS_HOST" \
               "$release_id $VPS_KEEP_RELEASES"
 
