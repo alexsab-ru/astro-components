@@ -487,6 +487,7 @@ jobs:
           VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
           VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
           VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
+          VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
         run: |
           set -euo pipefail
 
@@ -547,6 +548,16 @@ jobs:
             fi
           elif [ -n "$VPS_PROXY_USER" ] || [ -n "$VPS_PROXY_SSH_PRIVATE_KEY" ] || [ -n "$VPS_PROXY_KNOWN_HOSTS" ]; then
             echo "VPS_PROXY_HOST is required when any proxy setting is configured"
+            exit 1
+          fi
+
+          if [ -n "$VPS_HEALTHCHECK_VIA_PROXY" ] && [ "$VPS_HEALTHCHECK_VIA_PROXY" != "true" ] && [ "$VPS_HEALTHCHECK_VIA_PROXY" != "false" ]; then
+            echo "VPS_HEALTHCHECK_VIA_PROXY must be true, false, or empty"
+            exit 1
+          fi
+
+          if [ "$VPS_HEALTHCHECK_VIA_PROXY" = "true" ] && [ -z "$VPS_PROXY_HOST" ]; then
+            echo "VPS_PROXY_HOST is required when VPS_HEALTHCHECK_VIA_PROXY=true"
             exit 1
           fi
 
@@ -616,10 +627,56 @@ jobs:
       - name: Verify public site
         env:
           VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
+          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
+          VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
         run: |
-          curl --fail --silent --show-error --location \
-            --retry 3 --retry-all-errors --max-time 20 \
-            "https://$VPS_DOMAIN/" >/dev/null
+          set -euo pipefail
+
+          curl_options=(
+            --fail
+            --silent
+            --show-error
+            --location
+            --retry 3
+            --retry-all-errors
+            --max-time 20
+          )
+
+          if [ "$VPS_HEALTHCHECK_VIA_PROXY" = "true" ]; then
+            healthcheck_port=18443
+            ssh -N \
+              -L "127.0.0.1:$healthcheck_port:$VPS_HOST:443" \
+              -p "$VPS_PROXY_PORT" \
+              -i "${{ runner.temp }}/ghstatic-ssh/proxy_ed25519" \
+              -o BatchMode=yes \
+              -o IdentitiesOnly=yes \
+              -o StrictHostKeyChecking=yes \
+              -o UserKnownHostsFile="${{ runner.temp }}/ghstatic-ssh/proxy_known_hosts" \
+              -o ExitOnForwardFailure=yes \
+              -o ConnectTimeout=15 \
+              "$VPS_PROXY_USER@$VPS_PROXY_HOST" &
+            relay_pid=$!
+            trap 'kill "$relay_pid" 2>/dev/null || true; wait "$relay_pid" 2>/dev/null || true' EXIT
+
+            for _ in {1..20}; do
+              if nc -z 127.0.0.1 "$healthcheck_port"; then
+                break
+              fi
+              if ! kill -0 "$relay_pid" 2>/dev/null; then
+                echo "HTTPS relay exited before the healthcheck started"
+                exit 1
+              fi
+              sleep 1
+            done
+
+            nc -z 127.0.0.1 "$healthcheck_port"
+            curl_options+=(--connect-to "$VPS_DOMAIN:443:127.0.0.1:$healthcheck_port")
+          fi
+
+          curl "${curl_options[@]}" "https://$VPS_DOMAIN/" >/dev/null
 
       - name: Clean downloaded artifact
         if: always()
