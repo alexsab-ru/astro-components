@@ -1,6 +1,6 @@
 # Статический хостинг: GitHub Actions, ключи и серверы
 
-Актуально на 18 августа 2026 года. Документ относится к workflow `.github/workflows/action-pages.yml` и серверным скриптам репозитория `ghstatic` в каталоге `static/`.
+Актуально на 19 августа 2026 года. Документ относится к workflow `.github/workflows/action-pages.yml` и серверным скриптам репозитория `ghstatic` в каталоге `static/`.
 
 ## Где на GitHub находятся настройки
 
@@ -11,7 +11,7 @@
 - `Settings → Environments → static-vps` или `yandex-cloud` — допустимое место для секретов конкретного deploy job, если нужны approvals или отдельные права;
 - `Organization settings → Secrets and variables → Actions` — только общие значения с доступом `Selected repositories`.
 
-Переменные `DEPLOY_TO_YC`, `YC_BUCKET`, `DEPLOY_TO_VPS` и `VPS_HOST` участвуют в `determine_targets`, где GitHub Environment ещё не выбран. Поэтому они должны быть Repository Variables или Organization Variables, доступными репозиторию. Для предсказуемости deploy variables ниже рекомендуется держать на уровне репозитория. `DOMAIN` — исключение: job `build` выбирает environment `production` или `development`, поэтому текущий рабочий вариант — Environment Variable `DOMAIN` в соответствующем environment.
+Переменные `DEPLOY_TO_YC`, `YC_BUCKET`, `DEPLOY_TO_VPS` и `VPS_HOST` участвуют в `determine_targets`, где GitHub Environment ещё не выбран. Поэтому они должны быть Repository Variables или Organization Variables, доступными репозиторию. Одинаковые параметры сервера удобно хранить на уровне организации, а параметры сайта и переключатели — на уровне репозитория. `DOMAIN` теперь хранится как Repository Variable; одноимённая Repository Variable имеет приоритет над Organization Variable и не требует GitHub Environment.
 
 `GITHUB_TOKEN` создаёт сам GitHub Actions. Добавлять его в Secrets вручную не нужно.
 
@@ -19,19 +19,19 @@
 
 | Имя | Когда нужно | Значение или назначение | Рекомендуемое место |
 | --- | --- | --- | --- |
-| `DOMAIN` | всегда | Канонический домен и ключ выбора данных сайта | Environment Variable `production`/`development`; допустима Repository Variable |
+| `DOMAIN` | всегда | Канонический домен и ключ выбора данных сайта | Repository Variable |
 | `DEPLOY_TO_PAGES` | всегда | `false` отключает GitHub Pages; при пустом значении Pages разрешены, если они включены в репозитории | Repository Variable |
 | `DEPLOY_TO_YC` | Object Storage | Только `true` включает синхронизацию в bucket | Repository Variable |
 | `YC_BUCKET` | Object Storage | Имя bucket; должно совпадать с `DOMAIN` или `www.DOMAIN` | Repository Variable |
 | `YC_DEPLOY_DRY_RUN` | Object Storage | `true` оставляет `aws s3 sync` в режиме dry-run | Repository Variable |
 | `YC_SYNC_DELETE` | Object Storage | `true` удаляет из bucket объекты, которых нет в текущем `_site` | Repository Variable |
 | `DEPLOY_TO_VPS` | VPS | Только `true` включает атомарный VPS deploy | Repository Variable |
-| `VPS_HOST` | VPS | IP или hostname целевого сервера | Repository Variable |
-| `VPS_PORT` | VPS | SSH-порт target; по умолчанию `22` | Repository Variable |
-| `VPS_USER` | VPS | Ограниченный пользователь; по умолчанию `site-deploy` | Repository Variable |
+| `VPS_HOST` | VPS | IP или hostname целевого сервера | Organization Variable; Repository Variable переопределяет её для другого сервера |
+| `VPS_PORT` | VPS | SSH-порт target; по умолчанию `22` | Organization Variable; Repository Variable переопределяет её |
+| `VPS_USER` | VPS | Ограниченный пользователь; по умолчанию `site-deploy` | Organization Variable; Repository Variable переопределяет её |
 | `VPS_DOMAIN` | VPS | Домен deploy; при пустом значении используется `DOMAIN` | Repository Variable |
-| `VPS_KEEP_RELEASES` | VPS | Число сохраняемых релизов, по умолчанию `3` | Repository Variable |
-| `VPS_KNOWN_HOSTS` | VPS | Проверенная строка host key целевого SSH-сервера | Repository Variable |
+| `VPS_KEEP_RELEASES` | VPS | Число сохраняемых релизов, по умолчанию `3` | Organization Variable; Repository Variable переопределяет её |
+| `VPS_KNOWN_HOSTS` | VPS | Проверенная строка host key целевого SSH-сервера | Organization Variable для общего сервера; Repository Variable для другого host key |
 | `VPS_PROXY_HOST` | relay | Адрес SSH relay | Repository Variable |
 | `VPS_PROXY_PORT` | relay | SSH-порт relay; по умолчанию `22` | Repository Variable |
 | `VPS_PROXY_USER` | relay | Ограниченный пользователь `site-relay` | Repository Variable |
@@ -54,9 +54,10 @@
 Текущее размещение:
 
 - `YC_ACCESS_KEY_ID` и `YC_SECRET_ACCESS_KEY` — Organization Secrets с `Selected repositories`;
-- `VPS_SSH_PRIVATE_KEY` — Repository Secret каждого VPS-сайта;
+- `VPS_HOST=88.218.61.141`, `VPS_PORT=2112`, `VPS_USER=site-deploy`, `VPS_KEEP_RELEASES=3` и проверенный `VPS_KNOWN_HOSTS` — Organization Variables; отдельный репозиторий может переопределить любое значение;
+- `VPS_SSH_PRIVATE_KEY` — отдельный Repository Secret каждого VPS-сайта;
 - `VPS_PROXY_SSH_PRIVATE_KEY` — Repository Secret только Kaiyi;
-- `DOMAIN` — Environment Variable `production` у всех четырёх сайтов; у Honda и Kaiyi сейчас также есть одноимённая Repository Variable;
+- `DOMAIN` — Repository Variable;
 - environment secrets сейчас не используются.
 
 Один target key не переиспользуется между доменами. Компрометация ключа тогда не даёт обновлять соседние сайты.
@@ -80,20 +81,23 @@ Jobs `deploy_yc` и `deploy_vps` получают только готовый ar
 
 ## Подключённые домены
 
-| Домен | Репозиторий | Площадка | Web server | Текущее состояние | Автодеплой из default branch |
-| --- | --- | --- | --- | --- | --- |
-| `sales-autoholding-turgenevskiy.ru` | `astro-main-sales-autoholding-turgenevskiy` | Yandex Object Storage, bucket `sales-autoholding-turgenevskiy.ru` | Object Storage website hosting | Работает, `YC_SYNC_DELETE=true` | Включён через `DEPLOY_TO_YC=true` |
-| `baic-krasnodar.ru` | `astro-dealer-baic-krasnodar` | VDSina `88.218.61.141` | nginx | Статический релиз работает | Включён; production run `32172982100`, attempt 2, прошёл успешно |
-| `honda-krd.ru` | `astro-dealer-honda-krd` | Timeweb Cloud `185.200.243.81` | Caddy | Статический релиз работает | Включён; production run `32172995574` прошёл успешно |
-| `kaiyi-krd.ru` | `astro-dealer-kaiyi-krd` | Yandex Compute Cloud `51.250.68.234` | nginx | Статический релиз работает | Включён; production run `32134618368` прошёл успешно |
+| Площадка | Домены | Web server | Автодеплой |
+| --- | --- | --- | --- |
+| VDSina `88.218.61.141` | `baic-krasnodar.ru`; `baic.alexsab.ru`; `belgee.alexsab.ru`; `changan.alexsab.ru`; `dev.alexsab.ru`; `forthing.alexsab.ru`; `gac-stavauto.alexsab.ru`; `geely.alexsab.ru`; `haval.alexsab.ru`; `honda.alexsab.ru`; `hyundai.alexsab.ru`; `infiniti.alexsab.ru`; `jetour.alexsab.ru`; `kaiyi.alexsab.ru`; `kia.alexsab.ru`; `lexus.alexsab.ru`; `livan.alexsab.ru`; `mazda.alexsab.ru`; `solaris.alexsab.ru`; `soueast.alexsab.ru`; `tank.alexsab.ru`; `tenet.alexsab.ru`; `toyota.alexsab.ru`; `toyota-samara.alexsab.ru`; `toyota-saratov.alexsab.ru`; `vgv.alexsab.ru`; `wey.alexsab.ru`; `alpha-center.ru`; `avto.avtoforum-changanauto.ru`; `belgee-partner-saratov.ru`; `belgee-samara.ru`; `belgee-smr.ru`; `gac-samara.ru`; `geely-orsk.ru`; `geely-partner-orenburg.ru`; `infiniti-samauto.ru`; `kuzovsamara.ru`; `gac-smr.alexsab.ru`; `jaecoo.alexsab.ru`; `jac-samara.ru`; `mazda-armada-avto.ru`; `promo.kia-engels.ru`; `solaris-krasnodar-autoholding.ru`; `tank-penza.ru`; `wey-penza.ru`; `volga.alexsab.ru`; `omoda-avtofan.alexsab.ru`; `chery.alexsab.ru`; `evolute.alexsab.ru`; `gac.alexsab.ru`; `jac.alexsab.ru`; `knewstar.alexsab.ru`; `omoda.alexsab.ru`; `cars.toyotaorenburg.ru`; `venucia.alexsab.ru`; `belgee-orenburg.ru`; `gac-armada-avto.ru`; `geely-partner-samara.ru`; `geely-partner-saratov.ru`; `jetour-krasnodar.ru`; `promo.kia-samara.ru`; `promo.kia-szr.ru`; `service.kia-samara.ru`; `vgv-krd.ru`; `jaecoo-avtofan.alexsab.ru`; `berezniki.expertmotors-tenet.ru`; `avtosalon2000.alexsab.ru`; `cars.toyota-penza.ru`; `baic-alpha.ru`; `belgee-penza.ru`; `cars.toyotastav.ru`; `china-samara-auto.ru`; `gac-sar.ru`; `haval-ulyanovsk.ru`; `jetour-alpha.ru`; `kaiyi-alpha.ru`; `livan-samara.ru` | nginx | 77 статических vhost; у 76 Astro-репозиториев включён VPS-only deploy, а `baic-krasnodar.ru` был подключён ранее |
+| Timeweb Cloud `185.200.243.81` | `honda-krd.ru` | Caddy | VPS-only deploy включён |
+| Yandex Compute Cloud `51.250.68.234` | `kaiyi-krd.ru` | nginx | VPS-only deploy включён |
+| Yandex Object Storage | `sales-autoholding-turgenevskiy.ru` | Object Storage website hosting | `DEPLOY_TO_YC=true`, `YC_SYNC_DELETE=true` |
+| VDSina, прежний GitHub Pages proxy | `auto-team.pro` | nginx proxy | Перенос не завершён: workflow остаётся `pending` без jobs, Pages не отключён |
 
-Источник общей VPS-таблицы — `ghstatic/static/sites.tsv`. Строка имеет формат:
+Пять нестандартных репозиториев пока намеренно не переносились: `boomerang-motors.ru`, `gkankor.ru`, `kia-bongo` (`kia-comtrans.ru`), `kp` (`serm-karma.ru`) и `dvig-ra-1` (`dvig-ra.ru`).
+
+Источник полной актуальной VPS-таблицы — `ghstatic/static/sites.tsv`. Строка имеет формат:
 
 ```text
 domain<TAB>host<TAB>www_mode
 ```
 
-Сейчас поддержан только `www_mode=none`.
+Поддерживаются `www_mode=none`, `redirect-to-base` и `redirect-to-www`. Канонические редиректы сохраняют path и query string, а одиночный `?` убирается серверной нормализацией.
 
 ## Доступ к серверам
 
