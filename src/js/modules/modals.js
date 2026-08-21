@@ -98,13 +98,24 @@ document.querySelectorAll(".popup-link").forEach(
 		})
 );
 
-document.querySelectorAll(".modal-overlay").forEach((el) => {
-	document.addEventListener("keydown", (event) => {
-		if (event.key == "Escape") {
-			closeModal(el);
-		}
-	});
+const modalOverlays = Array.from(document.querySelectorAll(".modal-overlay"));
 
+document.addEventListener("keydown", (event) => {
+	if (event.key !== "Escape") return;
+
+	let openModal = null;
+	for (let index = modalOverlays.length - 1; index >= 0; index--) {
+		if (!modalOverlays[index].classList.contains("hidden")) {
+			openModal = modalOverlays[index];
+			break;
+		}
+	}
+	if (openModal) {
+		closeModal(openModal);
+	}
+});
+
+modalOverlays.forEach((el) => {
 	el.addEventListener("click", (event) => {
 		if (typeof event.target.dataset.close != "undefined") {
 			closeModal(el);
@@ -113,10 +124,11 @@ document.querySelectorAll(".modal-overlay").forEach((el) => {
 });
 
 function closeModal(modal) {
-	reachGoal("form_close");
+	if (modal.classList.contains("hidden")) return;
 
 	const form = modal.querySelector("form");
 	if (form) {
+		reachGoal("form_close");
 		form.reset();
 	}
 	document.querySelectorAll(".error-message").forEach((mes) => {
