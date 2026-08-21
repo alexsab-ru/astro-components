@@ -15,7 +15,12 @@ const instrumentedSource = source.replace(
 	"from '@alexsab-ru/scripts'",
 	`from ${JSON.stringify(analyticsMockUrl)}`,
 );
-const { emitFormRequired, getFormRequiredGoalPayload } = await import(
+const {
+	emitFormError,
+	emitFormRequired,
+	getFormErrorGoalPayload,
+	getFormRequiredGoalPayload,
+} = await import(
 	toModuleUrl(instrumentedSource)
 );
 
@@ -33,6 +38,47 @@ test('form_required context contains field names but never field values', () => 
 			invalidCount: 2,
 		},
 	});
+});
+
+test('form_error context contains only bounded technical categories', () => {
+	const payload = getFormErrorGoalPayload({
+		formID: 'callback-form',
+		errorSource: 'server',
+		errorStage: 'lead_response',
+		httpStatus: 503,
+		error: 'must be ignored',
+	});
+
+	assert.deepEqual(payload, {
+		eventProperties: {
+			errorSource: 'server',
+			errorStage: 'lead_response',
+			formID: 'callback-form',
+			httpStatus: 503,
+		},
+	});
+});
+
+test('emitFormError emits one categorized goal', () => {
+	globalThis.__formGoalCalls = [];
+
+	emitFormError({
+		formID: 'callback-form',
+		errorSource: 'network',
+		errorStage: 'lead_request',
+	});
+
+	assert.deepEqual(globalThis.__formGoalCalls, [{
+		goal: 'form_error',
+		payload: {
+			eventProperties: {
+				errorSource: 'network',
+				errorStage: 'lead_request',
+				formID: 'callback-form',
+			},
+		},
+	}]);
+	delete globalThis.__formGoalCalls;
 });
 
 test('emitFormRequired emits one categorized goal', () => {

@@ -20,7 +20,7 @@ import {
 } from '@alexsab-ru/scripts/calltouch';
 import FormsValidation from './FormsValidation';
 import { getCalltouchGoalPayload } from '@/js/utils/calltouchLeadDecision';
-import { emitFormRequired } from '@/js/utils/formGoalContext';
+import { emitFormError, emitFormRequired } from '@/js/utils/formGoalContext';
 
 const defaultProps = {
 	validation: FormsValidation,
@@ -190,18 +190,36 @@ const submitFormWithFiles = async (form, url, props) => {
 		formDataObj.siteId = calltouchResult.siteId;
 	}
 
+	let errorContext = {
+		errorSource: 'network',
+		errorStage: 'lead_request',
+	};
 	try {
 		const res = await fetch(url, {
 			method: 'POST',
 			body: formData,
 		});
+		errorContext = {
+			errorSource: 'network',
+			errorStage: 'response_read',
+			httpStatus: res.status,
+		};
 		const text = await res.text();
 		let data;
 		try {
+			errorContext = {
+				errorSource: 'server',
+				errorStage: 'response_parse',
+				httpStatus: res.status,
+			};
 			data = JSON.parse(text);
 		} catch (e) {
 			throw new Error('Ошибка обработки данных');
 		}
+		errorContext = {
+			errorSource: 'client',
+			errorStage: 'success_handler',
+		};
 		stateBtn(btn, btnText);
 		if (data.answer === 'required') {
 			emitFormRequired({
@@ -213,8 +231,13 @@ const submitFormWithFiles = async (form, url, props) => {
 			return;
 		}
 		if (data.answer === 'error') {
-			reachGoal('form_error');
-			showMessageModal(messageModal, errorIcon, errorText + '<br>' + data.error);
+			emitFormError({
+				formID: form.id,
+				errorSource: 'server',
+				errorStage: 'lead_response',
+				httpStatus: res.status,
+			});
+			showMessageModal(messageModal, errorIcon, errorText, data.error);
 			return;
 		}
 		// Сервер вернул attention:true — заявка похожа на спам, success не шлём.
@@ -235,10 +258,10 @@ const submitFormWithFiles = async (form, url, props) => {
 		form.reset();
 		resetDropzones();
 	} catch (error) {
-		reachGoal('form_error');
+		emitFormError({ formID: form.id, ...errorContext });
 		console.error('Ошибка отправки данных формы: ' + error);
 		deleteCookie(sendMailCookie);
-		showMessageModal(messageModal, errorIcon, errorText + '<br>' + error);
+		showMessageModal(messageModal, errorIcon, errorText, error);
 		stateBtn(btn, btnText);
 	}
 };

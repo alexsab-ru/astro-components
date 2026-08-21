@@ -25,3 +25,24 @@ export const getFormRequiredGoalPayload = ({
 export const emitFormRequired = (context) => {
 	reachGoal('form_required', getFormRequiredGoalPayload(context));
 };
+
+export const getFormErrorGoalPayload = ({
+	formID = '',
+	errorSource,
+	errorStage,
+	httpStatus,
+} = {}) => {
+	const eventProperties = {
+		errorSource,
+		errorStage,
+		formID: String(formID || '').slice(0, 100),
+	};
+	if (Number.isInteger(httpStatus) && httpStatus >= 100 && httpStatus <= 599) {
+		eventProperties.httpStatus = httpStatus;
+	}
+	return { eventProperties };
+};
+
+export const emitFormError = (context) => {
+	reachGoal('form_error', getFormErrorGoalPayload(context));
+};

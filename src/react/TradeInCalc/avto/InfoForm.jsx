@@ -138,9 +138,11 @@ function AvtoInfoForm({
 		const [
 			{ reachGoal, setCookie, deleteCookie },
 			{ appendCalltouchResultToFormData, attemptCalltouchCallback },
+			{ emitFormError },
 		] = await Promise.all([
 			import('@alexsab-ru/scripts'),
 			import('@alexsab-ru/scripts/calltouch'),
+			import('@/js/utils/formGoalContext'),
 		]);
 		reachGoal("form_submit");
 		showLoader();
@@ -251,7 +253,12 @@ function AvtoInfoForm({
 				.catch(function (error) {
 					if (window.location.hostname == "localhost")
 						console.log('Ошибка отправки письма', error);
-					reachGoal("form_error");
+					emitFormError({
+						formID: 'trade-in-info-form',
+						errorSource: error?.response ? 'server' : 'network',
+						errorStage: error?.response ? 'lead_response' : 'lead_request',
+						httpStatus: error?.response?.status,
+					});
 					deleteCookie(SEND_MAIL_COOKIE);
 					setError();
 					scroll('trade-in-calc');
@@ -260,7 +267,12 @@ function AvtoInfoForm({
 			}else{
 				if (window.location.hostname == "localhost")
 					console.log('Error fetch express', res);
-				reachGoal("form_error");
+				emitFormError({
+					formID: 'trade-in-info-form',
+					errorSource: 'server',
+					errorStage: 'maxposter_response',
+					httpStatus: res?.status,
+				});
 				setError();
 				hideLoader();
 				scroll('trade-in-calc');
@@ -268,7 +280,12 @@ function AvtoInfoForm({
 		}, (error) => {
 			if (window.location.hostname == "localhost")
 				console.log('Error fetch express', error);
-			reachGoal("form_error");
+			emitFormError({
+				formID: 'trade-in-info-form',
+				errorSource: error?.response ? 'server' : 'network',
+				errorStage: error?.response ? 'maxposter_response' : 'maxposter_request',
+				httpStatus: error?.response?.status,
+			});
 			setError();
 			hideLoader();
 			scroll('trade-in-calc');

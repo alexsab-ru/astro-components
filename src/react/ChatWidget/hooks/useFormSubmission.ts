@@ -58,9 +58,11 @@ export function useFormSubmission({
     const [
       { reachGoal, setCookie, deleteCookie },
       { appendCalltouchResultToFormData, attemptCalltouchCallback },
+      { emitFormError },
     ] = await Promise.all([
       import('@alexsab-ru/scripts'),
       import('@alexsab-ru/scripts/calltouch'),
+      import('@/js/utils/formGoalContext'),
     ]);
 
     // Отправляем цель «форма отправлена»
@@ -146,7 +148,12 @@ export function useFormSubmission({
         setIsFinished(true);
       } else {
         const errorMsg = res?.error || "Ошибка на стороне сервера. Попробуйте еще раз.";
-        reachGoal("form_error");
+        emitFormError({
+          formID: 'chat-widget',
+          errorSource: 'server',
+          errorStage: 'lead_response',
+          httpStatus: response.status,
+        });
         deleteCookie(SEND_MAIL_COOKIE);
         setMessages(prev => [
           ...prev,
@@ -164,7 +171,12 @@ export function useFormSubmission({
       if (window.location.hostname === "localhost") {
         console.log('Ошибка отправки письма', error);
       }
-      reachGoal("form_error");
+      emitFormError({
+        formID: 'chat-widget',
+        errorSource: (error as any)?.response ? 'server' : 'network',
+        errorStage: (error as any)?.response ? 'lead_response' : 'lead_request',
+        httpStatus: (error as any)?.response?.status,
+      });
       deleteCookie(SEND_MAIL_COOKIE);
       setMessages(prev => [
         ...prev,
