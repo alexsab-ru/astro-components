@@ -19,10 +19,12 @@ export default class FormsValidation {
             customError: ({ validationMessage }) => validationMessage || 'Проверьте корректность введённых данных',
         };
         this.isValid = true;
+        this.invalidFields = [];
     }
 
     validate() {
         this.isValid = true;
+        this.invalidFields = [];
 
         const requiredControlElements = [...this.form.elements].filter((element) => {
             // Пропускаем отключённые, fieldset, скрытые и необязательные поля
@@ -99,6 +101,7 @@ export default class FormsValidation {
 
             if (errorMessages.length) {
                 this.isValid = false;
+                this.invalidFields.push(element.name || element.id || element.type || 'form');
                 const errorMessage = errorMessages[0];
                 // Для radio/checkbox ищем ошибку в форме (они могут быть вложены в label)
                 // Для остальных полей ищем в parentElement (как раньше)

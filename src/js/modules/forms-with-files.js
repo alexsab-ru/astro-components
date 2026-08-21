@@ -20,6 +20,7 @@ import {
 } from '@alexsab-ru/scripts/calltouch';
 import FormsValidation from './FormsValidation';
 import { getCalltouchGoalPayload } from '@/js/utils/calltouchLeadDecision';
+import { emitFormRequired } from '@/js/utils/formGoalContext';
 
 const defaultProps = {
 	validation: FormsValidation,
@@ -62,10 +63,16 @@ const runValidation = async (form, validation) => {
 		}
 		if (typeof result === 'boolean') return { isValid: result };
 		if (result && typeof result === 'object' && 'isValid' in result) {
-			return { isValid: Boolean(result.isValid) };
+			return {
+				isValid: Boolean(result.isValid),
+				invalidFields: result.invalidFields || instance?.invalidFields || [],
+			};
 		}
 		if (instance && typeof instance.isValid !== 'undefined') {
-			return { isValid: Boolean(instance.isValid) };
+			return {
+				isValid: Boolean(instance.isValid),
+				invalidFields: instance.invalidFields || [],
+			};
 		}
 		return { isValid: false };
 	} catch (err) {
@@ -99,19 +106,32 @@ const submitFormWithFiles = async (form, url, props) => {
 
 	let validate = await runValidation(form, props.validation);
 	if (!props.validation) {
-		if (!phoneChecker(phone)) return;
+		if (!phoneChecker(phone)) {
+			emitFormRequired({ formID: form.id, invalidFields: ['phone'] });
+			return;
+		}
 		if (dealer && dealer.hasAttribute('required') && !dealer.value) {
 			showErrorMes(form, '.dealer', 'Выберите дилерский центр');
+			emitFormRequired({ formID: form.id, invalidFields: ['dealer'] });
 			return;
 		}
 		if (!agree || !agree.checked) {
 			showErrorMes(form, `.${props.agreeSelector}`, 'Чтобы продолжить, установите флажок');
+			emitFormRequired({ formID: form.id, invalidFields: [props.agreeSelector] });
 			return;
 		}
 		validate = { isValid: true };
 	}
 
-	if (!validate.isValid) return;
+	if (!validate.isValid) {
+		emitFormRequired({
+			formID: form.id,
+			invalidFields: validate.invalidFields?.length
+				? validate.invalidFields
+				: ['form'],
+		});
+		return;
+	}
 	if (agree && agree.checked) setAgreeCookie(90);
 
 	stateBtn(btn, 'Отправляем...', true);
@@ -184,7 +204,11 @@ const submitFormWithFiles = async (form, url, props) => {
 		}
 		stateBtn(btn, btnText);
 		if (data.answer === 'required') {
-			reachGoal('form_required');
+			emitFormRequired({
+				formID: form.id,
+				validationSource: 'server',
+				invalidFields: [data.field],
+			});
 			showErrorMes(form, data.field, data.message);
 			return;
 		}

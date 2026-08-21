@@ -63,12 +63,23 @@ export function useInputHandler({
    * Валидирует данные для шага телефона, для остальных шагов передает в handleAnswer
    */
   const handleInputSubmit = useCallback(async () => {
-    if (!inputValue.trim()) return;
+    const emitRequired = async (invalidFields: string[]) => {
+      const { emitFormRequired } = await import('@/js/utils/formGoalContext');
+      emitFormRequired({ formID: 'chat-widget', invalidFields });
+    };
+
+    if (!inputValue.trim()) {
+      if (currentStep === "phone") {
+        await emitRequired(['phone']);
+      }
+      return;
+    }
 
     // Если это шаг телефона — валидируем
     if (currentStep === "phone") {
       if (!consentChecked) {
         setAgreeError("Чтобы продолжить, установите флажок");
+        await emitRequired(['agree']);
         return;
       }
       try {
@@ -114,6 +125,7 @@ export function useInputHandler({
         }
         await sendLead(leadPayload);
       } catch (err: any) {
+        await emitRequired(['phone']);
         addErrorMessage(err.message);
       }
 
