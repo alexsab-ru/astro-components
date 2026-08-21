@@ -8,6 +8,8 @@ document.querySelectorAll(".popup-link").forEach(
 			if (id === "#" || !id) return;
 			const targetModal = document.getElementById(id.replace("#", ""));
 			if (!targetModal) return;
+			const opensForm = Boolean(targetModal.querySelector('form'));
+			const wasHidden = targetModal.classList.contains('hidden');
 
 			const img = link.dataset.img;
 			const imgPosition = link.dataset.img_position || 'right';
@@ -92,9 +94,11 @@ document.querySelectorAll(".popup-link").forEach(
 			}
 			
 
-			reachGoal("form_open");
 			targetModal.classList.remove("hidden");
 			document.body.classList.add("overflow-hidden");
+			if (opensForm && wasHidden) {
+				reachGoal("form_open");
+			}
 		})
 );
 

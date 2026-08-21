@@ -39,10 +39,21 @@ const createModal = ({ open = false, form = false } = {}) => {
 		querySelector(selector) {
 			return selector === 'form' ? formElement : null;
 		},
+		querySelectorAll() {
+			return [];
+		},
 	};
 };
 
-const loadModals = async (modals) => {
+const createLink = (href = '#common-modal') => ({
+	dataset: {},
+	getAttribute(name) {
+		return name === 'href' ? href : null;
+	},
+	onclick: null,
+});
+
+const loadModals = async (modals, links = []) => {
 	const documentListeners = {};
 	globalThis.__modalGoals = [];
 	globalThis.document = {
@@ -52,8 +63,12 @@ const loadModals = async (modals) => {
 		addEventListener(event, callback) {
 			documentListeners[event] = callback;
 		},
+		getElementById(id) {
+			return id === 'common-modal' ? modals[0] : null;
+		},
 		querySelectorAll(selector) {
-			if (selector === '.popup-link' || selector === '.error-message') return [];
+			if (selector === '.popup-link') return links;
+			if (selector === '.error-message') return [];
 			if (selector === '.modal-overlay') return modals;
 			return [];
 		},
@@ -81,6 +96,29 @@ test('Escape with no open modal does not emit form_close', async () => {
 	listeners.keydown({ key: 'Escape' });
 
 	assert.deepEqual(globalThis.__modalGoals, []);
+});
+
+test('opening a hidden form modal emits form_open once', async () => {
+	const formModal = createModal({ form: true });
+	const link = createLink();
+	await loadModals([formModal], [link]);
+
+	link.onclick({ preventDefault() {} });
+	link.onclick({ preventDefault() {} });
+
+	assert.deepEqual(globalThis.__modalGoals, ['form_open']);
+	assert.equal(formModal.classList.contains('hidden'), false);
+});
+
+test('opening a non-form modal does not emit form_open', async () => {
+	const imageModal = createModal();
+	const link = createLink();
+	await loadModals([imageModal], [link]);
+
+	link.onclick({ preventDefault() {} });
+
+	assert.deepEqual(globalThis.__modalGoals, []);
+	assert.equal(imageModal.classList.contains('hidden'), false);
 });
 
 test('Escape closes one open form modal and emits form_close once', async () => {
