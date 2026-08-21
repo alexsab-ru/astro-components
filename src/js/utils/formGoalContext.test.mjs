@@ -20,6 +20,7 @@ const {
 	emitFormRequired,
 	getFormErrorGoalPayload,
 	getFormRequiredGoalPayload,
+	reportClientFormError,
 } = await import(
 	toModuleUrl(instrumentedSource)
 );
@@ -38,6 +39,45 @@ test('form_required context contains field names but never field values', () => 
 			invalidCount: 2,
 		},
 	});
+});
+
+test('client form error report is deduplicated and excludes error details', async () => {
+	const previousWindow = globalThis.window;
+	const previousFetch = globalThis.fetch;
+	const stored = new Map();
+	const requests = [];
+	globalThis.window = {
+		location: { pathname: '/cars/?phone=private' },
+		sessionStorage: {
+			getItem: (key) => stored.get(key) || null,
+			setItem: (key, value) => stored.set(key, value),
+		},
+	};
+	globalThis.fetch = async (url, options) => requests.push({ url, options });
+
+	try {
+		const context = {
+			formID: 'callback-form',
+			errorSource: 'network',
+			errorStage: 'lead_request',
+			error: 'private error details',
+		};
+		assert.equal(await reportClientFormError(context), true);
+		assert.equal(await reportClientFormError(context), false);
+		assert.equal(requests.length, 1);
+		assert.deepEqual(JSON.parse(requests[0].options.body), {
+			version: 1,
+			goal: 'form_error',
+			errorSource: 'network',
+			errorStage: 'lead_request',
+			formID: 'callback-form',
+			pagePath: '/cars/',
+		});
+		assert.equal(requests[0].options.body.includes('private'), false);
+	} finally {
+		globalThis.window = previousWindow;
+		globalThis.fetch = previousFetch;
+	}
 });
 
 test('form_error context contains only bounded technical categories', () => {
