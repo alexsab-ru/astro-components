@@ -33,6 +33,9 @@ const linksToSkip = [
   /checkLinks\.md/,
   /^https?:\/\/(www\.)?probegcentr\.ru/,
   /^https?:\/\/(www\.)?vtb\.ru/,
+  // Банки: CI/linkinator часто падает на SELF_SIGNED_CERT_IN_CHAIN
+  /^https?:\/\/(www\.)?alfabank\.ru/,
+  /^https?:\/\/(www\.)?sberbank\.com/,
   // Пропускаем ссылку https://service.kia-samara.ru/?utm_source=promo Берется из menu.json
   /^https?:\/\/(www\.)?service\.kia-samara\.ru/,
   'http://carcade.com/',
