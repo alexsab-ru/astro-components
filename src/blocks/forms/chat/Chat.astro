@@ -39,7 +39,7 @@ const questions = quizSteps.filter(step => step.id && step.type);
 const lastStep = quizSteps[quizSteps.length - 1];
 ---
 {!!questions.length && (
-    <form class="chat-container" id="chat-container">
+    <form class="chat-container" id="chat-container" novalidate>
         <input type="hidden" name="form" value={formName} />
         <input type="email" tabindex="-1" name="email" class="h-0 opacity-0 absolute -z-100" placeholder="mail@example.com" />
         <div class="chat-header">

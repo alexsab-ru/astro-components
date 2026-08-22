@@ -64,7 +64,7 @@ const callbackStyle = [
         <div class="w-wull xl:w-1/2 text-base sm:text-xl leading-normal!">
             {title && (<h2 class="text-left text-xl sm:text-5xl mb-4 before:hidden ml-0 mr-0">{title}</h2>)}
             {subtitle !== '' && <Fragment set:html={subtitle} />}
-            <form class="mt-14 sm:max-w-md text-base">
+            <form class="mt-14 sm:max-w-md text-base" novalidate>
                 <input type="hidden" name="form" value={formName}>
 
                 <input
@@ -99,6 +99,15 @@ const callbackStyle = [
                         <Textarea classes="border-gray-100 resize-none min-h-[100px] overflow-y-auto" name="comment" required placeholder={commentPlaceholder} minlength="10" />
                     )}
 
+                    <Checkbox
+                        name="agree"
+                        label={agree_label}
+                        color="white"
+                        required
+                        errorClasses="text-red-500 text-xs w-full"
+                        errorText="Чтобы продолжить, установите флажок"
+                    />
+
                     <input
                         type="checkbox"
                         name="subscribe"
@@ -108,15 +117,6 @@ const callbackStyle = [
                     <Button view="form-button" classes="w-full" title={btn} />
 
                 </div>
-
-                <Checkbox
-                    name="agree"
-                    label={agree_label}
-                    color="white"
-                    required
-                    errorClasses="text-red-500 text-xs w-full"
-                    errorText="Чтобы продолжить, установите флажок"
-                />
 
             </form>
         </div>

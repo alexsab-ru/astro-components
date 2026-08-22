@@ -81,7 +81,7 @@ const hasTestDriveModels = visibleTestDrive.length > 0;
 					</div>
 				</template>
 			</div>
-			<form class="flex flex-col gap-4 max-w-[500px] mx-auto">
+			<form class="flex flex-col gap-4 max-w-[500px] mx-auto" novalidate>
 				<input type="hidden" name="form" :value="modelTitle(current) ? `Запись на тест-драйв. ${modelTitle(current)}` : 'Запись на тест-драйв'" />
 				<input
 					type="email"

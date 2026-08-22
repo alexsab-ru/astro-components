@@ -27,6 +27,7 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 			$store.import.brand = '${brand}';
 		`}
 		class="mt-10"
+		novalidate
 	>
 		<div x-show="$store.import.step === 0">
 			<ul>
