@@ -41,32 +41,32 @@ on:
         required: false
         type: string
       send_specials:
-        description: 'Отправить уведомление о датах окончания акций (TELEGRAM_TO_SPECIAL)'
+        description: 'TELEGRAM_TO_SPECIAL - отправить уведомление о датах окончания акций'
         required: false
         type: boolean
         default: false
       send_specials_marketing:
-        description: 'Отправить уведомление о датах окончания акций — маркетинг (TELEGRAM_TO_SPECIAL_MARKETING)'
+        description: 'TELEGRAM_TO_SPECIAL_MARKETING - отправить уведомление о датах окончания акций — маркетинг'
         required: false
         type: boolean
         default: false
       send_rassrochka:
-        description: 'Отправить уведомление о Рассрочке с путями к файлам (TELEGRAM_TO_SPECIAL)'
+        description: 'TELEGRAM_TO_SPECIAL - отправить уведомление о Рассрочке с путями к файлам'
         required: false
         type: boolean
         default: false
       send_rassrochka_marketing:
-        description: 'Отправить уведомление о Рассрочке — маркетинг (TELEGRAM_TO_SPECIAL_MARKETING)'
+        description: 'TELEGRAM_TO_SPECIAL_MARKETING - отправить уведомление о Рассрочке — маркетинг'
         required: false
         type: boolean
         default: false
       send_english_words:
-        description: 'Отправить отчёт по английским словам (TELEGRAM_TO_SPECIAL)'
+        description: 'TELEGRAM_TO_SPECIAL - отправить отчёт по английским словам'
         required: false
         type: boolean
         default: false
       run_linkinator:
-        description: 'Запустить проверку ссылок (linkinator)'
+        description: 'linkinator - запустить проверку ссылок'
         required: false
         type: boolean
         default: false
