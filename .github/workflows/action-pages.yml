@@ -104,7 +104,8 @@ jobs:
   # Выбор целей деплоя по переменным репозитория:
   #   DEPLOY_TO_PAGES — GitHub Pages включён по умолчанию, отключается значением 'false'
   #   DEPLOY_TO_YC    — Yandex Object Storage включается только значением 'true' и требует YC_BUCKET
-  #   DEPLOY_TO_VPS   — прямой VPS-деплой включается только значением 'true' и требует VPS_HOST
+  #   DEPLOY_TO_VPS   — прямой VPS-деплой включается только значением 'true' и требует VPS_TARGET
+  #                     (либо старую VPS_HOST — лазейка на период миграции)
   determine_targets:
     needs: check-pages
     runs-on: ubuntu-latest
@@ -121,6 +122,7 @@ jobs:
           DEPLOY_TO_YC: ${{ vars.DEPLOY_TO_YC }}
           YC_BUCKET: ${{ vars.YC_BUCKET }}
           DEPLOY_TO_VPS: ${{ vars.DEPLOY_TO_VPS }}
+          VPS_TARGET: ${{ vars.VPS_TARGET }}
           VPS_HOST: ${{ vars.VPS_HOST }}
         run: |
           if [ "$PAGES_ENABLED" = "true" ] && [ "$DEPLOY_TO_PAGES" != "false" ]; then
@@ -135,7 +137,7 @@ jobs:
             echo "deploy_yc=false" >> "$GITHUB_OUTPUT"
           fi
 
-          if [ "$DEPLOY_TO_VPS" = "true" ] && [ -n "$VPS_HOST" ]; then
+          if [ "$DEPLOY_TO_VPS" = "true" ] && { [ -n "$VPS_TARGET" ] || [ -n "$VPS_HOST" ]; }; then
             echo "deploy_vps=true" >> "$GITHUB_OUTPUT"
           else
             echo "deploy_vps=false" >> "$GITHUB_OUTPUT"
@@ -467,30 +469,91 @@ jobs:
       name: static-vps
       url: https://${{ vars.VPS_DOMAIN || vars.DOMAIN }}/
     steps:
-      - name: Download site artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: site-dist
-          path: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Validate VPS deployment
+      - name: Resolve VPS target
         env:
           SITE_DOMAIN: ${{ needs.build.outputs.site_domain }}
           VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
-          VPS_HOST: ${{ vars.VPS_HOST }}
-          VPS_PORT: ${{ vars.VPS_PORT || '22' }}
-          VPS_USER: ${{ vars.VPS_USER || 'site-deploy' }}
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
           VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
-          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
-          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
-          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
-          VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
           VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
-          VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
+          VPS_TARGET: ${{ vars.VPS_TARGET }}
+          VPS_TARGETS: ${{ vars.VPS_TARGETS }}
+          LEGACY_VPS_HOST: ${{ vars.VPS_HOST }}
+          LEGACY_VPS_PORT: ${{ vars.VPS_PORT }}
+          LEGACY_VPS_USER: ${{ vars.VPS_USER }}
+          LEGACY_VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
+          LEGACY_VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
+          LEGACY_VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT }}
+          LEGACY_VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
+          LEGACY_VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
+          LEGACY_VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
         run: |
           set -euo pipefail
+
+          # --- Резолвер цели ---------------------------------------------------------
+          # Профиль берётся из org-таблицы VPS_TARGETS по репозиторной переменной
+          # VPS_TARGET. Пока VPS_TARGET не задан, работает старая ветка на vars.VPS_*
+          # (лазейка на период миграции, снимается вместе с org-переменными VPS_*).
+
+          if [ -n "$VPS_TARGET" ]; then
+            if [ -z "$VPS_TARGETS" ]; then
+              echo "::error::VPS_TARGET='$VPS_TARGET', но org-переменная VPS_TARGETS пуста"
+              exit 1
+            fi
+
+            profile=$(printf '%s' "$VPS_TARGETS" | jq -e --arg t "$VPS_TARGET" '.[$t]') || {
+              echo "::error::Профиль '$VPS_TARGET' отсутствует в VPS_TARGETS"
+              exit 1
+            }
+
+            # Достать строковое поле профиля; отсутствующее поле даёт пустую строку
+            field() {
+              printf '%s' "$profile" | jq -r --arg k "$1" '.[$k] // "" | if type == "string" then . else tostring end'
+            }
+
+            VPS_HOST=$(field host)
+            VPS_PORT=$(field port)
+            VPS_USER=$(field user)
+            VPS_KNOWN_HOSTS=$(field known_hosts)
+            VPS_PROXY_HOST=$(field proxy_host)
+            VPS_PROXY_PORT=$(field proxy_port)
+            VPS_PROXY_USER=$(field proxy_user)
+            VPS_PROXY_KNOWN_HOSTS=$(field proxy_known_hosts)
+            VPS_HEALTHCHECK_VIA_PROXY=$(field healthcheck_via_proxy)
+
+            # Четыре поля обязательны в любом профиле
+            for pair in "host:$VPS_HOST" "port:$VPS_PORT" "user:$VPS_USER" "known_hosts:$VPS_KNOWN_HOSTS"; do
+              if [ -z "${pair#*:}" ]; then
+                echo "::error::В профиле '$VPS_TARGET' нет обязательного поля ${pair%%:*}"
+                exit 1
+              fi
+            done
+
+            echo "Резолвер: VPS_TARGET=$VPS_TARGET -> host=$VPS_HOST port=$VPS_PORT user=$VPS_USER proxy_host=${VPS_PROXY_HOST:-(нет)}"
+
+          elif [ -n "$LEGACY_VPS_HOST" ]; then
+            # Лазейка: репозиторий ещё не переведён на VPS_TARGET
+            VPS_HOST="$LEGACY_VPS_HOST"
+            VPS_PORT="${LEGACY_VPS_PORT:-22}"
+            VPS_USER="${LEGACY_VPS_USER:-site-deploy}"
+            VPS_KNOWN_HOSTS="$LEGACY_VPS_KNOWN_HOSTS"
+            VPS_PROXY_HOST="$LEGACY_VPS_PROXY_HOST"
+            VPS_PROXY_PORT="$LEGACY_VPS_PROXY_PORT"
+            VPS_PROXY_USER="$LEGACY_VPS_PROXY_USER"
+            VPS_PROXY_KNOWN_HOSTS="$LEGACY_VPS_PROXY_KNOWN_HOSTS"
+            VPS_HEALTHCHECK_VIA_PROXY="$LEGACY_VPS_HEALTHCHECK_VIA_PROXY"
+
+            echo "Резолвер: VPS_TARGET не задан, работают старые vars.VPS_* -> host=$VPS_HOST port=$VPS_PORT user=$VPS_USER proxy_host=${VPS_PROXY_HOST:-(нет)}"
+
+          else
+            echo "::error::DEPLOY_TO_VPS=true, но не задан ни VPS_TARGET, ни VPS_HOST"
+            exit 1
+          fi
+
+          # Умолчание порта прыжка — как в прежнем vars.VPS_PROXY_PORT || '22'
+          VPS_PROXY_PORT="${VPS_PROXY_PORT:-22}"
+
+          # --- Валидация (в точности прежняя, но по разрешённым значениям) ------------
 
           if [[ ! "$VPS_DOMAIN" =~ ^[a-z0-9][a-z0-9.-]{1,251}[a-z0-9]$ ]]; then
             echo "Invalid VPS_DOMAIN: $VPS_DOMAIN"
@@ -562,15 +625,47 @@ jobs:
             exit 1
           fi
 
+          # --- Передача значений следующим шагам -------------------------------------
+          # Только heredoc-форма: known_hosts бывает многострочным, key=value его сломает.
+          # Имена регистрозависимы и совпадают с теми, что читают шаги ниже.
+
+          emit() {
+            local delim
+            delim="EOF_$(openssl rand -hex 8)"
+            {
+              printf '%s<<%s\n' "$1" "$delim"
+              printf '%s\n' "$2"
+              printf '%s\n' "$delim"
+            } >> "$GITHUB_ENV"
+          }
+
+          emit VPS_HOST                  "$VPS_HOST"
+          emit VPS_PORT                  "$VPS_PORT"
+          emit VPS_USER                  "$VPS_USER"
+          emit VPS_KNOWN_HOSTS           "$VPS_KNOWN_HOSTS"
+          emit VPS_PROXY_HOST            "$VPS_PROXY_HOST"
+          emit VPS_PROXY_PORT            "$VPS_PROXY_PORT"
+          emit VPS_PROXY_USER            "$VPS_PROXY_USER"
+          emit VPS_PROXY_KNOWN_HOSTS     "$VPS_PROXY_KNOWN_HOSTS"
+          emit VPS_HEALTHCHECK_VIA_PROXY "$VPS_HEALTHCHECK_VIA_PROXY"
+
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Verify artifact contents
+        run: |
+          set -euo pipefail
           test -f "${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}/index.html"
 
       - name: Configure restricted SSH key
+        # VPS_KNOWN_HOSTS, VPS_PROXY_HOST, VPS_PROXY_KNOWN_HOSTS приходят из
+        # шага Resolve VPS target через $GITHUB_ENV
         env:
           VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
-          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
           VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
-          VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
         run: |
           set -euo pipefail
           install -d -m 700 "${{ runner.temp }}/ghstatic-ssh"
@@ -589,15 +684,11 @@ jobs:
           fi
 
       - name: Upload and activate VPS release
+        # VPS_HOST, VPS_PORT, VPS_USER и VPS_PROXY_* приходят из шага
+        # Resolve VPS target через $GITHUB_ENV
         env:
           VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
-          VPS_HOST: ${{ vars.VPS_HOST }}
-          VPS_PORT: ${{ vars.VPS_PORT || '22' }}
-          VPS_USER: ${{ vars.VPS_USER || 'site-deploy' }}
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
-          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
-          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
-          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
           DEPLOY_SHA: ${{ needs.build.outputs.deploy_sha }}
           ARTIFACT_DIR: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
         run: |
@@ -626,13 +717,10 @@ jobs:
               "$release_id $VPS_KEEP_RELEASES"
 
       - name: Verify public site
+        # VPS_HOST, VPS_PROXY_* и VPS_HEALTHCHECK_VIA_PROXY приходят из шага
+        # Resolve VPS target через $GITHUB_ENV
         env:
           VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
-          VPS_HOST: ${{ vars.VPS_HOST }}
-          VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
-          VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT || '22' }}
-          VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
-          VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
         run: |
           set -euo pipefail
 
