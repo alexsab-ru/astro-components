@@ -143,8 +143,8 @@ jobs:
             # VPS_TARGET job с резолвером просто не стартует, и молчание
             # выглядит как успех. Сайты статические — они продолжат
             # отдаваться, и заметить отсутствие свежего можно очень нескоро.
-            if [ -z "$VPS_TARGET" ] && [ -z "$VPS_HOST" ]; then
-              echo "::error::DEPLOY_TO_VPS=true, но не задан ни VPS_TARGET, ни VPS_HOST — деплой на VPS не настроен"
+            if [ -z "$VPS_TARGET" ]; then
+              echo "::error::DEPLOY_TO_VPS=true, но VPS_TARGET не задан — деплой на VPS не настроен"
               exit 1
             fi
             echo "deploy_vps=true" >> "$GITHUB_OUTPUT"
@@ -476,26 +476,17 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: static-vps
-      url: https://${{ vars.VPS_DOMAIN || vars.DOMAIN }}/
+      url: https://${{ vars.DOMAIN }}/
     steps:
       - name: Resolve VPS target
         env:
           SITE_DOMAIN: ${{ needs.build.outputs.site_domain }}
-          VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          DEPLOY_DOMAIN: ${{ vars.DOMAIN }}
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
           VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           VPS_PROXY_SSH_PRIVATE_KEY: ${{ secrets.VPS_PROXY_SSH_PRIVATE_KEY }}
           VPS_TARGET: ${{ vars.VPS_TARGET }}
           VPS_TARGETS: ${{ vars.VPS_TARGETS }}
-          LEGACY_VPS_HOST: ${{ vars.VPS_HOST }}
-          LEGACY_VPS_PORT: ${{ vars.VPS_PORT }}
-          LEGACY_VPS_USER: ${{ vars.VPS_USER }}
-          LEGACY_VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
-          LEGACY_VPS_PROXY_HOST: ${{ vars.VPS_PROXY_HOST }}
-          LEGACY_VPS_PROXY_PORT: ${{ vars.VPS_PROXY_PORT }}
-          LEGACY_VPS_PROXY_USER: ${{ vars.VPS_PROXY_USER }}
-          LEGACY_VPS_PROXY_KNOWN_HOSTS: ${{ vars.VPS_PROXY_KNOWN_HOSTS }}
-          LEGACY_VPS_HEALTHCHECK_VIA_PROXY: ${{ vars.VPS_HEALTHCHECK_VIA_PROXY }}
         run: |
           set -euo pipefail
 
@@ -540,22 +531,8 @@ jobs:
 
             echo "Резолвер: VPS_TARGET=$VPS_TARGET -> host=$VPS_HOST port=$VPS_PORT user=$VPS_USER proxy_host=${VPS_PROXY_HOST:-(нет)}"
 
-          elif [ -n "$LEGACY_VPS_HOST" ]; then
-            # Лазейка: репозиторий ещё не переведён на VPS_TARGET
-            VPS_HOST="$LEGACY_VPS_HOST"
-            VPS_PORT="${LEGACY_VPS_PORT:-22}"
-            VPS_USER="${LEGACY_VPS_USER:-site-deploy}"
-            VPS_KNOWN_HOSTS="$LEGACY_VPS_KNOWN_HOSTS"
-            VPS_PROXY_HOST="$LEGACY_VPS_PROXY_HOST"
-            VPS_PROXY_PORT="$LEGACY_VPS_PROXY_PORT"
-            VPS_PROXY_USER="$LEGACY_VPS_PROXY_USER"
-            VPS_PROXY_KNOWN_HOSTS="$LEGACY_VPS_PROXY_KNOWN_HOSTS"
-            VPS_HEALTHCHECK_VIA_PROXY="$LEGACY_VPS_HEALTHCHECK_VIA_PROXY"
-
-            echo "Резолвер: VPS_TARGET не задан, работают старые vars.VPS_* -> host=$VPS_HOST port=$VPS_PORT user=$VPS_USER proxy_host=${VPS_PROXY_HOST:-(нет)}"
-
           else
-            echo "::error::DEPLOY_TO_VPS=true, но не задан ни VPS_TARGET, ни VPS_HOST"
+            echo "::error::DEPLOY_TO_VPS=true, но VPS_TARGET не задан — деплой на VPS не настроен"
             exit 1
           fi
 
@@ -564,13 +541,8 @@ jobs:
 
           # --- Валидация (в точности прежняя, но по разрешённым значениям) ------------
 
-          if [[ ! "$VPS_DOMAIN" =~ ^[a-z0-9][a-z0-9.-]{1,251}[a-z0-9]$ ]]; then
-            echo "Invalid VPS_DOMAIN: $VPS_DOMAIN"
-            exit 1
-          fi
-
-          if [ "$VPS_DOMAIN" != "$SITE_DOMAIN" ]; then
-            echo "VPS_DOMAIN must match DOMAIN: vps=$VPS_DOMAIN domain=$SITE_DOMAIN"
+          if [[ ! "$DEPLOY_DOMAIN" =~ ^[a-z0-9][a-z0-9.-]{1,251}[a-z0-9]$ ]]; then
+            echo "Invalid DOMAIN: $DEPLOY_DOMAIN"
             exit 1
           fi
 
@@ -696,7 +668,7 @@ jobs:
         # VPS_HOST, VPS_PORT, VPS_USER и VPS_PROXY_* приходят из шага
         # Resolve VPS target через $GITHUB_ENV
         env:
-          VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          DEPLOY_DOMAIN: ${{ vars.DOMAIN }}
           VPS_KEEP_RELEASES: ${{ vars.VPS_KEEP_RELEASES || '3' }}
           DEPLOY_SHA: ${{ needs.build.outputs.deploy_sha }}
           ARTIFACT_DIR: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
@@ -729,7 +701,7 @@ jobs:
         # VPS_HOST, VPS_PROXY_* и VPS_HEALTHCHECK_VIA_PROXY приходят из шага
         # Resolve VPS target через $GITHUB_ENV
         env:
-          VPS_DOMAIN: ${{ vars.VPS_DOMAIN || vars.DOMAIN }}
+          DEPLOY_DOMAIN: ${{ vars.DOMAIN }}
         run: |
           set -euo pipefail
 
@@ -771,10 +743,10 @@ jobs:
             done
 
             nc -z 127.0.0.1 "$healthcheck_port"
-            curl_options+=(--connect-to "$VPS_DOMAIN:443:127.0.0.1:$healthcheck_port")
+            curl_options+=(--connect-to "$DEPLOY_DOMAIN:443:127.0.0.1:$healthcheck_port")
           fi
 
-          curl "${curl_options[@]}" "https://$VPS_DOMAIN/" >/dev/null
+          curl "${curl_options[@]}" "https://$DEPLOY_DOMAIN/" >/dev/null
 
       - name: Clean downloaded artifact
         if: always()
