@@ -137,7 +137,16 @@ jobs:
             echo "deploy_yc=false" >> "$GITHUB_OUTPUT"
           fi
 
-          if [ "$DEPLOY_TO_VPS" = "true" ] && { [ -n "$VPS_TARGET" ] || [ -n "$VPS_HOST" ]; }; then
+          if [ "$DEPLOY_TO_VPS" = "true" ]; then
+            # Забытый VPS_TARGET обязан ронять сборку, а не тихо отключать
+            # выкладку. Проверка стоит здесь, а не в резолвере: при пустом
+            # VPS_TARGET job с резолвером просто не стартует, и молчание
+            # выглядит как успех. Сайты статические — они продолжат
+            # отдаваться, и заметить отсутствие свежего можно очень нескоро.
+            if [ -z "$VPS_TARGET" ] && [ -z "$VPS_HOST" ]; then
+              echo "::error::DEPLOY_TO_VPS=true, но не задан ни VPS_TARGET, ни VPS_HOST — деплой на VPS не настроен"
+              exit 1
+            fi
             echo "deploy_vps=true" >> "$GITHUB_OUTPUT"
           else
             echo "deploy_vps=false" >> "$GITHUB_OUTPUT"
