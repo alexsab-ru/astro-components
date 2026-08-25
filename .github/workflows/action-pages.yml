@@ -305,7 +305,7 @@ jobs:
           cp ./_site/sitemap-0.xml ./_site/sitemap.xml
 
       - name: Find English Words
-        if: ${{ vars.FIND_ENGLISH_WORDS != 'false' || github.event.inputs.send_english_words == 'true' }}
+        if: ${{ github.event.inputs.send_english_words == 'true' }}
         run: |
           pip install beautifulsoup4 --quiet
           python3 .github/scripts/findEnglishWords.py
