@@ -294,7 +294,7 @@ send_telegram_message() {
 
     # Ненастроенный чат — пробел в конфиге, а не сбой (см. send_telegram_messages).
     if [ -z "$chat_ids" ]; then
-        echo "Warning: chat_ids is empty, skipping Telegram message send" >&2
+        echo "Warning: TELEGRAM_TO (chat_ids) is empty, skipping Telegram message send" >&2
         return 0
     fi
 

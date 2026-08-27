@@ -356,7 +356,7 @@ jobs:
 
       - name: Upload portable site artifact
         if: needs.determine_targets.outputs.deploy_yc == 'true' || needs.determine_targets.outputs.deploy_vps == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site-dist
           path: ./_site
@@ -402,7 +402,7 @@ jobs:
       url: https://website.yandexcloud.net/${{ vars.YC_BUCKET }}/
     steps:
       - name: Download site artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: site-dist
           path: _site
@@ -631,7 +631,7 @@ jobs:
           emit VPS_HEALTHCHECK_VIA_PROXY "$VPS_HEALTHCHECK_VIA_PROXY"
 
       - name: Download site artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: site-dist
           path: ${{ runner.temp }}/site-dist-${{ github.run_id }}-${{ github.run_attempt }}
