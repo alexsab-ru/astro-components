@@ -212,7 +212,10 @@ const cards = models
 		const carPrices = modelCars
 			.map((car) => positiveNumber(car?.data?.priceWithDiscount) || positiveNumber(car?.data?.sale_price) || positiveNumber(car?.data?.price))
 			.filter(Boolean);
-		const price = carPrices.length ? Math.min(...carPrices) : positiveNumber(model.price);
+		// Цена модели — минимум среди цен автомобилей в наличии И цены самой модели.
+		// Цена модели участвует в сравнении наравне с ценами машин, а не только как запасной вариант.
+		const priceCandidates = [...carPrices, positiveNumber(model.price)].filter(Boolean);
+		const price = priceCandidates.length ? Math.min(...priceCandidates) : 0;
 		const carBenefits = modelCars.map((car) => positiveNumber(car?.data?.max_discount)).filter(Boolean);
 		const benefit = carBenefits.length ? Math.max(...carBenefits) : positiveNumber(model.benefit);
 		const contentItems = override?.contentItems || [
