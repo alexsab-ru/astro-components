@@ -50,9 +50,13 @@ const imageClasses = hasFixedAspectRatio
         )
       )}
       </div>
-      <div class="swiper-pagination simple-slider-pagination bottom-0"></div>
-      <div class="swiper-button-prev model-gallery-slider-button-prev hidden! sm:flex! bg-white/80!"></div>
-      <div class="swiper-button-next model-gallery-slider-button-next hidden! sm:flex! bg-white/80!"></div>
+      {images.length > 1 && (
+        <>
+          <div class="swiper-pagination simple-slider-pagination bottom-0"></div>
+          <div class="swiper-button-prev model-gallery-slider-button-prev hidden! sm:flex! bg-white/80!"></div>
+          <div class="swiper-button-next model-gallery-slider-button-next hidden! sm:flex! bg-white/80!"></div>
+        </>
+      )}
     </div>
   )}
   <div><slot name="card-image" /></div>
