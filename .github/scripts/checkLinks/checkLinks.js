@@ -43,6 +43,7 @@ const linksToSkip = [
   'https://www.vsk.ru/klientam',
   'https://www.cbr.ru/statistics/insurance/ssd_stat/',
   'https://sovcombank.ru/',
+  'https://www.alfastrah.ru/',
   /_astro\//
 ];
 
