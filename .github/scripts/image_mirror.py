@@ -308,6 +308,7 @@ class ImageMirror:
         status_code = getattr(getattr(error, "response", None), "status_code", None)
         status = f" HTTP {status_code}" if status_code else ""
         message = (
+            ""
             f"⚠️ Avito autoload image download failed{status}: VIN {vin}, image #{index + 1}. "
             "Новые Avito autoload изображения будут пропущены до конца запуска; "
             "для авто без сохраненных изображений будет использована цветовая заглушка. "
@@ -320,6 +321,7 @@ class ImageMirror:
         status_code = getattr(getattr(error, "response", None), "status_code", None)
         status = f" HTTP {status_code}" if status_code else ""
         message = (
+            ""
             f"⚠️ Image {action} failed{status}: VIN {vin}, image #{index + 1}. "
             "Картинка будет пропущена; если у авто не останется сохраненных изображений, "
             "будет использована цветовая заглушка. "
