@@ -2,7 +2,7 @@
  * Карта перелинковки текущей сборки astro-components.
  *
  * 1. Собирает все URL из исходников (pages + content + routes.json)
- * 2. Парсит menu.json и footer legal links
+ * 2. Парсит menu.json (все слоты, включая нижние документы footer_legal)
  * 3. Загружает каждую страницу с dev/preview сервера и извлекает href
  * 4. Строит граф «кто на кого ссылается» и находит «сирот»
  *
@@ -15,6 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dotenv from 'dotenv';
 
+import { resolveMenu } from '../../../src/js/utils/menuSlots.js';
 import {
 	collectAllRoutes,
 	collectMenuUrls,
@@ -339,8 +340,14 @@ async function main() {
 	const pages = readSiteJson('pages') ?? {};
 	const shellUrls = collectMenuUrls(menu, pages);
 	const menuUrls = shellUrls;
-	// Отдельного слота footer/legal больше нет — документы теперь часть меню (см. MENU_SLOTS)
-	const footerUrls = new Set();
+	// footer_legal — теперь просто один из слотов меню (см. MENU_SLOTS), но отчёту
+	// по-прежнему полезно отдельно показывать, сколько документов в нём реально осталось
+	// после автофильтра выключенных страниц.
+	const footerUrls = new Set(
+		resolveMenu(menu, pages, 'footer_legal')
+			.map((item) => (typeof item?.url === 'string' ? normalizeUrl(item.url) : null))
+			.filter(Boolean),
+	);
 
 	const urlSet = new Set(routes.map((r) => r.url));
 	const routeByUrl = new Map(routes.map((r) => [r.url, r]));
