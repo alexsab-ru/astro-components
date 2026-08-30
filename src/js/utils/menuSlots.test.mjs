@@ -90,3 +90,9 @@ test('footer_legal чистится реестром без отдельной �
 	const urls = resolveMenu(MENU, PAGES, 'footer_legal').map((item) => item.url);
 	assert.deepEqual(urls, ['/privacy-policy/']);
 });
+
+test('подпись якоря без title не подтягивается из реестра', () => {
+	const pages = {home: {url: '/', title: 'Главная', enabled: true, sitemap: true}};
+	const menu = {main: [{url: '/#services'}]};
+	assert.equal(resolveMenu(menu, pages, 'main')[0].name, '');
+});

@@ -49,8 +49,11 @@ export function resolveMenu(menu = {}, pages = {}, slot) {
 			const target = menuItemPath(item?.url);
 			return target === '' ? true : !pathMatchesRouteRules(target, disabled);
 		})
-		.map((item) => ({
-			...item,
-			name: item?.title ?? item?.name ?? getPageTitle(pages, item?.url) ?? '',
-		}));
+		.map((item) => {
+			const path = menuItemPath(item?.url);
+			return {
+				...item,
+				name: item?.title ?? item?.name ?? (path ? getPageTitle(pages, path) : '') ?? '',
+			};
+		});
 }
