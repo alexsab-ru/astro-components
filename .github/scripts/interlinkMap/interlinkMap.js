@@ -17,7 +17,6 @@ import dotenv from 'dotenv';
 
 import {
 	collectAllRoutes,
-	collectFooterUrls,
 	collectMenuUrls,
 	normalizeUrl,
 } from './collectRoutes.js';
@@ -172,7 +171,7 @@ function buildHtmlReport(data) {
       <section>
         <h2>Статистика</h2>
         <div class="stat"><span>В меню</span><strong>${stats.inMenu}</strong></div>
-        <div class="stat"><span>В footer (legal)</span><strong>${stats.inFooter}</strong></div>
+        <div class="stat"><span>В меню (документы)</span><strong>${stats.inFooter}</strong></div>
         <div class="stat"><span>Достижимо с /</span><strong>${stats.reachableFromHome}</strong></div>
         <div class="stat"><span>Без входящих ссылок</span><strong style="color:#f85149">${stats.noIncoming}</strong></div>
         <div class="stat"><span>Не в меню и без входящих</span><strong style="color:#f85149">${stats.trueOrphans}</strong></div>
@@ -335,12 +334,13 @@ async function main() {
 	console.log(`   Источник HTML: ${args.fromDist ? 'dist/' : baseOrigin}`);
 	console.log(`   Страниц в реестре: ${routes.length}\n`);
 
-	// Меню и footer
-	const menu = readSiteJson('menu');
-	const settings = readSiteJson('settings') ?? {};
-	const menuUrls = collectMenuUrls(menu ?? []);
-	const footerUrls = collectFooterUrls(settings);
-	const shellUrls = new Set([...menuUrls, ...footerUrls]);
+	// Меню: все слоты, включая нижние документы
+	const menu = readSiteJson('menu') ?? {};
+	const pages = readSiteJson('pages') ?? {};
+	const shellUrls = collectMenuUrls(menu, pages);
+	const menuUrls = shellUrls;
+	// Отдельного слота footer/legal больше нет — документы теперь часть меню (см. MENU_SLOTS)
+	const footerUrls = new Set();
 
 	const urlSet = new Set(routes.map((r) => r.url));
 	const routeByUrl = new Map(routes.map((r) => [r.url, r]));
