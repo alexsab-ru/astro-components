@@ -13,6 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { pathMatchesRouteRules } from './src/js/utils/pathMatchesRouteRules.js';
+import { getDisabledUrls, getSitemapIgnoredUrls } from './src/js/utils/sitePages.js';
 import { resolveDevHost } from './src/js/utils/devHost.js';
 
 // https://astro.build/config
@@ -130,32 +131,38 @@ const resolveRobotsConfig = () => {
 };
 const robotsConfig = resolveRobotsConfig();
 
-// Сопоставление путей: disabled_routes / sitemap_ignore — см. src/js/utils/pathMatchesRouteRules.js
+// Сопоставление путей: disabled / sitemap_ignore — см. src/js/utils/pathMatchesRouteRules.js
 
-// --- routes.json (раньше редиректы лежали в отдельном redirects.json) ---
-// Формат: { "disabled_routes": [], "sitemap_ignore": [], "redirects": { "/from": "/to" | { status, destination } } }
+// --- pages.json: что собирается и что попадает в sitemap ---
+// Формат: { "<id>": { url, title, enabled, sitemap, collection, always_available } }
+// Отсутствие файла — не ошибка: реестр пуст, значит ничего не выключено.
+const loadSitePagesFromData = () => {
+	const pagesJsonPath = path.resolve(process.cwd(), 'src/data/site/pages.json');
+	try {
+		const raw = JSON.parse(fs.readFileSync(pagesJsonPath, 'utf-8'));
+		return raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+	} catch {
+		return {};
+	}
+};
+
+// --- routes.json: только редиректы ---
+// Формат: { "redirects": { "/from": "/to" | { status, destination } } }
 // Резерв: если routes.json нет, читаем legacy redirects.json как объект редиректов.
-const loadSiteRoutesFromData = () => {
+const loadRedirectsFromData = () => {
 	const routesJsonPath = path.resolve(process.cwd(), 'src/data/site/routes.json');
 	const legacyRedirectsPath = path.resolve(process.cwd(), 'src/data/site/redirects.json');
-	const empty = { disabled_routes: [], sitemap_ignore: [], redirects: {} };
 	try {
 		const raw = JSON.parse(fs.readFileSync(routesJsonPath, 'utf-8'));
-		return {
-			disabled_routes: Array.isArray(raw.disabled_routes) ? raw.disabled_routes : [],
-			sitemap_ignore: Array.isArray(raw.sitemap_ignore) ? raw.sitemap_ignore : [],
-			redirects:
-				raw.redirects && typeof raw.redirects === 'object' && !Array.isArray(raw.redirects) ? raw.redirects : {},
-		};
+		return raw.redirects && typeof raw.redirects === 'object' && !Array.isArray(raw.redirects)
+			? raw.redirects
+			: {};
 	} catch {
 		try {
 			const raw = JSON.parse(fs.readFileSync(legacyRedirectsPath, 'utf-8'));
-			return {
-				...empty,
-				redirects: typeof raw === 'object' && raw !== null && !Array.isArray(raw) ? raw : {},
-			};
+			return typeof raw === 'object' && raw !== null && !Array.isArray(raw) ? raw : {};
 		} catch {
-			return empty;
+			return {};
 		}
 	}
 };
@@ -187,10 +194,10 @@ const validateRedirectEntries = (raw) => {
 	return validated;
 };
 
-const siteRoutes = loadSiteRoutesFromData();
-const redirectsConfig = validateRedirectEntries(siteRoutes.redirects);
-const disabledRoutesForBuild = siteRoutes.disabled_routes;
-const sitemapIgnoreRoutes = siteRoutes.sitemap_ignore;
+const sitePages = loadSitePagesFromData();
+const redirectsConfig = validateRedirectEntries(loadRedirectsFromData());
+const disabledRoutesForBuild = getDisabledUrls(sitePages);
+const sitemapIgnoreRoutes = getSitemapIgnoredUrls(sitePages);
 // Открывает браузер на origin текущего дилера.
 //
 // Почему не server.open: это статическая строка, вычисляемая до listen(), а Vite при

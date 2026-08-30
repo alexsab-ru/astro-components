@@ -26,10 +26,6 @@ type SeoEntry = {
 	image?: string;
 };
 
-type RoutesData = {
-	always_available_collections?: unknown;
-};
-
 const readSeoData = (): Record<string, SeoEntry> => {
 	const path = resolve(process.cwd(), 'src/data/site/seo.json');
 	if (!existsSync(path)) return {};
@@ -40,15 +36,18 @@ const readSeoData = (): Record<string, SeoEntry> => {
 const seoData = readSeoData();
 
 const readAlwaysAvailableCollections = (): string[] => {
-	const path = resolve(process.cwd(), 'src/data/site/routes.json');
+	const path = resolve(process.cwd(), 'src/data/site/pages.json');
 	if (!existsSync(path)) return [];
 
-	const routes = JSON.parse(readFileSync(path, 'utf-8')) as RoutesData;
-	if (!Array.isArray(routes.always_available_collections)) return [];
+	const pages = JSON.parse(readFileSync(path, 'utf-8')) as Record<string, unknown>;
 
-	return routes.always_available_collections
-		.filter((name): name is string => typeof name === 'string')
-		.map((name) => name.trim())
+	return Object.values(pages)
+		.filter((entry): entry is {collection: string; always_available: boolean} =>
+			entry !== null &&
+			typeof entry === 'object' &&
+			(entry as {always_available?: unknown}).always_available === true &&
+			typeof (entry as {collection?: unknown}).collection === 'string')
+		.map((entry) => entry.collection.trim())
 		.filter((name) => /^[a-z0-9][a-z0-9_-]*$/.test(name));
 };
 
