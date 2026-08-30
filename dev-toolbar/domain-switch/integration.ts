@@ -16,6 +16,7 @@ type DownloadPayload = { domain: string; file?: string; preserveLog?: boolean };
 const domainFiles = [
   "settings.json",
   "routes.json",
+  "pages.json",
   "robots.json",
   "banners.json",
   "scripts.json",
