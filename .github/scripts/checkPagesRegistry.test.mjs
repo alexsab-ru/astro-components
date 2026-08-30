@@ -37,6 +37,7 @@ test('всё совпадает — обе стороны пусты', () => {
 test('маршрут шаблона без записи в реестре', () => {
 	const result = comparePagesToRoutes({contacts: {url: '/contacts/'}}, ['contacts', 'test-drive']);
 	assert.deepEqual(result.missingInRegistry, ['test-drive']);
+	assert.deepEqual(result.missingInPages, []);
 });
 
 test('запись реестра без маршрута', () => {
@@ -45,6 +46,19 @@ test('запись реестра без маршрута', () => {
 		['contacts'],
 	);
 	assert.deepEqual(result.missingInPages, ['/ghost/']);
+	assert.deepEqual(result.missingInRegistry, []);
+});
+
+test('нормализует url реестра независимо от слэшей', () => {
+	const result = comparePagesToRoutes(
+		{
+			a: {url: 'contacts'},
+			b: {url: '/models'},
+			c: {url: '//used_cars//'},
+		},
+		['contacts', 'models', 'used_cars'],
+	);
+	assert.deepEqual(result, {missingInRegistry: [], missingInPages: []});
 });
 
 test('записи коллекций из сверки исключены', () => {
