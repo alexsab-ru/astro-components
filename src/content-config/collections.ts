@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 
 import { getRegularCollectionNames, hasContentCollection } from './fs';
 import { carsSchema, pageCollectionSchema, usedCarsSchema } from './schemas';
+import { getAlwaysAvailableCollections } from '../js/utils/sitePages.js';
 
 export type CollectionMeta = {
 	name: string;
@@ -39,16 +40,12 @@ const readAlwaysAvailableCollections = (): string[] => {
 	const path = resolve(process.cwd(), 'src/data/site/pages.json');
 	if (!existsSync(path)) return [];
 
-	const pages = JSON.parse(readFileSync(path, 'utf-8')) as Record<string, unknown>;
-
-	return Object.values(pages)
-		.filter((entry): entry is {collection: string; always_available: boolean} =>
-			entry !== null &&
-			typeof entry === 'object' &&
-			(entry as {always_available?: unknown}).always_available === true &&
-			typeof (entry as {collection?: unknown}).collection === 'string')
-		.map((entry) => entry.collection.trim())
-		.filter((name) => /^[a-z0-9][a-z0-9_-]*$/.test(name));
+	try {
+		return getAlwaysAvailableCollections(JSON.parse(readFileSync(path, 'utf-8')));
+	} catch {
+		// Битый реестр не должен ронять сборку — как и отсутствующий.
+		return [];
+	}
 };
 
 const alwaysAvailableCollections = readAlwaysAvailableCollections();
