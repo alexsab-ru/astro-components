@@ -1,6 +1,6 @@
 ---
 import type { TBreadcrumb } from '@/ui/breadcrumbs/types';
-import { LINKS_MENU } from '@/const.js';
+import { getMenu } from '@/const.js';
 import settings from '@/data/site/settings.json';
 import {
 	composeSchemaOrg,
@@ -27,7 +27,7 @@ const schemas = composeSchemaOrg({
 	currentPath: Astro.url.pathname,
 	siteUrl: Astro.site ?? Astro.url.origin,
 	breadcrumbs,
-	menu: LINKS_MENU,
+	menu: getMenu('main'),
 	flags: {
 		useSchemaOrg: features?.use_schema_org === true,
 		useBreadcrumbs: features?.use_schema_org_breadcrumbs === true,
