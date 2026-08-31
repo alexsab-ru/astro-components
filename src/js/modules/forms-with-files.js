@@ -13,6 +13,7 @@ import {
 	successText,
 	messageModal,
 	phoneChecker,
+	getFormResponseDiagnostics,
 } from '@alexsab-ru/scripts';
 import {
 	appendCalltouchResultToFormData,
@@ -214,6 +215,11 @@ const submitFormWithFiles = async (form, url, props) => {
 			};
 			data = JSON.parse(text);
 		} catch (e) {
+			Object.assign(errorContext, getFormResponseDiagnostics({
+				responseText: text,
+				response: res,
+				url,
+			}));
 			throw new Error('Ошибка обработки данных');
 		}
 		errorContext = {
