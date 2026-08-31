@@ -312,7 +312,6 @@ clean_data_dir() {
 }
 
 sync_remote_content() {
-  local copied_any_brand=false
   local common_content_dir="$TMP_DIR/$ASTRO_JSON_DATA_PATH/content"
   mkdir -p "$ASTRO_CONTENT_DIR"
 
@@ -323,20 +322,13 @@ sync_remote_content() {
     echo "▶ Common content not found: $ASTRO_JSON_DATA_PATH/content"
   fi
 
-  for brand_domain in "${BRAND_DOMAINS[@]}"; do
-    local src_dir="$TMP_DIR/src/$brand_domain/content"
-
-    if [ -d "$src_dir" ]; then
-      rsync -a "$src_dir/" "$ASTRO_CONTENT_DIR/"
-      echo "  ✔ Brand content: $brand_domain/content → $ASTRO_CONTENT_DIR"
-      copied_any_brand=true
-    else
-      echo "  ⚠ Brand content not found: src/$brand_domain/content"
-    fi
-  done
-
-  if [ "$copied_any_brand" = false ] && [ ${#BRAND_DOMAINS[@]} -gt 0 ]; then
-    echo "▶ No brand content directories were found"
+  if [ ${#BRAND_DOMAINS[@]} -gt 0 ]; then
+    SYNC_KIND="content" \
+    TMP_DIR="$TMP_DIR" \
+    TARGET_DIR="$ASTRO_CONTENT_DIR" \
+    SITE_DATA_DIR="$SITE_DATA_DIR" \
+    BRAND_DOMAINS="$(printf '%s\n' "${BRAND_DOMAINS[@]}")" \
+    node .github/scripts/syncBrandLayers.mjs
   fi
 
   local site_content_dir="$TMP_DIR/$REMOTE_DATA_PATH/content"
@@ -379,7 +371,6 @@ NODE
 }
 
 sync_remote_pages() {
-  local copied_any_brand=false
   local common_pages_dir="$TMP_DIR/$ASTRO_JSON_DATA_PATH/pages"
   local settings_file="$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
   local page_template
@@ -395,20 +386,13 @@ sync_remote_pages() {
     echo "▶ Common pages not found: $ASTRO_JSON_DATA_PATH/pages"
   fi
 
-  for brand_domain in "${BRAND_DOMAINS[@]}"; do
-    local src_dir="$TMP_DIR/src/$brand_domain/pages"
-
-    if [ -d "$src_dir" ]; then
-      rsync -a "$src_dir/" "$ASTRO_PAGES_DIR/"
-      echo "  ✔ Brand pages: $brand_domain/pages → $ASTRO_PAGES_DIR"
-      copied_any_brand=true
-    else
-      echo "  ⚠ Brand pages not found: src/$brand_domain/pages"
-    fi
-  done
-
-  if [ "$copied_any_brand" = false ] && [ ${#BRAND_DOMAINS[@]} -gt 0 ]; then
-    echo "▶ No brand pages directories were found"
+  if [ ${#BRAND_DOMAINS[@]} -gt 0 ]; then
+    SYNC_KIND="pages" \
+    TMP_DIR="$TMP_DIR" \
+    TARGET_DIR="$ASTRO_PAGES_DIR" \
+    SITE_DATA_DIR="$SITE_DATA_DIR" \
+    BRAND_DOMAINS="$(printf '%s\n' "${BRAND_DOMAINS[@]}")" \
+    node .github/scripts/syncBrandLayers.mjs
   fi
 
   if [ -n "$page_template" ]; then
