@@ -1,9 +1,12 @@
 /**
  * Собирает полный список URL текущей сборки из исходников (без build).
- * Учитывает disabled_routes из routes.json и dedicated-маршруты коллекций.
+ * Учитывает выключенные страницы из реестра pages.json и dedicated-маршруты коллекций.
  */
 import fs from 'node:fs';
 import path from 'node:path';
+
+import { MENU_SLOTS, resolveMenu } from '../../../src/js/utils/menuSlots.js';
+import { getAlwaysAvailableCollections, getDisabledUrls } from '../../../src/js/utils/sitePages.js';
 
 const ROOT = process.cwd();
 const PAGES_DIR = path.join(ROOT, 'src/pages');
@@ -30,7 +33,7 @@ function readSiteJson(name) {
 	return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
-/** Проверка disabled_routes (упрощённая копия pathMatchesRouteRules) */
+/** Проверка списка выключенных URL (упрощённая копия pathMatchesRouteRules) */
 function isRouteDisabled(pathname, disabledRoutes) {
 	const normalized = pathname.endsWith('/') ? pathname : `${pathname}/`;
 	return disabledRoutes.some((rule) => {
@@ -202,34 +205,27 @@ function canonicalPath(url) {
 	return lower.endsWith('/') ? lower : `${lower}/`;
 }
 
-/** Рекурсивно достаёт URL из menu.json */
-export function collectMenuUrls(menuItems, result = new Set()) {
-	if (!Array.isArray(menuItems)) return result;
-
-	for (const item of menuItems) {
-		if (item?.url && typeof item.url === 'string' && item.url.startsWith('/')) {
-			result.add(normalizeUrl(item.url));
+/** Все URL из слотов menu.json, с учётом выключенных страниц */
+export function collectMenuUrls(menu, pages, result = new Set()) {
+	const addItems = (items) => {
+		for (const item of items) {
+			if (item?.url && typeof item.url === 'string' && item.url.startsWith('/')) {
+				result.add(normalizeUrl(item.url));
+			}
+			if (Array.isArray(item?.children)) {
+				addItems(item.children);
+			} else if (item?.children && typeof item.children === 'object') {
+				for (const group of Object.values(item.children)) {
+					if (Array.isArray(group)) addItems(group);
+				}
+			}
 		}
-		if (item?.children) collectMenuUrls(item.children, result);
+	};
+
+	for (const slot of MENU_SLOTS) {
+		addItems(resolveMenu(menu ?? {}, pages ?? {}, slot));
 	}
 	return result;
-}
-
-/** Footer legal links по settings.legal */
-export function collectFooterUrls(settings) {
-	const LEGAL = [
-		{ key: 'privacyPolicy', href: '/privacy-policy/' },
-		{ key: 'personalDataConsent', href: '/personal-data-consent/' },
-		{ key: 'cookiePolicy', href: '/cookie-policy/' },
-		{ key: 'advertisingConsent', href: '/advertising-consent/' },
-		{ key: 'companySout', href: '/company-sout/' },
-		{ key: 'termsOfUse', href: '/terms-of-use/' },
-		{ key: 'thirdPartiesPage', href: '/third-parties/' },
-	];
-	const legal = settings?.legal ?? {};
-	return new Set(
-		LEGAL.filter((d) => legal[d.key] === true).map((d) => normalizeUrl(d.href)),
-	);
 }
 
 /**
@@ -279,11 +275,9 @@ export function normalizeUrl(href, baseOrigin = '') {
 
 /** Главная функция: все URL сборки */
 export function collectAllRoutes() {
-	const routesData = readSiteJson('routes') ?? {};
-	const disabledRoutes = Array.isArray(routesData.disabled_routes) ? routesData.disabled_routes : [];
-	const alwaysAvailable = Array.isArray(routesData.always_available_collections)
-		? routesData.always_available_collections
-		: [];
+	const pages = readSiteJson('pages') ?? {};
+	const disabledRoutes = getDisabledUrls(pages);
+	const alwaysAvailable = getAlwaysAvailableCollections(pages);
 
 	const all = [
 		...collectStaticPageRoutes(disabledRoutes),

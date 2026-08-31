@@ -2,7 +2,7 @@
  * Карта перелинковки текущей сборки astro-components.
  *
  * 1. Собирает все URL из исходников (pages + content + routes.json)
- * 2. Парсит menu.json и footer legal links
+ * 2. Парсит menu.json (все слоты, включая нижние документы footer_legal)
  * 3. Загружает каждую страницу с dev/preview сервера и извлекает href
  * 4. Строит граф «кто на кого ссылается» и находит «сирот»
  *
@@ -15,9 +15,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dotenv from 'dotenv';
 
+import { resolveMenu } from '../../../src/js/utils/menuSlots.js';
 import {
 	collectAllRoutes,
-	collectFooterUrls,
 	collectMenuUrls,
 	normalizeUrl,
 } from './collectRoutes.js';
@@ -172,7 +172,7 @@ function buildHtmlReport(data) {
       <section>
         <h2>Статистика</h2>
         <div class="stat"><span>В меню</span><strong>${stats.inMenu}</strong></div>
-        <div class="stat"><span>В footer (legal)</span><strong>${stats.inFooter}</strong></div>
+        <div class="stat"><span>В меню (документы)</span><strong>${stats.inFooter}</strong></div>
         <div class="stat"><span>Достижимо с /</span><strong>${stats.reachableFromHome}</strong></div>
         <div class="stat"><span>Без входящих ссылок</span><strong style="color:#f85149">${stats.noIncoming}</strong></div>
         <div class="stat"><span>Не в меню и без входящих</span><strong style="color:#f85149">${stats.trueOrphans}</strong></div>
@@ -335,12 +335,19 @@ async function main() {
 	console.log(`   Источник HTML: ${args.fromDist ? 'dist/' : baseOrigin}`);
 	console.log(`   Страниц в реестре: ${routes.length}\n`);
 
-	// Меню и footer
-	const menu = readSiteJson('menu');
-	const settings = readSiteJson('settings') ?? {};
-	const menuUrls = collectMenuUrls(menu ?? []);
-	const footerUrls = collectFooterUrls(settings);
-	const shellUrls = new Set([...menuUrls, ...footerUrls]);
+	// Меню: все слоты, включая нижние документы
+	const menu = readSiteJson('menu') ?? {};
+	const pages = readSiteJson('pages') ?? {};
+	const shellUrls = collectMenuUrls(menu, pages);
+	const menuUrls = shellUrls;
+	// footer_legal — теперь просто один из слотов меню (см. MENU_SLOTS), но отчёту
+	// по-прежнему полезно отдельно показывать, сколько документов в нём реально осталось
+	// после автофильтра выключенных страниц.
+	const footerUrls = new Set(
+		resolveMenu(menu, pages, 'footer_legal')
+			.map((item) => (typeof item?.url === 'string' ? normalizeUrl(item.url) : null))
+			.filter(Boolean),
+	);
 
 	const urlSet = new Set(routes.map((r) => r.url));
 	const routeByUrl = new Map(routes.map((r) => [r.url, r]));

@@ -13,6 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { pathMatchesRouteRules } from './src/js/utils/pathMatchesRouteRules.js';
+import { getDisabledUrls, getSitemapIgnoredUrls } from './src/js/utils/sitePages.js';
 import { resolveDevHost } from './src/js/utils/devHost.js';
 
 // https://astro.build/config
@@ -130,37 +131,57 @@ const resolveRobotsConfig = () => {
 };
 const robotsConfig = resolveRobotsConfig();
 
-// Сопоставление путей: disabled_routes / sitemap_ignore — см. src/js/utils/pathMatchesRouteRules.js
+// Сопоставление путей: disabled / sitemap_ignore — см. src/js/utils/pathMatchesRouteRules.js
 
-// --- routes.json (раньше редиректы лежали в отдельном redirects.json) ---
-// Формат: { "disabled_routes": [], "sitemap_ignore": [], "redirects": { "/from": "/to" | { status, destination } } }
+// --- pages.json: что собирается и что попадает в sitemap ---
+// Формат: { "<id>": { url, title, enabled, sitemap, collection, always_available } }
+// Отсутствие файла — не ошибка: реестр пуст, значит ничего не выключено.
+const loadSitePagesFromData = () => {
+	const pagesJsonPath = path.resolve(process.cwd(), 'src/data/site/pages.json');
+	try {
+		const raw = JSON.parse(fs.readFileSync(pagesJsonPath, 'utf-8'));
+		return raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+	} catch {
+		return {};
+	}
+};
+
+// --- routes.json: только редиректы ---
+// Формат: { "redirects": { "/from": "/to" | { status, destination } } }
 // Резерв: если routes.json нет, читаем legacy redirects.json как объект редиректов.
-const loadSiteRoutesFromData = () => {
+const loadRedirectsFromData = () => {
 	const routesJsonPath = path.resolve(process.cwd(), 'src/data/site/routes.json');
 	const legacyRedirectsPath = path.resolve(process.cwd(), 'src/data/site/redirects.json');
-	const empty = { disabled_routes: [], sitemap_ignore: [], redirects: {} };
 	try {
 		const raw = JSON.parse(fs.readFileSync(routesJsonPath, 'utf-8'));
-		return {
-			disabled_routes: Array.isArray(raw.disabled_routes) ? raw.disabled_routes : [],
-			sitemap_ignore: Array.isArray(raw.sitemap_ignore) ? raw.sitemap_ignore : [],
-			redirects:
-				raw.redirects && typeof raw.redirects === 'object' && !Array.isArray(raw.redirects) ? raw.redirects : {},
-		};
+		return raw.redirects && typeof raw.redirects === 'object' && !Array.isArray(raw.redirects)
+			? raw.redirects
+			: {};
 	} catch {
 		try {
 			const raw = JSON.parse(fs.readFileSync(legacyRedirectsPath, 'utf-8'));
-			return {
-				...empty,
-				redirects: typeof raw === 'object' && raw !== null && !Array.isArray(raw) ? raw : {},
-			};
+			return typeof raw === 'object' && raw !== null && !Array.isArray(raw) ? raw : {};
 		} catch {
-			return empty;
+			return {};
 		}
 	}
 };
 
-const validateRedirectEntries = (raw) => {
+// Ссылка с явной схемой (http:, https:, tel:, mailto:, ...) — внешний адрес,
+// а не маршрут шаблона, проверять его на "выключенную страницу" бессмысленно.
+const hasUrlScheme = (value) => typeof value === 'string' && /^[a-z][a-z0-9+.-]*:/i.test(value);
+
+// pages.json и routes.json — разные файлы: редирект может вести на страницу,
+// которую реестр pages.json выключил, и без явной проверки это расхождение
+// не заметно до первого 404 в проде (см. пункт про personal-data-consent).
+const warnIfRedirectTargetsDisabledPage = (from, destination, disabledRoutes) => {
+	if (hasUrlScheme(destination)) return;
+	if (pathMatchesRouteRules(destination, disabledRoutes)) {
+		console.warn(`[astro.config] routes.json redirects: "${from}" ведёт на "${destination}" — эта страница выключена в pages.json.`);
+	}
+};
+
+const validateRedirectEntries = (raw, disabledRoutes) => {
 	if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
 		console.warn('[astro.config] routes.json: ключ "redirects" должен быть объектом. Редиректы отключены.');
 		return {};
@@ -173,10 +194,12 @@ const validateRedirectEntries = (raw) => {
 		}
 		if (typeof to === 'string') {
 			validated[from] = to;
+			warnIfRedirectTargetsDisabledPage(from, to, disabledRoutes);
 		} else if (typeof to === 'object' && to !== null && typeof to.destination === 'string') {
 			const status = Number(to.status);
 			if (status && [301, 302, 303, 307, 308].includes(status)) {
 				validated[from] = { status, destination: to.destination };
+				warnIfRedirectTargetsDisabledPage(from, to.destination, disabledRoutes);
 			} else {
 				console.warn(`[astro.config] routes.json: пропущен "${from}" — недопустимый status ${to.status}. Допустимы: 301, 302, 303, 307, 308.`);
 			}
@@ -187,10 +210,10 @@ const validateRedirectEntries = (raw) => {
 	return validated;
 };
 
-const siteRoutes = loadSiteRoutesFromData();
-const redirectsConfig = validateRedirectEntries(siteRoutes.redirects);
-const disabledRoutesForBuild = siteRoutes.disabled_routes;
-const sitemapIgnoreRoutes = siteRoutes.sitemap_ignore;
+const sitePages = loadSitePagesFromData();
+const disabledRoutesForBuild = getDisabledUrls(sitePages);
+const sitemapIgnoreRoutes = getSitemapIgnoredUrls(sitePages);
+const redirectsConfig = validateRedirectEntries(loadRedirectsFromData(), disabledRoutesForBuild);
 // Открывает браузер на origin текущего дилера.
 //
 // Почему не server.open: это статическая строка, вычисляемая до listen(), а Vite при
@@ -227,7 +250,7 @@ const devToolbarIntegrations = isDevCommand
 	]
 	: [];
 
-// Удаляет из dist папки целых разделов (например catalog), если соответствующий путь в disabled_routes.
+// Удаляет из dist папки целых разделов (например catalog), если соответствующий путь выключен в pages.json.
 // Дублирует логику «не собирать» для статических index.astro без getStaticPaths.
 const stripDisabledRoutesIntegration = (disabledRules) => ({
 	name: 'strip-disabled-route-dirs',

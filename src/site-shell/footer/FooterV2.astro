@@ -3,7 +3,9 @@ import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
 const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer, footer_info } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
-import { LINKS_MENU as links } from '@/const';
+import { getMenu } from '@/const';
+const links = getMenu('footer');
+const legalLinks = getMenu('footer_legal');
 import Brands from '@/blocks/brands/Brands.astro';
 import { YEAR } from '@/js/utils/date';
 import { Icon } from 'astro-icon/components'
@@ -28,7 +30,6 @@ const { showSiteLinks = true, logoNoLink = false } = Astro.props;
 import SocialList from '@/site-shell/social/SocialList.astro';
 import socials from '@/data/site/socials.json';
 import scripts from '@/data/site/scripts.json';
-import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';
 // 1) legal из settings; 2) legal из salons; 3) если salons пустой или без legal — site_name
 const salonsLegalLines = salons
     .filter(salon => salon?.legal_entity && salon?.legal_entity !== '')
@@ -39,7 +40,6 @@ const LEGAL_SALONS_INFO =
         : salonsLegalLines.length > 0
             ? salonsLegalLines
             : [`<span class="text-sm">${site_name}</span>`];
-const legalDocuments = getEnabledLegalDocuments(settings.legal);
 ---
 
 <footer class="bg-linear-[var(--footer-bg)] text-footer-text-color py-14 relative">
@@ -66,10 +66,8 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
                 <div class="text-xl mb-3 md:mb-5">Разделы сайта</div>
                 <ul class="space-y-2">
                 {
-                    links
-                        .filter(link => link.url !== 'javascript:void(0)')
-                        .map(link => (
-                            <li><a href={link.url} class={`transition hover:underline ${path === link.url ? 'font-weight-bold' : ''}`}>{link.name}</a></li>
+                    links.map(link => (
+                        <li><a href={link.url} class={`transition hover:underline ${path === link.url ? 'font-weight-bold' : ''}`}>{link.name}</a></li>
                     ))
                 }
                 </ul>
@@ -128,9 +126,9 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
                 <span class="text-sm mb-2 mr-2">&copy; {YEAR}</span>
                 {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
             </div>
-            {legalDocuments.map(document => (
+            {legalLinks.map(link => (
                 <div class="shrink-0">
-                    <a href={document.href} class="text-footer-link text-sm font-light hover:text-footer-link-hover!">{document.label}</a>
+                    <a href={link.url} class="text-footer-link text-sm font-light hover:text-footer-link-hover!" target={link.target} rel={link.rel}>{link.name}</a>
                 </div>
             ))}
             <div class="made-by ml-auto shrink-0 text-sm m-0 text-footer-link">Разработка <a href={url} class="hover:text-footer-link-hover!" target="_blank">alexsab.ru</a></div>

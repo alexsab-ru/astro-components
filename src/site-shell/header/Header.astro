@@ -6,7 +6,9 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 const { brand = null } = Astro.props;
 const path = Astro.url.pathname;
 
-import { LINKS_MENU as links } from '@/const.js';
+import { getMenu } from '@/const.js';
+const links = getMenu('main');
+const headerLinks = getMenu('header');
 import settings from '@/data/site/settings.json';
 import { isHeaderTransparentEnabled } from '@/js/utils/features';
 const { header_top_line } = settings;
@@ -63,6 +65,13 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 						})
 					}
 					</div>
+					{headerLinks.length > 0 && (
+						<div class="hidden xl:flex items-center gap-4">
+							{headerLinks.map((link) => (
+								<a href={link.url} class={`whitespace-nowrap transition-colors ${colorText} ${colorHoverText}`}>{link.name}</a>
+							))}
+						</div>
+					)}
 					{salons.length &&
 						salons.length > 1 ? (
 							<div class="hidden lg:block">

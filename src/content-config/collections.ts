@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 
 import { getRegularCollectionNames, hasContentCollection } from './fs';
 import { carsSchema, pageCollectionSchema, usedCarsSchema } from './schemas';
+import { getAlwaysAvailableCollections } from '../js/utils/sitePages.js';
 
 export type CollectionMeta = {
 	name: string;
@@ -26,10 +27,6 @@ type SeoEntry = {
 	image?: string;
 };
 
-type RoutesData = {
-	always_available_collections?: unknown;
-};
-
 const readSeoData = (): Record<string, SeoEntry> => {
 	const path = resolve(process.cwd(), 'src/data/site/seo.json');
 	if (!existsSync(path)) return {};
@@ -40,16 +37,15 @@ const readSeoData = (): Record<string, SeoEntry> => {
 const seoData = readSeoData();
 
 const readAlwaysAvailableCollections = (): string[] => {
-	const path = resolve(process.cwd(), 'src/data/site/routes.json');
+	const path = resolve(process.cwd(), 'src/data/site/pages.json');
 	if (!existsSync(path)) return [];
 
-	const routes = JSON.parse(readFileSync(path, 'utf-8')) as RoutesData;
-	if (!Array.isArray(routes.always_available_collections)) return [];
-
-	return routes.always_available_collections
-		.filter((name): name is string => typeof name === 'string')
-		.map((name) => name.trim())
-		.filter((name) => /^[a-z0-9][a-z0-9_-]*$/.test(name));
+	try {
+		return getAlwaysAvailableCollections(JSON.parse(readFileSync(path, 'utf-8')));
+	} catch {
+		// Битый реестр не должен ронять сборку — как и отсутствующий.
+		return [];
+	}
 };
 
 const alwaysAvailableCollections = readAlwaysAvailableCollections();

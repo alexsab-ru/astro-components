@@ -260,6 +260,7 @@ export default defineToolbarApp({
       actionsRow.appendChild(makeDownloadButton("Скачать всё", "__all__", "purple"));
       actionsRow.appendChild(makeDownloadButton("settings.json", "settings.json", "blue"));
       actionsRow.appendChild(makeDownloadButton("routes.json", "routes.json"));
+      actionsRow.appendChild(makeDownloadButton("pages.json", "pages.json"));
       actionsRow.appendChild(makeDownloadButton("robots.json", "robots.json"));
       actionsRow.appendChild(makeDownloadButton("scripts.json", "scripts.json"));
       actionsRow.appendChild(makeDownloadButton("env.json", "env.json"));

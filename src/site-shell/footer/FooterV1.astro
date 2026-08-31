@@ -2,9 +2,9 @@
 import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
 const { site_name, legal_entity, brand, footer_info } = settings;
-import { getEnabledLegalDocuments } from '@/js/utils/legalDocuments';
+import { getMenu } from '@/const';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
-const legalDocuments = getEnabledLegalDocuments(settings.legal);
+const legalLinks = getMenu('footer_legal');
 ---
 
 <footer class="bg-black text-white py-8" x-data="footer">
@@ -30,10 +30,10 @@ const legalDocuments = getEnabledLegalDocuments(settings.legal);
 		<div class="relative flex flex-col sm:flex-row justify-between pt-10">
 			<div class="mb-4">
 				<p>© 2024 {legal_entity}</p>
-				{legalDocuments.length > 0 && (
+				{legalLinks.length > 0 && (
 					<div class="flex gap-x-4 gap-y-1 flex-wrap mt-3 text-sm opacity-80">
-						{legalDocuments.map(document => (
-							<a href={document.href} class="underline transition hover:no-underline">{document.label}</a>
+						{legalLinks.map(link => (
+							<a href={link.url} class="underline transition hover:no-underline" target={link.target} rel={link.rel}>{link.name}</a>
 						))}
 					</div>
 				)}

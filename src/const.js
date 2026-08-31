@@ -1,4 +1,6 @@
 import { LAST_DAY, MONTH, YEAR } from '@/js/utils/date';
+import { MENU_SLOTS, resolveMenu } from '@/js/utils/menuSlots';
+import { getSitePages } from '@/js/utils/siteRoutes';
 // Конечное время для таймера
 //string 2025-12-31T23:59:59+04:00
 export const TIMER = { title: 'До конца акции осталось',subtitle: '', endtime: `${YEAR}-${MONTH}-${LAST_DAY}T23:59:59+04:00`, btnName: 'Зафиксировать цену', show: false };
@@ -53,28 +55,37 @@ const childrenGroup = Object.keys(dynamicMenuConfig).reduce((acc, type) => {
 	return acc;
 }, {});
 
-let menu = [];
+let menuData = {};
 
 try {
-	menu = await import('@/data/site/menu.json');
-	menu = menu.default || menu; // Обработка случая, когда импорт возвращает объект с ключом default
+	const imported = await import('@/data/site/menu.json');
+	menuData = imported.default || imported;
 } catch (e) {
 	console.warn('menu.json not found, using default empty menu');
-	menu = []; // или какой-то fallback
+	menuData = {};
 }
 
-// Обрабатываем динамические children только для известных типов
-menu.length > 0 && menu.map(item => {
-	if(typeof item?.children === 'string'){
-		const key = item.children;		
-		// Проверяем, что это именно известный тип из конфигурации
-		if (childrenGroup[key] && dynamicMenuConfig[key]) {			
+// Подставляем динамические children (например список моделей) во все слоты.
+for (const slot of MENU_SLOTS) {
+	const items = menuData?.[slot];
+	if (!Array.isArray(items)) continue;
+	for (const item of items) {
+		if (typeof item?.children !== 'string') continue;
+		const key = item.children;
+		if (childrenGroup[key] && dynamicMenuConfig[key]) {
 			item.children = childrenGroup[key];
 		}
 	}
-});
+}
 
-export const LINKS_MENU = menu;
+/**
+ * Пункты одного слота меню, готовые к рендеру.
+ * Пункты, ведущие на выключенные в реестре страницы, отброшены;
+ * подпись лежит в поле `name` (его читают HeaderMenuLink.astro и FooterV2.astro).
+ */
+export function getMenu(slot) {
+	return resolveMenu(menuData, getSitePages(), slot);
+}
 
 export const STATUS = ['enable','show','disable','hide','preorder','comminsoon'];
 
