@@ -10,6 +10,10 @@ const analyticsMockUrl = toModuleUrl(`
 	export const reachGoal = (goal, payload) => {
 		globalThis.__formGoalCalls.push({ goal, payload });
 	};
+	export const reportClientFormError = (context) => {
+		globalThis.__clientErrorReports.push(context);
+		return Promise.resolve(true);
+	};
 `);
 const instrumentedSource = source.replace(
 	"from '@alexsab-ru/scripts'",
@@ -18,10 +22,8 @@ const instrumentedSource = source.replace(
 const {
 	emitFormError,
 	emitFormRequired,
-	getFormResponseDiagnostics,
 	getFormErrorGoalPayload,
 	getFormRequiredGoalPayload,
-	reportClientFormError,
 } = await import(
 	toModuleUrl(instrumentedSource)
 );
@@ -40,45 +42,6 @@ test('form_required context contains field names but never field values', () => 
 			invalidCount: 2,
 		},
 	});
-});
-
-test('client form error report is deduplicated and excludes error details', async () => {
-	const previousWindow = globalThis.window;
-	const previousFetch = globalThis.fetch;
-	const stored = new Map();
-	const requests = [];
-	globalThis.window = {
-		location: { pathname: '/cars/?phone=private' },
-		sessionStorage: {
-			getItem: (key) => stored.get(key) || null,
-			setItem: (key, value) => stored.set(key, value),
-		},
-	};
-	globalThis.fetch = async (url, options) => requests.push({ url, options });
-
-	try {
-		const context = {
-			formID: 'callback-form',
-			errorSource: 'network',
-			errorStage: 'lead_request',
-			error: 'private error details',
-		};
-		assert.equal(await reportClientFormError(context), true);
-		assert.equal(await reportClientFormError(context), false);
-		assert.equal(requests.length, 1);
-		assert.deepEqual(JSON.parse(requests[0].options.body), {
-			version: 1,
-			goal: 'form_error',
-			errorSource: 'network',
-			errorStage: 'lead_request',
-			formID: 'callback-form',
-			pagePath: '/cars/',
-		});
-		assert.equal(requests[0].options.body.includes('private'), false);
-	} finally {
-		globalThis.window = previousWindow;
-		globalThis.fetch = previousFetch;
-	}
 });
 
 test('form_error context contains only bounded technical categories', () => {
@@ -100,73 +63,16 @@ test('form_error context contains only bounded technical categories', () => {
 	});
 });
 
-test('response diagnostics contain classifications but no response body', () => {
-	const previousWindow = globalThis.window;
-	globalThis.window = { location: { origin: 'https://dealer.example' } };
-	try {
-		assert.deepEqual(getFormResponseDiagnostics({
-			responseText: '-_-',
-			response: { headers: { get: () => 'text/plain' } },
-			url: 'https://l.alexsab.ru/lead/jac/samara/',
-		}), {
-			leadPath: '/lead/jac/samara/',
-			responseKind: 'legacy_sentinel',
-			responseBytes: 3,
-		});
-	} finally {
-		globalThis.window = previousWindow;
-	}
-});
-
-test('client report includes only approved response diagnostics', async () => {
-	const previousWindow = globalThis.window;
-	const previousFetch = globalThis.fetch;
-	const requests = [];
-	globalThis.window = {
-		location: { pathname: '/' },
-		sessionStorage: { getItem: () => null, setItem: () => {} },
-	};
-	globalThis.fetch = async (_url, options) => requests.push(options);
-
-	try {
-		await reportClientFormError({
-			formID: 'callback-form',
-			errorSource: 'server',
-			errorStage: 'response_parse',
-			httpStatus: 200,
-			leadPath: '/lead/test/dealer/',
-			responseKind: 'html',
-			responseBytes: 321,
-			responseText: '<html>private response</html>',
-		});
-		const payload = JSON.parse(requests[0].body);
-		assert.deepEqual(payload, {
-			version: 1,
-			goal: 'form_error',
-			errorSource: 'server',
-			errorStage: 'response_parse',
-			formID: 'callback-form',
-			pagePath: '/',
-			httpStatus: 200,
-			leadPath: '/lead/test/dealer/',
-			responseKind: 'html',
-			responseBytes: 321,
-		});
-		assert.equal(requests[0].body.includes('private response'), false);
-	} finally {
-		globalThis.window = previousWindow;
-		globalThis.fetch = previousFetch;
-	}
-});
-
 test('emitFormError emits one categorized goal', () => {
 	globalThis.__formGoalCalls = [];
+	globalThis.__clientErrorReports = [];
 
-	emitFormError({
+	const context = {
 		formID: 'callback-form',
 		errorSource: 'network',
 		errorStage: 'lead_request',
-	});
+	};
+	emitFormError(context);
 
 	assert.deepEqual(globalThis.__formGoalCalls, [{
 		goal: 'form_error',
@@ -178,7 +84,9 @@ test('emitFormError emits one categorized goal', () => {
 			},
 		},
 	}]);
+	assert.deepEqual(globalThis.__clientErrorReports, [context]);
 	delete globalThis.__formGoalCalls;
+	delete globalThis.__clientErrorReports;
 });
 
 test('emitFormRequired emits one categorized goal', () => {
