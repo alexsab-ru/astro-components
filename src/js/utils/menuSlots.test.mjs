@@ -96,3 +96,24 @@ test('подпись якоря без title не подтягивается и�
 	const menu = {main: [{url: '/#services'}]};
 	assert.equal(resolveMenu(menu, pages, 'main')[0].name, '');
 });
+
+test('javascript: пункты отбрасываются, остальные схемы остаются', () => {
+	const menu = {
+		main: [
+			{url: 'javascript:void(0)', title: 'Покупателям'},
+			{url: 'JavaScript:void(0)', title: 'Регистр не важен'},
+			{url: '  javascript:void(0)  ', title: 'Пробелы вокруг'},
+			{url: 'https://example.com/', title: 'Внешняя'},
+			{url: 'tel:+70000000000', title: 'Телефон'},
+			{url: 'mailto:info@example.com', title: 'Почта'},
+			{url: '/#services', title: 'Якорь'},
+		],
+	};
+	const urls = resolveMenu(menu, PAGES, 'main').map((item) => item.url);
+	assert.deepEqual(urls, [
+		'https://example.com/',
+		'tel:+70000000000',
+		'mailto:info@example.com',
+		'/#services',
+	]);
+});

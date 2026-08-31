@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
+import path from 'node:path';
 import test from 'node:test';
-import { collectRouteSlugs, comparePagesToRoutes } from './checkPagesRegistry.mjs';
+import { collectRouteSlugs, comparePagesToRoutes, templatePagesJsonPath } from './checkPagesRegistry.mjs';
 
 test('collectRouteSlugs превращает пути файлов в слаги', () => {
 	assert.deepEqual(
@@ -67,4 +68,32 @@ test('записи коллекций из сверки исключены', () 
 		['contacts'],
 	);
 	assert.deepEqual(result, {missingInRegistry: [], missingInPages: []});
+});
+
+test('templatePagesJsonPath смотрит на соседний astro-json по умолчанию', () => {
+	const previous = process.env.ASTRO_JSON_LOCAL_PATH;
+	delete process.env.ASTRO_JSON_LOCAL_PATH;
+	try {
+		assert.equal(
+			templatePagesJsonPath('/repo/astro-components'),
+			path.resolve('/repo/astro-components', '../astro-json', 'data/json/pages.json'),
+		);
+	} finally {
+		if (previous === undefined) delete process.env.ASTRO_JSON_LOCAL_PATH;
+		else process.env.ASTRO_JSON_LOCAL_PATH = previous;
+	}
+});
+
+test('templatePagesJsonPath уважает переопределение ASTRO_JSON_LOCAL_PATH', () => {
+	const previous = process.env.ASTRO_JSON_LOCAL_PATH;
+	process.env.ASTRO_JSON_LOCAL_PATH = '/custom/astro-json';
+	try {
+		assert.equal(
+			templatePagesJsonPath('/repo/astro-components'),
+			path.resolve('/custom/astro-json', 'data/json/pages.json'),
+		);
+	} finally {
+		if (previous === undefined) delete process.env.ASTRO_JSON_LOCAL_PATH;
+		else process.env.ASTRO_JSON_LOCAL_PATH = previous;
+	}
 });

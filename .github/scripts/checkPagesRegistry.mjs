@@ -1,9 +1,16 @@
 #!/usr/bin/env node
 /**
- * Сверяет реестр страниц (src/data/site/pages.json) со статическими маршрутами шаблона.
+ * Сверяет реестр страниц шаблона (astro-json/data/json/pages.json) со статическими
+ * маршрутами шаблона (src/pages в astro-components).
  *
  * Реестр живёт в данных (astro-json), маршруты — в коде. Без этой проверки
  * они расходятся молча: добавили страницу в src/pages и забыли описать.
+ *
+ * Сверяем именно с дефолтным слоем шаблона, а не с итоговым src/data/site/pages.json:
+ * тот — результат слияния общий → бренд → дилер, и в нём законно встречаются
+ * дилерские записи (`/about/`, `/iov/`, `/for-owners/`, ...), для которых в
+ * src/pages шаблона файла нет и быть не должно. Сверка с ним даёт ложные
+ * ошибки на дилерских сайтах.
  *
  * Динамические маршруты и служебные страницы в сверке не участвуют:
  * их набор зависит от контента дилера, а не от шаблона.
@@ -70,10 +77,24 @@ export function comparePagesToRoutes(pages, routeSlugs) {
 	};
 }
 
+/**
+ * Путь к дефолтному реестру страниц шаблона в соседнем репозитории astro-json.
+ *
+ * Тот же способ, что и `--local` в downloadCommonRepo.sh: соседняя директория
+ * `../astro-json` по умолчанию, переопределяется той же переменной окружения
+ * (ASTRO_JSON_LOCAL_PATH), чтобы не плодить второе имя для одного и того же пути.
+ */
+export function templatePagesJsonPath(repoRoot) {
+	const astroJsonPath = process.env.ASTRO_JSON_LOCAL_PATH || '../astro-json';
+	return path.resolve(repoRoot, astroJsonPath, 'data/json/pages.json');
+}
+
 const main = () => {
-	const pagesJsonPath = path.join(ROOT, 'src/data/site/pages.json');
+	const pagesJsonPath = templatePagesJsonPath(ROOT);
 	if (!fs.existsSync(pagesJsonPath)) {
-		console.error('❌ src/data/site/pages.json не найден. Сначала pnpm downloadCommonRepo --local');
+		console.error(`❌ ${pagesJsonPath} не найден.`);
+		console.error('   Ожидается соседний репозиторий astro-json (см. --local в downloadCommonRepo).');
+		console.error('   Переопределить путь: ASTRO_JSON_LOCAL_PATH=/путь/до/astro-json');
 		process.exit(1);
 	}
 

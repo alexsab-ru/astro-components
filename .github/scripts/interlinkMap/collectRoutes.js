@@ -212,7 +212,9 @@ export function collectMenuUrls(menu, pages, result = new Set()) {
 			if (item?.url && typeof item.url === 'string' && item.url.startsWith('/')) {
 				result.add(normalizeUrl(item.url));
 			}
-			if (item?.children && typeof item.children === 'object') {
+			if (Array.isArray(item?.children)) {
+				addItems(item.children);
+			} else if (item?.children && typeof item.children === 'object') {
 				for (const group of Object.values(item.children)) {
 					if (Array.isArray(group)) addItems(group);
 				}

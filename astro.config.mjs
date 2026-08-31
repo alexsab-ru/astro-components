@@ -167,7 +167,21 @@ const loadRedirectsFromData = () => {
 	}
 };
 
-const validateRedirectEntries = (raw) => {
+// Ссылка с явной схемой (http:, https:, tel:, mailto:, ...) — внешний адрес,
+// а не маршрут шаблона, проверять его на "выключенную страницу" бессмысленно.
+const hasUrlScheme = (value) => typeof value === 'string' && /^[a-z][a-z0-9+.-]*:/i.test(value);
+
+// pages.json и routes.json — разные файлы: редирект может вести на страницу,
+// которую реестр pages.json выключил, и без явной проверки это расхождение
+// не заметно до первого 404 в проде (см. пункт про personal-data-consent).
+const warnIfRedirectTargetsDisabledPage = (from, destination, disabledRoutes) => {
+	if (hasUrlScheme(destination)) return;
+	if (pathMatchesRouteRules(destination, disabledRoutes)) {
+		console.warn(`[astro.config] routes.json redirects: "${from}" ведёт на "${destination}" — эта страница выключена в pages.json.`);
+	}
+};
+
+const validateRedirectEntries = (raw, disabledRoutes) => {
 	if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
 		console.warn('[astro.config] routes.json: ключ "redirects" должен быть объектом. Редиректы отключены.');
 		return {};
@@ -180,10 +194,12 @@ const validateRedirectEntries = (raw) => {
 		}
 		if (typeof to === 'string') {
 			validated[from] = to;
+			warnIfRedirectTargetsDisabledPage(from, to, disabledRoutes);
 		} else if (typeof to === 'object' && to !== null && typeof to.destination === 'string') {
 			const status = Number(to.status);
 			if (status && [301, 302, 303, 307, 308].includes(status)) {
 				validated[from] = { status, destination: to.destination };
+				warnIfRedirectTargetsDisabledPage(from, to.destination, disabledRoutes);
 			} else {
 				console.warn(`[astro.config] routes.json: пропущен "${from}" — недопустимый status ${to.status}. Допустимы: 301, 302, 303, 307, 308.`);
 			}
@@ -195,9 +211,9 @@ const validateRedirectEntries = (raw) => {
 };
 
 const sitePages = loadSitePagesFromData();
-const redirectsConfig = validateRedirectEntries(loadRedirectsFromData());
 const disabledRoutesForBuild = getDisabledUrls(sitePages);
 const sitemapIgnoreRoutes = getSitemapIgnoredUrls(sitePages);
+const redirectsConfig = validateRedirectEntries(loadRedirectsFromData(), disabledRoutesForBuild);
 // Открывает браузер на origin текущего дилера.
 //
 // Почему не server.open: это статическая строка, вычисляемая до listen(), а Vite при
@@ -234,7 +250,7 @@ const devToolbarIntegrations = isDevCommand
 	]
 	: [];
 
-// Удаляет из dist папки целых разделов (например catalog), если соответствующий путь в disabled_routes.
+// Удаляет из dist папки целых разделов (например catalog), если соответствующий путь выключен в pages.json.
 // Дублирует логику «не собирать» для статических index.astro без getStaticPaths.
 const stripDisabledRoutesIntegration = (disabledRules) => ({
 	name: 'strip-disabled-route-dirs',

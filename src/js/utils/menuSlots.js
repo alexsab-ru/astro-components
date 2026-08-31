@@ -18,6 +18,14 @@ export const MENU_SLOTS = ['header', 'main', 'footer', 'footer_legal'];
 const hasScheme = (url) => /^[a-z][a-z0-9+.-]*:/i.test(url);
 
 /**
+ * `javascript:` — псевдо-ссылка (обычно раскрывающийся заголовок меню вроде
+ * «Покупателям»/«Владельцам»), а не переход. В любом слоте это мёртвая ссылка,
+ * поэтому такие пункты отбрасываются целиком, а не просто пропускаются
+ * проверкой выключенных страниц.
+ */
+const isJavascriptUrl = (url) => typeof url === 'string' && /^javascript:/i.test(url.trim());
+
+/**
  * Путь пункта для проверки «выключена ли страница».
  * Пустая строка означает «проверять нечего, пункт оставляем всегда»:
  * внешние ссылки и якоря на текущей странице (`/#services`) фильтровать нельзя.
@@ -46,6 +54,7 @@ export function resolveMenu(menu = {}, pages = {}, slot) {
 	const disabled = getDisabledUrls(pages);
 	return getSlotItems(menu, slot)
 		.filter((item) => {
+			if (isJavascriptUrl(item?.url)) return false;
 			const target = menuItemPath(item?.url);
 			return target === '' ? true : !pathMatchesRouteRules(target, disabled);
 		})
