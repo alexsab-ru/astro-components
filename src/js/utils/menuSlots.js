@@ -18,10 +18,12 @@ export const MENU_SLOTS = ['header', 'main', 'footer', 'footer_legal'];
 const hasScheme = (url) => /^[a-z][a-z0-9+.-]*:/i.test(url);
 
 /**
- * `javascript:` — псевдо-ссылка (обычно раскрывающийся заголовок меню вроде
- * «Покупателям»/«Владельцам»), а не переход. В любом слоте это мёртвая ссылка,
- * поэтому такие пункты отбрасываются целиком, а не просто пропускаются
- * проверкой выключенных страниц.
+ * `javascript:` — псевдо-ссылка. В большинстве слотов это мёртвая ссылка,
+ * но в слоте `main` тем же значением помечают заголовок выпадающего меню
+ * («Покупателям», «Владельцам» и т. п.) — у такого пункта есть `children`,
+ * и он обязан остаться, иначе выпадающий список пропадает целиком вместе
+ * со всеми вложенными ссылками. Поэтому решение, отбрасывать пункт или
+ * нет, принимает вызывающий код (см. resolveMenu) в зависимости от слота.
  */
 const isJavascriptUrl = (url) => typeof url === 'string' && /^javascript:/i.test(url.trim());
 
@@ -54,7 +56,10 @@ export function resolveMenu(menu = {}, pages = {}, slot) {
 	const disabled = getDisabledUrls(pages);
 	return getSlotItems(menu, slot)
 		.filter((item) => {
-			if (isJavascriptUrl(item?.url)) return false;
+			// `main` рендерится выпадающими списками, где пункт с `javascript:`
+			// это заголовок группы (несёт `children`) — его нельзя отбрасывать.
+			// Остальные слоты рендерят плоский список ссылок, там это мёртвый пункт.
+			if (slot !== 'main' && isJavascriptUrl(item?.url)) return false;
 			const target = menuItemPath(item?.url);
 			return target === '' ? true : !pathMatchesRouteRules(target, disabled);
 		})

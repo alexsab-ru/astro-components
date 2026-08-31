@@ -128,7 +128,7 @@ const LEGAL_SALONS_INFO =
             </div>
             {legalLinks.map(link => (
                 <div class="shrink-0">
-                    <a href={link.url} class="text-footer-link text-sm font-light hover:text-footer-link-hover!">{link.name}</a>
+                    <a href={link.url} class="text-footer-link text-sm font-light hover:text-footer-link-hover!" target={link.target} rel={link.rel}>{link.name}</a>
                 </div>
             ))}
             <div class="made-by ml-auto shrink-0 text-sm m-0 text-footer-link">Разработка <a href={url} class="hover:text-footer-link-hover!" target="_blank">alexsab.ru</a></div>

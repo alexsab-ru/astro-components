@@ -33,7 +33,7 @@ const legalLinks = getMenu('footer_legal');
 				{legalLinks.length > 0 && (
 					<div class="flex gap-x-4 gap-y-1 flex-wrap mt-3 text-sm opacity-80">
 						{legalLinks.map(link => (
-							<a href={link.url} class="underline transition hover:no-underline">{link.name}</a>
+							<a href={link.url} class="underline transition hover:no-underline" target={link.target} rel={link.rel}>{link.name}</a>
 						))}
 					</div>
 				)}

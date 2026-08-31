@@ -97,19 +97,43 @@ test('подпись якоря без title не подтягивается и�
 	assert.equal(resolveMenu(menu, pages, 'main')[0].name, '');
 });
 
-test('javascript: пункты отбрасываются, остальные схемы остаются', () => {
+test('в main javascript: — заголовок выпадающего меню и остаётся вместе с children', () => {
 	const menu = {
 		main: [
-			{url: 'javascript:void(0)', title: 'Покупателям'},
-			{url: 'JavaScript:void(0)', title: 'Регистр не важен'},
-			{url: '  javascript:void(0)  ', title: 'Пробелы вокруг'},
+			{url: 'javascript:void(0)', title: 'Покупателям', children: 'buyers'},
+			{url: 'JavaScript:void(0)', title: 'Регистр не важен', children: 'case'},
+			{url: '  javascript:void(0)  ', title: 'Пробелы вокруг', children: 'trim'},
 			{url: 'https://example.com/', title: 'Внешняя'},
 			{url: 'tel:+70000000000', title: 'Телефон'},
 			{url: 'mailto:info@example.com', title: 'Почта'},
 			{url: '/#services', title: 'Якорь'},
 		],
 	};
-	const urls = resolveMenu(menu, PAGES, 'main').map((item) => item.url);
+	const items = resolveMenu(menu, PAGES, 'main');
+	const urls = items.map((item) => item.url);
+	assert.deepEqual(urls, [
+		'javascript:void(0)',
+		'JavaScript:void(0)',
+		'  javascript:void(0)  ',
+		'https://example.com/',
+		'tel:+70000000000',
+		'mailto:info@example.com',
+		'/#services',
+	]);
+	assert.equal(items.find((item) => item.title === 'Покупателям').children, 'buyers');
+});
+
+test('в footer javascript: пункты отбрасываются, остальные схемы остаются', () => {
+	const menu = {
+		footer: [
+			{url: 'javascript:void(0)', title: 'Покупателям', children: 'buyers'},
+			{url: 'https://example.com/', title: 'Внешняя'},
+			{url: 'tel:+70000000000', title: 'Телефон'},
+			{url: 'mailto:info@example.com', title: 'Почта'},
+			{url: '/#services', title: 'Якорь'},
+		],
+	};
+	const urls = resolveMenu(menu, PAGES, 'footer').map((item) => item.url);
 	assert.deepEqual(urls, [
 		'https://example.com/',
 		'tel:+70000000000',
