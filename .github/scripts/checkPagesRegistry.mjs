@@ -61,11 +61,10 @@ export function comparePagesToRoutes(pages, routeSlugs) {
 	const routes = new Set(routeSlugs);
 	const registrySlugs = new Set();
 
-	for (const entry of Object.values(pages ?? {})) {
+	for (const [key, entry] of Object.entries(pages ?? {})) {
 		if (!entry || typeof entry !== 'object') continue;
 		if (typeof entry.collection === 'string') continue;
-		if (typeof entry.url !== 'string') continue;
-		registrySlugs.add(entry.url.replace(/^\/+/, '').replace(/\/+$/, ''));
+		registrySlugs.add(key.replace(/^\/+/, '').replace(/\/+$/, ''));
 	}
 
 	return {
@@ -78,15 +77,114 @@ export function comparePagesToRoutes(pages, routeSlugs) {
 }
 
 /**
- * Путь к дефолтному реестру страниц шаблона в соседнем репозитории astro-json.
+ * Путь к корню соседнего репозитория astro-json.
  *
  * Тот же способ, что и `--local` в downloadCommonRepo.sh: соседняя директория
  * `../astro-json` по умолчанию, переопределяется той же переменной окружения
  * (ASTRO_JSON_LOCAL_PATH), чтобы не плодить второе имя для одного и того же пути.
  */
-export function templatePagesJsonPath(repoRoot) {
+export function astroJsonRoot(repoRoot) {
 	const astroJsonPath = process.env.ASTRO_JSON_LOCAL_PATH || '../astro-json';
-	return path.resolve(repoRoot, astroJsonPath, 'data/json/pages.json');
+	return path.resolve(repoRoot, astroJsonPath);
+}
+
+/** Путь к дефолтному реестру страниц шаблона в соседнем репозитории astro-json. */
+export function templatePagesJsonPath(repoRoot) {
+	return path.join(astroJsonRoot(repoRoot), 'data/json/pages.json');
+}
+
+/**
+ * Пути ко всем файлам реестра всех слоёв: дефолт (data/json/pages.json) и
+ * каждый дилерский диф (src/<домен>/pages.json). Отсутствующие файлы пропускаются —
+ * не у каждого дилера есть свой pages.json.
+ */
+export function listRegistryFiles(repoRoot) {
+	const root = astroJsonRoot(repoRoot);
+	const files = [];
+
+	const defaultPath = path.join(root, 'data/json/pages.json');
+	if (fs.existsSync(defaultPath)) files.push(defaultPath);
+
+	const srcDir = path.join(root, 'src');
+	if (fs.existsSync(srcDir)) {
+		for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
+			if (!entry.isDirectory()) continue;
+			const dealerPath = path.join(srcDir, entry.name, 'pages.json');
+			if (fs.existsSync(dealerPath)) files.push(dealerPath);
+		}
+	}
+
+	return files;
+}
+
+/**
+ * Приводит ключ реестра к строгому каноническому виду для этой проверки:
+ * один ведущий и один завершающий слэш, без query/якоря, без пустых сегментов
+ * (то есть без двойных слэшей).
+ *
+ * Это НЕ то же самое, что normalizePageUrl из src/js/utils/sitePages.js: та функция
+ * снисходительна к рантайм-сравнению путей (не схлопывает двойные слэши — на реальных
+ * URL их и так не бывает), а здесь мы, наоборот, ловим именно опечатки в исходных
+ * данных, поэтому проверяем строже.
+ */
+export function canonicalizeRegistryKey(key) {
+	if (typeof key !== 'string') return '/';
+	const withoutTail = key.split('#')[0].split('?')[0];
+	const segments = withoutTail.split('/').filter(Boolean);
+	return segments.length > 0 ? `/${segments.join('/')}/` : '/';
+}
+
+/**
+ * Проверяет канонический вид ключей одного файла реестра.
+ *
+ * Ключ реестра — это URL, и склейка слоёв (deepMerge) сливает записи по точному
+ * совпадению строки ключа. Два случая ловим здесь:
+ *  - ключ записан не канонически (без ведущего/завершающего слэша, двойные
+ *    слэши, `?`/`#` в строке) — такая запись не сольётся с канонической версией
+ *    того же URL в другом слое;
+ *  - два ключа одного файла после нормализации дают один и тот же URL — то есть
+ *    один из них лишний или опечатка, и который из двух реально применится,
+ *    решает порядок ключей в объекте, а не намерение автора.
+ */
+export function checkCanonicalKeys(filePath, pages) {
+	const problems = [];
+	const byNormalized = new Map();
+
+	for (const key of Object.keys(pages ?? {})) {
+		const canonical = canonicalizeRegistryKey(key);
+		if (canonical !== key) {
+			problems.push({
+				file: filePath,
+				key,
+				message: `ключ "${key}" не в каноническом виде — используйте "${canonical}"`,
+			});
+		}
+		const bucket = byNormalized.get(canonical) ?? [];
+		bucket.push(key);
+		byNormalized.set(canonical, bucket);
+	}
+
+	for (const [canonical, keys] of byNormalized) {
+		if (keys.length > 1) {
+			problems.push({
+				file: filePath,
+				key: keys.join(' и '),
+				message: `ключи ${keys.map((k) => `"${k}"`).join(' и ')} после нормализации дают один и тот же URL "${canonical}" — оставьте одну запись`,
+			});
+		}
+	}
+
+	return problems;
+}
+
+/** Проверяет канонический вид ключей во всех файлах реестра всех слоёв. */
+export function checkAllRegistryFiles(repoRoot) {
+	const problems = [];
+	for (const filePath of listRegistryFiles(repoRoot)) {
+		const pages = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+		problems.push(...checkCanonicalKeys(filePath, pages));
+	}
+	return problems;
 }
 
 const main = () => {
@@ -98,26 +196,40 @@ const main = () => {
 		process.exit(1);
 	}
 
+	let hasErrors = false;
+
 	const pages = JSON.parse(fs.readFileSync(pagesJsonPath, 'utf8'));
 	const slugs = collectRouteSlugs(trackedPageFiles(ROOT));
 	const { missingInRegistry, missingInPages } = comparePagesToRoutes(pages, slugs);
 
 	if (missingInRegistry.length === 0 && missingInPages.length === 0) {
 		console.log(`✔ Реестр и маршруты совпадают (${slugs.length} маршрутов)`);
-		return;
+	} else {
+		hasErrors = true;
+		if (missingInRegistry.length > 0) {
+			console.error('❌ Маршруты шаблона без записи в pages.json:');
+			for (const slug of missingInRegistry) console.error(`   /${slug}/`);
+			console.error('   Добавьте записи в astro-json/data/json/pages.json');
+		}
+		if (missingInPages.length > 0) {
+			console.error('❌ Записи pages.json без маршрута в src/pages:');
+			for (const url of missingInPages) console.error(`   ${url}`);
+			console.error('   Уберите записи из astro-json/data/json/pages.json');
+		}
 	}
 
-	if (missingInRegistry.length > 0) {
-		console.error('❌ Маршруты шаблона без записи в pages.json:');
-		for (const slug of missingInRegistry) console.error(`   /${slug}/`);
-		console.error('   Добавьте записи в astro-json/data/json/pages.json');
+	const keyProblems = checkAllRegistryFiles(ROOT);
+	if (keyProblems.length === 0) {
+		console.log('✔ Ключи реестра во всех слоях канонические');
+	} else {
+		hasErrors = true;
+		console.error('❌ Ключи реестра не в каноническом виде:');
+		for (const problem of keyProblems) {
+			console.error(`   ${path.relative(astroJsonRoot(ROOT), problem.file)}: ${problem.message}`);
+		}
 	}
-	if (missingInPages.length > 0) {
-		console.error('❌ Записи pages.json без маршрута в src/pages:');
-		for (const url of missingInPages) console.error(`   ${url}`);
-		console.error('   Уберите записи из astro-json/data/json/pages.json');
-	}
-	process.exit(1);
+
+	if (hasErrors) process.exit(1);
 };
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();

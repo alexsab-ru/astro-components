@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import test from 'node:test';
-import { collectRouteSlugs, comparePagesToRoutes, templatePagesJsonPath } from './checkPagesRegistry.mjs';
+import {
+	canonicalizeRegistryKey,
+	checkCanonicalKeys,
+	collectRouteSlugs,
+	comparePagesToRoutes,
+	templatePagesJsonPath,
+} from './checkPagesRegistry.mjs';
 
 test('collectRouteSlugs превращает пути файлов в слаги', () => {
 	assert.deepEqual(
@@ -29,45 +35,92 @@ test('collectRouteSlugs выбрасывает служебные, главну�
 
 test('всё совпадает — обе стороны пусты', () => {
 	const result = comparePagesToRoutes(
-		{contacts: {url: '/contacts/'}, models: {url: '/models/'}},
+		{'/contacts/': {}, '/models/': {}},
 		['contacts', 'models'],
 	);
 	assert.deepEqual(result, {missingInRegistry: [], missingInPages: []});
 });
 
 test('маршрут шаблона без записи в реестре', () => {
-	const result = comparePagesToRoutes({contacts: {url: '/contacts/'}}, ['contacts', 'test-drive']);
+	const result = comparePagesToRoutes({'/contacts/': {}}, ['contacts', 'test-drive']);
 	assert.deepEqual(result.missingInRegistry, ['test-drive']);
 	assert.deepEqual(result.missingInPages, []);
 });
 
 test('запись реестра без маршрута', () => {
 	const result = comparePagesToRoutes(
-		{contacts: {url: '/contacts/'}, ghost: {url: '/ghost/'}},
+		{'/contacts/': {}, '/ghost/': {}},
 		['contacts'],
 	);
 	assert.deepEqual(result.missingInPages, ['/ghost/']);
 	assert.deepEqual(result.missingInRegistry, []);
 });
 
-test('нормализует url реестра независимо от слэшей', () => {
+test('терпимо относится к ключам без ведущего/завершающего слэша', () => {
 	const result = comparePagesToRoutes(
 		{
-			a: {url: 'contacts'},
-			b: {url: '/models'},
-			c: {url: '//used_cars//'},
+			contacts: {},
+			'/models': {},
 		},
-		['contacts', 'models', 'used_cars'],
+		['contacts', 'models'],
 	);
 	assert.deepEqual(result, {missingInRegistry: [], missingInPages: []});
 });
 
 test('записи коллекций из сверки исключены', () => {
 	const result = comparePagesToRoutes(
-		{news: {url: '/news/', collection: 'news'}, contacts: {url: '/contacts/'}},
+		{'/news/': {collection: 'news'}, '/contacts/': {}},
 		['contacts'],
 	);
 	assert.deepEqual(result, {missingInRegistry: [], missingInPages: []});
+});
+
+test('canonicalizeRegistryKey добавляет слэши, убирает query/якорь и схлопывает двойные слэши', () => {
+	assert.equal(canonicalizeRegistryKey('/trade-in/'), '/trade-in/');
+	assert.equal(canonicalizeRegistryKey('trade-in'), '/trade-in/');
+	assert.equal(canonicalizeRegistryKey('/trade-in'), '/trade-in/');
+	assert.equal(canonicalizeRegistryKey('trade-in/'), '/trade-in/');
+	assert.equal(canonicalizeRegistryKey('//trade-in//'), '/trade-in/');
+	assert.equal(canonicalizeRegistryKey('/trade-in/?a=1'), '/trade-in/');
+	assert.equal(canonicalizeRegistryKey('/trade-in/#top'), '/trade-in/');
+	assert.equal(canonicalizeRegistryKey(''), '/');
+});
+
+test('checkCanonicalKeys ловит ключ не в каноническом виде', () => {
+	const problems = checkCanonicalKeys('/repo/pages.json', {'trade-in': {enabled: false}});
+	assert.equal(problems.length, 1);
+	assert.equal(problems[0].file, '/repo/pages.json');
+	assert.equal(problems[0].key, 'trade-in');
+	assert.match(problems[0].message, /"\/trade-in\/"/);
+});
+
+test('checkCanonicalKeys ловит двойной слэш и ?/# в ключе', () => {
+	const problems = checkCanonicalKeys('/repo/pages.json', {
+		'//trade-in//': {},
+		'/models/?a=1': {},
+		'/news/#top': {},
+	});
+	assert.equal(problems.length, 3);
+	assert.ok(problems.every((p) => p.message.includes('не в каноническом виде')));
+});
+
+test('checkCanonicalKeys не ругается на уже канонические ключи', () => {
+	const problems = checkCanonicalKeys('/repo/pages.json', {
+		'/trade-in/': {enabled: false},
+		'/models/': {enabled: true},
+	});
+	assert.deepEqual(problems, []);
+});
+
+test('checkCanonicalKeys ловит два ключа, дающих один URL после нормализации', () => {
+	const problems = checkCanonicalKeys('/repo/pages.json', {
+		'/trade-in/': {enabled: false},
+		'/trade-in': {enabled: true},
+	});
+	const duplicate = problems.find((p) => p.message.includes('один и тот же URL'));
+	assert.ok(duplicate, 'должна быть найдена коллизия ключей');
+	assert.match(duplicate.message, /"\/trade-in\/"/);
+	assert.match(duplicate.message, /"\/trade-in"/);
 });
 
 test('templatePagesJsonPath смотрит на соседний astro-json по умолчанию', () => {

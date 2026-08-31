@@ -12,13 +12,13 @@ import {
 } from './sitePages.js';
 
 const PAGES = {
-	'privacy-policy': {url: '/privacy-policy/', title: 'Политика конфиденциальности', enabled: true, sitemap: true},
-	'advertising-consent': {url: '/advertising-consent/', title: 'Согласие на рекламные сообщения', enabled: false, sitemap: true},
-	'trade-in': {url: '/trade-in/', title: 'Trade-in', enabled: false, sitemap: true},
-	'model-page': {url: '/model-page/', title: 'Модель', enabled: true, sitemap: false},
-	models: {url: '/models/', title: 'Модели', enabled: true, sitemap: true},
-	news: {url: '/news/', title: 'Новости', enabled: true, sitemap: true, collection: 'news', always_available: true},
-	broken: {title: 'Без url'},
+	'/privacy-policy/': {title: 'Политика конфиденциальности', enabled: true, sitemap: true},
+	'/advertising-consent/': {title: 'Согласие на рекламные сообщения', enabled: false, sitemap: true},
+	'/trade-in/': {title: 'Trade-in', enabled: false, sitemap: true},
+	'/model-page/': {title: 'Модель', enabled: true, sitemap: false},
+	'/models/': {title: 'Модели', enabled: true, sitemap: true},
+	'/news/': {title: 'Новости', enabled: true, sitemap: true, collection: 'news', always_available: true},
+	broken: 'не объект',
 };
 
 test('normalizePageUrl приводит к виду /path/', () => {
@@ -30,11 +30,16 @@ test('normalizePageUrl приводит к виду /path/', () => {
 	assert.equal(normalizePageUrl(undefined), '');
 });
 
-test('listPages отбрасывает записи без url и проставляет id', () => {
-	const ids = listPages(PAGES).map((page) => page.id);
-	assert.ok(!ids.includes('broken'), 'запись без url не попадает в список');
-	assert.ok(ids.includes('models'));
-	assert.equal(listPages(PAGES).find((page) => page.id === 'models').url, '/models/');
+test('listPages отбрасывает записи, значение которых не объект, и берёт url из ключа', () => {
+	const urls = listPages(PAGES).map((page) => page.url);
+	assert.ok(!urls.includes('broken'), 'запись-не-объект не попадает в список');
+	assert.ok(urls.includes('/models/'));
+	assert.equal(listPages(PAGES).find((page) => page.url === '/models/').title, 'Модели');
+});
+
+test('listPages нормализует ключ, даже если он записан не канонически', () => {
+	const pages = {'/models': {title: 'Модели'}};
+	assert.equal(listPages(pages)[0].url, '/models/');
 });
 
 test('getDisabledUrls отдаёт только enabled === false', () => {
@@ -42,7 +47,7 @@ test('getDisabledUrls отдаёт только enabled === false', () => {
 });
 
 test('запись без enabled считается включённой', () => {
-	assert.deepEqual(getDisabledUrls({about: {url: '/about/'}}), []);
+	assert.deepEqual(getDisabledUrls({'/about/': {}}), []);
 });
 
 test('getSitemapIgnoredUrls не дублирует выключенные страницы', () => {
@@ -54,13 +59,13 @@ test('getAlwaysAvailableCollections отдаёт имена коллекций',
 });
 
 test('getAlwaysAvailableCollections отбрасывает недопустимые имена', () => {
-	const pages = {bad: {url: '/Bad/', collection: 'Bad Name', always_available: true}};
+	const pages = {'/bad/': {collection: 'Bad Name', always_available: true}};
 	assert.deepEqual(getAlwaysAvailableCollections(pages), []);
 });
 
 test('findPageByUrl находит запись независимо от слэша', () => {
-	assert.equal(findPageByUrl(PAGES, '/models').id, 'models');
-	assert.equal(findPageByUrl(PAGES, '/models/').id, 'models');
+	assert.equal(findPageByUrl(PAGES, '/models').url, '/models/');
+	assert.equal(findPageByUrl(PAGES, '/models/').url, '/models/');
 	assert.equal(findPageByUrl(PAGES, '/unknown/'), undefined);
 });
 

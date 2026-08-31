@@ -1,7 +1,12 @@
 /**
  * Чистые функции над реестром страниц (src/data/site/pages.json).
  *
- * Реестр — объект вида { "<id>": { url, title, enabled, sitemap, collection, always_available } }.
+ * Реестр — объект вида { "/url/": { title, enabled, sitemap, collection, always_available } }.
+ * Ключ записи — сам URL в каноническом виде (ведущий и завершающий слэш, без query/якоря);
+ * поля `url` в записи больше нет, чтобы не заводить два разных ключа с одним и тем же URL —
+ * склейка слоёв (deepMerge) сливает записи по точному совпадению строки ключа, и такое
+ * дублирование сделало бы переопределение дилера молчаливо неработающим.
+ *
  * Отсутствие записи означает «маршрут включён и в sitemap»: реестр не белый список,
  * потому что контент-коллекции обнаруживаются динамически и у дилеров разные.
  *
@@ -24,12 +29,12 @@ export function normalizePageUrl(url) {
 	return withLead.endsWith('/') ? withLead : `${withLead}/`;
 }
 
-/** Записи реестра в виде массива, с id внутри. Записи без строкового url отбрасываются. */
+/** Записи реестра в виде массива. url — нормализованный ключ записи. Записи, значение которых не объект, отбрасываются. */
 export function listPages(pages = {}) {
 	if (!isPlainObject(pages)) return [];
 	return Object.entries(pages)
-		.filter(([, entry]) => isPlainObject(entry) && typeof entry.url === 'string')
-		.map(([id, entry]) => ({ id, ...entry }));
+		.filter(([, entry]) => isPlainObject(entry))
+		.map(([key, entry]) => ({ ...entry, url: normalizePageUrl(key) }));
 }
 
 /** URL страниц, которые не должны собираться. Заменяет routes.disabled_routes. */
