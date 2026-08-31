@@ -20,7 +20,7 @@ import {
 } from '@alexsab-ru/scripts/calltouch';
 import FormsValidation from './FormsValidation';
 import { getCalltouchGoalPayload } from '@/js/utils/calltouchLeadDecision';
-import { emitFormError, emitFormRequired } from '@/js/utils/formGoalContext';
+import { emitFormError, emitFormRequired, getFormResponseDiagnostics } from '@/js/utils/formGoalContext';
 
 const defaultProps = {
 	validation: FormsValidation,
@@ -214,6 +214,11 @@ const submitFormWithFiles = async (form, url, props) => {
 			};
 			data = JSON.parse(text);
 		} catch (e) {
+			Object.assign(errorContext, getFormResponseDiagnostics({
+				responseText: text,
+				response: res,
+				url,
+			}));
 			throw new Error('Ошибка обработки данных');
 		}
 		errorContext = {

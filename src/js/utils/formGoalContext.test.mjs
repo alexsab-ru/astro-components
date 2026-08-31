@@ -18,6 +18,7 @@ const instrumentedSource = source.replace(
 const {
 	emitFormError,
 	emitFormRequired,
+	getFormResponseDiagnostics,
 	getFormErrorGoalPayload,
 	getFormRequiredGoalPayload,
 	reportClientFormError,
@@ -97,6 +98,65 @@ test('form_error context contains only bounded technical categories', () => {
 			httpStatus: 503,
 		},
 	});
+});
+
+test('response diagnostics contain classifications but no response body', () => {
+	const previousWindow = globalThis.window;
+	globalThis.window = { location: { origin: 'https://dealer.example' } };
+	try {
+		assert.deepEqual(getFormResponseDiagnostics({
+			responseText: '-_-',
+			response: { headers: { get: () => 'text/plain' } },
+			url: 'https://l.alexsab.ru/lead/jac/samara/',
+		}), {
+			leadPath: '/lead/jac/samara/',
+			responseKind: 'legacy_sentinel',
+			responseBytes: 3,
+		});
+	} finally {
+		globalThis.window = previousWindow;
+	}
+});
+
+test('client report includes only approved response diagnostics', async () => {
+	const previousWindow = globalThis.window;
+	const previousFetch = globalThis.fetch;
+	const requests = [];
+	globalThis.window = {
+		location: { pathname: '/' },
+		sessionStorage: { getItem: () => null, setItem: () => {} },
+	};
+	globalThis.fetch = async (_url, options) => requests.push(options);
+
+	try {
+		await reportClientFormError({
+			formID: 'callback-form',
+			errorSource: 'server',
+			errorStage: 'response_parse',
+			httpStatus: 200,
+			leadPath: '/lead/test/dealer/',
+			responseKind: 'html',
+			responseBytes: 321,
+			responseText: '<html>private response</html>',
+		});
+		const payload = JSON.parse(requests[0].body);
+		assert.deepEqual(payload, {
+			version: 1,
+			goal: 'form_error',
+			errorSource: 'server',
+			errorStage: 'response_parse',
+			formID: 'callback-form',
+			pagePath: '/',
+			httpStatus: 200,
+			leadPath: '/lead/test/dealer/',
+			responseKind: 'html',
+			responseBytes: 321,
+		});
+		assert.equal(requests[0].body.includes('private response'), false);
+	} finally {
+		globalThis.window = previousWindow;
+		globalThis.fetch = previousFetch;
+	}
 });
 
 test('emitFormError emits one categorized goal', () => {

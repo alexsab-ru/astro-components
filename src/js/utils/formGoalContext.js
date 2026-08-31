@@ -11,6 +11,39 @@ const allowedErrorStages = new Set([
 	'response_read',
 	'success_handler',
 ]);
+const allowedResponseKinds = new Set([
+	'empty', 'html', 'invalid_json', 'legacy_sentinel', 'text', 'unknown',
+]);
+
+const toLeadPath = (url) => {
+	try {
+		const path = new URL(url, window.location.origin).pathname;
+		return /^\/lead\/[A-Za-z0-9._/-]{1,200}$/.test(path) ? path : '';
+	} catch (error) {
+		return '';
+	}
+};
+
+const responseByteLength = (value) => {
+	if (typeof TextEncoder === 'function') return new TextEncoder().encode(value).length;
+	return value.length;
+};
+
+export const getFormResponseDiagnostics = ({ responseText, response, url } = {}) => {
+	const text = typeof responseText === 'string' ? responseText : '';
+	const contentType = response?.headers?.get?.('content-type') || '';
+	let responseKind = 'unknown';
+	if (text === '') responseKind = 'empty';
+	else if (text === '-_-') responseKind = 'legacy_sentinel';
+	else if (/\btext\/html\b/i.test(contentType) || /^\s*<!doctype html|^\s*<html\b/i.test(text)) responseKind = 'html';
+	else if (/\bapplication\/json\b/i.test(contentType)) responseKind = 'invalid_json';
+	else if (/^\s*[^<]/.test(text)) responseKind = 'text';
+	return {
+		leadPath: toLeadPath(url),
+		responseKind,
+		responseBytes: responseByteLength(text),
+	};
+};
 
 const normalizeInvalidFieldNames = (fields = []) => [...new Set(
 	fields
@@ -81,12 +114,24 @@ export const reportClientFormError = async (context = {}) => {
 	if (Number.isInteger(context.httpStatus) && context.httpStatus >= 100 && context.httpStatus <= 599) {
 		payload.httpStatus = context.httpStatus;
 	}
+	if (typeof context.leadPath === 'string' && /^\/lead\/[A-Za-z0-9._/-]{1,200}$/.test(context.leadPath)) {
+		payload.leadPath = context.leadPath;
+	}
+	if (allowedResponseKinds.has(context.responseKind)) {
+		payload.responseKind = context.responseKind;
+	}
+	if (Number.isInteger(context.responseBytes) && context.responseBytes >= 0 && context.responseBytes <= 1048576) {
+		payload.responseBytes = context.responseBytes;
+	}
 
 	const dedupeKey = 'alexsab:client-form-error:' + [
 		payload.formID,
 		payload.errorSource,
 		payload.errorStage,
 		payload.httpStatus || '',
+		payload.leadPath || '',
+		payload.responseKind || '',
+		payload.responseBytes ?? '',
 		payload.pagePath,
 	].join(':');
 	try {
