@@ -97,7 +97,7 @@
     "verifycars": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo --local && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm getAll && pnpm cars auto --skip_thumbs && pnpm build",
     "verifyr": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm build",
     "verifyrcars": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm getAll && pnpm cars auto --skip_thumbs && pnpm build",
-    "test_links_local": "ASTRO_DEV_OPEN=0 astro dev --port 4343 & sleep 10 && export DOMAIN=localhost:4343 && node .github/scripts/checkLinks/checkLinks.js && pkill -f 'astro dev'",
+    "test_links_local": "bash .github/scripts/sh/checkLinksLocal.sh",
     "test_links_production": "node .github/scripts/checkLinks/checkLinks.js",
     "interlink_map": "node .github/scripts/interlinkMap/interlinkMap.js",
     "interlink_map_dist": "node .github/scripts/interlinkMap/interlinkMap.js -- --from-dist",
