@@ -100,9 +100,18 @@ jobs:
           touch .env
           echo DOMAIN=${{ vars.DOMAIN }} >> .env
           export DOMAIN=${{ vars.DOMAIN }}
+          # STRICT_DOMAIN_PROBE=1: недоступный домен роняет джоб, а не даёт
+          # тихий зелёный прогон с пустым отчётом. Не проверить — это отказ,
+          # а не результат «битых ссылок нет».
           node .github/scripts/checkLinks/checkLinks.js
           if [ -s broken_links.txt ]; then
-            echo "$(cat broken_links.txt)" > output_wrapped.txt
+            # Обрезаем до того же предела, который применяет send_telegram.sh:
+            # длиннее всё равно не уедет, а раздутый base64 рискует упереться
+            # в лимит на размер вывода шага.
+            head -c 30000 broken_links.txt > output_wrapped.txt
+            if [ "$(wc -c < broken_links.txt)" -gt 30000 ]; then
+              printf '\n\n[отчёт обрезан, полная версия — в логе джоба]' >> output_wrapped.txt
+            fi
             encoded_output=$(base64 -w 0 output_wrapped.txt)
             echo "script_output=$encoded_output" >> $GITHUB_OUTPUT
             echo "has_broken_links=true" >> $GITHUB_OUTPUT
@@ -111,6 +120,7 @@ jobs:
           fi
         env:
           DOMAIN: ${{ vars.DOMAIN }}
+          STRICT_DOMAIN_PROBE: '1'
 
   notify_telegram:
     needs: check_links
