@@ -1,7 +1,6 @@
-export type ModelCarsCardImage = {
-	imageUrl: string;
-	thumbUrl?: string;
-};
+import type { MediaImage, MediaOverlay } from '@/ui/media-frame/media-overlay.types';
+
+export type ModelCarsCardImage = MediaImage;
 
 export type ModelCarsCardImageStrategy = 'diagonal' | 'first-car' | 'per-car' | 'vin' | 'car';
 export type ModelCarsCardAspectRatio = '4/3' | '16/9' | '3/2' | '1/1';
@@ -36,6 +35,8 @@ export type ModelCarsCardOverride = {
 	subtitle?: string;
 	contentItems?: string[];
 	images?: ModelCarsCardImage[];
+	/** Default overlays for every selected image. Per-image overlays take precedence. */
+	imageOverlays?: MediaOverlay[];
 	imageSelection?: ModelCarsCardImageSelection;
 	primaryButton?: ModelCarsCardButton;
 	secondaryButton?: ModelCarsCardButton;

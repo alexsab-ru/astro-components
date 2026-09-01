@@ -209,6 +209,11 @@ const cards = models
 		const brand = getModelBrandDisplayName(model);
 		const modelTitle = getModelTitle(model);
 		const title = override?.title || `${brand} ${modelTitle}`.trim();
+		images = images.map((image, imageIndex) => ({
+			...image,
+			alt: image.alt || `${title}, фото ${imageIndex + 1}`,
+			overlays: image.overlays ?? override?.imageOverlays,
+		}));
 		const carPrices = modelCars
 			.map((car) => positiveNumber(car?.data?.priceWithDiscount) || positiveNumber(car?.data?.sale_price) || positiveNumber(car?.data?.price))
 			.filter(Boolean);

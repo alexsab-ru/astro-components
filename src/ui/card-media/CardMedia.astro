@@ -1,12 +1,10 @@
 ---
-type TImage = {
-  imageUrl: string;
-  thumbUrl?: string;
-}
+import MediaFrame from '@/ui/media-frame/MediaFrame.astro';
+import type { MediaImage } from '@/ui/media-frame/media-overlay.types';
 
 interface Props {
   imgPlacement?: string;
-  images?: TImage[];
+  images?: MediaImage[];
   imageAspectRatio?: 'auto' | '4/3' | '16/9' | '3/2' | '1/1';
   imageFit?: 'cover' | 'contain';
   lightboxDescription?: string;
@@ -39,22 +37,28 @@ const imageClasses = hasFixedAspectRatio
       <div class={`swiper-wrapper ${hasFixedAspectRatio ? 'h-full' : ''}`}>
       {images.map(img => (
           <div class={hasFixedAspectRatio ? 'swiper-slide h-full!' : 'swiper-slide'}>
-            {img.thumbUrl ? (
-              <a href={img.imageUrl} class={`glightbox cursor-zoom-in select-none ${hasFixedAspectRatio ? 'block h-full' : ''}`} data-gallery={images[0].imageUrl} data-description={lightboxDescription}>
-                <img src={img.thumbUrl} class={imageClasses} loading="lazy" />
-              </a>
-            ) : (
-              <img src={img.imageUrl} class={imageClasses} loading="lazy" />
-            )}
+            <MediaFrame
+              overlays={img.overlays}
+              reserveBottom={images.length > 1}
+              classes={hasFixedAspectRatio ? 'h-full' : ''}
+            >
+              {img.thumbUrl ? (
+                <a href={img.imageUrl} class={`glightbox cursor-zoom-in select-none ${hasFixedAspectRatio ? 'block h-full' : ''}`} data-gallery={images[0].imageUrl} data-description={lightboxDescription}>
+                  <img src={img.thumbUrl} class={imageClasses} loading="lazy" alt={img.alt || ''} />
+                </a>
+              ) : (
+                <img src={img.imageUrl} class={imageClasses} loading="lazy" alt={img.alt || ''} />
+              )}
+            </MediaFrame>
           </div>
         )
       )}
       </div>
       {images.length > 1 && (
         <>
-          <div class="swiper-pagination simple-slider-pagination bottom-0"></div>
-          <div class="swiper-button-prev model-gallery-slider-button-prev hidden! sm:flex! bg-white/80!"></div>
-          <div class="swiper-button-next model-gallery-slider-button-next hidden! sm:flex! bg-white/80!"></div>
+          <div class="swiper-pagination simple-slider-pagination bottom-0 z-20!"></div>
+          <div class="swiper-button-prev model-gallery-slider-button-prev hidden! sm:flex! bg-white/80! z-20!"></div>
+          <div class="swiper-button-next model-gallery-slider-button-next hidden! sm:flex! bg-white/80! z-20!"></div>
         </>
       )}
     </div>

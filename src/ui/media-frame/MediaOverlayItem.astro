@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { MediaOverlay } from './media-overlay.types';
+
+interface Props {
+	overlay: MediaOverlay;
+}
+
+const { overlay } = Astro.props;
+const variantClasses = {
+	ribbon: 'substrate-skew substrate-skew-both uppercase italic font-semibold',
+	panel: 'rounded-2xl px-3 py-2 sm:px-5 sm:py-3 font-semibold',
+	plain: 'px-2 py-1 font-semibold',
+};
+const toneClasses = {
+	dark: 'bg-black/90 text-white',
+	light: 'bg-white/95 text-black',
+};
+const variant = overlay.variant || 'panel';
+const tone = overlay.tone || 'dark';
+---
+
+<div
+	class={`media-overlay-item flex max-w-full items-center gap-2 text-[clamp(0.625rem,1.5vw,1.25rem)] leading-tight shadow-lg ${variantClasses[variant]} ${toneClasses[tone]} ${overlay.classes || ''}`}
+>
+	{
+		overlay.icon && (
+			<Icon
+				name={overlay.icon}
+				class="shrink-0 text-[clamp(1.5rem,4vw,3.5rem)]"
+				aria-hidden="true"
+			/>
+		)
+	}
+	<div set:html={overlay.html} />
+</div>

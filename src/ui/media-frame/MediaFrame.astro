@@ -1,0 +1,17 @@
+---
+import MediaOverlays from './MediaOverlays.astro';
+import type { MediaOverlay } from './media-overlay.types';
+
+interface Props {
+	overlays?: MediaOverlay[];
+	reserveBottom?: boolean;
+	classes?: string;
+}
+
+const { overlays = [], reserveBottom = false, classes = '' } = Astro.props;
+---
+
+<div class={`relative isolate overflow-hidden ${classes}`}>
+	<slot />
+	<MediaOverlays overlays={overlays} reserveBottom={reserveBottom} />
+</div>

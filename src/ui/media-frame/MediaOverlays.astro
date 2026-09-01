@@ -1,0 +1,70 @@
+---
+import MediaOverlayItem from './MediaOverlayItem.astro';
+import {
+	MEDIA_OVERLAY_POSITIONS,
+	type MediaOverlay,
+	type MediaOverlayPosition,
+} from './media-overlay.types';
+
+interface Props {
+	overlays?: MediaOverlay[];
+	reserveBottom?: boolean;
+}
+
+const { overlays = [], reserveBottom = false } = Astro.props;
+
+const groupOverlays = (mobile: boolean) =>
+	MEDIA_OVERLAY_POSITIONS.map((position) => ({
+		position,
+		items: overlays.filter((overlay) => {
+			if (mobile && overlay.mobile?.hidden) return false;
+			const resolvedPosition = mobile ? overlay.mobile?.position || overlay.position : overlay.position;
+			return resolvedPosition === position;
+		}),
+	})).filter((group) => group.items.length > 0);
+
+const mobileGroups = groupOverlays(true);
+const desktopGroups = groupOverlays(false);
+const bottomClasses = reserveBottom ? 'bottom-8 sm:bottom-10' : 'bottom-2 sm:bottom-3';
+
+const getPositionClasses = (position: MediaOverlayPosition) => ({
+	'top-left': 'left-2 top-2 items-start text-left sm:left-3 sm:top-3',
+	'top-center': 'left-1/2 top-2 -translate-x-1/2 items-center text-center sm:top-3',
+	'top-right': 'right-2 top-2 items-end text-right sm:right-3 sm:top-3',
+	'center-left': 'left-2 top-1/2 -translate-y-1/2 items-start text-left sm:left-3',
+	center: 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center text-center',
+	'center-right': 'right-2 top-1/2 -translate-y-1/2 items-end text-right sm:right-3',
+	'bottom-left': `left-2 items-start text-left sm:left-3 ${bottomClasses}`,
+	'bottom-center': `left-1/2 -translate-x-1/2 items-center text-center ${bottomClasses}`,
+	'bottom-right': `right-2 items-end text-right sm:right-3 ${bottomClasses}`,
+})[position];
+---
+
+{
+	overlays.length > 0 && (
+		<div class="pointer-events-none absolute inset-0 z-10 select-none overflow-hidden">
+			<div
+				role="group"
+				aria-label="Преимущества и специальные условия"
+				class="absolute inset-0 md:hidden"
+			>
+				{mobileGroups.map((group) => (
+					<div class={`absolute flex max-w-[62%] flex-col gap-1.5 ${getPositionClasses(group.position)}`}>
+						{group.items.map((overlay) => <MediaOverlayItem overlay={overlay} />)}
+					</div>
+				))}
+			</div>
+			<div
+				role="group"
+				aria-label="Преимущества и специальные условия"
+				class="absolute inset-0 hidden md:block"
+			>
+				{desktopGroups.map((group) => (
+					<div class={`absolute flex max-w-[55%] flex-col gap-2 ${getPositionClasses(group.position)}`}>
+						{group.items.map((overlay) => <MediaOverlayItem overlay={overlay} />)}
+					</div>
+				))}
+			</div>
+		</div>
+	)
+}
