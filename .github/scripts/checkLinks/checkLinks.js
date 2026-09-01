@@ -325,6 +325,19 @@ async function checkLinks() {
       }
     });
 
+  const scannedCount = result.links.length;
+  console.log(`🔗 Просканировано ссылок: ${scannedCount}`);
+
+  // Пустой обход — это не «всё чисто», а «проверить не удалось»: краулер не
+  // дошёл даже до корня. Прежде такой прогон выглядел неотличимо от успешного
+  // (пустой broken_links.txt, зелёный джоб, тишина в Telegram), и лежащий
+  // целиком сайт молчал так же, как исправный.
+  if (scannedCount === 0) {
+    console.log('❌ Ни одной ссылки не просканировано — проверка не состоялась.');
+    console.log('   Причина обычно в недоступности домена. Это отказ проверки, а не отсутствие битых ссылок.');
+    process.exit(1);
+  }
+
   console.log(`📊 Первичная проверка завершена. Найдено ${brokenLinks.length} потенциально битых ссылок.`);
 
   // Если есть битые ссылки, выполняем повторную проверку
@@ -334,7 +347,7 @@ async function checkLinks() {
   }
 
   if (finalBrokenLinks.length) {
-    let message = `<b>На сайте ${domain} обнаружены битые ссылки. Всего: ${finalBrokenLinks.length}</b>\n\n`;
+    let message = `<b>На сайте ${domain} обнаружены битые ссылки: ${finalBrokenLinks.length} из ${scannedCount} проверенных</b>\n\n`;
     message += finalBrokenLinks.map(item => {
       let linkInfo = `<b>Ссылка</b>: ${item.url}\n<b>Родитель</b>: ${item.parent}\n<b>Статус</b>: ${item.status}`;
       if (item.transformedUrl) {
@@ -352,7 +365,7 @@ async function checkLinks() {
     fs.writeFileSync(outputPath, message, 'utf8');
     console.log(`❌ После повторной проверки найдено ${finalBrokenLinks.length} действительно битых ссылок. Результаты сохранены в ${outputPath}`);
   } else {
-    console.log('✅ Все ссылки работают корректно!');
+    console.log(`✅ Все ${scannedCount} ссылок работают корректно!`);
     // Удаляем файл с битыми ссылками, если он существует
     if (fs.existsSync(outputPath)) {
       fs.unlinkSync(outputPath);
