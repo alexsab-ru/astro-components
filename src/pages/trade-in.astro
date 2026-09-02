@@ -10,6 +10,10 @@ import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('trade_in'));
 const singleCalltouch = salons.length === 1 ? salons[0]?.scripts?.calltouch : null;
+import scripts_json from '@/data/site/scripts.json';
+// Глобальный фолбэк routeKey из scripts.json — как в app.js; сгенерированный
+// scripts.json не обязан содержать routeKey, поэтому тип задаём явно.
+const fallbackCalltouch = (scripts_json?.calltouch?.value ?? {}) as { routeKey?: string };
 const LEGAL_SALONS_INFO = legal_entity && legal_inn ? 
 [`${legal_entity}`] : 
 salons
@@ -25,7 +29,7 @@ import TradeInCalc from '@/react/TradeInCalc';
 >
     <TradeInCalc
         client:only
-        ct_routeKey={singleCalltouch?.routeKey || ''}
+        ct_routeKey={singleCalltouch?.routeKey || fallbackCalltouch.routeKey || ''}
         ct_mod_id={singleCalltouch?.mod_id || ''}
         ct_site_id={singleCalltouch?.site_id || ''}
     />

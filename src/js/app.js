@@ -17,11 +17,18 @@ import FormsValidation from './modules/FormsValidation';
 import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
 
 import salons from '@/data/site/salons.json';
+import scripts from '@/data/site/scripts.json';
 
 const singleCalltouch =
 	salons.length === 1
 		? salons[0]?.scripts?.calltouch
 		: null;
+
+// Глобальный routeKey автопрозвона: единственный салон приоритетнее общего
+// значения из scripts.json. Выбор салона в форме (dealer.dataset.ctRouteKey)
+// перебивает оба — см. form.js в @alexsab-ru/scripts.
+const globalCalltouchRouteKey =
+	singleCalltouch?.routeKey || scripts?.calltouch?.value?.routeKey || '';
 
 const confirmModalText = 'Вы уже оставляли заявку сегодня, с Вами обязательно свяжутся в ближайшее время!';
 
@@ -36,7 +43,7 @@ const waitForDp = setInterval(() => {
 		connectForms(window._dp.connectforms_link, {
 			confirmModalText: confirmModalText,
 			validation: FormsValidation,
-			ct_routeKey: singleCalltouch?.routeKey || '',
+			ct_routeKey: globalCalltouchRouteKey,
 		});
 	}
 }, 100); // Check every 100ms

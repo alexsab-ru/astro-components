@@ -17,7 +17,14 @@ const salonCalltouchPairs = salons_json
 		mod_id: String(calltouch.mod_id).trim(),
 		site_id: String(calltouch.site_id).trim(),
 	}))
-	.filter((pair) => pair.mod_id !== '' && pair.site_id !== '');
+	.filter((pair) => pair.mod_id !== '' && pair.site_id !== '')
+	// Несколько салонов одного проекта дают одинаковые пары. Без дедупликации
+	// resolveCalltouchProject в @alexsab-ru/scripts посчитает конфиг multi-project
+	// и без выбора салона откажет с project_ambiguous.
+	.filter(
+		(pair, index, pairs) =>
+			pairs.findIndex((candidate) => candidate.mod_id === pair.mod_id && candidate.site_id === pair.site_id) === index
+	);
 
 // Если в salons.json нет calltouch-ключей, используем прежний источник из scripts.json.
 // Так сохраняется полная обратная совместимость старого конфига.
