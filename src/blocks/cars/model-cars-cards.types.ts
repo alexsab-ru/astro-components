@@ -33,6 +33,12 @@ export type ModelCarsCardOverride = {
 	imageFit?: ModelCarsCardImageFit;
 	title?: string;
 	subtitle?: string;
+	/**
+	 * Manual "from" price for this card only.
+	 * Replaces the auto min of stock cars + model.price.
+	 * Does not change models.json or the car feed.
+	 */
+	price?: number;
 	contentItems?: string[];
 	images?: ModelCarsCardImage[];
 	/** Default overlays for every selected image. Per-image overlays take precedence. */
