@@ -42,7 +42,7 @@ export const getContentEntryIds = (collection: string): string[] => {
 export const hasContentEntry = (collection: string, id: string): boolean =>
 	getContentEntryIds(collection).includes(id);
 
-export const getRegularCollectionNames = (): string[] => {
+export const getRegularCollectionNames = (includeEmpty = false): string[] => {
 	if (!existsSync(CONTENT_ROOT)) return [];
 
 	return readdirSync(CONTENT_ROOT, { withFileTypes: true })
@@ -50,6 +50,6 @@ export const getRegularCollectionNames = (): string[] => {
 		.map((dirent) => dirent.name)
 		.filter((name) => !name.startsWith('_'))
 		.filter((name) => !SPECIAL_COLLECTIONS.has(name))
-		.filter(hasContentCollection)
+		.filter((name) => includeEmpty || hasContentCollection(name))
 		.sort();
 };

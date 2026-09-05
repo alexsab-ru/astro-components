@@ -3,6 +3,8 @@
 @import "tailwindcss";
 
 @source "../**/*.{json,yml,yaml,mdx,astro}";
+/* linkJson ставит src/scss/.json-site → astro-json/src/<DOMAIN> */
+@source "./.json-site/**/*.{json,yml,yaml,mdx,astro}";
 
 @import './base/theme.css';
 @import './base/variants.css';

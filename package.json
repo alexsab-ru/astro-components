@@ -87,6 +87,7 @@
     "ddl": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo --local && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm dev",
     "ddol": "pnpm downloadCommonRepo --local && pnpm dev",
     "ddolcd": "pnpm downloadCommonRepo --local -cd && pnpm dev",
+    "ddolcdln": "pnpm downloadCommonRepo --local -cd && pnpm linkJson && pnpm dev",
     "ddcars": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm getAll && pnpm cars auto --skip_thumbs && pnpm dev",
     "ddlcars": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo --local && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm getAll && pnpm cars auto --skip_thumbs && pnpm dev",
     "ddlcarsl": "export IGNORE_ERRORS=1 && pnpm downloadCommonRepo --local && pnpm getDealerPrices && pnpm getDealerServicePrices && pnpm mergeCarPrices && pnpm replacePlaceholdersAndSearchDates && pnpm copyRepoCars && pnpm dev",
@@ -109,6 +110,7 @@
     "test:site-pages": "node --test src/js/utils/sitePages.test.mjs src/js/utils/menuSlots.test.mjs",
     "check:pages-registry": "node .github/scripts/checkPagesRegistry.mjs",
     "test:pages-registry": "node --test .github/scripts/checkPagesRegistry.test.mjs",
+    "test:local-json": "node --test .github/scripts/localJson.test.mjs .github/scripts/localJsonDev.test.mjs",
     "test:layer-resolution": "node --test .github/scripts/layerResolution.test.mjs .github/scripts/syncBrandLayers.test.mjs",
     "lighthouse": "bash .github/scripts/sh/lighthouseLocal.sh",
     "prebuild": "node .github/scripts/setBrand.mjs",
@@ -121,6 +123,7 @@
     "preview:toyota": "ASTRO_ACTIVE_BRAND=toyota node .github/scripts/setBrand.mjs && astro preview --open --host",
     "downloadCommonRepo": "bash ./.github/scripts/sh/downloadCommonRepo.sh",
     "downloadCommonRepoLocal": "pnpm downloadCommonRepo --local",
+    "linkJson": "node .github/scripts/linkAstroJson.mjs",
     "copyRepoCars": "node .github/scripts/copyRepoCars.mjs",
     "filterModelsByBrand": "node .github/scripts/filterModelsByBrand.js",
     "mergeCarPrices": "bash ./.github/scripts/sh/mergeCarPrices.sh",
@@ -130,7 +133,7 @@
     "\n# https://alexsab.ru": ""
   },
   "dependencies": {
-    "@alexsab-ru/scripts": "^0.18.1",
+    "@alexsab-ru/scripts": "^0.19.0",
     "@astrojs/alpinejs": "^0.4.9",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/react": "^4.4.2",

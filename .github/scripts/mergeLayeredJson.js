@@ -58,7 +58,7 @@ const listJsonFiles = (directory) => {
 
 	return fs
 		.readdirSync(directory, { withFileTypes: true })
-		.filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+		.filter((entry) => entry.isFile() && entry.name.endsWith('.json') && entry.name !== 'leads.json')
 		.map((entry) => entry.name);
 };
 

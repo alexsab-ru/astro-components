@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
+test('server-only leads.json is not layered, even when explicitly requested', t => {
+	const root = mkdtempSync(join(tmpdir(), 'lead-json-isolation-'));
+	t.after(() => rmSync(root, { recursive: true, force: true }));
+	for (const dir of ['data/json', 'src/fixture.test', 'out']) mkdirSync(join(root, dir), { recursive: true });
+	writeFileSync(join(root, 'data/json/leads.json'), '{"serverOnly":true}');
+	writeFileSync(join(root, 'src/fixture.test/leads.json'), '{"serverOnly":true}');
+	writeFileSync(join(root, 'data/json/settings.json'), '{"title":"common"}');
+	writeFileSync(join(root, 'src/fixture.test/settings.json'), '{"title":"site"}');
+	const script = fileURLToPath(new URL('./mergeLayeredJson.js', import.meta.url));
+	const env = { ...process.env, TMP_DIR: root, SITE_DATA_DIR: join(root, 'out'), REMOTE_DATA_PATH: 'src/fixture.test', ASTRO_JSON_DATA_PATH: 'data', BRAND_DOMAINS: '', SPECIFIC_FILES: '' };
+	execFileSync(process.execPath, [script], { env });
+	assert.equal(existsSync(join(root, 'out/leads.json')), false);
+	assert.equal(JSON.parse(readFileSync(join(root, 'out/settings.json'), 'utf8')).title, 'site');
+	execFileSync(process.execPath, [script], { env: { ...env, SPECIFIC_FILES: 'leads.json' } });
+	assert.equal(existsSync(join(root, 'out/leads.json')), false);
+});

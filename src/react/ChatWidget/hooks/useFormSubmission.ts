@@ -44,6 +44,7 @@ export function useFormSubmission({
   const [isFinished, setIsFinished] = useState(false);
   // Используем ref для хранения функции setInputValue, которая будет установлена позже
   const setInputValueRef = useRef<((value: string) => void) | null>(null);
+  const leadAttemptOwner = useRef({});
 
   /**
    * Отправляет данные формы на сервер
@@ -88,13 +89,18 @@ export function useFormSubmission({
       console.log(payload);
     }
 
-    const calltouchResult = await attemptCalltouchCallback({
+    const { leadAttempt, finishLeadAttempt } = await import('@alexsab-ru/scripts/lead-attempt');
+    const attemptData = new FormData();
+    for (const [key, value] of Object.entries(payload)) attemptData.set(key, String(value));
+    const attempt = await leadAttempt(leadAttemptOwner.current, connectforms_link, attemptData, () => attemptCalltouchCallback({
       routeKey: ct_routeKey,
       phone: data.phone || '',
       name: data.name || '',
       modId: ct_mod_id,
       siteId: ct_site_id,
-    });
+    }));
+    const calltouchResult = attempt.calltouch;
+    if (attempt.requestId) payload.request_id = attempt.requestId;
     const calltouchFields = new FormData();
     appendCalltouchResultToFormData(calltouchFields, calltouchResult);
 
@@ -134,6 +140,7 @@ export function useFormSubmission({
 
       const res = response.data;
       if (res?.answer && res.answer.toLowerCase() === 'ok') {
+        finishLeadAttempt(leadAttemptOwner.current);
         // attention:true — сервер посчитал заявку подозрительной (антиспам).
         if (res.attention === true) {
           reachGoal("form_attention");
