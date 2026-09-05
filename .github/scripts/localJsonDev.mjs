@@ -12,7 +12,10 @@ export default function localJsonDev(root = process.cwd()) {
 		apply: 'serve',
 		config() {
 			contentFiles = offers.sync();
-			return { server: { fs: { allow: [searchForWorkspaceRoot(root), source.jsonRoot] } } };
+			return { server: { fs: {
+				allow: [searchForWorkspaceRoot(root), source.jsonRoot],
+				deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/leads.json'],
+			} } };
 		},
 		configureServer(server) {
 			server.watcher.add(offers.watchPaths);

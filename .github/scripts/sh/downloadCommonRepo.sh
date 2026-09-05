@@ -609,10 +609,16 @@ if [ "$CLEAN_DATA" = true ]; then
 fi
 
 mkdir -p "$SITE_DATA_DIR" "$COMMON_DATA_DIR"
+# Remove only a stale generated server-config copy, never its source in astro-json.
+rm -f "$SITE_DATA_DIR/leads.json" "$COMMON_DATA_DIR/leads.json"
 
 # Если указаны конкретные файлы, копируем только их
 if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
   for file in "${SPECIFIC_FILES[@]}"; do
+    if [ "$(basename "$file")" = "leads.json" ]; then
+      echo "❌ leads.json is server-only and cannot be synced into Astro"
+      exit 1
+    fi
     SRC_FILE="$TMP_DIR/$REMOTE_DATA_PATH/$file"
     DEST_FILE="$SITE_DATA_DIR/$file"
     
@@ -643,6 +649,7 @@ else
   # Копируем все файлы из папки data
   if [ "$SKIP_DEALER_FILES" = false ]; then
     rsync -a \
+        --exclude "leads.json" \
         --exclude "content/" \
         --exclude "components/" \
         --exclude "pages/" \
@@ -677,6 +684,7 @@ fi
 if [ -d "$TMP_DIR/$ASTRO_JSON_DATA_PATH" ]; then
   echo "▶ Sync astro-json/data → $COMMON_DATA_DIR…"
   rsync -a \
+    --exclude "leads.json" \
     --exclude "content/" \
     --exclude "components/" \
     --exclude "components-template/" \

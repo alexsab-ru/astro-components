@@ -29,6 +29,7 @@ test('Astro dev updates MDX routes, external page, JSON and Tailwind; discovers 
 		fs.symlinkSync(path.join(repo, 'node_modules'), path.join(root, 'node_modules'));
 		write(path.join(root, '.env'), `DOMAIN=fixture.test # test\nASTRO_JSON_LOCAL_PATH=${jsonRoot}\n`);
 		write(path.join(site, 'settings.json'), '{}');
+		write(path.join(site, 'leads.json'), '{"serverOnly":"PRIVATE_SENTINEL"}');
 		write(path.join(site, 'banners.json'), '{"title":"BannerInitial"}');
 		const page = (width) => `---\nimport ${JSON.stringify(path.join(root, 'src/scss/app.css'))};\nimport banners from ${JSON.stringify(path.join(root, 'src/data/site/banners.json'))};\n---\n<h1 class="w-[${width}px] fixture-scoped">Page${width} {banners.title}</h1>\n<style>.fixture-scoped { color: rgb(12, 34, 56); }</style>`;
 		write(path.join(site, 'pages/index.astro'), page(137));
@@ -71,6 +72,7 @@ export default defineConfig({ cacheDir: './.cache', integrations: [mdx()], vite:
 			assert.fail(`${url} did not reach ${status} ${text ?? ''}: ${last.slice(0, 500)}`);
 		}
 		const initialPage = await expectResponse('/', 200, 'BannerInitial');
+		await expectResponse(`/@fs${path.join(site, 'leads.json')}`, 403);
 		assert.match(initialPage, /rgb\(12,\s*34,\s*56\)/, 'The external page must propagate its scoped CSS');
 		await expectResponse('/src/scss/app.css?direct', 200, 'width: 137px');
 		write(commonOffer, mdx('CommonOffer'));
