@@ -105,18 +105,20 @@ export const getIndexCollections = (): CollectionMeta[] =>
 		.map(getCollectionMeta);
 
 const createGlobCollection = (collection: string, schema?: unknown) => defineCollection({
-	loader: glob({
+	// An empty glob returns before clearing Astro 5's cached entries.
+	// Keep an explicit empty loader so deleting the last file clears the collection.
+	loader: hasContentCollection(collection) ? glob({
 		base: `./src/content/${collection}`,
 		pattern: '**/*.{md,mdx}',
 		exclude: ['**/__*'],
-	} as any),
+	} as any) : () => [],
 	...(schema ? { schema } : {}),
 });
 
 export const pageCollections = Object.fromEntries(
-	getContentCollections().map((collection) => [
-		collection.name,
-		createGlobCollection(collection.name, pageCollectionSchema),
+	getRegularCollectionNames(true).map((collection) => [
+		collection,
+		createGlobCollection(collection, pageCollectionSchema),
 	]),
 );
 

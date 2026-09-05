@@ -1,5 +1,8 @@
 # Generated brand aggregator
 src/scss/brand.css
+# Symlink to astro-json/src/<DOMAIN> for Tailwind @source (see linkAstroJson.mjs)
+src/scss/.json-site
+src/scss/json-source.css
 # build output
 dist/
 _site/

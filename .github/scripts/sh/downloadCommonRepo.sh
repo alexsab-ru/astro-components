@@ -596,6 +596,11 @@ fi
 # ==================================================
 # Копирование JSON
 # ==================================================
+# Stop live links before copy/merge commands can write through them into astro-json.
+if [ -L src/scss/.json-site ]; then
+  node .github/scripts/linkAstroJson.mjs --detach
+fi
+
 echo "▶ Sync JSON data…"
 
 if [ "$CLEAN_DATA" = true ]; then

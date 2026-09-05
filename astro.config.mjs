@@ -8,6 +8,7 @@ import icon from "astro-icon";
 import yaml from '@rollup/plugin-yaml';
 import react from '@astrojs/react';
 import { loadEnv } from 'vite';
+import localJsonDev from './.github/scripts/localJsonDev.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -314,6 +315,7 @@ export default defineConfig({
 		plugins: [
 			yaml(),
 			tailwindcss(),
+			localJsonDev(),
 		],
 		css: {
 			preprocessorOptions: {
