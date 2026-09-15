@@ -15,6 +15,7 @@ import Tooltip from './modules/Tooltip';
 import FormsValidation from './modules/FormsValidation';
 
 import { connectForms, cookiecook, startNoBounce, initPersistCampaignData } from '@alexsab-ru/scripts';
+import { shuffleRandomDealers } from './utils/randomDealer.js';
 
 import salons from '@/data/site/salons.json';
 import scripts from '@/data/site/scripts.json';
@@ -59,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	new LazyLoader();
 
 	new Tooltip();
+
+	// Shuffle every .random-dealer list on the page (header phones, slide-out, footer)
+	shuffleRandomDealers(document);
 
 });
 
