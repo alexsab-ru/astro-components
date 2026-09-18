@@ -26,7 +26,11 @@ import WIDGETS from '@/integrations/scripts/providers/WidgetsScripts.astro';
 import LoadAnalyticsScripts from '@/integrations/scripts/providers/LoadScripts.astro';
 import DWELL from '@/integrations/scripts/providers/DwellBeacon.astro';
 
-const cleanedScripts = cleanScriptsData(scripts_json);
+interface Props {
+    showWidgets?: boolean;
+}
+const { showWidgets = true } = Astro.props;
+const cleanedScripts = cleanScriptsData(showWidgets ? scripts_json : { ...scripts_json, widgets: undefined });
 ---
 <PageStart />
 <script id="scripts_json" type="application/ld+json" set:html={cleanedScripts}/>
@@ -42,6 +46,6 @@ const cleanedScripts = cleanScriptsData(scripts_json);
 <KONGET />
 <STREAMWOOD />
 <SMARTPOINT />
-<WIDGETS />
+{showWidgets && <WIDGETS />}
 <DWELL />
 <LoadAnalyticsScripts />

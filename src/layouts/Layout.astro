@@ -10,6 +10,8 @@ interface Props {
 	breadcrumb?: TBreadcrumb[];
 	footerVersion?: string | number;
 	showHeaderMenu?: boolean;
+	showLeadForm?: boolean;
+	showWidgets?: boolean;
 	showFooterLinks?: boolean;
 	logoNoLink?: boolean;
 	canonical?: boolean;
@@ -25,6 +27,8 @@ let {
 	breadcrumb,
 	footerVersion = '2',
 	showHeaderMenu = true,
+	showLeadForm = true,
+	showWidgets = true,
 	showFooterLinks = true,
 	logoNoLink = false,
 	canonical = true,
@@ -110,7 +114,7 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 			canonical={canonical}
 			noindex={noindex}
 		/>
-		<ScriptHeadPlatform />
+		<ScriptHeadPlatform showWidgets={showWidgets} />
 		<ScriptHead />
 		<SchemaOrg breadcrumbs={breadcrumb} />
 	</head>
@@ -122,7 +126,7 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 			<slot />
 		</main>
 		<Footer showSiteLinks={showFooterLinks} logoNoLink={logoNoLink} />
-		<Modals />
+		<Modals showLeadForm={showLeadForm} />
 		<UpBtn />
 		<Cookie />
 		<ScriptBodyEnd />

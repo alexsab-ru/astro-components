@@ -10,9 +10,15 @@ const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.
 import settings from '@/data/site/settings.json';
 const { agree_label } = settings;
 
+interface Props {
+	showLeadForm?: boolean;
+}
+const { showLeadForm = true } = Astro.props;
+
 ---
 
 <!-- MODALS -->
+{showLeadForm && (
 <div
 	class="fixed w-screen h-screen left-0 top-0 bg-black/70 overflow-x-hidden overflow-y-auto hidden modal-overlay z-300000000"
 	id="common-modal"
@@ -83,6 +89,8 @@ const { agree_label } = settings;
 		</form>
 	</div>
 </div>
+
+)}
 
 <div
 	class="fixed w-screen h-screen left-0 top-0 bg-black/70 z-300000000 overflow-x-hidden overflow-y-auto hidden modal-overlay"

@@ -1,6 +1,7 @@
 ---
 interface Props {
 	mapImg?: string;
+	phoneOnly?: boolean;
 	title?: string;
 	height?: number;
 	yOffset?: number;
@@ -14,6 +15,7 @@ const {
 	title = 'Наши контакты',
 	height = 500,
 	yOffset = 20,
+	phoneOnly = false,
 } = Astro.props;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
@@ -35,7 +37,7 @@ import MapInfo from '@/blocks/map/MapInfo.astro';
 	</div>
 	)}
 	<div class="container relative">
-		<MapInfo salons={salons} classes={`h-(--height) top-(--y-offset)`} />
+		<MapInfo phoneOnly={phoneOnly} salons={salons} classes={`h-(--height) top-(--y-offset)`} />
 	</div>
 
 	<Map mapImg={mapImg} salons={salons} classes="h-[400px] lg:h-[calc(var(--height)+var(--y-offset)*2)]"></Map>

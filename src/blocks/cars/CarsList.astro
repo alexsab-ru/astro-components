@@ -8,11 +8,12 @@ import { filterVisibleCars } from "@/js/utils/car";
 
 interface Props {
 	cars?: any[];
+	phone?: string;
 	path?: string;
 	collection?: string;
 }
 
-const { cars: inputCars, collection = 'cars', path = '/cars/' } = Astro.props;
+const { phone, cars: inputCars, collection = 'cars', path = '/cars/' } = Astro.props;
 const rawCars = inputCars || await (getCollection as any)(collection);
 
 let cars: any, models = {}, years = {}, groupCars = {};
@@ -81,7 +82,7 @@ if (rawCars && rawCars.length > 0) {
 	    с фильтром */}
 	<div class="max-lg:full-bleed flex flex-wrap justify-start gap-1 sm:gap-2 lg:gap-3 mb-10 lg:mb-20 last:mb-0 mt-5 car-list">
 		{cars.map((car) => (
-			<CarItem car={car} path={path} />
+			<CarItem car={car} path={path} phone={phone} />
 		))}
 	</div>
 	</div>

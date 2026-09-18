@@ -1,5 +1,6 @@
 ---
 interface Props {
+    phone?: string;
     bgUrl?: string;
     bgImage?: {
         desktop?: string;
@@ -23,6 +24,7 @@ import salons from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const { improve_offer_background, agree_label } = settings;
 const {
+    phone,
     bgUrl = improve_offer_background,
     bgImage,
     bgPosition,
@@ -34,6 +36,7 @@ const {
     commentPlaceholder = "Напишите предложение конкурента*",
     ...rest
 } = Astro.props;
+import { phoneFormat } from '@/js/utils/numbers.format';
 import Button from '@/ui/button/Button.astro';
 import Input from '@/ui/input/Input.astro';
 import Checkbox from '@/ui/checkbox/Checkbox.astro';
@@ -64,6 +67,9 @@ const callbackStyle = [
         <div class="w-wull xl:w-1/2 text-base sm:text-xl leading-normal!">
             {title && (<h2 class="text-left text-xl sm:text-5xl mb-4 before:hidden ml-0 mr-0">{title}</h2>)}
             {subtitle !== '' && <Fragment set:html={subtitle} />}
+            {phone ? (
+                <a class="btn mt-10" href={`tel:${phoneFormat(phone)}`}>{btn}</a>
+            ) : (
             <form class="mt-14 sm:max-w-md text-base" novalidate>
                 <input type="hidden" name="form" value={formName}>
 
@@ -119,6 +125,7 @@ const callbackStyle = [
                 </div>
 
             </form>
+            )}
         </div>
     </div>
 </section>

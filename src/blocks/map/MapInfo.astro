@@ -2,13 +2,17 @@
 interface Props {
 	salons?: any[];
 	classes?: string;
+	phoneOnly?: boolean;
 }
 
-const {salons = [], classes = ''} = Astro.props;
+const {salons = [], classes = '', phoneOnly = false} = Astro.props;
 
 import settings from '@/data/site/settings.json';
 const { site_name, logo_map_info, logo_header, logo_dealer_header, logo_dealer_map_info } = settings;
 const logo_dealer = logo_dealer_map_info || logo_dealer_header || '';
+
+import { phoneFormat } from '@/js/utils/numbers.format';
+const phone = salons.find(salon => salon.phone)?.phone || settings.phone_common;
 
 import InfoItem from '@/blocks/contacts/ContactsInfoItem.astro';
 const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
@@ -43,8 +47,11 @@ const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
 	)}
 
 	<div class="font-weight-bold sm:text-xl mb-4">
-		Остались вопросы? Мы&nbsp;перезвоним!
+		{phoneOnly ? 'Остались вопросы? Позвони нам!' : 'Остались вопросы? Мы\u00a0перезвоним!'}
 	</div>
+	{phoneOnly ? (phone && (
+		<a class="btn max-w-[400px] w-full" href={`tel:${phoneFormat(phone)}`}>Позвонить</a>
+	)) : (
 	<a
 		class="popup-link btn max-w-[400px] w-full"
 		href="#common-modal"
@@ -54,4 +61,5 @@ const space = salons.length > 1 ? 'space-y-2' : 'space-y-4';
 	>
 		Заказать звонок
 	</a>
+	)}
 </div>
