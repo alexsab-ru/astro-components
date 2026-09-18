@@ -77,7 +77,8 @@ const LEGAL_SALONS_INFO =
                 salons.length ? (
                     <div class="">
                         <div class="text-xl mb-3 md:mb-5">Контакты</div>
-                        <div class="space-y-6">
+                        {/* random-dealer shuffles salon cards on each page load when there is more than one */}
+                        <div class={salons.length > 1 ? 'space-y-6 random-dealer' : 'space-y-6'}>
                         {
                             salons.map(salon => (
                             <div class="flex flex-col gap-3">

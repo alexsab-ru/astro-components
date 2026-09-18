@@ -58,15 +58,19 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 			<div class="flex items-center justify-between xs:py-2 xs:h-auto h-[60px] md:h-[80px]">
 				<Logo noLink={logoNoLink} />
 				<div class="flex items-center xs:gap-2 gap-4 lg:gap-10 xl:gap-10 xs:grow xs:shrink-0 xs:justify-end">
-					<div class="hidden md:flex flex-col">
+					{/* In call-only mode, also show the phone for a single salon. */}
+					{(salons.length > 1 || !callbackEnabled) && (
+					<div class={`hidden md:flex flex-col shrink-0 items-end ${salons.length > 1 ? 'random-dealer' : ''}`}>
 					{
-						salons.length && salons.map((salon: any, index) => {
-							return index < 2 && (
-						<a href={`tel:${phoneFormat(salon.phone)}`} class={`whitespace-nowrap font-weight-bold text-base xl:text-lg flex items-center gap-1 flex-nowrap transition-colors ${colorText} ${colorHoverText}`} title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
-							)
-						})
+						salons.slice(0, 2).map((salon: any) => (
+						<div class="flex items-center gap-1 whitespace-nowrap">
+							<span>{salon.address_short}</span>
+							<a href={`tel:${phoneFormat(salon.phone)}`} class={`whitespace-nowrap font-weight-bold text-base xl:text-lg inline-flex items-center gap-1 flex-nowrap transition-colors ${colorText} ${colorHoverText}`} title={salon.name}><Icon name="mdi:cellphone" class="text-xl" /> {salon.phone}</a>
+						</div>
+						))
 					}
 					</div>
+					)}
 					{headerLinks.length > 0 && (
 						<div class="hidden xl:flex items-center gap-4">
 							{headerLinks.map((link) => (
@@ -164,7 +168,8 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 		<div class="h-full">
 			<div class="h-full overflow-y-auto">
 				{showMenu && links.length > 0 && ( <div class="lg:hidden"><HeaderMenuList links={links} /></div> )}
-				<div>
+				{/* Same random-dealer shuffle as the header phones: only when there is more than one salon. */}
+				<div class={salons.length > 1 ? 'random-dealer' : undefined}>
 				{salons.length && salons.map(salon => (
 					<div class={`flex flex-col gap-3 py-5 px-5 ${borderColor} border-t first:border-0`}>
 						<div class="font-medium text-lg">{salon.name}</div>
