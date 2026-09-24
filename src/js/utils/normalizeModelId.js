@@ -1,2 +1,5 @@
-// Нормализует идентификатор модели: убирает все не-буквенно-цифровые символы и приводит к нижнему регистру.
-export const normalizeModelId = (str) => (str || '').toString().replace(/\W/gm, '').toLowerCase();
+// Ключ для сравнения id модели с folder_id из фида.
+// Буквы (включая кириллицу), цифры и «+» остаются, поэтому «X50» и «X50+» не склеиваются.
+// Пробелы, дефисы и прочая пунктуация снимаются, чтобы «CS75 Plus» совпал с «CS75PLUS».
+export const normalizeModelId = (str) =>
+	(str || '').toString().replace(/[^\p{L}\p{N}+]/gu, '').toLowerCase();
