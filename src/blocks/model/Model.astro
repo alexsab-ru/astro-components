@@ -47,7 +47,7 @@ const creditEnabled = isCreditEnabled(settings);
 		<img src={badgeImage} alt={badgeAlt} class={`absolute right-4 top-4 h-auto z-10 object-contain ${badgeClasses}`} loading="lazy" />
 	)}
 	<div
-		class="model__info"
+		class="model__info lg:min-h-[800px]"
 		style={`background-image: url(${getModelHomeImg(model)})`}>
 		<div class="container h-full pt-8 sm:pt-[2.5%] xl:pb-10">
 			{breadcrumb && <Breadcrumbs breadcrumb={breadcrumb} color="text-(--color-white)!" />}
@@ -92,7 +92,7 @@ const creditEnabled = isCreditEnabled(settings);
 				{
 					Array.isArray(model?.benefits) && model.benefits.map(benefit => (
 					<a
-						class={`w-fit inline-flex items-center flex-nowrap gap-1.5 last:pb-5 text-white font-medium text-base sm:text-xl group ${benefit.view === 'popup-link' ? 'popup-link' : ''}`}
+						class={`w-fit inline-flex items-center flex-nowrap gap-1.5 last:pb-10 text-white font-medium text-base sm:text-xl group ${benefit.view === 'popup-link' ? 'popup-link' : ''}`}
 						href={benefit?.url ? benefit.url : '#'}
 						data-title={benefit?.dataTitle}
 						data-form_name={benefit?.dataFormName}
