@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import time
+import html
 import requests
 import argparse
 from lxml import etree
@@ -8,8 +9,9 @@ from requests.exceptions import RequestException
 
 
 def write_output(message):
+    # output.txt is sent to Telegram with parse_mode=HTML.
     with open('output.txt', 'a', encoding='utf-8') as file:
-        file.write(f"{message}\n")
+        file.write(f"{html.escape(message, quote=False)}\n")
 
 
 def get_positive_int_env(name, default):
@@ -99,16 +101,14 @@ def detect_xpath(xml_content, url):
         error_msg = "❌ Не удалось определить структуру XML {url} - ни один из известных XPath паттернов не найден"
         print(error_msg)
         # Записываем ошибку в output.txt
-        with open('output.txt', 'a', encoding='utf-8') as file:
-            file.write(f"\n{error_msg}\n")
+        write_output(f"\n{error_msg}")
         # Возвращаем первый паттерн по умолчанию, чтобы не останавливать выполнение
         return xpath_patterns[0][0]
         
     except etree.XMLSyntaxError as e:
         error_msg = f"❌ Невалидный XML контент {url}: {str(e)}"
         print(error_msg)
-        with open('output.txt', 'a', encoding='utf-8') as file:
-            file.write(f"\n{error_msg}\n")
+        write_output(f"\n{error_msg}")
         raise ValueError(error_msg)
 
 def merge_xml_files(xml_contents, xpath):
@@ -222,8 +222,7 @@ def main():
     if not xml_contents:
         warning_msg = "⚠️ Ни один XML не удалось получить. Проверьте URL или доступность файлов."
         print(warning_msg)
-        with open('output.txt', 'a', encoding='utf-8') as file:
-            file.write(f"{warning_msg}\n")
+        write_output(warning_msg)
         return
     
     # Если xpath не указан, определяем его автоматически из первого XML
