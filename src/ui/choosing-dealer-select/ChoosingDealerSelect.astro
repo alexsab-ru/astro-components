@@ -10,6 +10,7 @@ interface Props {
 }
 const { required, errorMessage = 'Выберите дилерский центр', pageData = false, modalData = false, salons, disabled = false } = Astro.props;
 import FormSelect from '@/ui/form-select/FormSelect.astro';
+const fixedDealer = Astro.locals.pageDealer;
 // Сразу пробрасываем calltouch-метаданные в опцию селекта.
 // Позже они попадут в data-атрибуты hidden input[name="dealer"].
 const options = salons.map((salon, idx) => ({
@@ -20,7 +21,20 @@ const options = salons.map((salon, idx) => ({
 	ctRouteKey: salon?.scripts?.calltouch?.routeKey || '',
 }));
 ---
-{options.length > 1 && (
+{fixedDealer ? (
+	<>
+		<input
+			type="hidden"
+			name="dealer"
+			value={fixedDealer.name}
+			data-fixed-dealer
+			data-ct-mod-id={fixedDealer.scripts?.calltouch?.mod_id || ''}
+			data-ct-site-id={fixedDealer.scripts?.calltouch?.site_id || ''}
+			data-ct-route-key={fixedDealer.scripts?.calltouch?.routeKey || ''}
+		/>
+		<p class="text-sm">Дилерский центр: <strong>{fixedDealer.name}</strong></p>
+	</>
+) : options.length > 1 && (
 	<div class="w-full">
 		<FormSelect name="dealer" placeholder="Выберите дилерский центр" options={options} required={required} errorMessage={errorMessage} disabled={disabled} pageData={pageData} modalData={modalData} />
 	</div>

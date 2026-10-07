@@ -1,3 +1,5 @@
+import { getLocalAnchorId } from '../utils/localAnchor';
+
 let $nav = document.getElementById('site_nav');
 let anchorScrollTimer;
 
@@ -17,10 +19,9 @@ if (hashURL) {
 
 document.querySelectorAll('.scroll-link').forEach((link) => {
 	link.addEventListener('click', function (e) {
-		if (window.location.pathname === '/') {
-			e.preventDefault();
-		}
-		let hash = this.getAttribute('href').substring(2);
+		const hash = getLocalAnchorId(this.getAttribute('href'), window.location.href);
+		if (!hash || !document.getElementById(hash)) return;
+		e.preventDefault();
 		scroll(hash);
 	});
 });
@@ -67,7 +68,7 @@ if (sections.length && scrollLinks.length) {
 				scrollLinks.forEach((link) => {
 					link.classList.toggle(
 						'active',
-						link.getAttribute('href') === `#${sectionId}`
+						getLocalAnchorId(link.getAttribute('href'), window.location.href) === sectionId
 					);
 				});
 			}

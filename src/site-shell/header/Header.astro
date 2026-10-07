@@ -1,13 +1,14 @@
 ---
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('header'));
+import { scopeSalons } from '@/js/utils/pageScope';
+const salons = scopeSalons(salonsData, Astro.locals.pageDealer).filter((salon: ISalon) => !salon?.type || salon?.type.includes('header'));
 
 const { brand = null } = Astro.props;
 const path = Astro.url.pathname;
 
 import { getMenu } from '@/const.js';
-const links = getMenu('main');
+const links = Astro.props.navigationLinks ?? getMenu('main');
 const headerLinks = getMenu('header');
 import settings from '@/data/site/settings.json';
 import { getFeatureFlag, isHeaderTransparentEnabled } from '@/js/utils/features';
@@ -32,6 +33,7 @@ import './styles.css';
 
 interface Props {
 	showMenu?: boolean;
+	navigationLinks?: any[];
 	contactsUrl?: string;
 	logoNoLink?: boolean;
 }
@@ -60,7 +62,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 				<Logo noLink={logoNoLink} />
 				<div class="flex items-center xs:gap-2 gap-4 lg:gap-10 xl:gap-10 xs:grow xs:shrink-0 xs:justify-end">
 					{/* In call-only mode, also show the phone for a single salon. */}
-					{(salons.length > 1 || !callbackEnabled) && (
+					{(salons.length > 1 || !callbackEnabled || Astro.locals.pageDealer) && (
 					<div class={`hidden md:flex flex-col shrink-0 items-end ${salons.length > 1 ? 'random-dealer' : ''}`}>
 					{
 						salons.slice(0, 2).map((salon: any) => (

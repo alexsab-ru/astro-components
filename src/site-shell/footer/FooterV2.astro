@@ -13,7 +13,8 @@ import { phoneFormat } from '@/js/utils/numbers.format';
 const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => {
+import { scopeSalons } from '@/js/utils/pageScope';
+const salons = scopeSalons(salonsData, Astro.locals.pageDealer).filter((salon: ISalon) => {
     if (salon?.hidden_in?.includes('footer')) return false;
     if (salon?.type && salon.type.length) return salon.type.includes('footer');
     return true;
@@ -75,7 +76,7 @@ const LEGAL_SALONS_INFO =
             )}
             {
                 salons.length ? (
-                    <div class="">
+                    <div id={Astro.locals.pageDealer ? 'contacts' : undefined}>
                         <div class="text-xl mb-3 md:mb-5">Контакты</div>
                         {/* random-dealer shuffles salon cards on each page load when there is more than one */}
                         <div class={salons.length > 1 ? 'space-y-6 random-dealer' : 'space-y-6'}>
