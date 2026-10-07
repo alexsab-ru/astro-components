@@ -17,7 +17,7 @@ if (hashURL) {
 	window.location.hash = hashURL;
 }
 
-document.querySelectorAll('.scroll-link').forEach((link) => {
+document.querySelectorAll('.scroll-link, .js-scroll-link').forEach((link) => {
 	link.addEventListener('click', function (e) {
 		const hash = getLocalAnchorId(this.getAttribute('href'), window.location.href);
 		if (!hash || !document.getElementById(hash)) return;
