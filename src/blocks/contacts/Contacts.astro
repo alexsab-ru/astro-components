@@ -19,7 +19,8 @@ const {
 } = Astro.props;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('map'));
+import { scopeSalons } from '@/js/utils/pageScope';
+const salons = scopeSalons(salonsData, Astro.locals.pageDealer).filter((salon: ISalon) => !salon?.type || salon?.type.includes('map'));
 
 import Map from '@/blocks/map/Map.astro';
 

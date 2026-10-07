@@ -33,8 +33,8 @@ export function scroll(hash) {
 			clearTimeout(anchorScrollTimer);
 		}
 		window.__isAnchorScrolling = true;
-		const topOffset = $nav ? $nav.offsetHeight : 0;
-		// const topOffset = 0; // если не нужен отступ сверху
+		const header = document.querySelector('.header-wrapper');
+		const topOffset = header ? header.offsetHeight : ($nav ? $nav.offsetHeight : 0);
 		const elementPosition = scrollTarget.getBoundingClientRect().top;
 		const offsetPosition = elementPosition - topOffset;
 		window.scrollBy({

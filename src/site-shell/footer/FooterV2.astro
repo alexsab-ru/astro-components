@@ -4,7 +4,7 @@ import settings from '@/data/site/settings.json';
 const { site_name, legal_entity, legal_inn, brand, logo_header, logo_footer, logo_dealer_header, logo_dealer_footer, phone_common, footer_disclaimer, footer_info } = settings;
 const logo_dealer = logo_dealer_footer || logo_dealer_header || '';
 import { getMenu } from '@/const';
-const links = getMenu('footer');
+const links = Astro.props.navigationLinks ?? getMenu('footer');
 const legalLinks = getMenu('footer_legal');
 import Brands from '@/blocks/brands/Brands.astro';
 import { YEAR } from '@/js/utils/date';
@@ -24,6 +24,7 @@ import DisclaimerCollapse from '@/ui/disclaimer-collapse/DisclaimerCollapse.astr
 
 interface Props {
 	showSiteLinks?: boolean;
+	navigationLinks?: any[];
 	logoNoLink?: boolean;
 }
 const { showSiteLinks = true, logoNoLink = false } = Astro.props;
@@ -68,7 +69,7 @@ const LEGAL_SALONS_INFO =
                 <ul class="space-y-2">
                 {
                     links.map(link => (
-                        <li><a href={link.url} class={`transition hover:underline ${path === link.url ? 'font-weight-bold' : ''}`}>{link.name}</a></li>
+                        <li><a href={link.url} class={`${link.url.startsWith('#') ? 'scroll-link ' : ''}transition hover:underline ${path === link.url ? 'font-weight-bold' : ''}`}>{link.name}</a></li>
                     ))
                 }
                 </ul>
@@ -76,7 +77,7 @@ const LEGAL_SALONS_INFO =
             )}
             {
                 salons.length ? (
-                    <div id={Astro.locals.pageDealer ? 'contacts' : undefined}>
+                    <div class="">
                         <div class="text-xl mb-3 md:mb-5">Контакты</div>
                         {/* random-dealer shuffles salon cards on each page load when there is more than one */}
                         <div class={salons.length > 1 ? 'space-y-6 random-dealer' : 'space-y-6'}>
