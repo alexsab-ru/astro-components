@@ -10,6 +10,7 @@ interface Props {
 	breadcrumb?: TBreadcrumb[];
 	footerVersion?: string | number;
 	showHeaderMenu?: boolean;
+	contactsUrl?: string;
 	showLeadForm?: boolean;
 	showWidgets?: boolean;
 	showFooterLinks?: boolean;
@@ -27,6 +28,7 @@ let {
 	breadcrumb,
 	footerVersion = '2',
 	showHeaderMenu = true,
+	contactsUrl = '#contacts',
 	showLeadForm = true,
 	showWidgets = true,
 	showFooterLinks = true,
@@ -121,7 +123,7 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 	<body class={`antialiased flex flex-col min-w-80 min-h-screen overflow-x-hidden text-black ${bodyClasses}`} x-data="complectation">
 		<ScriptBodyBeginPlatform />
 		<ScriptBodyBegin />
-		<Header brand={brand} showMenu={showHeaderMenu} logoNoLink={logoNoLink} />
+		<Header brand={brand} showMenu={showHeaderMenu} logoNoLink={logoNoLink} contactsUrl={contactsUrl} />
 		<main class="grow relative">
 			<slot />
 		</main>

@@ -32,10 +32,11 @@ import './styles.css';
 
 interface Props {
 	showMenu?: boolean;
+	contactsUrl?: string;
 	logoNoLink?: boolean;
 }
 
-const { showMenu = true, logoNoLink = false } = Astro.props;
+const { showMenu = true, logoNoLink = false, contactsUrl = '#contacts' } = Astro.props;
 
 const headerGlobalClasses = is_header_transparent ? 'header-transparent fixed' : 'sticky';
 const headerBgClasses = is_header_transparent ? 'bg-header-transparent-bg' : 'bg-header-bg';
@@ -173,7 +174,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 				{salons.length && salons.map(salon => (
 					<div class={`flex flex-col gap-3 py-5 px-5 ${borderColor} border-t first:border-0`}>
 						<div class="font-medium text-lg">{salon.name}</div>
-						<a href="#contacts" class={`text-xl flex items-center gap-1 flex-nowrap ${colorText} ${colorHoverText}`}><Icon name="mdi:map-marker-outline" class={`text-2xl shrink-0 ${colorText}`} /><Fragment set:html={salon.address} /></a>
+						<a href={contactsUrl} class={`text-xl flex items-center gap-1 flex-nowrap ${colorText} ${colorHoverText}`}><Icon name="mdi:map-marker-outline" class={`text-2xl shrink-0 ${colorText}`} /><Fragment set:html={salon.address} /></a>
 						<a href={`tel:${phoneFormat(salon.phone)}`} class={`text-2xl font-weight-bold flex items-center gap-1 flex-nowrap transition-colors ${colorText} ${colorHoverText}`} title={salon.name}><Icon name="mdi:cellphone" class={`text-xl ${colorText}`} /> {salon.phone}</a>
 					</div>
 				))}

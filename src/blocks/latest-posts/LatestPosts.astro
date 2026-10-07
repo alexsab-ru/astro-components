@@ -7,6 +7,7 @@ import Button from '@/ui/button/Button.astro';
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 interface Props {
 	collectionName: string;
+	postIds?: string[];
 	id?: string;
 	class?: string;
 	title?: string;
@@ -21,6 +22,7 @@ interface Props {
 }
 const {
 	collectionName,
+	postIds,
 	id = '',
 	class: classNames = '',
 	title = '',
@@ -37,6 +39,9 @@ let rawPosts = await getSafeCollection(collectionName);
 let diffLimit: number;
 if (rawPosts && rawPosts.length) {
 	rawPosts = sortingAndFilteringPosts(rawPosts);
+	if (postIds) {
+		rawPosts = rawPosts.filter((post) => postIds.includes(post.id));
+	}
 	diffLimit = Math.min(rawPosts.length, offset + limit); // Ограничиваем пределы
 	if (offset >= rawPosts.length) {
 		diffLimit = offset; // Если offset больше длины массива, ничего не берем
