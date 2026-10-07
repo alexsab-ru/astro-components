@@ -5,7 +5,8 @@ import { USPSection } from '@/react/USPSection';
 import Banner from '@/blocks/banner/Banner.astro'
 import siteSettings from '@/data/site/settings.json';
 import modelsData from '@/data/site/models.json';
-import { getModelBrandDisplayName, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
+import { getModelBrandDisplayName, getModelTitle } from '@/js/utils/modelFields';
+import { getChatModelOption } from '@/js/utils/chatModelOptions';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
@@ -77,12 +78,9 @@ const config = {
                           ),
                       )
                       .filter(Boolean);
-        const newOptions = sourceModels.map((model: any) => ({
-            label: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}`,
-            value: model.id,
-            description: model.slogan,
-            image: getModelThumb(model),
-        }));
+        const newOptions = sourceModels.map((model: any) =>
+            getChatModelOption(model, mergedSettings),
+        );
         return { ...q, answerOptions: newOptions };
     }),
 };

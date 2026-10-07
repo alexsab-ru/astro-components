@@ -17,6 +17,8 @@ export interface AnswerOption {
   value: string;
   image?: string;
   description?: string;
+  price?: number;
+  benefit?: number;
 }
 
 /**
@@ -45,6 +47,10 @@ export interface ChatSettings {
   legalCityWhere?: string;
   messageDelayBase?: number;
   messageDelayPerChar?: number;
+  showPrice?: boolean;
+  showBenefit?: boolean;
+  /** Использовать media.chat; при отсутствии — текущую миниатюру модели. */
+  showRealPhoto?: boolean;
 }
 
 /**

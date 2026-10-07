@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import type { AnswerOption } from "../types";
+import { currencyFormat } from '@/js/utils/numbers.format';
 
 interface OptionsListProps {
   options: AnswerOption[];
@@ -71,7 +72,7 @@ export function OptionsList({
         {options.map((opt) => {
           const isSelected = multiple && selectedValues.includes(opt.value);
 
-          if (opt.image && isModelCards) {
+          if (isModelCards) {
             return (
               <motion.button
                 key={opt.value}
@@ -81,13 +82,15 @@ export function OptionsList({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="aspect-video w-full overflow-hidden bg-gray-100 flex items-center justify-center p-1">
-                  <img
-                    src={opt.image}
-                    alt={opt.label}
-                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
+                {opt.image && (
+                  <div className="aspect-video w-full overflow-hidden bg-gray-100 flex items-center justify-center p-1">
+                    <img
+                      src={opt.image}
+                      alt={opt.label}
+                      className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                )}
                 <div className="p-2 sm:p-3 text-center">
                   <div className="font-semibold text-xs sm:text-sm text-accent-500">
                     {opt.label}
@@ -95,6 +98,16 @@ export function OptionsList({
                   {opt.description && (
                     <div className="text-gray-500 mt-0.5 text-[10px] sm:text-xs">
                       {opt.description}
+                    </div>
+                  )}
+                  {opt.price !== undefined && (
+                    <div className="text-sm sm:text-base font-bold text-gray-900 mt-2">
+                      от {currencyFormat(opt.price)}
+                    </div>
+                  )}
+                  {opt.benefit !== undefined && (
+                    <div className="text-[10px] sm:text-xs font-medium text-emerald-600 bg-emerald-50 rounded px-2 py-0.5 inline-block mt-1">
+                      🔥 Выгода до {currencyFormat(opt.benefit)}
                     </div>
                   )}
                 </div>

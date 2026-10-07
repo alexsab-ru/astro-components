@@ -115,6 +115,8 @@ export function useChatSteps(config: ChatLandingConfig) {
             value: opt.value || opt.label || '',
             image: opt.image || '',
             description: opt.description || '',
+            price: opt.price,
+            benefit: opt.benefit,
           };
         });
       }
