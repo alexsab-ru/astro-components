@@ -3,7 +3,7 @@
 get_env_value() {
     local key="$1"
     local value="${!key}"
-    if [ -n "$value" ]; then
+    if [ "${!key+x}" = "x" ]; then
         echo "$value"
         return 0
     fi
@@ -19,20 +19,15 @@ if [ -z "$CSV_URL" ] && [ -f .env ]; then
 fi
 
 export DEALER_CARS_PRICE_OVERRIDE="$(get_env_value "DEALER_CARS_PRICE_OVERRIDE")"
-DEALER_CARS_PRICE_OVERRIDE_NORMALIZED=$(echo "$DEALER_CARS_PRICE_OVERRIDE" | tr '[:upper:]' '[:lower:]')
+DEALER_CARS_PRICE_OVERRIDE_NORMALIZED=$(echo "$DEALER_CARS_PRICE_OVERRIDE" | tr '[:upper:]' '[:lower:]' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
 
-if [ -z "$DEALER_CARS_PRICE_OVERRIDE_NORMALIZED" ]; then
-    echo "Проброс отключен, укажите явно значение ключа DEALER_CARS_PRICE_OVERRIDE=true или DEALER_CARS_PRICE_OVERRIDE=false"
-    if [ "$IGNORE_ERRORS" = "1" ]; then
-        echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
-        exit 0
-    else
-        exit 1
-    fi
+if [ -z "$DEALER_CARS_PRICE_OVERRIDE_NORMALIZED" ] || [ "$DEALER_CARS_PRICE_OVERRIDE_NORMALIZED" = "false" ]; then
+    echo "Замена цен отключена: пропускаем загрузку дилерского прайса"
+    exit 0
 fi
 
-if [ "$DEALER_CARS_PRICE_OVERRIDE_NORMALIZED" != "true" ] && [ "$DEALER_CARS_PRICE_OVERRIDE_NORMALIZED" != "false" ]; then
-    echo "Error: DEALER_CARS_PRICE_OVERRIDE must be explicitly true or false"
+if [ "$DEALER_CARS_PRICE_OVERRIDE_NORMALIZED" != "true" ] && [ "$DEALER_CARS_PRICE_OVERRIDE_NORMALIZED" != "less" ]; then
+    echo "Error: DEALER_CARS_PRICE_OVERRIDE must be empty, false, true or less"
     if [ "$IGNORE_ERRORS" = "1" ]; then
         echo "IGNORE_ERRORS=1: Пропускаем ошибку и продолжаем выполнение"
         exit 0

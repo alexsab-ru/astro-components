@@ -1087,15 +1087,37 @@ def to_int(value, default: int = 0) -> int:
         return default
 
 
-def update_car_prices(car_data: dict, prices_data: Dict[str, Dict[str, int]], override_price: bool = False) -> None:
+def normalize_dealer_cars_price_override(value: Any) -> Any:
+    """Режим замены цен: False (отключено), True (всегда) или 'less'."""
+    if value is None or value is False:
+        return False
+    if value is True:
+        return True
+    if isinstance(value, str):
+        mode = value.strip().lower()
+        if mode in ('', 'false'):
+            return False
+        if mode == 'true':
+            return True
+        if mode == 'less':
+            return 'less'
+    raise ValueError('DEALER_CARS_PRICE_OVERRIDE must be empty, false, true or less')
+
+
+def update_car_prices(car_data: dict, prices_data: Dict[str, Dict[str, int]], override_price: Any = False) -> None:
     """
     Обновляет цены в словаре данных автомобиля (car_data).
     
     Args:
         car_data: Словарь с данными автомобиля (ключи: vin, priceWithDiscount, sale_price, max_discount, price)
         prices_data: Данные о ценах из JSON (ключи: VIN, значения: словарь с ценами)
-        override_price: Если True, перезаписывает цену из dealer-cars_price.json даже когда она выше текущей
+        override_price: True — заменять всегда; 'less' — при меньшей или равной
+            конечной цене; False, None или пустая строка — не менять цены и скидки.
     """
+    mode = normalize_dealer_cars_price_override(override_price)
+    if mode is False:
+        return
+
     # Получаем VIN из словаря
     vin = car_data.get('vin')
     if not vin:
@@ -1122,7 +1144,7 @@ def update_car_prices(car_data: dict, prices_data: Dict[str, Dict[str, int]], ov
         return
 
     final_price = to_int(car_prices["Конечная цена"])
-    if override_price or final_price <= current_sale_price:
+    if mode is True or (mode == 'less' and final_price <= current_sale_price):
         discount = to_int(car_prices["Скидка"])
         rrp = to_int(car_prices["РРЦ"], final_price + discount)
         # Обновляем значения в словаре car_data
@@ -1821,6 +1843,14 @@ def load_env_config(source_type: str, default_config) -> Dict[str, Any]:
             raw_value = env_json_data[env_var]
 
         if raw_value is None:
+            continue
+
+        if config_key == 'dealer_cars_price_override':
+            try:
+                config[config_key] = normalize_dealer_cars_price_override(raw_value)
+            except ValueError as e:
+                print(str(e))
+                config[config_key] = False
             continue
 
         try:
