@@ -2,6 +2,38 @@
 
 Этот документ описывает, как тестировать обработчик фидов XML для генерации MDX страниц автомобилей.
 
+## YML: подключение и проверка цепочки
+
+Для новых машин задайте `XML_URL_YML_CATALOG_SHOP_OFFERS_OFFER`, для машин с пробегом —
+`USED_CARS_YML_CATALOG_SHOP_OFFERS_OFFER` в данных сайта `env.json`, затем синхронизируйте
+данные в шаблон. `getAllNewCars`, `getAllUsedCars` и workflow `update_cars.yml` скачивают
+эти фиды в `tmp/feeds/{new,used_cars}/yml_catalog_shop_offers_offer/cars.xml`.
+`pnpm cars auto` обрабатывает их вместе с остальными фидами.
+
+Из каталога `astro-components` можно запустить только YML:
+
+```bash
+pnpm getOne_XML_URL_YML_CATALOG_SHOP_OFFERS_OFFER
+pnpm update_cars_yml_catalog_shop_offers_offer
+# Либо скачать и обработать одним вызовом, без запуска dev-сервера:
+pnpm cars test yml_catalog_shop_offers_offer
+# Машины с пробегом:
+pnpm cars test used_cars_yml_catalog_shop_offers_offer
+```
+
+Эти команды записывают MDX и итоговый XML; это не dry-run. Режим фотографий определяется
+`MIRROR_CAR_IMAGES`. Флаг `--skip_thumbs` отключает и фотографии из фида, и превью.
+Реальный VIN сохраняется. Если его нет, поле идентификатора `vin` содержит постоянный
+служебный `YML-…` из марки и `offer@id` (при отсутствии ID — из URL предложения).
+Этот идентификатор не является VIN автомобиля. Наличие определяется по `available`,
+затем `store`; нулевой `count` исключает наличие.
+
+Регрессионная проверка пишет только во временные папки и не обращается к сети:
+
+```bash
+.venv/bin/python3 .github/scripts/test_yml_feed.py
+```
+
 ## 📁 Поддерживаемые форматы
 
 Обработчик поддерживает следующие форматы XML фидов:
@@ -148,4 +180,4 @@ sh .github/scripts/sh/test/test_with_type.sh "data-cars-car" "data-cars-car--cm.
 sh .github/scripts/sh/test/test_all_feeds.sh
 ```
 
-После любого из этих тестов запустите `pnpm dev` и откройте `http://localhost:4321/cars/` для просмотра результатов. 
+После любого из этих тестов запустите `pnpm dev` и откройте `http://localhost:4321/cars/` для просмотра результатов.

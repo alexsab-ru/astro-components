@@ -152,6 +152,32 @@ def merge_xml_files(xml_contents, xpath):
 
 def remove_duplicates(root, xpath, attribute="VIN"):
     """Удаление дубликатов элементов по значению атрибута (например, VIN)."""
+    if xpath == '//yml_catalog/shop/offers/offer':
+        # YML обычно не содержит VIN. ID предложения стабилен между выгрузками.
+        # Не выводим offer целиком: описание и ссылки не нужны в логах загрузки.
+        seen = set()
+        removed = 0
+        for offer in root.xpath(xpath):
+            vin = offer.get('vin') or offer.get('VIN') or offer.findtext('vin') or offer.findtext('VIN')
+            if not vin:
+                vin = next((param.text for param in offer.findall('param')
+                            if (param.get('name') or '').strip().upper() == 'VIN' and param.text), None)
+            vendor = (offer.findtext('vendor') or '').strip().lower()
+            offer_id = (offer.get('id') or '').strip()
+            url = (offer.findtext('url') or '').strip()
+            key = ('vin', vin.strip()) if vin and vin.strip() else (
+                ('id', vendor, offer_id) if offer_id else ('url', vendor, url) if url else None
+            )
+            if key is None:
+                continue
+            if key in seen:
+                offer.getparent().remove(offer)
+                removed += 1
+            else:
+                seen.add(key)
+        print(f'Removed {removed} duplicate YML offers')
+        return root
+
     unique_values = set()
     elements_to_remove = []
     

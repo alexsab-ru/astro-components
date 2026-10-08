@@ -237,6 +237,14 @@ jobs:
         XML_URL: ${{ env.XML_URL_CARCOPY_OFFERS_OFFER }}
         XML_URL_CARCOPY_OFFERS_OFFER: ${{ env.XML_URL_CARCOPY_OFFERS_OFFER }}
 
+    - name: Get cars yml_catalog_shop_offers_offer XML
+      if: ${{ env.XML_URL_YML_CATALOG_SHOP_OFFERS_OFFER }}
+      run: |
+        pnpm getOne_XML_URL_YML_CATALOG_SHOP_OFFERS_OFFER
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        XML_URL_YML_CATALOG_SHOP_OFFERS_OFFER: ${{ env.XML_URL_YML_CATALOG_SHOP_OFFERS_OFFER }}
+
     - name: Get used_cars data_cars_car XML
       if: ${{ env.USED_CARS_DATA_CARS_CAR }}
       run: |
@@ -281,6 +289,14 @@ jobs:
         DOMAIN: ${{ vars.DOMAIN }}
         XML_URL: ${{ env.USED_CARS_CARCOPY_OFFERS_OFFER }}
         USED_CARS_CARCOPY_OFFERS_OFFER: ${{ env.USED_CARS_CARCOPY_OFFERS_OFFER }}
+
+    - name: Get used_cars yml_catalog_shop_offers_offer XML
+      if: ${{ env.USED_CARS_YML_CATALOG_SHOP_OFFERS_OFFER }}
+      run: |
+        pnpm getOne_USED_CARS_YML_CATALOG_SHOP_OFFERS_OFFER
+      env:
+        DOMAIN: ${{ vars.DOMAIN }}
+        USED_CARS_YML_CATALOG_SHOP_OFFERS_OFFER: ${{ env.USED_CARS_YML_CATALOG_SHOP_OFFERS_OFFER }}
 
     - name: Get air storage
       if: ${{ env.AIR_STORAGE_CSV_URL }}

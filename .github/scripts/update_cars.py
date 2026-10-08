@@ -4,6 +4,8 @@ import json
 import argparse
 import glob
 import shutil
+import hashlib
+import re
 from pathlib import Path
 from utils import *
 import xml.etree.ElementTree as ET
@@ -331,9 +333,9 @@ class CarProcessor:
                     'max_discount': None,  # Будем рассчитывать из sales_notes
                     'modification_id': 'model',  # Будем извлекать модификацию из model
                     'price': 'price',
-                    'run': '0',  # Новые автомобили
+                    'run': 'run',
                     'tradein_discount': None,
-                    'vin': None,  # В YML нет VIN, будем генерировать из других полей
+                    'vin': ['vin', 'VIN'],
                     'wheel': None,  # Будем извлекать из параметра "Руль"
                     'year': None  # Будем извлекать из параметра "Год выпуска"
                 },
@@ -358,6 +360,9 @@ class CarProcessor:
         if not self.show_only_available_cars:
             return False
 
+        if self.source_type == 'yml_catalog_shop_offers_offer':
+            return not self.get_yml_availability(car)
+
         availability_field = self.config['field_mapping'].get('availability')
         field_names = (
             availability_field
@@ -380,6 +385,45 @@ class CarProcessor:
                 return availability not in TRUTHY_ENV_VALUES
 
         return True
+
+    def get_yml_availability(self, car: ET.Element) -> bool:
+        """available имеет приоритет над store; нулевой остаток недоступен."""
+        count = car.findtext('count')
+        if count is not None and count.strip():
+            try:
+                if float(count.strip()) <= 0:
+                    return False
+            except ValueError:
+                pass
+        available = car.get('available')
+        if available is None:
+            available = car.findtext('available')
+        if available is None:
+            available = car.findtext('store')
+        if available is not None:
+            return available.strip().lower() in TRUTHY_ENV_VALUES
+        # count без флага store/available также является явным остатком.
+        try:
+            return count is not None and float(count.strip()) > 0
+        except ValueError:
+            return False
+
+    def get_yml_identifier(self, car: ET.Element) -> str:
+        """Сохраняем VIN, иначе используем стабильный служебный ID предложения."""
+        for name in ('vin', 'VIN'):
+            value = car.get(name) or car.findtext(name)
+            if value and value.strip():
+                return value.strip()
+        for param in car.findall('param'):
+            if (param.get('name') or '').strip().upper() == 'VIN' and param.text and param.text.strip():
+                return param.text.strip()
+        offer_id = (car.get('id') or '').strip()
+        identity = offer_id or (car.findtext('url') or '').strip()
+        if not identity:
+            return ''
+        vendor = (car.findtext('vendor') or '').strip().lower()
+        digest = hashlib.sha256(f'{vendor}:{identity}'.encode('utf-8')).hexdigest()[:20]
+        return f'YML-{digest.upper()}'
 
     def auto_detect_source_type(self, xml_file_path: str) -> Optional[str]:
         """
@@ -463,6 +507,12 @@ class CarProcessor:
                 
             if internal_name == 'images':
                 # Особая обработка для изображений
+                if self.source_type == 'yml_catalog_shop_offers_offer':
+                    car_data['images'] = [
+                        picture.text.strip() for picture in car.findall('picture')
+                        if picture.text and picture.text.strip()
+                    ]
+                    continue
                 images_container = car.find(xml_field)
                 if images_container is not None:
                     car_data['images'] = self.extract_images(images_container)
@@ -486,7 +536,7 @@ class CarProcessor:
                 car_data[internal_name] = elem.text.strip()
         
         # Обработка специальных случаев для разных форматов
-        if self.source_type == 'yml_catalog':
+        if self.source_type == 'yml_catalog_shop_offers_offer':
             # В YML некоторые данные могут быть в параметрах
             yml_params = self.extract_yml_params(car)
             car_data.update(yml_params)
@@ -495,10 +545,25 @@ class CarProcessor:
             if 'model_name' in car_data:
                 car_data['folder_id'] = car_data['model_name']
             
-            # Извлекаем модификацию из поля model
+            car_data['vin'] = self.get_yml_identifier(car)
+            car_data['offer_id'] = (car.get('id') or '').strip()
+            car_data['availability'] = (
+                AVAILABLE_CAR_VALUE if self.get_yml_availability(car) else 'нет в наличии'
+            )
+            if 'run' not in car_data and (car.findtext('typePrefix') or '').strip() == 'Новый автомобиль':
+                car_data['run'] = '0'
+
+            # model содержит модель, модификацию и год; не дублируем их в URL.
             model_elem = car.find('model')
             if model_elem is not None and model_elem.text:
-                car_data['modification_id'] = model_elem.text.strip()
+                modification = model_elem.text.strip()
+                model_name = car_data.get('model_name', '')
+                if model_name:
+                    modification = re.sub(r'^' + re.escape(model_name) + r'(?:\s+|$)', '', modification, flags=re.IGNORECASE)
+                year = car_data.get('year', '')
+                if year:
+                    modification = re.sub(r'\s+' + re.escape(year) + r'$', '', modification)
+                car_data['modification_id'] = modification.strip()
 
         # Подготовка цветовых полей (рус/eng) для дальнейшего использования
         raw_color = car_data.get('color')
@@ -591,28 +656,21 @@ class CarProcessor:
                     'Кузов': 'body_type',
                     'Руль': 'wheel',
                     'Цвет': 'color',
-                    'ПТС': 'pts_type',
-                    'Двигатель': 'engine_info',
+                    'ПТС': 'ptsType',
+                    'Двигатель': 'engineType',
                     'Привод': 'drive_type',
-                    'КПП': 'gearbox_type',
+                    'КПП': 'gearboxType',
                     'Поколение': 'generation',
-                    'Модель': 'model_name'
+                    'Модель': 'model_name',
+                    'Пробег': 'run',
+                    'Комплектация': 'complectation_name',
                 }
                 if name in param_mapping:
                     params[param_mapping[name]] = param.text.strip()
         
-        # Генерируем VIN из доступных данных
-        vendor = car.find('vendor')
-        model_name = params.get('model_name', '')
-        year = params.get('year', '')
-        if vendor is not None and vendor.text and model_name and year:
-            # Создаем псевдо-VIN из марки, модели и года
-            vin_base = f"{vendor.text}{model_name}{year}".replace(' ', '').upper()
-            # Добавляем случайные символы для уникальности
-            import random
-            import string
-            random_chars = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-            params['vin'] = f"{vin_base}{random_chars}"
+        # Остальные характеристики двигателя уже входят в modification_id.
+        if 'engineType' in params:
+            params['engineType'] = params['engineType'].split(',', 1)[0].strip()
         
         # Извлекаем скидки из sales_notes
         sales_notes = car.find('sales_notes')
@@ -622,20 +680,21 @@ class CarProcessor:
             import re
             
             # Ищем максимальную скидку
-            max_discount_match = re.search(r'Максимальная скидка: (\d+)', notes_text)
+            number_pattern = r'([\d][\d \u00a0\u202f]*)'
+            max_discount_match = re.search(r'Максимальная скидка:\s*' + number_pattern, notes_text, re.IGNORECASE)
             if max_discount_match:
                 params['max_discount'] = max_discount_match.group(1)
             
             # Ищем скидки по программам
-            tradein_match = re.search(r'trade-in до (\d+)', notes_text)
+            tradein_match = re.search(r'trade-in до\s*' + number_pattern, notes_text, re.IGNORECASE)
             if tradein_match:
                 params['tradein_discount'] = tradein_match.group(1)
             
-            credit_match = re.search(r'в кредит до (\d+)', notes_text)
+            credit_match = re.search(r'в кредит до\s*' + number_pattern, notes_text, re.IGNORECASE)
             if credit_match:
                 params['credit_discount'] = credit_match.group(1)
             
-            insurance_match = re.search(r'страховки до (\d+)', notes_text)
+            insurance_match = re.search(r'страховки до\s*' + number_pattern, notes_text, re.IGNORECASE)
             if insurance_match:
                 params['insurance_discount'] = insurance_match.group(1)
         
@@ -1119,6 +1178,8 @@ class CarProcessor:
         
         # Функция для извлечения VIN из элемента автомобиля
         def get_vin(car_elem):
+            if self.source_type == 'yml_catalog_shop_offers_offer':
+                return self.get_yml_identifier(car_elem)
             # Пытаемся найти VIN в зависимости от типа источника
             vin_field = self.config['field_mapping'].get('vin')
             if vin_field:
@@ -1531,7 +1592,7 @@ def main():
         # Очистка директории для временных файлов
         if os.path.exists(config['temp_cars_dir']):
             shutil.rmtree(config['temp_cars_dir'])
-            os.makedirs(config['temp_cars_dir'])
+        os.makedirs(config['temp_cars_dir'], exist_ok=True)
         
         # output.txt is initialized by the workflow step
 
