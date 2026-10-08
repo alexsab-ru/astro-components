@@ -14,6 +14,19 @@ TRUTHY_ENV_VALUES = {'1', 'true', 'yes', 'on'}
 AVAILABLE_CAR_VALUE = 'в наличии'
 
 
+def configure_car_image_mode(config: Dict[str, Any]) -> None:
+    """Явные CLI-флаги имеют приоритет над MIRROR_CAR_IMAGES."""
+    if config.get('skip_thumbs'):
+        config['mirror_images'] = False
+        return
+    if config.get('mirror_images'):
+        return
+
+    mode = str(get_env_value('MIRROR_CAR_IMAGES', '')).lower()
+    config['mirror_images'] = mode == 'true'
+    config['skip_thumbs'] = mode not in ('true', 'thumbs_local')
+
+
 class CarProcessor:
     def __init__(self):
         self.existing_files = set()
@@ -1238,6 +1251,7 @@ def main():
     
     args = parser.parse_args()
     config = vars(args)
+    configure_car_image_mode(config)
 
     default_config = {
         "move_vin_id_up": 0,

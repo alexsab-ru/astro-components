@@ -21,6 +21,12 @@ show_help() {
     echo "  --skip_check_thumb               - Skip thumbnail existence check"
     echo "  --dev                            - Start dev server after processing (for auto and test)"
     echo
+    echo "Car image mode (MIRROR_CAR_IMAGES, environment > .env > src/data/site/env.json):"
+    echo "  true                            - Mirror car images to CDN"
+    echo "  thumbs_local                    - Generate local thumbnails, keep original image URLs"
+    echo "  false, empty or unset           - Skip feed images and thumbnail generation"
+    echo "  Explicit --skip_thumbs / --mirror_images override this setting"
+    echo
     echo "Environment Variable Options for 'getone':"
     echo "  AVITO_XML_URL"
     echo "  AVITO_XML_URL_DATA_CARS_CAR"

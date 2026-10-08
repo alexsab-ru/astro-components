@@ -364,20 +364,28 @@ jobs:
       id: generate_cars
       continue-on-error: true
       run: |
-        mirror_args=""
-        if [[ "${MIRROR_CAR_IMAGES:-}" == "true" ]]; then
-          mirror_args="--mirror_images"
-          if [[ -n "${MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS:-}" ]]; then
-            mirror_args="$mirror_args --mirror_autoload_download_delay_seconds ${MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS}"
-          fi
-          if [[ -n "${MIRROR_MAX_NEW_IMAGES_PER_CAR:-}" ]]; then
-            mirror_args="$mirror_args --mirror_max_new_images_per_car ${MIRROR_MAX_NEW_IMAGES_PER_CAR}"
-          fi
-          if [[ -n "${MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR:-}" ]]; then
-            mirror_args="$mirror_args --mirror_avito_autoload_max_new_per_car ${MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR}"
-          fi
-        fi
-        pnpm cars auto $mirror_args
+        image_args=()
+        case "${MIRROR_CAR_IMAGES:-}" in
+          true)
+            image_args+=(--mirror_images)
+            if [[ -n "${MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS:-}" ]]; then
+              image_args+=(--mirror_autoload_download_delay_seconds "$MIRROR_AUTOLOAD_DOWNLOAD_DELAY_SECONDS")
+            fi
+            if [[ -n "${MIRROR_MAX_NEW_IMAGES_PER_CAR:-}" ]]; then
+              image_args+=(--mirror_max_new_images_per_car "$MIRROR_MAX_NEW_IMAGES_PER_CAR")
+            fi
+            if [[ -n "${MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR:-}" ]]; then
+              image_args+=(--mirror_avito_autoload_max_new_per_car "$MIRROR_AVITO_AUTOLOAD_MAX_NEW_PER_CAR")
+            fi
+            ;;
+          thumbs_local)
+            # Только локальные превью, без зеркалирования на CDN.
+            ;;
+          *)
+            image_args+=(--skip_thumbs)
+            ;;
+        esac
+        pnpm cars auto "${image_args[@]}"
       env:
         DOMAIN: ${{ vars.DOMAIN }}
         CDN_BASE_URL: ${{ secrets.CDN_BASE_URL }}
