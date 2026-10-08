@@ -651,6 +651,16 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
         data['thumbs'] = mirror_result.thumbs
         return
 
+    # Повторная обработка может получить только CDN URL или пустой список.
+    # Сохранённые наборы уже содержат готовые фото: восстанавливаем связанные
+    # поля вместо замены фото заглушкой после фильтрации исходных URL.
+    if config.get('mirror_images') and data.get('imageSets'):
+        data['images'] = [image_set['full'] for image_set in data['imageSets']]
+        data['thumbs'] = [image_set['medium'] for image_set in data['imageSets'][:5]]
+        data['image'] = data['imageSets'][0]['medium']
+        return
+
+    data['imageSets'] = []
     data['images'] = merged_images
     data['image'] = data['images'][0] if data['images'] else _get_color_fallback_image(
         data.get('mark_id', brand or ''),

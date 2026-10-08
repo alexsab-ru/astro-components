@@ -45,7 +45,7 @@ const creditEnabled = isCreditEnabled(settings);
 
 					{badgeImage && (<img src={badgeImage} class={`absolute right-3 top-3 xs:right-1 xs:top-1 z-10 h-auto object-contain ${badgeClasses}`} alt={badgeAlt} />)}
 
-				{ data.images && data.images.length > 0 ? (
+				{ data.imageSets?.length > 0 || data.images?.length > 0 ? (
 					<CarImageSlider data={data} />
 					) : (
 					<a
