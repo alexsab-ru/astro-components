@@ -41,6 +41,8 @@ export type ModelCarsCardOverride = {
 	price?: number;
 	/** Formatted price HTML, including a priceb placeholder and its disclaimer. */
 	priceText?: string;
+	/** Text before the price; use an empty string for a complete promotional message. */
+	pricePrefix?: string;
 	contentItems?: string[];
 	images?: ModelCarsCardImage[];
 	/** Default overlays for every selected image. Per-image overlays take precedence. */

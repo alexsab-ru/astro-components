@@ -375,6 +375,7 @@ class PlaceholderProcessor {
                 '{{monthNominative}}': MONTH_NOMINATIVE,
                 '{{monthGenitive}}': MONTH_GENITIVE,
                 '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
+                '{{monthPrepositionalLower}}': MONTH_PREPOSITIONAL.toLowerCase(),
                 '{{year}}': YEAR,
                 ...this.settingsPlaceholder,
                 ...this.carsPlaceholder,
@@ -413,6 +414,7 @@ class PlaceholderProcessor {
             '{{monthNominative}}': MONTH_NOMINATIVE,
             '{{monthGenitive}}': MONTH_GENITIVE,
             '{{monthPrepositional}}': MONTH_PREPOSITIONAL,
+            '{{monthPrepositionalLower}}': MONTH_PREPOSITIONAL.toLowerCase(),
             '{{year}}': YEAR,
             ...this.settingsPlaceholder,
         };

@@ -237,6 +237,7 @@ const cards = models
 			title,
 			subtitle: override?.subtitle ?? model.slogan ?? '',
 			price: override?.priceText ?? (price ? currencyFormat(price) : ''),
+			pricePrefix: override?.pricePrefix ?? 'Цена от ',
 			contentItems,
 			images,
 			order: override?.order ?? modelIndex,
@@ -286,7 +287,7 @@ const cards = models
 				</div>
 
 				{card.price && (
-					<p class="m-0! text-2xl! lg:text-3xl! font-bold text-accent-500">Цена от <Fragment set:html={card.price} /></p>
+					<p class="m-0! text-2xl! lg:text-3xl! font-bold text-accent-500">{card.pricePrefix}<Fragment set:html={card.price} /></p>
 				)}
 
 				{card.contentItems.length > 0 && (
