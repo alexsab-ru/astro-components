@@ -6,6 +6,7 @@ import glob
 import shutil
 import hashlib
 import re
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from utils import *
 import xml.etree.ElementTree as ET
@@ -425,6 +426,42 @@ class CarProcessor:
         digest = hashlib.sha256(f'{vendor}:{identity}'.encode('utf-8')).hexdigest()[:20]
         return f'YML-{digest.upper()}'
 
+    def extract_yml_prices(self, car: ET.Element) -> Dict[str, int]:
+        """Конечная цена — price; обычная — oldprice или price + выгода из текста."""
+        def parse_price(value: Optional[str]) -> int:
+            try:
+                amount = Decimal(re.sub(r'[ \u00a0\u202f]', '', (value or '').strip()))
+                return int(amount) if amount.is_finite() and amount > 0 else 0
+            except (InvalidOperation, ValueError):
+                return 0
+
+        sale_price = parse_price(car.findtext('price'))
+        old_price = parse_price(car.findtext('oldprice'))
+        price = old_price if sale_price > 0 and old_price > sale_price else sale_price
+        if sale_price > 0 and price == sale_price:
+            notes = car.findtext('sales_notes') or ''
+            number_pattern = r'(\d[\d \u00a0\u202f]*(?:[.,]\d+)?)'
+            discount_match = re.search(
+                r'(?:максимальная|общая|суммарная)\s+(?:скидка|выгода)\s*:?\s*(?:до\s+)?' + number_pattern,
+                notes, re.IGNORECASE,
+            )
+            if not discount_match:
+                discount_match = re.search(
+                    r'(?:^|\n)\s*(?:скидка|выгода)\s*(?::\s*(?:до\s+)?|до\s+)' + number_pattern,
+                    notes, re.IGNORECASE,
+                )
+            if discount_match:
+                # Не трактуем проценты и сокращённые суммы (тыс./млн) как рубли.
+                suffix = notes[discount_match.end():].lstrip().lower()
+                if not suffix.startswith(('%', 'процент', 'тыс', 'млн', 'миллион')):
+                    price += parse_price(discount_match.group(1).replace(',', '.'))
+        return {
+            'price': price,
+            'priceWithDiscount': sale_price,
+            'sale_price': sale_price,
+            'max_discount': price - sale_price,
+        }
+
     def auto_detect_source_type(self, xml_file_path: str) -> Optional[str]:
         """
         Автоматически определяет тип источника на основе структуры XML.
@@ -540,6 +577,7 @@ class CarProcessor:
             # В YML некоторые данные могут быть в параметрах
             yml_params = self.extract_yml_params(car)
             car_data.update(yml_params)
+            car_data.update(self.extract_yml_prices(car))
             
             # Извлекаем название модели из параметра "Модель"
             if 'model_name' in car_data:
@@ -679,12 +717,9 @@ class CarProcessor:
             # Парсим скидки из текста
             import re
             
-            # Ищем максимальную скидку
+            # Условия отдельных программ сохраняем как справочные значения.
+            # Общая выгода из текста применяется отдельно только как резерв для oldprice.
             number_pattern = r'([\d][\d \u00a0\u202f]*)'
-            max_discount_match = re.search(r'Максимальная скидка:\s*' + number_pattern, notes_text, re.IGNORECASE)
-            if max_discount_match:
-                params['max_discount'] = max_discount_match.group(1)
-            
             # Ищем скидки по программам
             tradein_match = re.search(r'trade-in до\s*' + number_pattern, notes_text, re.IGNORECASE)
             if tradein_match:

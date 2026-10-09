@@ -2,11 +2,13 @@
 """YML regression tests; all writes and CLI runs stay in temporary directories."""
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
+import yaml
 from contextlib import redirect_stdout
 from io import StringIO
 from pathlib import Path
@@ -29,7 +31,7 @@ OFFER = '''<offer id="stock-1" type="vendor.model">
     <url>https://example.invalid/stock-1</url>
     <vendor>Haval</vendor><model>H9 2.0 AT (218 л.с.) 4WD 2026</model>
     <typePrefix>Новый автомобиль</typePrefix><store>true</store><count>1</count>
-    <price>5000000</price><picture>https://example.invalid/1.jpg</picture>
+    <price>5000000</price><oldprice>5500000</oldprice><picture>https://example.invalid/1.jpg</picture>
     <picture>https://example.invalid/2.jpg</picture><picture> </picture>
     <param name="Модель">H9</param><param name="Год выпуска">2026</param>
     <param name="Цвет">Белый</param><param name="Кузов">Внедорожник 5 дв.</param>
@@ -71,9 +73,57 @@ class YmlFeedTests(unittest.TestCase):
         self.assertEqual(data['run'], '0')
         self.assertEqual(data['availability'], 'в наличии')
         self.assertEqual(data['images'], ['https://example.invalid/1.jpg', 'https://example.invalid/2.jpg'])
-        self.assertEqual(update_cars.to_int(data['max_discount']), 900000)
+        self.assertEqual(data['price'], 5500000)
+        self.assertEqual(data['priceWithDiscount'], 5000000)
+        self.assertEqual(data['sale_price'], 5000000)
+        self.assertEqual(data['max_discount'], 500000)
         self.assertEqual(update_cars.to_int(data['credit_discount']), 200000)
         self.assertEqual(update_cars.to_int(data['tradein_discount']), 100000)
+
+    def test_missing_or_invalid_oldprice_uses_sales_notes_benefit(self):
+        for oldprice in (None, '', 'invalid', 'NaN', 'Infinity', '-1', '0', '4900000', '5000000'):
+            with self.subTest(oldprice=oldprice):
+                car = ET.fromstring(OFFER)
+                if oldprice is None:
+                    car.remove(car.find('oldprice'))
+                else:
+                    car.find('oldprice').text = oldprice
+                data = self.processor.extract_car_data(car)
+                self.assertEqual(data['price'], 5900000)
+                self.assertEqual(data['priceWithDiscount'], 5000000)
+                self.assertEqual(data['sale_price'], 5000000)
+                self.assertEqual(data['max_discount'], 900000)
+
+    def test_sales_notes_fallback_formats_and_missing_benefit(self):
+        self.offer.remove(self.offer.find('oldprice'))
+        for notes, benefit in (
+            ('Максимальная скидка: 900 000', 900000),
+            ('Максимальная выгода до 900\u202f000 руб.', 900000),
+            ('Общая выгода: 900\u00a0000', 900000),
+            ('Выгода до 900000', 900000),
+            ('Скидка: 900000.00 рублей', 900000),
+            ('', 0), ('Оплата наличными', 0),
+            ('при покупке в кредит до 200000\ntrade-in до 100000', 0),
+            ('Максимальная скидка: неизвестна', 0),
+            ('Максимальная скидка: -100000', 0),
+            ('Максимальная скидка: 10%', 0),
+            ('Максимальная скидка: 900 тыс. рублей', 0),
+        ):
+            with self.subTest(notes=notes):
+                self.offer.find('sales_notes').text = notes
+                data = self.processor.extract_car_data(self.offer)
+                self.assertEqual(data['price'], 5000000 + benefit)
+                self.assertEqual(data['max_discount'], benefit)
+                self.assertEqual(data['sale_price'], 5000000)
+                self.assertEqual(data['priceWithDiscount'], 5000000)
+
+    def test_decimal_yml_prices(self):
+        self.offer.find('price').text = '1999000.00'
+        self.offer.find('oldprice').text = '2319990.00'
+        data = self.processor.extract_car_data(self.offer)
+        self.assertEqual(data['price'], 2319990)
+        self.assertEqual(data['sale_price'], 1999000)
+        self.assertEqual(data['max_discount'], 320990)
 
     def test_identity_stays_stable_when_price_model_or_year_changes(self):
         identity = self.processor.get_yml_identifier(self.offer)
@@ -150,8 +200,12 @@ class YmlCliTests(unittest.TestCase):
         scripts = Path(__file__).resolve().parent
         with tempfile.TemporaryDirectory() as tmp:
             cwd = Path(tmp)
-            (cwd / '.github').mkdir()
-            (cwd / '.github/scripts').symlink_to(scripts, target_is_directory=True)
+            isolated_scripts = cwd / '.github/scripts'
+            isolated_scripts.mkdir(parents=True)
+            # __file__.resolve() участвует в поиске .env: копии исключают настройки
+            # рабочего сайта из CLI-тестов, в отличие от symlink на scripts.
+            for name in ('config.py', 'utils.py', 'getOneXML.py', 'update_cars.py', 'image_mirror.py'):
+                shutil.copyfile(scripts / name, isolated_scripts / name)
             site = cwd / 'src/data/site'
             site.mkdir(parents=True)
             (site / 'settings.json').write_text(json.dumps({'legal_city': 'Тест', 'legal_city_where': 'Тесте'}))
@@ -183,11 +237,35 @@ class YmlCliTests(unittest.TestCase):
             for name, count in (('cars', 2), ('used_cars', 1)):
                 root = ET.parse(cwd / f'public/{name}.xml').getroot()
                 self.assertEqual(len(root.findall('./cars/car')), count)
-                self.assertEqual(len(list((cwd / f'src/content/{name}').glob('*.mdx'))), 1)
+                files = list((cwd / f'src/content/{name}').glob('*.mdx'))
+                self.assertEqual(len(files), 1)
+                data = yaml.safe_load(files[0].read_text().split('---', 2)[1])
+                for key, expected in (('price', 5500000), ('priceWithDiscount', 5000000),
+                                      ('sale_price', 5000000), ('max_discount', 500000)):
+                    self.assertEqual(data[key], expected)
+                    for car in root.findall('./cars/car'):
+                        self.assertEqual(int(car.findtext(key)), expected)
             before = (cwd / 'public/cars.xml').read_bytes()
             run('auto', '--skip_thumbs')
             self.assertEqual((cwd / 'public/cars.xml').read_bytes(), before)
             self.assertEqual(ET.parse(cwd / 'public/used_cars.xml').findtext('./cars/car/run'), '120000')
+            prices = json.loads((cwd / 'src/data/dealer-models_cars_price.json').read_text())
+            self.assertEqual(prices[0]['price'], 5000000)
+            self.assertEqual(prices[0]['benefit'], 500000)
+
+            # sales_notes не даёт права вычитать скидку из уже конечной price.
+            fixture.write_text(feed(OFFER.replace('<oldprice>5500000</oldprice>', '')), encoding='utf-8')
+            run('test', 'yml_catalog_shop_offers_offer', '--skip_thumbs')
+            car = ET.parse(cwd / 'public/cars.xml').find('./cars/car')
+            file = next((cwd / 'src/content/cars').glob('*.mdx'))
+            data = yaml.safe_load(file.read_text().split('---', 2)[1])
+            for key, expected in (('price', 5900000), ('sale_price', 5000000),
+                                  ('priceWithDiscount', 5000000), ('max_discount', 900000)):
+                self.assertEqual(int(car.findtext(key)), expected)
+                self.assertEqual(data[key], expected)
+            prices = json.loads((cwd / 'src/data/dealer-models_cars_price.json').read_text())
+            self.assertEqual(prices[0]['price'], 5000000)
+            self.assertEqual(prices[0]['benefit'], 900000)
 
 
 if __name__ == '__main__':
