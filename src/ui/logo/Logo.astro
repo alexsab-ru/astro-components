@@ -1,6 +1,7 @@
 ---
 import settings from '@/data/site/settings.json';
 import { isHeaderTransparentEnabled } from '@/js/utils/features';
+import LogoImage from './LogoImage.astro';
 const { site_name, logo_header, logo_dealer_header } = settings;
 const is_header_transparent = isHeaderTransparentEnabled(settings);
 const path = Astro.url.pathname;
@@ -15,18 +16,18 @@ const { noLink = false } = Astro.props;
 ---
 {path === '/' || noLink ? (
 <div class={`flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left cursor-pointer`} x-data="scrollTop" x-on:click="onClick">
-    <img src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} loading="eager" width="200" height="40" />
+    <LogoImage src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} instance="brand" />
     {logo_dealer_header ? (
-        <img src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} loading="eager" width="200" height="40" />
+        <LogoImage src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} instance="dealer" />
     ) : (
         <span class="text-logo-header-daeler-size uppercase font-medium leading-none! select-none">{site_name}</span>
     ) }    
 </div>
 ) : (
 <a href="/" class={`flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left`}>
-    <img src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} loading="eager" width="200" height="40" />
+    <LogoImage src={logo_header} class={`${logoHeaderSize} sm:pr-3`} alt={site_name} instance="brand" />
     {logo_dealer_header ? (
-        <img src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} loading="eager" width="200" height="40" />
+        <LogoImage src={logo_dealer_header} class={`${dealerLogoSize}`} alt={site_name} instance="dealer" />
     ) : (
         <span class="text-logo-header-daeler-size uppercase font-medium leading-none! select-none">{site_name}</span>
     ) } 

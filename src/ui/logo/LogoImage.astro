@@ -1,0 +1,17 @@
+---
+import { getInlineLogo } from '@/js/utils/inlineLogo';
+
+interface Props {
+	src: string;
+	alt: string;
+	class?: string;
+	instance: string;
+}
+const { src, alt, class: className = '', instance } = Astro.props;
+const svg = await getInlineLogo(src, { className, label: alt, instance });
+---
+{svg ? (
+	<Fragment set:html={svg} />
+) : (
+	<img src={src} class={className} alt={alt} loading="eager" fetchpriority="auto" width="200" height="40" />
+)}
