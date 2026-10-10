@@ -12,6 +12,7 @@ export function useChatAnalytics(
   questions: readonly QuizQuestion[] = EMPTY_QUESTIONS,
 ) {
   const [sentEvents] = useState(() => new Set<string>());
+  const [hasChatStarted, setHasChatStarted] = useState(false);
 
   const sendOnce = useCallback(
     (goal: string, params?: GoalParams) => {
@@ -23,17 +24,16 @@ export function useChatAnalytics(
     [sentEvents],
   );
 
-  // Legacy form_chat_start: intro and first question have been prepared;
-  // useChatInit reveals answer options here. This does not check viewport visibility.
-  // The first accepted visitor answer is already tracked by form_chat_step_1.
+  // form_chat_start: a rendered bot message was visible for 500 ms in an active
+  // tab. The first accepted visitor answer remains form_chat_step_1.
   const trackChatStart = useCallback(() => {
-    const firstQuestion = questions[0];
-    if (!firstQuestion) return;
+    if (!questions.length) return;
 
     sendOnce('form_chat_start', {
-      id: firstQuestion.id,
-      title: firstQuestion.title,
+      definition: 'bot_message_visible_v1',
+      visibility: '50pct_500ms',
     });
+    setHasChatStarted(true);
   }, [questions, sendOnce]);
 
   const trackQuestionAnswer = useCallback(
@@ -63,6 +63,7 @@ export function useChatAnalytics(
   }, [sendOnce]);
 
   return {
+    hasChatStarted,
     trackChatStart,
     trackQuestionAnswer,
     trackNameFilled,

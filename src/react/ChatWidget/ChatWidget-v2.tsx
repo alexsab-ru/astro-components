@@ -57,6 +57,7 @@ export function ChatWidget({ config }: ChatWidgetProps) {
   } = useChatSteps(config);
 
   const {
+    hasChatStarted,
     trackChatStart,
     trackQuestionAnswer,
     trackNameFilled,
@@ -140,7 +141,6 @@ export function ChatWidget({ config }: ChatWidgetProps) {
     addBotMessages,
     setCurrentStep,
     setShowOptions,
-    onFirstQuestionShown: trackChatStart,
   });
 
   useEffect(() => {
@@ -171,7 +171,11 @@ export function ChatWidget({ config }: ChatWidgetProps) {
           id="chat"
         >
           {messages.map((msg) => (
-            <Message message={msg} key={msg.id} />
+            <Message
+              message={msg}
+              key={msg.id}
+              onVisible={isOnline && !hasChatStarted ? trackChatStart : undefined}
+            />
           ))}
 
           {isTyping && <Typing />}
