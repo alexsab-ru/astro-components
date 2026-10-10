@@ -14,7 +14,7 @@ const {salons = [], mapImg, classes = '', ...rest} = Astro.props;
 </div>
 
 
-<script id="salons" type="application/ld+json" set:html={JSON.stringify(salons)}/>
+<script id="salons" type="application/json" set:html={JSON.stringify(salons)}/>
 <script>
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { loadMapScript, observeMap, showMapError, withTimeout } from '@/js/utils/lazyMap';
