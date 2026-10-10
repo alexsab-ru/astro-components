@@ -17,6 +17,7 @@ const {salons = [], mapImg, classes = '', ...rest} = Astro.props;
 <script id="salons" type="application/ld+json" set:html={JSON.stringify(salons)}/>
 <script>
 import { phoneFormat } from '@/js/utils/numbers.format';
+import { loadMapScript, observeMap, showMapError, withTimeout } from '@/js/utils/lazyMap';
 
 const e = document.querySelector("#salons");
 
@@ -42,6 +43,7 @@ let start_load_script = false, // Переменная для определен
 	end_load_script = false; // Переменная для определения был ли загружен скрипт Яндекс.Карт полностью (чтобы не возникли какие-нибудь ошибки, если мы загружаем несколько карт одновременно)
 
 let myMapTemp = null;
+let loadGeneration = 0;
 
 //Функция создания карты сайта и затем вставки ее в блок с идентификатором "map-yandex"
 function init() {
@@ -98,9 +100,10 @@ function init() {
 	var layer = myMapTemp.layers.get(0).get(0);
 
 	// Решение по callback-у для определния полной загрузки карты
-	waitForTilesLoad(layer).then(function (value) {
+	const initializingMap = myMapTemp;
+	return waitForTilesLoad(layer).then(function (value) {
 		// Скрываем индикатор загрузки после полной загрузки карты
-		parent.querySelector(".loader").classList.remove("is-active");
+		if (myMapTemp === initializingMap) parent.querySelector(".loader").classList.remove("is-active");
 	});
 }
 
@@ -109,6 +112,7 @@ function waitForTilesLoad(layer) {
 	return new ymaps.vow.Promise(function (resolve, reject) {
 		var tc = getTileContainer(layer),
 			readyAll = true;
+		if (!tc) { resolve(); return; }
 		tc.tiles.each(function (tile, number) {
 			if (!tile.isReady()) {
 				readyAll = false;
@@ -138,71 +142,42 @@ function getTileContainer(layer) {
 	return null;
 }
 
-// Функция загрузки API Яндекс.Карт по требованию (в нашем случае при наведении)
-function loadScript(url, callback) {
-	var script = document.createElement("script");
-
-	if (script.readyState) {
-		// IE
-		script.onreadystatechange = function () {
-			if (script.readyState == "loaded" || script.readyState == "complete") {
-				script.onreadystatechange = null;
-				callback();
-			}
-		};
-	} else {
-		// Другие браузеры
-		script.onload = function () {
-			callback();
-		};
-	}
-
-	script.src = url;
-	document.getElementsByTagName("head")[0].appendChild(script);
-}
-
-const mouseEnterHandler = function() {
-	ymap();
-};
-
-// Основная функция, которая проверяет когда мы навели на блок с классом "ymap-container"
-function ymap() {
-	if (!start_load_script) {
-		// проверяем первый ли раз загружается Яндекс.Карта, если да, то загружаем
-
-		// Показываем индикатор загрузки до тех пор, пока карта не загрузится
-		parent.querySelector(".loader").classList.add("is-active");
-
-		// Чтобы не было повторной загрузки карты, мы изменяем значение переменной
-		start_load_script = true;
-		parent.removeEventListener('mouseenter', mouseEnterHandler);
-
-		// Загружаем API Яндекс.Карт
-		loadScript(
-			"https://api-maps.yandex.ru/2.1/?lang=ru_RU&loadByRequire=1",
-			function () {
-				end_load_script = !end_load_script;
-				// Как только API Яндекс.Карт загрузились, сразу формируем карту и помещаем в блок с идентификатором "map-yandex"
-				ymaps.ready(init);
-			}
-		);
+// Load on visibility or pointer interaction; every failed attempt can be retried.
+async function ymap() {
+	if (start_load_script || !parent) return;
+	start_load_script = true;
+	const generation = ++loadGeneration;
+	const target = parent.querySelector('#map');
+	target.replaceChildren();
+	parent.querySelector('.loader').classList.add('is-active');
+	try {
+		await withTimeout((async () => {
+			if (!window.ymaps) await loadMapScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU&loadByRequire=1');
+			if (generation !== loadGeneration) return;
+			await new Promise((resolve) => ymaps.ready(resolve));
+			if (generation !== loadGeneration) return;
+			await init();
+		})());
+		if (generation === loadGeneration) {
+			end_load_script = true;
+			parent.removeEventListener('mouseenter', ymap);
+		}
+	} catch {
+		if (generation !== loadGeneration) return;
+		loadGeneration += 1;
+		start_load_script = false;
+		myMapTemp?.destroy();
+		myMapTemp = null;
+		parent.querySelector('.loader').classList.remove('is-active');
+		showMapError(target, ymap);
 	}
 }
 
 if (parent) {
-	parent.addEventListener('mouseenter', mouseEnterHandler);
+	parent.addEventListener('mouseenter', ymap);
+	parent.addEventListener('click', ymap);
+	observeMap(parent, ymap);
 }
-
-const cb = function(entries, observer) {
-	entries.forEach((entry) => {
-		if (entry.isIntersecting) {
-			ymap();
-			observer.unobserve(entry.target);
-		}
-	})
-}
-let mapObserver = new IntersectionObserver(cb);
-mapObserver.observe(document.querySelector('#map'));
 
 }
 

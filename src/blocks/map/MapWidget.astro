@@ -18,50 +18,46 @@ import './map.sass';
 
 <script>
 	import { LINK_WIDGET } from '@/const';
-	const widgetWrapper = document.getElementById('map-widget-wrapper');
+	import { observeMap, showMapError } from '@/js/utils/lazyMap';
+	const wrapper = document.getElementById('map-widget-wrapper');
 	const widget = document.getElementById('map-widget');
-	let onHover = false;
-	const yandex_widget_orgnization = widgetWrapper.dataset.widgetId;
-	if(yandex_widget_orgnization){
-		const mouseEnterHandler = function() {
-			ymap();
-		};
-		const ymap = function() {
-			if(!onHover){
-				widgetWrapper.removeEventListener('mouseenter', mouseEnterHandler);
-				widgetWrapper.classList.add('is-active');
-				const iframe = document.createElement("iframe");
-				iframe.classList.add('absolute', 'w-full', 'h-full', 'z-20');
-				iframe.onload = function(e) {
-					widgetWrapper.setAttribute('style', '');
-					widgetWrapper.classList.remove('is-active');
-					// console.log("iframe загрузился");
-				};
-				iframe.onerror = function() {
-					// console.log("Что-то пошло не так, давай, ищи ошибку!");
-					showError(widget);
-					widgetWrapper.classList.remove('is-active');
-				};
-				iframe.src = LINK_WIDGET+yandex_widget_orgnization;
-				widget.appendChild(iframe);
-				onHover = true;
-			}
-		}
-		widgetWrapper.addEventListener('mouseenter', mouseEnterHandler);
-		
-		function showError(el: HTMLElement){
-			el.innerHTML = '<p class="text-center font-medium text-lg">Упс! Что-то пошло не так :( <br /> Перезагрузите страницу и попробуйте снова... </p>'
-		}
+	const widgetId = wrapper?.dataset.widgetId;
+	let loaded = false;
+	let loading = false;
 
-		const cb = function(entries, observer) {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					ymap();
-					observer.unobserve(entry.target);
-				}
-			})
+	function loadWidget() {
+		if (!wrapper || !widget || !widgetId || loaded || loading) return;
+		loading = true;
+		wrapper.classList.add('is-active');
+		const iframe = document.createElement('iframe');
+		iframe.className = 'absolute w-full h-full z-20';
+		iframe.title = 'Карта расположения автосалона';
+		const timer = setTimeout(fail, 20000);
+		function fail() {
+			clearTimeout(timer);
+			iframe.onload = null;
+			iframe.onerror = null;
+			iframe.remove();
+			loading = false;
+			wrapper.classList.remove('is-active');
+			showMapError(widget, loadWidget);
 		}
-		let mapObserver = new IntersectionObserver(cb);
-		mapObserver.observe(document.querySelector('#map-widget'));
+		iframe.onload = () => {
+			clearTimeout(timer);
+			loaded = true;
+			loading = false;
+			wrapper.style.backgroundImage = '';
+			wrapper.classList.remove('is-active');
+			wrapper.removeEventListener('mouseenter', loadWidget);
+		};
+		iframe.onerror = fail;
+		iframe.src = LINK_WIDGET + widgetId;
+		widget.replaceChildren(iframe);
+	}
+
+	if (wrapper && widgetId) {
+		wrapper.addEventListener('mouseenter', loadWidget);
+		wrapper.addEventListener('click', loadWidget);
+		observeMap(wrapper, loadWidget);
 	}
 </script>
