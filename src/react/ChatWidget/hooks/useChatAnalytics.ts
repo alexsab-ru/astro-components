@@ -23,6 +23,9 @@ export function useChatAnalytics(
     [sentEvents],
   );
 
+  // Legacy form_chat_start: intro and first question have been prepared;
+  // useChatInit reveals answer options here. This does not check viewport visibility.
+  // The first accepted visitor answer is already tracked by form_chat_step_1.
   const trackChatStart = useCallback(() => {
     const firstQuestion = questions[0];
     if (!firstQuestion) return;
