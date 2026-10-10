@@ -8,6 +8,7 @@ interface Props {
 import BannerSlide from './BannerSlide.astro';
 import bannersData from '@/data/site/banners.json';
 const { banners = bannersData, onlyView = false, onlyModal = false } = Astro.props;
+const visibleBanners = (banners || []).filter((banner) => banner.show);
 
 import settings from '@/data/site/settings.json';
 import { isHeaderTransparentEnabled } from '@/js/utils/features';
@@ -22,8 +23,8 @@ const bannerClasses = is_header_transparent ? 'pb-[160%] md:pb-[100%] lg:pb-0 lg
 			<div class="absolute inset-0">
 				<div class="swiper banner-slider h-full text-white">
 					<div class="swiper-wrapper">
-						{banners.map((banner: any, index: number) => (
-							banner.show && <BannerSlide banner={banner} index={index} onlyView={onlyView} onlyModal={onlyModal} />
+						{visibleBanners.map((banner: any, index: number) => (
+							<BannerSlide banner={banner} index={index} onlyView={onlyView} onlyModal={onlyModal} />
 						))}
 					</div>
 
@@ -36,7 +37,7 @@ const bannerClasses = is_header_transparent ? 'pb-[160%] md:pb-[100%] lg:pb-0 lg
 						<span />
 					</div>
 
-					{banners.length > 1 && (
+					{visibleBanners.length > 1 && (
 						<div class="swiper-button-prev banner-button-prev hidden! md:flex!" />
 						<div class="swiper-button-next banner-button-next hidden! md:flex!" />
 					)}

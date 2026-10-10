@@ -23,7 +23,7 @@ const pos = getObjectPosition(banner);
 		class={`absolute inset-0 h-full w-full object-cover ${pos.className}`}
 		style={pos.style}
 		{...banner?.title ? {alt: banner.title.replace(/<[^>]*>/g, '')} : {alt: `${site_name} ${site_description} в ${legal_city_where}`} }
-		{...index === 0 ? {fetchpriority: 'high'} : {}}
-		loading="lazy"
+		fetchpriority={index === 0 ? 'high' : 'auto'}
+		loading={index === 0 ? 'eager' : 'lazy'}
 	/>
 </picture>
