@@ -1,5 +1,8 @@
 // ──────────────── Утилиты для ChatWidget ────────────────
 
+import { createChatGoalSender, getChatMetrikaCounterIds, isChatAnalyticsReady } from './chatGoalSender.js';
+import scripts from '@/data/site/scripts.json';
+
 /**
  * Fallback для SuccessMessage после sendLead.
  * Не используется в map шагов — шаг done с success убран (вариант B).
@@ -42,20 +45,19 @@ export const maskPhone = (value: string): string => {
   return num.join("");
 };
 
+// Match the counters initialized by the production/development Metrica providers.
+const requiredCounterIds = getChatMetrikaCounterIds(scripts.metrika, import.meta.env.PROD);
+const enqueueChatGoal = createChatGoalSender(() => import('@alexsab-ru/scripts'), {
+  isReady: () => isChatAnalyticsReady(window, requiredCounterIds),
+});
+
 /**
- * Отправляет цель через reachGoal из @alexsab-ru/scripts.
- * Пакет грузится динамически, чтобы не тянуть его в бандл острова.
- *
- * @param goal - идентификатор цели
- * @param params - дополнительные параметры цели
+ * Отправляет цели по порядку через reachGoal после готовности аналитики.
+ * Динамический импорт не блокирует показ сообщений и обработку ответов.
  */
 export function sendChatGoal(
   goal: string,
   params: Record<string, string> = {},
 ) {
-  void import("@alexsab-ru/scripts")
-    .then(({ reachGoal }) => reachGoal(goal, params))
-    .catch((error) => {
-      console.error(`Chat analytics goal ${goal} was not sent`, error);
-    });
+  void enqueueChatGoal(goal, params);
 }
