@@ -33,8 +33,8 @@ const { showWidgets = true } = Astro.props;
 const cleanedScripts = cleanScriptsData(showWidgets ? scripts_json : { ...scripts_json, widgets: undefined });
 ---
 <PageStart />
-<script id="scripts_json" type="application/ld+json" set:html={cleanedScripts}/>
-<script id="settings_json" type="application/ld+json" set:html={dealer_params}/>
+<script id="scripts_json" type="application/json" set:html={cleanedScripts}/>
+<script id="settings_json" type="application/json" set:html={dealer_params}/>
 <GTM />
 <METRIKA_DEV />
 <METRIKA />
