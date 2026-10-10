@@ -13,5 +13,13 @@ const svg = await getInlineLogo(src, { className, label: alt, instance });
 {svg ? (
 	<Fragment set:html={svg} />
 ) : (
-	<img src={src} class={className} alt={alt} loading="eager" fetchpriority="auto" width="200" height="40" />
+	<img
+		src={src}
+		class={className}
+		alt={alt}
+		loading="eager"
+		fetchpriority="auto"
+		width="200"
+		height="40"
+	/>
 )}
