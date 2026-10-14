@@ -8,6 +8,7 @@ show_help() {
     echo "  getone ENV_VAR [OUTPUT_FILE]     - Get one XML file using specified environment variable"
     echo "  update TYPE [OPTIONS]            - Update cars with specific type"
     echo "  auto [OPTIONS]                   - Automatically process all XML files in ./tmp/feeds/new and ./tmp/feeds/used_cars"
+    echo "  export [EXPORT_ID ...]           - Export existing inventories for configured destinations"
     echo "  test TYPE [OPTIONS]              - Run getone and update commands in sequence"
     echo
     echo "Options (can be used with update, auto, test commands):"
@@ -591,6 +592,9 @@ command_args=("${remaining_args[@]:1}")  # All arguments except the first one
 # echo -e "${BGYELLOW}🔧 Debug: command_args=(${command_args[*]})${Color_Off}"
 
 case $command in
+    "export")
+        "$PYTHON_BIN" .github/scripts/export_car_feeds.py "${command_args[@]}"
+        ;;
     "getone")
         if [ ${#command_args[@]} -lt 1 ]; then
             echo -e "${BGRED}Error: getone requires an environment variable name${Color_Off}"

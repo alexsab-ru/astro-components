@@ -204,7 +204,8 @@ class YmlCliTests(unittest.TestCase):
             isolated_scripts.mkdir(parents=True)
             # __file__.resolve() участвует в поиске .env: копии исключают настройки
             # рабочего сайта из CLI-тестов, в отличие от symlink на scripts.
-            for name in ('config.py', 'utils.py', 'getOneXML.py', 'update_cars.py', 'image_mirror.py'):
+            for name in ('config.py', 'utils.py', 'getOneXML.py', 'update_cars.py', 'image_mirror.py',
+                         'car_feed_exports.py', 'car_feed_exports.json'):
                 shutil.copyfile(scripts / name, isolated_scripts / name)
             site = cwd / 'src/data/site'
             site.mkdir(parents=True)
@@ -229,8 +230,10 @@ class YmlCliTests(unittest.TestCase):
                 result = subprocess.run(['bash', str(scripts / 'sh/process_xml.sh'), *args],
                                         cwd=cwd, env=env, capture_output=True, text=True, timeout=30)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                return result.stdout
 
             run('test', 'yml_catalog_shop_offers_offer', '--skip_thumbs')
+            self.assertEqual(ET.parse(cwd / 'public/vk_data_cars_car.xml').findall('./cars/car'), [])
             fixture.write_text(feed(OFFER.replace('Новый автомобиль', 'Автомобиль с пробегом').replace(
                 '<price>', '<param name="Пробег">120000</param><price>')), encoding='utf-8')
             run('test', 'used_cars_yml_catalog_shop_offers_offer', '--skip_thumbs')
@@ -266,6 +269,37 @@ class YmlCliTests(unittest.TestCase):
             prices = json.loads((cwd / 'src/data/dealer-models_cars_price.json').read_text())
             self.assertEqual(prices[0]['price'], 5000000)
             self.assertEqual(prices[0]['benefit'], 900000)
+
+            # Exercise automatic destination export with images, without fetching thumbnails.
+            # Zero thumbnails avoids downloads; stub image HEAD requests in the child process.
+            (cwd / 'sitecustomize.py').write_text('''import requests
+from requests import Response
+
+def offline_response(url, *args, **kwargs):
+    if not url.startswith("https://example.invalid/"):
+        raise AssertionError("Unexpected network request: " + url)
+    response = Response()
+    response.status_code = 200
+    response.headers["ETag"] = '"fixture"'
+    response._content = b""
+    response._content_consumed = True
+    return response
+
+requests.head = offline_response
+requests.get = offline_response
+''')
+            env['PYTHONPATH'] = str(cwd)
+            env['MIRROR_CAR_IMAGES'] = 'thumbs_local'
+            auto_output = run('auto', '--count_thumbs', '0')
+            vk_cars = ET.parse(cwd / 'public/vk_data_cars_car.xml').findall('./cars/car')
+            self.assertEqual(len(vk_cars), 1, (cwd / 'tmp/feed_exports/vk_data_cars_car.json').read_text() + auto_output)
+            self.assertEqual(len({car.findtext('unique_id') for car in vk_cars}), 1)
+            for car in vk_cars:
+                self.assertEqual(car.findtext('price'), '5000000')
+                self.assertEqual(car.findtext('owners_number'), 'Не было владельцев')
+                self.assertEqual(len(car.findall('./images/image')), 2)
+            # Destination price projection must not change the native inventory price.
+            self.assertEqual(ET.parse(cwd / 'public/cars.xml').findtext('./cars/car/price'), '5900000')
 
 
 if __name__ == '__main__':

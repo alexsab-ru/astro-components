@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "exports": [
+    {
+      "id": "vk_data_cars_car",
+      "destination": "vk",
+      "format": "data_cars_car",
+      "input_format": "data_cars_car",
+      "input": "public/cars.xml",
+      "output": "public/vk_data_cars_car.xml",
+      "category": "new"
+    }
+  ]
+}

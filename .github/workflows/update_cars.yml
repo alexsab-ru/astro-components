@@ -658,6 +658,10 @@ jobs:
           if [[ -f src/data/dealer-models_cars_price.json ]]; then git add src/data/dealer-models_cars_price.json --force; fi
         fi
         if [[ -f public/cars.xml ]]; then git add public/cars.xml; fi
+        # Stage all configured destination exports, including new formats added later.
+        python .github/scripts/export_car_feeds.py --list-outputs | while IFS= read -r feed_path; do
+          if [[ -f "$feed_path" ]]; then git add -- "$feed_path"; fi
+        done
         if [[ -f public/used_cars.xml ]]; then git add public/used_cars.xml; fi
         if [[ -f public/autoru.xml ]]; then git add public/autoru.xml; fi
         if [[ -f public/avito.xml ]]; then git add public/avito.xml; fi

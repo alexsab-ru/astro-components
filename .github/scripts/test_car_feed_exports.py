@@ -1,0 +1,221 @@
+"""Offline regression checks for destination exports and publication boundaries."""
+import hashlib
+from contextlib import redirect_stdout
+from io import StringIO
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import unittest
+import xml.etree.ElementTree as ET
+from dataclasses import replace
+from pathlib import Path
+from unittest.mock import patch
+
+import car_feed_exports as feeds
+
+
+class CarFeedExportTests(unittest.TestCase):
+    def setUp(self):
+        self.enterContext(redirect_stdout(StringIO()))
+        self.tmp = self.enterContext(tempfile.TemporaryDirectory())
+        self.root = Path(self.tmp)
+        self.job = feeds.ExportJob('vk_data_cars_car', 'vk', 'data_cars_car',
+                                  'data_cars_car', self.root / 'cars.xml',
+                                  self.root / 'vk_data_cars_car.xml', 'new')
+        self.fields = {
+            'vin': 'TEST_VIN_1', 'url': 'https://dealer.example/cars/1/',
+            'mark_id': 'Belgee', 'folder_id': 'X50+', 'year': '2026',
+            'price': '2699990', 'priceWithDiscount': '2240000', 'sale_price': '2240000',
+            'currency': 'RUR', 'description': 'Длинный рекламный текст. ' * 100,
+            'availability': 'В пути', 'color': 'СЕРЕБРИСТЫЙ', 'body_type': 'Внедорожник',
+            'run': '3', 'complectation_name': 'Престиж', 'max_discount': '459990',
+        }
+        self.images = ['https://cdn.example/1.webp?v=123', 'https://cdn.example/2.jpg']
+
+    def write_inventory(self, records):
+        root = ET.Element('data')
+        cars = ET.SubElement(root, 'cars')
+        for fields, images in records:
+            car = ET.SubElement(cars, 'car')
+            for key, value in fields.items():
+                ET.SubElement(car, key).text = value
+            if images:
+                container = ET.SubElement(car, 'images')
+                for url in images:
+                    ET.SubElement(container, 'image').text = url
+        ET.ElementTree(root).write(self.job.input, encoding='utf-8', xml_declaration=True)
+
+    def export(self, records, job=None):
+        self.write_inventory(records)
+        before = hashlib.sha256(self.job.input.read_bytes()).digest()
+        report = feeds.export_job(job or self.job, self.root / 'reports')
+        self.assertEqual(before, hashlib.sha256(self.job.input.read_bytes()).digest())
+        return ET.parse((job or self.job).output).findall('./cars/car'), report
+
+    def test_vk_required_fields_discount_and_optional_normalization(self):
+        cars, report = self.export([(self.fields, self.images)])
+        self.assertEqual(report['exported'], 1)
+        car = cars[0]
+        for key, expected in {
+            'unique_id': 'TEST_VIN_1', 'vin': 'TEST_VIN_1', 'price': '2240000',
+            'owners_number': 'Не было владельцев', 'color': 'серебряный',
+            'availability': 'На заказ', 'body_type': 'Внедорожник', 'run': '3',
+        }.items():
+            self.assertEqual(car.findtext(key), expected)
+        self.assertLessEqual(len(car.findtext('description')), 256)
+        self.assertFalse(car.findtext('description').isupper())
+        self.assertFalse(car.findtext('description').islower())
+        self.assertEqual([image.text for image in car.findall('images/image')], self.images)
+        for native_key in ('sale_price', 'priceWithDiscount', 'max_discount', 'complectation_name'):
+            self.assertIsNone(car.find(native_key))
+
+    def test_short_description_xml_escaping_and_id_preserved(self):
+        fields = {**self.fields, 'unique_id': 'stock_1', 'description': 'Belgee X50+ & специальная цена'}
+        cars, _ = self.export([(fields, self.images)])
+        self.assertEqual(cars[0].findtext('description'), fields['description'])
+        self.assertEqual(cars[0].findtext('unique_id'), 'stock_1')
+        self.assertEqual(cars[0].findtext('vin'), fields['vin'])
+
+    def test_price_precedence_and_invalid_final_price(self):
+        cases = [
+            ({'sale_price': '', 'priceWithDiscount': '2300000.50'}, '2300000.50'),
+            ({'sale_price': '', 'priceWithDiscount': ''}, '2699990'),
+            ({'sale_price': '0', 'priceWithDiscount': ''}, None),
+            ({'sale_price': 'NaN', 'priceWithDiscount': ''}, None),
+            ({'sale_price': '1,50', 'priceWithDiscount': ''}, None),
+            ({'sale_price': '-1', 'priceWithDiscount': ''}, None),
+            ({'sale_price': '2000000'}, None),  # conflicting discounted fields
+        ]
+        for changes, expected in cases:
+            with self.subTest(changes=changes):
+                cars, report = self.export([({**self.fields, **changes}, self.images)])
+                self.assertEqual(len(cars), 0 if expected is None else 1)
+                if expected:
+                    self.assertEqual(cars[0].findtext('price'), expected)
+                else:
+                    self.assertTrue(report['issues'][0]['errors'])
+
+    def test_conflicting_ids_and_missing_photos_are_excluded(self):
+        records = [(self.fields, self.images), ({**self.fields, 'color': 'Белый'}, self.images),
+                   ({**self.fields, 'vin': 'TEST_VIN_2'}, []),
+                   ({**self.fields, 'vin': 'TEST_VIN_3'}, self.images)]
+        cars, report = self.export(records)
+        self.assertEqual((report['total'], report['exported'], report['excluded']), (4, 1, 3))
+        self.assertEqual(cars[0].findtext('vin'), 'TEST_VIN_3')
+        self.assertEqual(len(report['issues']), 3)
+
+    def test_required_values_not_invented(self):
+        for key in ('vin', 'url', 'mark_id', 'folder_id', 'year', 'currency'):
+            with self.subTest(key=key):
+                fields = {**self.fields, key: ''}
+                cars, report = self.export([(fields, self.images)])
+                self.assertFalse(cars)
+                self.assertEqual(report['excluded'], 1)
+        cars, _ = self.export([({**self.fields, 'url': 'javascript:alert(1)'}, ['file:///photo.jpg'])])
+        self.assertFalse(cars)
+
+    def test_unsupported_optional_values_omitted(self):
+        fields = {**self.fields, 'color': 'Неизвестный', 'body_type': 'Что-то',
+                  'state': 'Идеальное', 'availability': 'Продан', 'run': 'abc', 'poi_id': 'x' * 257}
+        cars, report = self.export([(fields, self.images + ['bad-url', self.images[0]])])
+        for key in ('color', 'body_type', 'state', 'availability', 'run', 'poi_id'):
+            self.assertIsNone(cars[0].find(key))
+        self.assertEqual(len(cars[0].findall('images/image')), 2)
+        self.assertGreaterEqual(len(report['issues'][0]['warnings']), 6)
+
+    def test_used_owners_must_be_known(self):
+        job = replace(self.job, category='used')
+        cars, report = self.export([(self.fields, self.images)], job)
+        self.assertFalse(cars)
+        self.assertEqual(report['excluded'], 1)
+        cars, _ = self.export([({**self.fields, 'owners_number': '2'}, self.images)], job)
+        self.assertEqual(cars[0].findtext('owners_number'), 'Два владельца')
+
+    def test_empty_inventory_clears_previous_export(self):
+        self.export([(self.fields, self.images)])
+        cars, report = self.export([])
+        self.assertFalse(cars)
+        self.assertEqual(report['total'], 0)
+
+    def test_malformed_input_preserves_previous_output(self):
+        self.export([(self.fields, self.images)])
+        before = self.job.output.read_bytes()
+        self.job.input.write_text('<not-xml')
+        with self.assertRaises(ET.ParseError):
+            feeds.export_job(self.job, self.root / 'reports')
+        self.assertEqual(self.job.output.read_bytes(), before)
+
+    def test_failed_atomic_write_preserves_existing_file(self):
+        path = self.root / 'atomic.xml'
+        path.write_bytes(b'previous')
+        with patch.object(feeds.os, 'replace', side_effect=OSError('write failed')):
+            with self.assertRaises(OSError):
+                feeds.atomic_write(path, b'new')
+        self.assertEqual(path.read_bytes(), b'previous')
+        self.assertEqual(list(self.root.glob('.atomic.xml.*')), [])
+
+    def test_config_validation_and_independent_registries(self):
+        entry = {'id': self.job.id, 'destination': 'vk', 'format': 'data_cars_car',
+                 'input_format': 'data_cars_car', 'input': str(self.job.input),
+                 'output': str(self.job.output), 'category': 'new'}
+        config_path = self.root / 'exports.json'
+        def config(entries):
+            config_path.write_text(json.dumps({'version': 1, 'exports': entries}))
+        config([entry])
+        self.assertEqual(feeds.load_jobs(config_path), [self.job])
+        for entries in ([entry, entry], [{**entry, 'output': entry['input']}],
+                        [{**entry, 'destination': 'unknown'}], [{**entry, 'category': 'other'}],
+                        [{**entry, 'unknown': 'field'}]):
+            config(entries)
+            with self.assertRaises(ValueError):
+                feeds.load_jobs(config_path)
+        # A destination and an output format can be added independently of the runner.
+        config([{**entry, 'destination': 'another', 'format': 'another_format'}])
+        with patch.dict(feeds.WRITERS, {'another_format': feeds.serialize_data_cars_car}), patch.dict(
+            feeds.DESTINATIONS, {'another': feeds.Destination(('another_format',), feeds.prepare_vk, feeds.identify_vk)}):
+            jobs = feeds.load_jobs(config_path)
+            self.write_inventory([(self.fields, self.images)])
+            report = feeds.export_job(jobs[0], self.root / 'reports')
+            self.assertEqual(report['exported'], 1)
+
+    def test_cli_shell_wrapper_and_source_selection(self):
+        scripts = Path(__file__).resolve().parent
+        entry = {'id': self.job.id, 'destination': 'vk', 'format': 'data_cars_car',
+                 'input_format': 'data_cars_car', 'input': str(self.job.input),
+                 'output': str(self.job.output), 'category': 'new'}
+        config = self.root / 'config.json'
+        config.write_text(json.dumps({'version': 1, 'exports': [entry]}))
+        self.write_inventory([(self.fields, self.images)])
+        before = self.job.input.read_bytes()
+        cwd = Path.cwd()
+        try:
+            os.chdir(self.root)
+            self.assertEqual(feeds.export_for_source(self.root / 'used.xml', config), [])
+            self.assertFalse(self.job.output.exists())
+            self.assertEqual(len(feeds.export_for_source(self.job.input, config)), 1)
+        finally:
+            os.chdir(cwd)
+        for command in (
+            [sys.executable, str(scripts / 'export_car_feeds.py')],
+            ['bash', str(scripts / 'sh/process_xml.sh'), 'export'],
+        ):
+            result = subprocess.run(command + [self.job.id, '--config', str(config)],
+                                    env={**os.environ, 'PYTHON_BIN': sys.executable},
+                                    capture_output=True, text=True, timeout=30)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        result = subprocess.run([sys.executable, str(scripts / 'export_car_feeds.py'),
+                                 '--config', str(config), '--list-outputs'],
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), str(self.job.output))
+        self.assertEqual(self.job.input.read_bytes(), before)
+        result = subprocess.run([sys.executable, str(scripts / 'export_car_feeds.py'),
+                                 'unknown', '--config', str(config)], capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('unknown exports', result.stderr)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -9,6 +9,7 @@ import re
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from utils import *
+from car_feed_exports import export_for_source
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Tuple
 import requests
@@ -1531,6 +1532,7 @@ def main():
                 tree = ET.ElementTree(data_root)
                 tree.write(output_path, encoding='utf-8', xml_declaration=True)
                 print(f"✅ Сохранен объединенный XML для категории {category_type}: {output_path}")
+                export_for_source(Path(output_path))
                 
                 # Очистка превью для категории
                 cleanup_unused_thumbs(processor.current_thumbs, thumbs_dir)
@@ -1657,6 +1659,7 @@ def main():
         convert_to_string(data_root)
         tree = ET.ElementTree(data_root)
         tree.write(args.output_path, encoding='utf-8', xml_declaration=True)
+        export_for_source(Path(args.output_path))
         
         # Очистка превью
         cleanup_unused_thumbs(processor.current_thumbs, config['thumbs_dir'])
