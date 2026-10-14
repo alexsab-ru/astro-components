@@ -71,7 +71,7 @@ class YmlFeedTests(unittest.TestCase):
         self.assertEqual(data['gearboxType'], 'Автомат')
         self.assertEqual(data['ptsType'], 'Оригинал')
         self.assertEqual(data['run'], '0')
-        self.assertEqual(data['availability'], 'в наличии')
+        self.assertEqual(data['availability'], 'В наличии')
         self.assertEqual(data['images'], ['https://example.invalid/1.jpg', 'https://example.invalid/2.jpg'])
         self.assertEqual(data['price'], 5500000)
         self.assertEqual(data['priceWithDiscount'], 5000000)
@@ -175,8 +175,8 @@ class YmlFeedTests(unittest.TestCase):
                         ET.SubElement(car, tag).text = value
                 self.assertEqual(self.processor.should_skip_car_for_availability(car), not expected)
         self.processor.update_source_type('data_cars_car')
-        self.assertFalse(self.processor.should_skip_car_for_availability(ET.fromstring('<car><availability>в наличии</availability></car>')))
-        self.assertTrue(self.processor.should_skip_car_for_availability(ET.fromstring('<car><availability>в пути</availability></car>')))
+        self.assertFalse(self.processor.should_skip_car_for_availability(ET.fromstring('<car><availability>В наличии</availability></car>')))
+        self.assertTrue(self.processor.should_skip_car_for_availability(ET.fromstring('<car><availability>В пути</availability></car>')))
 
     def test_used_car_mileage_is_preserved(self):
         self.offer.find('typePrefix').text = 'Автомобиль с пробегом'

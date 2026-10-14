@@ -1679,7 +1679,7 @@ def increment_unique_id(unique_id, increment):
 
     return ''.join(reversed(prefix)) + ''.join(updated_id)
 
-def duplicate_car(car, config, n, status="в пути", offset=0):
+def duplicate_car(car, config, n, status="В пути", offset=0):
     """Функция для дублирования элемента 'car' N раз с изменением vin."""
     duplicates = []
 

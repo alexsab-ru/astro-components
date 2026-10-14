@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Tuple
 import requests
 
 TRUTHY_ENV_VALUES = {'1', 'true', 'yes', 'on'}
-AVAILABLE_CAR_VALUE = 'в наличии'
+AVAILABLE_CAR_VALUE = 'В наличии'
 
 
 def configure_car_image_mode(config: Dict[str, Any]) -> None:
@@ -586,7 +586,7 @@ class CarProcessor:
             car_data['vin'] = self.get_yml_identifier(car)
             car_data['offer_id'] = (car.get('id') or '').strip()
             car_data['availability'] = (
-                AVAILABLE_CAR_VALUE if self.get_yml_availability(car) else 'нет в наличии'
+                AVAILABLE_CAR_VALUE if self.get_yml_availability(car) else 'Нет в наличии'
             )
             if 'run' not in car_data and (car.findtext('typePrefix') or '').strip() == 'Новый автомобиль':
                 car_data['run'] = '0'

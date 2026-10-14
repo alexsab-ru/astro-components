@@ -74,7 +74,7 @@ def process_car(car: ET.Element, config, all_duplicates, air_storage_data, eleme
 
     if vin and vin in air_storage_data and air_storage_data.get(vin):
         # Создаем указанное количество дубликатов для машин из JSON
-        duplicates = duplicate_car(car, config, air_storage_data[vin], "в наличии", 0)
+        duplicates = duplicate_car(car, config, air_storage_data[vin], "В наличии", 0)
         all_duplicates.extend(duplicates)
 
 

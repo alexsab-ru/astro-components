@@ -63,7 +63,7 @@ class IncrementUniqueIdTests(unittest.TestCase):
             '<Car>'
             '<Id>CME_77236613</Id>'
             '<VIN>EDEJB31B5TE014832</VIN>'
-            '<Availability>в наличии</Availability>'
+            '<Availability>В наличии</Availability>'
             '</Car>',
         )
         config = {
