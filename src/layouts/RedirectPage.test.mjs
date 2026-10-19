@@ -104,9 +104,9 @@ async function runRedirectScenario({ fetchImpl, metricCallback = false, advanceT
 	return { errors, fetchCalls, href, redirectCount };
 }
 
-test('RedirectPage uses the bounded Yandex Telegram relay fallback', () => {
-	assert.equal(source.includes('https://alexsab.ru/lead/tg/'), false);
-	assert.equal(source.includes("fetch('https://l.alexsab.ru/lead/tg/'"), true);
+test('RedirectPage uses the bounded alexsab.ru Telegram relay fallback', () => {
+	assert.equal(source.includes('https://l.alexsab.ru/lead/tg/'), false);
+	assert.equal(source.includes("fetch('https://alexsab.ru/lead/tg/'"), true);
 	assert.match(source, /relayTimeoutMs = 2000/);
 	assert.match(source, /Promise\.race\(\[relayRequest, relayTimeout\]\)/);
 	assert.match(source, /\.finally\(\(\) => \{\s*clearTimeout\(relayTimeoutId\);\s*saveOrRedirect\(\);/s);
@@ -153,7 +153,7 @@ for (const [name, fetchImpl, advanceTo] of relayCases) {
 		assert.equal(result.href, 'https://t.me/HavalCityTonAutoBot');
 		assert.equal(result.redirectCount, 1);
 		assert.equal(result.fetchCalls.length, 1);
-		assert.equal(result.fetchCalls[0][0], 'https://l.alexsab.ru/lead/tg/');
+		assert.equal(result.fetchCalls[0][0], 'https://alexsab.ru/lead/tg/');
 		assert.deepEqual(
 			JSON.parse(result.fetchCalls[0][1].body),
 			{
@@ -176,6 +176,6 @@ test('relay failure still completes a file download flow exactly once', async ()
 
 	assert.equal(result.href, saveUrl);
 	assert.equal(result.redirectCount, 1);
-	assert.equal(result.fetchCalls.filter(([url]) => url === 'https://l.alexsab.ru/lead/tg/').length, 1);
+	assert.equal(result.fetchCalls.filter(([url]) => url === 'https://alexsab.ru/lead/tg/').length, 1);
 	assert.equal(result.fetchCalls.filter(([url]) => url === saveUrl).length, 1);
 });

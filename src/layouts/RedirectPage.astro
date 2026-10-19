@@ -190,7 +190,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 												reject(new Error('Telegram relay timeout'));
 											}, relayTimeoutMs);
 										});
-										const relayRequest = fetch('https://l.alexsab.ru/lead/tg/', {
+										const relayRequest = fetch('https://alexsab.ru/lead/tg/', {
 											method: 'POST',
 											body: JSON.stringify({
 												message: messageToTelegram,
