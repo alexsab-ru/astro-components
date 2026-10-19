@@ -24,6 +24,8 @@ on:
       - '.github/scripts/config_air_storage-friend.json'
       - '.github/scripts/config_air_storage.json'
       - '.github/scripts/config.py'
+      - '.github/scripts/car_feed_exports.json'
+      - '.github/scripts/car_feed_exports.py'
       - '.github/scripts/getOneXML.py'
       - '.github/scripts/GSheetFetcher.js'
       - '.github/scripts/mergeCarPrices.js'
