@@ -9,6 +9,16 @@
       "input": "public/cars.xml",
       "output": "public/vk_data_cars_car.xml",
       "category": "new"
+    },
+    {
+      "id": "vk_channel_item",
+      "destination": "vk",
+      "format": "channel_item",
+      "input_format": "data_cars_car",
+      "input": "public/cars.xml",
+      "output": "public/vk_channel_item.xml",
+      "category": "new",
+      "defaults_file": "src/data/site/vk_channel_item.json"
     }
   ]
 }

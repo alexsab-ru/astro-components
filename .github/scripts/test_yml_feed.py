@@ -300,6 +300,12 @@ requests.get = offline_response
                 self.assertEqual(car.findtext('max_benefit'), '900000')
                 self.assertEqual(car.findtext('owners_number'), 'Не было владельцев')
                 self.assertEqual(len(car.findall('./images/image')), 2)
+            channel_items = ET.parse(cwd / 'public/vk_channel_item.xml').findall('item')
+            self.assertEqual(len(channel_items), 1)
+            self.assertEqual(channel_items[0].findtext('price'), '5900000 RUB')
+            self.assertEqual(channel_items[0].findtext('sale_price'), '5000000 RUB')
+            self.assertEqual(channel_items[0].findtext('state_of_vehicle'), 'new')
+            self.assertEqual(channel_items[0].findtext('mileage/value'), '0')
             # Destination price projection must not change the native inventory price.
             self.assertEqual(ET.parse(cwd / 'public/cars.xml').findtext('./cars/car/price'), '5900000')
 

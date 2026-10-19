@@ -188,18 +188,148 @@ class CarFeedExportTests(unittest.TestCase):
         self.assertEqual(feeds.load_jobs(config_path), [self.job])
         for entries in ([entry, entry], [{**entry, 'output': entry['input']}],
                         [{**entry, 'destination': 'unknown'}], [{**entry, 'category': 'other'}],
-                        [{**entry, 'unknown': 'field'}]):
+                        [{**entry, 'unknown': 'field'}], [{**entry, 'defaults': []}],
+                        [{**entry, 'defaults_file': 1}]):
             config(entries)
             with self.assertRaises(ValueError):
                 feeds.load_jobs(config_path)
         # A destination and an output format can be added independently of the runner.
         config([{**entry, 'destination': 'another', 'format': 'another_format'}])
         with patch.dict(feeds.WRITERS, {'another_format': feeds.serialize_data_cars_car}), patch.dict(
-            feeds.DESTINATIONS, {'another': feeds.Destination(('another_format',), feeds.prepare_vk, feeds.identify_vk)}):
+            feeds.DESTINATIONS, {'another': feeds.Destination({'another_format': feeds.prepare_vk}, feeds.identify_vk)}):
             jobs = feeds.load_jobs(config_path)
             self.write_inventory([(self.fields, self.images)])
             report = feeds.export_job(jobs[0], self.root / 'reports')
             self.assertEqual(report['exported'], 1)
+
+    def channel_export(self, fields=None, images=None, **job_options):
+        job = replace(self.job, id='vk_channel_item', format='channel_item',
+                      output=self.root / 'vk_channel_item.xml', **job_options)
+        self.export([(self.fields if fields is None else fields,
+                      self.images if images is None else images)], job)
+        return ET.parse(job.output).getroot(), json.loads(
+            (self.root / 'reports/vk_channel_item.json').read_text())
+
+    def test_channel_item_covers_csv_fields_with_nested_xml(self):
+        # Equivalent to the VK CSV columns, with unique headers and valid price ordering.
+        source = {**self.fields, 'state': 'Отличное', 'custom_label': 'Летняя распродажа',
+                  'location.address': '3-я улица Строителей, 55', 'location.country': 'Россия',
+                  'location.region': 'Республика Татарстан', 'location.locality': 'Казань',
+                  'metro.name': 'Проспект Победы'}
+        root, report = self.channel_export(source)
+        self.assertEqual(root.tag, 'channel')
+        self.assertEqual(len(root.findall('item')), 1)
+        car = root.find('item')
+        expected = {
+            'id': 'TEST_VIN_1', 'title': 'Belgee X50+ Престиж 2026',
+            'link': self.fields['url'], 'brand': 'Belgee', 'model': 'X50+',
+            'year': '2026', 'image_link': self.images[0], 'price': '2699990 RUB',
+            'sale_price': '2240000 RUB', 'min_price': '2240000 RUB',
+            'max_price': '2699990 RUB', 'exterior_color': 'СЕРЕБРИСТЫЙ',
+            'mileage/value': '3', 'mileage/unit': 'KM', 'vin': 'TEST_VIN_1',
+            'body_style': 'suv', 'condition': 'excellent', 'state_of_vehicle': 'new',
+            'availability': 'на заказ', 'vehicle_type': 'car_truck',
+            'custom_label_0': 'Летняя распродажа',
+            'location/address': source['location.address'], 'location/country': 'Россия',
+            'location/region': 'Республика Татарстан', 'location/locality': 'Казань',
+            'location/metro/name': 'Проспект Победы',
+        }
+        for key, value in expected.items():
+            self.assertEqual(car.findtext(key), value, key)
+        self.assertLessEqual(len(car.findtext('description')), 256)
+        self.assertNotIn('Длинный рекламный текст', car.findtext('description'))
+        self.assertFalse(report['issues'])
+        for key in ('unique_id', 'mark_id', 'folder_id', 'currency', 'max_discount', 'owners_number', 'images'):
+            self.assertIsNone(car.find(key))
+        for key in ('description', 'availability', 'condition'):
+            self.assertEqual(len(car.findall(key)), 1)
+
+    def test_channel_item_does_not_require_owners_or_vin_with_valid_id(self):
+        fields = {**self.fields, 'unique_id': 'stock-123', 'state_of_vehicle': 'cpo'}
+        del fields['vin']
+        root, report = self.channel_export(fields, category='used')
+        self.assertEqual(report['exported'], 1)
+        self.assertEqual(root.findtext('item/id'), 'stock-123')
+        self.assertEqual(root.findtext('item/state_of_vehicle'), 'cpo')
+        self.assertIsNone(root.find('item/vin'))
+        self.assertTrue(report['issues'][0]['warnings'])
+
+    def test_channel_item_missing_data_is_reported_without_fabrication(self):
+        fields = {**self.fields}
+        for key in ('run', 'body_type', 'availability'):
+            fields.pop(key)
+        root, report = self.channel_export(fields)
+        self.assertEqual(root.findtext('item/mileage/value'), '0')
+        self.assertIsNone(root.find('item/location'))
+        self.assertIsNone(root.find('item/condition'))
+        self.assertIsNone(root.find('item/body_style'))
+        self.assertIn('location.region', ' '.join(report['issues'][0]['warnings']))
+        fields['state_of_vehicle'] = 'used'
+        root, report = self.channel_export(fields)
+        self.assertEqual(report['excluded'], 1)
+        self.assertFalse(root.findall('item'))
+
+    def test_channel_item_validates_required_values_and_mileage(self):
+        for changes in ({'price': ''}, {'url': 'javascript:alert(1)'}, {'mark_id': ''},
+                        {'sale_price': 'bad'}, {'year': ''}, {'folder_id': 'x' * 257}):
+            with self.subTest(changes=changes):
+                root, report = self.channel_export({**self.fields, **changes})
+                self.assertEqual(report['excluded'], 1)
+                self.assertFalse(root.findall('item'))
+        root, report = self.channel_export(images=[])
+        self.assertEqual(report['excluded'], 1)
+        root, _ = self.channel_export({**self.fields, 'run': 'bad'})
+        self.assertIsNone(root.find('item/mileage'))
+        root, _ = self.channel_export({**self.fields, 'mileage.unit': 'mi', 'min_price': '2100000'})
+        self.assertEqual(root.findtext('item/mileage/unit'), 'MI')
+        self.assertEqual(root.findtext('item/min_price'), '2100000 RUB')
+        root, _ = self.channel_export({**self.fields, 'availability': 'транзит'})
+        self.assertEqual(root.findtext('item/availability'), 'на заказ')
+
+    def test_channel_item_price_ranges_are_ordered_and_currency_is_preserved(self):
+        root, report = self.channel_export({**self.fields, 'price': '200', 'sale_price': '250',
+                                           'priceWithDiscount': '250', 'currency': 'USD'})
+        self.assertEqual(root.findtext('item/price'), '200 USD')
+        self.assertEqual(root.findtext('item/sale_price'), '250 USD')
+        self.assertEqual(root.findtext('item/min_price'), '200 USD')
+        self.assertEqual(root.findtext('item/max_price'), '250 USD')
+        root, report = self.channel_export({**self.fields, 'min_price': '3000000', 'max_price': '2000000'})
+        self.assertEqual(report['exported'], 1)
+        self.assertIsNone(root.find('item/min_price'))
+        self.assertIsNone(root.find('item/max_price'))
+        self.assertIn('reversed', ' '.join(report['issues'][0]['warnings']))
+
+    def test_nested_source_and_dealer_defaults_do_not_change_input_or_other_exports(self):
+        defaults_file = self.root / 'dealer.json'
+        defaults_file.write_text(json.dumps({'location.country': 'Россия', 'condition': 'excellent'}))
+        root, report = self.channel_export({**self.fields, 'condition': 'good'},
+            defaults={'location.country': 'Other', 'location.locality': 'Казань'}, defaults_file=defaults_file)
+        self.assertEqual(root.findtext('item/condition'), 'good')
+        self.assertEqual(root.findtext('item/location/country'), 'Россия')
+        self.assertEqual(root.findtext('item/location/locality'), 'Казань')
+        # The source reader understands actual nested XML, too.
+        tree = ET.parse(self.job.input)
+        location = ET.SubElement(tree.find('./cars/car'), 'location')
+        ET.SubElement(location, 'address').text = 'Улица & Дом'
+        metro = ET.SubElement(location, 'metro')
+        ET.SubElement(metro, 'name').text = 'Удельная'
+        tree.write(self.job.input, encoding='utf-8')
+        vehicle = feeds.read_data_cars_car(self.job.input)[0]
+        self.assertEqual(vehicle.fields['location.address'], 'Улица & Дом')
+        self.assertEqual(vehicle.fields['location.metro.name'], 'Удельная')
+        before = self.job.input.read_bytes()
+        job = replace(self.job, id='vk_channel_item', format='channel_item',
+                      output=self.root / 'vk_channel_item.xml', defaults_file=defaults_file)
+        feeds.export_job(job, self.root / 'reports')
+        self.assertEqual(self.job.input.read_bytes(), before)
+        self.assertEqual(ET.parse(job.output).findtext('item/location/address'), 'Улица & Дом')
+        with self.assertRaises(ValueError):
+            feeds.validate_defaults({'location': {'address': 'nested'}}, 'defaults')
+        defaults_file.write_text('{invalid-json')
+        previous = job.output.read_bytes()
+        with self.assertRaises(ValueError):
+            feeds.export_job(job, self.root / 'reports')
+        self.assertEqual(job.output.read_bytes(), previous)
 
     def test_cli_shell_wrapper_and_source_selection(self):
         scripts = Path(__file__).resolve().parent
