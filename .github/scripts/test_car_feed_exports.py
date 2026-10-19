@@ -59,7 +59,7 @@ class CarFeedExportTests(unittest.TestCase):
         self.assertEqual(report['exported'], 1)
         car = cars[0]
         for key, expected in {
-            'unique_id': 'TEST_VIN_1', 'vin': 'TEST_VIN_1', 'price': '2240000',
+            'unique_id': 'TEST_VIN_1', 'vin': 'TEST_VIN_1', 'price': '2699990',
             'sale_price': '2240000', 'max_benefit': '459990',
             'owners_number': 'Не было владельцев', 'color': 'серебряный',
             'availability': 'На заказ', 'body_type': 'Внедорожник', 'run': '3',
@@ -79,7 +79,7 @@ class CarFeedExportTests(unittest.TestCase):
         self.assertEqual(cars[0].findtext('unique_id'), 'stock_1')
         self.assertEqual(cars[0].findtext('vin'), fields['vin'])
 
-    def test_price_precedence_and_invalid_final_price(self):
+    def test_regular_and_discounted_prices_are_validated_independently(self):
         cases = [
             ({'sale_price': '', 'priceWithDiscount': '2300000.50'}, '2300000.50'),
             ({'sale_price': '', 'priceWithDiscount': ''}, '2699990'),
@@ -88,13 +88,19 @@ class CarFeedExportTests(unittest.TestCase):
             ({'sale_price': '1,50', 'priceWithDiscount': ''}, None),
             ({'sale_price': '-1', 'priceWithDiscount': ''}, None),
             ({'sale_price': '2000000'}, None),  # conflicting discounted fields
+            ({'price': ''}, None),  # a discounted price cannot replace the regular price
+            ({'price': 'NaN'}, None),
+            ({'price': '0'}, None),
+            ({'price': '-1'}, None),
+            ({'price': '2699990,50'}, None),
+            ({'price': '2699990.50'}, '2240000'),
         ]
         for changes, expected in cases:
             with self.subTest(changes=changes):
                 cars, report = self.export([({**self.fields, **changes}, self.images)])
                 self.assertEqual(len(cars), 0 if expected is None else 1)
                 if expected:
-                    self.assertEqual(cars[0].findtext('price'), expected)
+                    self.assertEqual(cars[0].findtext('price'), changes.get('price', self.fields['price']))
                     self.assertEqual(cars[0].findtext('sale_price'), expected)
                 else:
                     self.assertTrue(report['issues'][0]['errors'])

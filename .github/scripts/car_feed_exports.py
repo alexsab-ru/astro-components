@@ -152,12 +152,13 @@ def prepare_vk(vehicle: Vehicle, category: str, identities: Counter) -> Tuple[Pr
     if output['url'] and not is_http_url(output['url']):
         errors.append('url: expected an absolute HTTP(S) URL')
     # Native inventory convention: sale_price/priceWithDiscount are final prices.
-    price = source.get('sale_price') or source.get('priceWithDiscount') or source.get('price', '')
+    sale_price = source.get('sale_price') or source.get('priceWithDiscount') or source.get('price', '')
     try:
-        output['price'] = positive_price(price)
+        output['price'] = positive_price(source.get('price', ''))
+        output['sale_price'] = positive_price(sale_price)
         if source.get('sale_price') and source.get('priceWithDiscount'):
             other = positive_price(source['priceWithDiscount'])
-            if Decimal(output['price']) != Decimal(other):
+            if Decimal(output['sale_price']) != Decimal(other):
                 errors.append('price: sale_price and priceWithDiscount disagree')
     except ValueError as error:
         errors.append(str(error))
@@ -180,7 +181,6 @@ def prepare_vk(vehicle: Vehicle, category: str, identities: Counter) -> Tuple[Pr
         errors.append('images/image: at least one HTTP(S) image URL is required')
     if errors:
         return PreparedVehicle(output, images), errors, warnings
-    output['sale_price'] = output['price']
     benefit = source.get('max_discount', '')
     if re.fullmatch(r'[0-9]+(?:\.[0-9]+)?', benefit):
         output['max_benefit'] = format(Decimal(benefit), 'f')
