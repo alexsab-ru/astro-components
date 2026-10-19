@@ -60,6 +60,7 @@ class CarFeedExportTests(unittest.TestCase):
         car = cars[0]
         for key, expected in {
             'unique_id': 'TEST_VIN_1', 'vin': 'TEST_VIN_1', 'price': '2240000',
+            'sale_price': '2240000', 'max_benefit': '459990',
             'owners_number': 'Не было владельцев', 'color': 'серебряный',
             'availability': 'На заказ', 'body_type': 'Внедорожник', 'run': '3',
         }.items():
@@ -68,7 +69,7 @@ class CarFeedExportTests(unittest.TestCase):
         self.assertFalse(car.findtext('description').isupper())
         self.assertFalse(car.findtext('description').islower())
         self.assertEqual([image.text for image in car.findall('images/image')], self.images)
-        for native_key in ('sale_price', 'priceWithDiscount', 'max_discount', 'complectation_name'):
+        for native_key in ('priceWithDiscount', 'max_discount', 'complectation_name'):
             self.assertIsNone(car.find(native_key))
 
     def test_short_description_xml_escaping_and_id_preserved(self):
@@ -94,8 +95,22 @@ class CarFeedExportTests(unittest.TestCase):
                 self.assertEqual(len(cars), 0 if expected is None else 1)
                 if expected:
                     self.assertEqual(cars[0].findtext('price'), expected)
+                    self.assertEqual(cars[0].findtext('sale_price'), expected)
                 else:
                     self.assertTrue(report['issues'][0]['errors'])
+
+    def test_max_benefit_accepts_zero_and_omits_invalid_optional_values(self):
+        for value, expected in (('0', '0'), ('459990.50', '459990.50'),
+                                ('', None), (None, None), ('-1', None),
+                                ('NaN', None), ('1,50', None), ('1e5', None)):
+            with self.subTest(value=value):
+                fields = {**self.fields, 'max_discount': value}
+                if value is None:
+                    del fields['max_discount']
+                cars, report = self.export([(fields, self.images)])
+                self.assertEqual(report['exported'], 1)
+                self.assertEqual(cars[0].findtext('max_benefit'), expected)
+                self.assertEqual(bool(report['issues']), bool(value) and expected is None)
 
     def test_conflicting_ids_and_missing_photos_are_excluded(self):
         records = [(self.fields, self.images), ({**self.fields, 'color': 'Белый'}, self.images),

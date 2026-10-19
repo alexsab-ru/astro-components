@@ -180,6 +180,12 @@ def prepare_vk(vehicle: Vehicle, category: str, identities: Counter) -> Tuple[Pr
         errors.append('images/image: at least one HTTP(S) image URL is required')
     if errors:
         return PreparedVehicle(output, images), errors, warnings
+    output['sale_price'] = output['price']
+    benefit = source.get('max_discount', '')
+    if re.fullmatch(r'[0-9]+(?:\.[0-9]+)?', benefit):
+        output['max_benefit'] = format(Decimal(benefit), 'f')
+    elif benefit:
+        warnings.append('max_benefit: invalid optional max_discount omitted')
     color = source.get('color', '').lower().replace('ё', 'е')
     color = VK_COLOR_ALIASES.get(color, color)
     if color in VK_COLORS:

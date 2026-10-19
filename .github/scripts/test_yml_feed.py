@@ -296,6 +296,8 @@ requests.get = offline_response
             self.assertEqual(len({car.findtext('unique_id') for car in vk_cars}), 1)
             for car in vk_cars:
                 self.assertEqual(car.findtext('price'), '5000000')
+                self.assertEqual(car.findtext('sale_price'), '5000000')
+                self.assertEqual(car.findtext('max_benefit'), '900000')
                 self.assertEqual(car.findtext('owners_number'), 'Не было владельцев')
                 self.assertEqual(len(car.findall('./images/image')), 2)
             # Destination price projection must not change the native inventory price.
