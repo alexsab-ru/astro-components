@@ -44,6 +44,7 @@ const linksToSkip = [
   'https://www.cbr.ru/statistics/insurance/ssd_stat/',
   'https://sovcombank.ru/',
   'https://www.alfastrah.ru/',
+  'https://www.tbank.ru/loans/auto-loan/programs/',
   /_astro\//
 ];
 
