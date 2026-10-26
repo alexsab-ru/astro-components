@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {
 	getFeatureFlag,
+	getHeaderCallbackMode,
 	isCreditEnabled,
 	isHeaderTransparentEnabled,
 } from './features.js';
@@ -40,5 +41,21 @@ assert.equal(
 	false,
 	'header transparent feature stays disabled by default'
 );
+
+for (const mode of ['both', 'only_phone', 'only_callback']) {
+	assert.equal(getHeaderCallbackMode({features: {header_callback: mode}}), mode);
+	assert.equal(getHeaderCallbackMode({header_callback: mode}), mode);
+}
+
+assert.equal(getHeaderCallbackMode({}), 'both', 'show both controls by default');
+assert.equal(
+	getHeaderCallbackMode({features: {header_callback: 'only_phone'}, header_callback: 'both'}),
+	'only_phone',
+	'nested header mode takes precedence'
+);
+assert.equal(getHeaderCallbackMode({features: {header_callback: false}}), 'only_phone');
+assert.equal(getHeaderCallbackMode({features: {header_callback: true}}), 'only_callback');
+assert.equal(getHeaderCallbackMode({features: {header_callback: null}}), 'both');
+assert.equal(getHeaderCallbackMode({features: {header_callback: 'unknown'}}), 'both');
 
 console.log('feature flag tests passed');

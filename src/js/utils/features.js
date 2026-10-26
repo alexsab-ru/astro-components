@@ -22,3 +22,14 @@ export function isCreditEnabled(settings = {}) {
 export function isHeaderTransparentEnabled(settings = {}) {
 	return getFeatureFlag(settings, 'is_header_transparent', false) === true;
 }
+
+/** @returns {'both' | 'only_phone' | 'only_callback'} */
+export function getHeaderCallbackMode(settings = {}) {
+	const mode = getFeatureFlag(settings, 'header_callback', 'both');
+
+	// Keep older dealer data working while template updates propagate to forks.
+	if (mode === false || mode === 'only_phone') return 'only_phone';
+	if (mode === true || mode === 'only_callback') return 'only_callback';
+
+	return 'both';
+}
