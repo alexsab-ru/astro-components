@@ -1,4 +1,6 @@
 ---
+import type { FeedbackFormImage } from '@/blocks/forms/feedback-form/FeedbackFormGallery.astro';
+
 type TImage = {
 	url: string;
 	title?: string;
@@ -50,6 +52,8 @@ interface Props {
 			subtitle?: string;
 			description?: string;
 			imageUrl?: string;
+			images?: (string | FeedbackFormImage)[];
+			labelBtn?: string;
 			dataFormName?: string;
 			showModelSelect?: boolean;
 		};

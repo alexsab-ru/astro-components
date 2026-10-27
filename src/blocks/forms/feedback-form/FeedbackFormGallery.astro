@@ -1,0 +1,97 @@
+---
+export interface FeedbackFormImage {
+	imageUrl: string;
+	alt?: string;
+}
+
+interface Props {
+	images: FeedbackFormImage[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="feedback-form-gallery" data-count={images.length}>
+	{images.map((image) => (
+		<div class="feedback-form-gallery__item">
+			<img
+				src={image.imageUrl}
+				alt={image.alt ?? ''}
+				loading="lazy"
+				decoding="async"
+			/>
+		</div>
+	))}
+</div>
+
+<style>
+	.feedback-form-gallery {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-auto-rows: clamp(7rem, 20vw, 15rem);
+		gap: clamp(0.5rem, 1.2vw, 1rem);
+		min-width: 0;
+	}
+
+	.feedback-form-gallery__item {
+		min-width: 0;
+		min-height: 0;
+		overflow: hidden;
+	}
+
+	.feedback-form-gallery__item img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.feedback-form-gallery__item:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
+	}
+
+	.feedback-form-gallery[data-count='1'],
+	.feedback-form-gallery[data-count='2'],
+	.feedback-form-gallery[data-count='3'],
+	.feedback-form-gallery[data-count='4'] {
+		aspect-ratio: 3 / 2;
+		grid-auto-rows: minmax(0, 1fr);
+	}
+
+	.feedback-form-gallery[data-count='1'] {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.feedback-form-gallery[data-count='3'] .feedback-form-gallery__item:first-child {
+		grid-row: span 2;
+	}
+
+	.feedback-form-gallery[data-count='3'] .feedback-form-gallery__item:last-child {
+		grid-column: auto;
+	}
+
+	.feedback-form-gallery[data-count='4'] {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	/* Два широких и два узких кадра: портрет, пейзаж / пейзаж, портрет. */
+	.feedback-form-gallery[data-count='4'] .feedback-form-gallery__item:nth-child(1) {
+		grid-column: 2 / span 2;
+		grid-row: 1;
+	}
+
+	.feedback-form-gallery[data-count='4'] .feedback-form-gallery__item:nth-child(2) {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.feedback-form-gallery[data-count='4'] .feedback-form-gallery__item:nth-child(3) {
+		grid-column: 1 / span 2;
+		grid-row: 2;
+	}
+
+	.feedback-form-gallery[data-count='4'] .feedback-form-gallery__item:nth-child(4) {
+		grid-column: 3;
+		grid-row: 2;
+	}
+</style>
