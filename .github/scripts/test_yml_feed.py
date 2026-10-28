@@ -178,6 +178,22 @@ class YmlFeedTests(unittest.TestCase):
         self.assertFalse(self.processor.should_skip_car_for_availability(ET.fromstring('<car><availability>В наличии</availability></car>')))
         self.assertTrue(self.processor.should_skip_car_for_availability(ET.fromstring('<car><availability>В пути</availability></car>')))
 
+    def test_text_availability_is_case_insensitive_in_all_xml_formats(self):
+        self.processor.show_only_available_cars = True
+        for source_type in ('data_cars_car', 'catalog_vehicles_vehicle', 'vehicles_vehicle',
+                            'ads_ad', 'carcopy_offers_offer'):
+            self.processor.update_source_type(source_type)
+            field = self.processor.config['field_mapping']['availability']
+            for value, skip in (('В наличии', False), ('в наличии', False),
+                                (' В НАЛИЧИИ ', False), ('В пути', True), ('', True)):
+                with self.subTest(source_type=source_type, value=value):
+                    car = ET.Element('car')
+                    ET.SubElement(car, field).text = value
+                    self.assertEqual(self.processor.should_skip_car_for_availability(car), skip)
+            self.assertTrue(self.processor.should_skip_car_for_availability(ET.Element('car')))
+        self.processor.show_only_available_cars = False
+        self.assertFalse(self.processor.should_skip_car_for_availability(ET.Element('car')))
+
     def test_used_car_mileage_is_preserved(self):
         self.offer.find('typePrefix').text = 'Автомобиль с пробегом'
         ET.SubElement(self.offer, 'param', name='Пробег').text = '120000'

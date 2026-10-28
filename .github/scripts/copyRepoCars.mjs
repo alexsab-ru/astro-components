@@ -131,3 +131,30 @@ if (copiedCollections === 0) {
 		'В исходной репе нет коллекций src/content/cars или src/content/used_cars.',
 	);
 }
+
+// Prices must come from the same inventory snapshot as the copied cards.
+const pricesFile = 'dealer-models_cars_price.json';
+const sourcePricesPath = [
+	path.join(resolvedRepoPath, 'src/data', pricesFile),
+	path.join(resolvedRepoPath, 'src/data/site', pricesFile),
+].find(existsSync);
+const targetPricesPath = path.join(projectRoot, 'src/data', pricesFile);
+
+if (sourcePricesPath) {
+	const temporaryPricesPath = `${targetPricesPath}.repo-copy-${process.pid}`;
+	try {
+		mkdirSync(path.dirname(targetPricesPath), { recursive: true });
+		cpSync(sourcePricesPath, temporaryPricesPath);
+		renameSync(temporaryPricesPath, targetPricesPath);
+	} catch (error) {
+		rmSync(temporaryPricesPath, { force: true });
+		fail(`Не удалось скопировать цены автомобилей: ${error.message}`);
+	}
+	console.log(`✅ Цены автомобилей: ${sourcePricesPath} → ${targetPricesPath}`);
+} else {
+	// Do not reuse prices left by a different site or an earlier feed run.
+	rmSync(targetPricesPath, { force: true });
+	console.warn(
+		`⚠️ В исходной репе нет ${pricesFile}; сохранённые локальные цены фида удалены.`,
+	);
+}

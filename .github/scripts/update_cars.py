@@ -379,7 +379,7 @@ class CarProcessor:
             elem = car.find(field_name)
             if elem is not None and elem.text:
                 availability = elem.text.strip().lower()
-                return availability != AVAILABLE_CAR_VALUE
+                return availability != AVAILABLE_CAR_VALUE.lower()
 
             attribute_value = car.get(field_name)
             if attribute_value is not None:
