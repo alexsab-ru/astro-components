@@ -9,10 +9,11 @@ const { name, value, id, filterType, ...rest } = Astro.props;
 const inputValue = value || name;
 // HTML id cannot contain spaces or commas. PageSpeed/axe treat
 // ids like "atlas, ii" as unlabeled even when a wrapping <label> exists.
+// Preserve Cyrillic letters so restyled generations keep distinct ids.
 const inputId = `${filterType}-${id || inputValue}`
 	.trim()
 	.toLowerCase()
-	.replace(/[^a-z0-9_-]+/g, '-')
+	.replace(/[^\p{L}\p{N}_-]+/gu, '-')
 	.replace(/^-+|-+$/g, '');
 ---
 
