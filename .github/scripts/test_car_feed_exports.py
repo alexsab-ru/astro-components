@@ -72,6 +72,18 @@ class CarFeedExportTests(unittest.TestCase):
         for native_key in ('priceWithDiscount', 'max_discount', 'complectation_name'):
             self.assertIsNone(car.find(native_key))
 
+    def test_availability_case_does_not_change_either_vk_export(self):
+        for status, expected in (('В наличии', 'В наличии'), ('В пути', 'На заказ')):
+            for value in (status, status.lower(), status.upper()):
+                with self.subTest(availability=value):
+                    fields = {**self.fields, 'availability': value}
+                    cars, report = self.export([(fields, self.images)])
+                    self.assertEqual(report['exported'], 1)
+                    self.assertEqual(cars[0].findtext('availability'), expected)
+                    channel, report = self.channel_export(fields)
+                    self.assertEqual(report['exported'], 1)
+                    self.assertEqual(channel.findtext('item/availability'), expected.lower())
+
     def test_short_description_xml_escaping_and_id_preserved(self):
         fields = {**self.fields, 'unique_id': 'stock_1', 'description': 'Belgee X50+ & специальная цена'}
         cars, _ = self.export([(fields, self.images)])

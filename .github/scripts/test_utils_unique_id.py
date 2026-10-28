@@ -87,7 +87,7 @@ class IncrementUniqueIdTests(unittest.TestCase):
         )
         self.assertEqual(
             [duplicate.findtext('Availability') for duplicate in duplicates],
-            ['в пути', 'в пути'],
+            ['В пути', 'В пути'],
         )
 
 
