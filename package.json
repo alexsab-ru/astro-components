@@ -143,7 +143,7 @@
     "\n# https://alexsab.ru": ""
   },
   "dependencies": {
-    "@alexsab-ru/scripts": "^0.20.1",
+    "@alexsab-ru/scripts": "^0.21.0",
     "@astrojs/alpinejs": "^0.4.9",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/react": "^4.4.2",
