@@ -21,7 +21,7 @@ from collections import defaultdict
 
 
 # Латинские слова:
-#   - с дефисами/точками внутри (Wi-Fi, e-mail, cdn.alexsab.ru)
+#   - с дефисами/точками внутри (Wi-Fi, e-mail, img.upspace.ru)
 #   - обычные слова 2+ букв
 ENGLISH_WORD_RE = re.compile(
     r'(?<!\w)[a-zA-Z][a-zA-Z0-9]*(?:[-\.][a-zA-Z][a-zA-Z0-9]*)+(?!\w)'  # Wi-Fi, alexsab.ru

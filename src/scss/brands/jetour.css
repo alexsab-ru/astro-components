@@ -2,7 +2,7 @@
    Map tokens to classes like text-accent-500, bg-accent-500, etc. */
 @font-face {
     font-family: 'Manrope';
-    src: url('https://cdn.alexsab.ru/fonts/Manrope/Manrope-Regular.woff2') format('woff2');
+    src: url('https://img.upspace.ru/fonts/Manrope/Manrope-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -10,7 +10,7 @@
 
 @font-face {
     font-family: 'Manrope';
-    src: url('https://cdn.alexsab.ru/fonts/Manrope/Manrope-Medium.woff2') format('woff2');
+    src: url('https://img.upspace.ru/fonts/Manrope/Manrope-Medium.woff2') format('woff2');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -18,7 +18,7 @@
 
 @font-face {
     font-family: 'Manrope';
-    src: url('https://cdn.alexsab.ru/fonts/Manrope/Manrope-Bold.woff2') format('woff2');
+    src: url('https://img.upspace.ru/fonts/Manrope/Manrope-Bold.woff2') format('woff2');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -26,7 +26,7 @@
 
 @font-face {
   font-family: "Russo One";
-  src: url("https://cdn.alexsab.ru/fonts/RussoOne/RussoOne-Regular.ttf");
+  src: url("https://img.upspace.ru/fonts/RussoOne/RussoOne-Regular.ttf");
   font-weight: 400;
   font-style: normal;
   font-display: swap;

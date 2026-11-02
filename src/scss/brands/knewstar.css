@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("https://cdn.alexsab.ru/fonts/OpenSans/opensans-light.woff2");
+  src: url("https://img.upspace.ru/fonts/OpenSans/opensans-light.woff2");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -11,7 +11,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("https://cdn.alexsab.ru/fonts/OpenSans/opensans-regular.woff2");
+  src: url("https://img.upspace.ru/fonts/OpenSans/opensans-regular.woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -19,7 +19,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("https://cdn.alexsab.ru/fonts/OpenSans/opensans-semibold.woff2");
+  src: url("https://img.upspace.ru/fonts/OpenSans/opensans-semibold.woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -27,7 +27,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("https://cdn.alexsab.ru/fonts/OpenSans/opensans-bold.woff2");
+  src: url("https://img.upspace.ru/fonts/OpenSans/opensans-bold.woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

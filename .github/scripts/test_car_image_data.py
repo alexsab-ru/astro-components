@@ -19,7 +19,7 @@ class CarImageDataTests(unittest.TestCase):
     def setUp(self):
         self.image_sets = [
             {
-                size: f'https://cdn.alexsab.ru/cars/example.test/new/test-car/{index}/{size}.webp'
+                size: f'https://img.upspace.ru/cars/example.test/new/test-car/{index}/{size}.webp'
                 for size in ('full', 'large', 'medium', 'small', 'thumb')
             }
             for index in range(7)

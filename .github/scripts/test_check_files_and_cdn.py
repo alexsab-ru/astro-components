@@ -26,7 +26,7 @@ def test_check_local_files():
 
 def test_cdn_check(brand, folder, color_image):
     print("\nТест 5: Проверка CDN")
-    cdn_path = f"https://cdn.alexsab.ru/b/{brand.lower()}/img/models/{folder}/colors/{color_image}"
+    cdn_path = f"https://img.upspace.ru/b/{brand.lower()}/img/models/{folder}/colors/{color_image}"
     try:
         response = requests.head(cdn_path)
         if response.status_code == 200:

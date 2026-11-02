@@ -25,7 +25,7 @@ const DEFAULT_LINK = '#common-modal';
 // Ссылки на логотипы лежат в layered-каталоге брендов (astro-json/data/brands),
 // который downloadCommonRepo кладёт в src/data/common/brands. Каталога может не быть
 // (данные не скачаны) или у бренда может не быть заполненного logo — тогда работает
-// фолбэк на стандартные имена файлов в cdn.alexsab.ru/logo.
+// фолбэк на стандартные имена файлов в img.upspace.ru/logo.
 const brandDefaults = import.meta.glob<{ default: Record<string, any> }>(
   '/src/data/common/brands/*/defaults.json',
   { eager: true }
@@ -82,8 +82,8 @@ const items = brands.map((brand) => {
     id: brand,
     displayName,
     count: brandCounts[brand] ?? 0,
-    colorLogo: defaults?.logo?.color || `https://cdn.alexsab.ru/logo/${brand}/logo-color.svg`,
-    whiteLogo: defaults?.logo?.white || `https://cdn.alexsab.ru/logo/${brand}/logo-footer.svg`,
+    colorLogo: defaults?.logo?.color || `https://img.upspace.ru/logo/${brand}/logo-color.svg`,
+    whiteLogo: defaults?.logo?.white || `https://img.upspace.ru/logo/${brand}/logo-footer.svg`,
     href: link?.href ?? DEFAULT_LINK,
     isPopup: link?.isPopup ?? true,
     target: link?.target,

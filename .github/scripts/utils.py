@@ -378,7 +378,7 @@ def process_description(desc_text):
 
 
 THUMB_REQUEST_TIMEOUT = (5, 15)
-DEFAULT_CAR_IMAGE = "https://cdn.alexsab.ru/errors/404.webp"
+DEFAULT_CAR_IMAGE = "https://img.upspace.ru/errors/404.webp"
 
 
 def _normalize_header_value(value):
@@ -565,7 +565,7 @@ def _is_mirror_cdn_image_url(image_url, config):
     if not image_url:
         return False
 
-    cdn_base_url = config.get('mirror_cdn_base_url') or 'https://cdn.alexsab.ru'
+    cdn_base_url = config.get('mirror_cdn_base_url') or 'https://img.upspace.ru'
     remote_prefix = (config.get('mirror_remote_prefix') or 'cars').strip('/')
     parsed_url = urllib.parse.urlparse(str(image_url))
     parsed_base = urllib.parse.urlparse(cdn_base_url)
@@ -614,7 +614,7 @@ def _apply_car_images_to_data(data, incoming_images, friendly_url, current_thumb
         mirror_config = MirrorConfig(
             site=config['domain'],
             category=config.get('category_type') or ('used' if config.get('path_car_page') == '/used_cars/' else 'new'),
-            cdn_base_url=config.get('mirror_cdn_base_url') or 'https://cdn.alexsab.ru',
+            cdn_base_url=config.get('mirror_cdn_base_url') or 'https://img.upspace.ru',
             remote_prefix=config.get('mirror_remote_prefix') or 'cars',
             local_root=Path(config.get('mirror_local_root') or 'tmp/image_mirror'),
             probe_count=int(config.get('mirror_probe_count') or 3),

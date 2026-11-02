@@ -167,7 +167,7 @@ for (const [name, fetchImpl, advanceTo] of relayCases) {
 }
 
 test('relay failure still completes a file download flow exactly once', async () => {
-	const saveUrl = 'https://cdn.alexsab.ru/bot/HavalCityTonAutoBot/offer.pdf';
+	const saveUrl = 'https://img.upspace.ru/bot/HavalCityTonAutoBot/offer.pdf';
 	const result = await runRedirectScenario({
 		advanceTo: 4000,
 		fetchImpl: () => Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({}) }),

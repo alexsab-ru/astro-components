@@ -85,7 +85,7 @@ class CarProcessor:
         # Задача: по числовым ID (generation/modification/complectation)
         # получить человекочитаемые значения из внешнего API и подставить в данные.
         self._lookup_cache: Dict[Tuple[str, str], Optional[str]] = {}
-        self._lookup_base_url = "https://cdn.alexsab.ru/getAutocatalog/index.php"
+        self._lookup_base_url = "https://img.upspace.ru/getAutocatalog/index.php"
 
         # --- Поля, требующие обязательной нормализации значений ---
         # Документируем: расширяем список по мере появления новых кейсов,
@@ -742,9 +742,9 @@ class CarProcessor:
         и возвращает человекочитаемое имя из атрибута `name` первого подходящего тега.
 
         Пример запроса:
-        - generation: https://cdn.alexsab.ru/getAutocatalog/index.php?lookup=1&type=generation&id=332036
-        - modification: https://cdn.alexsab.ru/getAutocatalog/index.php?lookup=1&type=modification&id=18488230
-        - complectation: https://cdn.alexsab.ru/getAutocatalog/index.php?lookup=1&type=complectation&id=18791852
+        - generation: https://img.upspace.ru/getAutocatalog/index.php?lookup=1&type=generation&id=332036
+        - modification: https://img.upspace.ru/getAutocatalog/index.php?lookup=1&type=modification&id=18488230
+        - complectation: https://img.upspace.ru/getAutocatalog/index.php?lookup=1&type=complectation&id=18791852
 
         Возвращаемое значение кэшируется по ключу (kind, id_value).
         """
@@ -1311,7 +1311,7 @@ def main():
     parser.add_argument('--skip_check_thumb', action="store_true", help='Skip check thumbnails')
     parser.add_argument('--mirror_images', action="store_true", help='Mirror external car images into CDN layout')
     parser.add_argument('--mirror_local_root', default='tmp/image_mirror', help='Local root for mirrored CDN image files')
-    parser.add_argument('--mirror_cdn_base_url', default=os.getenv('CDN_BASE_URL', 'https://cdn.alexsab.ru'), help='CDN base URL for mirrored images')
+    parser.add_argument('--mirror_cdn_base_url', default=os.getenv('CDN_BASE_URL', 'https://img.upspace.ru'), help='CDN base URL for mirrored images')
     parser.add_argument('--mirror_remote_prefix', default='cars', help='Remote URL/path prefix for mirrored images')
     parser.add_argument('--mirror_probe_count', default=3, help='Number of first non-Avito images to probe before probing all')
     # Лимиты и пауза читаются с приоритетом os.environ > .env > src/data/site/env.json,

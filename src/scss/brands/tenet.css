@@ -2,9 +2,9 @@
    Map tokens to classes like text-accent-500, bg-accent-500, font-sans, rounded-btn, etc. */
 @font-face {
     font-family: "TENET Sans";
-    src: url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-Regular.woff2) format("woff2"),
-         url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-Regular.woff) format("woff"),
-         url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-Regular.otf) format("opentype");
+    src: url(https://img.upspace.ru/fonts/tenet/TENETSans-Regular.woff2) format("woff2"),
+         url(https://img.upspace.ru/fonts/tenet/TENETSans-Regular.woff) format("woff"),
+         url(https://img.upspace.ru/fonts/tenet/TENETSans-Regular.otf) format("opentype");
     font-weight: 400;
     font-style: normal;
     font-display: swap
@@ -12,9 +12,9 @@
 
 @font-face {
     font-family: "TENET Sans";
-    src: url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-SemiExpandedBold.woff2) format("woff2"),
-         url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-SemiExpandedBold.woff) format("woff"),
-         url(https://cdn.alexsab.ru/fonts/tenet/TENETSans-SemiExpandedBold.otf) format("opentype");
+    src: url(https://img.upspace.ru/fonts/tenet/TENETSans-SemiExpandedBold.woff2) format("woff2"),
+         url(https://img.upspace.ru/fonts/tenet/TENETSans-SemiExpandedBold.woff) format("woff"),
+         url(https://img.upspace.ru/fonts/tenet/TENETSans-SemiExpandedBold.otf) format("opentype");
     font-weight: 700;
     font-style: normal;
     font-display: swap

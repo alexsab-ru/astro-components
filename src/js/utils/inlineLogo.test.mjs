@@ -41,18 +41,18 @@ test('fetches trusted SVG once, supports URL query and distinct instances', asyn
 		calls += 1;
 		return new Response('<svg viewBox="0 0 1 1"><path id="p"/></svg>');
 	});
-	const src = 'https://cdn.alexsab.ru/logo/test-inline.svg?v=2';
+	const src = 'https://img.upspace.ru/logo/test-inline.svg?v=2';
 	const brand = await getInlineLogo(src, { instance: 'brand' });
 	const dealer = await getInlineLogo(src, { instance: 'dealer' });
 	assert.equal(calls, 1);
 	assert.ok(brand && dealer);
 	assert.notEqual(brand, dealer);
 	assert.equal(await getInlineLogo('https://example.com/logo.svg'), null);
-	assert.equal(await getInlineLogo('https://cdn.alexsab.ru/logo/test.png'), null);
+	assert.equal(await getInlineLogo('https://img.upspace.ru/logo/test.png'), null);
 	assert.equal(calls, 1);
 });
 
 test('remote failure falls back without breaking page rendering', async (t) => {
 	t.mock.method(globalThis, 'fetch', async () => { throw new Error('offline'); });
-	assert.equal(await getInlineLogo('https://cdn.alexsab.ru/logo/offline.svg'), null);
+	assert.equal(await getInlineLogo('https://img.upspace.ru/logo/offline.svg'), null);
 });

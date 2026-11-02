@@ -26,7 +26,7 @@ from PIL import Image, ImageOps
 
 REQUEST_TIMEOUT = (8, 30)
 DEFAULT_REMOTE_PREFIX = "cars"
-DEFAULT_CDN_BASE_URL = "https://cdn.alexsab.ru"
+DEFAULT_CDN_BASE_URL = "https://img.upspace.ru"
 DEFAULT_LOCAL_ROOT = "tmp/image_mirror"
 DEFAULT_PROBE_COUNT = 3
 DEFAULT_ENV_FILE = ".env"

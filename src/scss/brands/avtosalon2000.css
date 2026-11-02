@@ -3,11 +3,11 @@
    Map tokens to classes like text-accent-500, bg-accent-500, font-sans, rounded-btn, etc. */
 
 /* На avtosalon2000.ru используется Graphik LCG (коммерческая лицензия, self-hosted
-   на их домене). На cdn.alexsab.ru её нет, хотлинк с чужого домена не ставим —
+   на их домене). На img.upspace.ru её нет, хотлинк с чужого домена не ставим —
    берём Montserrat: та же геометрическая гротескная логика, есть на CDN. */
 @font-face {
     font-family: "Montserrat";
-    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Regular.woff2");
+    src: url("https://img.upspace.ru/fonts/Montserrat/Montserrat-Regular.woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -15,7 +15,7 @@
 
 @font-face {
     font-family: "Montserrat";
-    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Medium.woff2");
+    src: url("https://img.upspace.ru/fonts/Montserrat/Montserrat-Medium.woff2");
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -23,7 +23,7 @@
 
 @font-face {
     font-family: "Montserrat";
-    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-SemiBold.woff2");
+    src: url("https://img.upspace.ru/fonts/Montserrat/Montserrat-SemiBold.woff2");
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -31,7 +31,7 @@
 
 @font-face {
     font-family: "Montserrat";
-    src: url("https://cdn.alexsab.ru/fonts/Montserrat/Montserrat-Bold.woff2");
+    src: url("https://img.upspace.ru/fonts/Montserrat/Montserrat-Bold.woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;

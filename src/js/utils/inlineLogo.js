@@ -4,7 +4,7 @@ import path from 'node:path';
 import { optimize } from 'svgo';
 
 const MAX_BYTES = 128 * 1024;
-const remoteHosts = new Set(['cdn.alexsab.ru', 'alexsab.ru']);
+const remoteHosts = new Set(['img.upspace.ru', 'alexsab.ru']);
 const cache = new Map();
 const tags = new Set([
 	'svg', 'g', 'path', 'defs', 'rect', 'circle', 'ellipse', 'line',
