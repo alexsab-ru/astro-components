@@ -34,6 +34,8 @@ DEFAULT_ENV_JSON_FILE = "src/data/site/env.json"
 DEFAULT_AUTOLOAD_DOWNLOAD_DELAY_SECONDS = 1.0
 DEFAULT_MAX_NEW_IMAGES_PER_CAR = 5
 DEFAULT_AVITO_AUTOLOAD_MAX_NEW_PER_CAR = 1
+# Temporary outage workaround: remove when the legacy CDN is available again.
+DISABLED_SOURCE_HOSTS = {"cdn.alexsab.ru"}
 
 IMAGE_SIZES = {
     "full": 1920,
@@ -451,6 +453,23 @@ class ImageMirror:
                 index,
                 source_url,
             )
+            if (urlparse(source_url).hostname or "").lower() in DISABLED_SOURCE_HOSTS:
+                # Keep an existing mirror without HEAD/GET, including when another
+                # source in this car triggers force_probe_all below.
+                if existing and isinstance(existing.get("cdn"), dict):
+                    prepared_images.append({
+                        "index": index,
+                        "source_url": source_url,
+                        "metadata": {
+                            "etag": existing.get("etag"),
+                            "last_modified": existing.get("last_modified"),
+                            "content_length": existing.get("content_length"),
+                        },
+                        "version": existing.get("version"),
+                        "existing": existing,
+                        "force_keep_existing": True,
+                    })
+                continue
             try:
                 metadata = self.inspect_source(source_url, index)
             except requests.RequestException as error:
@@ -502,7 +521,7 @@ class ImageMirror:
             existing = item["existing"]
             force_keep_existing = item["force_keep_existing"]
 
-            if force_probe_all and index >= self.config.probe_count and not is_avito_autoload_url(source_url):
+            if force_probe_all and not force_keep_existing and index >= self.config.probe_count and not is_avito_autoload_url(source_url):
                 try:
                     metadata = self.inspect_source(source_url, index, force=True)
                     version = source_signature(source_url, metadata)
