@@ -2,7 +2,6 @@
 import Layout from '@/layouts/Layout.astro';
 import { ChatWidget } from '@/react/ChatWidget/ChatWidget-v2';
 import { USPSection } from '@/react/USPSection';
-import Banner from '@/blocks/banner/Banner.astro'
 import siteSettings from '@/data/site/settings.json';
 import modelsData from '@/data/site/models.json';
 import { getModelBrandDisplayName, getModelTitle } from '@/js/utils/modelFields';
@@ -18,33 +17,6 @@ const chatConfig: any = (Object.values(chatFiles)[0] as any)?.default || { setti
 
 const { models } = modelsData;
 const visibleModels = models.filter(isModelVisible);
-const banners = [
-    {
-        "id": 1,
-        "show": true,
-        "type": "video",
-        "view": "popup-link",
-        "video": {
-            "desktop": "https://alexsab.ru/video/jetour-dashing-compress.mp4"
-        },
-        "image": {
-            "desktop": "https://img.upspace.ru/models/default-model-bg.webp"
-        },
-        "title": "Заголовок баннера до 31.08.2024",
-        "descr": "Подзаголовок баннера может быть длиннее или короче за 1 234 567 ₽",
-        "btn": "Онлайн запись",
-        "btnUrl": "#common-modal",
-        "dataTitle": "Онлайн запись",
-        "dataFormName": "Онлайн запись. Баннер",
-        "badge": {
-            "autoname": "Jetour Dashing",
-            "title": "Ежегодная национальная премия",
-            "descr": "Победитель номинации <br>«новинка в&nbsp;массовом сегменте»",
-            "image": "https://jetour-alpha.ru/img/badge-4x4-2024.png"
-        },
-        "autoplay": 6000
-    },
-];
 // Fallback: берём brand/dealer/legalCityWhere из settings.json если не заданы в chat-landing.json
 const chatSettings = chatConfig.settings || {};
 const mergedSettings = {
@@ -96,7 +68,6 @@ const config = {
     logoNoLink={true}
 >
 
-<!-- <Banner banners={banners} /> -->
 
 <section class="pb-14!">
     <div class="container">

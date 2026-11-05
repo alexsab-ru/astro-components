@@ -1,6 +1,7 @@
 import fs from 'fs';
 import dns from 'node:dns';
 import dotenv from 'dotenv';
+import { loadLinkPolicy, matchesSkipRule, normalizeHost } from './linkPolicy.mjs';
 
 // Подавляем warning от устаревшего builtin punycode, который тянет node-fetch
 const originalEmitWarning = process.emitWarning.bind(process);
@@ -19,33 +20,12 @@ dns.setDefaultResultOrder('ipv4first');
 // Динамически импортируем после подавления warning
 const { LinkChecker } = await import('linkinator');
 
-const excludeDomains = [
-  'service.kia-samara.ru',
-  'service.kia-szr.ru',
-  'service.kia-engels.ru',
-  'ac-engels.ru',
-  'dev.alexsab.ru'
-];
-
-const linksToSkip = [
+// Технические исключения; внешние сайты задаются в astro-json/config/link-checker.json.
+const technicalSkips = [
   /javascript:void\(0\)/,
   /\/404\/?$/,
   /checkLinks\.md/,
-  /^https?:\/\/(www\.)?probegcentr\.ru/,
-  /^https?:\/\/(www\.)?vtb\.ru/,
-  // Банки: CI/linkinator часто падает на SELF_SIGNED_CERT_IN_CHAIN
-  /^https?:\/\/(www\.)?alfabank\.ru/,
-  /^https?:\/\/(www\.)?sberbank\.com/,
-  // Пропускаем ссылку https://service.kia-samara.ru/?utm_source=promo Берется из menu.json
-  /^https?:\/\/(www\.)?service\.kia-samara\.ru/,
-  'http://carcade.com/',
-  'https://shop.vsk.ru/',
-  'https://www.vsk.ru/klientam',
-  'https://www.cbr.ru/statistics/insurance/ssd_stat/',
-  'https://sovcombank.ru/',
-  'https://www.alfastrah.ru/',
-  'https://www.tbank.ru/loans/auto-loan/programs/',
-  /_astro\//
+  /_astro\//,
 ];
 
 dotenv.config();
@@ -272,8 +252,12 @@ async function checkLinks() {
   console.log(`🔍 Начинаю проверку ссылок на ${domain}...`);
   const strictProbe = ['1', 'true', 'yes'].includes(String(process.env.STRICT_DOMAIN_PROBE || '').toLowerCase());
 
-  // Пропускаем проверку для исключенных доменов
-  if (excludeDomains.some(excluded => domain.includes(excluded))) {
+  const { policy, source } = await loadLinkPolicy();
+  console.log(`📋 Исключения линкинатора: ${source} (${policy.skip.length} правил)`);
+  const linksToSkip = async (link) => technicalSkips.some(rule => rule.test(link)) || matchesSkipRule(link, policy);
+
+  // Сравниваем имя хоста целиком, чтобы не исключать похожие домены.
+  if (policy.excludeSites.some(host => normalizeHost(new URL(domain).hostname) === normalizeHost(host))) {
     console.log(`⏭️ Домен ${domain} находится в списке исключений. Пропускаю проверку`);
     process.exit(0);
   }
@@ -377,4 +361,7 @@ async function checkLinks() {
   process.exit(0);
 }
 
-checkLinks();
+checkLinks().catch(error => {
+  console.error(`❌ Проверка ссылок не состоялась: ${error.message}`);
+  process.exitCode = 1;
+});

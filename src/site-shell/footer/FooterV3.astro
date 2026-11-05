@@ -1,9 +1,8 @@
 ---
-import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
 const { site_name, legal_city, legal_inn, legal_entity, brand, footer_info } = settings;
 import { YEAR } from '@/js/utils/date';
-const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_campaign=${scripts_json.site}`;
+const url = 'https://t.me/alexsab_ru';
 
 import { Icon } from 'astro-icon/components'
 import { getMenu } from '@/const';
@@ -81,7 +80,7 @@ const footerClasses = [
                 {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
             </div>
             <div class="mt-4 ">
-                Разработка <a href={url} class="underline hover:no-underline" target="_blank">alexsab.ru</a>
+                Разработка <a href={url} class="underline hover:no-underline" target="_blank" rel="nofollow noopener noreferrer">alexsab.ru</a>
             </div>
         )}
         </div>

@@ -1,9 +1,8 @@
 ---
-import scripts_json from '@/data/site/scripts.json';
 import settings from '@/data/site/settings.json';
 const { site_name, legal_entity, brand, footer_info } = settings;
 import { getMenu } from '@/const';
-const url = `https://alexsab.ru?utm_source=client&utm_medium=${brand}&utm_compaing=${scripts_json.site}`;
+const url = 'https://t.me/alexsab_ru';
 const legalLinks = getMenu('footer_legal');
 ---
 
@@ -38,7 +37,7 @@ const legalLinks = getMenu('footer_legal');
 					</div>
 				)}
 			</div>
-			<p class="relative bottom-0 right-0 text-sm opacity-70">Разработка <a href={url} target="_blank">alexsab.ru</a></p>
+			<p class="relative bottom-0 right-0 text-sm opacity-70">Разработка <a href={url} target="_blank" rel="nofollow noopener noreferrer">alexsab.ru</a></p>
 		</div>
 	</div>
 </footer>
