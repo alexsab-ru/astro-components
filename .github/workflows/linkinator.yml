@@ -3,6 +3,12 @@ name: Linkinator
 on:
   workflow_call:
     secrets:
+      JSON_REPO:
+        description: Репозиторий данных astro-json
+        required: true
+      FINE_GRAINED_PAT:
+        description: Доступ к репозиторию данных
+        required: false
       TELEGRAM_TO_LINKS:
         description: Telegram chat ID для уведомлений о битых ссылках
         required: false
@@ -93,6 +99,13 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm install --no-frozen-lockfile
+
+      - name: Download JSONs
+        run: pnpm downloadCommonRepo
+        env:
+          JSON_REPO: ${{ secrets.JSON_REPO }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          FINE_GRAINED_PAT: ${{ secrets.FINE_GRAINED_PAT }}
 
       - name: Check links
         id: check_links

@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 
-export const DEFAULT_POLICY_URL = 'https://raw.githubusercontent.com/alexsab-ru/astro-json/main/config/link-checker.json';
+export const DEFAULT_POLICY_PATH = 'src/data/common/link-checker.json';
 
 export const normalizeHost = (host) => host.toLowerCase().replace(/^www\./, '');
 
@@ -43,16 +43,7 @@ export function matchesSkipRule(link, policy) {
 	);
 }
 
-export async function loadLinkPolicy({ env = process.env, fetchImpl = fetch } = {}) {
-	// Явный локальный путь нужен для проверки ещё не опубликованных изменений.
-	const source = env.LINK_CHECKER_CONFIG_PATH || env.LINK_CHECKER_CONFIG_URL || DEFAULT_POLICY_URL;
-	let policy;
-	if (env.LINK_CHECKER_CONFIG_PATH) {
-		policy = JSON.parse(await readFile(source, 'utf8'));
-	} else {
-		const response = await fetchImpl(source, { signal: AbortSignal.timeout(15000), cache: 'no-store' });
-		if (!response.ok) throw new Error(`Не удалось загрузить исключения: HTTP ${response.status}`);
-		policy = await response.json();
-	}
+export async function loadLinkPolicy(source = DEFAULT_POLICY_PATH) {
+	const policy = JSON.parse(await readFile(source, 'utf8'));
 	return { policy: validatePolicy(policy), source };
 }

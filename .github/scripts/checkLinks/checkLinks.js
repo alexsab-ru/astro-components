@@ -20,7 +20,7 @@ dns.setDefaultResultOrder('ipv4first');
 // Динамически импортируем после подавления warning
 const { LinkChecker } = await import('linkinator');
 
-// Технические исключения; внешние сайты задаются в astro-json/config/link-checker.json.
+// Технические исключения; внешние сайты задаются в astro-json/data/link-checker.json.
 const technicalSkips = [
   /javascript:void\(0\)/,
   /\/404\/?$/,
