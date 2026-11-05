@@ -17,6 +17,7 @@ Options:
   -h, --help                 Show this help message
   -f, --file FILE            Specify file(s) to copy from data directory
                              Can be used multiple times or comma-separated
+                             data/FILE copies only common files, without site sync
   -d, --skip-dealer-files    Skip copying dealer data files from src/$DOMAIN
   -c, --skip-cars            Skip copying cars.json
   -k, --keep-tmp             Keep cloned repo in tmp/
@@ -36,6 +37,7 @@ Examples:
   pnpm downloadCommonRepo
   pnpm downloadCommonRepo -cd
   pnpm downloadCommonRepo -f settings.json
+  pnpm downloadCommonRepo -f data/link-checker.json
   pnpm downloadCommonRepo -f settings.json -f faq.json
   pnpm downloadCommonRepo -f settings.json,faq.json
   pnpm downloadCommonRepo --skip-dealer-files
@@ -114,6 +116,22 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Общие файлы можно получить отдельно от данных и контента сайта.
+COMMON_FILES_ONLY=false
+if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
+  COMMON_FILES_ONLY=true
+  for file in "${SPECIFIC_FILES[@]}"; do
+    if [[ "$file" != data/* ]]; then
+      COMMON_FILES_ONLY=false
+      break
+    fi
+    if [[ ! "$file" =~ ^data/[a-zA-Z0-9_./-]+$ ]] || [[ "$file" == *..* ]] || [ "$(basename "$file")" = "leads.json" ]; then
+      echo "❌ Invalid common data file: $file"
+      exit 1
+    fi
+  done
+fi
 
 build_git_clone_url() {
   local repo_url="$1"
@@ -492,17 +510,17 @@ if [ "$LOCAL_SOURCE" = false ] && [ -z "${JSON_REPO:-}" ]; then
   exit 1
 fi
 
-if [ -z "${DOMAIN:-}" ]; then
+if [ -z "${DOMAIN:-}" ] && [ "$COMMON_FILES_ONLY" = false ]; then
   echo "❌ Error: DOMAIN is not set"
   exit 1
 fi
 
-echo "▶ DOMAIN:    $DOMAIN"
+echo "▶ DOMAIN:    ${DOMAIN:-}"
 
 # ==================================================
 # Переменные
 # ==================================================
-REMOTE_DATA_PATH="src/$DOMAIN"
+REMOTE_DATA_PATH="src/${DOMAIN:-}"
 LOCAL_DATA_DIR="src/data"
 SITE_DATA_DIR="$LOCAL_DATA_DIR/site"
 COMMON_DATA_DIR="$LOCAL_DATA_DIR/common"
@@ -526,7 +544,11 @@ if [ "$LOCAL_SOURCE" = true ]; then
     exit 1
   fi
 
-  if [ -f "$TMP_DIR/$REMOTE_DATA_PATH/settings.json" ]; then
+  if [ "$COMMON_FILES_ONLY" = true ]; then
+    BRANDS=()
+    BRAND_DOMAINS=()
+    BRAND_SPARSE_PATHS=()
+  elif [ -f "$TMP_DIR/$REMOTE_DATA_PATH/settings.json" ]; then
     collect_brand_paths_from_settings "$TMP_DIR/$REMOTE_DATA_PATH/settings.json"
   else
     BRANDS=()
@@ -562,27 +584,34 @@ else
     DEFAULT_BRANCH="main"
   fi
 
-  SETTINGS_FOR_BRANDS_FILE=".settings-for-brand-detection.json"
-  if git show "origin/$DEFAULT_BRANCH:$REMOTE_DATA_PATH/settings.json" > "$SETTINGS_FOR_BRANDS_FILE" 2>/dev/null; then
-    collect_brand_paths_from_settings "$SETTINGS_FOR_BRANDS_FILE"
+  if [ "$COMMON_FILES_ONLY" = true ]; then
+    SPARSE_PATHS=()
+    for file in "${SPECIFIC_FILES[@]}"; do
+      SPARSE_PATHS+=("/$file")
+    done
   else
-    BRANDS=()
-    BRAND_DOMAINS=()
-    BRAND_SPARSE_PATHS=()
-    echo "▶ settings.json not found in $REMOTE_DATA_PATH before sparse checkout; brand content will be skipped"
-  fi
+    SETTINGS_FOR_BRANDS_FILE=".settings-for-brand-detection.json"
+    if git show "origin/$DEFAULT_BRANCH:$REMOTE_DATA_PATH/settings.json" > "$SETTINGS_FOR_BRANDS_FILE" 2>/dev/null; then
+      collect_brand_paths_from_settings "$SETTINGS_FOR_BRANDS_FILE"
+    else
+      BRANDS=()
+      BRAND_DOMAINS=()
+      BRAND_SPARSE_PATHS=()
+      echo "▶ settings.json not found in $REMOTE_DATA_PATH before sparse checkout; brand content will be skipped"
+    fi
 
-  SPARSE_PATHS=(
-    "/src/$DOMAIN" \
-    "/src/cars.json" \
-    "/src/avito-colors.json" \
-    "/src/translations.json" \
-    "/$ASTRO_JSON_DATA_PATH"
-  )
+    SPARSE_PATHS=(
+      "/src/$DOMAIN" \
+      "/src/cars.json" \
+      "/src/avito-colors.json" \
+      "/src/translations.json" \
+      "/$ASTRO_JSON_DATA_PATH"
+    )
 
-  if [ ${#BRAND_SPARSE_PATHS[@]} -gt 0 ]; then
-    SPARSE_PATHS+=("${BRAND_SPARSE_PATHS[@]}")
-    echo "▶ Brand sparse paths: ${BRAND_SPARSE_PATHS[*]}"
+    if [ ${#BRAND_SPARSE_PATHS[@]} -gt 0 ]; then
+      SPARSE_PATHS+=("${BRAND_SPARSE_PATHS[@]}")
+      echo "▶ Brand sparse paths: ${BRAND_SPARSE_PATHS[*]}"
+    fi
   fi
 
   git sparse-checkout init --no-cone
@@ -591,6 +620,22 @@ else
   git checkout "$DEFAULT_BRANCH"
 
   cd ../..
+fi
+
+if [ "$COMMON_FILES_ONLY" = true ]; then
+  for file in "${SPECIFIC_FILES[@]}"; do
+    SRC_FILE="$TMP_DIR/$file"
+    DEST_FILE="$COMMON_DATA_DIR/${file#data/}"
+    if [ ! -f "$SRC_FILE" ]; then
+      echo "❌ Error: common file '$file' not found"
+      exit 1
+    fi
+    mkdir -p "$(dirname "$DEST_FILE")"
+    cp "$SRC_FILE" "$DEST_FILE"
+    echo "  ✔ Common file: $file → $DEST_FILE"
+  done
+  echo "✅ Done (common files only)"
+  exit 0
 fi
 
 # ==================================================

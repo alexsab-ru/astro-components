@@ -101,7 +101,7 @@ jobs:
           pnpm install --no-frozen-lockfile
 
       - name: Download JSONs
-        run: pnpm downloadCommonRepo
+        run: pnpm downloadCommonRepo -f data/link-checker.json
         env:
           JSON_REPO: ${{ secrets.JSON_REPO }}
           DOMAIN: ${{ vars.DOMAIN }}
