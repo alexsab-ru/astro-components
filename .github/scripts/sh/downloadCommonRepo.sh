@@ -17,6 +17,7 @@ Options:
   -h, --help                 Show this help message
   -f, --file FILE            Specify file(s) to copy from data directory
                              Can be used multiple times or comma-separated
+                             Skips content, pages and component sync
                              data/FILE copies only common files, without site sync
   -d, --skip-dealer-files    Skip copying dealer data files from src/$DOMAIN
   -c, --skip-cars            Skip copying cars.json
@@ -712,12 +713,12 @@ BRAND_DOMAINS="$(printf '%s\n' "${BRAND_DOMAINS[@]}")" \
 SPECIFIC_FILES="$(printf '%s\n' "${SPECIFIC_FILES[@]}")" \
 node .github/scripts/mergeLayeredJson.js
 
-echo "▶ Sync content…"
-sync_remote_content
-
 if [ ${#SPECIFIC_FILES[@]} -gt 0 ]; then
-  echo "▶ Sync pages and components skipped for specific file download"
+  echo "▶ Sync content, pages and components skipped for specific file download"
 else
+  echo "▶ Sync content…"
+  sync_remote_content
+
   echo "▶ Sync pages…"
   sync_remote_pages
 

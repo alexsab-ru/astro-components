@@ -58,3 +58,42 @@ test('missing, traversal and server-only files fail without changing site data',
 		assert.notEqual(result.status, 0, file);
 	}
 }));
+
+test('selected site JSON does not sync conflicting brand content without pages.json', () => {
+	const base = fs.mkdtempSync(path.join(os.tmpdir(), 'site-files-'));
+	const source = path.join(base, 'source');
+	const project = path.join(base, 'project');
+	const write = (relative, contents) => {
+		const file = path.join(base, relative);
+		fs.mkdirSync(path.dirname(file), { recursive: true });
+		fs.writeFileSync(file, contents);
+	};
+	try {
+		write('project/package.json', '{"type":"module"}');
+		write('source/src/site.test/settings.json', '{"brand":"changan,belgee"}');
+		write('source/src/site.test/env.json', '{}');
+		write('source/src/site.test/routes.json', '{}');
+		write('source/src/cars.json', '[]');
+		for (const brand of ['changan', 'belgee']) {
+			write(`source/src/${brand}.alexsab.ru/content/special-offers/trade-in.mdx`, brand);
+		}
+		write('project/src/content/special-offers/trade-in.mdx', 'Published content');
+		write('project/src/pages/keep.astro', 'Published page');
+		write('project/src/ui/Keep.astro', 'Existing component');
+		fs.cpSync(path.dirname(path.dirname(script)), path.join(project, '.github/scripts'), { recursive: true });
+		execFileSync('bash', [script, '--local-path', source, '-f', 'settings.json,env.json,routes.json'], {
+			cwd: project,
+			env: { ...process.env, DOMAIN: 'site.test', JSON_REPO: '', ASTRO_JSON_LOCAL: '' },
+			stdio: 'pipe',
+		});
+		assert.equal(JSON.parse(fs.readFileSync(path.join(project, 'src/data/site/settings.json'))).brand, 'changan,belgee');
+		assert.equal(fs.existsSync(path.join(project, 'src/data/site/env.json')), true);
+		assert.equal(fs.existsSync(path.join(project, 'src/data/site/routes.json')), true);
+		assert.equal(fs.existsSync(path.join(project, 'src/data/site/pages.json')), false);
+		assert.equal(fs.readFileSync(path.join(project, 'src/content/special-offers/trade-in.mdx'), 'utf8'), 'Published content');
+		assert.equal(fs.readFileSync(path.join(project, 'src/pages/keep.astro'), 'utf8'), 'Published page');
+		assert.equal(fs.readFileSync(path.join(project, 'src/ui/Keep.astro'), 'utf8'), 'Existing component');
+	} finally {
+		fs.rmSync(base, { recursive: true, force: true });
+	}
+});
