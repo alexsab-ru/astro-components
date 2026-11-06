@@ -16,7 +16,7 @@ const url = slug ? slug : `${path}${car.id}/`;
 import { calculateCarPrice, findModelByCarData } from '@/js/utils/car';
 import { getModelBadgeData } from '@/js/utils/modelBadge';
 const carModel = findModelByCarData(car.data);
-const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadgeData(carModel, 'carList');
+const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadgeData(carModel?.badge?.newCarsOnly && car.collection !== 'cars' ? null : carModel, 'carList');
 const price = calculateCarPrice(car.data);
 
 import { declOfNums, currencyFormat, phoneFormat } from '@/js/utils/numbers.format';
