@@ -42,8 +42,21 @@ jobs:
           probe curve25519 -o KexAlgorithms=curve25519-sha256
           probe qos_none -o IPQoS=none
           probe curve_qos_none -o KexAlgorithms=curve25519-sha256 -o IPQoS=none
-          for i in $(seq 1 6); do probe "parallel_$i" & done
-          wait
+          for round in 1 2 3; do
+            for i in $(seq 1 6); do probe "burst_${round}_$i" & done
+            wait
+            probe "after_burst_$round"
+          done
+          for round in 1 2 3; do
+            for i in 1 2; do probe "limited_${round}_$i" & done
+            wait
+          done
+          for round in 1 2 3; do
+            scan_rc=0
+            timeout 15 ssh-keyscan -T 5 -p 22 -H "$CDN_SSH_HOST" > /dev/null 2>&1 || scan_rc=$?
+            echo "KEYSCAN round=$round exit=$scan_rc"
+            probe "after_keyscan_$round"
+          done
       - name: Read-only rsync listing with existing configuration
         run: |
           rc=0
