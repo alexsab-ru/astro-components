@@ -30,6 +30,7 @@ on:
       - '.github/scripts/GSheetFetcher.js'
       - '.github/scripts/mergeCarPrices.js'
       - '.github/scripts/image_mirror.py'
+      - '.github/scripts/cdn_ssh.py'
       - '.github/scripts/sh/uploadImageMirror.sh'
       - '.github/scripts/update_cars_air_storage.py'
       - '.github/scripts/update_cars.py'

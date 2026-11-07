@@ -13,42 +13,18 @@ get_env_value() {
     fi
 
     if [ -f ".env" ]; then
-        awk -F= -v key="$key" '$1 == key { sub(/^"/, "", $2); sub(/"$/, "", $2); print $2; exit }' .env
+        awk -F= -v key="$key" '$1 == key { value = substr($0, index($0, "=") + 1); sub(/^"/, "", value); sub(/"$/, "", value); print value; exit }' .env
     fi
 }
 
-CDN_SSH_HOST="$(get_env_value CDN_SSH_HOST)"
-CDN_SSH_USER="$(get_env_value CDN_SSH_USER)"
-CDN_SSH_KEY_PATH="$(get_env_value CDN_SSH_KEY_PATH)"
-CDN_REMOTE_PATH="$(get_env_value CDN_REMOTE_PATH)"
+for key in CDN_SSH_HOST CDN_SSH_USER CDN_SSH_PORT CDN_SSH_KEY_PATH CDN_REMOTE_PATH CDN_SSH_KNOWN_HOSTS; do
+    export "$key=$(get_env_value "$key")"
+done
 
-if [ -z "$CDN_SSH_HOST" ] || [ -z "$CDN_SSH_USER" ]; then
-    echo "Error: CDN_SSH_HOST and CDN_SSH_USER are required" >&2
-    exit 1
-fi
-
-if [ ! -d "$LOCAL_SOURCE" ]; then
-    echo "Image mirror directory not found: $LOCAL_SOURCE"
-    exit 0
-fi
-
-REMOTE_PATH="${CDN_REMOTE_PATH:-.}"
-SSH_ARGS="-o IdentitiesOnly=yes -o BatchMode=yes"
-
-if [ -n "$CDN_SSH_KEY_PATH" ]; then
-    if [ ! -f "$CDN_SSH_KEY_PATH" ]; then
-        echo "Error: CDN_SSH_KEY_PATH file not found: $CDN_SSH_KEY_PATH" >&2
-        exit 1
-    fi
-    SSH_ARGS="-i $CDN_SSH_KEY_PATH $SSH_ARGS"
-fi
-
-RSYNC_ARGS=(-rzO --no-perms --itemize-changes)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ARGS=(upload "$LOCAL_SOURCE")
 if [ "$DRY_RUN" = "1" ]; then
-    RSYNC_ARGS+=(-n)
+    ARGS+=(--dry-run)
 fi
 
-rsync "${RSYNC_ARGS[@]}" \
-    -e "ssh $SSH_ARGS" \
-    "${LOCAL_SOURCE%/}/" \
-    "$CDN_SSH_USER@$CDN_SSH_HOST:$REMOTE_PATH/"
+exec python3 "$SCRIPT_DIR/../cdn_ssh.py" "${ARGS[@]}"
