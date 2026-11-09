@@ -28,7 +28,7 @@ function fixture(options = dealers, config = {}) {
 	Object.assign(component, {
 		$el: { closest: () => form },
 		$refs: {
-			selectInput: { dataset: {} },
+			selectInput: { name: 'dealer', dataset: {} },
 			error: { classList: { add: (name) => errorClasses.add(name) } },
 		},
 		$store: { salonsStore: { filteredData: options } },
@@ -83,4 +83,36 @@ test('reset does not change selects in other forms or a cancelled reset', () => 
 	component.onFormReset({ target: form, defaultPrevented: true });
 	pending.shift()();
 	assert.equal(component.value, 'Первый ДЦ');
+});
+
+test('dealer preselection updates the caption and Calltouch and remains editable', () => {
+	const { component } = fixture();
+	const event = { target: { contains: (element) => element === component.$el }, detail: { name: 'Второй ДЦ' } };
+	component.selectDealer(event);
+	assert.equal(component.value, 'Второй ДЦ');
+	assert.equal(component.disabled, false);
+	assert.equal(component.$refs.selectInput.dataset.ctRouteKey, 'route-2');
+	assert.equal(component.$refs.selectInput.dataset.ctModId, 'mod-2');
+	assert.equal(component.$refs.selectInput.dataset.ctSiteId, 'site-2');
+
+	component.select(0);
+	assert.equal(component.value, 'Первый ДЦ');
+	assert.equal(component.$refs.selectInput.dataset.ctRouteKey, 'route-1');
+});
+
+test('dealer preselection ignores other modals, other field types and unknown dealers', () => {
+	const { component } = fixture();
+	const event = { target: { contains: () => false }, detail: { name: 'Второй ДЦ' } };
+	component.selectDealer(event);
+	assert.equal(component.value, null);
+
+	event.target.contains = () => true;
+	component.$refs.selectInput.name = 'model';
+	component.selectDealer(event);
+	assert.equal(component.value, null);
+
+	component.$refs.selectInput.name = 'dealer';
+	event.detail.name = 'Неизвестный ДЦ';
+	component.selectDealer(event);
+	assert.equal(component.value, null);
 });

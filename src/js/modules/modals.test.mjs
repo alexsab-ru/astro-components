@@ -33,6 +33,10 @@ const createModal = ({ open = false, form = false } = {}) => {
 		classList: new FakeClassList(open ? [] : ['hidden']),
 		formElement,
 		listeners,
+		events: [],
+		dispatchEvent(event) {
+			this.events.push(event);
+		},
 		addEventListener(event, callback) {
 			listeners[event] = callback;
 		},
@@ -74,6 +78,14 @@ const loadModals = async (modals, links = []) => {
 		},
 	};
 	globalThis.window = { location: { search: '' } };
+	const pending = [];
+	const store = {
+		sortingCalls: [],
+		sortingData(brand) { this.sortingCalls.push(brand); },
+	};
+	globalThis.Alpine = { nextTick: (callback) => pending.push(callback), store: () => store };
+	documentListeners.flushAlpine = () => { while (pending.length) pending.shift()(); };
+	documentListeners.salonsStore = store;
 
 	const source = await readFile(new URL('./modals.js', import.meta.url), 'utf8');
 	const analyticsMockUrl = toModuleUrl(`
@@ -82,6 +94,9 @@ const loadModals = async (modals, links = []) => {
 	const instrumentedSource = source.replace(
 		"from '@alexsab-ru/scripts'",
 		`from ${JSON.stringify(analyticsMockUrl)}`,
+	).replace(
+		"from '../utils/formDepartments'",
+		`from ${JSON.stringify(new URL('../utils/formDepartments.js', import.meta.url).href)}`,
 	);
 	moduleLoadId += 1;
 	await import(toModuleUrl(`${instrumentedSource}\n// test-load-${moduleLoadId}`));
@@ -156,8 +171,35 @@ test('close click emits form_close only for a visible form modal', async () => {
 	assert.equal(hiddenFormModal.formElement.resetCalls, 0);
 });
 
+test('dealer callback waits for the sorted options then selects the dealer in its target modal', async () => {
+	const formModal = createModal({ form: true });
+	const link = createLink();
+	link.dataset.dealerName = 'Второй ДЦ';
+	const listeners = await loadModals([formModal], [link]);
+	globalThis.document.documentElement.dataset.brand = 'haval';
+
+	link.onclick({ preventDefault() {} });
+	assert.deepEqual(listeners.salonsStore.sortingCalls, ['haval']);
+	assert.equal(formModal.events.length, 0);
+	listeners.flushAlpine();
+	assert.equal(formModal.events.length, 1);
+	assert.equal(formModal.events[0].type, 'select-dealer');
+	assert.equal(formModal.events[0].bubbles, true);
+	assert.deepEqual(formModal.events[0].detail, { name: 'Второй ДЦ' });
+});
+
+test('ordinary callback does not request a dealer preselection', async () => {
+	const formModal = createModal({ form: true });
+	const link = createLink();
+	const listeners = await loadModals([formModal], [link]);
+	link.onclick({ preventDefault() {} });
+	listeners.flushAlpine();
+	assert.deepEqual(formModal.events, []);
+});
+
 test.afterEach(() => {
 	delete globalThis.__modalGoals;
 	delete globalThis.document;
 	delete globalThis.window;
+	delete globalThis.Alpine;
 });

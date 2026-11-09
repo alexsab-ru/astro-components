@@ -49,6 +49,7 @@ const formSelectConfig = JSON.stringify({
 	x-data={`formSelectComponent(${formSelectConfig})`}
 	x-effect="effect()"
 	@reset.window="onFormReset($event)"
+	@select-dealer.window="selectDealer($event)"
 	x-cloak>
 	<input 
 		type="text" 

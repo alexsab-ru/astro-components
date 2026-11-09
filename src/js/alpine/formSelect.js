@@ -55,6 +55,11 @@ export function formSelect() {
 			this.select(id);
 			this.disabled = true;
 		},
+		selectDealer(event) {
+			if (this.$refs.selectInput.name !== 'dealer' || !event.target.contains(this.$el)) return;
+			const dealer = this.options.find((option) => option.name === event.detail?.name);
+			if (dealer) this.select(dealer.id);
+		},
 		resetSelect() {
 			this.value = null;
 			this.currentOption = {};

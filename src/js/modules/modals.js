@@ -56,16 +56,25 @@ document.querySelectorAll(".popup-link").forEach(
 			const root = document.documentElement;
 			const dataBrand = root.dataset.brand || brandParams || link.dataset.filtering;
 			
-			if(dataBrand){
+			const dealerName = link.dataset.dealerName;
+			if(dataBrand || dealerName){
 				let salonsStore = Alpine.store('salonsStore');
-				const sorting = link.dataset.sorting;
+				const sorting = link.dataset.sorting || dealerName;
 				if(sorting){
 					salonsStore.sortingData(dataBrand);
 				}else{
 					salonsStore.filterData(dataBrand);
 				}
 			}
-			
+			if (dealerName) {
+				// Дожидаемся обновления списка и сброса после сортировки по марке.
+				Alpine.nextTick(() => {
+					targetModal.dispatchEvent(new CustomEvent('select-dealer', {
+						bubbles: true,
+						detail: { name: dealerName },
+					}));
+				});
+			}
 
 			targetModal.classList.remove("hidden");
 			document.body.classList.add("overflow-hidden");
