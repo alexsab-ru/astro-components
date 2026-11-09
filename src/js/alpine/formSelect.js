@@ -58,10 +58,23 @@ export function formSelect() {
 		resetSelect() {
 			this.value = null;
 			this.currentOption = {};
+			this.open = false;
 			// При сбросе селекта обязательно очищаем data-атрибуты,
 			// чтобы submitForm не взял routeKey/mod_id от прошлого выбора.
 			this.setCalltouchData();
 			this.disabled = false;
+			this.$refs.error?.classList.add('hidden');
+		},
+		onFormReset(event) {
+			if (event.target !== this.$el.closest('form')) return;
+			// reset срабатывает до очистки нативных полей. Обновляем Alpine
+			// после неё, чтобы подпись, input и Calltouch оставались согласованы.
+			this.$nextTick(() => {
+				if (event.defaultPrevented) return;
+				this.resetSelect();
+				// Сохраняем автовыбор, если доступен только один вариант.
+				this.effect();
+			});
 		},
 		// Марка, под которую подстраиваем список. Явная ссылка (?brand=) важнее
 		// того, что проставила страница, а память о просмотренном автомобиле —

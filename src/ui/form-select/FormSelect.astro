@@ -48,6 +48,7 @@ const formSelectConfig = JSON.stringify({
 	:class="{'opacity-70': disabled}"
 	x-data={`formSelectComponent(${formSelectConfig})`}
 	x-effect="effect()"
+	@reset.window="onFormReset($event)"
 	x-cloak>
 	<input 
 		type="text" 
