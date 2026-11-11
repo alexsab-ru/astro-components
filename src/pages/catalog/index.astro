@@ -206,7 +206,12 @@ export const breadcrumb = { name: "Каталог", href: "/catalog/" };
 					<hr class="my-5" />
 					<div class="max-lg:full-bleed flex flex-wrap justify-start gap-1 sm:gap-2 lg:gap-3 mb-10 lg:mb-20 last:mb-0 mt-5 car-list">
 						{cars.map((car) => (
-							<CarItem car={car} slug={`/catalog/${car.slug}`} totalShow={false} />
+							<CarItem
+								class="w-[calc(50%-2px)] sm:w-[calc(33%-4px)] lg:w-[calc(24%-1px)]"
+								car={car}
+								slug={`/catalog/${car.slug}`}
+								totalShow={false}
+							/>
 						))}
 					</div>
 					<p x-show="!total" class="px-4">Ничего не найдено</p>
