@@ -5,7 +5,7 @@ import LogoImage from './LogoImage.astro';
 const { site_name, logo_header, logo_dealer_header } = settings;
 const is_header_transparent = isHeaderTransparentEnabled(settings);
 const path = Astro.url.pathname;
-const logoHeaderSize = "h-[var(--logo-header-height)] w-auto";
+const logoHeaderSize = "h-[var(--logo-header-height-mobile)] sm:h-[var(--logo-header-height)] w-auto max-w-full min-w-0";
 const dealerLogoSize = "h-[var(--logo-dealer-header-height)] w-auto";
 const colorDivide = is_header_transparent ? 'divide-header-transparent-divide' : 'divide-header-divide';
 
@@ -15,7 +15,7 @@ interface Props {
 const { noLink = false } = Astro.props;
 ---
 {path === '/' || noLink ? (
-<div class={`flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left cursor-pointer`} x-data="scrollTop" x-on:click="onClick">
+<div class={`flex min-w-0 flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left cursor-pointer`} x-data="scrollTop" x-on:click="onClick">
     <LogoImage
         src={logo_header}
         class={`${logoHeaderSize} sm:pr-3`}
@@ -34,7 +34,7 @@ const { noLink = false } = Astro.props;
     ) }    
 </div>
 ) : (
-<a href="/" class={`flex flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left`}>
+<a href="/" class={`flex min-w-0 flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left`}>
     <LogoImage
         src={logo_header}
         class={`${logoHeaderSize} sm:pr-3`}

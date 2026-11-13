@@ -65,7 +65,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 		<div class="container">
 			<div class="flex items-center justify-between xs:py-2 xs:h-auto h-[60px] md:h-[80px]">
 				<Logo noLink={logoNoLink} />
-				<div class="flex items-center xs:gap-2 gap-4 lg:gap-10 xl:gap-10 xs:grow xs:shrink-0 xs:justify-end">
+				<div class="flex shrink-0 items-center gap-2 sm:gap-4 lg:gap-10 xl:gap-10 xs:grow xs:justify-end">
 					{phoneEnabled && headerPhones.length > 0 && (
 					<div class={`hidden ${headerCallbackMode === 'both' ? 'lg:flex' : 'md:flex'} flex-col shrink-0 items-end ${salons.length > 1 ? 'random-dealer' : ''}`}>
 					{
@@ -102,7 +102,7 @@ const borderColor = is_header_transparent ? 'border-header-border-transparent' :
 							</div>
 						)
 					}
-					<div class="flex items-center xs:gap-2 gap-4 shrink-0">
+					<div class="flex items-center gap-2 sm:gap-4 shrink-0">
 						{callbackEnabled && (
 						<Fragment>
 						<Button
