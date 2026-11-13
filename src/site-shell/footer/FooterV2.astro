@@ -129,7 +129,7 @@ const LEGAL_SALONS_INFO =
                 {LEGAL_SALONS_INFO.length > 0 && (<Fragment set:html={LEGAL_SALONS_INFO.join('')} />)}
             </div>
             {legalLinks.map(link => (
-                <div class="shrink-0">
+                <div class="min-w-0 max-w-full">
                     <a href={link.url} class="text-footer-link text-sm font-light hover:text-footer-link-hover!" target={link.target} rel={link.rel}>{link.name}</a>
                 </div>
             ))}
