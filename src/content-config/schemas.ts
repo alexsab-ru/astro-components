@@ -5,6 +5,8 @@ export const pageCollectionSchema = z.object({
 	title: z.string().optional(),
 	caption: z.string().optional(),
 	draft: z.boolean().optional(),
+	// Скрывает активную страницу из списков, сохраняя её прямой URL.
+	listed: z.boolean().optional(),
 	breadcrumb: z.string().optional(),
 	description: z.string().optional(),
 	image: z.string().optional(),

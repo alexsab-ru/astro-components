@@ -38,6 +38,7 @@ export function sortingAndFilteringPosts(posts) {
 			return 0;
 		})
 		.filter(post => !post.data.draft)
+		.filter(post => post.data.listed !== false)
 		.filter(post => {
 			if (post.data?.toDate && typeof post.data?.toDate === 'object') {
 				return nowWithoutTime <= post.data?.toDate ? post : null;
