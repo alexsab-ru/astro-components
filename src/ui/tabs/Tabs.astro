@@ -62,7 +62,7 @@ const panels = await Promise.all(items.map(item => Astro.slots.render(item.id)))
 	<div
 		role="tablist"
 		aria-label={label}
-		class={listClass}
+		class:list={['tabs-list', listClass]}
 		data-tabs-list
 		hidden
 	>
@@ -74,7 +74,7 @@ const panels = await Promise.all(items.map(item => Astro.slots.render(item.id)))
 				aria-controls={`${instance}-panel-${index}`}
 				aria-selected={index === active ? 'true' : 'false'}
 				tabindex={index === active ? 0 : -1}
-				class:list={['tabs-trigger', variant, buttonClass]}
+				class:list={['tabs-trigger', `tabs-trigger--${variant}`, buttonClass]}
 				data-tabs-index={index}
 				data-image-src={item.image?.src}
 				data-image-alt={item.image?.alt}
@@ -118,27 +118,34 @@ const panels = await Promise.all(items.map(item => Astro.slots.render(item.id)))
 
 <style>
 	content-tabs { display: block; }
+	/* Keep the outer focus ring inside the scroll viewport without moving tabs. */
+	.tabs-list {
+		padding: 6px;
+		margin: -6px;
+		scroll-padding: 6px;
+	}
 	[data-tabs-list][hidden], [data-tabs-panel][hidden], [data-tabs-media][hidden] {
 		display: none !important;
 	}
 	[data-tabs-content] { scroll-margin-top: var(--tabs-scroll-offset, 1rem); }
 	.tabs-trigger {
 		min-height: 44px;
+		scroll-margin: 6px;
 		flex-shrink: 0;
 		cursor: pointer;
 		transition: color .2s, background-color .2s, border-color .2s;
 	}
-	.tabs-trigger:focus-visible, [data-tabs-panel]:focus-visible {
-		outline: 2px solid currentColor;
+	.tabs-trigger:focus-visible {
+		outline: 3px solid var(--tabs-focus-color, #2563eb);
 		outline-offset: 3px;
 	}
-	.filled { background: #f3f4f6; color: #1f2937; }
-	.filled:hover { background: #e5e7eb; }
-	.filled[aria-selected='true'] {
+	.tabs-trigger--filled { background: #f3f4f6; color: #1f2937; }
+	.tabs-trigger--filled:hover { background: #e5e7eb; }
+	.tabs-trigger--filled[aria-selected='true'] {
 		background: var(--color-accent-500, #111);
 		color: var(--tabs-active-color, #fff);
 	}
-	.outline { border: 2px solid #d1d5db; color: #4b5563; }
-	.outline:hover { border-color: #000; color: #000; }
-	.outline[aria-selected='true'] { border-color: #000; background: #000; color: #fff; }
+	.tabs-trigger--outline { border: 2px solid #d1d5db; color: #4b5563; }
+	.tabs-trigger--outline:hover { border-color: #000; color: #000; }
+	.tabs-trigger--outline[aria-selected='true'] { border-color: #000; background: #000; color: #fff; }
 </style>

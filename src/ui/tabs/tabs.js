@@ -19,6 +19,8 @@ export class ContentTabs extends HTMLElement {
 			event.preventDefault();
 			this.activate(next);
 			this.tabs[next].focus();
+			// Reveal the focus ring too when the horizontal strip overflows.
+			this.tabs[next].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
 		};
 		this.list.addEventListener('click', this.onClick);
 		this.list.addEventListener('keydown', this.onKeydown);
