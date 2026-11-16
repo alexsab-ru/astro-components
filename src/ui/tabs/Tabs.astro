@@ -135,17 +135,27 @@ const panels = await Promise.all(items.map(item => Astro.slots.render(item.id)))
 		cursor: pointer;
 		transition: color .2s, background-color .2s, border-color .2s;
 	}
-	.tabs-trigger:focus-visible {
-		outline: 3px solid var(--tabs-focus-color, #2563eb);
-		outline-offset: 3px;
+	.tabs-trigger {
+		background: var(--tabs-bg, var(--color-tabs-bg));
+		color: var(--tabs-text, var(--color-tabs-text));
+		border: 2px solid var(--tabs-border, var(--color-tabs-border));
 	}
-	.tabs-trigger--filled { background: #f3f4f6; color: #1f2937; }
-	.tabs-trigger--filled:hover { background: #e5e7eb; }
-	.tabs-trigger--filled[aria-selected='true'] {
-		background: var(--color-accent-500, #111);
-		color: var(--tabs-active-color, #fff);
+	.tabs-trigger:hover {
+		background: var(--tabs-bg-hover, var(--color-tabs-bg-hover));
+		color: var(--tabs-text-hover, var(--color-tabs-text-hover));
+		border-color: var(--tabs-border-hover, var(--color-tabs-border-hover));
 	}
-	.tabs-trigger--outline { border: 2px solid #d1d5db; color: #4b5563; }
-	.tabs-trigger--outline:hover { border-color: #000; color: #000; }
-	.tabs-trigger--outline[aria-selected='true'] { border-color: #000; background: #000; color: #fff; }
+	.tabs-trigger--outline {
+		--tabs-bg: var(--color-tabs-outline-bg);
+		--tabs-text: var(--color-tabs-outline-text);
+		--tabs-border: var(--color-tabs-outline-border);
+		--tabs-bg-hover: var(--color-tabs-outline-bg-hover);
+		--tabs-text-hover: var(--color-tabs-outline-text-hover);
+		--tabs-border-hover: var(--color-tabs-outline-border-hover);
+	}
+	.tabs-trigger[aria-selected='true'] {
+		background: var(--color-tabs-bg-active);
+		color: var(--color-tabs-text-active);
+		border-color: var(--color-tabs-border-active);
+	}
 </style>
