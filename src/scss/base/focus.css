@@ -1,0 +1,14 @@
+/* Shared by the site shell and isolated guide pages. The light inner gap keeps
+   the dark outline visible on dark headers and filled buttons. */
+:focus-visible {
+	outline: 3px solid var(--color-focus-ring, #262626);
+	outline-offset: 3px;
+	box-shadow: 0 0 0 3px var(--color-focus-ring-gap, #fff);
+}
+
+@media (forced-colors: active) {
+	:focus-visible {
+		outline-color: Highlight;
+		box-shadow: none;
+	}
+}

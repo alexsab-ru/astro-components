@@ -14,6 +14,7 @@
 
 /* Imports */
 @import './global.scss';
+@import './base/focus.css';
 
 @import './ui/button.scss';
 @import './ui/badge.scss';

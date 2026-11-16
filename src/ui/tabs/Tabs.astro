@@ -1,0 +1,161 @@
+---
+import { randomUUID } from 'node:crypto';
+
+interface TabImage {
+	src: string;
+	alt: string;
+	width?: number;
+	height?: number;
+}
+
+interface Props {
+	items: { id: string; label: string; image?: TabImage }[];
+	label: string;
+	initial?: string;
+	scrollOnChange?: boolean;
+	variant?: 'filled' | 'outline';
+	class?: string;
+	listClass?: string;
+	buttonClass?: string;
+	contentClass?: string;
+	mediaClass?: string;
+	imageClass?: string;
+}
+
+const {
+	items,
+	label,
+	initial = items[0]?.id,
+	scrollOnChange = false,
+	variant = 'filled',
+	class: className,
+	listClass = 'flex gap-3 overflow-x-auto',
+	buttonClass = 'rounded-lg p-4 text-center font-bold text-sm lg:text-base',
+	contentClass,
+	mediaClass = 'flex justify-center mb-10',
+	imageClass = 'w-full max-w-[500px]',
+} = Astro.props;
+
+if (!items.length || new Set(items.map(item => item.id)).size !== items.length) {
+	throw new Error('Tabs requires at least one item and unique item IDs.');
+}
+for (const item of items) {
+	if (!item.id || !Astro.slots.has(item.id)) {
+		throw new Error(`Tabs requires a named slot for "${item.id}".`);
+	}
+}
+const active = items.findIndex(item => item.id === initial);
+if (active < 0) throw new Error(`Tabs: unknown initial item "${initial}".`);
+// IDs only connect accessible labels; interaction and scrolling use local nodes.
+const instance = `tabs-${randomUUID()}`;
+const initialImage = items[active].image;
+// Astro slot names in <slot> must be static. Render the selected named slots
+// server-side so callers can still supply arbitrary Astro/MDX components.
+const panels = await Promise.all(items.map(item => Astro.slots.render(item.id)));
+---
+
+<content-tabs
+	class={className}
+	data-initial={active}
+	data-scroll={scrollOnChange ? 'true' : undefined}
+>
+	<div
+		role="tablist"
+		aria-label={label}
+		class:list={['tabs-list', listClass]}
+		data-tabs-list
+		hidden
+	>
+		{items.map((item, index) => (
+			<button
+				type="button"
+				role="tab"
+				id={`${instance}-tab-${index}`}
+				aria-controls={`${instance}-panel-${index}`}
+				aria-selected={index === active ? 'true' : 'false'}
+				tabindex={index === active ? 0 : -1}
+				class:list={['tabs-trigger', `tabs-trigger--${variant}`, buttonClass]}
+				data-tabs-index={index}
+				data-image-src={item.image?.src}
+				data-image-alt={item.image?.alt}
+				data-image-width={item.image?.width}
+				data-image-height={item.image?.height}
+			>
+				{item.label}
+			</button>
+		))}
+	</div>
+	<div class={contentClass} data-tabs-content>
+		{items.some(item => item.image) && (
+			<div class={mediaClass} data-tabs-media hidden={!initialImage}>
+				<img
+					class={imageClass}
+					src={initialImage?.src}
+					alt={initialImage?.alt || ''}
+					width={initialImage?.width}
+					height={initialImage?.height}
+					data-tabs-image
+				/>
+			</div>
+		)}
+		{items.map((item, index) => (
+			<div
+				role="tabpanel"
+				id={`${instance}-panel-${index}`}
+				aria-labelledby={`${instance}-tab-${index}`}
+				tabindex="0"
+				data-tabs-panel
+			>
+				<Fragment set:html={panels[index]} />
+			</div>
+		))}
+	</div>
+</content-tabs>
+
+<script>
+	import './tabs.js';
+</script>
+
+<style>
+	content-tabs { display: block; }
+	/* Keep the outer focus ring inside the scroll viewport without moving tabs. */
+	.tabs-list {
+		padding: 6px;
+		margin: -6px;
+		scroll-padding: 6px;
+	}
+	[data-tabs-list][hidden], [data-tabs-panel][hidden], [data-tabs-media][hidden] {
+		display: none !important;
+	}
+	[data-tabs-content] { scroll-margin-top: var(--tabs-scroll-offset, 1rem); }
+	.tabs-trigger {
+		min-height: 44px;
+		scroll-margin: 6px;
+		flex-shrink: 0;
+		cursor: pointer;
+		transition: color .2s, background-color .2s, border-color .2s;
+	}
+	.tabs-trigger {
+		background: var(--tabs-bg, var(--color-tabs-bg));
+		color: var(--tabs-text, var(--color-tabs-text));
+		border: 2px solid var(--tabs-border, var(--color-tabs-border));
+	}
+	.tabs-trigger:hover {
+		background: var(--tabs-bg-hover, var(--color-tabs-bg-hover));
+		color: var(--tabs-text-hover, var(--color-tabs-text-hover));
+		border-color: var(--tabs-border-hover, var(--color-tabs-border-hover));
+	}
+	.tabs-trigger--outline {
+		--tabs-bg: var(--color-tabs-outline-bg);
+		--tabs-text: var(--color-tabs-outline-text);
+		--tabs-border: var(--color-tabs-outline-border);
+		--tabs-bg-hover: var(--color-tabs-outline-bg-hover);
+		--tabs-text-hover: var(--color-tabs-outline-text-hover);
+		--tabs-border-hover: var(--color-tabs-outline-border-hover);
+	}
+	.tabs-trigger[aria-selected='true'] {
+		background: var(--color-tabs-bg-active);
+		color: var(--color-tabs-text-active);
+		border-color: var(--color-tabs-border-active);
+	}
+</style>

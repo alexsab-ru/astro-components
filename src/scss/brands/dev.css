@@ -1,0 +1,17 @@
+/* Kia's dark accent palette, with neutral dev typography and a dark header. */
+@theme {
+	--color-accent-400: #071d2c;
+	--color-accent-500: #05141f;
+
+	--color-header-bg: var(--color-accent-500);
+	--color-header-text: var(--color-white);
+	--color-header-border: color-mix(in srgb, var(--color-white) 20%, transparent);
+	--color-submenu-bg: var(--color-header-bg);
+	--color-submenu-text: var(--color-header-text);
+	--color-header-button-bg: var(--color-white);
+	--color-header-button-bg-hover: var(--color-gray-200);
+	--color-header-button-text: var(--color-accent-500);
+	--color-header-button-text-hover: var(--color-accent-500);
+	--color-header-menu-link-bg-hover: var(--color-accent-400);
+	--color-header-menu-link-text-hover: var(--color-white);
+}

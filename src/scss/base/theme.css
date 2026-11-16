@@ -32,6 +32,9 @@
        (правило `* { border-color: var(--color-border) }` в base/layer.css).
        НЕ переопределяйте ради тёмного хедера — для этого есть --color-header-border. */
     --color-border: var(--color-gray-200);
+    /* Keyboard focus: dark outline with a light gap on dark surfaces. */
+    --color-focus-ring: #262626;
+    --color-focus-ring-gap: var(--color-white);
     /* Рамки и разделители ХЕДЕРА. Тёмнотемные бренды переопределяют этот токен,
        чтобы не задеть весь сайт. --color-header-divide наследуется отсюда. */
     --color-header-border: var(--color-border);
@@ -81,6 +84,23 @@
     --color-button-bg-hover: var(--color-accent-400);
     --color-button-text: var(--color-white);
     --color-button-text-hover: var(--color-white);
+
+    /* TABS — override in a brand theme, just like button tokens. */
+    --color-tabs-bg: var(--color-gray-100);
+    --color-tabs-text: var(--color-gray-800);
+    --color-tabs-border: transparent;
+    --color-tabs-bg-hover: var(--color-gray-200);
+    --color-tabs-text-hover: var(--color-tabs-text);
+    --color-tabs-border-hover: var(--color-tabs-border);
+    --color-tabs-bg-active: var(--color-button-bg);
+    --color-tabs-text-active: var(--color-button-text);
+    --color-tabs-border-active: var(--color-button-bg);
+    --color-tabs-outline-bg: transparent;
+    --color-tabs-outline-text: var(--color-gray-600);
+    --color-tabs-outline-border: var(--color-gray-300);
+    --color-tabs-outline-bg-hover: var(--color-tabs-outline-bg);
+    --color-tabs-outline-text-hover: var(--color-button-bg);
+    --color-tabs-outline-border-hover: var(--color-button-bg);
     
     /* HEADER BUTTON COLORS */
     --color-header-button-bg: var(--color-accent-500);
