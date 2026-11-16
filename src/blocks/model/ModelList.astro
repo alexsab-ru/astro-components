@@ -4,6 +4,7 @@ interface Props {
 	title?: string;
 	classes?: string;
 	getModelPath?: (model: any) => string;
+	brandPlacement?: 'separate' | 'inline';
 }
 import ModelItem from './ModelItem.astro';
 import { groupArrayByKey } from '@/js/utils/groupArrayByKey';
@@ -15,7 +16,7 @@ import { IS_MODEL_PREFIX_URL } from '@/const';
 import modelsData from '@/data/site/models.json';
 const { models: modelsArr } = modelsData;
 const defaultGetModelPath = (model: any) => `/models/${setPrefixModelUrl(model, IS_MODEL_PREFIX_URL)}/`;
-const {models = modelsArr, title = 'Модельный ряд', classes = '', getModelPath = defaultGetModelPath, ...rest} = Astro.props;
+const {models = modelsArr, title = 'Модельный ряд', classes = '', getModelPath = defaultGetModelPath, brandPlacement, ...rest} = Astro.props;
 const filteredModels = models.filter(isModelVisible);
 const groupModelsByBrand = groupArrayByKey(
 	filteredModels.map((model: any) => ({
@@ -47,7 +48,7 @@ const cardHeadingLevel: 'h2' | 'h3' = (multipleBrands || !!title) ? 'h3' : 'h2';
 						<div class="flex flex-wrap justify-center gap-1 sm:gap-4 lg:gap-5 text-xs 2xl:text-base">
 							{groupModelsByBrand[key].map((model: any) => (
 
-								<ModelItem model={model} modelPath={getModelPath(model)} headingLevel={cardHeadingLevel} />
+								<ModelItem model={model} modelPath={getModelPath(model)} headingLevel={cardHeadingLevel} brandPlacement={brandPlacement} />
 
 							))}
 						</div>

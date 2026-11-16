@@ -3,6 +3,7 @@ interface Props {
 	model: any;
 	modelPath?: string;
 	headingLevel?: 'h2' | 'h3';
+	brandPlacement?: 'separate' | 'inline';
 }
 import {Icon} from 'astro-icon/components';
 import { currencyFormat } from '@/js/utils/numbers.format';
@@ -11,7 +12,9 @@ import { setPrefixModelUrl } from '@/js/utils/helpers';
 import { getModelBadgeData } from '@/js/utils/modelBadge';
 import { getModelBrandDisplayName, getModelThumb, getModelTitle } from '@/js/utils/modelFields';
 import { IS_MODEL_PREFIX_URL } from '@/const';
-let { model, modelPath, headingLevel = 'h3' } = Astro.props;
+import { resolveBrandPlacement } from './model-card.options.js';
+let { model, modelPath, headingLevel = 'h3', brandPlacement } = Astro.props;
+const resolvedBrandPlacement = resolveBrandPlacement(brandPlacement, model);
 const HeadingTag = headingLevel;
 const noPriceText = (model?.status && (model.status === 'preorder' || model.status === 'comminsoon')) ? 'cкоро в продаже' : 'по запросу';
 const modelTitle = getModelTitle(model);
@@ -27,9 +30,16 @@ const { image: badgeImage, alt: badgeAlt, classes: badgeClasses } = getModelBadg
 	<div>
 	<HeadingTag
 		class="leading-none! xs:text-xs! text-sm! sm:text-2xl! uppercase transition-colors duration-300 group-hover:text-accent-500 m-0! p-0! before:content-none! text-left! w-auto!"
+		data-brand-placement={resolvedBrandPlacement}
 	>
-		<small class="block xs:text-[10px] text-xs sm:text-sm leading-none! text-title-brand-model-item">{brandDisplayName}</small>
-		<span>{modelTitle}</span>
+		{resolvedBrandPlacement === 'inline' ? (
+			<span>{brandDisplayName} {modelTitle}</span>
+		) : (
+			<>
+				<small class="block xs:text-[10px] text-xs sm:text-sm leading-none! text-title-brand-model-item">{brandDisplayName}</small>
+				<span>{modelTitle}</span>
+			</>
+		)}
 	</HeadingTag>
 		{
 			model?.benefit && !isNaN(model?.benefit) && model?.benefit != 0 && model?.benefit != '' && (
