@@ -1,39 +1,42 @@
 ---
-interface Props {
-    type?: string,
-    name?: string,
-    classes?: string,
-    placeholder?: string,
-    required?: boolean,
-    errorText?: string,
-    errorClasses?: string,
-    autocomplete?: string
+import type { HTMLAttributes } from 'astro/types';
+import type { FieldProps } from '../form-field/types';
+import FormField from '../form-field/FormField.astro';
+import { FIELD_CONTROL_CLASSES, fieldAccessibility } from '../form-field/field.js';
+
+interface Props extends HTMLAttributes<'textarea'>, FieldProps {
+	type?: string;
 }
 const {
-    name,
-    classes = '',
-    placeholder = 'Введите значение',
-    required = false,
-    autocomplete = 'on',
-    errorText = '',
-    errorClasses = 'text-xs text-red-500',
-    ...rest
-} = Astro.props
+	name, classes = '', wrapperClass, label, hint, id,
+	class: nativeClass, title: nativeTitle,
+	'aria-describedby': describedBy,
+	placeholder = 'Введите значение', required = false, autocomplete = 'on',
+	errorText = '', errorClasses = 'text-xs text-red-500', ...rest
+} = Astro.props;
+const field = fieldAccessibility({ id, label, hint, required, describedBy });
 ---
 
-<div class="w-full">
-    <textarea
-        name={name}
-        class={`border-2 transition-all focus:border-accent-500 px-4 py-2.5 outline-none w-full bg-white text-black xs:text-sm ${classes}`} 
-        placeholder={placeholder}
-        required={required}
-        autocomplete={autocomplete}
-        {...errorText ? {title: errorText} : {}}
-        {...rest}
-    ></textarea>
-{
-    required ? (
-    <div class={`error-message text-xs hidden ${name} ${errorClasses}`}>{errorText}</div>
-    ) : ('')
-}
-</div>
+<FormField
+	controlId={field.id}
+	name={name}
+	label={label}
+	hint={hint}
+	required={required}
+	errorText={errorText}
+	errorClasses={`text-xs ${errorClasses}`}
+	class={wrapperClass}
+>
+	<textarea
+		name={name}
+		id={field.id}
+		aria-describedby={field.describedBy}
+		aria-errormessage={field.errorMessage}
+		class={nativeClass === undefined ? `${FIELD_CONTROL_CLASSES} outline-none ${classes}` : nativeClass}
+		placeholder={placeholder}
+		required={required}
+		autocomplete={autocomplete}
+		title={nativeTitle === undefined ? errorText || undefined : nativeTitle}
+		{...rest}
+	></textarea>
+</FormField>
