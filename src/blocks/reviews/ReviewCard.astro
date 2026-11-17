@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon/components';
+import { type TReviewContent } from './types';
+
+interface Props {
+	item: TReviewContent;
+	variant?: 'quote' | 'bubble';
+	class?: string;
+}
+
+const { item, variant = 'quote', class: className } = Astro.props;
+const bubble = variant === 'bubble';
+const Frame = bubble ? 'div' : 'blockquote';
+const Quote = bubble ? 'blockquote' : 'div';
+const Metadata = bubble ? 'div' : 'footer';
+const DateLabel = bubble ? 'small' : 'span';
+---
+
+<Frame
+	class:list={[bubble ? 'reviews__item' : 'px-5 py-8 bg-white shadow-lg rounded-lg mb-5', className]}
+	data-review-card={variant}
+>
+	{!bubble && <header class="mb-3 text-xl">{item.name}</header>}
+	<div class:list={{ 'reviews__item--text px-5 py-8 bg-white shadow-lg rounded-lg': bubble }}>
+		<Quote class:list={{ 'max-h-[200px] overflow-y-auto custom-scrollbar': bubble }}>
+			<p class:list={[bubble ? 'pr-2' : 'text-base!']}>{item.text}</p>
+		</Quote>
+	</div>
+	<Metadata class={bubble ? 'reviews__item--bottom flex items-center flex-nowrap mt-5 gap-4' : 'text-base text-gray-500'}>
+		{bubble && <Icon name="mdi:message-processing-outline" class="text-4xl shrink-0" aria-hidden="true" />}
+		<div class:list={{ 'reviews__item-autor': bubble }}>
+			{bubble && <div>{item.name}</div>}
+			<DateLabel>{item.date}</DateLabel>
+		</div>
+	</Metadata>
+</Frame>
