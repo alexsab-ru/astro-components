@@ -30,8 +30,19 @@ const showseo = hasText || Content !== null;
 { showseo ? (
 <section class={`${!sectionPaddingBlock ? 'pt-0!' : ''}`}>
 	<div class={`container ${noPadding ? 'px-0!' : ''}`}>
-		<CollapsibleText variant="seo">
+		<CollapsibleText
+			mode="height"
+			collapsedHeight="230px"
+			fade
+			expandLabel="читать полностью"
+			collapseLabel="скрыть"
+			contentClass="seo-content"
+			buttonClass="seo-show-more no-underline!"
+			actionsClass="flex justify-center mt-6"
+			scroll="collapse"
+		>
 			{hasText ? <Fragment set:html={text} /> : <Content />}
+			<span slot="toggle-icon" class="seo-show-more-arrow" aria-hidden="true">&#187;</span>
 		</CollapsibleText>
 	</div>
 </section>

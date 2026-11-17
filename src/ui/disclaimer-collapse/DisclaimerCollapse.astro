@@ -6,6 +6,17 @@ interface Props {
 }
 const {content} = Astro.props;
 ---
-<CollapsibleText variant="disclaimer" class="pt-5 mt-8 border-white/20 border-t">
+<CollapsibleText
+	mode="lines"
+	collapsedLines={3}
+	expandLabel="Показать все +"
+	collapseLabel="Скрыть -"
+	class="pt-5 mt-8 border-white/20 border-t"
+	contentClass="text-xs! text-white/60 mb-2 space-y-4"
+	buttonClass="text-xs"
+	scroll="toggle"
+	scrollTarget="root"
+	scrollOffsetSelector="#site_nav"
+>
     <Fragment set:html={content} />
 </CollapsibleText>

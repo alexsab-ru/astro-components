@@ -9,7 +9,22 @@ const { value = '' } = Astro.props;
 ---
 
 {value && (
-	<CollapsibleText variant="rich">
+	<CollapsibleText
+		mode="height"
+		collapsedHeight="var(--rich-content-collapsed-height)"
+		fade
+		class="rich-content-more"
+		contentClass="space-y-4 my-8"
+		collapsedContentClass="seo-content"
+		buttonClass="underline cursor-pointer"
+	>
 		<Fragment set:html={value} />
 	</CollapsibleText>
 )}
+
+<style is:global>
+	collapsible-text.rich-content-more { --rich-content-collapsed-height: 90px; }
+	@media (min-width: 64rem) {
+		collapsible-text.rich-content-more { --rich-content-collapsed-height: 55px; }
+	}
+</style>

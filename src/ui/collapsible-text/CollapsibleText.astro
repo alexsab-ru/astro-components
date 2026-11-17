@@ -2,56 +2,71 @@
 import { randomUUID } from 'node:crypto';
 
 interface Props {
-	variant?: 'seo' | 'rich' | 'disclaimer';
+	mode?: 'height' | 'lines';
+	collapsedHeight?: string;
+	collapsedLines?: number;
+	fade?: boolean;
 	expandLabel?: string;
 	collapseLabel?: string;
 	class?: string;
 	contentClass?: string;
+	collapsedContentClass?: string;
 	buttonClass?: string;
+	actionsClass?: string;
+	scroll?: 'none' | 'collapse' | 'toggle';
+	scrollTarget?: 'content' | 'root';
+	scrollOffsetSelector?: string;
 }
 
 const {
-	variant = 'seo',
-	expandLabel = { seo: 'читать полностью', rich: 'Подробнее', disclaimer: 'Показать все +' }[variant],
-	collapseLabel = { seo: 'скрыть', rich: 'Свернуть', disclaimer: 'Скрыть -' }[variant],
+	mode = 'height',
+	collapsedHeight = '230px',
+	collapsedLines = 3,
+	fade = false,
+	expandLabel = 'Подробнее',
+	collapseLabel = 'Свернуть',
 	class: className,
 	contentClass,
+	collapsedContentClass,
 	buttonClass,
+	actionsClass,
+	scroll = 'none',
+	scrollTarget = 'content',
+	scrollOffsetSelector,
 } = Astro.props;
 const contentId = `collapse-${randomUUID()}`;
 ---
 
 <collapsible-text
 	class={className}
-	data-variant={variant}
+	style={`--collapse-height: ${collapsedHeight}; --collapse-lines: ${collapsedLines};`}
+	data-mode={mode}
+	data-fade={fade ? 'true' : undefined}
 	data-expand-label={expandLabel}
 	data-collapse-label={collapseLabel}
+	data-collapsed-content-class={collapsedContentClass}
+	data-scroll={scroll}
+	data-scroll-target={scrollTarget}
+	data-scroll-offset-selector={scrollOffsetSelector}
 >
 	<div
 		id={contentId}
-		class:list={[
-			{ 'seo-content': variant === 'seo', 'space-y-4 my-8': variant === 'rich', 'text-xs! text-white/60 mb-2 space-y-4': variant === 'disclaimer' },
-			contentClass,
-		]}
+		class={contentClass}
 		data-collapse-content
 	>
 		<slot />
 	</div>
-	<div class:list={{ 'flex justify-center mt-6': variant === 'seo' }}>
+	<div class={actionsClass} data-collapse-actions hidden>
 		<button
 			type="button"
-			class:list={[
-				'collapse-toggle',
-				{ 'seo-show-more no-underline!': variant === 'seo', 'underline cursor-pointer': variant === 'rich', 'text-xs': variant === 'disclaimer' },
-				buttonClass,
-			]}
+			class:list={['collapse-toggle', buttonClass]}
 			aria-expanded="true"
 			aria-controls={contentId}
 			data-collapse-toggle
 			hidden
 		>
 			<span data-collapse-label>{collapseLabel}</span>
-			{variant === 'seo' && <span class="seo-show-more-arrow" aria-hidden="true">&#187;</span>}
+			<slot name="toggle-icon" />
 		</button>
 	</div>
 </collapsible-text>
@@ -62,23 +77,21 @@ const contentId = `collapse-${randomUUID()}`;
 
 <style>
 	collapsible-text { display: block; }
-	[data-collapse-toggle][hidden] { display: none !important; }
+	[data-collapse-toggle][hidden], [data-collapse-actions][hidden] { display: none !important; }
 	.collapse-toggle { cursor: pointer; }
-	collapsible-text[data-expanded] > [data-collapse-content] {
+	collapsible-text:is([data-overflow], [data-measuring]) > [data-collapse-content] {
 		overflow: hidden;
 		position: relative;
 	}
-	collapsible-text[data-variant='seo'][data-expanded='false'] > [data-collapse-content] { height: 230px; }
-	collapsible-text[data-variant='rich'][data-expanded='false'] > [data-collapse-content] { height: 90px; }
-	@media (min-width: 64rem) {
-		collapsible-text[data-variant='rich'][data-expanded='false'] > [data-collapse-content] { height: 55px; }
+	collapsible-text[data-mode='height']:is([data-measuring], [data-overflow='true'][data-expanded='false']) > [data-collapse-content] {
+		max-height: var(--collapse-height);
 	}
-	collapsible-text[data-variant='disclaimer'][data-expanded='false'] > [data-collapse-content] {
+	collapsible-text[data-mode='lines']:is([data-measuring], [data-overflow='true'][data-expanded='false']) > [data-collapse-content] {
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 3;
+		-webkit-line-clamp: var(--collapse-lines);
 	}
-	collapsible-text:is([data-variant='seo'], [data-variant='rich'])[data-expanded] > [data-collapse-content]::before {
+	collapsible-text[data-fade='true'][data-overflow='true']:not([data-measuring]) > [data-collapse-content]::before {
 		content: '';
 		position: absolute;
 		bottom: 0;
@@ -89,9 +102,9 @@ const contentId = `collapse-${randomUUID()}`;
 		pointer-events: none;
 		background: linear-gradient(to top, var(--collapse-fade-color, #fff), transparent);
 		opacity: 0;
+		transition: opacity .25s;
 	}
-	collapsible-text[data-variant='seo'][data-expanded] > [data-collapse-content]::before { transition: opacity .25s; }
-	collapsible-text[data-expanded='false'] > [data-collapse-content]::before { opacity: 1; }
+	collapsible-text[data-fade='true'][data-overflow='true'][data-expanded='false'] > [data-collapse-content]::before { opacity: 1; }
 	@media (prefers-reduced-motion: reduce) {
 		collapsible-text[data-expanded] > [data-collapse-content]::before { transition: none; }
 	}
