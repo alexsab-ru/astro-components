@@ -1,0 +1,111 @@
+---
+import { randomUUID } from 'node:crypto';
+
+interface Props {
+	mode?: 'height' | 'lines';
+	collapsedHeight?: string;
+	collapsedLines?: number;
+	fade?: boolean;
+	expandLabel?: string;
+	collapseLabel?: string;
+	class?: string;
+	contentClass?: string;
+	collapsedContentClass?: string;
+	buttonClass?: string;
+	actionsClass?: string;
+	scroll?: 'none' | 'collapse' | 'toggle';
+	scrollTarget?: 'content' | 'root';
+	scrollOffsetSelector?: string;
+}
+
+const {
+	mode = 'height',
+	collapsedHeight = '230px',
+	collapsedLines = 3,
+	fade = false,
+	expandLabel = 'Подробнее',
+	collapseLabel = 'Свернуть',
+	class: className,
+	contentClass,
+	collapsedContentClass,
+	buttonClass,
+	actionsClass,
+	scroll = 'none',
+	scrollTarget = 'content',
+	scrollOffsetSelector,
+} = Astro.props;
+const contentId = `collapse-${randomUUID()}`;
+---
+
+<collapsible-text
+	class={className}
+	style={`--collapse-height: ${collapsedHeight}; --collapse-lines: ${collapsedLines};`}
+	data-mode={mode}
+	data-fade={fade ? 'true' : undefined}
+	data-expand-label={expandLabel}
+	data-collapse-label={collapseLabel}
+	data-collapsed-content-class={collapsedContentClass}
+	data-scroll={scroll}
+	data-scroll-target={scrollTarget}
+	data-scroll-offset-selector={scrollOffsetSelector}
+>
+	<div
+		id={contentId}
+		class={contentClass}
+		data-collapse-content
+	>
+		<slot />
+	</div>
+	<div class={actionsClass} data-collapse-actions hidden>
+		<button
+			type="button"
+			class:list={['collapse-toggle', buttonClass]}
+			aria-expanded="true"
+			aria-controls={contentId}
+			data-collapse-toggle
+			hidden
+		>
+			<span data-collapse-label>{collapseLabel}</span>
+			<slot name="toggle-icon" />
+		</button>
+	</div>
+</collapsible-text>
+
+<script>
+	import './collapsible-text.js';
+</script>
+
+<style>
+	collapsible-text { display: block; }
+	[data-collapse-toggle][hidden], [data-collapse-actions][hidden] { display: none !important; }
+	.collapse-toggle { cursor: pointer; }
+	collapsible-text:is([data-overflow], [data-measuring]) > [data-collapse-content] {
+		overflow: hidden;
+		position: relative;
+	}
+	collapsible-text[data-mode='height']:is([data-measuring], [data-overflow='true'][data-expanded='false']) > [data-collapse-content] {
+		max-height: var(--collapse-height);
+	}
+	collapsible-text[data-mode='lines']:is([data-measuring], [data-overflow='true'][data-expanded='false']) > [data-collapse-content] {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: var(--collapse-lines);
+	}
+	collapsible-text[data-fade='true'][data-overflow='true']:not([data-measuring]) > [data-collapse-content]::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100px;
+		z-index: 10;
+		pointer-events: none;
+		background: linear-gradient(to top, var(--collapse-fade-color, #fff), transparent);
+		opacity: 0;
+		transition: opacity .25s;
+	}
+	collapsible-text[data-fade='true'][data-overflow='true'][data-expanded='false'] > [data-collapse-content]::before { opacity: 1; }
+	@media (prefers-reduced-motion: reduce) {
+		collapsible-text[data-expanded] > [data-collapse-content]::before { transition: none; }
+	}
+</style>
