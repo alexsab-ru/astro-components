@@ -118,10 +118,10 @@ const panels = await Promise.all(items.map(item => Astro.slots.render(item.id)))
 
 <style>
 	content-tabs { display: block; }
-	/* Keep the outer focus ring inside the scroll viewport without moving tabs. */
+	/* Reserve focus space without overriding caller spacing, e.g. mt-10. */
 	.tabs-list {
 		padding: 6px;
-		margin: -6px;
+		margin-inline: -6px;
 		scroll-padding: 6px;
 	}
 	[data-tabs-list][hidden], [data-tabs-panel][hidden], [data-tabs-media][hidden] {
