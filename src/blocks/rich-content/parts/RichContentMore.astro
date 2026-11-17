@@ -1,4 +1,6 @@
 ---
+import CollapsibleText from '@/ui/collapsible-text/CollapsibleText.astro';
+
 interface Props {
 	value?: string;
 }
@@ -7,17 +9,7 @@ const { value = '' } = Astro.props;
 ---
 
 {value && (
-	<div x-data="{showMore: false}" x-cloak>
-		<div
-			class="space-y-4 overflow-hidden my-8"
-			:class="{'h-[90px]! lg:h-[55px]! seo-content': !showMore}"
-		>
-			<Fragment set:html={value} />
-		</div>
-		<span
-			class="underline cursor-pointer"
-			@click="showMore = !showMore"
-			x-text="showMore ? 'Свернуть' : 'Подробнее'"
-		></span>
-	</div>
+	<CollapsibleText variant="rich">
+		<Fragment set:html={value} />
+	</CollapsibleText>
 )}
