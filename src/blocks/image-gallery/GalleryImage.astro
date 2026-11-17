@@ -1,0 +1,28 @@
+---
+import type { GalleryImageData, GalleryDescriptionMode } from './types';
+import { createGalleryGroup, galleryImageAttributes } from './gallery-data.js';
+
+interface Props {
+	image: GalleryImageData;
+	gallery?: string;
+	title?: string;
+	descriptionMode?: GalleryDescriptionMode;
+	linkClass?: string;
+	imageClass?: string;
+}
+
+const { image, gallery, title, descriptionMode = 'text', linkClass = 'block', imageClass = 'w-full h-auto' } = Astro.props;
+const group = createGalleryGroup(gallery);
+const attributes = galleryImageAttributes(image, title, descriptionMode);
+---
+
+<a
+	href={image.url}
+	class:list={['glightbox', linkClass]}
+	data-title={attributes.title}
+	data-description={attributes.description}
+	data-gallery={group}
+	data-gallery-image
+>
+	<img src={attributes.src} alt={attributes.alt} class={imageClass} />
+</a>

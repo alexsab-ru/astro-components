@@ -1,0 +1,25 @@
+---
+import GalleryImage from './GalleryImage.astro';
+import type { GalleryImageData, GalleryLayout, GalleryDescriptionMode } from './types';
+import { createGalleryGroup } from './gallery-data.js';
+import { createGalleryBlocks } from './gallery-layout.js';
+
+interface Props {
+	images: GalleryImageData[];
+	layout?: GalleryLayout;
+	gallery?: string;
+	title?: string;
+	descriptionMode?: GalleryDescriptionMode;
+}
+
+const { images = [], layout = 'mosaic', gallery, title, descriptionMode = 'text' } = Astro.props;
+const group = createGalleryGroup(gallery);
+const blocks = createGalleryBlocks(images, layout);
+const shared = { gallery: group, title, descriptionMode };
+---
+
+{blocks.map(block => block.className ? (
+	<div class={block.className} data-gallery-layout={layout}>
+		{block.items.map(item => <GalleryImage {...item} {...shared} />)}
+	</div>
+) : block.items.map(item => <GalleryImage {...item} {...shared} />))}
