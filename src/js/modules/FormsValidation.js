@@ -109,6 +109,7 @@ export default class FormsValidation {
                     ? this.form.querySelector(`.error-message.${element.name}`)
                     : element.parentElement.querySelector(`.error-message.${element.name}`);
                 if (errorField) {
+                    if (element.hasAttribute('aria-errormessage')) element.setAttribute('aria-invalid', 'true');
                     errorField.innerText = errorMessage;
                     errorField.classList.remove('hidden');
                     // Определяем тип события в зависимости от типа поля
@@ -127,6 +128,9 @@ export default class FormsValidation {
                         // Создаем новый обработчик для скрытия сообщения об ошибке
                         const handler = () => {
                             errorField.classList.add('hidden');
+                            group.forEach(radio => {
+                                if (radio.hasAttribute('aria-errormessage')) radio.removeAttribute('aria-invalid');
+                            });
                             // Удаляем обработчики со всех radio в группе
                             group.forEach((radio, idx) => {
                                 radio.removeEventListener(eventType, errorField._radioHandlers[idx]);
@@ -152,6 +156,7 @@ export default class FormsValidation {
                                 element.setCustomValidity('');
                             }
                             errorField.classList.add('hidden');
+                            if (element.hasAttribute('aria-errormessage')) element.removeAttribute('aria-invalid');
                             element.removeEventListener(eventType, handler);
                             errorField._inputHandler = null;
                         };

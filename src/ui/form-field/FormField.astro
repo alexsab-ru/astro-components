@@ -1,0 +1,48 @@
+---
+interface Props {
+	controlId?: string;
+	name?: string;
+	label?: string;
+	hint?: string;
+	required?: boolean;
+	errorText?: string;
+	errorClasses?: string;
+	class?: string;
+}
+
+const {
+	controlId, name, label, hint, required = false, errorText = '',
+	errorClasses = 'text-xs text-red-500', class: className,
+} = Astro.props;
+---
+
+<div class:list={['w-full', className]} data-form-field>
+	{label && (
+		<label for={controlId} class="mb-2 block">
+			{label}{required && <span aria-hidden="true"> *</span>}
+		</label>
+	)}
+	<slot />
+	{hint && <p id={controlId ? `${controlId}-hint` : undefined} class="mt-2 text-xs text-gray-600">{hint}</p>}
+	{required && (
+		<div
+			id={controlId ? `${controlId}-error` : undefined}
+			class:list={['error-message', 'hidden', name, errorClasses]}
+			aria-live="polite"
+		>
+			{errorText}
+		</div>
+	)}
+	<slot name="after" />
+</div>
+
+<script>
+	import { resetFieldErrors } from './field-reset.js';
+	document.addEventListener('reset', event => {
+		const form = event.target;
+		if (!(form instanceof HTMLFormElement)) return;
+		queueMicrotask(() => {
+			if (!event.defaultPrevented) resetFieldErrors(form);
+		});
+	}, true);
+</script>
