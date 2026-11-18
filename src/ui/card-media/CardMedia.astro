@@ -1,70 +1,208 @@
 ---
+import { randomUUID } from 'node:crypto';
+import CardAction from '@/ui/card-action/CardAction.astro';
 import MediaFrame from '@/ui/media-frame/MediaFrame.astro';
-import type { MediaImage } from '@/ui/media-frame/media-overlay.types';
+import type { CardMediaData } from './types';
 
-interface Props {
-  imgPlacement?: string;
-  images?: MediaImage[];
-  imageAspectRatio?: 'auto' | '4/3' | '16/9' | '3/2' | '1/1';
-  imageFit?: 'cover' | 'contain';
-  lightboxDescription?: string;
-}
-
+interface Props extends CardMediaData {}
 const {
-  imgPlacement = 'left',
-  images = [],
-  imageAspectRatio = 'auto',
-  imageFit = 'contain',
-  lightboxDescription,
-
+	imgPlacement = 'left',
+	images = [],
+	imageAspectRatio = 'auto',
+	imageFit = 'contain',
+	mediaVariant = 'split',
+	thumbnailWidth = '12rem',
+	lightboxDescription,
+	gallery = `media-card-${randomUUID()}`,
+	title,
+	subtitle,
+	content,
+	buttons = [],
+	headingTag: Heading = 'h2',
+	titleClass = 'text-2xl! lg:text-4xl!',
+	class: className,
 } = Astro.props;
 const aspectRatioClasses = {
-  auto: '',
-  '4/3': 'aspect-4/3',
-  '16/9': 'aspect-video',
-  '3/2': 'aspect-3/2',
-  '1/1': 'aspect-square',
+	auto: '',
+	'4/3': 'aspect-4/3',
+	'16/9': 'aspect-video',
+	'3/2': 'aspect-3/2',
+	'1/1': 'aspect-square',
 };
 const hasFixedAspectRatio = imageAspectRatio !== 'auto';
+const thumbnail = mediaVariant === 'thumbnail';
+const hasLegacyImage = Astro.slots.has('card-image');
 const imageClasses = hasFixedAspectRatio
-  ? `w-full h-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} object-center`
-  : 'w-full h-auto object-contain object-center';
+	? `w-full h-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} object-center`
+	: 'w-full h-auto object-contain object-center';
+const actions = buttons.slice(0, 2);
 ---
 
-<article class=`flex flex-col ${imgPlacement === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row'} bg-zinc-50 rounded-2xl overflow-hidden`>
-  {images.length > 0 && (
-    <div class={`swiper model-gallery-slider w-full lg:w-1/2 bg-zinc-100 ${aspectRatioClasses[imageAspectRatio]}`}>
-      <div class={`swiper-wrapper ${hasFixedAspectRatio ? 'h-full' : ''}`}>
-      {images.map(img => (
-          <div class={hasFixedAspectRatio ? 'swiper-slide h-full!' : 'swiper-slide'}>
-            <MediaFrame
-              overlays={img.overlays}
-              reserveBottom={images.length > 1}
-              classes={hasFixedAspectRatio ? 'h-full' : ''}
-            >
-              {img.thumbUrl ? (
-                <a href={img.imageUrl} class={`glightbox cursor-zoom-in select-none ${hasFixedAspectRatio ? 'block h-full' : ''}`} data-gallery={images[0].imageUrl} data-description={lightboxDescription}>
-                  <img src={img.thumbUrl} class={imageClasses} loading="lazy" alt={img.alt || ''} />
-                </a>
-              ) : (
-                <img src={img.imageUrl} class={imageClasses} loading="lazy" alt={img.alt || ''} />
-              )}
-            </MediaFrame>
-          </div>
-        )
-      )}
-      </div>
-      {images.length > 1 && (
-        <>
-          <div class="swiper-pagination simple-slider-pagination bottom-0 z-20!"></div>
-          <div class="swiper-button-prev model-gallery-slider-button-prev hidden! sm:flex! bg-white/80! z-20!"></div>
-          <div class="swiper-button-next model-gallery-slider-button-next hidden! sm:flex! bg-white/80! z-20!"></div>
-        </>
-      )}
-    </div>
-  )}
-  <div><slot name="card-image" /></div>
-  <div class="flex shrink-0 lg:w-1/2 flex-col justify-center gap-6 lg:gap-12 px-6 py-12 lg:px-12">
-    <slot name="card-content" />
-  </div>
+<article
+	class:list={[
+		'flex flex-col bg-zinc-50 rounded-2xl overflow-hidden',
+		imgPlacement === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row',
+		className,
+	]}
+	data-media-card
+	data-media-variant={mediaVariant}
+	style={`--card-media-thumbnail-width: ${thumbnailWidth};`}
+>
+	{images.length > 0 && (
+		<div
+			class:list={[
+				thumbnail
+					? 'shrink-0 max-w-full p-6 lg:p-10 self-center'
+					: 'w-full lg:w-1/2 bg-zinc-100',
+			]}
+		>
+			<div
+				class:list={[
+					'swiper model-gallery-slider w-full',
+					aspectRatioClasses[imageAspectRatio],
+				]}
+				style={
+					thumbnail
+						? 'width: var(--card-media-thumbnail-width); max-width: 100%;'
+						: undefined
+				}
+			>
+				<div
+					class:list={[
+						'swiper-wrapper',
+						{ 'h-full': hasFixedAspectRatio },
+					]}
+				>
+					{images.map((img) => (
+						<div
+							class={
+								hasFixedAspectRatio
+									? 'swiper-slide h-full!'
+									: 'swiper-slide'
+							}
+						>
+							<MediaFrame
+								overlays={img.overlays}
+								reserveBottom={images.length > 1}
+								classes={hasFixedAspectRatio ? 'h-full' : ''}
+							>
+								{img.thumbUrl ? (
+									<a
+										href={img.imageUrl}
+										class:list={[
+											'glightbox cursor-zoom-in select-none',
+											{
+												'block h-full':
+													hasFixedAspectRatio,
+											},
+										]}
+										data-gallery={gallery}
+										data-description={lightboxDescription}
+									>
+										<img
+											src={img.thumbUrl}
+											class={imageClasses}
+											loading="lazy"
+											alt={img.alt || ''}
+										/>
+									</a>
+								) : (
+									<img
+										src={img.imageUrl}
+										class={imageClasses}
+										loading="lazy"
+										alt={img.alt || ''}
+									/>
+								)}
+							</MediaFrame>
+						</div>
+					))}
+				</div>
+				{images.length > 1 && (
+					<>
+						<div class="swiper-pagination simple-slider-pagination bottom-0 z-20!"></div>
+						<div class="swiper-button-prev model-gallery-slider-button-prev hidden! sm:flex! bg-white/80! z-20!"></div>
+						<div class="swiper-button-next model-gallery-slider-button-next hidden! sm:flex! bg-white/80! z-20!"></div>
+					</>
+				)}
+			</div>
+		</div>
+	)}
+	{hasLegacyImage && (
+		<div>
+			<slot name="card-image" />
+		</div>
+	)}
+	<div
+		class:list={[
+			'flex min-w-0 flex-col justify-center gap-6 lg:gap-12 px-6 py-12 lg:px-12',
+			(images.length && !thumbnail) || hasLegacyImage
+				? 'shrink-0 lg:w-1/2'
+				: 'flex-1',
+		]}
+	>
+		<slot name="card-heading">
+			{(title || subtitle) && (
+				<div class="flex flex-col gap-2">
+					{subtitle && (
+						<p class="text-gray-700 text-base! lg:text-lg!">
+							{subtitle}
+						</p>
+					)}
+					{title && (
+						<Heading
+							class:list={['m-0! p-0! before:hidden', titleClass]}
+						>
+							{title}
+						</Heading>
+					)}
+				</div>
+			)}
+		</slot>
+		<slot name="card-content">
+			{content && (
+				<div
+					class="card-media-content text-gray-700 text-base! lg:text-lg!"
+					set:html={content}
+				/>
+			)}
+		</slot>
+		{actions.length > 0 && (
+			<div
+				class:list={[
+					'grid gap-3',
+					{ 'sm:grid-cols-2': actions.length === 2 },
+				]}
+				data-media-card-actions
+			>
+				{actions.map((button, index) => (
+					<CardAction
+						source={button}
+						class={`btn m-0! ${button.classes || (index ? 'btn-o' : '')}`}
+						download={button.download}
+					>
+						<span>{button.title}</span>
+					</CardAction>
+				))}
+			</div>
+		)}
+	</div>
 </article>
+
+<script>
+	import './slider';
+</script>
+
+<style>
+	[data-media-card] :global(.card-media-content ul) {
+		list-style: disc;
+		padding-inline-start: 1.25rem;
+	}
+	[data-media-card] :global(.card-media-content ol) {
+		list-style: decimal;
+		padding-inline-start: 1.25rem;
+	}
+	[data-media-card] :global(.card-media-content p + p) {
+		margin-top: 1rem;
+	}
+</style>

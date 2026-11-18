@@ -44,6 +44,8 @@ export type ModelCarsCardOverride = {
 	/** Text before the price; use an empty string for a complete promotional message. */
 	pricePrefix?: string;
 	contentItems?: string[];
+	/** Trusted HTML replacing the benefits list; the price remains separate. */
+	content?: string;
 	images?: ModelCarsCardImage[];
 	/** Default overlays for every selected image. Per-image overlays take precedence. */
 	imageOverlays?: MediaOverlay[];

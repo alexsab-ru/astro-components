@@ -37,10 +37,9 @@ export function filterVisibleCars(cars: any[] = []) {
  * @param carData - данные автомобиля
  * @returns найденная модель или null
  */
-export function findModelByCarData(carData: any) {
+export function findModelByCarData(carData: any, models = modelsData.models) {
   if (!carData?.folder_id) return null;
   
-  const { models } = modelsData;
   // Приводим folder_id один раз к нижнему регистру, чтобы не дергать toLowerCase в каждом сравнении.
   const normalizedFolderId = String(carData.folder_id).toLowerCase();
 

@@ -1,23 +1,37 @@
 ---
 // Плитка руководства с изображением модели (вариант бренда Toyota).
 import CardMedia from '@/ui/card-media/CardMedia.astro';
-import Button from '@/ui/button/Button.astro';
 
 interface Props {
 	image?: string;
 	name: string;
 	url: string;
 	imgPlacement?: 'left' | 'right';
+	thumbnailWidth?: string;
 }
-const { image, name, url, imgPlacement = 'left' } = Astro.props;
+const {
+	image,
+	name,
+	url,
+	imgPlacement = 'left',
+	thumbnailWidth = '12rem',
+} = Astro.props;
 ---
-<CardMedia imgPlacement={imgPlacement}>
-	<img slot="card-image" class="max-w-48 lg:p-10" src={image} alt={name} />
-	<Fragment slot="card-content">
-		<h2 class="m-0! p-0! before:hidden text-xl! lg:text-3xl!">Руководство по эксплуатации <span class="font-semibold">{name}</span></h2>
-		<div class="flex gap-3">
-			<Button classes="m-0! btn" url={url} target="_blank" title="Посмотреть" />
-			<Button classes="m-0! btn btn-o" url={url} download title="Скачать" />
-		</div>
+
+<CardMedia
+	imgPlacement={imgPlacement}
+	images={image ? [{ imageUrl: image, alt: name }] : []}
+	mediaVariant="thumbnail"
+	thumbnailWidth={thumbnailWidth}
+	buttons={[
+		{ title: 'Посмотреть', action: { type: 'new-tab', url } },
+		{ title: 'Скачать', url, download: true },
+	]}
+>
+	<Fragment slot="card-heading">
+		<h2 class="m-0! p-0! before:hidden text-xl! lg:text-3xl!">
+			Руководство по эксплуатации{' '}
+			<span class="font-semibold">{name}</span>
+		</h2>
 	</Fragment>
 </CardMedia>
