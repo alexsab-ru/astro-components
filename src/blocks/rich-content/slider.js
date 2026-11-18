@@ -1,10 +1,11 @@
 import Swiper from "swiper";
 import { Navigation, Pagination, Keyboard } from "swiper/modules";
+import { alignImageControls } from './image-controls';
 
-const sliders = document.querySelectorAll(".simple-slider");
+const sliders = document.querySelectorAll(".rich-content-images-slider");
 if(sliders.length){
 	Array.from(sliders).map(slider => {
-		new Swiper(slider, {
+		const swiper = new Swiper(slider, {
 			modules: [Navigation, Pagination, Keyboard],
 			loop: false,
 			speed: 1000,
@@ -14,11 +15,11 @@ if(sliders.length){
 				onlyInViewport: true,
 			},
 			navigation: {
-				nextEl: ".simple-slider-button-next",
-				prevEl: ".simple-slider-button-prev",
+				nextEl: slider.querySelector('.simple-slider-button-next'),
+				prevEl: slider.querySelector('.simple-slider-button-prev'),
 			},
 			pagination: {
-				el: '.simple-slider-pagination',
+				el: slider.querySelector('.simple-slider-pagination'),
 				type: 'bullets',
 				clickable: true,
 			},
@@ -40,6 +41,7 @@ if(sliders.length){
 				  spaceBetween: 20,
 				}
 			 }
-		})
+		});
+		alignImageControls(slider, swiper);
 	})
 }
