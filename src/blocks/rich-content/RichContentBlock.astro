@@ -1,5 +1,6 @@
 ---
 import type { FeedbackFormImage } from '@/blocks/forms/feedback-form/FeedbackFormGallery.astro';
+import type { CardMediaData } from '@/ui/card-media/types';
 
 type TImage = {
 	url: string;
@@ -27,6 +28,7 @@ interface Props {
 		more?: string;
 		images?: TImage[];
 		button?: string;
+		mediaCard?: CardMediaData;
 		alternatingMedia?: {
 			name?: string;
 			title?: string;
@@ -75,6 +77,7 @@ import ButtonSection from './parts/RichContentButton.astro';
 import AlternatingMediaSection from './parts/RichContentAlternatingMedia.astro';
 import AdvantagesSection from './parts/RichContentAdvantages.astro';
 import FeedbackFormSection from './parts/RichContentFeedbackForm.astro';
+import MediaCardSection from './parts/RichContentMediaCard.astro';
 ---
 
 <section class:list={['sm:py-20 py-10 font-light model-section odd:bg-gray-100', section?.sectionClass]} id={section?.id} {...rest}>
@@ -103,6 +106,8 @@ import FeedbackFormSection from './parts/RichContentFeedbackForm.astro';
 					return <AdvantagesSection section={value} />;
 				case 'feedbackForm':
 					return <FeedbackFormSection feedbackForm={value} />;
+				case 'mediaCard':
+					return <MediaCardSection card={value} />;
 				default:
 					return null;
 			}

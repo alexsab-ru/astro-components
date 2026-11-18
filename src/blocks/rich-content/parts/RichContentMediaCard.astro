@@ -1,0 +1,11 @@
+---
+import CardMedia from '@/ui/card-media/CardMedia.astro';
+import type { CardMediaData } from '@/ui/card-media/types';
+
+interface Props {
+	card?: CardMediaData;
+}
+const { card } = Astro.props;
+---
+
+{card && <CardMedia {...card} />}

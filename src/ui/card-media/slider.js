@@ -5,13 +5,14 @@ const modelGallerySliders = document.querySelectorAll('.model-gallery-slider');
 
 if(modelGallerySliders.length){
     Array.from(modelGallerySliders).map(s => {
+        if (s.swiper) return;
         // Если слайд один, кнопки и пагинация не выводятся в разметке.
         // Тогда слайдер инициализируем без навигации.
         const hasControls = s.querySelectorAll('.swiper-slide').length > 1;
 
         new Swiper(s, {
             modules: [Navigation, Pagination],
-            loop: true,
+            loop: hasControls,
             // Ищем элементы управления внутри текущего слайдера,
             // иначе несколько галерей на странице делят одни и те же кнопки.
             navigation: hasControls ? {

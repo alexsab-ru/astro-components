@@ -6,6 +6,7 @@ import { resolveCardAction } from './resolveCardAction';
 interface Props extends HTMLAttributes<'div'> {
 	source: CardActionSource;
 	class?: string;
+	download?: boolean | string;
 }
 const { source, class: classNames = '', ...rest } = Astro.props;
 const resolved = resolveCardAction(source);
