@@ -1,19 +1,6 @@
 ---
-import SpecialServiceItem from './SpecialServicesItem.astro'
-import { type TSpecialService  } from './types'
-interface Props {
-	items: TSpecialService[];
-	title?: string;
-}
-const { items = [], title } = Astro.props;
+import Component from '@/blocks/feature-cards/ImageFeatureCards.astro';
+import { withLegacyServiceAction } from '../services-alt/legacyAction';
+const items = (Astro.props.items || []).map(item => withLegacyServiceAction(item, true));
 ---
-{items.length > 0 && (
-<section class="" id="specials">
-	<div class="section-grid">
-		{title && (<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 xs:gap-y-2 gap-y-4 sm:gap-y-5">
-			{items.map(item => <SpecialServiceItem item={item} />)}
-		</div>
-	</div>
-</section>
-)}
+<Component {...Astro.props} items={items} id={Astro.props.id ?? 'specials'} />

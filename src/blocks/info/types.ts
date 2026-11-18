@@ -1,7 +1,2 @@
-export type TInfoLink = {
-    title?: string;
-    url?: string;
-    icon?: string;
-    iconClasses?: string;
-    target?: string;
-}
+/** @deprecated Use InfoCardData from blocks/feature-cards/types. */
+export type { InfoCardData as TInfoLink } from '@/blocks/feature-cards/types';

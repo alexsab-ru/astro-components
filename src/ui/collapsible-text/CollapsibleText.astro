@@ -91,21 +91,8 @@ const contentId = `collapse-${randomUUID()}`;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: var(--collapse-lines);
 	}
-	collapsible-text[data-fade='true'][data-overflow='true']:not([data-measuring]) > [data-collapse-content]::before {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: 100px;
-		z-index: 10;
-		pointer-events: none;
-		background: linear-gradient(to top, var(--collapse-fade-color, #fff), transparent);
-		opacity: 0;
-		transition: opacity .25s;
-	}
-	collapsible-text[data-fade='true'][data-overflow='true'][data-expanded='false'] > [data-collapse-content]::before { opacity: 1; }
-	@media (prefers-reduced-motion: reduce) {
-		collapsible-text[data-expanded] > [data-collapse-content]::before { transition: none; }
+	collapsible-text[data-fade='true'][data-overflow='true'][data-expanded='false']:not([data-measuring]) > [data-collapse-content] {
+		-webkit-mask-image: linear-gradient(to top, transparent, #000 100px);
+		mask-image: linear-gradient(to top, transparent, #000 100px);
 	}
 </style>

@@ -1,0 +1,15 @@
+---
+import type { BenefitCardData } from './types';
+interface Props {
+	items: BenefitCardData[];
+	classes?: string;
+};
+const { items = [], classes = 'grid sm:grid-cols-3 gap-5 lg:gap-10 text-center mb-10 md:mb-20', ...rest } = Astro.props;
+
+import BenefitCard from './BenefitCard.astro';
+---
+{items.length > 0 && (
+	<div class={ classes } {...rest}>
+		{items.map( item => <BenefitCard item={item} /> )}
+	</div>
+)}

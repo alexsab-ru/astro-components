@@ -1,39 +1,6 @@
 ---
-import { type TSpecialService } from './types';
-interface Props {
-	item: TSpecialService;
-}
-const { item } = Astro.props;
+import Component from '@/blocks/feature-cards/ImageFeatureCard.astro';
+import { withLegacyServiceAction } from '../services-alt/legacyAction';
+const item = withLegacyServiceAction(Astro.props.item, true);
 ---
-
-<a
-	href="#common-modal"
-	class="popup-link special sm:border-4 border-accent-500 xs:px-0 px-4 pt-2 pb-2 sm:px-5 sm:pt-8 sm:pb-8 cursor-pointer transition hover:bg-gray-100 group overflow-x-hidden"
-	data-title={item.title}
-	data-form_name={`Запись на сервис. ${item.title}`}
->
-	<div class="flex items-center">
-		<div class="rounded-full overflow-hidden relative z-10 border-4 border-accent-500 size-[110px] lg:size-[150px] shrink-0">
-			<img
-				src={item.img}
-				alt={item.title}
-				class="absolute w-full h-full object-cover object-center transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-2"
-				loading="lazy"
-			/>
-		</div>
-		<div class="relative grow">
-			<h3
-				class="border-4 border-accent-500 bg-accent-500 text-white pr-6 pl-12 py-2 -ml-10 xs:text-[10px]! text-xs! sm:text-sm! lg:text-lg! xl:text-2xl! font-normal uppercase flex items-center h-auto transition-colors duration-300 group-hover:bg-transparent group-hover:text-accent-500"
-			>
-				{item.title}
-			</h3>
-			{
-				item.subtitle && (
-					<div class="absolute top-full pl-2 text-xs xs:text-sm md:text-base lg:text-lg xl:text-2xl font-weight-bold text-gray-900 mt-1 leading-none!">
-						<Fragment set:html={item.subtitle} />{' '}
-					</div>
-				)
-			}
-		</div>
-	</div>
-</a>
+<Component {...Astro.props} item={item} />

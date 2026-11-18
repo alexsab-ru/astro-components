@@ -1,20 +1,4 @@
 ---
-import type { TInfoLink } from './types';
-import { Icon } from 'astro-icon/components';
-interface Props {
-    item: TInfoLink;
-    classes?: string;
-}
-const { item, classes, ...rest } = Astro.props;
-const { title, url, icon, iconClasses = 'size-[50px] text-accent-400', target } = item;
+import Component from '@/blocks/feature-cards/InfoCard.astro';
 ---
-
-<a 
-    href={url ? url : 'javascript:void(0)'} 
-    class={classes} 
-    { ...target && url ? {target: target} : {} }
-    {...rest}
->
-    <span><Fragment set:html={title} /></span>
-    {icon && (<Icon name={icon} class={iconClasses} />)}
-</a>
+<Component {...Astro.props} />

@@ -19,9 +19,9 @@ const { images = [], sectionId, title } = Astro.props;
 ---
 
 {images.length > 1 ? (
-	<div class="swiper simple-slider pb-10! mb-8">
+	<div class="swiper rich-content-images-slider pb-10! mb-8">
 		<div class="swiper-wrapper">
-			{images.map((img) => (
+			{images.map((img, index) => (
 				<a
 					href={img.url}
 					class="swiper-slide text-center glightbox text-inherit! no-underline!"
@@ -38,6 +38,7 @@ const { images = [], sectionId, title } = Astro.props;
 							<img
 								data-src={img.url}
 								src={img.url}
+								alt={img.title || `${title || 'Изображение'} ${index + 1}`}
 								class="absolute top-0 left-0 w-full h-full object-cover object-center"
 								width="485"
 								height="273"
@@ -55,8 +56,8 @@ const { images = [], sectionId, title } = Astro.props;
 			))}
 		</div>
 		<div class="swiper-pagination simple-slider-pagination bottom-0!"></div>
-		<div class="swiper-button-prev simple-slider-button-prev" />
-		<div class="swiper-button-next simple-slider-button-next" />
+		<button type="button" class="swiper-button-prev simple-slider-button-prev" aria-label="Предыдущее изображение" />
+		<button type="button" class="swiper-button-next simple-slider-button-next" aria-label="Следующее изображение" />
 	</div>
 ) : images.length === 1 ? (
 	<>
@@ -84,3 +85,16 @@ const { images = [], sectionId, title } = Astro.props;
 <script>
 	import '../slider';
 </script>
+
+<style>
+	.rich-content-images-slider {
+		--color-pagination-bg: var(--color-rich-images-pagination-inactive, var(--color-gray-500));
+	}
+	.rich-content-images-slider > .swiper-button-prev,
+	.rich-content-images-slider > .swiper-button-next {
+		top: var(--rich-images-control-top, 50%) !important;
+		margin-top: 0 !important;
+		translate: none !important;
+		transform: translateY(-50%) !important;
+	}
+</style>
