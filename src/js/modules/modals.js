@@ -1,6 +1,8 @@
 import { reachGoal } from '@alexsab-ru/scripts';
 import { syncFormDepartments } from '../utils/formDepartments';
 
+import { syncModalFields } from '../utils/modalFields';
+
 document.querySelectorAll(".popup-link").forEach(
 	(link) =>
 		(link.onclick = (e) => {
@@ -39,16 +41,7 @@ document.querySelectorAll(".popup-link").forEach(
 			if (formSubtitle) {
 				formSubtitle.innerHTML = link.dataset.subtitle || 'Оставьте свои данные и мы свяжемся с Вами в ближайшее время!';
 			}
-			const formName = link.dataset.form_name;
-			const formInput = targetModal.querySelector('input[name="form"]');
-			if (formName && formInput) {
-				formInput.value = formName;
-			}
-			const commentText = link.dataset.comment;
-			const commentInput = targetModal.querySelector('input[name="comment"]');
-			if (commentText && commentInput) {
-				commentInput.value = commentText;
-			}
+			syncModalFields(targetModal, link.dataset);
 			syncFormDepartments(targetModal, link.dataset.choose_department);
 
 			const params = new URLSearchParams(document.location.search);

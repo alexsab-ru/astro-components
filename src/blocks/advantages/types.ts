@@ -1,10 +1,2 @@
-export type TAdvantagesItem = {
-	iconName?: string;
-	iconClass?: string;
-	iconColor?: string;
-	title: string;
-	titleClass?: string;
-	text?: string;
-	textClass?: string;
-	classes?: string;
-}
+/** @deprecated Use BenefitCardData from blocks/feature-cards/types. */
+export type { BenefitCardData as TAdvantagesItem } from '@/blocks/feature-cards/types';

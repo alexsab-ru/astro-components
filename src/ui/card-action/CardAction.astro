@@ -1,0 +1,50 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import type { CardActionSource } from './types';
+import { resolveCardAction } from './resolveCardAction';
+
+interface Props extends HTMLAttributes<'div'> {
+	source: CardActionSource;
+	class?: string;
+}
+const { source, class: classNames = '', ...rest } = Astro.props;
+const resolved = resolveCardAction(source);
+const isPopup = resolved.type === 'popup';
+const isInteractive = resolved.type !== 'none';
+const Element = isInteractive ? 'a' : 'div';
+const classes = classNames.split(/\s+/).filter(value => value && value !== 'popup-link');
+const popup = isPopup ? resolved.popup : {};
+---
+<Element
+	{...rest}
+	class:list={[classes, { 'popup-link': isPopup, group: isInteractive }]}
+	data-card-action={resolved.type}
+	href={isInteractive ? resolved.href : undefined}
+	target={resolved.type === 'link' || resolved.type === 'new-tab' ? resolved.target : undefined}
+	rel={resolved.type === 'link' || resolved.type === 'new-tab' ? resolved.rel : undefined}
+	role={isPopup ? 'button' : rest.role}
+	aria-haspopup={isPopup ? 'dialog' : undefined}
+	aria-controls={isPopup ? resolved.id : undefined}
+	data-title={isPopup ? (rest['data-title'] ?? popup.title) : undefined}
+	data-subtitle={isPopup ? (rest['data-subtitle'] ?? popup.subtitle) : undefined}
+	data-form_name={isPopup ? (rest['data-form_name'] ?? popup.formName) : undefined}
+	data-comment={isPopup ? (rest['data-comment'] ?? popup.comment) : undefined}
+	data-choose_department={isPopup ? (rest['data-choose_department'] ?? popup.chooseDepartment) : undefined}
+	data-filtering={isPopup ? (rest['data-filtering'] ?? popup.filtering) : undefined}
+	data-sorting={isPopup ? (rest['data-sorting'] ?? popup.sorting) : undefined}
+	data-dealer-name={isPopup ? (rest['data-dealer-name'] ?? popup.dealerName) : undefined}
+>
+	<slot />
+	{resolved.type === 'new-tab' && <span class="sr-only"> (откроется в новой вкладке)</span>}
+</Element>
+<script>
+	// Flow content in a whole-card trigger stays valid inside an anchor. Add the
+	// Space activation expected of its button role; Enter is native to the anchor.
+	document.addEventListener('keydown', event => {
+		if (event.key !== ' ' || event.repeat || event.defaultPrevented) return;
+		const trigger = (event.target as Element)?.closest<HTMLAnchorElement>('a[data-card-action="popup"]');
+		if (!trigger) return;
+		event.preventDefault();
+		trigger.click();
+	});
+</script>

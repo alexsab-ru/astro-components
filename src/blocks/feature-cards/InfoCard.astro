@@ -1,0 +1,20 @@
+---
+import CardAction from '@/ui/card-action/CardAction.astro';
+import type { InfoCardData } from './types';
+import { Icon } from 'astro-icon/components';
+interface Props {
+	item: InfoCardData;
+	classes?: string;
+}
+const { item, classes, ...rest } = Astro.props;
+const { title, icon, iconClasses = 'size-[50px] text-accent-400' } = item;
+---
+
+<CardAction
+source={item}
+class={classes}
+{...rest}
+>
+	<span><Fragment set:html={title} /></span>
+	{icon && (<Icon name={icon} class={iconClasses} />)}
+</CardAction>
