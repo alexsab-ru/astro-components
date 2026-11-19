@@ -1,0 +1,62 @@
+---
+import { randomUUID } from 'node:crypto';
+import '@/ui/color-link/color-links.css';
+export interface ColorChoice {
+	id: string;
+	name: string;
+	image: string;
+	style?: string;
+}
+interface Props {
+	items?: ColorChoice[];
+	alt?: string;
+	class?: string;
+}
+const { items = [], alt = '', class: classes = '' } = Astro.props;
+const imageId = `color-showcase-${randomUUID()}`;
+---
+
+{items.length > 0 && (
+	<div
+		class={`color-showcase ${classes}`}
+		data-color-showcase
+	>
+		<img
+			id={imageId}
+			src={items[0].image}
+			alt={alt || items[0].name}
+			class="w-full h-auto object-contain"
+			data-color-image
+			data-color-base-alt={alt}
+			loading="lazy"
+		/>
+		<div class="flex flex-wrap justify-center gap-4 sm:gap-5">
+			{items.map((item, index) => (
+				<button
+					type="button"
+					class:list={[
+						'color-choice cursor-pointer',
+						{ active: index === 0 },
+					]}
+					title={item.name}
+					aria-label={item.name}
+					aria-pressed={index === 0}
+					aria-controls={imageId}
+					data-color={item.id}
+					data-choice-image={item.image}
+					data-choice-name={item.name}
+					style={item.style}
+				/>
+			))}
+			<p
+				class="w-full text-center text-xs text-black"
+				data-color-name
+			>
+				{items[0].name}
+			</p>
+		</div>
+	</div>
+)}
+<script>
+	import './color-showcase.js';
+</script>

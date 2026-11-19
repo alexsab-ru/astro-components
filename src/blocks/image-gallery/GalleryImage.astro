@@ -9,9 +9,20 @@ interface Props {
 	descriptionMode?: GalleryDescriptionMode;
 	linkClass?: string;
 	imageClass?: string;
+	alt?: string;
+	loading?: 'lazy' | 'eager';
 }
 
-const { image, gallery, title, descriptionMode = 'text', linkClass = 'block', imageClass = 'w-full h-auto' } = Astro.props;
+const {
+	image,
+	gallery,
+	title,
+	descriptionMode = 'text',
+	linkClass = 'block',
+	imageClass = 'w-full h-auto',
+	alt,
+	loading,
+} = Astro.props;
 const group = createGalleryGroup(gallery);
 const attributes = galleryImageAttributes(image, title, descriptionMode);
 ---
@@ -24,5 +35,10 @@ const attributes = galleryImageAttributes(image, title, descriptionMode);
 	data-gallery={group}
 	data-gallery-image
 >
-	<img src={attributes.src} alt={attributes.alt} class={imageClass} />
+	<img
+		src={attributes.src}
+		alt={alt ?? attributes.alt}
+		loading={loading}
+		class={imageClass}
+	/>
 </a>

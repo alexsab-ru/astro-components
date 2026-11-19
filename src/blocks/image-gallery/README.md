@@ -36,3 +36,20 @@
 
 Проверка подготовки раскладок, подписей и групп:
 `node --test src/blocks/image-gallery/gallery.test.mjs`.
+
+## Фотолента ImageCarousel
+
+Самостоятельный слайдер семейства галерей использует тот же GalleryImage.
+Принимает обычный массив images (url, alt, title, description), без модели.
+По умолчанию fullBleed=true — до краёв экрана; false оставляет контейнерную ширину.
+У каждого экземпляра своя группа просмотра и локальный Swiper; одинаковый
+явный gallery намеренно объединяет фотографии. GLightbox остаётся общим.
+Картинки загружаются лениво, после загрузки Swiper обновляет размеры слайдов.
+
+```astro
+<ImageCarousel images={[{url:'/photo.webp',alt:'Описание'}]} fullBleed />
+```
+
+GalleryImage дополнительно принимает необязательные alt и loading; старые
+вызовы Grid/SimpleGrid сохраняют прежние значения. ModelPhotos — только адаптер
+model.photos к этой общей фотоленте.

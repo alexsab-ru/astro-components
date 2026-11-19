@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
 	MODEL_PART_ORDER,
-	MODEL_HERO_ORDER,
 	resolveModelOrder,
 	isModelPartVisible,
 } from './model-layout.js';
@@ -13,27 +12,21 @@ test('default and partial orders retain all existing parts', () => {
 	assert.deepEqual(resolveModelOrder(['actions', 'hero']), [
 		'actions',
 		'hero',
-		'media',
 		'colors',
-		'photos',
+		'media',
 		'characteristics',
 	]);
-	assert.deepEqual(
-		resolveModelOrder(['price', 'heading'], MODEL_HERO_ORDER),
-		['price', 'heading', 'breadcrumb', 'slogan', 'benefits']
-	);
 });
 test('invalid keys and duplicates are ignored without mutating the inputs', () => {
-	const input = ['photos', 'unknown', 'photos', 'colors'];
+	const input = ['media', 'unknown', 'media', 'colors'];
 	assert.deepEqual(resolveModelOrder(input), [
-		'photos',
+		'media',
 		'colors',
 		'hero',
-		'media',
 		'characteristics',
 		'actions',
 	]);
-	assert.deepEqual(input, ['photos', 'unknown', 'photos', 'colors']);
+	assert.deepEqual(input, ['media', 'unknown', 'media', 'colors']);
 	assert.deepEqual(resolveModelOrder({ hero: false }), MODEL_PART_ORDER);
 	assert.deepEqual(resolveModelOrder([]), MODEL_PART_ORDER);
 });
@@ -43,7 +36,7 @@ test('only explicit false disables a part, independently from its position', () 
 		resolveModelOrder(['actions']).filter((key) =>
 			isModelPartVisible(parts, key)
 		),
-		['actions', 'hero', 'colors', 'photos', 'characteristics']
+		['actions', 'hero', 'colors', 'characteristics']
 	);
 	assert.equal(isModelPartVisible(parts, 'price'), false);
 	assert.equal(isModelPartVisible(undefined, 'heading'), true);

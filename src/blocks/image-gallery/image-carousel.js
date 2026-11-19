@@ -1,10 +1,12 @@
 import Swiper from 'swiper';
 import { Autoplay } from 'swiper/modules';
 
-const sliders = document.querySelectorAll('.photo-slider');
+const sliders = document.querySelectorAll(
+	'[data-image-carousel] .photo-slider'
+);
 sliders.forEach((element) => {
 	if (element.swiper) return;
-	new Swiper(element, {
+	const slider = new Swiper(element, {
 		modules: [Autoplay],
 		loop: element.querySelectorAll('.swiper-slide').length > 1,
 		centeredSlides: true,
@@ -20,6 +22,12 @@ sliders.forEach((element) => {
 			640: { spaceBetween: 10 },
 			1280: { spaceBetween: 10 },
 		},
+	});
+	element.querySelectorAll('img').forEach((image) => {
+		if (!image.complete)
+			image.addEventListener('load', () => slider.update(), {
+				once: true,
+			});
 	});
 });
 // GLightbox belongs to the site's shared bootstrap (and the guide preview shell).

@@ -1,0 +1,36 @@
+---
+import CardAction from '@/ui/card-action/CardAction.astro';
+import { Icon } from 'astro-icon/components';
+import type { HeroPoint } from './types';
+interface Props {
+	items?: HeroPoint[];
+}
+const { items = [] } = Astro.props;
+---
+
+{items.length > 0 && (
+	<div
+		class="flex flex-col gap-4 mt-10 lg:mt-14"
+		data-hero-points
+	>
+		{items.map((item) => (
+			<CardAction
+				source={item}
+				class="w-fit inline-flex items-center flex-nowrap gap-1.5 last:pb-10 text-white font-medium text-base sm:text-xl"
+			>
+				<span class="w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center">
+					{item.icon && (
+						<Icon
+							name={item.icon}
+							class="text-2xl"
+						/>
+					)}
+				</span>
+				<span
+					class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+					set:html={item.label}
+				/>
+			</CardAction>
+		))}
+	</div>
+)}

@@ -1,36 +1,26 @@
 ---
-import { Icon } from 'astro-icon/components';
+import HeroPoints from '@/blocks/hero/HeroPoints.astro';
 interface Props {
 	model: any;
 }
 const { model } = Astro.props;
+const items = (model.benefits || []).map((b: any) => ({
+	label: b.label,
+	icon: b.iconName,
+	action:
+		b.view === 'popup-link'
+			? {
+					type: 'popup',
+					id: (b.url || '#common-modal').replace(/^#/, ''),
+					title: b.dataTitle,
+					formName: b.dataFormName,
+				}
+			: b.url && b.url !== '#'
+				? { type: 'link', url: b.url }
+				: { type: 'none' },
+}));
 ---
 
-<div
-	data-model-hero-part="benefits"
-	class="flex flex-col gap-4 mt-10 lg:mt-14"
->
-	{Array.isArray(model?.benefits) &&
-		model.benefits.map((benefit) => (
-			<a
-				class={`w-fit inline-flex items-center flex-nowrap gap-1.5 last:pb-10 text-white font-medium text-base sm:text-xl group ${benefit.view === 'popup-link' ? 'popup-link' : ''}`}
-				href={benefit?.url ? benefit.url : '#'}
-				data-title={benefit?.dataTitle}
-				data-form_name={benefit?.dataFormName}
-			>
-				<span class="w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center">
-					{benefit.iconName && (
-						<Icon
-							name={benefit.iconName}
-							class="text-2xl"
-						/>
-					)}
-				</span>
-				{benefit.label && (
-					<span class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
-						<Fragment set:html={benefit.label} />
-					</span>
-				)}
-			</a>
-		))}
+<div data-model-hero-part="benefits">
+	<HeroPoints items={items} />
 </div>

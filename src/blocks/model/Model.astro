@@ -1,9 +1,7 @@
 ---
 import type { ModelProps } from './types';
 import ModelHero from './ModelHero.astro';
-import ModelBadge from './ModelBadge.astro';
-import ModelMedia from './ModelMedia.astro';
-import ModelColorPicker from './ModelColorPicker.astro';
+import ModelColors from './ModelColors.astro';
 import ModelPhotos from './ModelPhotos.astro';
 import ModelCharacteristics from './ModelCharacteristics.astro';
 import ModelActions from './ModelActions.astro';
@@ -18,7 +16,11 @@ const {
 	photos,
 	parts,
 	partOrder,
-	heroOrder,
+	eyebrow,
+	actions,
+	actionPreset,
+	excludeActions,
+	testDriveEnabled,
 	creditEnabled,
 } = Astro.props;
 const order = resolveModelOrder(partOrder);
@@ -31,8 +33,6 @@ const visibleOrder = order.filter((key) => isModelPartVisible(parts, key));
 		id={id}
 		data-dir={model?.id}
 	>
-		{isModelPartVisible(parts, 'badge') &&
-			isModelPartVisible(parts, 'hero') && <ModelBadge model={model} />}
 		{visibleOrder.map((key) => {
 			switch (key) {
 				case 'hero':
@@ -42,14 +42,12 @@ const visibleOrder = order.filter((key) => isModelPartVisible(parts, key));
 							breadcrumb={breadcrumb}
 							status={status}
 							parts={parts}
-							heroOrder={heroOrder}
+							eyebrow={eyebrow}
 						/>
 					);
-				case 'media':
-					return <ModelMedia model={model} />;
 				case 'colors':
-					return <ModelColorPicker model={model} />;
-				case 'photos':
+					return <ModelColors model={model} />;
+				case 'media':
 					return (
 						<ModelPhotos
 							model={model}
@@ -64,6 +62,10 @@ const visibleOrder = order.filter((key) => isModelPartVisible(parts, key));
 							model={model}
 							status={status}
 							creditEnabled={creditEnabled}
+							testDriveEnabled={testDriveEnabled}
+							preset={actionPreset}
+							actions={actions}
+							excludeActions={excludeActions}
 						/>
 					);
 			}

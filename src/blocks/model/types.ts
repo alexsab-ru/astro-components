@@ -2,7 +2,7 @@ import type { TBreadcrumb } from '@/ui/breadcrumbs/types';
 import type { TStatus } from '@/types/TStatus';
 
 export type ModelPart =
-	'hero' | 'media' | 'colors' | 'photos' | 'characteristics' | 'actions';
+	'hero' | 'media' | 'colors' | 'characteristics' | 'actions';
 export type ModelHeroPart =
 	'breadcrumb' | 'heading' | 'slogan' | 'price' | 'benefits';
 export type ModelParts = Partial<
@@ -11,7 +11,12 @@ export type ModelParts = Partial<
 export interface ModelOptions {
 	parts?: ModelParts;
 	partOrder?: ModelPart[];
-	heroOrder?: ModelHeroPart[];
+	eyebrow?: string;
+	actionPreset?: 'default' | 'purchase' | 'contact';
+	actions?: (string | import('@/blocks/action-group/types').ActionButton)[];
+	excludeActions?: string[];
+	testDriveEnabled?: boolean;
+	creditEnabled?: boolean;
 }
 export interface ModelProps extends ModelOptions {
 	model: any;
@@ -21,5 +26,4 @@ export interface ModelProps extends ModelOptions {
 	id?: string;
 	/** Optional supplied photographs; otherwise model.photos is fetched when visible. */
 	photos?: string[];
-	creditEnabled?: boolean;
 }
