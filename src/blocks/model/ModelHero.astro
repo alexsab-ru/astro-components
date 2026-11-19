@@ -1,0 +1,57 @@
+---
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
+import ModelHeading from './ModelHeading.astro';
+import ModelSlogan from './ModelSlogan.astro';
+import ModelPrice from './ModelPrice.astro';
+import ModelBenefits from './ModelBenefits.astro';
+import { getModelHomeImg } from '@/js/utils/modelFields';
+import {
+	resolveModelOrder,
+	MODEL_HERO_ORDER,
+	isModelPartVisible,
+} from './model-layout.js';
+import type { ModelProps } from './types';
+import './model.css';
+interface Props extends ModelProps {}
+const { model, breadcrumb, status, parts, heroOrder } = Astro.props;
+const order = resolveModelOrder(heroOrder, MODEL_HERO_ORDER);
+---
+
+<div
+	class="model__info lg:min-h-[800px]"
+	data-model-part="hero"
+	style={`background-image: url(${getModelHomeImg(model)})`}
+>
+	<div class="container h-full pt-8 sm:pt-[2.5%] xl:pb-10">
+		{order
+			.filter((key) => isModelPartVisible(parts, key))
+			.map((key) => {
+				switch (key) {
+					case 'breadcrumb':
+						return (
+							breadcrumb && (
+								<div data-model-hero-part="breadcrumb">
+									<Breadcrumbs
+										breadcrumb={[...breadcrumb]}
+										color="text-(--color-white)!"
+									/>
+								</div>
+							)
+						);
+					case 'heading':
+						return <ModelHeading model={model} />;
+					case 'slogan':
+						return model.slogan && <ModelSlogan model={model} />;
+					case 'price':
+						return (
+							<ModelPrice
+								model={model}
+								status={status}
+							/>
+						);
+					case 'benefits':
+						return <ModelBenefits model={model} />;
+				}
+			})}
+	</div>
+</div>

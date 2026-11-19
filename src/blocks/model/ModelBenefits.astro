@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon/components';
+interface Props {
+	model: any;
+}
+const { model } = Astro.props;
+---
+
+<div
+	data-model-hero-part="benefits"
+	class="flex flex-col gap-4 mt-10 lg:mt-14"
+>
+	{Array.isArray(model?.benefits) &&
+		model.benefits.map((benefit) => (
+			<a
+				class={`w-fit inline-flex items-center flex-nowrap gap-1.5 last:pb-10 text-white font-medium text-base sm:text-xl group ${benefit.view === 'popup-link' ? 'popup-link' : ''}`}
+				href={benefit?.url ? benefit.url : '#'}
+				data-title={benefit?.dataTitle}
+				data-form_name={benefit?.dataFormName}
+			>
+				<span class="w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center">
+					{benefit.iconName && (
+						<Icon
+							name={benefit.iconName}
+							class="text-2xl"
+						/>
+					)}
+				</span>
+				{benefit.label && (
+					<span class="translate-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+						<Fragment set:html={benefit.label} />
+					</span>
+				)}
+			</a>
+		))}
+</div>

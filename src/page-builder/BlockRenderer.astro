@@ -32,7 +32,7 @@ const data = (block: TBlock): any => ({ ...(block?.content ?? {}), ...(block?.pr
 				return <PageH1 h1={c.h1 ?? c.title ?? ''} classes={c.classes ?? c.class ?? ''} />;
 			case 'model':
 				return context.model
-					? <Model model={context.model} status={context.status} breadcrumb={context.breadcrumb} />
+					? <Model model={context.model} status={context.status} breadcrumb={context.breadcrumb} parts={c.parts} partOrder={c.partOrder} heroOrder={c.heroOrder} />
 					: null;
 			case 'rich-content':
 				return <RichContentBlock section={block} />;

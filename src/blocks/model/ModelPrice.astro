@@ -1,0 +1,43 @@
+---
+import Button from '@/ui/button/Button.astro';
+import { currencyFormat } from '@/js/utils/numbers.format';
+import { createDisclaimerIcon } from '@/js/utils/disclaimer';
+import {
+	getModelBrandDisplayName,
+	getModelTitle,
+} from '@/js/utils/modelFields';
+import type { TStatus } from '@/types/TStatus';
+interface Props {
+	model: any;
+	status?: TStatus;
+}
+const { model, status } = Astro.props;
+const labelBtn =
+	status === 'preorder' || status === 'comminsoon'
+		? 'Предзаказ'
+		: 'Узнать цену';
+const modelTitle = getModelTitle(model);
+const brandDisplayName = getModelBrandDisplayName(model);
+---
+
+{model?.price &&
+!isNaN(model?.price) &&
+model?.price != 0 &&
+model?.price != '' ? (
+	<p
+		data-model-hero-part="price"
+		class="uppercase text-3xl sm:text-4xl"
+	>
+		<span class="text-sm text-gray-400">от</span>&nbsp;{currencyFormat(model.price)}
+		{model?.priceDisclaimer && <Fragment set:html={createDisclaimerIcon(model.priceDisclaimer)} />}
+	</p>
+) : (
+	<Button
+		data-model-hero-part="price"
+		classes="popup-link btn px-20! mt-5 flex-1 whitespace-nowrap"
+		url="#common-modal"
+		title={labelBtn}
+		dataTitle={`${labelBtn} ${brandDisplayName} ${modelTitle}`}
+		dataFormName={`${labelBtn}. ${brandDisplayName} ${modelTitle}`}
+	/>
+)}
