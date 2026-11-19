@@ -1,24 +1,57 @@
 ---
-type TMarquee = {
-	title: string;
-	count?: number;
-	speed?: number;
-	show: boolean;
-}
+import { resolveBannerLink } from '@/blocks/banner/link.js';
+import scripts from '@/data/site/scripts.json';
+
 interface Props {
-	marquee: TMarquee;
+	marquee: {
+		title: string | string[];
+		count?: number;
+		speed?: number;
+		show: boolean;
+		url?: string;
+		dataTitle?: string;
+		dataFormName?: string;
+	};
 	classes?: string;
 }
-const {title, count = 8, show = false, speed = 20} = Astro.props.marquee;
-const { classes = "absolute w-full left-0 z-10 top-[50vh] md:top-[70vh]" } = Astro.props;
-const items = Array(count).fill(title) || [];
+
+const { marquee, classes = 'absolute w-full left-0 z-10 top-[50vh] md:top-[70vh]' } = Astro.props;
+const {
+	title, speed = 20, show,
+	dataTitle = 'Обратная связь',
+	dataFormName = `${dataTitle}. Бегущая строка`,
+} = marquee;
+const messages = (Array.isArray(title) ? title : [title]).filter(message => message?.trim());
+const count = marquee.count ?? (Array.isArray(title) ? 2 : 8);
+// Each half of the track must end on a complete sequence for a seamless loop.
+const repeatsPerHalf = Math.ceil(count / 2);
+const link = resolveBannerLink(marquee, { siteOrigin: scripts.site });
+const Tag = link ? 'a' : 'div';
 ---
-{show && (
-	<div class={`flex items-center overflow-x-hidden bg-accent-500 ${classes}`} style={`--animation-speed: ${speed}s`}>
-		<div class="marquee_run_string whitespace-nowrap py-2 sm:py-3 sm:text-xl md:text-3xl text-white">
-			{items.length > 0 && items.map(item => (
-				<span class="uppercase pr-8 sm:pr-[54px] mr-[28px] sm:mr-[44px]"><Fragment set:html={item} /></span>
+
+{show && messages.length > 0 && repeatsPerHalf > 0 && (
+	<Tag
+		class:list={['block overflow-hidden bg-accent-500 text-white', classes, { 'popup-link': link?.isPopup }]}
+		href={link?.href}
+		target={link?.target}
+		rel={link?.rel}
+		aria-label={link ? marquee.dataTitle : undefined}
+		data-title={link ? dataTitle : undefined}
+		data-form_name={link ? dataFormName : undefined}
+		style={`--animation-speed: ${speed}s`}
+	>
+		<div class="marquee_run_string flex w-max min-w-[200%] whitespace-nowrap py-2 sm:py-3 sm:text-xl md:text-3xl">
+			{[0, 1].map(half => (
+				<div class="marquee-group flex flex-1 justify-around" aria-hidden={half === 1 || undefined}>
+					{Array.from({ length: repeatsPerHalf }, (_, repeat) => messages.map(message => (
+						<span
+							class="marquee-item uppercase pr-8 sm:pr-[54px] mr-[28px] sm:mr-[44px]"
+							aria-hidden={repeat > 0 || undefined}
+							set:html={message}
+						/>
+					)))}
+				</div>
 			))}
 		</div>
-	</div>
+	</Tag>
 )}

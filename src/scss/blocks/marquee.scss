@@ -1,12 +1,12 @@
 .marquee_run_string {
 	animation: runstring var(--animation-speed) infinite linear;
 }
-.marquee_run_string span {
+.marquee-item {
 	display: inline-block;
 	position: relative;
 	font-weight: 500;
 }
-.marquee_run_string span:after {
+.marquee-item:after {
 	content: '';
 	display: block;
 	width: 10px;
@@ -23,5 +23,21 @@
 	}
 	100% {
 		transform: translateX(-50%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.marquee_run_string {
+		animation: none;
+		width: 100%;
+		min-width: 0;
+		white-space: normal;
+	}
+	.marquee-group {
+		flex-wrap: wrap;
+	}
+	.marquee-group[aria-hidden='true'],
+	.marquee-item[aria-hidden='true'] {
+		display: none;
 	}
 }
