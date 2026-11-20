@@ -6,12 +6,15 @@ interface Props {
 	images?: GalleryImageData[];
 	gallery?: string;
 	fullBleed?: boolean;
+	/** hidden crops at the selected frame; visible shows neighboring slides beyond it. */
+	overflow?: 'hidden' | 'visible';
 	class?: string;
 }
 const {
 	images = [],
 	gallery,
 	fullBleed = true,
+	overflow = 'hidden',
 	class: classes = '',
 } = Astro.props;
 const group = createGalleryGroup(gallery);
@@ -25,6 +28,7 @@ const group = createGalleryGroup(gallery);
 			classes,
 		]}
 		data-image-carousel
+		data-carousel-overflow={overflow === 'visible' ? 'visible' : 'hidden'}
 	>
 		<div class="swiper photo-slider h-[120px] md:h-[200px]">
 			<div class="swiper-wrapper">
@@ -46,6 +50,17 @@ const group = createGalleryGroup(gallery);
 	import './image-carousel.js';
 </script>
 <style>
+	.image-carousel {
+		min-width: 0;
+		overflow: hidden;
+		overflow: clip;
+	}
+	.image-carousel[data-carousel-overflow='visible'] {
+		overflow: visible;
+	}
+	.image-carousel > .swiper {
+		overflow: visible;
+	}
 	.image-carousel-full {
 		width: 100vw;
 		position: relative;
