@@ -1,4 +1,5 @@
 import Dropzone from "dropzone";
+import { confirmFileRemoval } from '../utils/confirmFileRemoval.js';
 import "dropzone/dist/basic.css";
 import "dropzone/dist/dropzone.css";
 import settings from '@/data/site/settings.json';
@@ -73,49 +74,4 @@ if (fileUploads.length) {
 	});
 }
 
-Dropzone.confirm = function (question, accepted, rejected) {
-	const confirmModal = document.getElementById('dropzone-confirm-modal');
-	const acceptBtn = document.getElementById('dropzone-accept');
-	const cancelBtn = document.getElementById('dropzone-cancel');
-	const closeBtn = confirmModal.querySelector('[data-close]');
-	
-	// Устанавливаем текст вопроса
-	confirmModal.querySelector('.message').innerText = question;
-	confirmModal.classList.remove('hidden');
-	
-	// Обработчик удаления
-	const handleAccept = (e) => {
-		e.preventDefault();
-		closeModal();
-		accepted();
-	};
-	
-	// Обработчик отмены
-	const handleReject = (e) => {
-		e.preventDefault();
-		closeModal();
-		if (rejected) rejected();
-	};
-	
-	// Функция закрытия и очистки слушателей
-	const closeModal = () => {
-		confirmModal.classList.add('hidden');
-		acceptBtn.removeEventListener('click', handleAccept);
-		cancelBtn.removeEventListener('click', handleReject);
-		closeBtn.removeEventListener('click', handleReject);
-		confirmModal.removeEventListener('click', handleOverlayClick);
-	};
-	
-	// Закрытие по клику на overlay
-	const handleOverlayClick = (e) => {
-		if (e.target === confirmModal) {
-			handleReject(e);
-		}
-	};
-	
-	// Добавляем слушатели
-	acceptBtn.addEventListener('click', handleAccept);
-	cancelBtn.addEventListener('click', handleReject);
-	closeBtn.addEventListener('click', handleReject);
-	confirmModal.addEventListener('click', handleOverlayClick);
-};
+Dropzone.confirm = confirmFileRemoval;

@@ -1,7 +1,13 @@
 ---
 const { color = 'black' } = Astro.props;
 ---
-<div class="w-10 h-10 flex items-center justify-center absolute right-0 top-0 opacity-60 transition-opacity hover:opacity-100 cursor-pointer rotate-45 z-10" data-close>
+
+<button
+	type="button"
+	aria-label="Закрыть окно"
+	class="w-10 h-10 flex items-center justify-center absolute right-0 top-0 opacity-60 transition-opacity hover:opacity-100 cursor-pointer z-10 p-0 border-0 bg-transparent"
+	data-close
+>
 	<svg
 		width="20"
 		height="20"
@@ -9,9 +15,22 @@ const { color = 'black' } = Astro.props;
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
 		data-close
-		class={`custom-stroke-${color}`}
-		>
-		<line y1="9.5" x2="20" y2="9.5" stroke="" data-close></line>
-		<line x1="9.5" y1="20" x2="9.5" stroke="" data-close></line>
+		aria-hidden="true"
+		class={`rotate-45 custom-stroke-${color}`}
+	>
+		<line
+			y1="9.5"
+			x2="20"
+			y2="9.5"
+			stroke=""
+			data-close
+		></line>
+		<line
+			x1="9.5"
+			y1="20"
+			x2="9.5"
+			stroke=""
+			data-close
+		></line>
 	</svg>
-</div>
+</button>

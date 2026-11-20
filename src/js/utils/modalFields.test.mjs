@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { syncModalFields } from './modalFields.js';
+import { syncModalFields, syncModalHeadings } from './modalFields.js';
 
 function fixture(formValue = 'Original form', commentValue = 'Original comment') {
 	const hidden = initial => ({
@@ -24,6 +24,17 @@ test('a later card without metadata restores original values, including hidden i
 	syncModalFields(modal, { form_name: 'Card B' });
 	assert.equal(modal.form.value, 'Card B');
 	assert.equal(modal.comment.value, 'Original comment');
+});
+
+test('custom titles are restored after trigger metadata instead of becoming a generic form', () => {
+	const title = { innerHTML: 'Свой заголовок' };
+	const subtitle = { innerHTML: 'Своё описание' };
+	const modal = { querySelector: selector => selector === '.title' ? title : subtitle };
+	syncModalHeadings(modal, { title: 'Другой <br>заголовок', subtitle: 'Другая подпись' });
+	assert.equal(title.innerHTML, 'Другой <br>заголовок');
+	syncModalHeadings(modal);
+	assert.equal(title.innerHTML, 'Свой заголовок');
+	assert.equal(subtitle.innerHTML, 'Своё описание');
 });
 
 test('an explicit empty value clears a field without replacing its saved default', () => {

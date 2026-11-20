@@ -1,0 +1,35 @@
+---
+import Modal from '@/ui/modal/Modal.astro';
+---
+
+<Modal
+	id="confirm-modal"
+	role="alertdialog"
+	aria-label="Повторная заявка"
+	aria-describedby="confirm-modal-text"
+	size="wide"
+	backdrop="soft"
+	closeColor="accent-500"
+>
+	<p
+		id="confirm-modal-text"
+		class="text-center text-lg mb-10 message"
+	></p>
+	<div class="flex justify-center flex-wrap gap-5">
+		<button
+			type="button"
+			id="accept-confirm"
+			class="btn gray"
+		>
+			Повторить заявку
+		</button>
+		<button
+			type="button"
+			id="accept-close"
+			data-close
+			class="btn"
+		>
+			Хорошо, я подожду
+		</button>
+	</div>
+</Modal>

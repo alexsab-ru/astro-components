@@ -1,0 +1,20 @@
+---
+import Modal from '@/ui/modal/Modal.astro';
+---
+
+<Modal
+	id="message-modal"
+	role="alertdialog"
+	aria-label="Сообщение"
+	aria-describedby="message-modal-text"
+	closeColor="accent-500"
+>
+	<div
+		class="w-20 h-20 mx-auto mb-10"
+		id="icon"
+	></div>
+	<p
+		id="message-modal-text"
+		class="text-center text-lg mb-10"
+	></p>
+</Modal>
