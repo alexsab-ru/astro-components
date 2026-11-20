@@ -30,6 +30,15 @@ export const getModelImage = (model = {}) =>
 export const getModelColorImage = (color = {}) =>
 	color?.image || color?.carImage || '';
 
+// The form illustrates the car, independently of page.blocks and gallery order.
+export const getModelFeedbackImage = (model = {}) =>
+	model?.page?.feedbackForm?.imageUrl ??
+	(getModelHomeImg(model) ||
+		(Array.isArray(model?.colors)
+			? model.colors.map(getModelColorImage).find(Boolean)
+			: '') ||
+		getModelImage(model));
+
 export const getModelFeedModelNames = (model = {}) => [
 	...(Array.isArray(model?.feed?.folderIds) ? model.feed.folderIds : []),
 	...(Array.isArray(model?.feed?.modelNames) ? model.feed.modelNames : []),

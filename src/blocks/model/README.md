@@ -82,3 +82,12 @@ model-colors, model-media, model-characteristics, model-actions: они позв
 
 В этом примере характеристики можно разместить позже среди остальных блоков
 страницы. Общая композиция остальных маршрутов и данные дилеров не переписаны.
+
+Последняя форма «Записаться на тест-драйв» выбирает фотографию независимо от
+порядка page.blocks: сначала page.feedbackForm.imageUrl, затем изображение
+Hero (media.homeImg / homeImg), первое доступное фото из colors и изображение
+модели / thumb. Пустой imageUrl явно скрывает фотографию формы.
+
+```json
+{"page":{"feedbackForm":{"imageUrl":"https://img.upspace.ru/model-photo.webp"}}}
+```
