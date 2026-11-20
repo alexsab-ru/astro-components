@@ -1,0 +1,22 @@
+---
+import {
+	getModelBrandDisplayName,
+	getModelTitle,
+} from '@/js/utils/modelFields';
+interface Props {
+	model: any;
+}
+const { model } = Astro.props;
+const modelTitle = getModelTitle(model);
+const brandDisplayName = getModelBrandDisplayName(model);
+---
+
+<h2
+	data-model-hero-part="heading"
+	class="text-2xl sm:text-5xl text-title-brand-model-page tracking-wider uppercase before:hidden mx-0"
+>
+	{brandDisplayName}
+	<b class="font-heading-weight tracking-tighter xs:text-3xl text-5xl sm:text-8xl uppercase text-title-model-page">
+		{modelTitle}
+	</b>
+</h2>

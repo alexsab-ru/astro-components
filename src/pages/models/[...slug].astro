@@ -102,7 +102,7 @@ const context = {
 // model / model-complectations / cars-grid само-гейтятся внутри BlockRenderer по context.
 const blocks = [
   { type: 'page-h1', props: { h1: `Автомобиль ${brandDisplayName} ${modelTitle} в ${legal_city_where}`, classes: 'sr-only' } },
-  { type: 'model' },
+  { type: 'model', props: model.page?.hero ?? {} },
   ...contentBlocks,
   { type: 'model-complectations' },
   { type: 'seo-text', props: { mdx: seoname, sectionPaddingBlock: true } },

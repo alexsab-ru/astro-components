@@ -1,0 +1,33 @@
+---
+import ImageCarousel from '@/blocks/image-gallery/ImageCarousel.astro';
+import { loadModelPhotos } from './model-photos.js';
+import {
+	getModelBrandDisplayName,
+	getModelTitle,
+} from '@/js/utils/modelFields';
+interface Props {
+	model: any;
+	photos?: string[];
+	gallery?: string;
+}
+const { model, photos, gallery } = Astro.props;
+const images = (photos ?? (await loadModelPhotos(model.photos))).map(
+	(url, index) => ({
+		url,
+		alt: `${getModelBrandDisplayName(model)} ${getModelTitle(model)}, фото ${index + 1}`,
+	})
+);
+---
+
+{images.length > 0 && (
+	<div
+		data-model-part="media"
+		class="mt-14"
+	>
+		<ImageCarousel
+			images={images}
+			gallery={gallery}
+			fullBleed
+		/>
+	</div>
+)}

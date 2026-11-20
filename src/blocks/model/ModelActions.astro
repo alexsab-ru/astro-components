@@ -1,0 +1,34 @@
+---
+import ActionGroup from '@/blocks/action-group/ActionGroup.astro';
+import settings from '@/data/site/settings.json';
+import { isCreditEnabled } from '@/js/utils/features';
+import { resolveModelActions } from './model-actions.js';
+import type { ActionButton } from '@/blocks/action-group/types';
+import type { TStatus } from '@/types/TStatus';
+interface Props {
+	model: any;
+	status?: TStatus;
+	creditEnabled?: boolean;
+	testDriveEnabled?: boolean;
+	preset?: 'default' | 'purchase' | 'contact';
+	actions?: (string | ActionButton)[];
+	excludeActions?: string[];
+}
+const {
+	model,
+	status,
+	creditEnabled = isCreditEnabled(settings),
+	...options
+} = Astro.props;
+const items = resolveModelActions(model, { ...options, status, creditEnabled });
+---
+
+<div
+	data-model-part="actions"
+	class="container"
+>
+	<ActionGroup
+		items={items}
+		class="flex justify-center flex-wrap xs:flex-col gap-4 mt-14"
+	/>
+</div>

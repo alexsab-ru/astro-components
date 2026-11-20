@@ -1,0 +1,105 @@
+---
+import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs.astro';
+import HeroPoints from './HeroPoints.astro';
+import type { HeroData } from './types';
+interface Props extends HeroData {
+	'data-model-part'?: string;
+}
+const {
+	tag: Tag = 'section',
+	image,
+	breadcrumb,
+	eyebrow,
+	title,
+	subtitle,
+	points = [],
+	badge,
+	classes = 'min-h-[28rem] lg:min-h-[40rem] flex items-center',
+	contentClass = 'container py-12 lg:py-20',
+	...rest
+} = Astro.props;
+const images = typeof image === 'string' ? { desktop: image } : image;
+const bg = (url?: string) => (url ? `url(${JSON.stringify(url)})` : 'none');
+---
+
+<Tag
+	{...rest}
+	class={`hero relative isolate w-full py-0 bg-cover bg-center text-white ${classes}`}
+	style={`--hero-bg:${bg(images?.desktop)};--hero-bg-tablet:${bg(images?.tablet || images?.desktop)};--hero-bg-mobile:${bg(images?.mobile || images?.tablet || images?.desktop)};`}
+	data-hero
+>
+	<slot name="badge">
+		{badge?.image && (
+			<img
+				src={badge.image}
+				alt={badge.alt || ''}
+				class={`absolute right-4 top-4 h-auto z-10 object-contain ${badge.classes || 'w-24 lg:w-40'}`}
+				loading="lazy"
+				data-hero-badge
+			/>
+		)}
+	</slot>
+	<div class={contentClass}>
+		{breadcrumb?.length > 0 && (
+			<div data-hero-element="breadcrumb">
+				<Breadcrumbs
+					breadcrumb={[...breadcrumb]}
+					color="text-(--color-white)!"
+				/>
+			</div>
+		)}
+		{eyebrow && (
+			<p
+				class="uppercase text-sm lg:text-lg mb-3"
+				data-hero-element="eyebrow"
+			>
+				{eyebrow}
+			</p>
+		)}
+		<slot name="title">
+			{title && (
+				<h2
+					class="m-0! before:hidden text-3xl sm:text-5xl lg:text-6xl"
+					data-hero-element="title"
+				>
+					{title}
+				</h2>
+			)}
+		</slot>
+		<slot name="subtitle">
+			{subtitle && (
+				<div
+					class="mt-4 text-lg lg:text-2xl"
+					data-hero-element="subtitle"
+					set:html={subtitle}
+				/>
+			)}
+		</slot>
+		<slot name="points">
+			<HeroPoints items={points} />
+		</slot>
+	</div>
+</Tag>
+<style>
+	.hero {
+		background-image: var(--hero-bg);
+		z-index: 1;
+	}
+	.hero::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgb(0 0 0 / 20%);
+		z-index: -1;
+	}
+	@media (max-width: 1023px) {
+		.hero {
+			background-image: var(--hero-bg-tablet);
+		}
+	}
+	@media (max-width: 639px) {
+		.hero {
+			background-image: var(--hero-bg-mobile);
+		}
+	}
+</style>

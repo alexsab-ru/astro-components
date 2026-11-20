@@ -2,6 +2,7 @@ export type GalleryImageData = {
 	url: string;
 	title?: string;
 	description?: string;
+	alt?: string;
 };
 
 export type GalleryLayout = 'mosaic' | 'simple';

@@ -1,0 +1,79 @@
+---
+import GalleryImage from './GalleryImage.astro';
+import { createGalleryGroup } from './gallery-data.js';
+import type { GalleryImageData } from './types';
+interface Props {
+	images?: GalleryImageData[];
+	gallery?: string;
+	fullBleed?: boolean;
+	/** hidden crops at the selected frame; visible shows neighboring slides beyond it. */
+	overflow?: 'hidden' | 'visible';
+	class?: string;
+}
+const {
+	images = [],
+	gallery,
+	fullBleed = true,
+	overflow = 'hidden',
+	class: classes = '',
+} = Astro.props;
+const group = createGalleryGroup(gallery);
+---
+
+{images.length > 0 && (
+	<div
+		class:list={[
+			'image-carousel',
+			{ 'image-carousel-full': fullBleed },
+			classes,
+		]}
+		data-image-carousel
+		data-carousel-overflow={overflow === 'visible' ? 'visible' : 'hidden'}
+	>
+		<div class="swiper photo-slider h-[120px] md:h-[200px]">
+			<div class="swiper-wrapper">
+				{images.map((image) => (
+					<GalleryImage
+						image={image}
+						gallery={group}
+						alt={image.alt}
+						loading="lazy"
+						linkClass="swiper-slide image-slide h-full w-auto inline-flex cursor-zoom-in"
+						imageClass="h-full w-full object-cover object-center brightness-50 transition-[filter] duration-500 hover:brightness-110"
+					/>
+				))}
+			</div>
+		</div>
+	</div>
+)}
+<script>
+	import './image-carousel.js';
+</script>
+<style>
+	.image-carousel {
+		min-width: 0;
+		overflow: hidden;
+		overflow: clip;
+	}
+	.image-carousel[data-carousel-overflow='visible'] {
+		overflow: visible;
+	}
+	.image-carousel > .swiper {
+		overflow: visible;
+	}
+	.image-carousel-full {
+		width: 100vw;
+		position: relative;
+		left: 50%;
+		margin-left: -50vw;
+	}
+	.image-carousel :global(.image-slide) {
+		height: 100%;
+		width: auto;
+		display: inline-flex;
+		cursor: zoom-in;
+	}
+	.image-carousel :global(.swiper-slide-active img) {
+		filter: brightness(1);
+	}
+</style>

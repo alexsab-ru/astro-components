@@ -1,0 +1,41 @@
+---
+import CardAction from '@/ui/card-action/CardAction.astro';
+import { Icon } from 'astro-icon/components';
+import type { ActionButton } from './types';
+import { actionGroupItems } from './presets.js';
+interface Props {
+	items?: ActionButton[];
+	preset?: 'callback' | 'request';
+	class?: string;
+}
+const {
+	items: input,
+	preset,
+	class: classes = 'flex justify-center flex-wrap xs:flex-col gap-4',
+} = Astro.props;
+const items = actionGroupItems(input, preset);
+---
+
+{items.length > 0 && (
+	<div
+		class={classes}
+		data-action-group
+	>
+		{items.map((item) => (
+			<CardAction
+				source={item}
+				class={`btn ${item.view === 'scroll-link' ? 'scroll-link' : ''} ${item.classes || ''}`}
+				download={item.download}
+				data-action-id={item.id}
+			>
+				<span>{item.title}</span>
+				{item.icon && (
+					<Icon
+						name={item.icon}
+						class="ml-2"
+					/>
+				)}
+			</CardAction>
+		))}
+	</div>
+)}

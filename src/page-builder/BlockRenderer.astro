@@ -14,6 +14,16 @@ import ModelComplectations from '@/blocks/model/ModelComplectations.astro';
 import FeedbackForm from '@/blocks/forms/feedback-form/FeedbackForm.astro';
 import Callback from '@/blocks/forms/callback/Callback.astro';
 import CarsGrid from '@/blocks/cars-grid/CarsGrid.astro';
+import Hero from '@/blocks/hero/Hero.astro';
+import Characteristics from '@/blocks/characteristics/Characteristics.astro';
+import ColorShowcase from '@/blocks/color-showcase/ColorShowcase.astro';
+import ImageCarousel from '@/blocks/image-gallery/ImageCarousel.astro';
+import ActionGroup from '@/blocks/action-group/ActionGroup.astro';
+import ModelHero from '@/blocks/model/ModelHero.astro';
+import ModelColors from '@/blocks/model/ModelColors.astro';
+import ModelPhotos from '@/blocks/model/ModelPhotos.astro';
+import ModelCharacteristics from '@/blocks/model/ModelCharacteristics.astro';
+import ModelActions from '@/blocks/model/ModelActions.astro';
 
 interface Props {
 	blocks?: TBlock[];
@@ -22,60 +32,155 @@ interface Props {
 const { blocks = [], context = {} } = Astro.props;
 
 // Данные блока: JSON content + route props (props важнее). any — блоки собираются динамически.
-const data = (block: TBlock): any => ({ ...(block?.content ?? {}), ...(block?.props ?? {}) });
+const data = (block: TBlock): any => ({
+	...(block?.content ?? {}),
+	...(block?.props ?? {}),
+});
 ---
-{
-	blocks.map((block) => {
-		const c = data(block);
-		switch (block?.type) {
-			case 'page-h1':
-				return <PageH1 h1={c.h1 ?? c.title ?? ''} classes={c.classes ?? c.class ?? ''} />;
-			case 'model':
-				return context.model
-					? <Model model={context.model} status={context.status} breadcrumb={context.breadcrumb} />
-					: null;
-			case 'rich-content':
-				return <RichContentBlock section={block} />;
-			case 'faq':
-				return (
-					<Faq
-						items={c.items ?? []}
-						title={c.title}
-						id={block.id}
-						class={`sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${block.sectionClass ?? c.sectionClass ?? ''}`}
-						withSchema={Boolean(c.withSchema ?? c.schema ?? false)}
-					/>
-				);
-			case 'model-complectations':
-				return context.model?.complectations?.length
-					? <ModelComplectations model={context.model} brand={context.brandDisplayName} title={c.title ?? `Подобрать комплектацию ${context.brandDisplayName ?? ''} ${context.modelTitle ?? ''}`} />
-					: null;
-			case 'seo-text':
-				return <SeoText mdx={c.mdx} text={c.text} noPadding={c.noPadding} sectionPaddingBlock={c.sectionPaddingBlock} />;
-			case 'feedback-form':
-				return (
-					<section>
-						<div class="section-grid">
-							<FeedbackForm
-								title={c.title}
-								subtitle={c.subtitle}
-								imageUrl={c.imageUrl ?? context.feedbackImageUrl ?? ''}
-								images={c.images}
-								labelBtn={c.labelBtn}
-								dataFormName={c.dataFormName}
-								showModelSelect={c.showModelSelect}
-							/>
-						</div>
-					</section>
-				);
-			case 'callback':
-				return <Callback bgUrl={c.bgUrl} bgImage={c.bgImage} bgPosition={c.bgPosition} title={c.title} subtitle={c.subtitle} formName={c.formName} btn={c.btn} showComment={c.showComment} commentPlaceholder={c.commentPlaceholder} />;
-			case 'cars-grid':
-				return context.cars?.length
-					? <CarsGrid cars={context.cars} title={c.title ?? context.carsTitle} />
-					: null;
-			default:
-				return null;
-		}
-	})
-}
+
+{blocks.map((block) => {
+	const c = data(block);
+	switch (block?.type) {
+		case 'page-h1':
+			return (
+				<PageH1
+					h1={c.h1 ?? c.title ?? ''}
+					classes={c.classes ?? c.class ?? ''}
+				/>
+			);
+		case 'model':
+			return context.model ? (
+				<Model
+					model={context.model}
+					status={context.status}
+					breadcrumb={context.breadcrumb}
+					parts={c.parts}
+					partOrder={c.partOrder}
+					eyebrow={c.eyebrow}
+					actions={c.actions}
+					actionPreset={c.actionPreset}
+					excludeActions={c.excludeActions}
+					testDriveEnabled={c.testDriveEnabled}
+					creditEnabled={c.creditEnabled}
+				/>
+			) : null;
+		case 'rich-content':
+			return <RichContentBlock section={block} />;
+		case 'hero':
+			return (
+				<Hero
+					{...c}
+					id={block.id ?? c.id}
+				/>
+			);
+		case 'characteristics':
+			return <Characteristics {...c} />;
+		case 'color-showcase':
+			return <ColorShowcase {...c} />;
+		case 'image-carousel':
+			return <ImageCarousel {...c} />;
+		case 'action-group':
+			return <ActionGroup {...c} />;
+		case 'model-hero':
+			return context.model ? (
+				<ModelHero
+					{...c}
+					model={context.model}
+					status={context.status}
+					breadcrumb={context.breadcrumb}
+				/>
+			) : null;
+		case 'model-colors':
+			return context.model ? <ModelColors model={context.model} /> : null;
+		case 'model-media':
+			return context.model ? (
+				<ModelPhotos
+					{...c}
+					model={context.model}
+				/>
+			) : null;
+		case 'model-characteristics':
+			return context.model ? (
+				<ModelCharacteristics model={context.model} />
+			) : null;
+		case 'model-actions':
+			return context.model ? (
+				<ModelActions
+					{...c}
+					model={context.model}
+					status={context.status}
+				/>
+			) : null;
+		case 'faq':
+			return (
+				<Faq
+					items={c.items ?? []}
+					title={c.title}
+					id={block.id}
+					class={`sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${block.sectionClass ?? c.sectionClass ?? ''}`}
+					withSchema={Boolean(c.withSchema ?? c.schema ?? false)}
+				/>
+			);
+		case 'model-complectations':
+			return context.model?.complectations?.length ? (
+				<ModelComplectations
+					model={context.model}
+					brand={context.brandDisplayName}
+					title={
+						c.title ??
+						`Подобрать комплектацию ${context.brandDisplayName ?? ''} ${context.modelTitle ?? ''}`
+					}
+				/>
+			) : null;
+		case 'seo-text':
+			return (
+				<SeoText
+					mdx={c.mdx}
+					text={c.text}
+					noPadding={c.noPadding}
+					sectionPaddingBlock={c.sectionPaddingBlock}
+				/>
+			);
+		case 'feedback-form':
+			return (
+				<section>
+					<div class="section-grid">
+						<FeedbackForm
+							title={c.title}
+							subtitle={c.subtitle}
+							imageUrl={
+								c.imageUrl ?? context.feedbackImageUrl ?? ''
+							}
+							images={c.images}
+							labelBtn={c.labelBtn}
+							dataFormName={c.dataFormName}
+							showModelSelect={c.showModelSelect}
+						/>
+					</div>
+				</section>
+			);
+		case 'callback':
+			return (
+				<Callback
+					bgUrl={c.bgUrl}
+					bgImage={c.bgImage}
+					bgPosition={c.bgPosition}
+					title={c.title}
+					subtitle={c.subtitle}
+					formName={c.formName}
+					btn={c.btn}
+					showComment={c.showComment}
+					commentPlaceholder={c.commentPlaceholder}
+				/>
+			);
+		case 'cars-grid':
+			return context.cars?.length ? (
+				<CarsGrid
+					cars={context.cars}
+					title={c.title ?? context.carsTitle}
+				/>
+			) : null;
+		default:
+			return null;
+	}
+})}

@@ -1,0 +1,26 @@
+---
+import HeroPoints from '@/blocks/hero/HeroPoints.astro';
+interface Props {
+	model: any;
+}
+const { model } = Astro.props;
+const items = (model.benefits || []).map((b: any) => ({
+	label: b.label,
+	icon: b.iconName,
+	action:
+		b.view === 'popup-link'
+			? {
+					type: 'popup',
+					id: (b.url || '#common-modal').replace(/^#/, ''),
+					title: b.dataTitle,
+					formName: b.dataFormName,
+				}
+			: b.url && b.url !== '#'
+				? { type: 'link', url: b.url }
+				: { type: 'none' },
+}));
+---
+
+<div data-model-hero-part="benefits">
+	<HeroPoints items={items} />
+</div>

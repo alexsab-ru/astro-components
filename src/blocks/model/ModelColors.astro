@@ -1,0 +1,28 @@
+---
+import ColorShowcase from '@/blocks/color-showcase/ColorShowcase.astro';
+import {
+	getModelColorImage,
+	getModelBrandDisplayName,
+	getModelTitle,
+} from '@/js/utils/modelFields';
+interface Props {
+	model: any;
+}
+const { model } = Astro.props;
+const items = (model.colors || []).map((c: any) => ({
+	id: c.id,
+	name: c.name,
+	image: getModelColorImage(c) || `/img/${model.id}/${c.id}.png`,
+	style: c.style,
+}));
+---
+
+<div
+	data-model-part="colors"
+	class="w-full lg:w-3/4 2xl:w-3/5 relative z-10 top-4 mx-auto"
+>
+	<ColorShowcase
+		items={items}
+		alt={`${getModelBrandDisplayName(model)} ${getModelTitle(model)}`}
+	/>
+</div>

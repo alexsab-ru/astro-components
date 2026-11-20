@@ -1,0 +1,15 @@
+---
+interface Props {
+	model: any;
+}
+const { model } = Astro.props;
+---
+
+{model.slogan && (
+	<p
+		class="uppercase text-lg sm:text-2xl opacity-80"
+		data-model-hero-part="slogan"
+	>
+		{model.slogan}
+	</p>
+)}

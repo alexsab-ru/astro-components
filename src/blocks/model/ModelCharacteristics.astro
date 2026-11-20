@@ -1,0 +1,11 @@
+---
+import Characteristics from '@/blocks/characteristics/Characteristics.astro';
+interface Props {
+	model: any;
+}
+const { model } = Astro.props;
+---
+
+<div data-model-part="characteristics">
+	<Characteristics items={model.globalChars || []} />
+</div>

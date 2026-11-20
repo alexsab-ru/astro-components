@@ -1,0 +1,47 @@
+---
+import Hero from '@/blocks/hero/Hero.astro';
+import ModelHeading from './ModelHeading.astro';
+import ModelSlogan from './ModelSlogan.astro';
+import ModelPrice from './ModelPrice.astro';
+import ModelBenefits from './ModelBenefits.astro';
+import ModelBadge from './ModelBadge.astro';
+import { getModelHomeImg } from '@/js/utils/modelFields';
+import { isModelPartVisible } from './model-layout.js';
+import type { ModelProps } from './types';
+import './model.css';
+interface Props extends ModelProps {}
+const { model, breadcrumb, status, parts, eyebrow } = Astro.props;
+---
+
+<Hero
+	tag="div"
+	image={getModelHomeImg(model)}
+	breadcrumb={
+		isModelPartVisible(parts, 'breadcrumb') ? breadcrumb : undefined
+	}
+	eyebrow={eyebrow}
+	classes="model__info lg:min-h-[800px]"
+	contentClass="container h-full pt-8 sm:pt-[2.5%] xl:pb-10"
+	data-model-part="hero"
+>
+	<Fragment slot="badge">
+		{isModelPartVisible(parts, 'badge') && <ModelBadge model={model} />}
+	</Fragment>
+	<Fragment slot="title">
+		{isModelPartVisible(parts, 'heading') && <ModelHeading model={model} />}
+	</Fragment>
+	<Fragment slot="subtitle">
+		{isModelPartVisible(parts, 'slogan') && <ModelSlogan model={model} />}{' '}
+		{isModelPartVisible(parts, 'price') && (
+			<ModelPrice
+				model={model}
+				status={status}
+			/>
+		)}
+	</Fragment>
+	<Fragment slot="points">
+		{isModelPartVisible(parts, 'benefits') && (
+			<ModelBenefits model={model} />
+		)}
+	</Fragment>
+</Hero>
