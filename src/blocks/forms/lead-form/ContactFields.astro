@@ -1,0 +1,28 @@
+---
+import type { ComponentProps } from 'astro/types';
+import Input from '@/ui/input/Input.astro';
+
+type ContactInput = Omit<ComponentProps<typeof Input>, 'name' | 'type'>;
+
+interface Props {
+	nameField?: ContactInput;
+	phoneField?: ContactInput;
+}
+
+const { nameField = {}, phoneField = {} } = Astro.props;
+---
+
+<Input
+	classes="border-gray-100"
+	placeholder="Ваше имя"
+	{...nameField}
+	name="name"
+/>
+<Input
+	classes="border-gray-100"
+	placeholder="+7 (999) 999-99-99*"
+	required
+	{...phoneField}
+	type="tel"
+	name="phone"
+/>

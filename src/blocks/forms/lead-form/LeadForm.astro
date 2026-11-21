@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'form'>, 'novalidate'> {
+	formName?: string;
+	comment?: string;
+}
+
+const { formName, comment, ...rest } = Astro.props;
+---
+
+<form
+	{...rest}
+	novalidate
+>
+	<input
+		type="hidden"
+		name="form"
+		value={formName}
+	/>
+	{
+		comment !== undefined && (
+			<input
+				type="hidden"
+				name="comment"
+				value={comment}
+			/>
+		)
+	}
+	<input
+		type="email"
+		tabindex="-1"
+		name="email"
+		class="h-0 opacity-0 absolute -z-100"
+		placeholder="mail@example.com"
+	/>
+	<slot />
+</form>
