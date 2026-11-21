@@ -21,4 +21,5 @@ const breadcrumb = frontmatter.breadcrumb || h1;
 	breadcrumb={[{ name: breadcrumb, href: '' }]}
 >
 	<Content />
+	<slot name="modals" slot="modals" />
 </PageLayout>

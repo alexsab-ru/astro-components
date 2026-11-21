@@ -1,0 +1,67 @@
+---
+import Modal from '@/ui/modal/Modal.astro';
+import LeadFormFields from './LeadFormFields.astro';
+import salonsData from '@/data/site/salons.json';
+import settings from '@/data/site/settings.json';
+import type { ISalon } from '@/types/ISalon';
+import { resolveFormDepartments } from '@/js/utils/formDepartments';
+
+interface Props {
+	id?: string;
+	title?: string;
+	subtitle?: string;
+	formName?: string;
+	comment?: string;
+	agreeLabel?: string;
+	formDepartments?: string[];
+	salons?: ISalon[];
+	useDealerStore?: boolean;
+}
+const {
+	id = 'common-modal',
+	title = 'Обратная связь',
+	subtitle = 'Оставьте свои данные и мы свяжемся с Вами в ближайшее время!',
+	formName = '',
+	comment = '',
+	agreeLabel = settings.agree_label,
+	formDepartments = settings.form_departments,
+	salons = salonsData.filter(
+		(salon: ISalon) => !salon?.type || salon.type.includes('common_modal')
+	),
+	useDealerStore = true,
+} = Astro.props;
+const departments = resolveFormDepartments(formDepartments);
+---
+
+<Modal
+	id={id}
+	aria-labelledby={`${id}-title`}
+	aria-describedby={`${id}-subtitle`}
+	panelClass=""
+>
+	<p
+		id={`${id}-title`}
+		class="title text-center text-3xl mb-2 text-gray-800"
+	>
+		{title}
+	</p>
+	<p
+		id={`${id}-subtitle`}
+		class="subtitle text-center mb-10 font-normal text-gray-600"
+	>
+		{subtitle}
+	</p>
+	<LeadFormFields
+		formId={`${id}-form`}
+		agreeLabel={agreeLabel}
+		departments={departments}
+		salons={salons}
+		formName={formName}
+		comment={comment}
+		useDealerStore={useDealerStore}
+	/>
+	<slot />
+</Modal>
+<script>
+	import '@/js/modules/modals.js';
+</script>

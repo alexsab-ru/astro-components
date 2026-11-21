@@ -1,0 +1,105 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import CloseModalBtn from '@/ui/close-modal-btn/CloseModalBtn.astro';
+
+interface Props extends HTMLAttributes<'div'> {
+	id: string;
+	title?: string;
+	description?: string;
+	size?: 'standard' | 'wide';
+	backdrop?: 'strong' | 'soft';
+	panelClass?: string;
+	closeColor?: string;
+}
+const {
+	id,
+	title,
+	description,
+	size = 'standard',
+	backdrop = 'strong',
+	panelClass = 'text-gray-800',
+	closeColor = 'black',
+	class: classes = '',
+	role = 'dialog',
+	...rest
+} = Astro.props;
+const titleId = title ? `${id}-title` : undefined;
+const descriptionId = description ? `${id}-description` : undefined;
+const labelledBy = rest['aria-labelledby'] ?? titleId;
+---
+
+<div
+	{...rest}
+	id={id}
+	role={role}
+	aria-modal="true"
+	aria-labelledby={labelledBy}
+	aria-describedby={rest['aria-describedby'] ?? descriptionId}
+	aria-label={
+		rest['aria-label'] ?? (labelledBy ? undefined : 'Диалоговое окно')
+	}
+	class:list={[
+		'fixed w-screen h-screen left-0 top-0 overflow-x-hidden overflow-y-auto hidden modal-overlay z-300000000',
+		backdrop === 'soft' ? 'bg-black/50' : 'bg-black/70',
+		classes,
+	]}
+	data-modal-shell
+	data-close
+>
+	<div class="modal-viewport">
+		<div
+			class:list={[
+				'modal-content relative w-full bg-white py-8 px-4 sm:p-8',
+				size === 'wide' ? 'max-w-2xl' : 'max-w-xl',
+				panelClass,
+			]}
+			tabindex="-1"
+		>
+			<CloseModalBtn color={closeColor} />
+			{title && (
+				<h2
+					id={titleId}
+					class="title text-center text-3xl mb-2 text-gray-800"
+				>
+					{title}
+				</h2>
+			)}
+			{description && (
+				<p
+					id={descriptionId}
+					class="subtitle text-center mb-10 font-normal text-gray-600"
+				>
+					{description}
+				</p>
+			)}
+			<slot />
+		</div>
+	</div>
+</div>
+<style>
+	.modal-overlay {
+		height: 100dvh;
+		overscroll-behavior: contain;
+	}
+
+	.modal-viewport {
+		display: flex;
+		flex-direction: column;
+		min-height: 100%;
+		padding: max(1rem, env(safe-area-inset-top))
+			max(0px, env(safe-area-inset-right))
+			max(1rem, env(safe-area-inset-bottom))
+			max(0px, env(safe-area-inset-left));
+		pointer-events: none;
+	}
+
+	.modal-content {
+		flex: none;
+		margin: auto;
+		pointer-events: auto;
+	}
+</style>
+<script>
+	import { initModals } from './modal-controller.js';
+	initModals();
+</script>

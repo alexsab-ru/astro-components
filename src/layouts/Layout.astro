@@ -135,7 +135,9 @@ const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] 
 			<slot />
 		</main>
 		<Footer showSiteLinks={showFooterLinks} logoNoLink={logoNoLink} navigationLinks={navigationLinks} />
-		<Modals showLeadForm={showLeadForm} />
+		<Modals showLeadForm={showLeadForm}>
+			<slot name="modals" />
+		</Modals>
 		<UpBtn />
 		<Cookie />
 		<ScriptBodyEnd />
