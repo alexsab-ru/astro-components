@@ -2,6 +2,7 @@ export type TSalonMap = {
 	zoom?: number;
 	balloon?: string;
 	coordinates?: [number, number];
+	marker_coordinates?: [number, number];
 	ya_link?: string;
 };
 

@@ -81,7 +81,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
 					</div>
 					{hasMap && (
 						<div class="absolute right-0 bottom-0 h-[400px] w-full md:top-0 md:h-auto md:w-1/2">
-							{useMapWidget ? <MapWidget class="h-full" /> : <DealerMap mapImg={map_background} salons={mapSalons} classes="h-full" />}
+						{useMapWidget ? <MapWidget class="h-full" /> : <DealerMap mapImg={map_background} salons={mapSalons} classes="h-full" clusterMarkers />}
 						</div>
 					)}
 				</section>

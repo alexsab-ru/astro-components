@@ -3,12 +3,13 @@ interface Props {
 	mapImg: string;
 	salons?: any[];
 	classes?: string;
+	clusterMarkers?: boolean;
 	[key: string]: any;
 }
-const {salons = [], mapImg, classes = '', ...rest} = Astro.props;
+const {salons = [], mapImg, classes = '', clusterMarkers = false, ...rest} = Astro.props;
 ---
 
-<div style={`background-image: url(${mapImg})`} class={`map ${classes}`} data-dealer-map {...rest}>
+<div style={`background-image: url(${mapImg})`} class={`map ${classes}`} data-dealer-map data-cluster-markers={clusterMarkers ? '' : undefined} {...rest}>
 	<div class="loader loader-default"></div>
 	<div class="map-canvas"></div>
 	<script type="application/json" data-map-salons set:html={JSON.stringify(salons).replace(/</g, '\\u003c')} />
@@ -27,18 +28,20 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 	const data = container.querySelector('[data-map-salons]')?.textContent;
 	if (!target || !loader || !data) return;
 
-	const salons = JSON.parse(data).filter(salon => salon.map?.coordinates?.length === 2);
-	if (!salons.length) return;
+	const locations = JSON.parse(data)
+		.filter(salon => salon.map?.coordinates?.length === 2)
+		.map(salon => ({ salon, position: salon.map.marker_coordinates ?? salon.map.coordinates }))
+		.sort((a, b) => b.position[1] - a.position[1]);
+	if (!locations.length) return;
 
-	const [firstLatitude, firstLongitude] = salons[0].map.coordinates;
-	const hasMultipleLocations = salons.some(({ map: { coordinates: [latitude, longitude] } }) =>
+	const [firstLatitude, firstLongitude] = locations[0].position;
+	const hasMultipleLocations = locations.some(({ position: [latitude, longitude] }) =>
 		latitude !== firstLatitude || longitude !== firstLongitude
 	);
-	const zoom = hasMultipleLocations ? 6 : (salons[0].map.zoom ?? defaultZoom);
-	const center = salons.reduce(([lat, lon], { map: { coordinates } }) =>
-		[lat + coordinates[0], lon + coordinates[1]], [0, 0]
-	).map(total => total / salons.length);
-	salons.sort((a, b) => b.map.coordinates[1] - a.map.coordinates[1]);
+	const zoom = hasMultipleLocations ? 6 : (locations[0].salon.map.zoom ?? defaultZoom);
+	const center = locations.reduce(([lat, lon], { position }) =>
+		[lat + position[0], lon + position[1]], [0, 0]
+	).map(total => total / locations.length);
 
 	let map = null;
 	let loading = false;
@@ -48,10 +51,10 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 		map = new ymaps.Map(target, { center, zoom, controls: ['zoomControl'] });
 		map.behaviors.disable('scrollZoom');
 
-		for (const salon of salons) {
+		const markers = locations.map(({ salon, position }) => {
 			const { coordinates, balloon, ya_link, zoom: markerZoom } = salon.map;
 			const route = ya_link || generateYandexMapLink(coordinates, markerZoom ?? defaultZoom);
-			map.geoObjects.add(new ymaps.Placemark(coordinates, {
+			return new ymaps.Placemark(position, {
 				balloonContentHeader: `<h6 class="text-sm"><b>${salon.name}</b></h6>`,
 				balloonContentBody: balloonContentBody(salon.schedule, salon.phone, route),
 				hintContent: salon.address,
@@ -60,7 +63,15 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 				iconImageHref: balloon || 'https://img.upspace.ru/locator/empty-locator.svg',
 				iconImageSize: [43, 62],
 				iconImageOffset: [-21, -58],
-			}));
+			});
+		});
+
+		if (markers.length > 1 && container.hasAttribute('data-cluster-markers')) {
+			const clusterer = new ymaps.Clusterer({ preset: 'islands#blueClusterIcons', zoomMargin: 48 });
+			clusterer.add(markers);
+			map.geoObjects.add(clusterer);
+		} else {
+			markers.forEach(marker => map.geoObjects.add(marker));
 		}
 
 		if (hasMultipleLocations) {
