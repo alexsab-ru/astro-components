@@ -4,11 +4,15 @@ import modelsData from '@/data/site/models.json';
 const { models } = modelsData;
 import { useTranslit } from '@/js/utils/translit';
 import { currencyFormat } from '@/js/utils/numbers.format';
+import { isModelTestDriveEnabled } from '@/js/utils/modelTestDrive';
 
 export function complectation() {
 	Alpine.data('complectation', () => ({
 		currentModel: {},
 		currentModelComplectation: {},
+		get testDriveEnabled() {
+			return isModelTestDriveEnabled(this.currentModel, modelsData.testDrive);
+		},
 		selectedModel(id) {
 			if (this.currentModel.id === id) return;
 			this.currentModel = models.find(model => model.id === id);

@@ -5,6 +5,7 @@ import {
 	getModelTitle,
 } from '../../js/utils/modelFields.js';
 import { isModelVisible } from '../../js/utils/modelVisibility.js';
+import { isModelTestDriveEnabled } from '../../js/utils/modelTestDrive.js';
 import { currencyFormat } from '../../js/utils/numbers.format.js';
 
 const DEFAULT_IMAGE_SELECTION = { strategy: 'diagonal', limit: 5 };
@@ -180,6 +181,7 @@ const resolveButton = (defaults, globalButton, cardButton, cardTitle) => {
 export function prepareModelCards(
 	{
 		models = [],
+		testDriveModels = [],
 		cars = [],
 		overrides = [],
 		onlyWithCars = false,
@@ -278,6 +280,19 @@ export function prepareModelCards(
 						: []),
 				].filter(Boolean);
 
+			const secondary = resolveButton(
+				{
+					id: 'testDrive',
+					title: 'Записаться на тест-драйв',
+					url: '#common-modal',
+					classes: SECONDARY_BUTTON_CLASSES,
+					popup: true,
+				},
+				secondaryButton,
+				override?.secondaryButton,
+				title
+			);
+
 			return {
 				model,
 				offerId,
@@ -307,17 +322,11 @@ export function prepareModelCards(
 					override?.primaryButton,
 					title
 				),
-				secondaryButton: resolveButton(
-					{
-						title: 'Записаться на тест-драйв',
-						url: '#common-modal',
-						classes: SECONDARY_BUTTON_CLASSES,
-						popup: true,
-					},
-					secondaryButton,
-					override?.secondaryButton,
-					title
-				),
+				secondaryButton:
+					secondary.id !== 'testDrive' ||
+					isModelTestDriveEnabled(model, testDriveModels)
+						? secondary
+						: null,
 			};
 		})
 		.filter(Boolean)

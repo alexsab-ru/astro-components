@@ -16,6 +16,8 @@ export type ModelCarsCardImageSelection = {
 };
 
 export type ModelCarsCardButton = {
+	/** The default secondary action is testDrive; use another id for a different action. */
+	id?: string;
 	title?: string;
 	url?: string;
 	dataTitle?: string;

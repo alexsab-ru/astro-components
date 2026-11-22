@@ -6,6 +6,7 @@ const { slug } = Astro.params;
 const seoname = 'models-'+slug;
 
 import modelsData from '@/data/site/models.json';
+import { getModelFeedbackTitle } from '@/js/utils/modelTestDrive';
 import { isModelVisible } from '@/js/utils/modelVisibility';
 import { normalizeModelId } from '@/js/utils/normalizeModelId';
 import { getModelBlocks, setPrefixModelUrl } from '@/js/utils/helpers';
@@ -100,7 +101,7 @@ const blocks = [
   { type: 'seo-text', props: { mdx: seoname, sectionPaddingBlock: true } },
   ...((status === 'enable' || status === 'show')
     ? [{ type: 'feedback-form', props: {
-        title: 'Записаться на тест-драйв',
+        title: getModelFeedbackTitle(model, modelsData.testDrive),
         imageUrl: getModelFeedbackImage(model),
       } }]
     : []),

@@ -30,6 +30,7 @@ const cards = prepareModelCards(
 	{
 		...options,
 		models,
+		testDriveModels: modelsData.testDrive,
 		cars: filterVisibleCars(cars),
 		offerPrefix: `${randomUUID()}-`,
 	},
@@ -46,7 +47,7 @@ const cards = prepareModelCards(
 			imageFit={card.imageFit}
 			title={card.title}
 			subtitle={card.subtitle}
-			buttons={[card.primaryButton, card.secondaryButton]}
+			buttons={[card.primaryButton, card.secondaryButton].filter(Boolean)}
 			lightboxDescription={card.lightboxDescription}
 		>
 			<Fragment slot="card-content">

@@ -14,7 +14,7 @@ test('lightbox offer keys are local to each model-card composition', () => {
 const model = (id, extra = {}) => ({
 	id,
 	status: 'active',
-	brand: { displayName: 'Демо' },
+	brand: { id: 'demo', displayName: 'Демо' },
 	name: id,
 	image: `/model-${id}.svg`,
 	price: 2000000,
@@ -30,7 +30,7 @@ const car = (id, extra = {}) => ({
 });
 const models = [model('a'), model('b')];
 const prepare = (options = {}) =>
-	prepareModelCards({ models, ...options }, (data) =>
+	prepareModelCards({ models, testDriveModels: models, ...options }, (data) =>
 		models.find((m) => m.id === data?.folder_id)
 	);
 
@@ -235,4 +235,16 @@ test('inputs are unchanged and lightbox model identifiers are escaped', () => {
 	const result = prepare(options);
 	assert.equal(JSON.stringify(options), before);
 	assert.match(result[0].lightboxDescription, /a&amp;quot;|a&quot;&lt;&gt;/);
+});
+
+test('secondary test-drive action follows the matrix while other actions remain available', () => {
+	const cards = prepare({ testDriveModels: [models[0]] });
+	assert.equal(cards[0].secondaryButton.id, 'testDrive');
+	assert.equal(cards[1].secondaryButton, null);
+	assert.ok(cards[1].primaryButton);
+	assert.ok(prepare({ testDriveModels: [] }).every((card) => card.secondaryButton === null));
+	assert.equal(prepare({
+		testDriveModels: [],
+		secondaryButton: { id: 'details', title: 'Подробнее', url: '/details/', popup: false },
+	})[0].secondaryButton.action.url, '/details/');
 });
