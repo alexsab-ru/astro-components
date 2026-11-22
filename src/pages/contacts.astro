@@ -44,7 +44,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
 								{salon.address && <InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon.address} iconName="mdi:map-marker-outline" />}
 								{salon.phone && <InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon.phone} iconName="mdi:cellphone" type="phone" />}
 								{salon.schedule && <InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon.schedule} iconName="mdi:clock-time-three-outline" />}
-								{salon.socials && Object.keys(salon.socials).length > 0 && <SocialList data={salon.socials} class="w-full" />}
+								{salon.socials && Object.keys(salon.socials).length > 0 && <SocialList data={salon.socials} class="w-full px-2" />}
 							</div>
 						))}
 					</div>
