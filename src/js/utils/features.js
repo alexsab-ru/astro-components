@@ -27,6 +27,10 @@ export function isRandomDealerOrderEnabled(settings = {}) {
 	return getFeatureFlag(settings, 'random_dealer_order', false) === true;
 }
 
+export function shouldShowSiteName(settings = {}, logo) {
+	return !logo || getFeatureFlag(settings, 'show_site_name_with_logo', true) !== false;
+}
+
 /** @returns {'both' | 'only_phone' | 'only_callback'} */
 export function getHeaderCallbackMode(settings = {}) {
 	const mode = getFeatureFlag(settings, 'header_callback', 'both');
