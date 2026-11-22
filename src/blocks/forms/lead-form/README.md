@@ -6,8 +6,8 @@
 | ContactFields | Input имени и телефона без дополнительного контейнера |
 | ConsentFields | Обязательный agree и опциональный скрытый subscribe |
 
-Эти части используются в Callback, FeedbackFormFields, TradeInFormFields,
-OnlineCalculation и LeadFormFields модального окна. Они не импортируют настройки
+Эти части используются в CallbackFormFields, FeedbackFormFields, TradeInFormFields,
+OnlineCalculationFormFields и LeadFormFields модального окна. Они не импортируют настройки
 сайта, не подключают отправку и не задают внешнюю раскладку.
 
 ```astro
@@ -36,10 +36,10 @@ subscribe=true; subscribe=false используется в Trade-in. Скрыт
 
 | Сценарий | Особенности |
 | --- | --- |
-| Callback | Фоновая секция, адаптивный фон, режим phone без form; showComment с required и minlength=10 |
+| CallbackFormFields | Форма с комментарием showComment: required и minlength=10; секция CallbackForm добавляет адаптивный фон и режим phone без form |
 | FeedbackFormFields | Необязательная модель с brandSort и метаданными; центры test_drive и pageData |
 | TradeInFormFields | Поля автомобиля, КПП и желаемая модель; js-trade-in-form, form=tradeInForm; без дилера и subscribe |
-| OnlineCalculation | Кузовной расчёт, адрес salon, VIN и FileUpload; центры online_modal, отдельный sender файлов |
+| OnlineCalculationFormFields | Кузовной расчёт, адрес salon, VIN и FileUpload; центры online_modal, отдельный sender файлов; секция OnlineCalculationForm добавляет фон и заголовки |
 | LeadFormFields | Отдел обращения, дилер modalData, фиксированный ID и скрытый контекст модального окна |
 
 У обёрток разные наборы данных и контракты, поэтому замена одной другой меняет
@@ -47,6 +47,30 @@ subscribe=true; subscribe=false используется в Trade-in. Скрыт
 по-прежнему отвечает за заголовок и фотографии, TradeInForm — за внешний блок
 оценки. Упрощённая заявка об обмене без характеристик автомобиля может использовать
 FeedbackForm с подходящими заголовком и dataFormName, как и прежде.
+
+## Имена и самостоятельное использование
+
+| Секция с оформлением | Самостоятельная форма |
+| --- | --- |
+| CallbackForm | CallbackFormFields |
+| FeedbackForm | FeedbackFormFields |
+| TradeInForm | TradeInFormFields |
+| OnlineCalculationForm | OnlineCalculationFormFields |
+| LeadFormModal | LeadFormFields |
+
+Импорты используют полное имя файла: `import TradeInFormFields from
+'./TradeInFormFields.astro'`. CallbackFormFields и OnlineCalculationFormFields
+можно вставлять отдельно от внешних заголовков и фоновых секций.
+
+Прежние Callback.astro и OnlineCalculation.astro — переходные входы для
+дилерских страниц на независимо обновляемых форках. Они только передают props
+новым секциям и не содержат второй копии разметки. Для новых подключений
+используются CallbackForm и OnlineCalculationForm. Старые входы можно убрать
+после миграции потребителей и обновления соответствующих форков.
+
+Общий фон OnlineCalculationForm: `https://img.upspace.ru/blocks/online-bg.webp`.
+Его можно переопределить через bgUrl. Прежний адрес в blocks/kuzovsamara
+сохранён для существующих сайтов; оба URL отдают одинаковый файл.
 
 Проверка после сборки guide: `python3 scripts/verify-form-demos.py <dist>`
 в astro-json. Она проверяет реальный HTML и состав отправляемых полей.

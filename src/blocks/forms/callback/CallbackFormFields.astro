@@ -1,0 +1,67 @@
+---
+import settings from '@/data/site/settings.json';
+import salons from '@/data/site/salons.json';
+import Button from '@/ui/button/Button.astro';
+import ChoosingDealerSelect from '@/ui/choosing-dealer-select/ChoosingDealerSelect.astro';
+import Textarea from '@/ui/textarea/Textarea.astro';
+import LeadForm from '../lead-form/LeadForm.astro';
+import ContactFields from '../lead-form/ContactFields.astro';
+import ConsentFields from '../lead-form/ConsentFields.astro';
+
+interface Props {
+	formName?: string;
+	btn?: string;
+	showComment?: boolean;
+	commentPlaceholder?: string;
+}
+const { agree_label } = settings;
+const {
+	formName = 'Улучшим предложение конкурентов',
+	btn = 'Отправить',
+	showComment = true,
+	commentPlaceholder = 'Напишите предложение конкурента*',
+} = Astro.props;
+---
+
+<LeadForm
+	class="mt-14 sm:max-w-md text-base"
+	formName={formName}
+>
+	<div class="flex flex-col gap-y-4 mb-5">
+		<ContactFields
+			nameField={{
+				placeholder: 'Имя (необязательное)',
+			}}
+			phoneField={{
+				errorClasses: 'text-red-500 text-xs',
+			}}
+		/>
+
+		<ChoosingDealerSelect
+			required={true}
+			salons={salons}
+		/>
+
+		{showComment && (
+			<Textarea
+				classes="border-gray-100 resize-none min-h-[100px] overflow-y-auto"
+				name="comment"
+				required
+				placeholder={commentPlaceholder}
+				minlength="10"
+			/>
+		)}
+
+		<ConsentFields
+			label={agree_label}
+			color="white"
+			errorClasses="text-red-500 text-xs w-full"
+		/>
+
+		<Button
+			view="form-button"
+			classes="w-full"
+			title={btn}
+		/>
+	</div>
+</LeadForm>

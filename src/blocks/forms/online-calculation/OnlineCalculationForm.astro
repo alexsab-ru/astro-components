@@ -1,0 +1,22 @@
+---
+import OnlineCalculationFormFields from './OnlineCalculationFormFields.astro';
+interface Props {
+	bgUrl?: string;
+}
+const { bgUrl = 'https://img.upspace.ru/blocks/online-bg.webp' } = Astro.props;
+---
+
+<section
+	class="section text-white z-1"
+	style={`background-image: url('${bgUrl}');`}
+	id="online-calc"
+>
+	<div class="absolute inset-0 bg-sky-900/90 z-[-1]"></div>
+	<div class="section-grid">
+		<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">Онлайн расчет</h2>
+		<p class="uppercase text-xl text-center mb-10">
+			От локальной покраски до кузовных работ
+		</p>
+		<OnlineCalculationFormFields />
+	</div>
+</section>

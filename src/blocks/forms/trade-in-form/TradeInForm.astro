@@ -1,5 +1,5 @@
 ---
-import Form from './TradeInFormFields.astro';
+import TradeInFormFields from './TradeInFormFields.astro';
 
 interface Props{
   imageUrl?: string;
@@ -26,10 +26,10 @@ const {
         <img src="https://img.upspace.ru/loaders/simple-loading-gray.svg" data-src={imageUrl} alt={title ? title : 'Оценка вашего автомобиля'} class="w-full h-auto" loading="lazy" />
       </div>
       <div>
-        <Form />
+        <TradeInFormFields />
       </div>
     </div>
   ) : (
-    <Form />
+    <TradeInFormFields />
   )}
 </div>

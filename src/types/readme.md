@@ -16,7 +16,7 @@
 - src/blocks/contacts/Contacts.astro
 - src/blocks/dealer-contact-cta/DealerContactCta.astro
 - src/blocks/forms/feedback-form/FeedbackFormFields.astro
-- src/blocks/forms/online-calculation/OnlineCalculation.astro
+- src/blocks/forms/online-calculation/OnlineCalculationFormFields.astro
 - src/pages/chat.astro
 - src/pages/contacts.astro
 - src/pages/cookie-policy.astro
@@ -29,7 +29,7 @@
 - src/site-shell/footer/FooterV2.astro
 - src/site-shell/footer/FooterV3.astro
 - src/site-shell/header/Header.astro
-- src/site-shell/modals/Modals.astro
+- src/site-shell/modals/LeadFormModal.astro
 - src/templates/site-page/SitePage.astro
 - src/types/readme.md
 
