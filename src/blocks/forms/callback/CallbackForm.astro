@@ -1,0 +1,112 @@
+---
+import type { ComponentProps } from 'astro/types';
+import CallbackFormFields from './CallbackFormFields.astro';
+
+interface Props extends ComponentProps<typeof CallbackFormFields> {
+	phone?: string;
+	bgUrl?: string;
+	bgImage?: {
+		desktop?: string;
+		tablet?: string;
+		mobile?: string;
+	};
+	bgPosition?: {
+		desktop?: string;
+		tablet?: string;
+		mobile?: string;
+	};
+	title?: string;
+	subtitle?: string;
+}
+import settings from '@/data/site/settings.json';
+const { improve_offer_background } = settings;
+const {
+	phone,
+	bgUrl = improve_offer_background,
+	bgImage,
+	bgPosition,
+	title = 'Улучшим предложение конкурентов!',
+	subtitle = '<p>У Вас уже есть предложение от другого дилера?</p><p>Сделаем лучше!</p><p>Оставьте Ваши контакты и в ближайшее время мы перезвоним!</p>',
+	formName,
+	btn = 'Отправить',
+	showComment,
+	commentPlaceholder,
+	...rest
+} = Astro.props;
+import { phoneFormat } from '@/js/utils/numbers.format';
+
+const defaultBgPosition = 'center';
+const desktopBg = bgImage?.desktop ?? bgUrl;
+const tabletBg = bgImage?.tablet ?? desktopBg;
+const mobileBg = bgImage?.mobile ?? tabletBg;
+const desktopBgPosition = bgPosition?.desktop ?? defaultBgPosition;
+const tabletBgPosition = bgPosition?.tablet ?? desktopBgPosition;
+const mobileBgPosition = bgPosition?.mobile ?? tabletBgPosition;
+
+const cssUrl = (url: string) => `url("${url.replace(/"/g, '\\"')}")`;
+const callbackStyle = [
+	`--callback-bg-mobile: ${cssUrl(mobileBg)}`,
+	`--callback-bg-tablet: ${cssUrl(tabletBg)}`,
+	`--callback-bg-desktop: ${cssUrl(desktopBg)}`,
+	`--callback-bg-position-mobile: ${mobileBgPosition}`,
+	`--callback-bg-position-tablet: ${tabletBgPosition}`,
+	`--callback-bg-position-desktop: ${desktopBgPosition}`,
+].join('; ');
+---
+
+<section
+	class="callback-bg-responsive text-white py-20 sm:py-24 bg-cover relative z-1 before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-[-1] model-section"
+	style={callbackStyle}
+	{...rest}
+>
+	<div class="section-grid">
+		<div class="w-wull xl:w-1/2 text-base sm:text-xl leading-normal!">
+			{
+				title && (
+					<h2 class="text-left text-xl sm:text-5xl mb-4 before:hidden ml-0 mr-0">
+						{title}
+					</h2>
+				)
+			}
+			{subtitle !== '' && <Fragment set:html={subtitle} />}
+			{
+				phone ? (
+					<a
+						class="btn mt-10"
+						href={`tel:${phoneFormat(phone)}`}
+					>
+						{btn}
+					</a>
+				) : (
+					<CallbackFormFields
+						formName={formName}
+						btn={btn}
+						showComment={showComment}
+						commentPlaceholder={commentPlaceholder}
+					/>
+				)
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.callback-bg-responsive {
+		background-image: var(--callback-bg-mobile);
+		background-position: var(--callback-bg-position-mobile, bottom);
+	}
+
+	@media (min-width: 768px) {
+		.callback-bg-responsive {
+			background-image: var(--callback-bg-tablet);
+			background-position: var(--callback-bg-position-tablet, bottom);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.callback-bg-responsive {
+			background-image: var(--callback-bg-desktop);
+			background-position: var(--callback-bg-position-desktop, bottom);
+		}
+	}
+</style>

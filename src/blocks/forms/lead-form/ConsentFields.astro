@@ -1,0 +1,37 @@
+---
+import Checkbox from '@/ui/checkbox/Checkbox.astro';
+
+interface Props {
+	label: string;
+	color?: string;
+	errorClasses?: string;
+	errorText?: string;
+	subscribe?: boolean;
+}
+
+const {
+	label,
+	color = 'black',
+	errorClasses,
+	errorText = 'Чтобы продолжить, установите флажок',
+	subscribe = true,
+} = Astro.props;
+---
+
+<Checkbox
+	name="agree"
+	label={label}
+	color={color}
+	required
+	errorClasses={errorClasses}
+	errorText={errorText}
+/>
+{
+	subscribe && (
+		<input
+			type="checkbox"
+			name="subscribe"
+			class="absolute w-0 h-0 opacity-0 invisible"
+		/>
+	)
+}

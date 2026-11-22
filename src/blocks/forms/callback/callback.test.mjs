@@ -4,17 +4,18 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
-const callbackSource = readFileSync(resolve(currentDir, 'Callback.astro'), 'utf8');
+const callbackSource = readFileSync(resolve(currentDir, 'CallbackForm.astro'), 'utf8');
+const fieldsSource = readFileSync(resolve(currentDir, 'CallbackFormFields.astro'), 'utf8');
 const blockRendererSource = readFileSync(resolve(currentDir, '../../../page-builder/BlockRenderer.astro'), 'utf8');
 
 assert.match(
-	callbackSource,
+	fieldsSource,
 	/showComment\s*=/,
 	'Callback exposes a showComment prop'
 );
 
 assert.match(
-	callbackSource,
+	fieldsSource,
 	/\{showComment\s*&&/,
 	'Callback renders the comment textarea only when showComment is enabled'
 );

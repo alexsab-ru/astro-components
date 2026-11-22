@@ -1,0 +1,58 @@
+---
+import FormSelect from '@/ui/form-select/FormSelect.astro';
+import salonsData from '@/data/site/salons.json';
+import type { ISalon } from '@/types/ISalon';
+const salons = salonsData.filter(
+	(salon: ISalon) => !salon?.type || salon?.type.includes('online_modal')
+);
+import Button from '@/ui/button/Button.astro';
+import Input from '@/ui/input/Input.astro';
+import LeadForm from '../lead-form/LeadForm.astro';
+import ContactFields from '../lead-form/ContactFields.astro';
+import ConsentFields from '../lead-form/ConsentFields.astro';
+import settings from '@/data/site/settings.json';
+const { agree_label } = settings;
+import FileUpload from '@/ui/file-upload/FileUpload.astro';
+const options = salons.map((salon, idx) => ({ id: idx, name: salon.address }));
+---
+
+<LeadForm
+	class="max-w-2xl w-full mx-auto"
+	formName="Онлайн расчет"
+>
+	<div class="grid grid-cols-1 min-[600px]:grid-cols-2 gap-5">
+		<ContactFields
+			nameField={{ classes: 'border-transparent' }}
+			phoneField={{
+				classes: 'border-transparent',
+				errorClasses: 'text-red-500',
+			}}
+		/>
+		<FormSelect
+			name="salon"
+			placeholder="Выберите салон"
+			options={options}
+		/>
+		<Input
+			name="vin"
+			classes="border-transparent"
+			placeholder="VIN"
+		/>
+
+		<div class="min-[600px]:col-span-2">
+			<FileUpload />
+		</div>
+		<div class="min-[600px]:col-span-2">
+			<ConsentFields
+				label={agree_label}
+				color="white"
+				errorClasses="text-red-50 w-full"
+			/>
+			<Button
+				view="form-button"
+				classes="white mt-5"
+				title="Отправить"
+			/>
+		</div>
+	</div>
+</LeadForm>

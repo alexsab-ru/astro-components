@@ -1,5 +1,5 @@
 ---
-import Form from './FeedbackFormFields.astro';
+import FeedbackFormFields from './FeedbackFormFields.astro';
 import FeedbackFormGallery from './FeedbackFormGallery.astro';
 import type { FeedbackFormImage } from './FeedbackFormGallery.astro';
 
@@ -78,7 +78,7 @@ const formName = dataFormName || title || defaultDataFormName;
 						<Fragment set:html={subtitle} />
 					</p>
 				)}
-				<Form
+				<FeedbackFormFields
 					dataFormName={formName}
 					showModelSelect={showModelSelect}
 					labelBtn={labelBtn}
@@ -91,7 +91,7 @@ const formName = dataFormName || title || defaultDataFormName;
 				<h3 class="text-center text-3xl! sm:text-4xl! mb-8!">{displayTitle}</h3>
 			)}
 			{subtitle.length > 0 && <p class="text-center mb-8">{subtitle}</p>}
-			<Form
+			<FeedbackFormFields
 				dataFormName={formName}
 				showModelSelect={showModelSelect}
 				labelBtn={labelBtn}
