@@ -10,7 +10,12 @@ import { isModelVisible } from '@/js/utils/modelVisibility';
 import { getModelTitle } from '@/js/utils/modelFields';
 import settings from '@/data/site/settings.json';
 import { isCreditEnabled } from '@/js/utils/features';
+import modelsData from '@/data/site/models.json';
+import { isModelTestDriveEnabled } from '@/js/utils/modelTestDrive';
 const creditEnabled = isCreditEnabled(settings);
+const hasTestDriveModels = (models.length ? models : [model]).some(
+	(item) => isModelTestDriveEnabled(item, modelsData.testDrive)
+);
 ---
 
 <section class="odd:bg-gray-100" id="complectation" x-init={`selectedModel('${models.length ? models[0]?.id : model?.id}')`}>
@@ -77,7 +82,15 @@ const creditEnabled = isCreditEnabled(settings);
 						{creditEnabled && (
 							<a class="popup-link btn px-4! whitespace-nowrap" href="#common-modal" data-title="Рассчитать кредит" :data-form_name={`'Рассчитать кредит. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Рассчитать кредит</a>
 						)}
-						<a class="popup-link btn gray px-4! whitespace-nowrap" href="#common-modal" data-title="Записаться на тест-драйв" :data-form_name={`'Записаться на тест-драйв. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Записаться на тест-драйв</a>
+						{hasTestDriveModels && (
+							<a
+								x-show="testDriveEnabled"
+								class="popup-link btn gray px-4! whitespace-nowrap"
+								href="#common-modal"
+								data-title="Записаться на тест-драйв"
+								:data-form_name={`'Записаться на тест-драйв. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}
+							>Записаться на тест-драйв</a>
+						)}
 						<a class="popup-link btn black px-4! whitespace-nowrap" href="#common-modal" data-title="Узнать цену по акции" :data-form_name={`'Узнать цену по акции. ${brand} ' + (currentModel.displayName || currentModel.caption || currentModel.name) + ' ' + currentModelComplectation.name`}>Узнать цену по акции</a>
 					</div>
 				</div>

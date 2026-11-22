@@ -1,6 +1,7 @@
 ---
 import ActionGroup from '@/blocks/action-group/ActionGroup.astro';
 import settings from '@/data/site/settings.json';
+import modelsData from '@/data/site/models.json';
 import { isCreditEnabled } from '@/js/utils/features';
 import { resolveModelActions } from './model-actions.js';
 import type { ActionButton } from '@/blocks/action-group/types';
@@ -20,7 +21,12 @@ const {
 	creditEnabled = isCreditEnabled(settings),
 	...options
 } = Astro.props;
-const items = resolveModelActions(model, { ...options, status, creditEnabled });
+const items = resolveModelActions(model, {
+	...options,
+	status,
+	creditEnabled,
+	testDriveModels: modelsData.testDrive,
+});
 ---
 
 <div

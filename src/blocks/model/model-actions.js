@@ -2,6 +2,7 @@ import {
 	getModelBrandDisplayName,
 	getModelTitle,
 } from '../../js/utils/modelFields.js';
+import { isModelTestDriveEnabled } from '../../js/utils/modelTestDrive.js';
 export const MODEL_ACTION_SETS = {
 	default: ['buy', 'credit', 'testDrive', 'offer', 'configuration'],
 	purchase: ['buy', 'offer', 'configuration'],
@@ -14,6 +15,7 @@ export function resolveModelActions(
 		status,
 		creditEnabled = true,
 		testDriveEnabled = true,
+		testDriveModels = [],
 		preset = 'default',
 		actions,
 		excludeActions = [],
@@ -79,6 +81,8 @@ export function resolveModelActions(
 				item &&
 				!excludeActions.includes(item.id) &&
 				(item.id !== 'credit' || creditEnabled) &&
-				(item.id !== 'testDrive' || testDriveEnabled)
+				(item.id !== 'testDrive' ||
+					(testDriveEnabled &&
+						isModelTestDriveEnabled(model, testDriveModels)))
 		);
 }

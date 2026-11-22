@@ -2,12 +2,14 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { resolveModelActions } from './model-actions.js';
 const model = {
-	brand: { displayName: 'Демо' },
+	id: 'a1',
+	status: 'enable',
+	brand: { id: 'demo', displayName: 'Демо' },
 	name: 'A1',
 	complectations: [{}],
 };
 const ids = (options) =>
-	resolveModelActions(model, { status: 'enable', ...options }).map(
+	resolveModelActions(model, { status: 'enable', testDriveModels: [model], ...options }).map(
 		(b) => b.id
 	);
 test('default set and metadata preserve existing model actions', () => {
@@ -69,7 +71,7 @@ test('model status/show and missing configuration fallback retain previous behav
 	assert.equal(
 		resolveModelActions({ ...model, show: true }, { status: 'preorder' })
 			.length,
-		5
+		4
 	);
 	assert.equal(
 		resolveModelActions(
@@ -78,4 +80,12 @@ test('model status/show and missing configuration fallback retain previous behav
 		).at(-1).action.type,
 		'popup'
 	);
+});
+
+test('test-drive actions require this brand and model in the matrix, even with an explicit enable', () => {
+	assert.ok(!ids({ testDriveModels: [] }).includes('testDrive'));
+	assert.ok(!ids({ testDriveModels: [], testDriveEnabled: true }).includes('testDrive'));
+	assert.ok(!ids({ testDriveModels: [{ ...model, brand: { id: 'other' } }] }).includes('testDrive'));
+	assert.deepEqual(ids({ testDriveModels: [], actions: ['buy', 'testDrive', 'offer'] }), ['buy', 'offer']);
+	assert.ok(ids({ testDriveModels: [model] }).includes('testDrive'));
 });
