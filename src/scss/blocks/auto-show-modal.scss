@@ -11,5 +11,5 @@
 	@apply bottom-0 md:bottom-5 left-0 md:left-5;
 }
 [data-position="center"]{
-	@apply top-0 md:top-20 left-1/2 -translate-x-1/2;
+	@apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
 }

@@ -33,19 +33,19 @@ const options = testDrive
 	: [];
 ---
 
-<div class={`modal fixed max-w-[700px] w-full max-h-[80vh] overflow-y-auto overflow-x-hidden bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
+<div class={`modal fixed max-w-[700px] w-full max-h-dvh overflow-y-auto overflow-x-hidden overscroll-y-contain bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
 
 	<CloseModalBtn color="black" />
 
 	<div class="flex flex-col sm:grid grid-cols-5">
 
 		{imgPosition === 'left' && img ? (
-			<div class="col-span-2 relative left bg-gray-100">
-				<img data-src={img} class="h-full w-full object-cover object-center" id="lazy-image" alt="ALT" width="280" height="702" />
+			<div class="max-sm:order-first col-span-2 relative left bg-gray-100">
+				<img data-src={img} class="h-auto sm:h-full max-h-[80vh] w-full object-cover object-top sm:object-center" id="lazy-image" alt="ALT" width="280" height="702" />
 			</div>
 		) : ('')}
 
-		<div class="order-first sm:order-none col-span-3 p-5 pt-10 sm:p-8">
+		<div class="col-span-3 p-5 pt-10 sm:p-8">
 			{title && (<p class="title text-xl sm:text-3xl mb-8 text-gray-800"><Fragment set:html={title} /></p>)}
 			{subtitle && (<p class="subtitle mb-8 text-gray-600"><Fragment set:html={subtitle} /></p>)}
 			<form class="flex flex-col gap-4" id="auto-show-modal-form" novalidate>
@@ -90,8 +90,8 @@ const options = testDrive
 		</div>
 
 		{imgPosition === 'right' && img ? (
-			<div class="col-span-2 relative left bg-gray-100">
-				<img data-src={img} class="h-full w-full object-cover object-center" id="lazy-image" alt="ALT" width="280" height="702" />
+			<div class="max-sm:order-first col-span-2 relative left bg-gray-100">
+				<img data-src={img} class="h-auto sm:h-full max-h-[80vh] w-full object-cover object-top sm:object-center" id="lazy-image" alt="ALT" width="280" height="702" />
 			</div>
 		) : ('')}
 
