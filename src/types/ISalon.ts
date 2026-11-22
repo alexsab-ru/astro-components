@@ -28,6 +28,7 @@ export interface ISalon {
 	name?: string;
 	brands?: string;
 	type?: string;
+	legal_city?: string;
 	address?: string;
 	phone?: string;
 	email?: string;

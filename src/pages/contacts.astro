@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Map from '@/blocks/map/Map.astro';
+import DealerMap from '@/blocks/map/Map.astro';
 import MapWidget from '@/blocks/map/MapWidget.astro';
 import AutoShowModal from '@/site-shell/auto-show-modal/AutoShowModal.astro';
 import SocialList from '@/site-shell/social/SocialList.astro';
@@ -12,6 +12,24 @@ const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_backg
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 const salons: ISalon[] = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
+const salonsByCity = new Map<string, ISalon[]>();
+const salonsWithoutCity: ISalon[] = [];
+for (const salon of salons) {
+	const city = salon.legal_city?.trim();
+	if (!city) {
+		salonsWithoutCity.push(salon);
+		continue;
+	}
+	const group = salonsByCity.get(city) ?? [];
+	group.push(salon);
+	salonsByCity.set(city, group);
+}
+const hasMultipleCities = salonsByCity.size > 1;
+const groups: [string, ISalon[]][] = hasMultipleCities ? [...salonsByCity] : [['', salons]];
+if (hasMultipleCities && salonsWithoutCity.length) groups.push(['', salonsWithoutCity]);
+const heading = hasMultipleCities ? `Контакты ${site_name}` : ['Контакты', ...salonsByCity.keys()].join(' ');
+const SalonHeading = hasMultipleCities ? 'h3' : 'h2';
+const useMapWidget = !hasMultipleCities && yandex_widget_orgnization;
 const staff = salons.flatMap(salon =>
     salon?.staff?.map(worker => ({
         ...worker,
@@ -24,42 +42,51 @@ const description = `Контакты автосалона ${site_name} - ${salo
 ---
 
 <Layout title={`Контакты автосалона ${site_name}`} description={`${description}`} breadcrumb={[{ name: 'Контакты', href: '/contacts/' }]}>
-	<div class="h-full relative">
-		<div class="container">
-			<div class="flex flex-col md:flex-row pb-[400px] md:pb-0">
-
-				<div class="md:w-2/5 py-10">
-					<PageH1 h1="Контакты" classes="text-3xl sm:text-4xl" />
-					<div class:list={[
-						legal_entity ? 'flex flex-wrap gap-y-5 sm:gap-y-8 mt-10' : 'divide-y',
-						salons.length > 1 && 'max-h-[250px] md:max-h-[528px] overflow-y-auto custom-scrollbar',
-					]}>
-						{legal_entity && <InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />}
-						{legal_entity && legal_inn && <InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={legal_inn} iconName="mdi:list-box-outline" />}
-						{salons.map(salon => (
-							<div class="w-full flex flex-wrap gap-y-3 py-8">
-								{salons.length > 1 && salon.name && <h2 class="w-full text-base font-semibold mb-0 before:hidden">{salon.name}</h2>}
-								{!legal_entity && salon.legal_entity && <InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={salon.legal_entity} iconName="mdi:bank" />}
-								{!legal_entity && salon.legal_inn && <InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={salon.legal_inn} iconName="mdi:list-box-outline" />}
-								{salon.address && <InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon.address} iconName="mdi:map-marker-outline" />}
-								{salon.phone && <InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon.phone} iconName="mdi:cellphone" type="phone" />}
-								{salon.schedule && <InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon.schedule} iconName="mdi:clock-time-three-outline" />}
-								{salon.socials && Object.keys(salon.socials).length > 0 && <SocialList data={salon.socials} class="w-full px-2" />}
+	<div class="container pt-10">
+		<PageH1 h1={heading} classes="text-3xl sm:text-4xl" useSeo={!hasMultipleCities} />
+	</div>
+	<div class="divide-y divide-gray-200">
+		{groups.map(([city, groupSalons], index) => {
+			const headingId = hasMultipleCities ? `contacts-city-${index + 1}` : undefined;
+			const mapSalons = groupSalons.filter(salon => salon.map?.coordinates);
+			const hasMap = useMapWidget || mapSalons.length > 0;
+			return (
+				<section class="relative py-0!" aria-labelledby={headingId}>
+					<div class:list={['container', hasMap && 'pb-[400px] md:pb-0']}>
+						<div class:list={['py-8', hasMap && 'md:w-2/5']}>
+							{headingId && <h2 id={headingId} class="mb-4 py-0! text-2xl sm:text-3xl before:hidden">{city ? `Контакты ${city}` : 'Остальные контакты'}</h2>}
+							{index === 0 && legal_entity && (
+								<div class="grid gap-5">
+									<InfoItem class="flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />
+									{legal_inn && <InfoItem class="flex items-center gap-2.5" label="ИНН" value={legal_inn} iconName="mdi:list-box-outline" />}
+								</div>
+							)}
+							<div class:list={[
+								'divide-y',
+								groupSalons.length > 1 && 'max-h-80 md:max-h-[528px] overflow-y-auto custom-scrollbar',
+							]}>
+								{groupSalons.map(salon => (
+									<div class="w-full flex flex-wrap gap-y-3 py-8">
+										{salons.length > 1 && salon.name && <SalonHeading class="w-full text-base font-semibold mb-0 before:hidden">{salon.name}</SalonHeading>}
+										{!legal_entity && salon.legal_entity && <InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={salon.legal_entity} iconName="mdi:bank" />}
+										{!legal_entity && salon.legal_inn && <InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={salon.legal_inn} iconName="mdi:list-box-outline" />}
+										{salon.address && <InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon.address} iconName="mdi:map-marker-outline" />}
+										{salon.phone && <InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon.phone} iconName="mdi:cellphone" type="phone" />}
+										{salon.schedule && <InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon.schedule} iconName="mdi:clock-time-three-outline" />}
+										{salon.socials && Object.keys(salon.socials).length > 0 && <SocialList data={salon.socials} class="w-full px-2" />}
+									</div>
+								))}
 							</div>
-						))}
+						</div>
 					</div>
-				</div>
-
-				<div class="h-[400px] md:h-auto w-full md:w-1/2 absolute md:top-0 right-0 bottom-0">
-					{yandex_widget_orgnization ? (
-						<MapWidget class="h-full" />
-					) : (
-						<Map mapImg={map_background} salons={salons} classes="h-full" />
+					{hasMap && (
+						<div class="absolute right-0 bottom-0 h-[400px] w-full md:top-0 md:h-auto md:w-1/2">
+							{useMapWidget ? <MapWidget class="h-full" /> : <DealerMap mapImg={map_background} salons={mapSalons} classes="h-full" />}
+						</div>
 					)}
-				</div>
-
-			</div>
-		</div>
+				</section>
+			);
+		})}
 	</div>
 	{staff.length > 0 && (
 		<section class="bg-gray-100">
