@@ -3,10 +3,11 @@ import seo from '@/data/site/seo.json';
 interface Props {
 	h1?: string;
 	classes?: string;
+	useSeo?: boolean;
 }
-let { h1 = '', classes = '' } = Astro.props;
+let { h1 = '', classes = '', useSeo = true } = Astro.props;
 const currentPath = Astro.url.pathname;
-if (seo[currentPath]) {
+if (useSeo && seo[currentPath]) {
 	const pageSeo = seo[currentPath];
 
 	if (pageSeo.h1 && pageSeo.h1.trim()) {

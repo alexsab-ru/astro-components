@@ -3,192 +3,163 @@ interface Props {
 	mapImg: string;
 	salons?: any[];
 	classes?: string;
+	clusterMarkers?: boolean;
 	[key: string]: any;
 }
-const {salons = [], mapImg, classes = '', ...rest} = Astro.props;
+const {salons = [], mapImg, classes = '', clusterMarkers = false, ...rest} = Astro.props;
 ---
 
-<div style={`background-image: url(${mapImg})`} class={`map ${classes}`} {...rest}>
+<div style={`background-image: url(${mapImg})`} class={`map ${classes}`} data-dealer-map data-cluster-markers={clusterMarkers ? '' : undefined} {...rest}>
 	<div class="loader loader-default"></div>
-	<div id="map"></div>
+	<div class="map-canvas"></div>
+	<script type="application/json" data-map-salons set:html={JSON.stringify(salons).replace(/</g, '\\u003c')} />
 </div>
 
-
-<script id="salons" type="application/json" set:html={JSON.stringify(salons)}/>
 <script>
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { loadMapScript, observeMap, showMapError, withTimeout } from '@/js/utils/lazyMap';
 
-const e = document.querySelector("#salons");
+const mapScriptUrl = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&loadByRequire=1';
+const defaultZoom = 15;
 
-if (e && e.textContent) {
+document.querySelectorAll('[data-dealer-map]').forEach((container) => {
+	const target = container.querySelector('.map-canvas');
+	const loader = container.querySelector('.loader');
+	const data = container.querySelector('[data-map-salons]')?.textContent;
+	if (!target || !loader || !data) return;
 
-const balloonContentHeader = name => {return `<h6 class="text-sm"><b>${name}</b></h6>`};
-const balloonContentBody = (hours, phone, link) => {
+	const locations = JSON.parse(data)
+		.filter(salon => salon.map?.coordinates?.length === 2)
+		.map(salon => ({ salon, position: salon.map.marker_coordinates ?? salon.map.coordinates }))
+		.sort((a, b) => b.position[1] - a.position[1]);
+	if (!locations.length) return;
+
+	const [firstLatitude, firstLongitude] = locations[0].position;
+	const hasMultipleLocations = locations.some(({ position: [latitude, longitude] }) =>
+		latitude !== firstLatitude || longitude !== firstLongitude
+	);
+	const zoom = hasMultipleLocations ? 6 : (locations[0].salon.map.zoom ?? defaultZoom);
+	const center = locations.reduce(([lat, lon], { position }) =>
+		[lat + position[0], lon + position[1]], [0, 0]
+	).map(total => total / locations.length);
+
+	let map = null;
+	let loading = false;
+	let loadGeneration = 0;
+
+	function init() {
+		map = new ymaps.Map(target, { center, zoom, controls: ['zoomControl'] });
+		map.behaviors.disable('scrollZoom');
+
+		const markers = locations.map(({ salon, position }) => {
+			const { coordinates, balloon, ya_link, zoom: markerZoom } = salon.map;
+			const route = ya_link || generateYandexMapLink(coordinates, markerZoom ?? defaultZoom);
+			return new ymaps.Placemark(position, {
+				balloonContentHeader: `<h6 class="text-sm"><b>${salon.name}</b></h6>`,
+				balloonContentBody: balloonContentBody(salon.schedule, salon.phone, route),
+				hintContent: salon.address,
+			}, {
+				iconLayout: 'default#image',
+				iconImageHref: balloon || 'https://img.upspace.ru/locator/empty-locator.svg',
+				iconImageSize: [43, 62],
+				iconImageOffset: [-21, -58],
+			});
+		});
+
+		if (markers.length > 1 && container.hasAttribute('data-cluster-markers')) {
+			const clusterer = new ymaps.Clusterer({ preset: 'islands#blueClusterIcons', zoomMargin: 48 });
+			clusterer.add(markers);
+			map.geoObjects.add(clusterer);
+		} else {
+			markers.forEach(marker => map.geoObjects.add(marker));
+		}
+
+		if (hasMultipleLocations) {
+			map.setBounds(map.geoObjects.getBounds(), { checkZoomRange: true, zoomMargin: 35 });
+		}
+
+		return waitForTilesLoad(map.layers.get(0).get(0));
+	}
+
+	async function load() {
+		if (loading || map) return;
+		loading = true;
+		const generation = ++loadGeneration;
+		target.replaceChildren();
+		loader.classList.add('is-active');
+		try {
+			await withTimeout((async () => {
+				if (!window.ymaps) await loadMapScript(mapScriptUrl);
+				if (generation !== loadGeneration) return;
+				await new Promise(resolve => ymaps.ready(resolve));
+				if (generation !== loadGeneration) return;
+				await init();
+			})());
+			container.removeEventListener('mouseenter', load);
+			container.removeEventListener('click', load);
+		} catch {
+			loadGeneration += 1;
+			map?.destroy();
+			map = null;
+			showMapError(target, load);
+		} finally {
+			loading = false;
+			loader.classList.remove('is-active');
+		}
+	}
+
+	container.addEventListener('mouseenter', load);
+	container.addEventListener('click', load);
+	observeMap(container, load);
+});
+
+function balloonContentBody(hours, phone, route) {
 	return `
-	<p>${hours}</p>
-	<a href="tel:${phoneFormat(phone)}" class="inline-block text-lg text-accent-500 my-1">${phone}</a><br>
-	<a href="${link}" target="_blank" class="text-sm">📍 Проложить маршрут</a><br>
-	`
+	${hours ? `<p>${hours}</p>` : ''}
+	${phone ? `<a href="tel:${phoneFormat(phone)}" class="inline-block text-lg text-accent-500 my-1">${phone}</a><br>` : ''}
+	<a href="${route}" target="_blank" class="text-sm">📍 Проложить маршрут</a><br>
+	`;
 }
 
-const salons = JSON.parse(e.textContent)
-
-const zoom = salons.length === 1 && salons[0].map.zoom ? salons[0].map.zoom : 6;
-const parent = document.querySelector(".map");
-const _ball_Offset = [-21, -58];
-const _ball_Size = [43, 62];
-
-let start_load_script = false, // Переменная для определения была ли хоть раз загружена Яндекс.Карта (чтобы избежать повторной загрузки при наведении)
-	end_load_script = false; // Переменная для определения был ли загружен скрипт Яндекс.Карт полностью (чтобы не возникли какие-нибудь ошибки, если мы загружаем несколько карт одновременно)
-
-let myMapTemp = null;
-let loadGeneration = 0;
-
-//Функция создания карты сайта и затем вставки ее в блок с идентификатором "map-yandex"
-function init() {
-	const add = (a1, a2) => a1.map((e, i) => e + a2[i]);
-	const avr = (array, length) => array.map((e, i) => e/length);
-	var center = [0,0];
-
-	if (!myMapTemp) {
-		myMapTemp = new ymaps.Map("map", {
-			center,
-			zoom,
-			controls: ["zoomControl"],
-		});
-	}
-	myMapTemp.behaviors.disable("scrollZoom");
-	salons.sort(function(a, b) {
-		return b.map.coordinates[1] - a.map.coordinates[1];
-	});
-	salons.map((salon) => {
-		center = add(center, salon.map.coordinates);
-		const _ball_bg = salon.map.balloon ? salon.map.balloon : 'https://img.upspace.ru/locator/empty-locator.svg';
-		const yaLink = salon.map.ya_link || generateYandexMapLink(salon.map.coordinates, salon.map.zoom);
-		myMapTemp.geoObjects.add(
-			new ymaps.Placemark(
-				[salon.map.coordinates[0], salon.map.coordinates[1]],
-				{
-					balloonContentHeader: balloonContentHeader(salon.name),
-					balloonContentBody: balloonContentBody(salon.schedule, salon.phone, yaLink),
-					balloonContentFooter: '',
-					hintContent: salon.address,
-				},
-				{
-					iconLayout: "default#image",
-					// Своё изображение иконки метки.
-					iconImageHref: _ball_bg,
-					// Размеры метки.
-					iconImageSize: _ball_Size,
-					// Смещение левого верхнего угла иконки относительно
-					// её "ножки" (точки привязки).
-					iconImageOffset: _ball_Offset,
-				}
-			)
-		);
-	});
-	myMapTemp.setCenter(avr(center,salons.length));
-	if(salons.length > 1) {
-	myMapTemp.setBounds(myMapTemp.geoObjects.getBounds(), {
-		checkZoomRange: true,
-		zoomMargin: 35
-	});
-	}
-
-	// Получаем первый экземпляр коллекции слоев, потом первый слой коллекции
-	var layer = myMapTemp.layers.get(0).get(0);
-
-	// Решение по callback-у для определния полной загрузки карты
-	const initializingMap = myMapTemp;
-	return waitForTilesLoad(layer).then(function (value) {
-		// Скрываем индикатор загрузки после полной загрузки карты
-		if (myMapTemp === initializingMap) parent.querySelector(".loader").classList.remove("is-active");
-	});
-}
-
-// Функция для определения полной загрузки карты (на самом деле проверяется загрузка тайлов)
 function waitForTilesLoad(layer) {
-	return new ymaps.vow.Promise(function (resolve, reject) {
-		var tc = getTileContainer(layer),
-			readyAll = true;
-		if (!tc) { resolve(); return; }
-		tc.tiles.each(function (tile, number) {
-			if (!tile.isReady()) {
-				readyAll = false;
-			}
+	return new ymaps.vow.Promise(resolve => {
+		const tileContainer = getTileContainer(layer);
+		if (!tileContainer) {
+			resolve();
+			return;
+		}
+
+		let ready = true;
+		tileContainer.tiles.each(tile => {
+			if (!tile.isReady()) ready = false;
 		});
-		if (readyAll) {
+		if (ready) {
 			resolve();
 		} else {
-			tc.events.once("ready", function () {
-				resolve();
-			});
+			tileContainer.events.once('ready', resolve);
 		}
 	});
 }
 
 function getTileContainer(layer) {
-	for (var k in layer) {
-		if (layer.hasOwnProperty(k)) {
-			if (
-				layer[k] instanceof ymaps.layer.tileContainer.CanvasContainer ||
-				layer[k] instanceof ymaps.layer.tileContainer.DomContainer
-			) {
-				return layer[k];
-			}
+	for (const value of Object.values(layer)) {
+		if (
+			value instanceof ymaps.layer.tileContainer.CanvasContainer ||
+			value instanceof ymaps.layer.tileContainer.DomContainer
+		) {
+			return value;
 		}
 	}
-	return null;
-}
-
-// Load on visibility or pointer interaction; every failed attempt can be retried.
-async function ymap() {
-	if (start_load_script || !parent) return;
-	start_load_script = true;
-	const generation = ++loadGeneration;
-	const target = parent.querySelector('#map');
-	target.replaceChildren();
-	parent.querySelector('.loader').classList.add('is-active');
-	try {
-		await withTimeout((async () => {
-			if (!window.ymaps) await loadMapScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU&loadByRequire=1');
-			if (generation !== loadGeneration) return;
-			await new Promise((resolve) => ymaps.ready(resolve));
-			if (generation !== loadGeneration) return;
-			await init();
-		})());
-		if (generation === loadGeneration) {
-			end_load_script = true;
-			parent.removeEventListener('mouseenter', ymap);
-		}
-	} catch {
-		if (generation !== loadGeneration) return;
-		loadGeneration += 1;
-		start_load_script = false;
-		myMapTemp?.destroy();
-		myMapTemp = null;
-		parent.querySelector('.loader').classList.remove('is-active');
-		showMapError(target, ymap);
-	}
-}
-
-if (parent) {
-	parent.addEventListener('mouseenter', ymap);
-	parent.addEventListener('click', ymap);
-	observeMap(parent, ymap);
-}
-
 }
 
 function generateYandexMapLink(coordinates: [number, number], zoom: number): string {
 	const [latitude, longitude] = coordinates;
-	
+
 	// Проверяем валидность координат
 	if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
 			throw new Error('Некорректные координаты');
 	}
-	
+
 	// Проверяем валидность зума
 	if (zoom < 1 || zoom > 19) {
 			throw new Error('Некорректный уровень зума (должен быть от 1 до 19)');
@@ -197,12 +168,12 @@ function generateYandexMapLink(coordinates: [number, number], zoom: number): str
 	// Формируем ссылку на Яндекс Карты
 	const baseUrl = 'https://yandex.ru/maps/';
 	const params = new URLSearchParams({
-			ll: `${longitude},${latitude}`,
-			z: zoom.toString(),
-			l: 'map', // тип карты (map, sat, skl)
-			pt: `${longitude},${latitude},pm2rdm` // метка на карте
+		ll: `${longitude},${latitude}`,
+		z: zoom.toString(),
+		l: 'map', // тип карты (map, sat, skl)
+		pt: `${longitude},${latitude},pm2rdm` // метка на карте
 	});
-	
+
 	return `${baseUrl}?${params.toString()}`;
 }
 

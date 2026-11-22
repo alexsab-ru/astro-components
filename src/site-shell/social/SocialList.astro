@@ -17,7 +17,7 @@ import { Icon } from 'astro-icon/components';
 			{...rest}
 		>
 		{title && <h2 class="text-xl sm:text-2xl mb-6 sm:mb-10"><Fragment set:html={title}/></h2>}
-			<svg class="absolute w-0 h-0 opacity-0">
+			{socials.instagram && <svg class="absolute w-0 h-0 opacity-0" aria-hidden="true">
 				<linearGradient
 					id="SVGID_1_"
 					gradientUnits="userSpaceOnUse"
@@ -40,7 +40,7 @@ import { Icon } from 'astro-icon/components';
 						style="stop-color:#9C27B0"
 					/>
 				</linearGradient>
-			</svg>
+			</svg>}
 
 			<div class="flex flex-wrap gap-2 sm:gap-4">
 				{Object.keys(socials).map((key) => (
@@ -48,12 +48,13 @@ import { Icon } from 'astro-icon/components';
 						href={socials[key]?.url || '#!'}
 						title={socials[key]?.title}
 						aria-label={socials[key]?.title}
-						class={
-							border
-								? `icon-link social-link ${key}`
-								: `icon-link messanger-link ${key}`
-						}
+						class:list={[
+							'icon-link focus-visible:outline-2 focus-visible:outline-offset-2',
+							border ? 'social-link' : 'messanger-link',
+							key,
+						]}
 						target="_blank"
+						rel="noopener noreferrer"
 					>
 						<Icon
 							name={key}
