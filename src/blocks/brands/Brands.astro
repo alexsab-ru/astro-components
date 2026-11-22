@@ -24,7 +24,7 @@ const DEFAULT_LINK = '#common-modal';
 
 interface BrandDefaults {
   brand?: { displayName?: string };
-  logo?: { color?: string; white?: string };
+  logo?: { color?: string; white?: string; whiteFilter?: boolean };
 }
 
 // downloadCommonRepo копирует astro-json/data/brands в общий каталог данных.
@@ -84,6 +84,7 @@ const items = brands.map((brand) => {
     count: brandCounts[brand] ?? 0,
     colorLogo: defaults?.logo?.color?.trim(),
     whiteLogo: defaults?.logo?.white?.trim(),
+    whiteLogoFilter: defaults?.logo?.whiteFilter,
     href: link?.href ?? DEFAULT_LINK,
     isPopup: link?.isPopup ?? true,
     target: link?.target,

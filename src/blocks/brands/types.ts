@@ -4,6 +4,7 @@ export type TBrandItem = {
 	count: number;
 	colorLogo?: string;
 	whiteLogo?: string;
+	whiteLogoFilter?: boolean;
 	href: string;
 	isPopup: boolean;
 	target?: string;

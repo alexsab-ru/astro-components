@@ -23,6 +23,10 @@ export function isHeaderTransparentEnabled(settings = {}) {
 	return getFeatureFlag(settings, 'is_header_transparent', false) === true;
 }
 
+export function isRandomDealerOrderEnabled(settings = {}) {
+	return getFeatureFlag(settings, 'random_dealer_order', false) === true;
+}
+
 /** @returns {'both' | 'only_phone' | 'only_callback'} */
 export function getHeaderCallbackMode(settings = {}) {
 	const mode = getFeatureFlag(settings, 'header_callback', 'both');
