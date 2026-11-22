@@ -26,7 +26,7 @@ if (e && e.textContent) {
 const balloonContentHeader = name => {return `<h6 class="text-sm"><b>${name}</b></h6>`};
 const balloonContentBody = (hours, phone, link) => {
 	return `
-	<p>${hours}</p>
+	${hours ? `<p>${hours}</p>` : ''}
 	<a href="tel:${phoneFormat(phone)}" class="inline-block text-lg text-accent-500 my-1">${phone}</a><br>
 	<a href="${link}" target="_blank" class="text-sm">📍 Проложить маршрут</a><br>
 	`

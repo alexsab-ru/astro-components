@@ -35,6 +35,7 @@ export interface ISalon {
 	legal_entity?: string;
 	legal_inn?: number;
 	map?: TSalonMap;
+	socials?: Record<string, { url: string; title: string }>;
 	staff?: TSalonStaff[];
 	hidden_in?: string[];
 	scripts?: TSalonScripts;

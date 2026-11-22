@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import Map from '@/blocks/map/Map.astro';
 import MapWidget from '@/blocks/map/MapWidget.astro';
 import AutoShowModal from '@/site-shell/auto-show-modal/AutoShowModal.astro';
+import SocialList from '@/site-shell/social/SocialList.astro';
 import InfoItem from '@/blocks/contacts/ContactsInfoItem.astro';
 import WorkerItem from '@/blocks/contacts/ContactsWorkerItem.astro';
 import settings from '@/data/site/settings.json';
@@ -10,7 +11,7 @@ import PageH1 from '@/ui/page-h1/PageH1.astro';
 const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_background, manager_photo } = settings;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
-const salons = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
+const salons: ISalon[] = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
 const staff = salons.flatMap(salon =>
     salon?.staff?.map(worker => ({
         ...worker,
@@ -29,35 +30,24 @@ const description = `Контакты автосалона ${site_name} - ${salo
 
 				<div class="md:w-2/5 py-10">
 					<PageH1 h1="Контакты" classes="text-3xl sm:text-4xl" />
-					{legal_entity ? (
-						<div class={`flex flex-wrap gap-y-5 sm:gap-y-8 mt-10 ${salons.length > 1 ? 'max-h-[250px] md:max-h-[528px] overflow-y-auto custom-scrollbar' : ''}`}>
-							{legal_entity && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />)}
-							{legal_inn && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={legal_inn} iconName="mdi:list-box-outline" />)}
-							{
-								salons.map(salon => (
-								<div class="flex flex-wrap gap-y-3 py-8">
-									{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
-									{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
-									{salon?.schedule && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.schedule} iconName="mdi:clock-time-three-outline" />)}
-								</div>
-								))
-							}
-						</div>
-					) : (
-						<div class={`divide-y ${salons.length > 1 ? 'max-h-[250px] md:max-h-[528px] overflow-y-auto custom-scrollbar' : ''}`}>
-							{
-								salons.map(salon => (
-								<div class="flex flex-wrap gap-y-3 py-8">
-									{salon?.legal_entity && (<InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={salon?.legal_entity} iconName="mdi:bank" />)}
-									{salon?.legal_inn && (<InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={salon?.legal_inn} iconName="mdi:list-box-outline" />)}
-									{salon?.address && (<InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon?.address} iconName="mdi:map-marker-outline" />)}
-									{salon?.phone && (<InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon?.phone} iconName="mdi:cellphone" type="phone"/>)}
-									{salon?.schedule && (<InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon?.schedule} iconName="mdi:clock-time-three-outline" />)}
-								</div>
-								))
-							}
-						</div>
-					)}
+					<div class:list={[
+						legal_entity ? 'flex flex-wrap gap-y-5 sm:gap-y-8 mt-10' : 'divide-y',
+						salons.length > 1 && 'max-h-[250px] md:max-h-[528px] overflow-y-auto custom-scrollbar',
+					]}>
+						{legal_entity && <InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={legal_entity} iconName="mdi:bank" />}
+						{legal_entity && legal_inn && <InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={legal_inn} iconName="mdi:list-box-outline" />}
+						{salons.map(salon => (
+							<div class="w-full flex flex-wrap gap-y-3 py-8">
+								{salons.length > 1 && salon.name && <h2 class="w-full text-base font-semibold mb-0 before:hidden">{salon.name}</h2>}
+								{!legal_entity && salon.legal_entity && <InfoItem class="w-full flex items-center gap-2.5" label="Юридическое лицо" value={salon.legal_entity} iconName="mdi:bank" />}
+								{!legal_entity && salon.legal_inn && <InfoItem class="w-full flex items-center gap-2.5" label="ИНН" value={salon.legal_inn} iconName="mdi:list-box-outline" />}
+								{salon.address && <InfoItem class="w-full flex items-center gap-2.5" label="Адрес" value={salon.address} iconName="mdi:map-marker-outline" />}
+								{salon.phone && <InfoItem class="w-full flex items-center gap-2.5" label="Телефон" value={salon.phone} iconName="mdi:cellphone" type="phone" />}
+								{salon.schedule && <InfoItem class="w-full flex items-center gap-2.5" label="Режим работы" value={salon.schedule} iconName="mdi:clock-time-three-outline" />}
+								{salon.socials && Object.keys(salon.socials).length > 0 && <SocialList data={salon.socials} class="w-full" />}
+							</div>
+						))}
+					</div>
 				</div>
 
 				<div class="h-[400px] md:h-auto w-full md:w-1/2 absolute md:top-0 right-0 bottom-0">
