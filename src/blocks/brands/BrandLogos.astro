@@ -16,8 +16,12 @@ const { items } = Astro.props;
       rel={item.rel}
       data-title={item.isPopup ? item.displayName : undefined}
       data-form_name={item.isPopup ? `${item.displayName}. Бренды` : undefined}
-      class={`flex items-center object-contain w-[70px] no-underline! ${item.isPopup ? 'popup-link' : ''}`}>
-      <img src={item.whiteLogo} alt={item.displayName} loading="lazy" class="h-auto w-full filter brightness-0 invert opacity-70" />
+      class={`flex items-center no-underline! ${item.isPopup ? 'popup-link' : ''}`}>
+      {item.whiteLogo ? (
+        <img src={item.whiteLogo} alt={item.displayName} loading="lazy" class="h-auto w-[70px] object-contain filter brightness-0 invert opacity-70" />
+      ) : (
+        <span class="text-sm">{item.displayName}</span>
+      )}
     </a>
   ))}
 </div>

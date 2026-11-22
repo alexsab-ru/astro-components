@@ -22,19 +22,19 @@ const ViewType = {
 
 const DEFAULT_LINK = '#common-modal';
 
-// Ссылки на логотипы лежат в layered-каталоге брендов (astro-json/data/brands),
-// который downloadCommonRepo кладёт в src/data/common/brands. Каталога может не быть
-// (данные не скачаны) или у бренда может не быть заполненного logo — тогда работает
-// фолбэк на стандартные имена файлов в img.upspace.ru/logo.
-const brandDefaults = import.meta.glob<{ default: Record<string, any> }>(
+interface BrandDefaults {
+  brand?: { displayName?: string };
+  logo?: { color?: string; white?: string };
+}
+
+// downloadCommonRepo копирует astro-json/data/brands в общий каталог данных.
+const brandDefaults = import.meta.glob<BrandDefaults>(
   '/src/data/common/brands/*/defaults.json',
-  { eager: true }
+  { eager: true, import: 'default' }
 );
-const brandData = Object.entries(brandDefaults).reduce((acc, [path, module]) => {
-  const brandId = path.split('/').at(-2);
-  if (brandId) acc[brandId] = module.default ?? {};
-  return acc;
-}, {} as Record<string, Record<string, any>>);
+const brandData = new Map(
+  Object.entries(brandDefaults).map(([path, defaults]) => [path.split('/').at(-2), defaults])
+);
 
 const modules = import.meta.glob('/src/content/cars/*.mdx', { eager: true });
 const filePaths = Object.keys(modules);
@@ -67,7 +67,7 @@ const settingsLinks: Record<string, string> =
   (settingsData as Record<string, any>)?.brand_links ?? {};
 
 const items = brands.map((brand) => {
-  const defaults = brandData[brand] ?? {};
+  const defaults = brandData.get(brand);
   const url = (
     brandLinks[brand] ??
     linkTo ??
@@ -82,8 +82,8 @@ const items = brands.map((brand) => {
     id: brand,
     displayName,
     count: brandCounts[brand] ?? 0,
-    colorLogo: defaults?.logo?.color || `https://img.upspace.ru/logo/${brand}/logo-color.svg`,
-    whiteLogo: defaults?.logo?.white || `https://img.upspace.ru/logo/${brand}/logo-footer.svg`,
+    colorLogo: defaults?.logo?.color?.trim(),
+    whiteLogo: defaults?.logo?.white?.trim(),
     href: link?.href ?? DEFAULT_LINK,
     isPopup: link?.isPopup ?? true,
     target: link?.target,
