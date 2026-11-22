@@ -1,12 +1,14 @@
 ---
 import settings from '@/data/site/settings.json';
-import { isHeaderTransparentEnabled } from '@/js/utils/features';
+import { isHeaderTransparentEnabled, shouldShowSiteName } from '@/js/utils/features';
 import LogoImage from './LogoImage.astro';
 const { site_name, logo_header, logo_dealer_header } = settings;
 const is_header_transparent = isHeaderTransparentEnabled(settings);
 const path = Astro.url.pathname;
 const logoHeaderSize = "h-[var(--logo-header-height-mobile)] sm:h-[var(--logo-header-height)] w-auto max-w-full min-w-0";
 const dealerLogoSize = "h-[var(--logo-dealer-header-height)] w-auto";
+const showSiteName = shouldShowSiteName(settings, logo_header);
+const brandLogoSize = `${logoHeaderSize}${logo_dealer_header || showSiteName ? ' sm:pr-3' : ''}`;
 const colorDivide = is_header_transparent ? 'divide-header-transparent-divide' : 'divide-header-divide';
 
 interface Props {
@@ -16,12 +18,12 @@ const { noLink = false } = Astro.props;
 ---
 {path === '/' || noLink ? (
 <div class={`flex min-w-0 flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left cursor-pointer`} x-data="scrollTop" x-on:click="onClick">
-    <LogoImage
+    {logo_header && <LogoImage
         src={logo_header}
-        class={`${logoHeaderSize} sm:pr-3`}
+        class={brandLogoSize}
         alt={site_name}
         instance="brand"
-    />
+    />}
     {logo_dealer_header ? (
         <LogoImage
             src={logo_dealer_header}
@@ -29,18 +31,18 @@ const { noLink = false } = Astro.props;
             alt={site_name}
             instance="dealer"
         />
-    ) : (
+    ) : showSiteName && (
         <span class="text-logo-header-daeler-size uppercase font-medium leading-none! select-none">{site_name}</span>
     ) }    
 </div>
 ) : (
 <a href="/" class={`flex min-w-0 flex-col sm:flex-row flex-nowrap items-center gap-2 sm:gap-3 divide-x-0 ${colorDivide} sm:divide-x text-center sm:text-left`}>
-    <LogoImage
+    {logo_header && <LogoImage
         src={logo_header}
-        class={`${logoHeaderSize} sm:pr-3`}
+        class={brandLogoSize}
         alt={site_name}
         instance="brand"
-    />
+    />}
     {logo_dealer_header ? (
         <LogoImage
             src={logo_dealer_header}
@@ -48,7 +50,7 @@ const { noLink = false } = Astro.props;
             alt={site_name}
             instance="dealer"
         />
-    ) : (
+    ) : showSiteName && (
         <span class="text-logo-header-daeler-size uppercase font-medium leading-none! select-none">{site_name}</span>
     ) } 
 </a>

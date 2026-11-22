@@ -4,6 +4,8 @@ import {
 	getHeaderCallbackMode,
 	isCreditEnabled,
 	isHeaderTransparentEnabled,
+	isRandomDealerOrderEnabled,
+	shouldShowSiteName,
 } from './features.js';
 
 assert.equal(
@@ -41,6 +43,14 @@ assert.equal(
 	false,
 	'header transparent feature stays disabled by default'
 );
+
+assert.equal(isRandomDealerOrderEnabled({}), false);
+assert.equal(isRandomDealerOrderEnabled({features: {random_dealer_order: true}}), true);
+assert.equal(isRandomDealerOrderEnabled({features: {random_dealer_order: 'true'}}), false);
+
+assert.equal(shouldShowSiteName({}, '/logo.svg'), true);
+assert.equal(shouldShowSiteName({features: {show_site_name_with_logo: false}}, '/logo.svg'), false);
+assert.equal(shouldShowSiteName({features: {show_site_name_with_logo: false}}, ''), true);
 
 for (const mode of ['both', 'only_phone', 'only_callback']) {
 	assert.equal(getHeaderCallbackMode({features: {header_callback: mode}}), mode);

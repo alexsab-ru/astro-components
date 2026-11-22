@@ -11,23 +11,11 @@ import PageH1 from '@/ui/page-h1/PageH1.astro';
 const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_background, manager_photo } = settings;
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
+import { groupSalonsByCity } from '@/js/utils/salonCities';
 const salons: ISalon[] = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
-const salonsByCity = new Map<string, ISalon[]>();
-const salonsWithoutCity: ISalon[] = [];
-for (const salon of salons) {
-	const city = salon.legal_city?.trim();
-	if (!city) {
-		salonsWithoutCity.push(salon);
-		continue;
-	}
-	const group = salonsByCity.get(city) ?? [];
-	group.push(salon);
-	salonsByCity.set(city, group);
-}
-const hasMultipleCities = salonsByCity.size > 1;
-const groups: [string, ISalon[]][] = hasMultipleCities ? [...salonsByCity] : [['', salons]];
-if (hasMultipleCities && salonsWithoutCity.length) groups.push(['', salonsWithoutCity]);
-const heading = hasMultipleCities ? `Контакты ${site_name}` : ['Контакты', ...salonsByCity.keys()].join(' ');
+const { cities, groups } = groupSalonsByCity(salons);
+const hasMultipleCities = cities.length > 1;
+const heading = hasMultipleCities ? `Контакты ${site_name}` : ['Контакты', ...cities].join(' ');
 const SalonHeading = hasMultipleCities ? 'h3' : 'h2';
 const useMapWidget = !hasMultipleCities && yandex_widget_orgnization;
 const staff = salons.flatMap(salon =>

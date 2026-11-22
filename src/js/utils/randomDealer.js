@@ -1,7 +1,6 @@
 /**
  * Shuffle children of a .random-dealer block on each page load.
- * Used wherever more than one salon is listed (header, slide-out, footer),
- * so the top/bottom order is not always the same dealer.
+ * Used for dealer lists on sites that enable random_dealer_order.
  */
 
 /**
