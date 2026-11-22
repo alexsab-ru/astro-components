@@ -33,11 +33,11 @@ const options = testDrive
 	: [];
 ---
 
-<div class={`modal fixed max-w-[700px] w-full max-h-full overflow-y-auto overflow-x-hidden bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
+<div class={`modal fixed max-w-[700px] w-full max-h-[80vh] overflow-y-auto overflow-x-hidden bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
 
 	<CloseModalBtn color="black" />
 
-	<div class={`flex sm:grid grid-cols-5 ${imgPosition === 'right' ? 'flex-col-reverse' : 'flex-col'}`}>
+	<div class="flex flex-col sm:grid grid-cols-5">
 
 		{imgPosition === 'left' && img ? (
 			<div class="col-span-2 relative left bg-gray-100">
@@ -45,7 +45,7 @@ const options = testDrive
 			</div>
 		) : ('')}
 
-		<div class="col-span-3 p-5 sm:p-8">
+		<div class="order-first sm:order-none col-span-3 p-5 pt-10 sm:p-8">
 			{title && (<p class="title text-xl sm:text-3xl mb-8 text-gray-800"><Fragment set:html={title} /></p>)}
 			{subtitle && (<p class="subtitle mb-8 text-gray-600"><Fragment set:html={subtitle} /></p>)}
 			<form class="flex flex-col gap-4" id="auto-show-modal-form" novalidate>
@@ -101,22 +101,58 @@ const options = testDrive
 
 <div class="fixed inset-0 overflow-x-hidden overflow-y-auto bg-black/70 z-9999 hidden" id="modal-overlay" data-close></div>
 
-<script define:vars={{seconds: modalShow, position: modalPosition}} is:inline>
-	const commonModalWithImg = document.getElementById('common-modal-with-img');
-	const lazyImage = commonModalWithImg.querySelector('#lazy-image');
-	setTimeout(() => {
-		if(lazyImage){
-			lazyImage.src = lazyImage.dataset.src;
+<script define:vars={{ showDelay: modalShow, position: modalPosition }} is:inline>
+	const modal = document.getElementById('common-modal-with-img');
+	const overlay = document.getElementById('modal-overlay');
+	const lazyImage = modal.querySelector('#lazy-image');
+	const storageKey = 'auto-show-modal-dismissals';
+	const dismissalDelay = 20_000;
+	const maxDismissals = 3;
+	let dismissals = 0;
+	let showTimer;
+
+	function scheduleShow() {
+		try {
+			dismissals = Number(sessionStorage.getItem(storageKey)) || 0;
+		} catch {
+			// Keep the in-memory count if session storage is unavailable.
 		}
-		commonModalWithImg.classList.remove('hidden');
-		if(position === 'center'){
-			document.getElementById('modal-overlay').classList.remove('hidden');
+		if (dismissals >= maxDismissals) return;
+
+		showTimer = window.setTimeout(() => {
+			if (lazyImage) lazyImage.src = lazyImage.dataset.src;
+			modal.classList.remove('hidden');
+			if (position === 'center') overlay.classList.remove('hidden');
+		}, Number(showDelay) + dismissals * dismissalDelay);
+	}
+
+	function hide() {
+		modal.classList.add('hidden');
+		overlay.classList.add('hidden');
+	}
+
+	function dismiss() {
+		if (modal.classList.contains('hidden')) return;
+
+		hide();
+		dismissals += 1;
+		try {
+			sessionStorage.setItem(storageKey, String(dismissals));
+		} catch {
+			// The modal can still be closed if session storage is unavailable.
 		}
-	}, seconds);
-	document.querySelectorAll('[data-close]').forEach(close => {
-		close.addEventListener('click', () => {
-			document.querySelectorAll('.modal').forEach(modal => modal.classList.add('hidden'))
-			document.getElementById('modal-overlay').classList.add('hidden')
-		})
-	})
+	}
+
+	modal.querySelector('button[data-close]').addEventListener('click', dismiss);
+	overlay.addEventListener('click', dismiss);
+
+	window.addEventListener('pagehide', () => {
+		window.clearTimeout(showTimer);
+		hide();
+	});
+	window.addEventListener('pageshow', (event) => {
+		if (event.persisted) scheduleShow();
+	});
+
+	scheduleShow();
 </script>
