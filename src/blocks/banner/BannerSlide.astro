@@ -17,13 +17,16 @@ import { resolveBannerLink } from './link.js';
 
 import settings from '@/data/site/settings.json';
 import scripts from '@/data/site/scripts.json';
-import { isHeaderTransparentEnabled } from '@/js/utils/features';
+import { isCenteredHeaderEnabled, isHeaderTransparentEnabled } from '@/js/utils/features';
 const { header_top_line } = settings;
 const is_header_transparent = isHeaderTransparentEnabled(settings);
 
-const containerClasses = is_header_transparent && header_top_line
+const centeredHeader = isCenteredHeaderEnabled(settings);
+const containerClasses = is_header_transparent && centeredHeader && Astro.url.pathname === '/'
+	? 'pt-[84px] lg:pt-[100px]'
+	: is_header_transparent && !centeredHeader && header_top_line
 	? 'pt-[117px] md:pt-[141px] lg:pt-[190px]'
-	: is_header_transparent
+	: is_header_transparent && !centeredHeader
 	? 'pt-[80px] md:pt-[100px] lg:pt-[149px]'
 	: 'pt-5 sm:pt-10 lg:py-10';
 

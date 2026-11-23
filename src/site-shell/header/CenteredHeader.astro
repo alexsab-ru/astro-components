@@ -3,13 +3,14 @@ import { Icon } from 'astro-icon/components';
 import { getMenu } from '@/const.js';
 import salonsData from '@/data/site/salons.json';
 import settings from '@/data/site/settings.json';
-import { getHeaderCallbackMode } from '@/js/utils/features';
+import { getHeaderCallbackMode, isHeaderTransparentEnabled } from '@/js/utils/features';
 import { scopeSalons } from '@/js/utils/pageScope';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
 import Button from '@/ui/button/Button.astro';
 import Logo from '@/ui/logo/Logo.astro';
 import HeaderTopLine from './HeaderTopLine.astro';
+import './styles.css';
 
 interface Props {
 	brand?: string | null;
@@ -27,8 +28,11 @@ const salons = scopeSalons(salonsData, Astro.locals.pageDealer).filter(salon => 
 const addressesUrl = contactsUrl !== '#contacts' || isRouteDisabled('/contacts/') ? contactsUrl : '/contacts/';
 const callbackMode = getHeaderCallbackMode(settings);
 const phone = salons.find(salon => salon.phone)?.phone || settings.phone_common;
+const transparent = isHeaderTransparentEnabled(settings);
+const surfaceClasses = transparent ? 'header-glass text-header-transparent-text' : 'bg-header-bg text-header-text';
+const borderClasses = transparent ? 'border-header-border-transparent' : 'border-header-border';
 const currentPage = (url: string) => url === Astro.url.pathname ? 'page' as const : undefined;
-const linkClasses = 'inline-flex min-h-11 items-center whitespace-nowrap no-underline! hover:underline! aria-[current=page]:underline! underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2';
+const linkClasses = 'inline-flex min-h-11 items-center no-underline! hover:underline! aria-[current=page]:underline! underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2';
 const buttonClasses = 'popup-link bg-header-button-bg! hover:bg-header-button-bg-hover! text-header-button-text! hover:text-header-button-text-hover! min-h-11 whitespace-nowrap rounded-lg px-4! py-2! focus-visible:outline-2 focus-visible:outline-offset-2';
 const callbackProps = {
 	url: '#common-modal',
@@ -40,10 +44,10 @@ const callbackProps = {
 };
 ---
 
-<centered-header class="header-wrapper sticky top-0 z-50 block border-b border-header-border bg-header-bg text-header-text">
-	<header>
+<centered-header class:list={['header-wrapper top-0 z-50 block w-full', transparent && 'header-transparent', transparent && Astro.url.pathname === '/' ? 'fixed' : 'sticky']}>
+	<header class:list={['border-b', borderClasses, surfaceClasses]}>
 		{settings.header_top_line && <HeaderTopLine content={settings.header_top_line} />}
-		<div class="centered-bar min-h-16 items-center gap-3 px-4 py-2 lg:min-h-20 lg:px-6 2xl:px-9">
+		<div class="centered-bar min-h-16 items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4 lg:min-h-20 lg:px-6 2xl:px-9">
 			<div class="flex min-w-0 items-center gap-3 2xl:gap-5">
 				<button type="button" data-drawer-open class="inline-grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2"
 					aria-haspopup="dialog" aria-controls="centered-header-drawer" aria-expanded="false" aria-label="Открыть меню">
@@ -51,15 +55,15 @@ const callbackProps = {
 				</button>
 				{primary.length > 0 && (
 					<nav aria-label="Основное меню" class="hidden items-center gap-3 text-sm font-semibold xl:flex 2xl:gap-5">
-						{primary.map(link => <a class={linkClasses} href={link.url} aria-current={currentPage(link.url)}>{link.name}</a>)}
+						{primary.map(link => <a class:list={[linkClasses, 'whitespace-nowrap']} href={link.url} aria-current={currentPage(link.url)}>{link.name}</a>)}
 					</nav>
 				)}
 			</div>
-			<div class="centered-logo min-w-0 max-w-[16rem] justify-self-center">
+			<div class="centered-logo min-w-0 justify-self-center">
 				<Logo noLink={logoNoLink} />
 			</div>
 			<div class="flex min-w-0 items-center justify-end gap-4 2xl:gap-6">
-				<a href={addressesUrl} class:list={[linkClasses, 'hidden! text-sm font-semibold lg:inline-flex!']}>Адреса салонов</a>
+				<a href={addressesUrl} class:list={[linkClasses, 'hidden! whitespace-nowrap text-sm font-semibold lg:inline-flex!']}>Адреса салонов</a>
 				{callbackMode === 'only_phone' ? (
 					phone && <a class={linkClasses} href={`tel:${phoneFormat(phone)}`} aria-label={`Позвонить: ${phone}`}>
 						<Icon name="mdi:phone" class="size-6 lg:hidden" aria-hidden="true" /><span class="hidden lg:inline">{phone}</span>
@@ -77,20 +81,20 @@ const callbackProps = {
 			</div>
 		</div>
 	</header>
-	<dialog id="centered-header-drawer" class="centered-drawer fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[min(100%,28rem)] max-w-none overflow-y-auto bg-header-bg text-header-text shadow-2xl" aria-label="Меню сайта">
+	<dialog id="centered-header-drawer" class:list={['centered-drawer fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[min(100%,28rem)] max-w-none overflow-y-auto shadow-2xl', surfaceClasses]} aria-label="Меню сайта">
 		<div class="px-5 pb-8 pt-3 sm:px-7">
-			<div class="flex min-h-16 items-center justify-between gap-4 border-b border-header-border pb-2">
-				<div class="centered-logo min-w-0 max-w-[16rem]"><Logo noLink={logoNoLink} /></div>
-				<button type="button" data-drawer-close autofocus class="grid size-11 cursor-pointer place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2" aria-label="Закрыть меню">
+			<div class:list={['flex min-h-16 items-center justify-between gap-4 border-b pb-2', borderClasses]}>
+				<div class="centered-logo min-w-0"><Logo noLink={logoNoLink} /></div>
+				<button type="button" data-drawer-close autofocus class="grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2" aria-label="Закрыть меню">
 					<Icon name="mdi:close" class="size-7" aria-hidden="true" />
 				</button>
 			</div>
 			{drawer.length > 0 && (
-				<nav aria-label="Разделы сайта" class="border-b border-header-border py-4">
+				<nav aria-label="Разделы сайта" class:list={['border-b py-4', borderClasses]}>
 					<ul>
 						{drawer.map(link => (
 							<li>
-								<a class:list={[linkClasses, 'w-full whitespace-normal rounded-lg px-3 py-2 text-lg font-semibold hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover']}
+								<a class:list={[linkClasses, 'w-full rounded-lg px-3 py-2 text-lg font-semibold hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover']}
 									href={link.url} aria-current={currentPage(link.url)}>{link.name}</a>
 							</li>
 						))}
@@ -135,10 +139,9 @@ const callbackProps = {
 	}
 
 	.centered-logo {
-		width: min(40vw, 16rem);
+		width: min(calc(100vw - 8rem), 18rem);
 		display: flex;
 		justify-content: center;
-		--logo-header-height-mobile: max(1.125rem, var(--logo-header-height));
 	}
 
 	.centered-drawer::backdrop {
