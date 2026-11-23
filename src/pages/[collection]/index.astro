@@ -46,7 +46,8 @@ if (entries && entries.length > 0) {
 	posts = [];
 }
 const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
-const filters = collection === 'news' ? 'news' : collection === 'special-offers' ? 'offers' : undefined;
+const offerCollections = ['special-offers', 'owners-service-promo', 'actions'];
+const filters = collection === 'news' ? 'news' : offerCollections.includes(collection ?? '') ? 'offers' : undefined;
 ---
 
 <PageLayout

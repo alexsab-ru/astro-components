@@ -28,29 +28,36 @@ const cards = posts.map(post => ({
 		}))];
 	}),
 }));
-const visibleFacets = facets.filter(facet => facet.options.size);
+const hasMetadata = facets.some(facet => facet.options.size > 0);
+const visibleFacets = facets.filter(({ key, options }) =>
+	options.size > (key === 'brand' || key === 'dealer' ? 1 : 0),
+);
 const gridClasses = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5';
 ---
-{visibleFacets.length ? (
+{hasMetadata ? (
 	<post-filters class="block">
-		<form hidden method="get" aria-label={filters === 'news' ? 'Фильтры новостей' : 'Фильтры спецпредложений'}>
-			<div class="mb-5 flex flex-wrap items-end gap-3 rounded-2xl bg-gray-100 p-4 sm:mb-7">
-				{visibleFacets.map(({ key, label, options }) => (
-					<div class="grid flex-[1_1_10rem] gap-1 text-sm font-medium">
-						<label for={`post-${filters}-${key}`}>{label}</label>
-						<select id={`post-${filters}-${key}`} name={key} class="min-h-11 w-full rounded-lg border border-gray-500 bg-white px-3 text-base text-black focus-visible:outline-2 focus-visible:outline-offset-2">
-							<option value="">Все</option>
-							{[...options].sort(([, left], [, right]) => left.localeCompare(right, 'ru')).map(([value, text]) => (
-								<option value={value}>{text}</option>
-							))}
-						</select>
+		{visibleFacets.length > 0 && (
+			<>
+				<form hidden method="get" aria-label={filters === 'news' ? 'Фильтры новостей' : 'Фильтры спецпредложений'}>
+					<div class="mb-5 flex flex-wrap items-end gap-3 rounded-2xl bg-gray-100 p-4 sm:mb-7">
+						{visibleFacets.map(({ key, label, options }) => (
+							<div class="grid flex-[1_1_10rem] gap-1 text-sm font-medium">
+								<label for={`post-${filters}-${key}`}>{label}</label>
+								<select id={`post-${filters}-${key}`} name={key} class="min-h-11 w-full rounded-lg border border-gray-500 bg-white px-3 text-base text-black focus-visible:outline-2 focus-visible:outline-offset-2">
+									<option value="">Все</option>
+									{[...options].sort(([, left], [, right]) => left.localeCompare(right, 'ru')).map(([value, text]) => (
+										<option value={value}>{text}</option>
+									))}
+								</select>
+							</div>
+						))}
+						<button type="reset" hidden class="min-h-11 px-3 text-sm font-medium underline focus-visible:outline-2 focus-visible:outline-offset-2">Сбросить</button>
 					</div>
-				))}
-				<button type="reset" class="min-h-11 px-3 text-sm font-medium underline focus-visible:outline-2 focus-visible:outline-offset-2">Сбросить</button>
-			</div>
-		</form>
-		<p class="sr-only" role="status" data-results-count></p>
-		<p hidden data-no-posts>По выбранным фильтрам ничего не найдено.</p>
+				</form>
+				<p class="sr-only" role="status" data-results-count></p>
+				<p hidden data-no-posts>По выбранным фильтрам ничего не найдено.</p>
+			</>
+		)}
 		<div class={gridClasses}>
 			{cards.map(({ post, facets: values }) => (
 				<div data-post-facets={JSON.stringify(Object.fromEntries(facets.map(({ key }, index) => [key, values[index]])))}>
@@ -77,9 +84,10 @@ const gridClasses = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5';
 		connectedCallback() {
 			const form = this.querySelector('form');
 			const selects = [...this.querySelectorAll('select')];
+			const reset = form?.querySelector<HTMLButtonElement>('button[type="reset"]');
 			const empty = this.querySelector<HTMLElement>('[data-no-posts]');
 			const count = this.querySelector('[data-results-count]');
-			if (!form || !empty || !count) return;
+			if (!form || !reset || !empty || !count) return;
 
 			const cards = [...this.querySelectorAll<HTMLElement>('[data-post-facets]')].map(card => ({
 				card,
@@ -87,6 +95,7 @@ const gridClasses = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5';
 			}));
 			const applyFilters = () => {
 				const active = selects.filter(select => select.value);
+				reset.hidden = active.length === 0;
 				let shown = 0;
 				for (const { card, facets } of cards) {
 					card.hidden = !active.every(select => facets[select.name]?.includes(select.value));
@@ -113,8 +122,10 @@ const gridClasses = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5';
 			form.addEventListener('change', updateUrl);
 			form.addEventListener('reset', event => {
 				event.preventDefault();
+				const firstActive = selects.find(select => select.value);
 				for (const select of selects) select.value = '';
 				updateUrl();
+				firstActive?.focus();
 			});
 			form.hidden = false;
 			applyFilters();
