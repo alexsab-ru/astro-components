@@ -4,7 +4,7 @@ import type { TCollection } from '@/types/TCollection';
 import PageLayout from '@/layouts/PageLayout.astro';
 import settings from '@/data/site/settings.json';
 const { site_name } = settings;
-import PostItem from '@/blocks/post/PostItem.astro';
+import PostGrid from '@/blocks/post/PostGrid.astro';
 import { sortingAndFilteringPosts } from '@/js/utils/sortingAndFilteringPosts';
 import { getRandomInt } from '@/js/utils/numbers.format';
 import SeoText from '@/blocks/seo-text/SeoText.astro';
@@ -46,6 +46,7 @@ if (entries && entries.length > 0) {
 	posts = [];
 }
 const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
+const filters = collection === 'news' ? 'news' : collection === 'special-offers' ? 'offers' : undefined;
 ---
 
 <PageLayout
@@ -60,9 +61,7 @@ const breadcrumb = { name: collectionBreadcrumb, href: `/${collection}/` };
 	<SeoText mdx={collection} noPadding />
 	{
 		posts.length > 0 ? (
-			<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-				{ posts.map(post => ( <PostItem post={post} /> )) }
-			</div>
+			<PostGrid posts={posts} filters={filters} />
 		) : (
 			<div class="section-grid"><p>Скоро здесь появятся {h1.toLowerCase()} {site_name}.</p></div>
 		)

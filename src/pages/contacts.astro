@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import DealerMap from '@/blocks/map/Map.astro';
+import DealerDirectory from '@/blocks/contacts/DealerDirectory.astro';
 import MapWidget from '@/blocks/map/MapWidget.astro';
 import AutoShowModal from '@/site-shell/auto-show-modal/AutoShowModal.astro';
 import SocialList from '@/site-shell/social/SocialList.astro';
@@ -12,6 +13,8 @@ const { site_name, legal_entity, legal_inn, yandex_widget_orgnization, map_backg
 import salonsData from '@/data/site/salons.json';
 import type { ISalon } from '@/types/ISalon';
 import { groupSalonsByCity } from '@/js/utils/salonCities';
+import { getFeatureFlag } from '@/js/utils/features';
+const showDirectory = getFeatureFlag(settings, 'contacts_directory', false) === true;
 const salons: ISalon[] = salonsData.filter((salon: ISalon) => !salon?.type || salon?.type.includes('contact_page'));
 const { cities, groups } = groupSalonsByCity(salons);
 const hasMultipleCities = cities.length > 1;
@@ -33,7 +36,9 @@ const description = `Контакты автосалона ${site_name} - ${salo
 	<div class="container pt-10">
 		<PageH1 h1={heading} classes="text-3xl sm:text-4xl" useSeo={!hasMultipleCities} />
 	</div>
-	<div class="divide-y divide-gray-200">
+	{showDirectory ? (
+		<DealerDirectory salons={salons} mapImage={map_background} legalEntity={legal_entity} legalInn={legal_inn} />
+	) : <div class="divide-y divide-gray-200">
 		{groups.map(([city, groupSalons], index) => {
 			const headingId = hasMultipleCities ? `contacts-city-${index + 1}` : undefined;
 			const mapSalons = groupSalons.filter(salon => salon.map?.coordinates);
@@ -75,7 +80,7 @@ const description = `Контакты автосалона ${site_name} - ${salo
 				</section>
 			);
 		})}
-	</div>
+	</div>}
 	{staff.length > 0 && (
 		<section class="bg-gray-100">
 			<div class="container">

@@ -1,7 +1,7 @@
 /**
  * Слоты меню (src/data/site/menu.json) и их разрешение против реестра страниц.
  *
- * Формат: { header: [...], main: [...], footer: [...], footer_legal: [...] }.
+ * Формат: { header: [...], header_primary: [...], header_drawer: [...], main: [...], footer: [...], footer_legal: [...] }.
  * Значение слота — массив, а deepMerge заменяет массивы целиком: дилер,
  * меняющий один пункт, переопределяет весь слот. Для упорядоченного списка
  * это осознанное поведение.
@@ -12,7 +12,7 @@
 import { pathMatchesRouteRules } from './pathMatchesRouteRules.js';
 import { getDisabledUrls, getPageTitle, normalizePageUrl } from './sitePages.js';
 
-export const MENU_SLOTS = ['header', 'main', 'footer', 'footer_legal'];
+export const MENU_SLOTS = ['header', 'main', 'footer', 'footer_legal', 'header_primary', 'header_drawer'];
 
 /** Ссылка с явной схемой (http:, tel:, mailto:, tg:) — не наш маршрут. */
 const hasScheme = (url) => /^[a-z][a-z0-9+.-]*:/i.test(url);

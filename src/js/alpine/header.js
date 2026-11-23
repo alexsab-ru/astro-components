@@ -5,11 +5,6 @@ export function headerComponent() {
 	Alpine.data('header', () => ({
 		open: false,
 		scrolling: false,
-		showTopLine: localStorage.getItem('show-top-line') || 1,
-		hideTopLine() {
-			localStorage.setItem('show-top-line', 0);
-			this.showTopLine = 0;
-		},
 		init() {
 			this.$nextTick(() => {
 				const $siteHeader = this.$root;

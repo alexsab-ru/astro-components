@@ -45,7 +45,7 @@ import settings from '@/data/site/settings.json';
 import salonsData from '@/data/site/salons.json';
 import { resolvePageDealer } from '@/js/utils/pageScope';
 Astro.locals.pageDealer = resolvePageDealer(salonsData, fixedDealerName);
-import { isHeaderTransparentEnabled } from '@/js/utils/features';
+import { isCenteredHeaderEnabled, isHeaderTransparentEnabled } from '@/js/utils/features';
 const { site_name, site_description } = settings;
 const is_header_transparent = isHeaderTransparentEnabled(settings);
 
@@ -55,7 +55,9 @@ import ScriptBodyBeginPlatform from '@/integrations/scripts/ScriptsBodyBeginPlat
 import ScriptHead from '@/integrations/scripts/ScriptsHead.astro';
 import ScriptBodyBegin from '@/integrations/scripts/ScriptsBodyBegin.astro';
 import ScriptBodyEnd from '@/integrations/scripts/ScriptsBodyEnd.astro';
-import Header from '@/site-shell/header/Header.astro';
+import StandardHeader from '@/site-shell/header/Header.astro';
+import CenteredHeader from '@/site-shell/header/CenteredHeader.astro';
+const Header = isCenteredHeaderEnabled(settings) && showHeaderMenu && !navigationLinks ? CenteredHeader : StandardHeader;
 import Modals from '@/site-shell/modals/Modals.astro';
 import UpBtn from '@/ui/up-btn/UpBtn.astro';
 import Cookie from '@/site-shell/cookie/Cookie.astro';

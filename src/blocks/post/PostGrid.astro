@@ -1,0 +1,125 @@
+---
+import PostItem from './PostItem.astro';
+
+type Metadata = { tags?: string[]; type?: string; brand?: string; brands?: string[]; dealer?: string };
+interface Props {
+	posts: { data: Metadata }[];
+	filters?: 'news' | 'offers';
+}
+
+const { posts, filters } = Astro.props;
+const categories = filters ? [
+	filters === 'news'
+		? { key: 'tag', label: 'Тег', values: (data: Metadata) => data.tags ?? [] }
+		: { key: 'type', label: 'Тип', values: (data: Metadata) => [data.type] },
+	{ key: 'brand', label: 'Бренд', values: (data: Metadata) => data.brands ?? [data.brand] },
+	{ key: 'dealer', label: 'Дилер', values: (data: Metadata) => [data.dealer] },
+] : [];
+
+const facets = categories.map(category => ({ ...category, options: new Map<string, string>() }));
+const cards = posts.map(post => ({
+	post,
+	facets: facets.map(facet => {
+		const values = facet.values(post.data).map(value => value?.trim()).filter((value): value is string => Boolean(value));
+		return [...new Set(values.map(value => {
+			const key = value.toLocaleLowerCase('ru');
+			if (!facet.options.has(key)) facet.options.set(key, value);
+			return key;
+		}))];
+	}),
+}));
+const visibleFacets = facets.filter(facet => facet.options.size);
+const gridClasses = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5';
+---
+{visibleFacets.length ? (
+	<post-filters class="block">
+		<form hidden method="get" aria-label={filters === 'news' ? 'Фильтры новостей' : 'Фильтры спецпредложений'}>
+			<div class="mb-5 flex flex-wrap items-end gap-3 rounded-2xl bg-gray-100 p-4 sm:mb-7">
+				{visibleFacets.map(({ key, label, options }) => (
+					<div class="grid flex-[1_1_10rem] gap-1 text-sm font-medium">
+						<label for={`post-${filters}-${key}`}>{label}</label>
+						<select id={`post-${filters}-${key}`} name={key} class="min-h-11 w-full rounded-lg border border-gray-500 bg-white px-3 text-base text-black focus-visible:outline-2 focus-visible:outline-offset-2">
+							<option value="">Все</option>
+							{[...options].sort(([, left], [, right]) => left.localeCompare(right, 'ru')).map(([value, text]) => (
+								<option value={value}>{text}</option>
+							))}
+						</select>
+					</div>
+				))}
+				<button type="reset" class="min-h-11 px-3 text-sm font-medium underline focus-visible:outline-2 focus-visible:outline-offset-2">Сбросить</button>
+			</div>
+		</form>
+		<p class="sr-only" role="status" data-results-count></p>
+		<p hidden data-no-posts>По выбранным фильтрам ничего не найдено.</p>
+		<div class={gridClasses}>
+			{cards.map(({ post, facets: values }) => (
+				<div data-post-facets={JSON.stringify(Object.fromEntries(facets.map(({ key }, index) => [key, values[index]])))}>
+					<PostItem post={post} />
+					{values.some(value => value.length) && (
+						<ul class="mt-2 flex list-none! flex-wrap gap-1.5 ps-0!" role="list" aria-label="Рубрики">
+							{facets.flatMap(({ key, options, label }, index) => values[index].map(value => (
+								<li class="mb-0! rounded bg-gray-100 px-2 py-1 text-xs text-gray-800" data-facet={key}>
+									<span class="sr-only">{label}: </span>{options.get(value)}
+								</li>
+							)))}
+						</ul>
+					)}
+				</div>
+			))}
+		</div>
+	</post-filters>
+) : (
+	<div class={gridClasses}>{posts.map(post => <PostItem post={post} />)}</div>
+)}
+
+<script>
+	class PostFilters extends HTMLElement {
+		connectedCallback() {
+			const form = this.querySelector('form');
+			const selects = [...this.querySelectorAll('select')];
+			const empty = this.querySelector<HTMLElement>('[data-no-posts]');
+			const count = this.querySelector('[data-results-count]');
+			if (!form || !empty || !count) return;
+
+			const cards = [...this.querySelectorAll<HTMLElement>('[data-post-facets]')].map(card => ({
+				card,
+				facets: JSON.parse(card.dataset.postFacets ?? '{}') as Record<string, string[]>,
+			}));
+			const applyFilters = () => {
+				const active = selects.filter(select => select.value);
+				let shown = 0;
+				for (const { card, facets } of cards) {
+					card.hidden = !active.every(select => facets[select.name]?.includes(select.value));
+					if (!card.hidden) shown += 1;
+				}
+				empty.hidden = shown > 0;
+				count.textContent = `Найдено публикаций: ${shown}`;
+			};
+			const updateUrl = () => {
+				const url = new URL(location.href);
+				for (const { name, value } of selects) {
+					if (value) url.searchParams.set(name, value);
+					else url.searchParams.delete(name);
+				}
+				history.replaceState(history.state, '', url);
+				applyFilters();
+			};
+			const params = new URLSearchParams(location.search);
+			for (const select of selects) {
+				const value = params.get(select.name)?.trim().toLocaleLowerCase('ru');
+				if (value && [...select.options].some(option => option.value === value)) select.value = value;
+			}
+			form.addEventListener('submit', event => event.preventDefault());
+			form.addEventListener('change', updateUrl);
+			form.addEventListener('reset', event => {
+				event.preventDefault();
+				for (const select of selects) select.value = '';
+				updateUrl();
+			});
+			form.hidden = false;
+			applyFilters();
+		}
+	}
+
+	customElements.define('post-filters', PostFilters);
+</script>

@@ -11,13 +11,15 @@ const is_header_transparent = isHeaderTransparentEnabled(settings);
 const defaultClasses = 'px-12 py-2 xs:text-xs text-sm md:text-base text-center text-white/80 relative';
 const {content, classes = is_header_transparent ? defaultClasses : 'bg-accent-500 ' + defaultClasses, closeBtn = true} = Astro.props
 ---
-<div x-show="showTopLine === 1" x-cloak class="border-header-border-transparent border-b">
+<div x-data="{ shown: localStorage.getItem('show-top-line') !== '0' }" x-show="shown" x-cloak class="border-header-border-transparent border-b">
 	<div class={classes}>
 		<Fragment set:html={content}>
 		{closeBtn && (
 			<button 
 				class="text-base absolute h-8 sm:h-full w-8 sm:w-10 right-0 top-0 z-10 close-header-top-line-btn"
-				@click="hideTopLine"
+				type="button"
+				aria-label="Закрыть объявление"
+				@click="localStorage.setItem('show-top-line', '0'); shown = false"
 			>
 				<Icon name="mdi:close" class="text-lg text-white/80 hover:text-white transition-colors" />
 			</button>

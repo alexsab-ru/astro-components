@@ -20,7 +20,11 @@ export function isCreditEnabled(settings = {}) {
 }
 
 export function isHeaderTransparentEnabled(settings = {}) {
-	return getFeatureFlag(settings, 'is_header_transparent', false) === true;
+	return !isCenteredHeaderEnabled(settings) && getFeatureFlag(settings, 'is_header_transparent', false) === true;
+}
+
+export function isCenteredHeaderEnabled(settings = {}) {
+	return getFeatureFlag(settings, 'header_variant', 'standard') === 'centered';
 }
 
 export function isRandomDealerOrderEnabled(settings = {}) {
