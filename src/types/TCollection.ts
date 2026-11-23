@@ -8,6 +8,10 @@ export type TDataCollection = {
 	pubDate?: string;
 	toDate?: boolean | string;
 	brand?: string;
+	brands?: string[];
+	tags?: string[];
+	dealer?: string;
+	type?: string;
 };
 
 export type TCollection = {

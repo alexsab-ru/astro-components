@@ -4,12 +4,13 @@ interface Props {
 	salons?: any[];
 	classes?: string;
 	clusterMarkers?: boolean;
+	interactiveDirectory?: boolean;
 	[key: string]: any;
 }
-const {salons = [], mapImg, classes = '', clusterMarkers = false, ...rest} = Astro.props;
+const {salons = [], mapImg, classes = '', clusterMarkers = false, interactiveDirectory = false, ...rest} = Astro.props;
 ---
 
-<div style={`background-image: url(${mapImg})`} class={`map ${classes}`} data-dealer-map data-cluster-markers={clusterMarkers ? '' : undefined} {...rest}>
+<div style={mapImg ? `background-image: url(${mapImg})` : undefined} class={`map ${classes}`} data-dealer-map data-cluster-markers={clusterMarkers ? '' : undefined} data-interactive-directory={interactiveDirectory ? '' : undefined} {...rest}>
 	<div class="loader loader-default"></div>
 	<div class="map-canvas"></div>
 	<script type="application/json" data-map-salons set:html={JSON.stringify(salons).replace(/</g, '\\u003c')} />
@@ -46,6 +47,24 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 	let map = null;
 	let loading = false;
 	let loadGeneration = 0;
+	const directory = container.hasAttribute('data-interactive-directory');
+	let state = { visible: locations.map(({ salon }) => salon.directoryId), selected: null };
+	let renderDirectory;
+
+	container.addEventListener('dealer-directory:update', event => {
+		const next = event.detail;
+		const changed = state.selected !== next.selected || state.visible.join(',') !== next.visible.join(',');
+		state = next;
+		if (!target.clientWidth) return;
+		if (!map) {
+			load();
+			return;
+		}
+		requestAnimationFrame(() => {
+			map?.container.fitToViewport();
+			if (changed || next.fit) renderDirectory?.();
+		});
+	});
 
 	function init() {
 		map = new ymaps.Map(target, { center, zoom, controls: ['zoomControl'] });
@@ -54,7 +73,7 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 		const markers = locations.map(({ salon, position }) => {
 			const { coordinates, balloon, ya_link, zoom: markerZoom } = salon.map;
 			const route = ya_link || generateYandexMapLink(coordinates, markerZoom ?? defaultZoom);
-			return new ymaps.Placemark(position, {
+			const marker = new ymaps.Placemark(position, {
 				balloonContentHeader: `<h6 class="text-sm"><b>${salon.name}</b></h6>`,
 				balloonContentBody: balloonContentBody(salon.schedule, salon.phone, route),
 				hintContent: salon.address,
@@ -63,10 +82,45 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 				iconImageHref: balloon || 'https://img.upspace.ru/locator/empty-locator.svg',
 				iconImageSize: [43, 62],
 				iconImageOffset: [-21, -58],
+				...(directory ? { openBalloonOnClick: false } : {}),
 			});
+			if (directory) {
+				marker.events.add('click', () => container.dispatchEvent(new CustomEvent('dealer-directory:select', {
+					bubbles: true,
+					detail: salon.directoryId,
+				})));
+			}
+			return marker;
 		});
 
-		if (markers.length > 1 && container.hasAttribute('data-cluster-markers')) {
+		if (directory) {
+			const clusterer = new ymaps.Clusterer({ preset: 'islands#blueClusterIcons', zoomMargin: 48 });
+			renderDirectory = () => {
+				const visible = new Set(state.visible);
+				const matching = locations.flatMap(({ salon }, index) =>
+					visible.has(salon.directoryId) && salon.directoryId !== state.selected ? [markers[index]] : []
+				);
+				const selectedIndex = locations.findIndex(({ salon }) => salon.directoryId === state.selected);
+				map.geoObjects.removeAll();
+				clusterer.removeAll();
+				if (matching.length > 1) {
+					clusterer.add(matching);
+					map.geoObjects.add(clusterer);
+				} else if (matching.length) {
+					map.geoObjects.add(matching[0]);
+				}
+				if (selectedIndex !== -1) {
+					const { salon, position } = locations[selectedIndex];
+					map.geoObjects.add(markers[selectedIndex]);
+					map.setCenter(position, salon.map.zoom ?? defaultZoom);
+				} else if (matching.length === 1) {
+					map.setCenter(matching[0].geometry.getCoordinates(), defaultZoom);
+				} else if (map.geoObjects.getBounds()) {
+					map.setBounds(map.geoObjects.getBounds(), { checkZoomRange: true, zoomMargin: 48 });
+				}
+			};
+			renderDirectory();
+		} else if (markers.length > 1 && container.hasAttribute('data-cluster-markers')) {
 			const clusterer = new ymaps.Clusterer({ preset: 'islands#blueClusterIcons', zoomMargin: 48 });
 			clusterer.add(markers);
 			map.geoObjects.add(clusterer);
@@ -74,7 +128,7 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 			markers.forEach(marker => map.geoObjects.add(marker));
 		}
 
-		if (hasMultipleLocations) {
+		if (!directory && hasMultipleLocations) {
 			map.setBounds(map.geoObjects.getBounds(), { checkZoomRange: true, zoomMargin: 35 });
 		}
 
@@ -101,6 +155,7 @@ document.querySelectorAll('[data-dealer-map]').forEach((container) => {
 			loadGeneration += 1;
 			map?.destroy();
 			map = null;
+			renderDirectory = undefined;
 			showMapError(target, load);
 		} finally {
 			loading = false;

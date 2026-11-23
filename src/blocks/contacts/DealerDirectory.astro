@@ -1,0 +1,201 @@
+---
+import { Icon } from 'astro-icon/components';
+import DealerMap from '@/blocks/map/Map.astro';
+import InfoItem from './ContactsInfoItem.astro';
+import SocialList from '@/site-shell/social/SocialList.astro';
+import { groupSalonsByCity } from '@/js/utils/salonCities';
+import type { ISalon } from '@/types/ISalon';
+
+interface Props {
+	id?: string;
+	salons: ISalon[];
+	mapImage?: string;
+	legalEntity?: string;
+	legalInn?: string | number;
+}
+
+const { id = 'dealer-directory', salons, mapImage = '', legalEntity, legalInn } = Astro.props;
+const dealers = salons.map((salon, index) => ({
+	...salon,
+	directoryId: String(index),
+	displayName: salon.name || salon.address || 'Дилерский центр',
+}));
+const { groups } = groupSalonsByCity(dealers);
+const mapDealers = dealers.filter(({ map }) => map?.coordinates?.length === 2);
+const hasMap = mapDealers.length > 0;
+const controlClasses = 'min-h-11 px-3 rounded-lg text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2';
+
+function routeUrl({ map }: ISalon) {
+	if (map?.ya_link) return map.ya_link;
+	if (!map?.coordinates) return undefined;
+	return `https://yandex.ru/maps/?${new URLSearchParams({ mode: 'routes', rtext: `~${map.coordinates.join(',')}` })}`;
+}
+---
+
+<dealer-directory id={id} class="container block pt-5 pb-10 md:pb-14" data-view="list">
+	{hasMap && (
+		<div class="mb-4 flex rounded-xl bg-gray-100 p-1 md:hidden" hidden data-directory-switch role="group" aria-label="Представление дилерских центров">
+			<button type="button" class:list={[controlClasses, 'flex-1']} data-directory-view="list" aria-controls={`${id}-list`} aria-pressed="true">Список</button>
+			<button type="button" class:list={[controlClasses, 'flex-1']} data-directory-view="map" aria-controls={`${id}-map`} aria-pressed="false">Карта</button>
+		</div>
+	)}
+	<div class:list={['grid gap-4 md:gap-0', hasMap && 'md:grid-cols-[minmax(18rem,2fr)_3fr] md:rounded-2xl md:border md:border-gray-200']}>
+		<div id={`${id}-list`} data-directory-list class:list={['min-w-0', hasMap && 'md:border-r md:border-gray-200 md:p-4']}>
+			<div data-directory-overview hidden>
+				<label class="mb-4 block text-sm font-semibold">
+					Поиск дилерского центра
+					<input type="search" class="mt-1 block min-h-11 w-full rounded-lg border border-gray-500 px-3 text-base font-normal placeholder:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2" placeholder="Название, город или адрес" autocomplete="off" />
+				</label>
+				<p class="sr-only" role="status" data-directory-count></p>
+				<p class="py-4" hidden data-directory-empty>Дилерские центры не найдены.</p>
+				<div class:list={[hasMap && 'md:max-h-[31rem] md:overflow-y-auto px-0.5 md:pr-2']}>
+					{groups.map(([city, members]) => (
+						<div class="mb-4 last:mb-0" data-directory-group>
+							{city && <h2 class="mb-2 text-base font-semibold before:hidden">{city}</h2>}
+							<ul class="grid gap-2">
+								{members.map(dealer => (
+									<li data-directory-row data-search={[dealer.displayName, dealer.brands, dealer.address, dealer.legal_city].filter(Boolean).join(' ')}>
+										<button type="button" data-directory-dealer={dealer.directoryId} class="flex min-h-11 w-full items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3 text-left hover:bg-gray-100 focus-visible:outline-2 focus-visible:-outline-offset-2">
+											<span class="grid gap-1">
+												<strong class="text-base leading-snug">{dealer.displayName}</strong>
+												{dealer.address && <span class="text-sm text-gray-700"><Fragment set:html={dealer.address} /></span>}
+											</span>
+											<Icon name="mdi:chevron-right" class="size-5 shrink-0" aria-hidden="true" />
+										</button>
+									</li>
+								))}
+							</ul>
+						</div>
+					))}
+				</div>
+			</div>
+			{dealers.map(dealer => (
+				<article data-directory-detail={dealer.directoryId} class="rounded-xl border border-gray-200 p-4 mb-3">
+					<button type="button" data-directory-back hidden class="mb-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold underline focus-visible:outline-2 focus-visible:outline-offset-2">
+						<Icon name="mdi:arrow-left" class="size-5" aria-hidden="true" /> К списку салонов
+					</button>
+					<h2 tabindex="-1" class="mb-4 text-xl font-semibold before:hidden">{dealer.displayName}</h2>
+					<div class="grid gap-3">
+						{dealer.address && <InfoItem class="flex items-center gap-3" label="Адрес" value={dealer.address} iconName="mdi:map-marker-outline" iconClass="size-6" />}
+						{dealer.phone && <InfoItem class="flex items-center gap-3" label="Телефон" value={dealer.phone} iconName="mdi:cellphone" iconClass="size-6" type="phone" />}
+						{dealer.schedule && <InfoItem class="flex items-center gap-3" label="Режим работы" value={dealer.schedule} iconName="mdi:clock-time-three-outline" iconClass="size-6" />}
+						{dealer.email && (
+							<div class="flex min-w-0 items-center gap-3">
+								<Icon name="mdi:email-outline" class="size-6 shrink-0" aria-hidden="true" />
+								<div class="min-w-0"><small class="block text-xs">Эл. почта</small><a href={`mailto:${dealer.email}`} class="break-all">{dealer.email}</a></div>
+							</div>
+						)}
+						{!legalEntity && dealer.legal_entity && <InfoItem class="flex items-center gap-3" label="Юридическое лицо" value={dealer.legal_entity} iconName="mdi:bank" iconClass="size-6" />}
+						{!legalEntity && dealer.legal_inn && <InfoItem class="flex items-center gap-3" label="ИНН" value={String(dealer.legal_inn)} iconName="mdi:list-box-outline" iconClass="size-6" />}
+						{dealer.socials && <SocialList data={dealer.socials} />}
+						{routeUrl(dealer) && <a href={routeUrl(dealer)} class="inline-flex min-h-11 items-center justify-self-start font-semibold underline focus-visible:outline-2 focus-visible:outline-offset-2">Проложить маршрут</a>}
+					</div>
+				</article>
+			))}
+			{!dealers.length && <p>Контакты дилерских центров пока не добавлены.</p>}
+		</div>
+		{hasMap && (
+			<div id={`${id}-map`} data-directory-map class="min-w-0 [overflow:clip] rounded-2xl md:rounded-l-none">
+				<DealerMap mapImg={mapImage} salons={mapDealers} classes="h-[min(65vh,32rem)] min-h-[20rem] md:h-full md:min-h-[36rem]" interactiveDirectory />
+			</div>
+		)}
+	</div>
+	{legalEntity && (
+		<div class="mt-6 flex flex-wrap gap-5">
+			<InfoItem class="flex items-center gap-3" label="Юридическое лицо" value={legalEntity} iconName="mdi:bank" iconClass="size-6" />
+			{legalInn && <InfoItem class="flex items-center gap-3" label="ИНН" value={String(legalInn)} iconName="mdi:list-box-outline" iconClass="size-6" />}
+		</div>
+	)}
+</dealer-directory>
+
+<style>
+	[data-directory-view][aria-pressed='true'] {
+		background-color: white;
+		box-shadow: 0 1px 3px rgb(0 0 0 / 15%);
+	}
+
+	@media (width < 48rem) {
+		[data-ready][data-view='map'] [data-directory-list],
+		[data-ready][data-view='list'] [data-directory-map] {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	const normalize = (value: string) => value.toLocaleLowerCase('ru').replaceAll('ё', 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+
+	class DealerDirectory extends HTMLElement {
+		connectedCallback() {
+			const overview = this.querySelector<HTMLElement>('[data-directory-overview]');
+			const search = this.querySelector<HTMLInputElement>('input[type="search"]');
+			const map = this.querySelector('[data-dealer-map]');
+			const empty = this.querySelector<HTMLElement>('[data-directory-empty]');
+			const count = this.querySelector('[data-directory-count]');
+			const switcher = this.querySelector<HTMLElement>('[data-directory-switch]');
+			if (!overview || !search || !empty || !count) return;
+			const groups = [...this.querySelectorAll<HTMLElement>('[data-directory-group]')];
+			const views = [...this.querySelectorAll<HTMLButtonElement>('[data-directory-view]')];
+			const details = [...this.querySelectorAll<HTMLElement>('[data-directory-detail]')];
+			const rows = [...this.querySelectorAll<HTMLElement>('[data-directory-row]')].map(row => ({
+				row,
+				terms: normalize(row.dataset.search ?? ''),
+				button: row.querySelector<HTMLButtonElement>('[data-directory-dealer]')!,
+			}));
+			let selected: string | null = null;
+			let visible = rows.map(({ button }) => button.dataset.directoryDealer);
+
+			const updateMap = (fit = false) => map?.dispatchEvent(new CustomEvent('dealer-directory:update', {
+				detail: { selected, visible, fit },
+			}));
+			const setView = (view: string) => {
+				this.dataset.view = view;
+				for (const button of views) button.setAttribute('aria-pressed', String(button.dataset.directoryView === view));
+				if (view === 'map') updateMap(true);
+			};
+			const selectDealer = (id: string | null) => {
+				selected = id;
+				overview.hidden = id !== null;
+				for (const detail of details) detail.hidden = detail.dataset.directoryDetail !== id;
+				updateMap();
+			};
+			const openDealer = (id: string) => {
+				const detail = details.find(item => item.dataset.directoryDetail === id);
+				if (!detail) return;
+				setView('list');
+				selectDealer(id);
+				detail.querySelector('h2')?.focus();
+			};
+
+			if (switcher) switcher.hidden = false;
+			for (const button of views) button.addEventListener('click', () => setView(button.dataset.directoryView!));
+			for (const { button } of rows) button.addEventListener('click', () => openDealer(button.dataset.directoryDealer!));
+			for (const button of this.querySelectorAll<HTMLButtonElement>('[data-directory-back]')) {
+				button.hidden = false;
+				button.addEventListener('click', () => {
+					const previous = rows.find(({ button }) => button.dataset.directoryDealer === selected);
+					selectDealer(null);
+					(previous?.button ?? search).focus();
+				});
+			}
+			search.addEventListener('input', () => {
+				const terms = normalize(search.value).split(' ').filter(Boolean);
+				visible = [];
+				for (const { row, terms: haystack, button } of rows) {
+					row.hidden = !terms.every(term => haystack.includes(term));
+					if (!row.hidden) visible.push(button.dataset.directoryDealer);
+				}
+				for (const group of groups) group.hidden = !group.querySelector('[data-directory-row]:not([hidden])');
+				empty.hidden = visible.length > 0;
+				count.textContent = `Найдено дилерских центров: ${visible.length}`;
+				updateMap();
+			});
+			this.addEventListener('dealer-directory:select', (event) => openDealer((event as CustomEvent<string>).detail));
+			overview.hidden = false;
+			for (const detail of details) detail.hidden = true;
+			this.toggleAttribute('data-ready', true);
+		}
+	}
+
+	customElements.define('dealer-directory', DealerDirectory);
+</script>

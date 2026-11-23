@@ -1,0 +1,162 @@
+---
+import { Icon } from 'astro-icon/components';
+import { getMenu } from '@/const.js';
+import salonsData from '@/data/site/salons.json';
+import settings from '@/data/site/settings.json';
+import { getHeaderCallbackMode } from '@/js/utils/features';
+import { scopeSalons } from '@/js/utils/pageScope';
+import { phoneFormat } from '@/js/utils/numbers.format';
+import { isRouteDisabled } from '@/js/utils/siteRoutes';
+import Button from '@/ui/button/Button.astro';
+import Logo from '@/ui/logo/Logo.astro';
+import HeaderTopLine from './HeaderTopLine.astro';
+
+interface Props {
+	brand?: string | null;
+	showMenu?: boolean;
+	logoNoLink?: boolean;
+	contactsUrl?: string;
+	navigationLinks?: unknown[];
+}
+
+const { logoNoLink = false, contactsUrl = '#contacts' } = Astro.props;
+const primary = getMenu('header_primary');
+const configuredDrawer = getMenu('header_drawer');
+const drawer = configuredDrawer.length ? configuredDrawer : primary;
+const salons = scopeSalons(salonsData, Astro.locals.pageDealer).filter(salon => !salon.type || salon.type.includes('header'));
+const addressesUrl = contactsUrl !== '#contacts' || isRouteDisabled('/contacts/') ? contactsUrl : '/contacts/';
+const callbackMode = getHeaderCallbackMode(settings);
+const phone = salons.find(salon => salon.phone)?.phone || settings.phone_common;
+const currentPage = (url: string) => url === Astro.url.pathname ? 'page' as const : undefined;
+const linkClasses = 'inline-flex min-h-11 items-center whitespace-nowrap no-underline! hover:underline! aria-[current=page]:underline! underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2';
+const buttonClasses = 'popup-link bg-header-button-bg! hover:bg-header-button-bg-hover! text-header-button-text! hover:text-header-button-text-hover! min-h-11 whitespace-nowrap rounded-lg px-4! py-2! focus-visible:outline-2 focus-visible:outline-offset-2';
+const callbackProps = {
+	url: '#common-modal',
+	title: 'Заказать звонок',
+	dataTitle: 'Заказать звонок',
+	dataFormName: 'Заказ звонка. Шапка',
+	dataChooseDepartment: true,
+	...(salons.length > 1 ? { 'data-sorting': true } : {}),
+};
+---
+
+<centered-header class="header-wrapper sticky top-0 z-50 block border-b border-header-border bg-header-bg text-header-text">
+	<header>
+		{settings.header_top_line && <HeaderTopLine content={settings.header_top_line} />}
+		<div class="centered-bar min-h-16 items-center gap-3 px-4 py-2 lg:min-h-20 lg:px-6 2xl:px-9">
+			<div class="flex min-w-0 items-center gap-3 2xl:gap-5">
+				<button type="button" data-drawer-open class="inline-grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2"
+					aria-haspopup="dialog" aria-controls="centered-header-drawer" aria-expanded="false" aria-label="Открыть меню">
+					<Icon name="mdi:menu" class="size-7" aria-hidden="true" />
+				</button>
+				{primary.length > 0 && (
+					<nav aria-label="Основное меню" class="hidden items-center gap-3 text-sm font-semibold xl:flex 2xl:gap-5">
+						{primary.map(link => <a class={linkClasses} href={link.url} aria-current={currentPage(link.url)}>{link.name}</a>)}
+					</nav>
+				)}
+			</div>
+			<div class="centered-logo min-w-0 max-w-[16rem] justify-self-center">
+				<Logo noLink={logoNoLink} />
+			</div>
+			<div class="flex min-w-0 items-center justify-end gap-4 2xl:gap-6">
+				<a href={addressesUrl} class:list={[linkClasses, 'hidden! text-sm font-semibold lg:inline-flex!']}>Адреса салонов</a>
+				{callbackMode === 'only_phone' ? (
+					phone && <a class={linkClasses} href={`tel:${phoneFormat(phone)}`} aria-label={`Позвонить: ${phone}`}>
+						<Icon name="mdi:phone" class="size-6 lg:hidden" aria-hidden="true" /><span class="hidden lg:inline">{phone}</span>
+					</a>
+				) : (
+					<>
+						<Button classes={`${buttonClasses} hidden! lg:inline-flex!`} {...callbackProps} />
+						<a class="popup-link inline-grid size-11 shrink-0 place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
+							href="#common-modal" aria-label="Заказать звонок" data-title={callbackProps.dataTitle}
+							data-form_name={callbackProps.dataFormName} data-choose_department={true} data-sorting={salons.length > 1 ? true : undefined}>
+							<Icon name="mdi:phone-incoming" class="size-6" aria-hidden="true" />
+						</a>
+					</>
+				)}
+			</div>
+		</div>
+	</header>
+	<dialog id="centered-header-drawer" class="centered-drawer fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[min(100%,28rem)] max-w-none overflow-y-auto bg-header-bg text-header-text shadow-2xl" aria-label="Меню сайта">
+		<div class="px-5 pb-8 pt-3 sm:px-7">
+			<div class="flex min-h-16 items-center justify-between gap-4 border-b border-header-border pb-2">
+				<div class="centered-logo min-w-0 max-w-[16rem]"><Logo noLink={logoNoLink} /></div>
+				<button type="button" data-drawer-close autofocus class="grid size-11 cursor-pointer place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2" aria-label="Закрыть меню">
+					<Icon name="mdi:close" class="size-7" aria-hidden="true" />
+				</button>
+			</div>
+			{drawer.length > 0 && (
+				<nav aria-label="Разделы сайта" class="border-b border-header-border py-4">
+					<ul>
+						{drawer.map(link => (
+							<li>
+								<a class:list={[linkClasses, 'w-full whitespace-normal rounded-lg px-3 py-2 text-lg font-semibold hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover']}
+									href={link.url} aria-current={currentPage(link.url)}>{link.name}</a>
+							</li>
+						))}
+					</ul>
+				</nav>
+			)}
+			<div class="mt-4 flex flex-wrap items-center gap-3">
+				<a href={addressesUrl} class:list={[linkClasses, 'px-3 font-semibold']}>Адреса салонов</a>
+				{callbackMode !== 'only_phone' && <Button classes={buttonClasses} {...callbackProps} />}
+				{callbackMode !== 'only_callback' && phone && <a class:list={[linkClasses, 'px-3 font-semibold']} href={`tel:${phoneFormat(phone)}`}>{phone}</a>}
+			</div>
+		</div>
+	</dialog>
+</centered-header>
+
+<script>
+	class CenteredHeader extends HTMLElement {
+		connectedCallback() {
+			const open = this.querySelector<HTMLButtonElement>('[data-drawer-open]');
+			const drawer = this.querySelector('dialog');
+			const close = drawer?.querySelector<HTMLButtonElement>('[data-drawer-close]');
+			if (!open || !drawer || !close) return;
+			open.addEventListener('click', () => {
+				drawer.showModal();
+				open.setAttribute('aria-expanded', 'true');
+			});
+			close.addEventListener('click', () => drawer.close());
+			drawer.addEventListener('close', () => open.setAttribute('aria-expanded', 'false'));
+			drawer.addEventListener('click', (event) => {
+				if (event.target === drawer || (event.target as Element).closest('a')) drawer.close();
+			});
+		}
+	}
+
+	customElements.define('centered-header', CenteredHeader);
+</script>
+
+<style>
+	.centered-bar {
+		display: grid;
+		grid-template-columns: minmax(2.75rem, 1fr) auto minmax(2.75rem, 1fr);
+	}
+
+	.centered-logo {
+		width: min(40vw, 16rem);
+		display: flex;
+		justify-content: center;
+		--logo-header-height-mobile: max(1.125rem, var(--logo-header-height));
+	}
+
+	.centered-drawer::backdrop {
+		background: rgb(0 0 0 / 45%);
+	}
+
+	:global(html:has(.centered-drawer[open])) {
+		overflow: hidden;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.centered-drawer[open] {
+			animation: drawer-enter 180ms ease-out;
+		}
+
+		@keyframes drawer-enter {
+			from { transform: translateX(-100%); }
+			to { transform: translateX(0); }
+		}
+	}
+</style>

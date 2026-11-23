@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {
 	getFeatureFlag,
 	getHeaderCallbackMode,
+	isCenteredHeaderEnabled,
 	isCreditEnabled,
 	isHeaderTransparentEnabled,
 	isRandomDealerOrderEnabled,
@@ -43,6 +44,10 @@ assert.equal(
 	false,
 	'header transparent feature stays disabled by default'
 );
+
+assert.equal(isCenteredHeaderEnabled({}), false);
+assert.equal(isCenteredHeaderEnabled({features: {header_variant: 'centered'}}), true);
+assert.equal(isHeaderTransparentEnabled({features: {header_variant: 'centered', is_header_transparent: true}}), false);
 
 assert.equal(isRandomDealerOrderEnabled({}), false);
 assert.equal(isRandomDealerOrderEnabled({features: {random_dealer_order: true}}), true);

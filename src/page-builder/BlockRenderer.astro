@@ -24,6 +24,7 @@ import ModelColors from '@/blocks/model/ModelColors.astro';
 import ModelPhotos from '@/blocks/model/ModelPhotos.astro';
 import ModelCharacteristics from '@/blocks/model/ModelCharacteristics.astro';
 import ModelActions from '@/blocks/model/ModelActions.astro';
+import DealerDirectory from '@/blocks/contacts/DealerDirectory.astro';
 
 interface Props {
 	blocks?: TBlock[];
@@ -81,6 +82,8 @@ const data = (block: TBlock): any => ({
 			return <ImageCarousel {...c} />;
 		case 'action-group':
 			return <ActionGroup {...c} />;
+		case 'dealer-directory':
+			return <DealerDirectory salons={[]} {...c} id={block.id ?? c.id} />;
 		case 'model-hero':
 			return context.model ? (
 				<ModelHero

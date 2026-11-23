@@ -24,8 +24,8 @@ const MENU = {
 	],
 };
 
-test('MENU_SLOTS перечисляет четыре слота', () => {
-	assert.deepEqual(MENU_SLOTS, ['header', 'main', 'footer', 'footer_legal']);
+test('MENU_SLOTS включает оба слота центрированного хедера', () => {
+	assert.deepEqual(MENU_SLOTS, ['header', 'main', 'footer', 'footer_legal', 'header_primary', 'header_drawer']);
 });
 
 test('menuItemPath отдаёт пустую строку там, где проверять нечего', () => {
