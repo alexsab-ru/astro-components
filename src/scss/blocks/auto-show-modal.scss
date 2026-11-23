@@ -13,3 +13,6 @@
 [data-position="center"]{
 	@apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
 }
+[data-desktop-bottom-right]{
+	@apply md:top-auto md:left-auto md:right-5 md:bottom-5 md:translate-none md:max-h-[calc(100dvh-2.5rem)] md:shadow-4xl;
+}

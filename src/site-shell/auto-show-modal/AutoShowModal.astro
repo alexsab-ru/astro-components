@@ -13,6 +13,7 @@ const {
 	subtitle = '',
 	testDrive = false,
 	modalPosition = 'center',
+	desktopBottomRight = false,
 	img = manager_photo,
 	imgPosition = 'right',
 	formName = ''
@@ -33,9 +34,14 @@ const options = testDrive
 	: [];
 ---
 
-<div class={`modal fixed max-w-[700px] w-full max-h-dvh overflow-y-auto overflow-x-hidden overscroll-y-contain bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`} data-position={modalPosition} id="common-modal-with-img">
+<div
+	class={`modal fixed max-w-[700px] w-full max-h-dvh overflow-y-auto overflow-x-hidden overscroll-y-contain bg-white z-10000 hidden ${modalPosition !== 'center' ? 'shadow-4xl' : ''}`}
+	data-position={modalPosition}
+	data-desktop-bottom-right={desktopBottomRight ? '' : undefined}
+	id="common-modal-with-img"
+>
 
-	<CloseModalBtn color="black" />
+	<CloseModalBtn variant="outlined" />
 
 	<div class="flex flex-col sm:grid grid-cols-5">
 
@@ -99,7 +105,11 @@ const options = testDrive
 
 </div>
 
-<div class="fixed inset-0 overflow-x-hidden overflow-y-auto bg-black/70 z-9999 hidden" id="modal-overlay" data-close></div>
+<div
+	class:list={['fixed inset-0 overflow-x-hidden overflow-y-auto bg-black/70 z-9999 hidden', desktopBottomRight && 'md:hidden']}
+	id="modal-overlay"
+	data-close
+></div>
 
 <script define:vars={{ showDelay: modalShow, position: modalPosition }} is:inline>
 	const modal = document.getElementById('common-modal-with-img');

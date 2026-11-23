@@ -1,11 +1,20 @@
 ---
-const { color = 'black' } = Astro.props;
+const { color = 'black', variant = 'plain' } = Astro.props;
+const isThick = variant === 'bold' || variant === 'outlined';
+const crossPath = 'M0 9.5H20M9.5 0V20';
 ---
 
 <button
 	type="button"
 	aria-label="Закрыть окно"
-	class="w-10 h-10 flex items-center justify-center absolute right-0 top-0 opacity-60 transition-opacity hover:opacity-100 cursor-pointer z-10 p-0 border-0 bg-transparent"
+	class:list={[
+		'w-10 h-10 flex items-center justify-center absolute cursor-pointer z-10 p-0 border-0',
+		variant === 'solid'
+			? 'right-2 top-2 rounded-full bg-white shadow-sm transition-colors hover:bg-gray-100 active:bg-gray-200'
+			: 'right-0 top-0 bg-transparent',
+		isThick && 'transition-transform hover:scale-105 active:scale-95',
+		!isThick && variant !== 'solid' && 'opacity-60 transition-opacity hover:opacity-100',
+	]}
 	data-close
 >
 	<svg
@@ -16,21 +25,16 @@ const { color = 'black' } = Astro.props;
 		xmlns="http://www.w3.org/2000/svg"
 		data-close
 		aria-hidden="true"
-		class={`rotate-45 custom-stroke-${color}`}
+		class:list={[`rotate-45 custom-stroke-${color}`, isThick && 'overflow-visible']}
 	>
-		<line
-			y1="9.5"
-			x2="20"
-			y2="9.5"
-			stroke=""
+		{variant === 'outlined' && (
+			<path d={crossPath} class="stroke-white" stroke-width="5" stroke-linecap="round" data-close />
+		)}
+		<path
+			d={crossPath}
+			stroke-width={isThick ? 2.5 : variant === 'solid' ? 2 : undefined}
+			stroke-linecap={isThick ? 'round' : undefined}
 			data-close
-		></line>
-		<line
-			x1="9.5"
-			y1="20"
-			x2="9.5"
-			stroke=""
-			data-close
-		></line>
+		/>
 	</svg>
 </button>
