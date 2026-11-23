@@ -127,3 +127,13 @@
        что совпадает с дефолтом base/theme.css */
     --radius-btn: 0px;
 }
+
+.btn.car-catalog-details {
+    background-color: var(--color-brand-navy-500);
+    border-color: var(--color-brand-navy-500);
+}
+
+.btn.car-catalog-details:hover {
+    background-color: var(--color-brand-navy-600);
+    border-color: var(--color-brand-navy-600);
+}
