@@ -57,7 +57,8 @@ import ScriptBodyBegin from '@/integrations/scripts/ScriptsBodyBegin.astro';
 import ScriptBodyEnd from '@/integrations/scripts/ScriptsBodyEnd.astro';
 import StandardHeader from '@/site-shell/header/Header.astro';
 import CenteredHeader from '@/site-shell/header/CenteredHeader.astro';
-const Header = isCenteredHeaderEnabled(settings) && showHeaderMenu && !navigationLinks ? CenteredHeader : StandardHeader;
+const useCenteredHeader = isCenteredHeaderEnabled(settings) && showHeaderMenu && !navigationLinks;
+const Header = useCenteredHeader ? CenteredHeader : StandardHeader;
 import Modals from '@/site-shell/modals/Modals.astro';
 import UpBtn from '@/ui/up-btn/UpBtn.astro';
 import Cookie from '@/site-shell/cookie/Cookie.astro';
@@ -102,7 +103,7 @@ if (seo[currentPath]) {
 }
 import '../scss/app.css';
 
-const bodyClasses = currentPath != '/' && is_header_transparent ? 'xs:pt-[52px] pt-[60px] md:pt-[80px] lg:pt-[130px]' : '';
+const bodyClasses = currentPath != '/' && is_header_transparent && !useCenteredHeader ? 'xs:pt-[52px] pt-[60px] md:pt-[80px] lg:pt-[130px]' : '';
 ---
 
 <!doctype html>

@@ -20,7 +20,7 @@ export function isCreditEnabled(settings = {}) {
 }
 
 export function isHeaderTransparentEnabled(settings = {}) {
-	return !isCenteredHeaderEnabled(settings) && getFeatureFlag(settings, 'is_header_transparent', false) === true;
+	return getFeatureFlag(settings, 'is_header_transparent', false) === true;
 }
 
 export function isCenteredHeaderEnabled(settings = {}) {

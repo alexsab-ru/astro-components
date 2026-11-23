@@ -13,6 +13,7 @@ interface Props {
   linkTo?: string;
   /** Точечные переопределения по бренду, тоже поддерживают {brand} */
   brandLinks?: Record<string, string>;
+  logosOnly?: boolean;
 }
 
 const ViewType = {
@@ -47,7 +48,7 @@ const brandCounts = filePaths.reduce((acc, path) => {
   return acc;
 }, {} as Record<string, number>);
 
-const { type = ViewType.LOGO, brands: brandsProp, linkTo, brandLinks = {} } = Astro.props;
+const { type = ViewType.LOGO, brands: brandsProp, linkTo, brandLinks = {}, logosOnly = false } = Astro.props;
 
 const toBrandList = (raw: unknown): string[] =>
   (Array.isArray(raw)
@@ -98,7 +99,7 @@ const items = brands.map((brand) => {
       case ViewType.LOGO:
         return <BrandLogos items={items} />;
       case ViewType.CARD:
-        return <BrandCards items={items} />;
+        return <BrandCards items={items} logosOnly={logosOnly} />;
       default:
         return null;
     }

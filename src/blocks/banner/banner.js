@@ -1,10 +1,6 @@
 import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay, Parallax, Keyboard } from "swiper/modules";
 
-import settings from '@/data/site/settings.json';
-import { isHeaderTransparentEnabled } from '@/js/utils/features';
-const is_header_transparent = isHeaderTransparentEnabled(settings);
-
 const progressCircle = document.querySelector(".autoplay-progress svg");
 const progressContent = document.querySelector(".autoplay-progress span");
 let bannerSlider;
@@ -23,6 +19,7 @@ if (progressCircle) {
 const slides = document.querySelectorAll(".banner-slide");
 
 const headerEl = document.querySelector('.header-wrapper');
+const is_header_transparent = headerEl?.classList.contains('header-transparent') && headerEl.classList.contains('fixed');
 const closeHeaderTopLineBtn = document.querySelector('.close-header-top-line-btn');
 // Все .banner-slide внутри слайдера, включая loop-дубликаты Swiper (их нет в slides на L22).
 function getBannerSlides() {

@@ -1,7 +1,7 @@
 @reference "../../scss/app.css";
 
 .scroll-link, .header-link{
-	@apply block lg:inline-block py-3 px-5 transition duration-150 whitespace-nowrap;
+	@apply block lg:inline-block py-3 px-5 transition duration-150 whitespace-normal lg:whitespace-nowrap;
 }
 .header-child-link{
 	@apply block lg:block! pl-8 lg:pl-5 py-3 px-5 transition duration-150 whitespace-normal;
@@ -28,31 +28,38 @@
 
 .clone-menu {
 	@apply relative flex items-center;
-
-	li, a {
-		@apply w-full block;
-	}
 }
-/* .header-transparent{
-	z-index:;
-} */
-/* Dropdown "more" menu styles when header is in transparent mode */
+
+.more-menu > li > a {
+	@apply w-full block;
+}
+
+.header-glass,
 .header-transparent .more-menu {
-	@apply backdrop-blur-header bg-header-transparent-bg border-header-border-transparent;
+	@apply backdrop-blur-header bg-header-transparent-bg;
+}
+
+/* Each dropdown needs its own backdrop, outside the filtered navigation bar. */
+.submenu-transparent {
+	@apply lg:backdrop-blur-header lg:bg-header-transparent-bg;
+}
+
+.header-transparent .more-menu {
+	@apply border-header-border-transparent;
 }
 
 .header-transparent .menu-more-btn{
 	@apply text-header-transparent-text;
 }
 
-.submenu-transparent::after,
-.header-transparent::after{
-	@apply backdrop-blur-header;
-    content: " ";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
+.more-menu .header-submenu {
+	@apply hidden static w-full shadow-none;
+}
+
+.more-menu li:is(:hover, :focus-within) > .header-submenu {
+	@apply block;
+}
+
+.more-menu .submenu-transparent {
+	@apply backdrop-filter-none bg-transparent;
 }

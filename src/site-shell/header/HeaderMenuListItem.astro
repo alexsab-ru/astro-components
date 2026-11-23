@@ -12,7 +12,7 @@ const hasSubMenu =
 		: link?.children !== null && typeof link.children === 'object' && Object.keys(link.children).length > 0;
 
 ---
-<li class={`group ${relative}`}>
+<li class={`group lg:shrink-0 ${relative}`}>
 	<MenuLink link={link} />
 	{hasSubMenu && <SubMenu children={link.children} />}
 </li>

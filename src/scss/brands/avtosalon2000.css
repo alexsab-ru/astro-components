@@ -75,9 +75,9 @@
     --color-header-button-text: var(--color-white);
     --color-header-button-text-hover: var(--color-white);
 
-    /* HEADER LINK MENU — на avtosalon2000.ru строка меню тёмная, ссылки белые.
-       У нас хедер светлый, поэтому темнеет только сама плашка пункта:
-       синяя подложка логотипа + белый текст (11.41:1). */
+    /* HEADER LINK MENU */
+    --color-header-transparent-bg: #12121299;
+    --blur-header: 10px;
     --color-header-menu-link-bg-hover: var(--color-brand-navy-500);
     --color-header-menu-link-text-hover: var(--color-white);
     --transparent-bg-hover-color: var(--color-brand-navy-500);
@@ -107,9 +107,9 @@
     --color-footer-link-hover: var(--color-brand-red-400);
     --color-footer-divide: color-mix(in srgb, var(--color-white) 20%, transparent);
 
-    /* Logo sizing — логотип очень широкий (797×121, ≈6.6:1),
-       поэтому высоты ниже дефолтных, иначе он съедает всю строку */
-    --logo-header-height: clamp(0.9rem, calc(1.4vw + 0.25rem), 1.9rem);
+    /* Логотип широкий (797×121), поэтому для телефона задана отдельная высота. */
+    --logo-header-height: clamp(.9rem, calc(1.4vw + 1.35rem), 2.7rem);
+    --logo-header-height-mobile: clamp(1.125rem, calc(1.4vw + 1.45rem), 1.8rem);
     --logo-dealer-header-height: var(--logo-header-height);
 
     --logo-map-info-height: clamp(1.25rem, calc(1.2vw + 0.4rem), 2rem);
@@ -126,4 +126,14 @@
     /* Radii — на сайте кнопки без скругления (border-radius: 0),
        что совпадает с дефолтом base/theme.css */
     --radius-btn: 0px;
+}
+
+.btn.car-catalog-details {
+    background-color: var(--color-brand-navy-500);
+    border-color: var(--color-brand-navy-500);
+}
+
+.btn.car-catalog-details:hover {
+    background-color: var(--color-brand-navy-600);
+    border-color: var(--color-brand-navy-600);
 }

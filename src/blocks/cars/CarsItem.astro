@@ -11,6 +11,7 @@ interface Props {
 const {phone, car = {}, path = '/cars/', slug, totalShow = true, class: className = '', ...rest} = Astro.props;
 // Формируем URL по приоритету: переданный slug | внутренний путь по id
 const url = slug ? slug : `${path}${car.id}/`;
+const catalogDetailsClass = Astro.url.pathname === '/cars/' ? 'car-catalog-details' : '';
 
 import { calculateCarPrice, findModelByCarData } from '@/js/utils/car';
 import { getModelBadgeData } from '@/js/utils/modelBadge';
@@ -93,7 +94,7 @@ const creditEnabled = isCreditEnabled(settings);
 		</Fragment>
 		)}
 		<Button
-			classes={`px-2! py-2! md:text-base! sm:text-sm! text-xs! no-underline! mb-0! text-white! w-full ${creditEnabled && !phone ? '' : 'md:w-[48%]'}`}
+			classes={`${catalogDetailsClass} px-2! py-2! md:text-base! sm:text-sm! text-xs! no-underline! mb-0! text-white! w-full ${creditEnabled && !phone ? '' : 'md:w-[48%]'}`}
 			url={ url }
 			title="Подробнее"
 		/>

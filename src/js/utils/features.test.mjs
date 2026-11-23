@@ -47,7 +47,7 @@ assert.equal(
 
 assert.equal(isCenteredHeaderEnabled({}), false);
 assert.equal(isCenteredHeaderEnabled({features: {header_variant: 'centered'}}), true);
-assert.equal(isHeaderTransparentEnabled({features: {header_variant: 'centered', is_header_transparent: true}}), false);
+assert.equal(isHeaderTransparentEnabled({features: {header_variant: 'centered', is_header_transparent: true}}), true);
 
 assert.equal(isRandomDealerOrderEnabled({}), false);
 assert.equal(isRandomDealerOrderEnabled({features: {random_dealer_order: true}}), true);

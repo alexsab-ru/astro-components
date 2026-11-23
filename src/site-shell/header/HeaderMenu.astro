@@ -13,7 +13,8 @@ const path = Astro.url.pathname;
 const classBottom = path != '/' ? ' border-b' : '';
 const siteNavClasses = is_header_transparent ? 'border-header-border-transparent' : 'border-header-border';
 ---
-<div id="site_nav" class={`hidden lg:block ${siteNavClasses} border-t ${classBottom}`}>
+<div id="site_nav" class={`relative isolate hidden lg:block ${siteNavClasses} border-t ${classBottom}`}>
+	{is_header_transparent && <div class="header-glass pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />}
 	<div class="container">
 		<div class="h-full">
 			<HeaderMenuList links={links} />
