@@ -1,0 +1,110 @@
+---
+import settings from '@/data/site/settings.json';
+import LogoImage from '@/ui/logo/LogoImage.astro';
+
+interface Props {
+	noLink?: boolean;
+}
+
+interface BrandLogo {
+	name: string;
+	src: string;
+}
+
+const { noLink = false } = Astro.props;
+const { site_name: dealerName, logo_dealer_header: dealerLogo } = settings;
+const config = settings as typeof settings & {
+	header_brand_logos?: BrandLogo[];
+	header_brand_logos_position?: {
+		desktop?: 'left' | 'right';
+		mobile?: 'left' | 'right';
+	};
+};
+const logos = Array.isArray(config.header_brand_logos)
+	? config.header_brand_logos.filter((logo) => logo?.name && logo?.src)
+	: [];
+const { desktop = 'right', mobile = 'left' } = config.header_brand_logos_position ?? {};
+const Identity = noLink ? 'div' : 'a';
+---
+
+<Identity
+	href={noLink ? undefined : '/'}
+	class:list={[
+		'multibrand-identity text-inherit! no-underline! focus-visible:outline-2 focus-visible:outline-offset-2',
+		desktop === 'left' && 'desktop-logos-left',
+		mobile === 'right' && 'mobile-logos-right',
+	]}
+>
+	<span class="dealer-name">
+		{dealerLogo ? (
+			<LogoImage src={dealerLogo} alt={dealerName} instance="multibrand-dealer" class="max-h-8 max-w-full object-contain" />
+		) : dealerName}
+	</span>
+	{logos.length > 0 && (
+		<ul class="brand-logos" aria-label="Марки автомобилей">
+			{logos.map(({ name, src }) => (
+				<li><img src={src} alt={name} width="100" height="22" /></li>
+			))}
+		</ul>
+	)}
+</Identity>
+
+<style>
+	.multibrand-identity {
+		min-width: 0;
+		display: flex;
+		align-items: center;
+		gap: clamp(.5rem, 1.4vw, 1.25rem);
+		min-height: 2.75rem;
+	}
+
+	.dealer-name {
+		min-width: 0;
+		font-size: clamp(.9375rem, 1.5vw, 1.25rem);
+		font-weight: 700;
+		line-height: 1.15;
+		overflow-wrap: anywhere;
+	}
+
+	.brand-logos {
+		order: -1;
+		display: flex;
+		flex: 0 1 5.5rem;
+		flex-direction: column;
+		gap: .1875rem;
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.mobile-logos-right .brand-logos { order: 0; }
+
+	.brand-logos img {
+		display: block;
+		width: 100%;
+		height: .9375rem;
+		object-fit: contain;
+	}
+
+	@media (min-width: 64rem) {
+		.brand-logos {
+			order: 0;
+			flex: 0 1 auto;
+			flex-flow: row wrap;
+			gap: .375rem .75rem;
+			max-width: min(24rem, 34vw);
+		}
+
+		.desktop-logos-left .brand-logos { order: -1; }
+
+		.brand-logos li { width: clamp(4rem, 6vw, 6.25rem); }
+
+		.brand-logos img { height: 1.375rem; }
+		:global(dialog) .multibrand-identity {
+			flex-wrap: wrap;
+		}
+
+		:global(dialog) .brand-logos { max-width: 100%; }
+	}
+</style>

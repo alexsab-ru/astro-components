@@ -5,6 +5,7 @@ import {
 	isCenteredHeaderEnabled,
 	isCreditEnabled,
 	isHeaderTransparentEnabled,
+	isMultibrandHeaderEnabled,
 	isRandomDealerOrderEnabled,
 	shouldShowSiteName,
 } from './features.js';
@@ -47,6 +48,8 @@ assert.equal(
 
 assert.equal(isCenteredHeaderEnabled({}), false);
 assert.equal(isCenteredHeaderEnabled({features: {header_variant: 'centered'}}), true);
+assert.equal(isMultibrandHeaderEnabled({features: {header_variant: 'multibrand'}}), true);
+assert.equal(isMultibrandHeaderEnabled({features: {header_variant: 'centered'}}), false);
 assert.equal(isHeaderTransparentEnabled({features: {header_variant: 'centered', is_header_transparent: true}}), true);
 
 assert.equal(isRandomDealerOrderEnabled({}), false);

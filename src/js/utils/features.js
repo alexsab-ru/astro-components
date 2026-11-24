@@ -27,6 +27,10 @@ export function isCenteredHeaderEnabled(settings = {}) {
 	return getFeatureFlag(settings, 'header_variant', 'standard') === 'centered';
 }
 
+export function isMultibrandHeaderEnabled(settings = {}) {
+	return getFeatureFlag(settings, 'header_variant', 'standard') === 'multibrand';
+}
+
 export function isRandomDealerOrderEnabled(settings = {}) {
 	return getFeatureFlag(settings, 'random_dealer_order', false) === true;
 }

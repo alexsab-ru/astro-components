@@ -3,13 +3,14 @@ import { Icon } from 'astro-icon/components';
 import { getMenu } from '@/const.js';
 import salonsData from '@/data/site/salons.json';
 import settings from '@/data/site/settings.json';
-import { getHeaderCallbackMode, isHeaderTransparentEnabled } from '@/js/utils/features';
+import { getHeaderCallbackMode, isHeaderTransparentEnabled, isMultibrandHeaderEnabled } from '@/js/utils/features';
 import { scopeSalons } from '@/js/utils/pageScope';
 import { phoneFormat } from '@/js/utils/numbers.format';
 import { isRouteDisabled } from '@/js/utils/siteRoutes';
 import Button from '@/ui/button/Button.astro';
 import Logo from '@/ui/logo/Logo.astro';
 import HeaderTopLine from './HeaderTopLine.astro';
+import MultibrandIdentity from './MultibrandIdentity.astro';
 import './styles.css';
 
 interface Props {
@@ -21,6 +22,8 @@ interface Props {
 }
 
 const { logoNoLink = false, contactsUrl = '#contacts' } = Astro.props;
+const multibrand = isMultibrandHeaderEnabled(settings);
+const Identity = multibrand ? MultibrandIdentity : Logo;
 const primary = getMenu('header_primary');
 const configuredDrawer = getMenu('header_drawer');
 const drawer = configuredDrawer.length ? configuredDrawer : primary;
@@ -47,7 +50,7 @@ const callbackProps = {
 <centered-header class:list={['header-wrapper top-0 z-50 block w-full', transparent && 'header-transparent', transparent && Astro.url.pathname === '/' ? 'fixed' : 'sticky']}>
 	<header class:list={['border-b', borderClasses, surfaceClasses]}>
 		{settings.header_top_line && <HeaderTopLine content={settings.header_top_line} />}
-		<div class="centered-bar min-h-16 items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4 lg:min-h-20 lg:px-6 2xl:px-9">
+		<div class:list={['centered-bar min-h-16 items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4 lg:min-h-20 lg:px-6 2xl:px-9', multibrand && 'centered-bar-multibrand']}>
 			<div class="flex min-w-0 items-center gap-3 2xl:gap-5">
 				<button type="button" data-drawer-open class="inline-grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2"
 					aria-haspopup="dialog" aria-controls="centered-header-drawer" aria-expanded="false" aria-label="Открыть меню">
@@ -59,8 +62,8 @@ const callbackProps = {
 					</nav>
 				)}
 			</div>
-			<div class="centered-logo min-w-0 justify-self-center">
-				<Logo noLink={logoNoLink} />
+			<div class:list={['centered-logo min-w-0 justify-self-center', multibrand && 'centered-logo-multibrand']}>
+				<Identity noLink={logoNoLink} />
 			</div>
 			<div class="flex min-w-0 items-center justify-end gap-4 2xl:gap-6">
 				<a href={addressesUrl} class:list={[linkClasses, 'hidden! whitespace-nowrap text-sm font-semibold lg:inline-flex!']}>Адреса салонов</a>
@@ -84,7 +87,7 @@ const callbackProps = {
 	<dialog id="centered-header-drawer" class:list={['centered-drawer fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[min(100%,28rem)] max-w-none overflow-y-auto shadow-2xl', surfaceClasses]} aria-label="Меню сайта">
 		<div class="px-5 pb-8 pt-3 sm:px-7">
 			<div class:list={['flex min-h-16 items-center justify-between gap-4 border-b pb-2', borderClasses]}>
-				<div class="centered-logo min-w-0"><Logo noLink={logoNoLink} /></div>
+				<div class:list={['centered-logo min-w-0', multibrand && 'centered-logo-multibrand']}><Identity noLink={logoNoLink} /></div>
 				<button type="button" data-drawer-close autofocus class="grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg hover:bg-header-menu-link-bg-hover hover:text-header-menu-link-text-hover focus-visible:outline-2 focus-visible:outline-offset-2" aria-label="Закрыть меню">
 					<Icon name="mdi:close" class="size-7" aria-hidden="true" />
 				</button>
@@ -142,6 +145,14 @@ const callbackProps = {
 		width: min(calc(100vw - 8rem), 18rem);
 		display: flex;
 		justify-content: center;
+	}
+
+	.centered-bar-multibrand {
+		grid-template-columns: minmax(2.75rem, 1fr) minmax(0, max-content) minmax(2.75rem, 1fr);
+	}
+
+	.centered-logo-multibrand {
+		width: auto;
 	}
 
 	.centered-drawer::backdrop {
