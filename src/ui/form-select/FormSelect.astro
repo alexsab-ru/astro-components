@@ -13,6 +13,7 @@ interface Props {
 	options?: {
 		id: string | number;
 		name: string;
+		caption?: string;
 		ctModId?: string;
 		ctSiteId?: string;
 		ctRouteKey?: string;
@@ -71,7 +72,7 @@ const formSelectConfig = JSON.stringify({
 			tabindex="-1" 
 			@click="openSelect()" 
 			@keydown.escape="open = false">
-			<span x-text="value || placeholder" :class="{'text-gray-400': !value, 'text-black': value}"></span>
+			<span x-text="currentOption.caption || value || placeholder" :class="{'text-gray-400': !value, 'text-black': value}"></span>
 			<Icon 
 				name="mdi:chevron-down" 
 				class="text-xl transition-transform duration-300 origin-center text-black"
@@ -86,8 +87,8 @@ const formSelectConfig = JSON.stringify({
 			<template x-for="option in options" :key="option.id">
 				<a 
 					href="#" 
-					class="block py-2 px-4 whitespace-nowrap transition-colors duration-300 hover:bg-gray-200 no-underline! text-black! mb-0!"
-					:class="{'bg-gray-200': option.id === currentOption.id}"
+					class="block py-2 px-4 transition-colors duration-300 hover:bg-gray-200 no-underline! text-black! mb-0!"
+					:class="{'bg-gray-200': option.id === currentOption.id, 'whitespace-nowrap': !option.caption}"
 					@click.prevent="select(option.id)"
 					x-text="option.caption || option.name"
 				></a>

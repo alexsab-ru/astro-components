@@ -3,9 +3,13 @@ import Button from '@/ui/button/Button.astro';
 import Input from '@/ui/input/Input.astro';
 import Checkbox from '@/ui/checkbox/Checkbox.astro';
 import CloseModalBtn from '@/ui/close-modal-btn/CloseModalBtn.astro';
+import ChoosingDealerSelect from '@/ui/choosing-dealer-select/ChoosingDealerSelect.astro';
 import FormSelect from '@/ui/form-select/FormSelect.astro';
 import settings from '@/data/site/settings.json';
+import salonsData from '@/data/site/salons.json';
+import type { ISalon } from '@/types/ISalon';
 const { manager_photo, agree_label } = settings;
+const salons = salonsData.filter((salon: ISalon) => !salon.type || salon.type.includes('common_modal'));
 
 const { 
 	modalShow = 20000,
@@ -75,6 +79,8 @@ const options = testDrive
 				{testDrive && <FormSelect name="model" placeholder="Выберите модель" options={options} />}
 
 				<Input name="name" classes="border-gray-100" placeholder="Ваше имя" />
+
+				<ChoosingDealerSelect required salons={salons} submitSingleDealer />
 
 				<Checkbox
 					name="agree"

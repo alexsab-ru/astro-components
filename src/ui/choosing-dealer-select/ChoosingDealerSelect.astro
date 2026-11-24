@@ -6,33 +6,42 @@ interface Props {
 	errorMessage?: string;
 	pageData?: boolean;
 	modalData?: boolean;
+	submitSingleDealer?: boolean;
 	salons: ISalon[];
 }
-const { required, errorMessage = 'Выберите дилерский центр', pageData = false, modalData = false, salons, disabled = false } = Astro.props;
+const { required, errorMessage = 'Выберите дилерский центр', pageData = false, modalData = false, salons, disabled = false, submitSingleDealer = false } = Astro.props;
 import FormSelect from '@/ui/form-select/FormSelect.astro';
 const fixedDealer = Astro.locals.pageDealer;
+const selectedDealer = fixedDealer ?? (submitSingleDealer && salons.length === 1 ? salons[0] : undefined);
 // Сразу пробрасываем calltouch-метаданные в опцию селекта.
 // Позже они попадут в data-атрибуты hidden input[name="dealer"].
-const options = salons.map((salon, idx) => ({
-	id: idx,
-	name: salon.name,
-	ctModId: salon?.scripts?.calltouch?.mod_id || '',
-	ctSiteId: salon?.scripts?.calltouch?.site_id || '',
-	ctRouteKey: salon?.scripts?.calltouch?.routeKey || '',
-}));
+const options = salons.map((salon, idx) => {
+	const sameName = salons.filter((other, index) => index !== idx && other.name === salon.name);
+	const location = sameName.some((other) => other.legal_city === salon.legal_city)
+		? salon.address || salon.legal_city
+		: salon.legal_city || salon.address;
+	return {
+		id: idx,
+		name: salon.name,
+		caption: sameName.length && location ? `${salon.name} — ${location}` : undefined,
+		ctModId: salon.scripts?.calltouch?.mod_id || '',
+		ctSiteId: salon.scripts?.calltouch?.site_id || '',
+		ctRouteKey: salon.scripts?.calltouch?.routeKey || '',
+	};
+});
 ---
-{fixedDealer ? (
+{selectedDealer ? (
 	<>
 		<input
 			type="hidden"
 			name="dealer"
-			value={fixedDealer.name}
+			value={selectedDealer.name}
 			data-fixed-dealer
-			data-ct-mod-id={fixedDealer.scripts?.calltouch?.mod_id || ''}
-			data-ct-site-id={fixedDealer.scripts?.calltouch?.site_id || ''}
-			data-ct-route-key={fixedDealer.scripts?.calltouch?.routeKey || ''}
+			data-ct-mod-id={selectedDealer.scripts?.calltouch?.mod_id || ''}
+			data-ct-site-id={selectedDealer.scripts?.calltouch?.site_id || ''}
+			data-ct-route-key={selectedDealer.scripts?.calltouch?.routeKey || ''}
 		/>
-		<p class="text-sm">Дилерский центр: <strong>{fixedDealer.name}</strong></p>
+		{fixedDealer && <p class="text-sm">Дилерский центр: <strong>{fixedDealer.name}</strong></p>}
 	</>
 ) : options.length > 1 && (
 	<div class="w-full">
