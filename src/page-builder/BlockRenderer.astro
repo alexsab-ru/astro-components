@@ -122,6 +122,7 @@ const data = (block: TBlock): any => ({
 					id={block.id}
 					class={`sm:py-20 py-10 font-light model-section odd:bg-gray-100 ${block.sectionClass ?? c.sectionClass ?? ''}`}
 					withSchema={Boolean(c.withSchema ?? c.schema ?? false)}
+					layout={c.layout}
 				/>
 			);
 		case 'model-complectations':

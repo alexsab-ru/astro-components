@@ -8,6 +8,7 @@ interface Props {
 	id?: string;
 	withSchema?: boolean;
 	schema?: boolean;
+	layout?: 'accordion' | 'headings';
 }
 const {
 	items = [],
@@ -16,9 +17,11 @@ const {
 	id = 'faq',
 	withSchema = false,
 	schema = false,
+	layout = 'accordion',
 } = Astro.props;
 
 const shouldRenderSchema = withSchema || schema;
+const showAsHeadings = layout === 'headings';
 const faqItems = items.map((item, index) => ({
 	...item,
 	id: item.id ?? index + 1,
@@ -56,12 +59,17 @@ const faqSchema = {
 			<section
 				class={`faq ${classNames}`}
 				id={id}
-				x-data="{activities:[]}"
+				x-data={showAsHeadings ? undefined : '{activities:[]}'}
 			>
 				<div class="section-grid">
 					{title && (<h2 class="text-xl sm:text-4xl mb-8 sm:mb-14">{title}</h2>)}
 
-					{faqItems.map((item) => (
+					{faqItems.map((item) => showAsHeadings ? (
+						<div class="mb-3 rounded-md border border-gray-200 px-5 py-4">
+							<h2 class="text-sm font-weight-bold md:text-lg">{item.question}</h2>
+							<h3 class="mt-2 text-sm font-normal leading-relaxed md:text-base">{item.answer}</h3>
+						</div>
+					) : (
 						<FaqItem item={item} />
 					))}
 				</div>
